@@ -11,9 +11,19 @@ import {
   Bot,
   Zap,
   Lock,
+  Mail,
+  Copy,
+  Check,
+  Shield,
+  HelpCircle,
+  Sparkles,
+  Layers,
+  Globe,
 } from 'lucide-react';
 import { ToolTab, ToolMeta } from './types';
 import { Header } from './components/Header';
+import { HeroSection } from './components/HeroSection';
+import { LegalModals, LegalModalType } from './components/LegalModals';
 import { ApEapcetRadar } from './components/ApEapcetRadar';
 import { AttendanceDefender } from './components/AttendanceDefender';
 import { GlobalGpaHub } from './components/GlobalGpaHub';
@@ -26,44 +36,20 @@ import { EducationalGuideAndSeo } from './components/EducationalGuideAndSeo';
 
 export const TOOLS_CONFIG: ToolMeta[] = [
   {
+    id: 'pdf-tools',
+    name: '30+ PDF Power Tools',
+    shortName: '30+ PDF Tools',
+    category: 'document',
+    description: 'Zero-server WebAssembly PDF merge, split, compress, watermark, redact & convert',
+    badge: '30 Tools',
+  },
+  {
     id: 'eapcet-radar',
     name: 'AP EAPCET Vacancy Radar',
     shortName: 'EAPCET Radar',
     category: 'counselling',
     description: 'Phase 2 live college vacancies, branch intake & fee structure scanner',
-    badge: 'NEW • Phase 2',
-  },
-  {
-    id: 'attendance',
-    name: 'Attendance Defender',
-    shortName: 'Attendance',
-    category: 'academic',
-    description: 'Smart bunk & recovery margin calculator with 75% thresholds',
-    badge: 'Tool 01',
-  },
-  {
-    id: 'gpa',
-    name: 'Global GPA Hub',
-    shortName: 'GPA Hub',
-    category: 'academic',
-    description: 'VTU/AICTE percentage converter & future SGPA goal predictor',
-    badge: 'Tool 02',
-  },
-  {
-    id: 'internal-calc',
-    name: 'Internal Cutoff Estimator',
-    shortName: 'Internal Calc',
-    category: 'academic',
-    description: '80:20 mid evaluation & external semester target marks finder',
-    badge: 'Tool 03',
-  },
-  {
-    id: 'resizer',
-    name: 'Exam Image Resizer',
-    shortName: 'Image Resizer',
-    category: 'document',
-    description: 'Client-side photo/signature compression to exact 20KB–500KB',
-    badge: 'Tool 04',
+    badge: 'LIVE • Phase 2',
   },
   {
     id: 'resume-checker',
@@ -71,7 +57,39 @@ export const TOOLS_CONFIG: ToolMeta[] = [
     shortName: 'ATS Matcher',
     category: 'document',
     description: 'Direct PDF/DOCX parsing, ATS diagnostics & 1-click builder',
-    badge: 'Tool 05',
+    badge: 'Career • ATS',
+  },
+  {
+    id: 'resizer',
+    name: 'Exam Image Resizer',
+    shortName: 'Image Resizer',
+    category: 'document',
+    description: 'Client-side photo/signature compression to exact 20KB–500KB',
+    badge: 'Exact KB',
+  },
+  {
+    id: 'attendance',
+    name: 'Attendance Defender',
+    shortName: 'Attendance',
+    category: 'academic',
+    description: 'Smart bunk & recovery margin calculator with 75% thresholds',
+    badge: 'Academic 01',
+  },
+  {
+    id: 'gpa',
+    name: 'Global GPA Hub',
+    shortName: 'GPA Hub',
+    category: 'academic',
+    description: 'VTU/AICTE percentage converter & future SGPA goal predictor',
+    badge: 'Academic 02',
+  },
+  {
+    id: 'internal-calc',
+    name: 'Internal Cutoff Estimator',
+    shortName: 'Internal Calc',
+    category: 'academic',
+    description: '80:20 mid evaluation & external semester target marks finder',
+    badge: 'Academic 03',
   },
   {
     id: 'humanizer',
@@ -79,20 +97,25 @@ export const TOOLS_CONFIG: ToolMeta[] = [
     shortName: 'AI Humanizer',
     category: 'writing',
     description: 'Real-feel AI pattern scanner & natural conversational rewriter',
-    badge: 'Tool 06',
-  },
-  {
-    id: 'pdf-tools',
-    name: 'PDF Power Tools',
-    shortName: 'PDF Suite',
-    category: 'document',
-    description: 'Zero-server WebAssembly PDF merge & custom page range extract',
-    badge: 'Tool 07',
+    badge: 'AI Scanner',
   },
 ];
 
+type CategoryFilter = 'all' | 'pdf' | 'career' | 'academic' | 'counselling';
+
 export default function App() {
   const [activeTab, setActiveTab] = useState<ToolTab>('eapcet-radar');
+  const [legalModal, setLegalModal] = useState<LegalModalType | null>(null);
+  const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('all');
+  const [copiedEmail, setCopiedEmail] = useState(false);
+
+  const supportEmail = 'support.jamord@gmail.com';
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(supportEmail);
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2200);
+  };
 
   // Sync activeTab with URL hash for bookmarking and history
   useEffect(() => {
@@ -148,32 +171,76 @@ export default function App() {
     }
   };
 
+  const filteredTools = TOOLS_CONFIG.filter((tool) => {
+    if (categoryFilter === 'all') return true;
+    if (categoryFilter === 'pdf') return tool.id === 'pdf-tools';
+    if (categoryFilter === 'career') return tool.id === 'resume-checker' || tool.id === 'humanizer' || tool.id === 'resizer';
+    if (categoryFilter === 'academic') return tool.category === 'academic';
+    if (categoryFilter === 'counselling') return tool.id === 'eapcet-radar';
+    return true;
+  });
+
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 tech-grid-pattern-light">
+    <div className="min-h-screen bg-slate-50 text-slate-900 tech-grid-pattern-light flex flex-col justify-between">
       
       {/* Sticky Top Navigation & Header */}
       <Header
         activeTab={activeTab}
         setActiveTab={handleTabChange}
+        onOpenLegal={(type) => setLegalModal(type)}
       />
 
-      {/* Main Container */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
+      {/* Main Content Container */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 flex-1 w-full">
         
-        {/* Quick Tool Selector Carousel / Grid */}
-        <section id="quick-tool-selector" className="space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase text-slate-600 tracking-wider flex items-center gap-1.5">
-              <Zap className="w-3.5 h-3.5 text-sky-600" />
-              Student Utility Suite
-            </span>
-            <span className="text-xs text-slate-500 hidden sm:inline">
-              8 In-Browser Tools • 100% Client-Side Private
-            </span>
+        {/* Global Positioning & Trust Hero Section */}
+        <HeroSection
+          onSelectTool={handleTabChange}
+          activeTab={activeTab}
+        />
+
+        {/* Feature Grid & Category Tool Showcase */}
+        <section id="quick-tool-selector" className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-200">
+            <div>
+              <span className="text-xs font-bold uppercase text-slate-900 tracking-wider flex items-center gap-1.5">
+                <Zap className="w-3.5 h-3.5 text-sky-600" />
+                Universal Productivity Suite
+              </span>
+              <p className="text-[11px] text-slate-500 mt-0.5">
+                International Document &amp; Career Engines alongside Specialized Indian Academic Trackers
+              </p>
+            </div>
+
+            {/* Category Filter Pills */}
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs">
+              {(
+                [
+                  { id: 'all', label: 'All Tools (8)' },
+                  { id: 'pdf', label: 'PDF Suite (30)' },
+                  { id: 'career', label: 'Career & ATS' },
+                  { id: 'academic', label: 'Academic & GPA' },
+                  { id: 'counselling', label: 'AP EAPCET' },
+                ] as const
+              ).map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setCategoryFilter(cat.id)}
+                  className={`px-3 py-1.5 rounded-lg font-medium transition-colors whitespace-nowrap cursor-pointer ${
+                    categoryFilter === cat.id
+                      ? 'bg-slate-900 text-white shadow-xs font-semibold'
+                      : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 hover:text-slate-900'
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
           </div>
 
+          {/* Quick Tool Selector Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5">
-            {TOOLS_CONFIG.map((tool) => {
+            {filteredTools.map((tool) => {
               const Icon = getToolIcon(tool.id);
               const isActive = activeTab === tool.id;
 
@@ -216,7 +283,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* Dynamic Tool Content with Smooth Animation */}
+        {/* Dynamic Active Tool Viewport */}
         <section id="active-tool-viewport" className="relative min-h-[400px]">
           <AnimatePresence mode="wait">
             {activeTab === 'eapcet-radar' && (
@@ -317,46 +384,202 @@ export default function App() {
           </AnimatePresence>
         </section>
 
-        {/* Educational Guides Section */}
+        {/* Educational Guides & Methodology Documentation */}
         <EducationalGuideAndSeo />
       </main>
 
-      {/* Global Minimalist Footer */}
-      <footer id="app-footer" className="border-t border-slate-200 bg-white text-slate-600 py-8 px-4 sm:px-6 lg:px-8 mt-16 shadow-xs">
-        <div className="max-w-7xl mx-auto space-y-5">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              <span className="text-sm font-bold text-slate-900">
-                STUDYMACHA
-              </span>
-              <span className="text-xs text-slate-500">• 100% Client-Side In-Browser Engine</span>
+      {/* Global SaaS Footer with Official Legal & Support Credentials */}
+      <footer id="app-footer" className="border-t border-slate-200 bg-white text-slate-600 py-10 px-4 sm:px-6 lg:px-8 mt-16 shadow-xs">
+        <div className="max-w-7xl mx-auto space-y-8">
+          
+          {/* Top Footer Row: Identity, Support Email & In-Memory Guarantee */}
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-slate-100">
+            <div className="space-y-1.5 max-w-lg">
+              <div className="flex items-center gap-2.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-base font-extrabold text-slate-900 tracking-tight">
+                  STUDYMACHA
+                </span>
+                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200">
+                  Global Utility Platform
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Empowering international professionals and Indian scholars with lightning-fast, client-side PDF manipulation, ATS resume optimization, exact KB exam image compression, and real-time AP EAPCET vacancy tracking.
+              </p>
             </div>
 
-            <div className="flex items-center gap-2 text-xs text-slate-700 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-200">
-              <Lock className="w-3.5 h-3.5 text-sky-600" />
-              <span>Zero server telemetry. All data stays confidential in your browser.</span>
+            {/* Official Support Email Card */}
+            <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col sm:flex-row sm:items-center gap-3 shrink-0">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-xl bg-sky-500 text-white flex items-center justify-center shadow-xs">
+                  <Mail className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="text-[11px] font-semibold uppercase text-slate-400 block tracking-wider">
+                    Official Support Desk
+                  </span>
+                  <a
+                    href={`mailto:${supportEmail}`}
+                    className="text-xs font-bold text-slate-900 hover:text-sky-600 transition-colors font-mono"
+                  >
+                    {supportEmail}
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1.5 pt-1 sm:pt-0">
+                <button
+                  onClick={handleCopyEmail}
+                  className="px-2.5 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 cursor-pointer"
+                  title="Copy support email"
+                >
+                  {copiedEmail ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copiedEmail ? 'Copied' : 'Copy'}</span>
+                </button>
+                <button
+                  onClick={() => setLegalModal('contact')}
+                  className="px-2.5 py-1.5 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+                >
+                  Contact Form
+                </button>
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2 text-xs">
-            {TOOLS_CONFIG.map((t) => (
-              <button
-                key={t.id}
-                onClick={() => handleTabChange(t.id)}
-                className="text-left text-slate-600 hover:text-sky-600 transition-colors p-1 truncate cursor-pointer font-medium"
-              >
-                {t.name}
-              </button>
-            ))}
+          {/* Middle Footer Row: Dual Value Grid & Tools Directory */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+            {/* Column 1: International Document & Career Tools */}
+            <div className="space-y-2">
+              <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                <FileText className="w-3.5 h-3.5 text-sky-600" />
+                Global Document &amp; Career Suite
+              </h4>
+              <ul className="space-y-1.5 text-slate-500">
+                <li>
+                  <button onClick={() => handleTabChange('pdf-tools')} className="hover:text-sky-600 transition-colors text-left cursor-pointer">
+                    30+ WebAssembly PDF Tools (Merge, Split, Watermark)
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => handleTabChange('resume-checker')} className="hover:text-sky-600 transition-colors text-left cursor-pointer">
+                    ATS Resume Keyword Diagnostic &amp; 1-Click Builder
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => handleTabChange('resizer')} className="hover:text-sky-600 transition-colors text-left cursor-pointer">
+                    Exam Image &amp; Signature Exact KB Resizer (20–500 KB)
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => handleTabChange('humanizer')} className="hover:text-sky-600 transition-colors text-left cursor-pointer">
+                    AI Text Humanizer &amp; Linguistic Perplexity Scanner
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 2: Indian Academic & Counselling Utilities */}
+            <div className="space-y-2">
+              <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                <GraduationCap className="w-3.5 h-3.5 text-rose-600" />
+                Indian University &amp; Counselling
+              </h4>
+              <ul className="space-y-1.5 text-slate-500">
+                <li>
+                  <button onClick={() => handleTabChange('eapcet-radar')} className="hover:text-rose-600 transition-colors text-left cursor-pointer font-medium text-slate-700">
+                    AP EAPCET Phase 2 College Vacancy Radar &amp; Fees
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => handleTabChange('attendance')} className="hover:text-sky-600 transition-colors text-left cursor-pointer">
+                    Attendance Defender (75% Statutory Threshold Bunk Engine)
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => handleTabChange('gpa')} className="hover:text-sky-600 transition-colors text-left cursor-pointer">
+                    Global GPA Hub (VTU, JNTU, AICTE, Anna Univ Formulas)
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => handleTabChange('internal-calc')} className="hover:text-sky-600 transition-colors text-left cursor-pointer">
+                    80:20 Mid Evaluation &amp; Semester Pass Cutoff Finder
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 3: Trust, Privacy Architecture & Compliance */}
+            <div className="space-y-2">
+              <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                Privacy Architecture &amp; Legal
+              </h4>
+              <p className="text-[11px] text-slate-500 leading-relaxed">
+                Zero server uploads. All processing takes place in your local browser sandbox. AdSense compliant with transparent third-party ad disclosures.
+              </p>
+              <div className="flex flex-wrap gap-2 pt-1 text-[11px]">
+                <button
+                  onClick={() => setLegalModal('about')}
+                  className="text-slate-600 hover:text-sky-600 underline font-medium cursor-pointer"
+                >
+                  About Us
+                </button>
+                <span className="text-slate-300">•</span>
+                <button
+                  onClick={() => setLegalModal('contact')}
+                  className="text-slate-600 hover:text-sky-600 underline font-medium cursor-pointer"
+                >
+                  Contact Us
+                </button>
+                <span className="text-slate-300">•</span>
+                <button
+                  onClick={() => setLegalModal('privacy')}
+                  className="text-slate-600 hover:text-sky-600 underline font-medium cursor-pointer"
+                >
+                  Privacy Policy
+                </button>
+                <span className="text-slate-300">•</span>
+                <button
+                  onClick={() => setLegalModal('terms')}
+                  className="text-slate-600 hover:text-sky-600 underline font-medium cursor-pointer"
+                >
+                  Terms &amp; Conditions
+                </button>
+                <span className="text-slate-300">•</span>
+                <button
+                  onClick={() => setLegalModal('disclaimer')}
+                  className="text-slate-600 hover:text-sky-600 underline font-medium cursor-pointer"
+                >
+                  Disclaimer
+                </button>
+              </div>
+            </div>
           </div>
 
-          <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-2">
-            <span>© 2026 STUDYMACHA. Designed for distraction-free student success.</span>
-            <span>All operations run locally in browser memory.</span>
+          {/* Bottom Copyright & Security Statement */}
+          <div className="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-3">
+            <div className="flex items-center gap-2">
+              <Lock className="w-3.5 h-3.5 text-emerald-600" />
+              <span>100% In-Memory Sandbox • No Personal Files Stored on Servers</span>
+            </div>
+            <div>
+              <span>© 2026 StudyMacha Platform. For assistance: </span>
+              <a href={`mailto:${supportEmail}`} className="font-mono text-slate-700 hover:text-sky-600 font-semibold">
+                {supportEmail}
+              </a>
+            </div>
           </div>
         </div>
       </footer>
+
+      {/* Global Interactive Legal & Contact Modal */}
+      <LegalModals
+        type={legalModal}
+        onClose={() => setLegalModal(null)}
+        onSwitchType={(type) => setLegalModal(type)}
+      />
     </div>
   );
 }
+

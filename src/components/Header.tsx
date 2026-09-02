@@ -11,33 +11,46 @@ import {
   Menu,
   X,
   Compass,
+  Info,
+  Mail,
+  Shield,
 } from 'lucide-react';
 import { ToolTab } from '../types';
+import { LegalModalType } from './LegalModals';
 
 interface HeaderProps {
   activeTab: ToolTab;
   setActiveTab: (tab: ToolTab) => void;
+  onOpenLegal?: (type: LegalModalType) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   activeTab,
   setActiveTab,
+  onOpenLegal,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
   const tools: Array<{ id: ToolTab; name: string; icon: React.ComponentType<{ className?: string }>; featured?: boolean }> = [
+    { id: 'pdf-tools', name: '30+ PDF Tools', icon: FileText, featured: true },
     { id: 'eapcet-radar', name: 'AP EAPCET Radar', icon: Radar, featured: true },
-    { id: 'attendance', name: 'Attendance Defender', icon: ShieldCheck },
-    { id: 'gpa', name: 'Global GPA Hub', icon: GraduationCap },
-    { id: 'internal-calc', name: 'Internal Cutoff', icon: Calculator },
-    { id: 'resizer', name: 'Image Resizer', icon: ImageIcon },
     { id: 'resume-checker', name: 'ATS Matcher', icon: FileSearch },
+    { id: 'resizer', name: 'Image Resizer', icon: ImageIcon },
+    { id: 'attendance', name: 'Attendance Defender', icon: ShieldCheck },
+    { id: 'gpa', name: 'GPA Hub', icon: GraduationCap },
+    { id: 'internal-calc', name: 'Internal Cutoff', icon: Calculator },
     { id: 'humanizer', name: 'AI Humanizer', icon: Bot },
-    { id: 'pdf-tools', name: 'PDF Tools', icon: FileText },
   ];
 
   const handleSelectTab = (tab: ToolTab) => {
     setActiveTab(tab);
+    setMobileMenuOpen(false);
+  };
+
+  const handleLegal = (type: LegalModalType) => {
+    if (onOpenLegal) {
+      onOpenLegal(type);
+    }
     setMobileMenuOpen(false);
   };
 
@@ -56,18 +69,18 @@ export const Header: React.FC<HeaderProps> = ({
                 <span className="text-base font-bold tracking-tight text-slate-900">
                   STUDYMACHA
                 </span>
-                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-200">
-                  Student Suite
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  Global Suite • 100% In-Memory
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 font-normal hidden sm:block">
-                Academic & Career Productivity Utilities
+                All-in-One Student &amp; Professional Utilities
               </p>
             </div>
           </div>
 
           {/* Desktop Navigation Tabs */}
-          <nav className="hidden lg:flex items-center gap-1.5 p-1 rounded-xl bg-slate-50 border border-slate-200">
+          <nav className="hidden xl:flex items-center gap-1 p-1 rounded-xl bg-slate-50 border border-slate-200">
             {tools.map((tool) => {
               const Icon = tool.icon;
               const isActive = activeTab === tool.id;
@@ -75,7 +88,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   key={tool.id}
                   onClick={() => handleSelectTab(tool.id)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all duration-200 ease-out active:scale-95 cursor-pointer ${
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs transition-all duration-200 ease-out active:scale-95 cursor-pointer ${
                     isActive
                       ? 'bg-sky-500 text-white border border-sky-500 shadow-sm font-semibold'
                       : 'bg-white text-slate-700 border border-slate-200 hover:bg-sky-50 hover:border-sky-300 hover:text-sky-700 font-medium'
@@ -88,12 +101,37 @@ export const Header: React.FC<HeaderProps> = ({
             })}
           </nav>
 
-          {/* Right Controls: Mobile Menu */}
+          {/* Right Controls: Desktop Legal / Support Links & Mobile Menu Toggle */}
           <div className="flex items-center gap-2">
+            {onOpenLegal && (
+              <div className="hidden md:flex items-center gap-1.5 text-xs text-slate-600">
+                <button
+                  onClick={() => handleLegal('about')}
+                  className="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors font-medium cursor-pointer"
+                >
+                  About
+                </button>
+                <button
+                  onClick={() => handleLegal('contact')}
+                  className="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors font-medium flex items-center gap-1 cursor-pointer"
+                >
+                  <Mail className="w-3.5 h-3.5 text-sky-600" />
+                  <span>Support</span>
+                </button>
+                <button
+                  onClick={() => handleLegal('privacy')}
+                  className="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors font-medium flex items-center gap-1 cursor-pointer"
+                >
+                  <Shield className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Privacy</span>
+                </button>
+              </div>
+            )}
+
             {/* Mobile Menu Toggle Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-sky-50 hover:text-sky-700 transition-all duration-200 ease-out active:scale-95 cursor-pointer shadow-xs"
+              className="xl:hidden p-2 rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-sky-50 hover:text-sky-700 transition-all duration-200 ease-out active:scale-95 cursor-pointer shadow-xs"
               aria-label="Open Tool Menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -102,7 +140,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Mobile / Tablet Horizontal Scrollable Tool Pills */}
-        <div className="flex lg:hidden py-2.5 border-t border-slate-200 gap-1.5 overflow-x-auto no-scrollbar">
+        <div className="flex xl:hidden py-2.5 border-t border-slate-200 gap-1.5 overflow-x-auto no-scrollbar">
           {tools.map((tool) => {
             const Icon = tool.icon;
             const isActive = activeTab === tool.id;
@@ -126,10 +164,10 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Expanded Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-200 bg-white px-4 py-4 space-y-4 max-h-[80vh] overflow-y-auto shadow-lg">
+        <div className="xl:hidden border-t border-slate-200 bg-white px-4 py-4 space-y-4 max-h-[85vh] overflow-y-auto shadow-lg">
           <div className="space-y-1.5">
             <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 px-2">
-              Student Utilities
+              All Productivity Utilities
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {tools.map((tool) => {
@@ -152,6 +190,47 @@ export const Header: React.FC<HeaderProps> = ({
               })}
             </div>
           </div>
+
+          {onOpenLegal && (
+            <div className="pt-3 border-t border-slate-100 space-y-2">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 px-2">
+                Information &amp; Support
+              </span>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <button
+                  onClick={() => handleLegal('about')}
+                  className="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 font-medium"
+                >
+                  <Info className="w-3.5 h-3.5 text-sky-600" />
+                  <span>About Us</span>
+                </button>
+                <button
+                  onClick={() => handleLegal('contact')}
+                  className="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 font-medium"
+                >
+                  <Mail className="w-3.5 h-3.5 text-sky-600" />
+                  <span>Contact Us</span>
+                </button>
+                <button
+                  onClick={() => handleLegal('privacy')}
+                  className="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 font-medium"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Privacy Policy</span>
+                </button>
+                <button
+                  onClick={() => handleLegal('terms')}
+                  className="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 font-medium"
+                >
+                  <FileText className="w-3.5 h-3.5 text-slate-600" />
+                  <span>Terms &amp; Disclaimers</span>
+                </button>
+              </div>
+              <div className="px-2 py-1.5 text-[11px] text-slate-500 bg-slate-50 rounded-lg">
+                Official Support: <strong className="text-slate-800 font-mono">support.jamord@gmail.com</strong>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </header>
