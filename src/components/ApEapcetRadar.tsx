@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Search,
   MapPin,
@@ -20,15 +20,41 @@ import {
   Loader2,
   RefreshCw,
 } from 'lucide-react';
-import { VacancyCollege, VacancyBranch } from '../types';
+import { VacancyCollege } from '../types';
+import rawVacanciesData from '../eapcet_vacancies.json';
 
-const DATA_URL =
-  'https://raw.githubusercontent.com/JaganMohanRao-D/studymacha/main/src/eapcet_vacancies.json';
 const COLLEGES_PER_PAGE = 10;
 
+// Helper to sanitize and map raw JSON records into strongly-typed VacancyCollege models
+function mapRawCollegeData(rawData: any[]): VacancyCollege[] {
+  if (!Array.isArray(rawData)) return [];
+  return rawData.map((item: any) => ({
+    inst_code: String(item.inst_code || '').trim(),
+    inst_name: String(item.inst_name || '').trim(),
+    district: String(item.district || '').trim(),
+    place: String(item.place || '').trim(),
+    region: item.region ? String(item.region).trim() : undefined,
+    affiliated_to: String(
+      item.affiliated_to || item.college_type || 'State Autonomous'
+    ).trim(),
+    branches: Array.isArray(item.branches)
+      ? item.branches.map((b: any) => ({
+          branch_code: String(b.branch_code || '').trim(),
+          branch_name: String(b.branch_name || b.branch_code || '').trim(),
+          total_seats: Number(b.total_seats) || 0,
+          left_over_seats: Number(b.left_over_seats) || 0,
+          fee: Number(b.fee) || 0,
+        }))
+      : [],
+  }));
+}
+
 export const ApEapcetRadar: React.FC = () => {
-  const [colleges, setColleges] = useState<VacancyCollege[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  // Directly initialize state with imported local dataset to avoid 404 network fetch issues
+  const [colleges, setColleges] = useState<VacancyCollege[]>(() =>
+    mapRawCollegeData(rawVacanciesData as any[])
+  );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -38,90 +64,20 @@ export const ApEapcetRadar: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
-  // Fetch real data dynamically from exact GitHub raw URL
-  const fetchVacancyData = async () => {
+  // Optional reload/refresh handler if user wants to re-sync
+  const handleReloadData = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(DATA_URL);
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: Failed to fetch vacancy dataset`);
-      }
-      const rawData = await response.json();
-
-      if (!Array.isArray(rawData)) {
-        throw new Error('Malformed dataset format');
-      }
-
-      // Map raw dataset fields cleanly to interface structure
-      const mappedData: VacancyCollege[] = rawData.map((item: any) => ({
-        inst_code: String(item.inst_code || '').trim(),
-        inst_name: String(item.inst_name || '').trim(),
-        district: String(item.district || '').trim(),
-        place: String(item.place || '').trim(),
-        region: item.region ? String(item.region).trim() : undefined,
-        affiliated_to: String(
-          item.affiliated_to || item.college_type || 'State Autonomous'
-        ).trim(),
-        branches: Array.isArray(item.branches)
-          ? item.branches.map((b: any) => ({
-              branch_code: String(b.branch_code || '').trim(),
-              branch_name: String(b.branch_name || b.branch_code || '').trim(),
-              total_seats: Number(b.total_seats) || 0,
-              left_over_seats: Number(b.left_over_seats) || 0,
-              fee: Number(b.fee) || 0,
-            }))
-          : [],
-      }));
-
-      setColleges(mappedData);
+      const mapped = mapRawCollegeData(rawVacanciesData as any[]);
+      setColleges(mapped);
       setIsLoading(false);
     } catch (err: any) {
-      console.warn('Primary fetch failed, checking local backup...', err);
-      // Fallback try to locally bundled json in case of offline/sandbox CORS
-      try {
-        const localRes = await fetch('/src/eapcet_vacancies.json');
-        if (localRes.ok) {
-          const localData = await localRes.json();
-          if (Array.isArray(localData)) {
-            const mappedLocal: VacancyCollege[] = localData.map((item: any) => ({
-              inst_code: String(item.inst_code || '').trim(),
-              inst_name: String(item.inst_name || '').trim(),
-              district: String(item.district || '').trim(),
-              place: String(item.place || '').trim(),
-              region: item.region ? String(item.region).trim() : undefined,
-              affiliated_to: String(
-                item.affiliated_to || item.college_type || 'State Autonomous'
-              ).trim(),
-              branches: Array.isArray(item.branches)
-                ? item.branches.map((b: any) => ({
-                    branch_code: String(b.branch_code || '').trim(),
-                    branch_name: String(b.branch_name || b.branch_code || '').trim(),
-                    total_seats: Number(b.total_seats) || 0,
-                    left_over_seats: Number(b.left_over_seats) || 0,
-                    fee: Number(b.fee) || 0,
-                  }))
-                : [],
-            }));
-            setColleges(mappedLocal);
-            setIsLoading(false);
-            return;
-          }
-        }
-      } catch (localErr) {
-        console.error('Local backup failed too:', localErr);
-      }
-
-      setError(
-        err.message || 'Unable to connect to live AP EAPCET vacancy registry. Please check your internet connection.'
-      );
+      console.error('Error reloading local vacancies data:', err);
+      setError('Unable to parse vacancy data. Please refresh the page.');
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchVacancyData();
-  }, []);
 
   // Dynamic dropdown extractions and global aggregates
   const { districts, branchCodes, totalSystemVacancies, totalSystemIntake } = useMemo(() => {
@@ -348,11 +304,11 @@ export const ApEapcetRadar: React.FC = () => {
             <p className="text-xs text-rose-700 max-w-md mx-auto">{error}</p>
           </div>
           <button
-            onClick={fetchVacancyData}
+            onClick={handleReloadData}
             className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-sm transition-colors"
           >
             <RefreshCw className="w-3.5 h-3.5" />
-            Retry Fetching Data
+            Reload Vacancy Data
           </button>
         </div>
       )}

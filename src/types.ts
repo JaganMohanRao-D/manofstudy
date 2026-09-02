@@ -266,8 +266,53 @@ export interface HumanizerResult {
 }
 
 // ----------------------------------------------------
-// Tool: Client-Side PDF Power Tools Types
+// Tool: Client-Side PDF Power Tools Types (30 Tools)
 // ----------------------------------------------------
+export type PdfToolCategory = 'all' | 'convert' | 'edit' | 'secure' | 'optimize';
+
+export type PdfToolId =
+  | 'merge-pdf'
+  | 'split-pdf'
+  | 'compress-pdf'
+  | 'pdf-to-word'
+  | 'pdf-to-powerpoint'
+  | 'pdf-to-excel'
+  | 'word-to-pdf'
+  | 'powerpoint-to-pdf'
+  | 'excel-to-pdf'
+  | 'edit-pdf'
+  | 'pdf-to-jpg'
+  | 'jpg-to-pdf'
+  | 'sign-pdf'
+  | 'watermark-pdf'
+  | 'rotate-pdf'
+  | 'html-to-pdf'
+  | 'unlock-pdf'
+  | 'protect-pdf'
+  | 'organize-pdf'
+  | 'pdf-to-pdfa'
+  | 'repair-pdf'
+  | 'page-numbers'
+  | 'scan-to-pdf'
+  | 'ocr-pdf'
+  | 'compare-pdf'
+  | 'redact-pdf'
+  | 'crop-pdf'
+  | 'pdf-forms'
+  | 'ai-summarizer'
+  | 'translate-markdown';
+
+export interface PdfToolDefinition {
+  id: PdfToolId;
+  name: string;
+  tagline: string;
+  category: 'convert' | 'edit' | 'secure' | 'optimize';
+  badge?: string;
+  acceptedFileTypes: string; // e.g., '.pdf' or '.jpg,.png,.jpeg' or '.docx,.txt' or '.xlsx,.csv'
+  multipleFiles?: boolean;
+  description: string;
+}
+
 export interface PdfFileItem {
   id: string;
   file: File;
@@ -275,6 +320,7 @@ export interface PdfFileItem {
   sizeBytes: number;
   pageCount?: number;
   arrayBuffer?: ArrayBuffer;
+  previewUrl?: string;
 }
 
 export type PdfToolMode = 'merge' | 'split' | 'info';
@@ -286,6 +332,13 @@ export interface PdfProcessProgress {
   error?: string;
   downloadUrl?: string;
   downloadFilename?: string;
+  resultStats?: {
+    originalSize?: string;
+    newSize?: string;
+    reductionPercent?: string;
+    pageCount?: number;
+    extraNote?: string;
+  };
 }
 
 // ----------------------------------------------------

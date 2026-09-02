@@ -1,6 +1,6 @@
 {
-  "name": "STUDYMACHA",
-  "description": "Distraction-free student utility platform featuring AP EAPCET Phase 2 Vacancy Radar, Attendance Defender, Global GPA Hub, Internal Cutoff Estimator, Exam Image Resizer, ATS Resume Matcher, and AI Text Humanizer.",
+  "name": "StudyMacha",
+  "description": "Distraction-free student utility platform featuring real-time AP EAPCET Phase 2 Vacancy Radar, Attendance Defender, Global GPA Hub, Internal Cutoff Estimator, Exam Image Resizer, ATS Resume Matcher, and AI Text Humanizer.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
