@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Search,
   MapPin,
@@ -21,8 +21,11 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { VacancyCollege } from '../types';
-import rawVacanciesData from '../eapcet_vacancies.json';
+import rawVacanciesFallback from '../eapcet_vacancies.json';
 
+const PUBLIC_DATA_URL = '/eapcet_vacancies.json';
+const GITHUB_RAW_URL =
+  'https://raw.githubusercontent.com/JaganMohanRao-D/studymacha/main/src/eapcet_vacancies.json';
 const COLLEGES_PER_PAGE = 10;
 
 // Helper to sanitize and map raw JSON records into strongly-typed VacancyCollege models
@@ -50,9 +53,9 @@ function mapRawCollegeData(rawData: any[]): VacancyCollege[] {
 }
 
 export const ApEapcetRadar: React.FC = () => {
-  // Directly initialize state with imported local dataset to avoid 404 network fetch issues
+  // Initialize with fallback data or empty until fetched from public root
   const [colleges, setColleges] = useState<VacancyCollege[]>(() =>
-    mapRawCollegeData(rawVacanciesData as any[])
+    mapRawCollegeData(rawVacanciesFallback as any[])
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -64,20 +67,55 @@ export const ApEapcetRadar: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
-  // Optional reload/refresh handler if user wants to re-sync
-  const handleReloadData = () => {
+  // Load vacancy dataset from public root /eapcet_vacancies.json
+  const loadVacancyData = async () => {
     setIsLoading(true);
     setError(null);
+
     try {
-      const mapped = mapRawCollegeData(rawVacanciesData as any[]);
-      setColleges(mapped);
-      setIsLoading(false);
-    } catch (err: any) {
-      console.error('Error reloading local vacancies data:', err);
-      setError('Unable to parse vacancy data. Please refresh the page.');
-      setIsLoading(false);
+      // Primary: Fetch from public assets root
+      const response = await fetch(PUBLIC_DATA_URL);
+      if (response.ok) {
+        const rawData = await response.json();
+        if (Array.isArray(rawData) && rawData.length > 0) {
+          setColleges(mapRawCollegeData(rawData));
+          setIsLoading(false);
+          return;
+        }
+      }
+      throw new Error(`HTTP ${response.status}: Failed to load from ${PUBLIC_DATA_URL}`);
+    } catch (publicErr) {
+      console.warn('Public asset fetch failed, attempting CDN & bundled fallback...', publicErr);
+      
+      // Secondary: Try GitHub Raw CDN
+      try {
+        const cdnRes = await fetch(GITHUB_RAW_URL);
+        if (cdnRes.ok) {
+          const cdnData = await cdnRes.json();
+          if (Array.isArray(cdnData) && cdnData.length > 0) {
+            setColleges(mapRawCollegeData(cdnData));
+            setIsLoading(false);
+            return;
+          }
+        }
+      } catch (cdnErr) {
+        console.warn('CDN fetch failed, using local module fallback:', cdnErr);
+      }
+
+      // Tertiary: Fallback to bundled module
+      if (Array.isArray(rawVacanciesFallback) && rawVacanciesFallback.length > 0) {
+        setColleges(mapRawCollegeData(rawVacanciesFallback as any[]));
+        setIsLoading(false);
+      } else {
+        setError('Unable to load AP EAPCET vacancy dataset. Please verify internet connection.');
+        setIsLoading(false);
+      }
     }
   };
+
+  useEffect(() => {
+    loadVacancyData();
+  }, []);
 
   // Dynamic dropdown extractions and global aggregates
   const { districts, branchCodes, totalSystemVacancies, totalSystemIntake } = useMemo(() => {
@@ -304,7 +342,7 @@ export const ApEapcetRadar: React.FC = () => {
             <p className="text-xs text-rose-700 max-w-md mx-auto">{error}</p>
           </div>
           <button
-            onClick={handleReloadData}
+            onClick={loadVacancyData}
             className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-sm transition-colors"
           >
             <RefreshCw className="w-3.5 h-3.5" />
