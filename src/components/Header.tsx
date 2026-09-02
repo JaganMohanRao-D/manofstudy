@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  Radar,
   ShieldCheck,
   GraduationCap,
   Image as ImageIcon,
@@ -24,7 +25,8 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
-  const tools: Array<{ id: ToolTab; name: string; icon: React.ComponentType<{ className?: string }> }> = [
+  const tools: Array<{ id: ToolTab; name: string; icon: React.ComponentType<{ className?: string }>; featured?: boolean }> = [
+    { id: 'eapcet-radar', name: 'AP EAPCET Radar', icon: Radar, featured: true },
     { id: 'attendance', name: 'Attendance Defender', icon: ShieldCheck },
     { id: 'gpa', name: 'Global GPA Hub', icon: GraduationCap },
     { id: 'internal-calc', name: 'Internal Cutoff', icon: Calculator },

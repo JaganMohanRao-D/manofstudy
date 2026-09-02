@@ -18,6 +18,12 @@ export const EducationalGuideAndSeo: React.FC = () => {
 
   const faqs = [
     {
+      category: 'Counselling Tools',
+      question: 'How does the AP EAPCET Phase 2 Vacancy Radar track leftover seats?',
+      answer:
+        'The Radar processes institutional seat matrices across Andhra Pradesh universities, autonomous colleges, and affiliated institutions following Phase 1 reporting. It tracks branch-wise intake, leftover vacant seats, and official government-notified annual fee structures, enabling students to plan optimal Phase 2 web options.',
+    },
+    {
       category: 'Academic Tools',
       question: 'How does the Attendance Defender calculate bunkable and required classes?',
       answer:

@@ -1,4 +1,5 @@
 export type ToolTab = 
+  | 'eapcet-radar'
   | 'attendance' 
   | 'gpa' 
   | 'internal-calc'
@@ -7,7 +8,7 @@ export type ToolTab =
   | 'humanizer'
   | 'pdf-tools';
 
-export type ToolCategory = 'academic' | 'document' | 'writing';
+export type ToolCategory = 'academic' | 'document' | 'writing' | 'counselling';
 
 export interface ToolMeta {
   id: ToolTab;
@@ -17,6 +18,27 @@ export interface ToolMeta {
   description: string;
   badge: string;
 }
+
+export interface VacancyBranch {
+  branch_code: string;
+  branch_name: string;
+  total_seats: number;
+  left_over_seats: number;
+  fee: number;
+}
+
+export interface VacancyCollege {
+  inst_code: string;
+  inst_name: string;
+  district: string;
+  place: string;
+  region?: string;
+  affiliated_to: string;
+  branches: VacancyBranch[];
+}
+
+export type EapcetBranchVacancy = VacancyBranch;
+export type EapcetCollege = VacancyCollege;
 
 export interface AttendanceState {
   totalClasses: number;

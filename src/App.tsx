@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
+  Radar,
   ShieldCheck,
   GraduationCap,
   Image as ImageIcon,
@@ -13,6 +14,7 @@ import {
 } from 'lucide-react';
 import { ToolTab, ToolMeta } from './types';
 import { Header } from './components/Header';
+import { ApEapcetRadar } from './components/ApEapcetRadar';
 import { AttendanceDefender } from './components/AttendanceDefender';
 import { GlobalGpaHub } from './components/GlobalGpaHub';
 import { ImageResizer } from './components/ImageResizer';
@@ -23,6 +25,14 @@ import { InternalExamEstimator } from './components/InternalExamEstimator';
 import { EducationalGuideAndSeo } from './components/EducationalGuideAndSeo';
 
 export const TOOLS_CONFIG: ToolMeta[] = [
+  {
+    id: 'eapcet-radar',
+    name: 'AP EAPCET Vacancy Radar',
+    shortName: 'EAPCET Radar',
+    category: 'counselling',
+    description: 'Phase 2 live college vacancies, branch intake & fee structure scanner',
+    badge: 'NEW • Phase 2',
+  },
   {
     id: 'attendance',
     name: 'Attendance Defender',
@@ -82,13 +92,15 @@ export const TOOLS_CONFIG: ToolMeta[] = [
 ];
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<ToolTab>('attendance');
+  const [activeTab, setActiveTab] = useState<ToolTab>('eapcet-radar');
 
   // Sync activeTab with URL hash for bookmarking and history
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '').toLowerCase();
-      if (hash === 'gpa') {
+      if (hash === 'eapcet-radar' || hash === 'eapcet' || hash === 'phase2' || hash === 'radar' || hash === 'vacancy') {
+        setActiveTab('eapcet-radar');
+      } else if (hash === 'gpa') {
         setActiveTab('gpa');
       } else if (hash === 'resizer' || hash === 'image') {
         setActiveTab('resizer');
@@ -117,6 +129,8 @@ export default function App() {
 
   const getToolIcon = (id: ToolTab) => {
     switch (id) {
+      case 'eapcet-radar':
+        return Radar;
       case 'attendance':
         return ShieldCheck;
       case 'gpa':
@@ -154,11 +168,11 @@ export default function App() {
               Student Utility Suite
             </span>
             <span className="text-xs text-slate-500 hidden sm:inline">
-              7 In-Browser Tools • 100% Client-Side Private
+              8 In-Browser Tools • 100% Client-Side Private
             </span>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5">
             {TOOLS_CONFIG.map((tool) => {
               const Icon = getToolIcon(tool.id);
               const isActive = activeTab === tool.id;
@@ -205,6 +219,18 @@ export default function App() {
         {/* Dynamic Tool Content with Smooth Animation */}
         <section id="active-tool-viewport" className="relative min-h-[400px]">
           <AnimatePresence mode="wait">
+            {activeTab === 'eapcet-radar' && (
+              <motion.div
+                key="eapcet-radar"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.15 }}
+              >
+                <ApEapcetRadar />
+              </motion.div>
+            )}
+
             {activeTab === 'attendance' && (
               <motion.div
                 key="attendance"
@@ -313,7 +339,7 @@ export default function App() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-7 gap-2 text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2 text-xs">
             {TOOLS_CONFIG.map((t) => (
               <button
                 key={t.id}
