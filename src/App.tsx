@@ -19,6 +19,7 @@ import {
   Sparkles,
   Layers,
   Globe,
+  AlertCircle,
 } from 'lucide-react';
 import { ToolTab, ToolMeta } from './types';
 import { Header } from './components/Header';
@@ -555,6 +556,25 @@ export default function App() {
                 </button>
               </div>
             </div>
+          </div>
+
+          {/* Prominent Legal Disclaimer & Safe Harbor Protection Zone */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-amber-50/80 border border-amber-200/90 text-amber-950 space-y-2">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 font-bold text-xs text-amber-900">
+                <AlertCircle className="w-4 h-4 text-amber-700 shrink-0" />
+                <span className="uppercase tracking-wider">Independent Platform &amp; Legal Safe Harbor</span>
+              </div>
+              <button
+                onClick={() => setLegalModal('disclaimer')}
+                className="text-[11px] font-semibold text-amber-800 hover:text-amber-950 underline cursor-pointer"
+              >
+                Read Full Disclosures →
+              </button>
+            </div>
+            <p className="text-xs text-amber-900/90 leading-relaxed">
+              <strong>Disclaimer:</strong> StudyMacha is an independent informational and utility platform. AP EAPCET data, college vacancy counts, and scholarship listings are aggregated from publicly available official portals for educational guidance only. StudyMacha is <strong>NOT affiliated with APSCHE, APCFSS, National Scholarship Portal (NSP), or any government body</strong>. Official cutoffs, deadlines, and seat allotments are subject to change by respective authorities. Users must verify all critical details on official government portals.
+            </p>
           </div>
 
           {/* Bottom Copyright & Security Statement */}

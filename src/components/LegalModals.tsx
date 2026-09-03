@@ -14,6 +14,7 @@ import {
   Sparkles,
   Info,
   Scale,
+  AlertCircle,
 } from 'lucide-react';
 
 export type LegalModalType = 'about' | 'contact' | 'privacy' | 'terms' | 'disclaimer';
@@ -367,12 +368,17 @@ export const LegalModals: React.FC<LegalModalsProps> = ({
                   All platform interfaces, proprietary computation engines, brand styling, visual designs, and source code are the intellectual property of StudyMacha. You retain complete ownership of all files, documents, and content processed using our client-side tools.
                 </p>
 
-                <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider">4. Limitation of Liability</h4>
+                <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider">4. Safe Harbor, Admissions &amp; Scholarship Disclaimer</h4>
+                <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-950 text-xs leading-relaxed">
+                  <strong>Disclaimer:</strong> StudyMacha is an independent informational and utility platform. AP EAPCET data, college vacancy counts, and scholarship listings are aggregated from publicly available official portals for educational guidance only. StudyMacha is <strong>NOT affiliated with APSCHE, APCFSS, National Scholarship Portal (NSP), or any government body</strong>. Official cutoffs, deadlines, and seat allotments are subject to change by respective authorities. Users must verify all critical details on official government portals.
+                </div>
+
+                <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider">5. Limitation of Liability</h4>
                 <p>
-                  Under no circumstances shall StudyMacha or its creators be liable for any direct, indirect, incidental, consequential, or exemplary damages arising out of your use or inability to use the platform, including but not limited to exam registration disqualifications, academic attendance shortages, or counselling allotment outcomes.
+                  Under no circumstances shall StudyMacha, its operators, or contributors be liable for any direct, indirect, incidental, consequential, or exemplary damages arising out of your use or inability to use the platform, including but not limited to university admissions, seat allotment variances, scholarship grant decisions, exam registration disqualifications, or academic attendance shortages.
                 </p>
 
-                <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider">5. Modifications to Terms</h4>
+                <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider">6. Modifications to Terms</h4>
                 <p>
                   We reserve the right to revise these Terms of Service at any time. Changes will be posted directly to this page with the updated revision date.
                 </p>
@@ -383,28 +389,33 @@ export const LegalModals: React.FC<LegalModalsProps> = ({
           {/* DISCLAIMER */}
           {type === 'disclaimer' && (
             <div className="space-y-4">
-              <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-950 space-y-2">
+              <div className="p-4 bg-amber-50 border border-amber-300 rounded-xl text-amber-950 space-y-2.5">
                 <div className="flex items-center gap-2 font-bold text-xs text-amber-900">
-                  <Info className="w-4 h-4 text-amber-600 shrink-0" />
-                  <span>Important Academic &amp; Statutory Disclaimer</span>
+                  <AlertCircle className="w-4 h-4 text-amber-700 shrink-0" />
+                  <span className="uppercase tracking-wider">Statutory Safe Harbor &amp; Legal Protection</span>
                 </div>
-                <p className="text-[11px] leading-relaxed">
-                  StudyMacha is an independent student utility initiative. It is not officially associated with, affiliated with, endorsed by, or sponsored by the Andhra Pradesh State Council of Higher Education (APSCHE), APCFSS, AICTE, VTU, JNTU, or any state or central government admissions authority.
+                <p className="text-xs leading-relaxed font-medium">
+                  <strong>Disclaimer:</strong> StudyMacha is an independent informational and utility platform. AP EAPCET data, college vacancy counts, and scholarship listings are aggregated from publicly available official portals for educational guidance only. StudyMacha is <strong>NOT affiliated with APSCHE, APCFSS, National Scholarship Portal (NSP), or any government body</strong>. Official cutoffs, deadlines, and seat allotments are subject to change by respective authorities. Users must verify all critical details on official government portals.
                 </p>
               </div>
 
               <div className="space-y-3">
-                <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider">AP EAPCET Vacancy Data Verification</h4>
+                <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider">1. AP EAPCET Vacancy Data Verification</h4>
                 <p>
                   The institutional seat vacancy records, leftover seat distributions, and annual tuition fees displayed in the AP EAPCET Vacancy Radar are sourced from public university announcements and official Phase 1 allotment reports for analytical convenience. While we make every effort to maintain dataset precision, seat statuses dynamically change during active counselling rounds. Students must cross-verify final choices on the official state portal (<code className="bg-slate-100 px-1 py-0.5 rounded text-[11px]">eapcet-sche.aptonline.in</code>) prior to final web option submission.
                 </p>
 
-                <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider">Attendance &amp; Academic Calculators</h4>
+                <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider">2. Scholarship Opportunities &amp; Government Schemes</h4>
+                <p>
+                  Information concerning national, state, and private engineering scholarships (including NSP, Vidyasaarathi, FAEA, and corporate foundations) is compiled from public notices. Eligibility criteria, application windows, and disbursement amounts are determined solely by the awarding bodies. StudyMacha does not process applications, collect fees, or guarantee scholarship disbursements.
+                </p>
+
+                <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider">3. Attendance &amp; Academic Calculators</h4>
                 <p>
                   Attendance and internal exam projections are mathematical estimates derived from standard institutional formulas (e.g. 75% statutory requirement, 80:20 mid evaluation models). Individual universities, colleges, and autonomous departments reserve the right to enforce custom medical condonation policies, detention norms, or lab pass marks. Always consult your departmental head or academic registrar for official exam eligibility.
                 </p>
 
-                <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider">Corrections &amp; Notice Reporting</h4>
+                <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider">4. Corrections &amp; Notice Reporting</h4>
                 <p>
                   If an institution notices an error or outdated fee in our vacancy matrices, please alert our technical desk at{' '}
                   <a href={`mailto:${supportEmail}`} className="text-sky-600 font-semibold underline">
