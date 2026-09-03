@@ -1,0 +1,236 @@
+import React, { useState } from 'react';
+import {
+  Compass,
+  Download,
+  Calendar,
+  Layers,
+  Briefcase,
+  TrendingUp,
+  ArrowRight,
+  Shield,
+  Cpu,
+  Wrench,
+  Building2,
+  Terminal,
+} from 'lucide-react';
+import { BranchRoadmap } from '../../types';
+
+interface BranchCardProps {
+  branch: BranchRoadmap;
+  onOpenModal: (branch: BranchRoadmap) => void;
+  onDownloadPdf: (e: React.MouseEvent, branch: BranchRoadmap) => void;
+}
+
+export const BranchCard: React.FC<BranchCardProps> = ({
+  branch,
+  onOpenModal,
+  onDownloadPdf,
+}) => {
+  const [imgFailed, setImgFailed] = useState(false);
+
+  // Category-based aesthetic gradients and watermarks
+  const categoryTheme = React.useMemo(() => {
+    const cat = branch.bannerCategory || branch.category;
+    switch (cat) {
+      case 'security':
+        return {
+          gradient: 'from-zinc-950 via-emerald-950 to-teal-950 border-emerald-500/30',
+          badgeBg: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/30',
+          accentText: 'text-emerald-400',
+          icon: Shield,
+          watermarkColor: 'text-emerald-500/10',
+          glow: 'from-emerald-600/20',
+        };
+      case 'electronics':
+        return {
+          gradient: 'from-slate-950 via-sky-950 to-amber-950/60 border-amber-500/30',
+          badgeBg: 'bg-amber-500/20 text-amber-300 border-amber-400/30',
+          accentText: 'text-amber-400',
+          icon: Cpu,
+          watermarkColor: 'text-amber-500/10',
+          glow: 'from-amber-600/20',
+        };
+      case 'mechanical':
+        return {
+          gradient: 'from-zinc-950 via-rose-950/70 to-slate-950 border-rose-500/30',
+          badgeBg: 'bg-rose-500/20 text-rose-300 border-rose-400/30',
+          accentText: 'text-rose-400',
+          icon: Wrench,
+          watermarkColor: 'text-rose-500/10',
+          glow: 'from-rose-600/20',
+        };
+      case 'civil':
+        return {
+          gradient: 'from-stone-950 via-amber-950/60 to-slate-950 border-stone-500/30',
+          badgeBg: 'bg-amber-500/20 text-amber-300 border-amber-400/30',
+          accentText: 'text-amber-400',
+          icon: Building2,
+          watermarkColor: 'text-amber-500/10',
+          glow: 'from-amber-600/20',
+        };
+      case 'computing':
+      default:
+        return {
+          gradient: 'from-slate-950 via-indigo-950 to-cyan-950/70 border-indigo-500/30',
+          badgeBg: 'bg-indigo-500/20 text-indigo-300 border-indigo-400/30',
+          accentText: 'text-indigo-400',
+          icon: Terminal,
+          watermarkColor: 'text-indigo-500/10',
+          glow: 'from-indigo-600/20',
+        };
+    }
+  }, [branch]);
+
+  const WatermarkIcon = categoryTheme.icon;
+  const topicsLabel = branch.topicsCount || '800+ Topics • 4 Years';
+  const acronymText = branch.acronym || branch.code;
+
+  return (
+    <div
+      id={`branch-card-${branch.id}`}
+      onClick={() => onOpenModal(branch)}
+      className="group relative flex flex-col bg-white rounded-2xl border border-slate-200/90 hover:border-indigo-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-200 overflow-hidden cursor-pointer"
+    >
+      {/* Card Thumbnail / Header Banner */}
+      <div className="relative h-44 w-full overflow-hidden bg-slate-950">
+        {!imgFailed ? (
+          <img
+            src={`/roadmaps/${branch.id}.png`}
+            alt={`${branch.name} Roadmap`}
+            onError={() => setImgFailed(true)}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+          />
+        ) : null}
+
+        {/* Fallback or Overlay Banner */}
+        {imgFailed && (
+          <div
+            className={`absolute inset-0 bg-gradient-to-br ${categoryTheme.gradient} p-4 flex flex-col justify-between border-b`}
+          >
+            {/* Ambient Glow */}
+            <div
+              className={`absolute -right-8 -top-8 w-32 h-32 rounded-full bg-gradient-to-br ${categoryTheme.glow} blur-2xl pointer-events-none`}
+            />
+
+            {/* SVG Watermark Icon */}
+            <WatermarkIcon
+              className={`absolute right-3 bottom-2 w-28 h-28 ${categoryTheme.watermarkColor} pointer-events-none transform rotate-12 transition-transform group-hover:scale-110 duration-300`}
+            />
+
+            {/* Top Bar: Code Badge + Topics Pill */}
+            <div className="relative z-10 flex items-center justify-between gap-2">
+              <span
+                className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-black tracking-wider uppercase border ${categoryTheme.badgeBg}`}
+              >
+                {branch.code}
+              </span>
+
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-white/10 text-slate-200 border border-white/10 backdrop-blur-xs">
+                <Layers className="w-3 h-3 text-indigo-300" />
+                <span>{topicsLabel}</span>
+              </span>
+            </div>
+
+            {/* Center: Prominent Branch Acronym */}
+            <div className="relative z-10 my-auto text-center">
+              <span className="text-3xl sm:text-4xl font-black tracking-tight text-white/90 drop-shadow-md font-mono">
+                {acronymText}
+              </span>
+            </div>
+
+            {/* Bottom Bar: Discipline Label */}
+            <div className="relative z-10 flex items-center justify-between text-[11px] font-semibold text-slate-300">
+              <span className="truncate max-w-[200px]">{branch.categoryLabel}</span>
+              <span className="text-[10px] text-slate-400 font-mono">B.Tech</span>
+            </div>
+          </div>
+        )}
+
+        {/* Semi-transparent bottom gradient for text contrast if image was loaded */}
+        {!imgFailed && (
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-between p-3.5">
+            <div className="flex items-center justify-between">
+              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-black uppercase bg-black/60 text-white border border-white/20 backdrop-blur-xs">
+                {branch.code}
+              </span>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-black/60 text-slate-200 border border-white/20 backdrop-blur-xs">
+                {topicsLabel}
+              </span>
+            </div>
+            <div className="text-white">
+              <span className="text-xs font-semibold text-slate-200">{branch.categoryLabel}</span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Card Content Body */}
+      <div className="flex-1 p-5 flex flex-col justify-between space-y-4">
+        <div className="space-y-2">
+          {/* Badge Pill */}
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
+              <Compass className="w-3 h-3" />
+              {branch.badge}
+            </span>
+          </div>
+
+          {/* Title */}
+          <h3 className="text-base font-extrabold text-slate-900 tracking-tight leading-snug group-hover:text-indigo-600 transition-colors line-clamp-2">
+            {branch.name}
+          </h3>
+
+          {/* Tagline */}
+          <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+            {branch.tagline}
+          </p>
+        </div>
+
+        {/* Quick Highlights */}
+        <div className="space-y-2 pt-2 border-t border-slate-100 text-xs">
+          {/* Entry Salary Preview */}
+          <div className="flex items-center justify-between text-slate-600">
+            <span className="text-[11px] font-medium text-slate-400 flex items-center gap-1">
+              <TrendingUp className="w-3.5 h-3.5 text-emerald-500" />
+              Entry Tier:
+            </span>
+            <span className="font-bold text-slate-800 text-[11px]">
+              {branch.strategicOverview.salaryBrackets.entryTier}
+            </span>
+          </div>
+
+          {/* Target Role preview */}
+          <div className="flex items-center gap-1.5 text-[11px] text-slate-500 truncate">
+            <Briefcase className="w-3 h-3 text-slate-400 shrink-0" />
+            <span className="truncate">
+              {branch.strategicOverview.targetRoles.slice(0, 2).join(' • ')}
+            </span>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center gap-2 pt-1">
+          <button
+            type="button"
+            onClick={() => onOpenModal(branch)}
+            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
+          >
+            <span>View 4-Year Blueprint</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+          </button>
+
+          <button
+            type="button"
+            title={`Download ${branch.code} PDF Roadmap`}
+            onClick={(e) => onDownloadPdf(e, branch)}
+            className="shrink-0 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 active:scale-98 text-slate-700 hover:text-indigo-700 transition-colors border border-slate-200/80 cursor-pointer"
+            aria-label={`Download ${branch.code} PDF`}
+          >
+            <Download className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};

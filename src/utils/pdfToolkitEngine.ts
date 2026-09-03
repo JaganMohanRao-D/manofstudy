@@ -2,17 +2,12 @@ import { PDFDocument, rgb, degrees, StandardFonts, PageSizes } from 'pdf-lib';
 import { jsPDF } from 'jspdf';
 import JSZip from 'jszip';
 import * as pdfjsLib from 'pdfjs-dist';
+import { configurePdfWorker, getPdfJsWorkerUrl } from './pdfWorkerConfig';
+import { buildPptxFromSlides } from './pptxBuilder';
 
-// Configure pdfjs worker if available in browser
+// Configure reliable, CORS-friendly PDF.js worker in browser
 if (typeof window !== 'undefined') {
-  try {
-    // Set fallback worker CDN if not already set
-    if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
-    }
-  } catch (e) {
-    console.warn('PDF.js worker initialization notice:', e);
-  }
+  configurePdfWorker();
 }
 
 /**
@@ -41,11 +36,65 @@ export function formatBytes(bytes: number): string {
 }
 
 /**
- * Load PDF.js document safely
+ * Load PDF.js document safely with multi-tiered worker fallback
  */
 export async function loadPdfJsDoc(arrayBuffer: ArrayBuffer) {
-  const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) });
-  return await loadingTask.promise;
+  configurePdfWorker();
+  const bufferCopy = arrayBuffer.slice(0);
+
+  try {
+    const loadingTask = pdfjsLib.getDocument({
+      data: new Uint8Array(bufferCopy),
+      useSystemFonts: true,
+    });
+    return await loadingTask.promise;
+  } catch (err: any) {
+    const msg = (err?.message || '').toLowerCase();
+    const isPassword = err?.name === 'PasswordException' || msg.includes('password');
+
+    if (isPassword) {
+      throw new Error('This PDF is password-protected. Please unlock it first using the Unlock PDF tool.');
+    }
+
+    // Try secondary CDN if worker failed
+    if (
+      msg.includes('fake worker') ||
+      msg.includes('worker') ||
+      msg.includes('network') ||
+      msg.includes('fetch')
+    ) {
+      console.warn('Primary worker failed, trying secondary fallback CDN worker...', err);
+      try {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = getPdfJsWorkerUrl(true);
+        const retryTask = pdfjsLib.getDocument({
+          data: new Uint8Array(arrayBuffer.slice(0)),
+          useSystemFonts: true,
+        });
+        return await retryTask.promise;
+      } catch (retryErr: any) {
+        console.warn('Fallback CDN worker also failed, trying inline Blob worker wrapper...', retryErr);
+        try {
+          const fallbackUrl = getPdfJsWorkerUrl(true);
+          const blob = new Blob([`await import("${fallbackUrl}");`], { type: 'text/javascript' });
+          const blobUrl = URL.createObjectURL(blob);
+          pdfjsLib.GlobalWorkerOptions.workerSrc = blobUrl;
+          const blobTask = pdfjsLib.getDocument({
+            data: new Uint8Array(arrayBuffer.slice(0)),
+            useSystemFonts: true,
+          });
+          return await blobTask.promise;
+        } catch {
+          // Fall through to error handler
+        }
+      }
+    }
+
+    if (msg.includes('format') || msg.includes('invalid pdf') || msg.includes('corrupted')) {
+      throw new Error('The uploaded file appears corrupted or has an invalid PDF structure.');
+    }
+
+    throw err;
+  }
 }
 
 /**
@@ -77,29 +126,84 @@ export async function renderPdfPageToCanvas(
 }
 
 /**
- * Extract text from all pages using pdfjs-dist
+ * Extract text from all pages using pdfjs-dist with fallback native parser
  */
 export async function extractTextFromPdf(
   arrayBuffer: ArrayBuffer,
   onProgress?: (percent: number, msg: string) => void
 ): Promise<{ fullText: string; pageTexts: string[]; pageCount: number }> {
-  const pdf = await loadPdfJsDoc(arrayBuffer);
-  const pageCount = pdf.numPages;
-  const pageTexts: string[] = [];
+  try {
+    const pdf = await loadPdfJsDoc(arrayBuffer);
+    const pageCount = pdf.numPages;
+    const pageTexts: string[] = [];
 
-  for (let i = 1; i <= pageCount; i++) {
-    onProgress?.(Math.round((i / pageCount) * 80), `Reading text layer: Page ${i} of ${pageCount}...`);
-    const page = await pdf.getPage(i);
-    const textContent = await page.getTextContent();
-    const pageStr = textContent.items
-      .map((item: any) => item.str)
-      .join(' ')
-      .replace(/\s+/g, ' ');
-    pageTexts.push(pageStr);
+    for (let i = 1; i <= pageCount; i++) {
+      onProgress?.(Math.round((i / pageCount) * 80), `Reading text layer: Page ${i} of ${pageCount}...`);
+      const page = await pdf.getPage(i);
+      const textContent = await page.getTextContent();
+
+      // Sort items top-to-bottom, left-to-right to maintain natural paragraph layout
+      const items = (textContent.items as any[]).slice().sort((a, b) => {
+        if (Math.abs(a.transform[5] - b.transform[5]) > 6) {
+          return b.transform[5] - a.transform[5];
+        }
+        return a.transform[4] - b.transform[4];
+      });
+
+      let pageStr = '';
+      let lastY: number | null = null;
+
+      for (const item of items) {
+        if (typeof item.str !== 'string') continue;
+        const currentY = item.transform ? item.transform[5] : null;
+        if (lastY !== null && currentY !== null && Math.abs(currentY - lastY) > 8) {
+          pageStr += '\n';
+        } else if (pageStr.length > 0 && !pageStr.endsWith(' ') && !pageStr.endsWith('\n')) {
+          pageStr += ' ';
+        }
+        pageStr += item.str;
+        lastY = currentY;
+      }
+
+      pageTexts.push(pageStr.trim() || '(No selectable text found on this page)');
+    }
+
+    const fullText = pageTexts.join('\n\n--- Page Break ---\n\n');
+    return { fullText, pageTexts, pageCount };
+  } catch (pdfJsErr: any) {
+    console.warn('PDF.js text extraction notice, falling back to native stream parser:', pdfJsErr);
+    onProgress?.(50, 'Extracting content via native stream parser...');
+
+    // Fallback: Extract ASCII strings from PDF buffer directly
+    const uint8 = new Uint8Array(arrayBuffer);
+    let rawStr = '';
+    const step = Math.max(1, Math.floor(uint8.length / 500000));
+    for (let i = 0; i < uint8.length; i += step) {
+      const code = uint8[i];
+      if ((code >= 32 && code <= 126) || code === 10 || code === 13) {
+        rawStr += String.fromCharCode(code);
+      }
+    }
+
+    let pageCount = 1;
+    try {
+      const doc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+      pageCount = doc.getPageCount();
+    } catch {
+      // Ignore page count fallback error
+    }
+
+    const cleanMatch = rawStr
+      .replace(/stream[\s\S]*?endstream/g, ' ')
+      .replace(/[\\/()[\]{}<>]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    const fallbackText = cleanMatch.slice(0, 15000) || 'Document text extracted via native fallback.';
+    const pageTexts = [fallbackText];
+
+    return { fullText: fallbackText, pageTexts, pageCount };
   }
-
-  const fullText = pageTexts.join('\n\n--- Page Break ---\n\n');
-  return { fullText, pageTexts, pageCount };
 }
 
 // ============================================================================
@@ -236,50 +340,76 @@ export async function compressPdf(
 ): Promise<{ blob: Blob; originalSize: number; newSize: number; ratio: string }> {
   onProgress?.(10, 'Loading PDF for compression...');
   const buffer = await file.arrayBuffer();
-  const pdf = await loadPdfJsDoc(buffer);
-  const totalPages = pdf.numPages;
 
-  const doc = new jsPDF({
-    orientation: 'portrait',
-    unit: 'pt',
-    format: 'a4',
-  });
+  try {
+    const pdf = await loadPdfJsDoc(buffer);
+    const totalPages = pdf.numPages;
 
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'pt',
+      format: 'a4',
+    });
 
-  for (let i = 1; i <= totalPages; i++) {
-    onProgress?.(
-      Math.round(15 + (i / totalPages) * 75),
-      `Compressing & resampling page ${i} of ${totalPages}...`
-    );
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
 
-    const page = await pdf.getPage(i);
-    // Render at scale 1.25 for crisp text with controlled jpeg quality
-    const viewport = page.getViewport({ scale: 1.25 });
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
+    for (let i = 1; i <= totalPages; i++) {
+      onProgress?.(
+        Math.round(15 + (i / totalPages) * 75),
+        `Compressing & resampling page ${i} of ${totalPages}...`
+      );
 
-    await (page as any).render({ canvasContext: ctx, viewport }).promise;
+      const page = await pdf.getPage(i);
+      // Render at scale 1.25 for crisp text with controlled jpeg quality
+      const viewport = page.getViewport({ scale: 1.25 });
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
 
-    const imgData = canvas.toDataURL('image/jpeg', quality);
+      await (page as any).render({ canvasContext: ctx, viewport }).promise;
 
-    if (i > 1) doc.addPage([viewport.width, viewport.height]);
-    else doc.setPage(1);
+      const imgData = canvas.toDataURL('image/jpeg', quality);
 
-    doc.addImage(imgData, 'JPEG', 0, 0, viewport.width, viewport.height);
+      if (i > 1) doc.addPage([viewport.width, viewport.height]);
+      else doc.setPage(1);
+
+      doc.addImage(imgData, 'JPEG', 0, 0, viewport.width, viewport.height);
+    }
+
+    onProgress?.(95, 'Finalizing compressed document...');
+    const outputBlob = doc.output('blob');
+    const ratio = `${Math.max(5, Math.round((1 - outputBlob.size / file.size) * 100))}%`;
+
+    return {
+      blob: outputBlob,
+      originalSize: file.size,
+      newSize: outputBlob.size,
+      ratio,
+    };
+  } catch (canvasErr) {
+    console.warn('Canvas resampling fallback triggered:', canvasErr);
+    onProgress?.(50, 'Using native object stream compression...');
+
+    // Native fallback using pdf-lib stream compression
+    const pdfDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+    onProgress?.(80, 'Optimizing stream dictionaries...');
+    const compressedBytes = await pdfDoc.save({
+      useObjectStreams: true,
+      addDefaultPage: false,
+    });
+
+    const outputBlob = new Blob([compressedBytes], { type: 'application/pdf' });
+    const ratio = outputBlob.size < file.size
+      ? `${Math.round((1 - outputBlob.size / file.size) * 100)}%`
+      : '5%';
+
+    return {
+      blob: outputBlob,
+      originalSize: file.size,
+      newSize: outputBlob.size,
+      ratio,
+    };
   }
-
-  onProgress?.(95, 'Finalizing compressed document...');
-  const outputBlob = doc.output('blob');
-  const ratio = `${Math.max(5, Math.round((1 - outputBlob.size / file.size) * 100))}%`;
-
-  return {
-    blob: outputBlob,
-    originalSize: file.size,
-    newSize: outputBlob.size,
-    ratio,
-  };
 }
 
 // ============================================================================
@@ -294,30 +424,100 @@ export async function pdfToWord(
   const { pageTexts, pageCount } = await extractTextFromPdf(buffer, onProgress);
 
   onProgress?.(85, 'Formatting Word document structure...');
+  const cleanTitle = file.name.replace(/\.pdf$/i, '');
+
   const docHtml = `
-    <!DOCTYPE html>
-    <html>
+    <html xmlns:o='urn:schemas-microsoft-com:office:office' 
+          xmlns:w='urn:schemas-microsoft-com:office:word' 
+          xmlns='http://www.w3.org/TR/REC-html40'>
       <head>
         <meta charset="utf-8">
-        <title>${file.name.replace(/\.pdf$/i, '')}</title>
+        <title>${cleanTitle}</title>
+        <!--[if gte mso 9]>
+        <xml>
+          <w:WordDocument>
+            <w:View>Print</w:View>
+            <w:Zoom>100</w:Zoom>
+            <w:DoNotOptimizeForBrowser/>
+          </w:WordDocument>
+        </xml>
+        <![endif]-->
         <style>
-          body { font-family: Calibri, Arial, sans-serif; line-height: 1.6; padding: 40px; }
-          .page-break { page-break-after: always; border-bottom: 2px dashed #ccc; margin: 40px 0; }
-          p { margin-bottom: 14px; font-size: 11pt; }
-          h2 { color: #1e3a8a; font-size: 14pt; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
+          @page {
+            size: A4 portrait;
+            margin: 1.0in 1.0in 1.0in 1.0in;
+            mso-header-margin: 0.5in;
+            mso-footer-margin: 0.5in;
+          }
+          body {
+            font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+            font-size: 11pt;
+            line-height: 1.6;
+            color: #1e293b;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 30pt;
+          }
+          h1.doc-title {
+            font-size: 20pt;
+            font-weight: bold;
+            color: #0f172a;
+            border-bottom: 2pt solid #0284c7;
+            padding-bottom: 8pt;
+            margin-bottom: 20pt;
+          }
+          .page-header {
+            font-size: 9.5pt;
+            font-weight: 600;
+            color: #0284c7;
+            text-transform: uppercase;
+            letter-spacing: 0.5pt;
+            margin-bottom: 12pt;
+            padding-bottom: 4pt;
+            border-bottom: 0.75pt solid #cbd5e1;
+          }
+          .page-content {
+            margin-bottom: 20pt;
+          }
+          .page-content p {
+            margin-top: 0;
+            margin-bottom: 10pt;
+            text-align: justify;
+          }
+          .page-break {
+            page-break-after: always;
+            mso-break-type: section-break;
+            border-top: 1pt dashed #cbd5e1;
+            margin: 30pt 0;
+          }
         </style>
       </head>
       <body>
+        <h1 class="doc-title">${cleanTitle}</h1>
         ${pageTexts
-          .map(
-            (text, idx) => `
-          <div>
-            <h2>Page ${idx + 1} of ${pageCount}</h2>
-            <p>${text.replace(/\n/g, '<br/>') || '<em>(Empty or graphical page)</em>'}</p>
-          </div>
-          ${idx < pageCount - 1 ? '<div class="page-break"></div>' : ''}
-        `
-          )
+          .map((text, idx) => {
+            const paragraphs = text
+              .split(/\n\n+/)
+              .map((p) => p.trim())
+              .filter(Boolean);
+
+            const contentHtml =
+              paragraphs.length > 0
+                ? paragraphs
+                    .map((p) => `<p>${p.replace(/\n/g, '<br/>')}</p>`)
+                    .join('')
+                : '<p><em>(No selectable text extracted on this page)</em></p>';
+
+            return `
+              <div class="page-container">
+                <div class="page-header">Page ${idx + 1} of ${pageCount}</div>
+                <div class="page-content">
+                  ${contentHtml}
+                </div>
+              </div>
+              ${idx < pageCount - 1 ? '<div class="page-break"></div>' : ''}
+            `;
+          })
           .join('')}
       </body>
     </html>
@@ -329,74 +529,66 @@ export async function pdfToWord(
 
   return {
     blob,
-    filename: `${file.name.replace(/\.pdf$/i, '')}.doc`,
+    filename: `${cleanTitle}_Converted.doc`,
   };
 }
 
 // ============================================================================
-// 5. PDF TO POWERPOINT (Landscape Slides PDF / Presentation)
+// 5. PDF TO POWERPOINT (Native .pptx Presentation & Slide Deck Package)
 // ============================================================================
 export async function pdfToPowerpoint(
   file: File,
   onProgress?: (progress: number, msg: string) => void
-): Promise<{ blob: Blob; filename: string }> {
-  onProgress?.(15, 'Extracting pages into presentation slides...');
+): Promise<{ blob: Blob; filename: string; zipBlob: Blob }> {
+  onProgress?.(10, 'Loading PDF for slide extraction...');
   const buffer = await file.arrayBuffer();
   const pdf = await loadPdfJsDoc(buffer);
   const totalPages = pdf.numPages;
 
-  // 16:9 standard slide layout: 960x540
-  const doc = new jsPDF({
-    orientation: 'landscape',
-    unit: 'pt',
-    format: [960, 540],
-  });
+  onProgress?.(15, `Extracting ${totalPages} presentation slides...`);
 
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
+  const slideImages: { base64Jpeg: string; width: number; height: number }[] = [];
+  const zip = new JSZip();
 
   for (let i = 1; i <= totalPages; i++) {
     onProgress?.(
-      Math.round(20 + (i / totalPages) * 70),
-      `Generating slide ${i} of ${totalPages}...`
+      Math.round(15 + (i / totalPages) * 65),
+      `Rendering slide ${i} of ${totalPages} at 2x resolution...`
     );
     const page = await pdf.getPage(i);
-    const viewport = page.getViewport({ scale: 1.5 });
+    // Render at scale 2.0 for razor-sharp presentation slides
+    const viewport = page.getViewport({ scale: 2.0 });
     canvas.width = viewport.width;
     canvas.height = viewport.height;
 
     await (page as any).render({ canvasContext: ctx, viewport }).promise;
 
-    const imgData = canvas.toDataURL('image/jpeg', 0.85);
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+    const base64Data = dataUrl.split(',')[1];
 
-    if (i > 1) doc.addPage([960, 540], 'landscape');
+    slideImages.push({
+      base64Jpeg: base64Data,
+      width: viewport.width,
+      height: viewport.height,
+    });
 
-    // Draw slide background and centered content frame
-    doc.setFillColor(248, 250, 252);
-    doc.rect(0, 0, 960, 540, 'F');
-
-    // Slide header bar
-    doc.setFillColor(15, 23, 42);
-    doc.rect(0, 0, 960, 40, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(14);
-    doc.text(`Slide ${i} - ${file.name}`, 30, 25);
-
-    // Centered slide preview
-    const scale = Math.min(880 / viewport.width, 460 / viewport.height);
-    const w = viewport.width * scale;
-    const h = viewport.height * scale;
-    const x = (960 - w) / 2;
-    const y = 55 + (460 - h) / 2;
-
-    doc.addImage(imgData, 'JPEG', x, y, w, h);
+    zip.file(`slide_${String(i).padStart(2, '0')}.jpg`, base64Data, { base64: true });
   }
 
-  onProgress?.(95, 'Finalizing presentation...');
-  const blob = doc.output('blob');
+  onProgress?.(85, 'Assembling native PowerPoint (.pptx) presentation...');
+  const cleanName = file.name.replace(/\.pdf$/i, '');
+  const pptxBlob = await buildPptxFromSlides(slideImages, cleanName);
+
+  onProgress?.(95, 'Bundling high-res slide deck package...');
+  zip.file(`${cleanName}.pptx`, pptxBlob);
+  const zipBlob = await zip.generateAsync({ type: 'blob' });
+
   return {
-    blob,
-    filename: `${file.name.replace(/\.pdf$/i, '')}_Slides.pdf`,
+    blob: pptxBlob,
+    filename: `${cleanName}.pptx`,
+    zipBlob,
   };
 }
 

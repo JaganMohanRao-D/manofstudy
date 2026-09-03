@@ -38,6 +38,9 @@ export interface BranchRoadmap {
   categoryLabel: string;
   badge: string;
   tagline: string;
+  acronym?: string;
+  topicsCount?: string;
+  bannerCategory?: 'computing' | 'security' | 'electronics' | 'mechanical' | 'civil';
   strategicOverview: {
     corporateViability: string;
     corporateSummary: string;
@@ -48,6 +51,20 @@ export interface BranchRoadmap {
       entryTier: string;
       midTier: string;
       peakTier: string;
+    };
+    tierReality?: {
+      tier1Salary: string;
+      tier1Reality: string;
+      tier3Salary: string;
+      tier3Reality: string;
+      offCampusTactics: string[];
+    };
+    standardTechStack?: string[];
+    higherStudiesGate?: {
+      exam: string;
+      topInstitutes: string[];
+      mtechSpecializations: string[];
+      msAbroadScope: string;
     };
     keyCompetitiveExams: string[];
   };
@@ -409,6 +426,8 @@ export interface PdfProcessProgress {
   error?: string;
   downloadUrl?: string;
   downloadFilename?: string;
+  secondaryDownloadUrl?: string;
+  secondaryFilename?: string;
   resultStats?: {
     originalSize?: string;
     newSize?: string;

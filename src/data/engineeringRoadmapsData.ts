@@ -1,5 +1,6 @@
 import { BranchRoadmap } from '../types';
 import { EXTENDED_ROADMAPS } from './engineeringRoadmapsExtended';
+import { IOT_ROADMAP } from './iotRoadmap';
 
 const CORE_ROADMAPS: BranchRoadmap[] = [
   // ==========================================
@@ -13,6 +14,9 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
     categoryLabel: 'Computing & Software',
     badge: 'Universal Flagship',
     tagline: 'The foundational software discipline powering global tech, systems architecture, and product engineering.',
+    acronym: 'CSE',
+    topicsCount: '800+ Topics • 4 Years',
+    bannerCategory: 'computing',
     strategicOverview: {
       corporateViability: 'Very High (Top Tier)',
       corporateSummary: 'Highest volume of product, fintech, SaaS, and IT campus hiring across India and globally. Direct pipeline to Silicon Valley and Bengaluru hubs.',
@@ -29,6 +33,31 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
         entryTier: '₹6.5 LPA – ₹18 LPA',
         midTier: '₹20 LPA – ₹38 LPA',
         peakTier: '₹45 LPA – ₹85+ LPA (Tier-1 Product / Remote US)',
+      },
+      tierReality: {
+        tier1Salary: '₹18 LPA – ₹52 LPA',
+        tier1Reality: 'Day-1 super-dream placement drives with direct on-campus interviews by Google, Microsoft, Amazon, Atlassian, Uber, and top fintechs.',
+        tier3Salary: '₹3.6 LPA – ₹7 LPA (Mass Recruiting) / ₹12 – ₹24 LPA (Off-Campus Product)',
+        tier3Reality: 'Mass hiring predominantly in service MNCs. However, tier-3 candidates who master LeetCode (350+ questions), build complex distributed full-stack systems, and actively seek employee referrals routinely crack ₹15–25 LPA off-campus product roles.',
+        offCampusTactics: [
+          'Achieve LeetCode contest rating 1750+ (Knight badge); solve 350+ medium/hard questions in DSA.',
+          'Build 2 production-grade full-stack / distributed applications with live URLs, CI/CD pipelines, and GitHub PR histories.',
+          'Reach out directly to engineering managers and alumni on LinkedIn with specific 3-sentence elevator pitches highlighting your live project links.',
+          'Compete in high-visibility coding contests (Google Kickstart/Code Jam archives, ICPC Regionals, Codeforces Div 2).',
+        ],
+      },
+      standardTechStack: [
+        'Languages: Java, C++, Python, TypeScript, Go',
+        'Backend & Frameworks: Spring Boot, Node.js / Express, FastAPI',
+        'Frontend: React, Next.js, Tailwind CSS',
+        'Databases & Caching: PostgreSQL, Redis, MongoDB, Elasticsearch',
+        'DevOps & Systems: Docker, Kubernetes, AWS (EC2/S3/RDS), Linux, Git, Nginx',
+      ],
+      higherStudiesGate: {
+        exam: 'GATE CS (Computer Science & Information Technology)',
+        topInstitutes: ['IISc Bengaluru (M.Tech CSE / AI)', 'IIT Bombay', 'IIT Delhi', 'IIT Madras', 'IIT Kanpur'],
+        mtechSpecializations: ['Computer Science & Engineering', 'Artificial Intelligence', 'Systems & Networks', 'Data Engineering'],
+        msAbroadScope: 'High global prestige in US (Stanford, CMU, Berkeley), Germany (TUM), and Switzerland (ETH Zurich).',
       },
       keyCompetitiveExams: ['GATE CS / IT', 'ISRO Scientist/Engineer', 'BARC OCES/DGFS', 'NIC Scientific Officer', 'TCS Prime / InfyTQ'],
     },
@@ -162,6 +191,9 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
     categoryLabel: 'Computing & AI',
     badge: 'High Industry Demand',
     tagline: 'Specialized computer science focusing on statistical learning, neural networks, computer vision, and generative AI.',
+    acronym: 'AI & ML',
+    topicsCount: '800+ Topics • 4 Years',
+    bannerCategory: 'computing',
     strategicOverview: {
       corporateViability: 'Very High (Exponential Growth)',
       corporateSummary: 'Tremendous hiring demand in AI research labs, autonomous vehicles, fintech predictive modeling, NLP products, and enterprise GenAI systems.',
@@ -178,6 +210,30 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
         entryTier: '₹7 LPA – ₹20 LPA',
         midTier: '₹22 LPA – ₹42 LPA',
         peakTier: '₹50 LPA – ₹90+ LPA (Tier-1 AI Labs & US Tech)',
+      },
+      tierReality: {
+        tier1Salary: '₹20 LPA – ₹55 LPA',
+        tier1Reality: 'Top AI research centers and product companies (Microsoft Research, Google DeepMind, Adobe, Nvidia) recruit directly for Applied AI / MLE positions.',
+        tier3Salary: '₹4 LPA – ₹8 LPA (Standard Data Analyst) / ₹14 – ₹28 LPA (Off-Campus AI Engineer)',
+        tier3Reality: 'Do not settle for generic Titanic/Iris tutorial projects. Students from Tier-3 who build custom fine-tuned LLM agents, deploy multimodal vision pipelines, and win Kaggle medals routinely leapfrog into high-paying remote and Bangalore startup roles.',
+        offCampusTactics: [
+          'Publish reproducible Jupyter notebooks & Hugging Face spaces with working web UIs (Gradio / Streamlit).',
+          'Attain Kaggle Expert or Master ranking; participate actively in active competitions.',
+          'Contribute to open-source ML libraries (LangChain, HuggingFace transformers, PyTorch-Lightning).',
+          'Deploy full end-to-end MLOps pipelines (FastAPI model serving, Docker, MLflow, AWS EC2).',
+        ],
+      },
+      standardTechStack: [
+        'Core ML: Python, PyTorch, Scikit-Learn, NumPy, Pandas',
+        'GenAI & LLMs: Hugging Face, LangChain, LlamaIndex, vLLM, Ollama',
+        'Vector Databases: Pinecone, Qdrant, ChromaDB, pgvector',
+        'MLOps & Serving: FastAPI, Docker, MLflow, Ray, Triton Inference Server',
+      ],
+      higherStudiesGate: {
+        exam: 'GATE DA (Data Science & AI) / GATE CS',
+        topInstitutes: ['IISc Bengaluru (CDS / AI)', 'IIT Madras (RBCDSAI)', 'IIT Hyderabad (Dept of AI)', 'IIT Bombay'],
+        mtechSpecializations: ['M.Tech in Artificial Intelligence', 'Computational & Data Sciences', 'Machine Learning & Signal Processing'],
+        msAbroadScope: 'Exceptional global demand in US (Stanford, CMU, MIT, Georgia Tech), Canada (Vector Institute, Mila), and UK (Oxford/Cambridge).',
       },
       keyCompetitiveExams: ['GATE CS / IT', 'GATE DA (Data Science & AI)', 'DRDO Scientist ‘B’', 'ISRO Scientist/Engineer', 'Kaggle Competitions Grandmaster track'],
     },
@@ -311,6 +367,9 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
     categoryLabel: 'Computing & Data',
     badge: 'Analytical Powerhouse',
     tagline: 'Empowering enterprise decision making through statistical modeling, big data engineering, and predictive intelligence.',
+    acronym: 'DATA SCIENCE',
+    topicsCount: '800+ Topics • 4 Years',
+    bannerCategory: 'computing',
     strategicOverview: {
       corporateViability: 'Very High',
       corporateSummary: 'Critical roles across banking, hedge funds, e-commerce, healthcare analytics, and business intelligence departments worldwide.',
@@ -327,6 +386,31 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
         entryTier: '₹6.5 LPA – ₹16 LPA',
         midTier: '₹18 LPA – ₹36 LPA',
         peakTier: '₹45 LPA – ₹80+ LPA',
+      },
+      tierReality: {
+        tier1Salary: '₹18 LPA – ₹48 LPA',
+        tier1Reality: 'Major investment banks (JPMorgan, Goldman Sachs), consulting firms (McKinsey, BCG), and product companies recruit on-campus for Data Science & Analytics.',
+        tier3Salary: '₹4 LPA – ₹7.5 LPA (Reporting / SQL Analyst) / ₹12 – ₹22 LPA (Off-Campus Data Engineer)',
+        tier3Reality: 'College curriculum heavily emphasizes Excel and basic SQL. Tier-3 students who master PySpark, dbt, Snowflake, and end-to-end Airflow ETL pipelines stand out from 99% of applicants and crack high-paying Data Engineering roles.',
+        offCampusTactics: [
+          'Build and host an automated end-to-end data pipeline: Raw API -> Kafka -> Spark -> Snowflake -> dbt -> Streamlit/Tableau dashboard.',
+          'Solve 200+ advanced SQL questions (window functions, recursive CTEs) on LeetCode and StrataScratch.',
+          'Participate in data analytics hackathons; author data storytelling articles on Medium / Towards Data Science.',
+          'Earn cloud credentials (AWS Certified Data Analytics or Databricks Certified Associate Developer).',
+        ],
+      },
+      standardTechStack: [
+        'Languages: Python, SQL, R, Scala',
+        'Big Data & Processing: Apache Spark, PySpark, Hadoop, Kafka',
+        'Data Warehouses: Snowflake, Google BigQuery, PostgreSQL, AWS Redshift',
+        'Orchestration & Transformation: Apache Airflow, dbt, Docker',
+        'BI & Visualization: Power BI, Tableau, Streamlit, Matplotlib/Seaborn',
+      ],
+      higherStudiesGate: {
+        exam: 'GATE DA (Data Science & AI) / GATE CS',
+        topInstitutes: ['IISc Bengaluru (CDS)', 'IIT Madras', 'IIT Kharagpur', 'ISI Kolkata (M.Tech QROR)'],
+        mtechSpecializations: ['Data Science', 'Computational Statistics', 'Big Data Engineering'],
+        msAbroadScope: 'Massive demand across US (Columbia, NYU, UC Berkeley for Data Science), UK, and Germany.',
       },
       keyCompetitiveExams: ['GATE DA', 'GATE CS', 'RBI Grade B (DEPR/DSIM)', 'UPSC Indian Statistical Service (ISS)', 'Kaggle Grandmaster'],
     },
@@ -596,13 +680,16 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
   },
 
   {
-    id: 'cybersecurity',
-    code: 'CSC',
-    name: 'Cybersecurity & Information Security',
+    id: 'cyber-security',
+    code: 'CSE (Cyber Security)',
+    name: 'CSE - Cyber Security',
     category: 'computing',
     categoryLabel: 'Computing & Security',
     badge: 'Critical Defense',
     tagline: 'Defending digital sovereignty, enterprise cloud infrastructure, networks, and applications against global cyber threats.',
+    acronym: 'CYBER SEC',
+    topicsCount: '800+ Topics • 4 Years',
+    bannerCategory: 'security',
     strategicOverview: {
       corporateViability: 'Very High (Zero Unemployment Field)',
       corporateSummary: 'Massive hiring demand in cybersecurity consultancies, banks, defence contractors, cloud providers, and Fortune 500 SOC teams.',
@@ -619,6 +706,30 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
         entryTier: '₹6 LPA – ₹16 LPA',
         midTier: '₹18 LPA – ₹36 LPA',
         peakTier: '₹42 LPA – ₹80+ LPA (Consulting / Cloud Security)',
+      },
+      tierReality: {
+        tier1Salary: '₹16 LPA – ₹45 LPA',
+        tier1Reality: 'Recruited directly by Big 4 cyber advisory, global investment banks (Goldman Sachs, Morgan Stanley cyber divisions), and cloud security providers.',
+        tier3Salary: '₹4.5 LPA – ₹8 LPA (General IT) / ₹12 – ₹22 LPA (Off-Campus Security)',
+        tier3Reality: 'College curriculum rarely covers practical offensive security. Students from tier-3 who grind TryHackMe / HackTheBox (Top 10%), earn OSCP/CEH, and write CVE exploit writeups get hired directly into specialist cyber firms.',
+        offCampusTactics: [
+          'Earn rank in Top 5% on TryHackMe or HackTheBox; link public badge on resume and LinkedIn.',
+          'Publish responsible disclosure bug bounty reports or write-ups on HackerOne / Bugcrowd.',
+          'Contribute to open-source security tools (Python automation scripts, Burp Suite extensions).',
+          'Attain industry credentials such as CompTIA Security+, CEH, or prepare for OSCP.',
+        ],
+      },
+      standardTechStack: [
+        'Languages: Python, Bash, C, Go, Assembly (x86/ARM)',
+        'Offensive Security: Burp Suite, Metasploit, Nmap, SQLmap, Ghidra',
+        'Defensive & SIEM: Splunk, Wireshark, Suricata, Elastic SIEM',
+        'Cloud & Container Security: AWS IAM, Kubernetes CIS Benchmarks, Falco',
+      ],
+      higherStudiesGate: {
+        exam: 'GATE CS / Specialized Cyber Forensics Entrance',
+        topInstitutes: ['IIT Kanpur (C3i Hub)', 'IIT Madras (Cyber Security)', 'NFSU Gandhinagar (Forensics & Cyber Security)', 'IISc Bengaluru'],
+        mtechSpecializations: ['Cyber Security', 'Information Security & Trustworthy Systems', 'Cyber Physical Systems Security'],
+        msAbroadScope: 'Massive demand across US (Carnegie Mellon, Johns Hopkins, NYU Tandon), UK, and Netherlands.',
       },
       keyCompetitiveExams: ['GATE CS', 'CEH (Certified Ethical Hacker)', 'CompTIA Security+', 'OSCP (Offensive Security Certified Professional)', 'DRDO / NTRO Scientist B'],
     },
@@ -752,6 +863,9 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
     categoryLabel: 'Computing & Business',
     badge: 'Industry Designed (TCS)',
     tagline: 'Curriculum designed in partnership with TCS, combining modern computing, enterprise architecture, financial analytics, and business acumen.',
+    acronym: 'CSBS',
+    topicsCount: '800+ Topics • 4 Years',
+    bannerCategory: 'computing',
     strategicOverview: {
       corporateViability: 'Very High',
       corporateSummary: 'Tailored specifically for IT services giants (TCS, Infosys, Cognizant), fintech banks, management consultancies, and ERP software vendors.',
@@ -762,6 +876,30 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
         entryTier: '₹5 LPA – ₹14 LPA',
         midTier: '₹16 LPA – ₹32 LPA',
         peakTier: '₹38 LPA – ₹70+ LPA (Consulting / Enterprise Tech)',
+      },
+      tierReality: {
+        tier1Salary: '₹15 LPA – ₹38 LPA',
+        tier1Reality: 'Recruited by top fintechs (Visa, MasterCard, Razorpay), consulting firms (Deloitte, PwC, EY), and enterprise SaaS companies.',
+        tier3Salary: '₹3.8 LPA – ₹7.5 LPA (TCS Digital / Ninja) / ₹12 – ₹20 LPA (Off-Campus Enterprise Tech)',
+        tier3Reality: 'Many students get trapped in generic business analyst roles. CSBS students who maintain strong software engineering depth (DSA + Full-Stack Java/Spring Boot) alongside their business knowledge excel rapidly into Technical Product Manager (APM) and Fintech Developer roles.',
+        offCampusTactics: [
+          'Target Associate Product Manager (APM) programs and FinTech startups (Razorpay, CRED, Zerodha).',
+          'Build full-stack fintech applications (payment gateway integration, algorithmic trade simulation, ledger bookkeeping).',
+          'Pair technical strength on LeetCode with case study prep for technology consulting roles.',
+          'Earn certifications in AWS / Azure Cloud Architecture and Agile / Scrum methodologies.',
+        ],
+      },
+      standardTechStack: [
+        'Languages: Java, Python, SQL, JavaScript',
+        'Enterprise Stack: Spring Boot, Microservices, Hibernate, Kafka',
+        'Fintech & Cloud: Stripe / Razorpay APIs, AWS Cloud, Docker',
+        'Business Tools: Power BI, Tableau, Jira, Confluence, ERP/SAP basics',
+      ],
+      higherStudiesGate: {
+        exam: 'CAT / GMAT / GATE CS',
+        topInstitutes: ['IIM Ahmedabad / Bangalore / Calcutta (MBA in Tech/Analytics)', 'IIT Bombay (SJMSOM)', 'NITIE / IIM Mumbai'],
+        mtechSpecializations: ['Industrial Engineering & Management', 'Technology Management', 'Computer Science'],
+        msAbroadScope: 'Excellent alignment with Master of Engineering Management (MEM) in US (Dartmouth, Duke, Northwestern).',
       },
       keyCompetitiveExams: ['GATE CS', 'CAT / XAT (for Tech MBA)', 'IBPS SO IT Officer', 'TCS Prime / Digital', 'AWS Certified Solutions Architect'],
     },
@@ -898,6 +1036,9 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
     categoryLabel: 'Electronics & Hardware',
     badge: 'Universal Core',
     tagline: 'Bridging silicon hardware, semiconductor physics, embedded microcontrollers, and modern wireless telecommunications.',
+    acronym: 'ECE',
+    topicsCount: '800+ Topics • 4 Years',
+    bannerCategory: 'electronics',
     strategicOverview: {
       corporateViability: 'Very High (Core Hardware & Software Dual Advantage)',
       corporateSummary: 'Dual market advantage: Direct recruitment by semiconductor titans (Qualcomm, Intel, TI, AMD) AND top software product companies.',
@@ -914,6 +1055,30 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
         entryTier: '₹6 LPA – ₹18 LPA (Core Semiconductor)',
         midTier: '₹20 LPA – ₹38 LPA',
         peakTier: '₹45 LPA – ₹90+ LPA (Tier-1 VLSI / Fabless Firms)',
+      },
+      tierReality: {
+        tier1Salary: '₹18 LPA – ₹48 LPA',
+        tier1Reality: 'Flagship semiconductor firms (Qualcomm, Texas Instruments, NVIDIA, MediaTek, Intel) visit top IITs/NITs for ASIC/FPGA digital design and verification roles.',
+        tier3Salary: '₹4 LPA – ₹7 LPA (Software Mass Recruitment) / ₹12 – ₹24 LPA (Cracking Core VLSI/Embedded)',
+        tier3Reality: 'Semiconductor companies rarely visit Tier-3 campuses directly. Tier-3 ECE students crack core semiconductor roles either by scoring top ranks in GATE EC to enter M.Tech VLSI at IITs/IISc, or by taking verified CDAC / RV-VLSI PG diplomas and building public FPGA/Verilog projects on GitHub.',
+        offCampusTactics: [
+          'Master SystemVerilog and Universal Verification Methodology (UVM); write verification testbenches for open-source cores (RISC-V).',
+          'Target GATE EC with focused preparation: rank < 350 opens direct admissions to IIT Bombay / Madras / IISc M.Tech VLSI.',
+          'Synthesize and implement RTL projects on real FPGA boards (Xilinx Basys 3 / PYNQ-Z2).',
+          'Learn Embedded Linux & FreeRTOS to qualify for high-paying firmware roles at Qualcomm and Bosch.',
+        ],
+      },
+      standardTechStack: [
+        'Languages: Verilog, SystemVerilog, C, Embedded C, Python',
+        'EDA & Simulation: ModelSim, Synopsys Design Compiler, Cadence Virtuoso, Xilinx Vivado',
+        'Embedded & RTOS: ARM Cortex-M, STM32, FreeRTOS, ESP-IDF',
+        'Math & Modeling: MATLAB & Simulink, LTspice, KiCAD',
+      ],
+      higherStudiesGate: {
+        exam: 'GATE EC (Electronics & Communication Engineering)',
+        topInstitutes: ['IISc Bengaluru (DESE / Electrical)', 'IIT Madras', 'IIT Bombay', 'IIT Kharagpur'],
+        mtechSpecializations: ['VLSI Design', 'Micro-electronics', 'Embedded Systems & IoT', 'Signal Processing & Communication'],
+        msAbroadScope: 'Massive semiconductor industry demand across US (UT Austin, Purdue, Georgia Tech), Taiwan, and Germany.',
       },
       keyCompetitiveExams: ['GATE EC', 'UPSC ESE (Electronics & Telecom)', 'ISRO Scientist/Engineer', 'DRDO RAC', 'BARC OCES', 'BEL Probationary Engineer'],
     },
@@ -1047,6 +1212,9 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
     categoryLabel: 'Electronics & Semiconductors',
     badge: 'Semiconductor Mission Aligned',
     tagline: 'Specialized silicon engineering aligning with the India Semiconductor Mission, focusing on chip design, physical design, and verification.',
+    acronym: 'VLSI',
+    topicsCount: '800+ Topics • 4 Years',
+    bannerCategory: 'electronics',
     strategicOverview: {
       corporateViability: 'Very High (Critical Talent Shortage in Semiconductor Fabs)',
       corporateSummary: 'Fierce hiring competition among fabless chip design houses (Qualcomm, AMD, Nvidia, Intel, MediaTek, Synopsys, Cadence).',
@@ -1063,6 +1231,30 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
         entryTier: '₹8 LPA – ₹22 LPA',
         midTier: '₹24 LPA – ₹45 LPA',
         peakTier: '₹55 LPA – ₹1.1+ Cr PA (Top Semiconductor Product Houses)',
+      },
+      tierReality: {
+        tier1Salary: '₹22 LPA – ₹50 LPA',
+        tier1Reality: 'Top IIT/NIT/BITS graduates secure direct campus placements as ASIC Design / Verification Engineers with signing bonuses at Nvidia, AMD, Qualcomm, and Apple Silicon.',
+        tier3Salary: '₹4.5 LPA – ₹8 LPA (General IT) / ₹14 – ₹26 LPA (Off-Campus VLSI Specialized)',
+        tier3Reality: 'Virtually no semiconductor EDA/fabless firms visit Tier-3 campuses. However, graduates who excel in SystemVerilog/UVM, complete open-source silicon tapeouts via OpenLane / Google SkyWater 130nm, and master Static Timing Analysis (STA) land competitive off-campus roles.',
+        offCampusTactics: [
+          'Design and tapeout a complete RISC-V SoC core using the open-source OpenLane / SkyWater 130nm flow; showcase GitHub GDSII files.',
+          'Complete end-to-end SystemVerilog UVM verification environments for UART/SPI/AXI bus protocols with 100% functional coverage.',
+          'Target GATE EC score (>750) to enter top M.Tech VLSI programs at IISc Bengaluru, IIT Bombay, or IIT Madras where 100% placement CTCs average ₹28 LPA.',
+          'Connect with semiconductor alumni on LinkedIn and share verification waveform simulations.',
+        ],
+      },
+      standardTechStack: [
+        'Languages: SystemVerilog, Verilog, Tcl, Python, C++',
+        'Verification: UVM (Universal Verification Methodology), SVA (Assertions)',
+        'Synthesis & STA: Synopsys Design Compiler, PrimeTime, Cadence Genus',
+        'Open-Source EDA: OpenLane, Yosys, SkyWater 130nm PDK, Magic, Netgen',
+      ],
+      higherStudiesGate: {
+        exam: 'GATE EC (Microelectronics & VLSI)',
+        topInstitutes: ['IISc Bengaluru (DESE)', 'IIT Bombay (Microelectronics)', 'IIT Madras', 'IIT Delhi'],
+        mtechSpecializations: ['VLSI Design & CAD', 'Integrated Electronics', 'Nano-electronics & Device Physics'],
+        msAbroadScope: 'High global demand in US (Purdue, UT Austin, UCSD), Taiwan (NTHU, NYCU), and Belgium (imec).',
       },
       keyCompetitiveExams: ['GATE EC (Microelectronics specialization at IITs)', 'ISRO Scientist/Engineer', 'DRDO RAC', 'BARC OCES'],
     },
@@ -1196,6 +1388,9 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
     categoryLabel: 'Electrical & Power Systems',
     badge: 'Core Infrastructure',
     tagline: 'Powering electric mobility, renewable energy grids, smart power transmission, power electronics, and high-voltage systems.',
+    acronym: 'EEE',
+    topicsCount: '800+ Topics • 4 Years',
+    bannerCategory: 'electronics',
     strategicOverview: {
       corporateViability: 'High (Surging with Electric Vehicles & Renewable Energy)',
       corporateSummary: 'Exponential expansion fueled by EV manufacturers (Tesla, Tata Motors, Ather, Ola), power tech giants (Schneider, ABB, Siemens), and renewable solar/wind installations.',
@@ -1212,6 +1407,30 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
         entryTier: '₹5 LPA – ₹14 LPA',
         midTier: '₹16 LPA – ₹32 LPA',
         peakTier: '₹38 LPA – ₹75+ LPA (EV & Power Tech Multinational)',
+      },
+      tierReality: {
+        tier1Salary: '₹14 LPA – ₹36 LPA',
+        tier1Reality: 'Automotive and energy giants (ABB, Schneider Electric, Eaton, Ather, Texas Instruments) recruit directly for Power Electronics and EV BMS roles.',
+        tier3Salary: '₹3.5 LPA – ₹6.5 LPA (IT Services / Site Electrical) / ₹10 – ₹20 LPA (Off-Campus Core EV)',
+        tier3Reality: 'Campus hiring is often dominated by generic IT or low-paying electrical maintenance contractors. Students from Tier-3 who master MATLAB/Simulink motor control, design working Buck-Boost / Inverter hardware, and crack GATE EE with high rank secure lucrative PSU and EV R&D jobs.',
+        offCampusTactics: [
+          'Design and build hardware prototypes of DC-DC converters, Battery Management System (BMS) boards, or inverter circuits with thermal calculations.',
+          'Develop motor control algorithms (Field-Oriented Control / FOC) in MATLAB/Simulink and flash onto TI C2000 microcontrollers.',
+          'Target GATE EE vigorously: top 200 rank guarantees Maharatna/Navratna PSU recruitment with ₹15–20 LPA initial compensation.',
+          'Complete verified simulation portfolios in ETAP, PSCAD, and LTspice.',
+        ],
+      },
+      standardTechStack: [
+        'Simulation & CAD: MATLAB / Simulink, PLECS, LTspice, ETAP, PSCAD',
+        'Embedded Hardware: TI C2000 DSP, STM32 Motor Control, KiCAD',
+        'Protocols: CAN Bus, Modbus, SCADA, IEC 61850',
+        'EV & Battery: BMS algorithms, State of Charge (SoC) estimation, MATLAB Simscape',
+      ],
+      higherStudiesGate: {
+        exam: 'GATE EE (Electrical Engineering)',
+        topInstitutes: ['IISc Bengaluru (Power Electronics)', 'IIT Madras', 'IIT Bombay', 'IIT Delhi'],
+        mtechSpecializations: ['Power Electronics & Drives', 'Power Systems', 'Control & Automation', 'Electric Vehicle Technology'],
+        msAbroadScope: 'High global demand in Germany (RWTH Aachen, TU Munich for EV tech) and US (Ohio State, Purdue).',
       },
       keyCompetitiveExams: ['GATE EE', 'UPSC ESE (Electrical Engineering)', 'Power Grid (PGCIL) Executive Trainee', 'NTPC / BHEL Engineer Trainee', 'State DISCOM AE/AEE'],
     },
@@ -1348,6 +1567,9 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
     categoryLabel: 'Mechanical & Manufacturing',
     badge: 'Evergreen Pillar',
     tagline: 'The mother of engineering disciplines, commanding thermal sciences, structural mechanics, advanced CAD/CAM, and smart manufacturing.',
+    acronym: 'MECH',
+    topicsCount: '800+ Topics • 4 Years',
+    bannerCategory: 'mechanical',
     strategicOverview: {
       corporateViability: 'High (Automotive, Heavy Machinery, Aerospace, Tech Manufacturing)',
       corporateSummary: 'Robust hiring by automotive leaders (Tata Motors, Mahindra, Maruti, Hyundai), defense suppliers (L&T, Godrej), industrial giants (Cummins, Caterpillar), and CAE consulting firms.',
@@ -1364,6 +1586,30 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
         entryTier: '₹4.5 LPA – ₹12 LPA',
         midTier: '₹14 LPA – ₹28 LPA',
         peakTier: '₹32 LPA – ₹65+ LPA (Automotive / Aerospace / MNC R&D)',
+      },
+      tierReality: {
+        tier1Salary: '₹12 LPA – ₹28 LPA',
+        tier1Reality: 'Top automotive OEMs (Tata Motors, Mahindra, Maruti Suzuki, Bajaj, Hyundai) and R&D consultancies (Mercedes-Benz R&D, GE Aerospace) recruit on-campus for structural design and powertrain engineering.',
+        tier3Salary: '₹2.8 LPA – ₹5.5 LPA (Plant Trainee / Shopfloor) / ₹9 – ₹18 LPA (Off-Campus CAE / Simulation)',
+        tier3Reality: 'Campus hiring is frequently limited to low-paying shop floor production/GET roles. Tier-3 mechanical students who master Ansys FEA/CFD, GD&T, and Python automation, or crack GATE ME for IIT admissions, break into top-paying engineering simulation and R&D positions.',
+        offCampusTactics: [
+          'Master Ansys Workbench (Structural FEA) and Ansys Fluent (CFD); post animated stress analysis & thermal simulation case studies on LinkedIn.',
+          'Attain certified SolidWorks Associate/Professional (CSWA/CSWP) credential with strict Geometric Dimensioning and Tolerancing (GD&T) drafting.',
+          'Target GATE ME rigorously: score > 750 opens PSU recruitment (IOCL/ONGC/BHEL) and IIT M.Tech in Thermal/Design.',
+          'Participate in collegiate design teams (Formula Student, SAE BAJA, Robocon) and document component manufacturing.',
+        ],
+      },
+      standardTechStack: [
+        'CAD & Modeling: SolidWorks, CATIA V5, Autodesk Fusion 360, AutoCAD',
+        'Simulation & CAE: Ansys Mechanical (FEA), Ansys Fluent (CFD), HyperMesh',
+        'Computation: MATLAB, Python (NumPy/SciPy for engineering mechanics)',
+        'Manufacturing: Mastercam (CNC programming), Cura (Additive 3D printing), GD&T',
+      ],
+      higherStudiesGate: {
+        exam: 'GATE ME (Mechanical Engineering)',
+        topInstitutes: ['IISc Bengaluru (Dept of Mechanical)', 'IIT Bombay', 'IIT Madras', 'IIT Kharagpur'],
+        mtechSpecializations: ['Mechanical Design', 'Thermal & Fluids Engineering', 'Manufacturing / Industrial Engineering', 'Aerospace Engineering'],
+        msAbroadScope: 'High global demand in Germany (RWTH Aachen, TU Stuttgart for Automotive/Robotics) and US (Michigan, Purdue).',
       },
       keyCompetitiveExams: ['GATE ME', 'UPSC ESE (Mechanical Engineering)', 'ISRO Scientist/Engineer', 'BARC OCES', 'BHEL / IOCL / ONGC Trainee', 'Indian Railways'],
     },
@@ -1497,6 +1743,9 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
     categoryLabel: 'Mechanical & Robotics',
     badge: 'Industry 4.0 Vanguard',
     tagline: 'Converging mechanical kinematics, computer vision, embedded control, and ROS for autonomous systems and smart industrial automation.',
+    acronym: 'ROBOTICS',
+    topicsCount: '800+ Topics • 4 Years',
+    bannerCategory: 'mechanical',
     strategicOverview: {
       corporateViability: 'Very High (Rapid Growth with Industry 4.0 & Warehousing)',
       corporateSummary: 'Surging demand in warehouse automation (Amazon Robotics, GreyOrange), industrial manufacturing (Fanuc, ABB, Kuka), autonomous drones, and surgical robotics.',
@@ -1513,6 +1762,30 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
         entryTier: '₹6 LPA – ₹16 LPA',
         midTier: '₹18 LPA – ₹36 LPA',
         peakTier: '₹42 LPA – ₹85+ LPA (Autonomous Vehicles & Global Tech)',
+      },
+      tierReality: {
+        tier1Salary: '₹16 LPA – ₹42 LPA',
+        tier1Reality: 'Recruited by autonomous driving companies, warehouse automation pioneers (GreyOrange, Addverb), and drone startups for perception, control, and ROS software roles.',
+        tier3Salary: '₹3.6 LPA – ₹7 LPA (PLC/SCADA Field Tech) / ₹12 – ₹24 LPA (Off-Campus Autonomous Systems)',
+        tier3Reality: 'College labs often only have outdated PLC kits. Students from Tier-3 who build autonomous mobile robots (AMR) with ROS 2, LiDAR SLAM, and OpenCV on Raspberry Pi / Jetson Nano stand head and shoulders above applicants for robotics engineer roles.',
+        offCampusTactics: [
+          'Master ROS 2 (Robot Operating System) with Nav2 and Gazebo simulation; publish working simulated AMR models on GitHub.',
+          'Build a real hardware robot utilizing RPLiDAR, depth camera, and Raspberry Pi/Jetson; demonstrate autonomous navigation and obstacle avoidance on YouTube and LinkedIn.',
+          'Excel in modern C++ (C++17/20) and memory management, as robotics companies test C++ rigorously.',
+          'Compete in prestigious robotics challenges (e-Yantra by IIT Bombay, Robocon, university drone leagues).',
+        ],
+      },
+      standardTechStack: [
+        'Middleware & Sim: ROS 2 (Humble/Iron), Gazebo, RViz, Isaac Sim',
+        'Languages: Modern C++ (17/20), Python, Linux / Bash',
+        'Perception & Navigation: OpenCV, Point Cloud Library (PCL), Nav2, Cartographer SLAM',
+        'Hardware: NVIDIA Jetson Nano/Orin, Raspberry Pi, STM32, LiDAR, RealSense Cameras',
+      ],
+      higherStudiesGate: {
+        exam: 'GATE ME / EC / CS',
+        topInstitutes: ['IISc Bengaluru (Robert Bosch Centre for Cyber-Physical Systems)', 'IIT Kanpur', 'IIT Madras', 'IIT Delhi'],
+        mtechSpecializations: ['Robotics & Autonomous Systems', 'Control & Automation', 'Mechatronics'],
+        msAbroadScope: 'Massive opportunities in US (Carnegie Mellon Robotics Institute, Michigan Robotics) and Germany (TU Munich).',
       },
       keyCompetitiveExams: ['GATE ME / GATE EC / GATE CS', 'DRDO Scientist B', 'ISRO Scientist/Engineer', 'RoboCup & DARPA Robotics Competitions'],
     },
@@ -1649,6 +1922,9 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
     categoryLabel: 'Civil & Infrastructure',
     badge: 'Nation Builder',
     tagline: 'Designing resilient mega-structures, smart highways, geotechnical foundations, water resources, and sustainable urban infrastructure.',
+    acronym: 'CIVIL',
+    topicsCount: '800+ Topics • 4 Years',
+    bannerCategory: 'mechanical',
     strategicOverview: {
       corporateViability: 'High (Mega Infrastructure & Smart City Projects)',
       corporateSummary: 'Robust hiring by infrastructure conglomerates (L&T Construction, Shapoorji Pallonji, Tata Projects, Afcons), international consultancies (WSP, AECOM, Atkins), and real estate builders.',
@@ -1665,6 +1941,30 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
         entryTier: '₹4.5 LPA – ₹11 LPA',
         midTier: '₹13 LPA – ₹26 LPA',
         peakTier: '₹30 LPA – ₹60+ LPA (International Infrastructure / EPC)',
+      },
+      tierReality: {
+        tier1Salary: '₹10 LPA – ₹24 LPA',
+        tier1Reality: 'Recruited by top engineering consultancies (Arup, WSP, AECOM) and premier construction EPCs (L&T Construction - Build India Scholarship).',
+        tier3Salary: '₹2.8 LPA – ₹5 LPA (Site Supervisor) / ₹8 – ₹16 LPA (Off-Campus Structural BIM / GATE)',
+        tier3Reality: 'Campus placement in Tier-3 is often non-existent or restricted to entry-level site execution roles with long hours. However, students who dedicate themselves to GATE CE secure government Assistant Executive Engineer (AEE) positions, or enter IIT M.Tech in Structural Engineering to work for global consultancy giants.',
+        offCampusTactics: [
+          'Master Building Information Modeling (BIM) workflows: Autodesk Revit, Navisworks, and Dynamo for computational BIM.',
+          'Develop mastery of ETABS and STAAD.Pro with complete structural design reports matching Indian Standards (IS 456, IS 800, IS 1893).',
+          'Prepare rigorously for GATE CE; Civil engineering offers the highest number of PSU, state AE, and CPWD vacancies in the nation.',
+          'Learn Primavera P6 and Microsoft Project for high-paying project management & scheduling roles.',
+        ],
+      },
+      standardTechStack: [
+        'Structural Design: ETABS, STAAD.Pro, SAFE, SAP2000',
+        'BIM & CAD: Autodesk Revit Structure, AutoCAD Civil 3D, Navisworks',
+        'Project Management: Primavera P6, Microsoft Project (MSP)',
+        'GIS & Geotechnical: ArcGIS, QGIS, PLAXIS 2D/3D',
+      ],
+      higherStudiesGate: {
+        exam: 'GATE CE (Civil Engineering)',
+        topInstitutes: ['IIT Roorkee (Pioneer in Civil & Earthquake)', 'IIT Bombay', 'IIT Delhi', 'IIT Madras'],
+        mtechSpecializations: ['Structural Engineering', 'Geotechnical Engineering', 'Transportation Systems', 'Water Resources & Environmental'],
+        msAbroadScope: 'Excellent career pathways in Australia, Canada, UK, and Germany (Infrastructure boom).',
       },
       keyCompetitiveExams: ['GATE CE', 'UPSC ESE (Civil Engineering - Largest Quota)', 'State PSC Assistant Engineer (AE / AEE)', 'SSC JE', 'NHAI / CPWD Executive Trainee'],
     },
@@ -1791,7 +2091,45 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
   },
 ];
 
-export const ENGINEERING_ROADMAPS: BranchRoadmap[] = [
+const ALL_RAW_ROADMAPS: BranchRoadmap[] = [
   ...CORE_ROADMAPS,
+  IOT_ROADMAP,
   ...EXTENDED_ROADMAPS,
+];
+
+const ORDERED_PRIMARY_IDS = [
+  'cse',
+  'csm',
+  'csd',
+  'csbs',
+  'cyber-security',
+  'iot',
+  'it',
+  'ece',
+  'ece-vlsi',
+  'ece-embedded',
+  'eee',
+  'mech',
+  'civil',
+  'robotics',
+  'aerospace',
+];
+
+const orderedPrimary: BranchRoadmap[] = ORDERED_PRIMARY_IDS
+  .map(id => ALL_RAW_ROADMAPS.find(r => r.id === id))
+  .filter((r): r is BranchRoadmap => Boolean(r));
+
+const seenIds = new Set(orderedPrimary.map(r => r.id));
+
+const remainingRoadmaps = ALL_RAW_ROADMAPS.filter(r => {
+  if (seenIds.has(r.id) || r.id === 'aim' || r.id === 'cybersecurity') {
+    return false;
+  }
+  seenIds.add(r.id);
+  return true;
+});
+
+export const ENGINEERING_ROADMAPS: BranchRoadmap[] = [
+  ...orderedPrimary,
+  ...remainingRoadmaps,
 ];

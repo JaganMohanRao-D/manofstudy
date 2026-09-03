@@ -1,13 +1,10 @@
 import * as pdfjsLib from 'pdfjs-dist';
 import mammoth from 'mammoth';
+import { configurePdfWorker } from './pdfWorkerConfig';
 
-// Configure pdfjs worker if in browser
+// Configure reliable pdfjs worker in browser
 if (typeof window !== 'undefined') {
-  try {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version || '3.11.174'}/pdf.worker.min.js`;
-  } catch {
-    // Ignore worker setup error, fallback inline
-  }
+  configurePdfWorker();
 }
 
 /**

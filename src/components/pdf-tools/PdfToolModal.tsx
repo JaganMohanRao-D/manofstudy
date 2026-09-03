@@ -62,6 +62,7 @@ import {
   summarizePdf,
   exportPdfToMarkdown,
 } from '../../utils/pdfToolkitEngine';
+import { formatPdfErrorMessage } from '../../utils/pdfErrorHelper';
 
 interface PdfToolModalProps {
   tool: PdfToolDefinition;
@@ -339,12 +340,15 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
             setProgress((prev) => ({ ...prev, progressPercent: pct, statusMessage: msg }));
           });
           const downloadUrl = URL.createObjectURL(res.blob);
+          const secondaryDownloadUrl = res.zipBlob ? URL.createObjectURL(res.zipBlob) : undefined;
           setProgress({
             isProcessing: false,
             progressPercent: 100,
-            statusMessage: 'Converted pages into 16:9 presentation slides!',
+            statusMessage: 'Converted pages into 16:9 presentation slides (.pptx)!',
             downloadUrl,
             downloadFilename: res.filename,
+            secondaryDownloadUrl,
+            secondaryFilename: `${mainFile.name.replace(/\.pdf$/i, '')}_Slides_Package.zip`,
           });
           break;
         }
@@ -790,11 +794,12 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
       }
     } catch (err: any) {
       console.error('PDF Tool execution error:', err);
+      const friendlyError = formatPdfErrorMessage(err);
       setProgress({
         isProcessing: false,
         progressPercent: 0,
-        statusMessage: 'Error during processing',
-        error: err.message || 'An unexpected error occurred while executing the PDF engine.',
+        statusMessage: 'Execution failed',
+        error: friendlyError,
       });
     }
   };
@@ -1276,11 +1281,11 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
 
         {/* Error Alert */}
         {progress.error && (
-          <div className="flex items-start gap-2.5 p-4 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-800">
+          <div className="flex items-start gap-3 p-4 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-800 animate-in fade-in">
             <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-            <div>
-              <p className="font-bold">Execution Failed</p>
-              <p className="text-rose-700 mt-0.5">{progress.error}</p>
+            <div className="space-y-1">
+              <p className="font-bold text-rose-900">Document Processing Notice</p>
+              <p className="text-rose-700 leading-relaxed">{progress.error}</p>
             </div>
           </div>
         )}
@@ -1313,20 +1318,38 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
               </div>
             )}
 
-            <button
-              onClick={() => {
-                if (progress.downloadUrl && progress.downloadFilename) {
-                  const link = document.createElement('a');
-                  link.href = progress.downloadUrl;
-                  link.download = progress.downloadFilename;
-                  link.click();
-                }
-              }}
-              className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
-            >
-              <Download className="w-4 h-4" />
-              Download Result ({progress.downloadFilename})
-            </button>
+            <div className="flex flex-col sm:flex-row gap-2.5">
+              <button
+                onClick={() => {
+                  if (progress.downloadUrl && progress.downloadFilename) {
+                    const link = document.createElement('a');
+                    link.href = progress.downloadUrl;
+                    link.download = progress.downloadFilename;
+                    link.click();
+                  }
+                }}
+                className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                Download {progress.downloadFilename}
+              </button>
+
+              {progress.secondaryDownloadUrl && progress.secondaryFilename && (
+                <button
+                  onClick={() => {
+                    const link = document.createElement('a');
+                    link.href = progress.secondaryDownloadUrl!;
+                    link.download = progress.secondaryFilename!;
+                    link.click();
+                  }}
+                  className="py-3 px-4 bg-white hover:bg-emerald-100/50 text-emerald-800 border border-emerald-300 font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2"
+                  title="Download slide deck package (.zip)"
+                >
+                  <Download className="w-4 h-4 text-emerald-600" />
+                  Slide Deck (.zip)
+                </button>
+              )}
+            </div>
           </div>
         )}
 
