@@ -135,53 +135,7 @@ export const PdfPowerTools: React.FC = () => {
   };
 
   return (
-    <div id="pdf-power-tools-container" className="space-y-6">
-      {/* Top Hero Banner */}
-      <div
-        id="pdf-hero-card"
-        className="bg-white border border-slate-200 rounded-xl p-6 sm:p-7 shadow-sm relative overflow-hidden"
-      >
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-          <div className="space-y-2 max-w-2xl">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-200">
-                <Sparkles className="w-3.5 h-3.5 text-sky-500" />
-                30 Client-Side PDF Utilities
-              </span>
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-                Zero-Server Privacy Guarantee
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-              StudyMacha PDF Toolkit &amp; Vector Suite
-            </h1>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Fast, privacy-focused client-side PDF document manipulation tools. Merge, compress, convert to Word/Excel/PowerPoint, sign, encrypt, rotate, redact, and extract content directly inside your web browser.
-            </p>
-          </div>
-
-          {/* Metric Highlights */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 shrink-0">
-            <div className="bg-slate-50 border border-slate-200/80 rounded-lg p-3 text-center">
-              <span className="text-xs font-medium text-slate-500 block">Total Tools</span>
-              <span className="text-xl font-bold text-slate-900">30</span>
-              <span className="text-[10px] text-slate-400 block">All-in-One Suite</span>
-            </div>
-            <div className="bg-sky-50/70 border border-sky-200/70 rounded-lg p-3 text-center">
-              <span className="text-xs font-medium text-sky-700 block">Server Uploads</span>
-              <span className="text-xl font-bold text-sky-900">0 KB</span>
-              <span className="text-[10px] text-sky-600 block">100% In-Memory</span>
-            </div>
-            <div className="col-span-2 sm:col-span-1 bg-emerald-50/70 border border-emerald-200/70 rounded-lg p-3 text-center">
-              <span className="text-xs font-medium text-emerald-700 block">Security</span>
-              <span className="text-xl font-bold text-emerald-900">Wasm</span>
-              <span className="text-[10px] text-emerald-600 block">Client Sandboxed</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <div id="pdf-power-tools-container" className="space-y-4">
       {/* Filter and Search Bar */}
       <div
         id="pdf-filter-bar"

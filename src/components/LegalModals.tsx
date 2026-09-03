@@ -402,7 +402,7 @@ export const LegalModals: React.FC<LegalModalsProps> = ({
               <div className="space-y-3">
                 <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider">1. AP EAPCET Vacancy Data Verification</h4>
                 <p>
-                  The institutional seat vacancy records, leftover seat distributions, and annual tuition fees displayed in the AP EAPCET Vacancy Radar are sourced from public university announcements and official Phase 1 allotment reports for analytical convenience. While we make every effort to maintain dataset precision, seat statuses dynamically change during active counselling rounds. Students must cross-verify final choices on the official state portal (<code className="bg-slate-100 px-1 py-0.5 rounded text-[11px]">eapcet-sche.aptonline.in</code>) prior to final web option submission.
+                  The institutional seat vacancy records, leftover seat distributions, and annual tuition fees displayed in the AP EAPCET Vacancy Radar are sourced from public university announcements and official Phase 2 leftover seat vacancy records for analytical convenience. While we make every effort to maintain dataset precision, seat statuses dynamically change during active counselling rounds. Students must cross-verify final choices on the official state portal (<code className="bg-slate-100 px-1 py-0.5 rounded text-[11px]">eapcet-sche.aptonline.in</code>) prior to final web option submission.
                 </p>
 
                 <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider">2. Scholarship Opportunities &amp; Government Schemes</h4>

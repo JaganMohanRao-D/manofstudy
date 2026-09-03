@@ -1,14 +1,91 @@
 export type ToolTab = 
   | 'eapcet-radar'
+  | 'roadmaps'
+  | 'scholarships'
+  | 'pdf-tools'
+  | 'resume-checker'
   | 'attendance' 
   | 'gpa' 
   | 'internal-calc'
   | 'resizer' 
-  | 'resume-checker' 
-  | 'humanizer'
-  | 'pdf-tools';
+  | 'humanizer';
 
-export type ToolCategory = 'academic' | 'document' | 'writing' | 'counselling';
+export type ToolCategory = 'academic' | 'document' | 'writing' | 'counselling' | 'scholarship';
+
+export interface SemesterPlan {
+  semNumber: number;
+  title: string;
+  coreSubjects: string[];
+  industrySkills: string[];
+  toolsAndPlatforms: string[];
+  keyProjects: string[];
+  internshipOrMilestone: string;
+  examOrPlacementPrep: string;
+}
+
+export interface YearPlan {
+  yearNumber: number;
+  yearTitle: string;
+  theme: string;
+  semesters: [SemesterPlan, SemesterPlan];
+}
+
+export interface BranchRoadmap {
+  id: string;
+  code: string;
+  name: string;
+  category: 'computing' | 'electronics' | 'mechanical' | 'civil';
+  categoryLabel: string;
+  badge: string;
+  tagline: string;
+  strategicOverview: {
+    corporateViability: string;
+    corporateSummary: string;
+    govtPsuViability: string;
+    govtPsuSummary: string;
+    targetRoles: string[];
+    salaryBrackets: {
+      entryTier: string;
+      midTier: string;
+      peakTier: string;
+    };
+    keyCompetitiveExams: string[];
+  };
+  skillsMatrix: {
+    foundational: string[];
+    advanced: string[];
+    industryTools: string[];
+  };
+  years: YearPlan[];
+  proTips: string[];
+}
+
+export interface IndianScholarship {
+  id: string;
+  title: string;
+  provider: string;
+  category: string;
+  target: string;
+  eligibility: string;
+  amount: string;
+  deadline: string;
+  apply_link: string;
+}
+
+export interface ScholarshipItem {
+  id: string;
+  title: string;
+  provider: string;
+  category: 'engineering' | 'class10-12' | 'national' | 'merit' | 'women';
+  categoryLabel: string;
+  amount: string;
+  deadline: string;
+  status: 'Open' | 'Closing Soon' | 'Announced' | 'Upcoming';
+  eligibility: string;
+  applicableCourses: string;
+  officialUrl: string;
+  keyBenefits: string[];
+}
 
 export interface ToolMeta {
   id: ToolTab;

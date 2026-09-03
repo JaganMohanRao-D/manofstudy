@@ -1,6 +1,6 @@
 {
   "name": "StudyMacha",
-  "description": "Free all-in-one student & career utility hub. 30+ client-side PDF tools, image compressor to 20kb 50kb, engineering scholarships, and real-time AP EAPCET 2026/2027 college vacancy radar.",
+  "description": "Free all-in-one student & career utility hub. 24 engineering branch roadmaps with 4-year blueprints & PDF export, 30+ client-side PDF tools, image compressor to 20kb-50kb, verified scholarships, and real-time AP EAPCET college vacancy radar.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

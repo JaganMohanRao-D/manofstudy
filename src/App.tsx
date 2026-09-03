@@ -1,31 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  Radar,
   ShieldCheck,
-  GraduationCap,
-  Image as ImageIcon,
-  FileSearch,
-  FileText,
-  Calculator,
-  Bot,
-  Zap,
   Lock,
   Mail,
   Copy,
   Check,
-  Shield,
-  HelpCircle,
-  Sparkles,
-  Layers,
-  Globe,
   AlertCircle,
+  MessageCircle,
+  GraduationCap,
+  FileText,
+  Building2,
+  Sparkles,
+  ExternalLink,
 } from 'lucide-react';
 import { ToolTab, ToolMeta } from './types';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { LegalModals, LegalModalType } from './components/LegalModals';
-import { ApEapcetRadar } from './components/ApEapcetRadar';
+import { ApEapcetRadar, EapcetPhaseTab } from './components/ApEapcetRadar';
 import { AttendanceDefender } from './components/AttendanceDefender';
 import { GlobalGpaHub } from './components/GlobalGpaHub';
 import { ImageResizer } from './components/ImageResizer';
@@ -33,9 +26,37 @@ import { AtsResumeMatcher } from './components/AtsResumeMatcher';
 import { AiHumanizer } from './components/AiHumanizer';
 import { PdfPowerTools } from './components/PdfPowerTools';
 import { InternalExamEstimator } from './components/InternalExamEstimator';
+import { ScholarshipsHub } from './components/ScholarshipsHub';
+import { EngineeringRoadmaps } from './components/EngineeringRoadmaps';
 import { EducationalGuideAndSeo } from './components/EducationalGuideAndSeo';
+import { StudentTestimonials } from './components/StudentTestimonials';
+import { CommandPalette } from './components/CommandPalette';
 
 export const TOOLS_CONFIG: ToolMeta[] = [
+  {
+    id: 'eapcet-radar',
+    name: 'AP EAPCET Phase 2 Vacancy Radar',
+    shortName: 'EAPCET Phase 2',
+    category: 'counselling',
+    description: 'Live AP EAPCET Phase 2 leftover seats, college matrices & official branch fee schedules',
+    badge: 'Phase 2 Live',
+  },
+  {
+    id: 'roadmaps',
+    name: 'Engineering Branch Roadmaps',
+    shortName: 'Branch Roadmaps',
+    category: 'counselling',
+    description: '4-year semester-by-semester blueprints, software, projects & PDF exports for 24 counseling branches',
+    badge: '24 Branches',
+  },
+  {
+    id: 'scholarships',
+    name: 'Scholarships Radar',
+    shortName: 'Scholarships Radar',
+    category: 'academic',
+    description: 'Verified 2026 national, state & corporate scholarships with direct official apply links',
+    badge: '22+ Live',
+  },
   {
     id: 'pdf-tools',
     name: '30+ PDF Power Tools',
@@ -43,14 +64,6 @@ export const TOOLS_CONFIG: ToolMeta[] = [
     category: 'document',
     description: 'Zero-server WebAssembly PDF merge, split, compress, watermark, redact & convert',
     badge: '30 Tools',
-  },
-  {
-    id: 'eapcet-radar',
-    name: 'AP EAPCET Vacancy Radar',
-    shortName: 'EAPCET Radar',
-    category: 'counselling',
-    description: 'Phase 2 live college vacancies, branch intake & fee structure scanner',
-    badge: 'LIVE • Phase 2',
   },
   {
     id: 'resume-checker',
@@ -102,13 +115,13 @@ export const TOOLS_CONFIG: ToolMeta[] = [
   },
 ];
 
-type CategoryFilter = 'all' | 'pdf' | 'career' | 'academic' | 'counselling';
-
 export default function App() {
   const [activeTab, setActiveTab] = useState<ToolTab>('eapcet-radar');
+  const [eapcetPhase, setEapcetPhase] = useState<EapcetPhaseTab>('phase2');
   const [legalModal, setLegalModal] = useState<LegalModalType | null>(null);
-  const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('all');
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState<boolean>(false);
+  const [targetRoadmapBranchId, setTargetRoadmapBranchId] = useState<string | undefined>(undefined);
 
   const supportEmail = 'support.jamord@gmail.com';
 
@@ -118,12 +131,39 @@ export default function App() {
     setTimeout(() => setCopiedEmail(false), 2200);
   };
 
+  // Global Ctrl/Cmd + K shortcut for Command Palette
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Check for Ctrl+K or Cmd+K
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsCommandPaletteOpen((prev) => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   // Sync activeTab with URL hash for bookmarking and history
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '').toLowerCase();
-      if (hash === 'eapcet-radar' || hash === 'eapcet' || hash === 'phase2' || hash === 'radar' || hash === 'vacancy') {
+      if (
+        hash === 'eapcet-radar' ||
+        hash === 'eapcet' ||
+        hash === 'phase1' ||
+        hash === 'phase2' ||
+        hash === 'radar' ||
+        hash === 'vacancy' ||
+        hash === 'predictor'
+      ) {
         setActiveTab('eapcet-radar');
+        setEapcetPhase('phase2');
+      } else if (hash.startsWith('roadmap') || hash === 'curriculum' || hash === 'branch') {
+        setActiveTab('roadmaps');
+      } else if (hash === 'scholarships' || hash === 'scholarship') {
+        setActiveTab('scholarships');
       } else if (hash === 'gpa') {
         setActiveTab('gpa');
       } else if (hash === 'resizer' || hash === 'image') {
@@ -151,151 +191,95 @@ export default function App() {
     window.location.hash = tab;
   };
 
-  const getToolIcon = (id: ToolTab) => {
-    switch (id) {
-      case 'eapcet-radar':
-        return Radar;
-      case 'attendance':
-        return ShieldCheck;
-      case 'gpa':
-        return GraduationCap;
-      case 'internal-calc':
-        return Calculator;
-      case 'resizer':
-        return ImageIcon;
-      case 'resume-checker':
-        return FileSearch;
-      case 'humanizer':
-        return Bot;
-      case 'pdf-tools':
-        return FileText;
-    }
+  const handleSelectEapcetPhase = () => {
+    setEapcetPhase('phase2');
+    setActiveTab('eapcet-radar');
+    window.location.hash = 'eapcet-radar';
   };
 
-  const filteredTools = TOOLS_CONFIG.filter((tool) => {
-    if (categoryFilter === 'all') return true;
-    if (categoryFilter === 'pdf') return tool.id === 'pdf-tools';
-    if (categoryFilter === 'career') return tool.id === 'resume-checker' || tool.id === 'humanizer' || tool.id === 'resizer';
-    if (categoryFilter === 'academic') return tool.category === 'academic';
-    if (categoryFilter === 'counselling') return tool.id === 'eapcet-radar';
-    return true;
-  });
+  const handleSelectToolFromPalette = (tab: ToolTab) => {
+    setActiveTab(tab);
+    window.location.hash = tab;
+    setIsCommandPaletteOpen(false);
+
+    // Smooth scroll to active tool viewport
+    setTimeout(() => {
+      const el = document.getElementById('active-tool-viewport');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 50);
+  };
+
+  const handleSelectBranchRoadmapFromPalette = (branchId: string) => {
+    setTargetRoadmapBranchId(branchId);
+    setActiveTab('roadmaps');
+    window.location.hash = `roadmaps?branch=${branchId}`;
+    setIsCommandPaletteOpen(false);
+
+    setTimeout(() => {
+      const el = document.getElementById('active-roadmap-view') || document.getElementById('active-tool-viewport');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 60);
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 tech-grid-pattern-light flex flex-col justify-between">
-      
-      {/* Sticky Top Navigation & Header */}
+      {/* 1. Modern Header with Search, Dropdowns & Quick Navigation */}
       <Header
         activeTab={activeTab}
         setActiveTab={handleTabChange}
+        onSelectEapcetPhase={handleSelectEapcetPhase}
         onOpenLegal={(type) => setLegalModal(type)}
+        onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
       />
 
-      {/* Main Content Container */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 flex-1 w-full">
-        
-        {/* Global Positioning & Trust Hero Section */}
-        <HeroSection
-          onSelectTool={handleTabChange}
-          activeTab={activeTab}
-        />
+      {/* 2. Main Content Container */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-6 flex-1 w-full">
+        {/* Compact Hero Section */}
+        <HeroSection />
 
-        {/* Feature Grid & Category Tool Showcase */}
-        <section id="quick-tool-selector" className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-200">
-            <div>
-              <span className="text-xs font-bold uppercase text-slate-900 tracking-wider flex items-center gap-1.5">
-                <Zap className="w-3.5 h-3.5 text-sky-600" />
-                Universal Productivity Suite
-              </span>
-              <p className="text-[11px] text-slate-500 mt-0.5">
-                International Document &amp; Career Engines alongside Specialized Indian Academic Trackers
-              </p>
-            </div>
-
-            {/* Category Filter Pills */}
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs">
-              {(
-                [
-                  { id: 'all', label: 'All Tools (8)' },
-                  { id: 'pdf', label: 'PDF Suite (30)' },
-                  { id: 'career', label: 'Career & ATS' },
-                  { id: 'academic', label: 'Academic & GPA' },
-                  { id: 'counselling', label: 'AP EAPCET' },
-                ] as const
-              ).map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => setCategoryFilter(cat.id)}
-                  className={`px-3 py-1.5 rounded-lg font-medium transition-colors whitespace-nowrap cursor-pointer ${
-                    categoryFilter === cat.id
-                      ? 'bg-slate-900 text-white shadow-xs font-semibold'
-                      : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 hover:text-slate-900'
-                  }`}
-                >
-                  {cat.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Quick Tool Selector Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5">
-            {filteredTools.map((tool) => {
-              const Icon = getToolIcon(tool.id);
-              const isActive = activeTab === tool.id;
-
-              return (
-                <button
-                  key={tool.id}
-                  onClick={() => handleTabChange(tool.id)}
-                  className={`p-3 rounded-2xl border text-left transition-all duration-200 ease-out active:scale-95 cursor-pointer flex flex-col justify-between relative group ${
-                    isActive
-                      ? 'bg-sky-500 text-white border-sky-500 shadow-sm ring-2 ring-sky-500/20'
-                      : 'bg-white text-slate-700 border-slate-200 hover:bg-sky-50 hover:border-sky-300 hover:text-sky-700 shadow-xs'
-                  }`}
-                >
-                  <div className="flex items-center justify-between w-full mb-2">
-                    <span className={`text-[10px] font-mono font-semibold uppercase tracking-wider ${isActive ? 'text-sky-100' : 'text-slate-400'}`}>
-                      {tool.badge}
-                    </span>
-                    <div
-                      className={`p-1.5 rounded-xl transition-colors ${
-                        isActive
-                          ? 'bg-white/20 text-white'
-                          : 'bg-slate-100 text-slate-600 group-hover:bg-sky-100 group-hover:text-sky-700'
-                      }`}
-                    >
-                      <Icon className="w-3.5 h-3.5" />
-                    </div>
-                  </div>
-
-                  <div>
-                    <span className={`text-xs font-semibold block truncate transition-colors ${isActive ? 'text-white' : 'text-slate-900 group-hover:text-sky-700'}`}>
-                      {tool.shortName}
-                    </span>
-                    <span className={`text-[10px] capitalize block truncate mt-0.5 ${isActive ? 'text-sky-100' : 'text-slate-500'}`}>
-                      {tool.category}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Dynamic Active Tool Viewport */}
+        {/* Dynamic Tool Viewport */}
         <section id="active-tool-viewport" className="relative min-h-[400px]">
           <AnimatePresence mode="wait">
             {activeTab === 'eapcet-radar' && (
               <motion.div
-                key="eapcet-radar"
+                key={`eapcet-radar-${eapcetPhase}`}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.15 }}
               >
-                <ApEapcetRadar />
+                <ApEapcetRadar initialTab={eapcetPhase} />
+              </motion.div>
+            )}
+
+            {activeTab === 'roadmaps' && (
+              <motion.div
+                key="roadmaps"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.15 }}
+              >
+                <EngineeringRoadmaps
+                  targetBranchId={targetRoadmapBranchId}
+                  onSelectBranch={(branchId) => setTargetRoadmapBranchId(branchId)}
+                />
+              </motion.div>
+            )}
+
+            {activeTab === 'scholarships' && (
+              <motion.div
+                key="scholarships"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.15 }}
+              >
+                <ScholarshipsHub />
               </motion.div>
             )}
 
@@ -385,40 +369,47 @@ export default function App() {
           </AnimatePresence>
         </section>
 
-        {/* Educational Guides & Methodology Documentation */}
+        {/* 3. High-Trust Testimonials & Interactive Feedback */}
+        <StudentTestimonials />
+
+        {/* 4. Educational Guides & Methodology Documentation */}
         <EducationalGuideAndSeo />
       </main>
 
-      {/* Global SaaS Footer with Official Legal & Support Credentials */}
-      <footer id="app-footer" className="border-t border-slate-200 bg-white text-slate-600 py-10 px-4 sm:px-6 lg:px-8 mt-16 shadow-xs">
-        <div className="max-w-7xl mx-auto space-y-8">
-          
-          {/* Top Footer Row: Identity, Support Email & In-Memory Guarantee */}
+      {/* 5. Comprehensive AdSense-Ready Footer */}
+      <footer
+        id="app-footer"
+        className="border-t border-slate-200 bg-white text-slate-600 py-12 px-4 sm:px-6 lg:px-8 mt-16 shadow-xs"
+      >
+        <div className="max-w-7xl mx-auto space-y-9">
+          {/* Identity & Support Email Desk */}
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-slate-100">
-            <div className="space-y-1.5 max-w-lg">
+            <div className="space-y-1.5 max-w-xl">
               <div className="flex items-center gap-2.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-base font-extrabold text-slate-900 tracking-tight">
-                  STUDYMACHA
+                <div className="w-8 h-8 rounded-xl bg-slate-950 text-white flex items-center justify-center font-bold text-xs">
+                  <Sparkles className="w-4 h-4 text-sky-400" />
+                </div>
+                <span className="text-lg font-black tracking-tight text-slate-900 font-sans">
+                  STUDY<span className="text-sky-600">MACHA</span>
                 </span>
-                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200">
-                  Global Utility Platform
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                  VERIFIED STUDENT PORTAL
                 </span>
               </div>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Empowering international professionals and Indian scholars with lightning-fast, client-side PDF manipulation, ATS resume optimization, exact KB exam image compression, and real-time AP EAPCET vacancy tracking.
+                Independent educational &amp; career guidance hub for Telugu engineering students. Providing verified AP EAPCET leftover seat matrices, national and corporate scholarship alerts, and 100% private in-browser document tools.
               </p>
             </div>
 
-            {/* Official Support Email Card */}
+            {/* Official Support Email Desk */}
             <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col sm:flex-row sm:items-center gap-3 shrink-0">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-sky-500 text-white flex items-center justify-center shadow-xs">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-sky-500 text-white flex items-center justify-center shadow-xs">
                   <Mail className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-semibold uppercase text-slate-400 block tracking-wider">
-                    Official Support Desk
+                  <span className="text-[10px] font-bold uppercase text-slate-400 block tracking-wider">
+                    Official Support &amp; Enquiries
                   </span>
                   <a
                     href={`mailto:${supportEmail}`}
@@ -432,7 +423,7 @@ export default function App() {
               <div className="flex items-center gap-1.5 pt-1 sm:pt-0">
                 <button
                   onClick={handleCopyEmail}
-                  className="px-2.5 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 cursor-pointer"
+                  className="px-2.5 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1 cursor-pointer"
                   title="Copy support email"
                 >
                   {copiedEmail ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
@@ -440,121 +431,233 @@ export default function App() {
                 </button>
                 <button
                   onClick={() => setLegalModal('contact')}
-                  className="px-2.5 py-1.5 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+                  className="px-3 py-1.5 bg-slate-900 hover:bg-sky-600 text-white rounded-xl text-xs font-semibold transition-colors cursor-pointer"
                 >
-                  Contact Form
+                  Contact Desk
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Middle Footer Row: Dual Value Grid & Tools Directory */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
-            {/* Column 1: International Document & Career Tools */}
-            <div className="space-y-2">
+          {/* 4-Column Directory Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-xs">
+            {/* Column 1: AP EAPCET Vacancies & Leftover Seats */}
+            <div className="space-y-3">
               <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
-                <FileText className="w-3.5 h-3.5 text-sky-600" />
-                Global Document &amp; Career Suite
+                <GraduationCap className="w-4 h-4 text-rose-600" />
+                AP EAPCET &amp; Admissions
               </h4>
-              <ul className="space-y-1.5 text-slate-500">
+              <ul className="space-y-2 text-slate-600">
                 <li>
-                  <button onClick={() => handleTabChange('pdf-tools')} className="hover:text-sky-600 transition-colors text-left cursor-pointer">
+                  <button
+                    onClick={() => handleSelectEapcetPhase()}
+                    className="hover:text-rose-600 transition-colors text-left cursor-pointer flex items-center gap-1.5 font-semibold text-rose-700"
+                  >
+                    <span>🔥 Phase 2 Left Over Seats Matrix</span>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => handleSelectEapcetPhase()}
+                    className="hover:text-rose-600 transition-colors text-left cursor-pointer"
+                  >
+                    Top Engineering Colleges &amp; Fee Schedules
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => handleSelectEapcetPhase()}
+                    className="hover:text-rose-600 transition-colors text-left cursor-pointer"
+                  >
+                    Category Quota Guidance (OC/BC/SC/ST/EWS)
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => handleTabChange('roadmaps')}
+                    className="hover:text-indigo-600 transition-colors text-left cursor-pointer font-semibold text-indigo-700 flex items-center gap-1.5"
+                  >
+                    <span>🧭 24 Branch Career Roadmaps (4-Year Action Plans)</span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 2: Free Utilities & Student Tools */}
+            <div className="space-y-3">
+              <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                <FileText className="w-4 h-4 text-sky-600" />
+                Free Utilities &amp; Student Tools
+              </h4>
+              <ul className="space-y-2 text-slate-600">
+                <li>
+                  <button
+                    onClick={() => handleTabChange('pdf-tools')}
+                    className="hover:text-sky-600 transition-colors text-left cursor-pointer"
+                  >
                     30+ WebAssembly PDF Tools (Merge, Split, Watermark)
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleTabChange('resume-checker')} className="hover:text-sky-600 transition-colors text-left cursor-pointer">
-                    ATS Resume Keyword Diagnostic &amp; 1-Click Builder
+                  <button
+                    onClick={() => handleTabChange('resizer')}
+                    className="hover:text-sky-600 transition-colors text-left cursor-pointer"
+                  >
+                    Exam Image &amp; Signature Resizer (20KB–50KB)
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleTabChange('resizer')} className="hover:text-sky-600 transition-colors text-left cursor-pointer">
-                    Exam Image &amp; Signature Exact KB Resizer (20–500 KB)
+                  <button
+                    onClick={() => handleTabChange('resume-checker')}
+                    className="hover:text-sky-600 transition-colors text-left cursor-pointer"
+                  >
+                    ATS Resume Keyword Matcher &amp; 1-Click Builder
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleTabChange('humanizer')} className="hover:text-sky-600 transition-colors text-left cursor-pointer">
+                  <button
+                    onClick={() => handleTabChange('attendance')}
+                    className="hover:text-sky-600 transition-colors text-left cursor-pointer"
+                  >
+                    Attendance Defender (75% Minimum Rule Calculator)
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => handleTabChange('gpa')}
+                    className="hover:text-sky-600 transition-colors text-left cursor-pointer"
+                  >
+                    Global GPA &amp; CGPA Hub (VTU, JNTU, AICTE Standard)
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => handleTabChange('humanizer')}
+                    className="hover:text-sky-600 transition-colors text-left cursor-pointer"
+                  >
                     AI Text Humanizer &amp; Linguistic Perplexity Scanner
                   </button>
                 </li>
               </ul>
             </div>
 
-            {/* Column 2: Indian Academic & Counselling Utilities */}
-            <div className="space-y-2">
+            {/* Column 3: Scholarships & Government Schemes */}
+            <div className="space-y-3">
               <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
-                <GraduationCap className="w-3.5 h-3.5 text-rose-600" />
-                Indian University &amp; Counselling
+                <Building2 className="w-4 h-4 text-emerald-600" />
+                Scholarships &amp; Grants
               </h4>
-              <ul className="space-y-1.5 text-slate-500">
+              <ul className="space-y-2 text-slate-600">
                 <li>
-                  <button onClick={() => handleTabChange('eapcet-radar')} className="hover:text-rose-600 transition-colors text-left cursor-pointer font-medium text-slate-700">
-                    AP EAPCET Phase 2 College Vacancy Radar &amp; Fees
+                  <button
+                    onClick={() => handleTabChange('scholarships')}
+                    className="hover:text-emerald-700 transition-colors text-left cursor-pointer font-medium text-slate-800"
+                  >
+                    Reliance Foundation UG (₹2 Lakhs Grant)
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleTabChange('attendance')} className="hover:text-sky-600 transition-colors text-left cursor-pointer">
-                    Attendance Defender (75% Statutory Threshold Bunk Engine)
+                  <button
+                    onClick={() => handleTabChange('scholarships')}
+                    className="hover:text-emerald-700 transition-colors text-left cursor-pointer"
+                  >
+                    HDFC Bank Parivartan ECSS Support
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleTabChange('gpa')} className="hover:text-sky-600 transition-colors text-left cursor-pointer">
-                    Global GPA Hub (VTU, JNTU, AICTE, Anna Univ Formulas)
+                  <button
+                    onClick={() => handleTabChange('scholarships')}
+                    className="hover:text-emerald-700 transition-colors text-left cursor-pointer"
+                  >
+                    LIC Golden Jubilee Scholarship Programme
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleTabChange('internal-calc')} className="hover:text-sky-600 transition-colors text-left cursor-pointer">
-                    80:20 Mid Evaluation &amp; Semester Pass Cutoff Finder
+                  <button
+                    onClick={() => handleTabChange('scholarships')}
+                    className="hover:text-emerald-700 transition-colors text-left cursor-pointer"
+                  >
+                    Kotak Kanya Scholarship for Girl Engineers
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => handleTabChange('scholarships')}
+                    className="hover:text-emerald-700 transition-colors text-left cursor-pointer"
+                  >
+                    AICTE Pragati &amp; Saksham Schemes (NSP)
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => handleTabChange('scholarships')}
+                    className="hover:text-emerald-700 transition-colors text-left cursor-pointer"
+                  >
+                    Amazon Future Engineer (AFE) Scholarship
                   </button>
                 </li>
               </ul>
             </div>
 
-            {/* Column 3: Trust, Privacy Architecture & Compliance */}
-            <div className="space-y-2">
+            {/* Column 4: Legal, Compliance & Community */}
+            <div className="space-y-3">
               <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                Privacy Architecture &amp; Legal
+                <ShieldCheck className="w-4 h-4 text-slate-800" />
+                Legal &amp; Compliance
               </h4>
-              <p className="text-[11px] text-slate-500 leading-relaxed">
-                Zero server uploads. All processing takes place in your local browser sandbox. AdSense compliant with transparent third-party ad disclosures.
-              </p>
-              <div className="flex flex-wrap gap-2 pt-1 text-[11px]">
-                <button
-                  onClick={() => setLegalModal('about')}
-                  className="text-slate-600 hover:text-sky-600 underline font-medium cursor-pointer"
-                >
-                  About Us
-                </button>
-                <span className="text-slate-300">•</span>
-                <button
-                  onClick={() => setLegalModal('contact')}
-                  className="text-slate-600 hover:text-sky-600 underline font-medium cursor-pointer"
-                >
-                  Contact Us
-                </button>
-                <span className="text-slate-300">•</span>
-                <button
-                  onClick={() => setLegalModal('privacy')}
-                  className="text-slate-600 hover:text-sky-600 underline font-medium cursor-pointer"
-                >
-                  Privacy Policy
-                </button>
-                <span className="text-slate-300">•</span>
-                <button
-                  onClick={() => setLegalModal('terms')}
-                  className="text-slate-600 hover:text-sky-600 underline font-medium cursor-pointer"
-                >
-                  Terms &amp; Conditions
-                </button>
-                <span className="text-slate-300">•</span>
-                <button
-                  onClick={() => setLegalModal('disclaimer')}
-                  className="text-slate-600 hover:text-sky-600 underline font-medium cursor-pointer"
-                >
-                  Disclaimer
-                </button>
-              </div>
+              <ul className="space-y-2 text-slate-600">
+                <li>
+                  <button
+                    onClick={() => setLegalModal('about')}
+                    className="hover:text-sky-600 transition-colors text-left cursor-pointer"
+                  >
+                    About StudyMacha
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => setLegalModal('privacy')}
+                    className="hover:text-sky-600 transition-colors text-left cursor-pointer"
+                  >
+                    Privacy Policy (100% In-Memory)
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => setLegalModal('terms')}
+                    className="hover:text-sky-600 transition-colors text-left cursor-pointer"
+                  >
+                    Terms of Service
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => setLegalModal('disclaimer')}
+                    className="hover:text-sky-600 transition-colors text-left cursor-pointer"
+                  >
+                    Legal Disclaimers &amp; Attribution
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => setLegalModal('contact')}
+                    className="hover:text-sky-600 transition-colors text-left cursor-pointer"
+                  >
+                    Contact Grievance Officer
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => {
+                      const el = document.getElementById('student-testimonials-section');
+                      if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="hover:text-sky-600 transition-colors text-left cursor-pointer flex items-center gap-1.5"
+                  >
+                    <span>⭐ Student Reviews &amp; Feedback</span>
+                  </button>
+                </li>
+              </ul>
             </div>
           </div>
 
@@ -581,10 +684,10 @@ export default function App() {
           <div className="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-3">
             <div className="flex items-center gap-2">
               <Lock className="w-3.5 h-3.5 text-emerald-600" />
-              <span>100% In-Memory Sandbox • No Personal Files Stored on Servers</span>
+              <span>100% In-Memory Sandbox • No Personal Files or Resumes Stored on Remote Servers</span>
             </div>
             <div>
-              <span>© 2026 StudyMacha Platform. For assistance: </span>
+              <span>© 2026 StudyMacha Platform. Official Support: </span>
               <a href={`mailto:${supportEmail}`} className="font-mono text-slate-700 hover:text-sky-600 font-semibold">
                 {supportEmail}
               </a>
@@ -593,13 +696,20 @@ export default function App() {
         </div>
       </footer>
 
-      {/* Global Interactive Legal & Contact Modal */}
+      {/* 6. Legal & Contact Modal */}
       <LegalModals
         type={legalModal}
         onClose={() => setLegalModal(null)}
         onSwitchType={(type) => setLegalModal(type)}
       />
+
+      {/* 7. Global Command Palette (Ctrl/Cmd + K) */}
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+        onSelectTool={handleSelectToolFromPalette}
+        onSelectBranchRoadmap={handleSelectBranchRoadmapFromPalette}
+      />
     </div>
   );
 }
-
