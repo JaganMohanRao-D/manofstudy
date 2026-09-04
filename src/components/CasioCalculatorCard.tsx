@@ -18,8 +18,14 @@ export const CasioCalculatorCard: React.FC<CasioCalculatorCardProps> = ({
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
         {/* Left icon and info */}
         <div className="flex items-start gap-3.5">
-          <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-300/80 dark:border-amber-700/60 flex items-center justify-center shrink-0">
-            <Calculator className="w-6 h-6" />
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-white dark:bg-slate-800 border border-amber-200/80 dark:border-slate-700 overflow-hidden flex items-center justify-center shrink-0 shadow-2xs">
+            <img
+              src="https://images.unsplash.com/photo-1594980596870-8aa52a78d8cd?auto=format&fit=crop&w=800&q=80"
+              alt="Casio fx-991CW ClassWiz Scientific Calculator"
+              className="w-full h-full object-cover"
+              loading="lazy"
+              referrerPolicy="no-referrer"
+            />
           </div>
 
           <div className="space-y-1">

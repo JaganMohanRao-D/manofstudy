@@ -59,10 +59,16 @@ export const BranchToolsBanner: React.FC<BranchToolsBannerProps> = ({
       {/* Featured Quick Items Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-4">
         {/* Item 1: Casio Calculator */}
-        <div className="bg-slate-800/80 border border-slate-700/70 rounded-xl p-3.5 flex items-center justify-between gap-3">
+        <div className="bg-slate-800/80 border border-slate-700/70 rounded-xl p-3.5 flex items-center justify-between gap-3 group">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0">
-              <Calculator className="w-5 h-5" />
+            <div className="w-12 h-12 rounded-lg bg-slate-700 overflow-hidden flex items-center justify-center shrink-0 border border-slate-600/60">
+              <img
+                src={calcItem.imageUrl}
+                alt={calcItem.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                loading="lazy"
+                referrerPolicy="no-referrer"
+              />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
@@ -71,10 +77,10 @@ export const BranchToolsBanner: React.FC<BranchToolsBannerProps> = ({
                 </span>
                 <span className="text-[10px] text-slate-400">• Exam Allowed</span>
               </div>
-              <h4 className="text-xs sm:text-sm font-bold text-white truncate max-w-[200px] sm:max-w-[220px]">
+              <h4 className="text-xs sm:text-sm font-bold text-white truncate max-w-[190px] sm:max-w-[210px]">
                 {calcItem.title}
               </h4>
-              <p className="text-[11px] text-slate-400 truncate max-w-[200px] sm:max-w-[220px]">
+              <p className="text-[11px] text-slate-400 truncate max-w-[190px] sm:max-w-[210px]">
                 {calcItem.subtitle}
               </p>
             </div>
@@ -84,7 +90,7 @@ export const BranchToolsBanner: React.FC<BranchToolsBannerProps> = ({
             href={calcItem.url}
             target="_blank"
             rel="sponsored noopener noreferrer"
-            className="shrink-0 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1 transition-all shadow-2xs"
+            className="shrink-0 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1 transition-all shadow-2xs cursor-pointer"
           >
             <span>Amazon</span>
             <ExternalLink className="w-3 h-3" />
@@ -92,10 +98,16 @@ export const BranchToolsBanner: React.FC<BranchToolsBannerProps> = ({
         </div>
 
         {/* Item 2: Performance Coding Laptop */}
-        <div className="bg-slate-800/80 border border-slate-700/70 rounded-xl p-3.5 flex items-center justify-between gap-3">
+        <div className="bg-slate-800/80 border border-slate-700/70 rounded-xl p-3.5 flex items-center justify-between gap-3 group">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center shrink-0">
-              <Laptop className="w-5 h-5" />
+            <div className="w-12 h-12 rounded-lg bg-slate-700 overflow-hidden flex items-center justify-center shrink-0 border border-slate-600/60">
+              <img
+                src={laptopItem.imageUrl}
+                alt={laptopItem.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                loading="lazy"
+                referrerPolicy="no-referrer"
+              />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
@@ -104,10 +116,10 @@ export const BranchToolsBanner: React.FC<BranchToolsBannerProps> = ({
                 </span>
                 <span className="text-[10px] text-slate-400">• 16GB RAM</span>
               </div>
-              <h4 className="text-xs sm:text-sm font-bold text-white truncate max-w-[200px] sm:max-w-[220px]">
+              <h4 className="text-xs sm:text-sm font-bold text-white truncate max-w-[190px] sm:max-w-[210px]">
                 {laptopItem.title}
               </h4>
-              <p className="text-[11px] text-slate-400 truncate max-w-[200px] sm:max-w-[220px]">
+              <p className="text-[11px] text-slate-400 truncate max-w-[190px] sm:max-w-[210px]">
                 {laptopItem.subtitle}
               </p>
             </div>
@@ -117,7 +129,7 @@ export const BranchToolsBanner: React.FC<BranchToolsBannerProps> = ({
             href={laptopItem.url}
             target="_blank"
             rel="sponsored noopener noreferrer"
-            className="shrink-0 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1 transition-all shadow-2xs"
+            className="shrink-0 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1 transition-all shadow-2xs cursor-pointer"
           >
             <span>Amazon</span>
             <ExternalLink className="w-3 h-3" />

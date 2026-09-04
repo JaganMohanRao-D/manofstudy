@@ -344,27 +344,55 @@ export const StudentEssentialsStore: React.FC<StudentEssentialsStoreProps> = ({
               <div
                 key={product.id}
                 id={`product-card-${product.id}`}
-                className="group flex flex-col justify-between bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-5 hover:border-slate-300 dark:hover:border-slate-700 transition-all hover:shadow-md relative overflow-hidden"
+                className="group flex flex-col justify-between bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-4 sm:p-5 hover:border-slate-300 dark:hover:border-slate-700 transition-all hover:shadow-lg relative overflow-hidden"
               >
-                {/* Top Badge & Type Indicator */}
+                {/* Product Image Showcase Container */}
                 <div>
-                  <div className="flex items-center justify-between gap-2">
+                  <div className="w-full h-44 bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-800/40 dark:to-slate-900/60 rounded-xl overflow-hidden flex items-center justify-center relative p-3 border border-slate-200/80 dark:border-slate-800 mb-4">
+                    {/* Realistic HD Product Visual */}
+                    <img
+                      src={product.imageUrl}
+                      alt={product.title}
+                      loading="lazy"
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover object-center rounded-lg group-hover:scale-105 transition-transform duration-300 shadow-2xs"
+                      onError={(e) => {
+                        // Safe fallback placeholder
+                        (e.target as HTMLImageElement).src =
+                          'https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80';
+                      }}
+                    />
+
+                    {/* Floating Glassmorphic Category Tag Badge (Top-Left) */}
+                    <div className="absolute top-2.5 left-2.5 z-10">
+                      <span className="backdrop-blur-md bg-white/85 dark:bg-slate-900/85 text-slate-900 dark:text-white font-semibold text-[11px] px-2.5 py-1 rounded-full shadow-xs border border-slate-200/50 dark:border-slate-700/50 flex items-center gap-1">
+                        {product.tag}
+                      </span>
+                    </div>
+
+                    {/* Official Amazon Logo Pill (Top-Right) */}
+                    <div className="absolute top-2.5 right-2.5 z-10">
+                      <div className="backdrop-blur-md bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-xs border border-slate-200/60 dark:border-slate-700/60 flex items-center gap-1">
+                        <span className="text-amber-500 font-black text-xs leading-none">a</span>
+                        <span className="tracking-tight text-slate-900 dark:text-slate-100 font-bold">amazon</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Type and Category Label Row */}
+                  <div className="flex items-center justify-between gap-2 mb-2">
                     <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700/70">
                       {getItemIcon(product.type)}
                       <span>{product.type}</span>
                     </div>
 
-                    <span
-                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${getTagColor(
-                        product.tag
-                      )}`}
-                    >
-                      {product.tag}
+                    <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 truncate max-w-[150px]">
+                      {product.category}
                     </span>
                   </div>
 
-                  {/* Title & Subtitle */}
-                  <div className="mt-3.5 space-y-1.5">
+                  {/* Title & 2-line Subtitle Description */}
+                  <div className="space-y-1.5">
                     <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm sm:text-base leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
                       {product.title}
                     </h3>
@@ -375,13 +403,15 @@ export const StudentEssentialsStore: React.FC<StudentEssentialsStoreProps> = ({
                   </div>
                 </div>
 
-                {/* Bottom Action Area with Amazon Pill Button */}
-                <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/80 space-y-2.5">
-                  <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
-                    <span className="truncate max-w-[170px]">{product.category}</span>
+                {/* Bottom Action Area with Amazon Price Check CTA & Primary Button */}
+                <div className="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-800/80 space-y-2.5">
+                  <div className="flex items-center justify-between text-[11px]">
                     <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
-                      <CheckCircle2 className="w-3 h-3" />
-                      <span>Authentic Gear</span>
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>Verified Authentic</span>
+                    </span>
+                    <span className="text-slate-500 dark:text-slate-400 font-medium text-[11px]">
+                      Live Amazon Price Check
                     </span>
                   </div>
 
@@ -391,10 +421,12 @@ export const StudentEssentialsStore: React.FC<StudentEssentialsStoreProps> = ({
                     target="_blank"
                     rel="sponsored noopener noreferrer"
                     className="w-full bg-amber-400 hover:bg-amber-500 active:scale-[0.98] text-slate-950 font-bold px-4 py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer group/btn"
-                    title={`View ${product.title} on Amazon India`}
+                    title={`View ${product.title} on Amazon`}
                   >
                     <span>View on Amazon</span>
-                    <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                    <span className="font-bold text-xs transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5">
+                      ↗
+                    </span>
                   </a>
                 </div>
               </div>
