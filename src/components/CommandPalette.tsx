@@ -29,6 +29,7 @@ import {
   HelpCircle,
   Terminal,
   ShoppingBag,
+  Heart,
 } from 'lucide-react';
 import { ToolTab } from '../types';
 import { ENGINEERING_ROADMAPS } from '../data/engineeringRoadmapsData';
@@ -40,6 +41,7 @@ export interface CommandPaletteProps {
   onSelectTool: (tab: ToolTab) => void;
   onSelectBranchRoadmap?: (branchId: string) => void;
   onOpenLegal?: (type: LegalModalType) => void;
+  onOpenSupport?: () => void;
 }
 
 interface CommandItem {
@@ -59,6 +61,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   onSelectTool,
   onSelectBranchRoadmap,
   onOpenLegal,
+  onOpenSupport,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -286,6 +289,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         },
       },
       {
+        id: 'action-support-studymacha',
+        title: '☕ Support the Developer / Keep StudyMacha Free',
+        subtitle: 'Help us pay server and scraper bills with a quick contribution via UPI',
+        category: 'Quick Actions',
+        badge: 'Donate',
+        icon: <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />,
+        keywords: ['support', 'donate', 'donation', 'upi', 'developer', 'chai', 'coffee', 'fund', 'contribute', 'free forever'],
+        action: () => onOpenSupport?.(),
+      },
+      {
         id: 'action-grievance',
         title: 'Contact Grievance Officer',
         subtitle: 'Direct support for student grievances & counseling assistance',
@@ -308,7 +321,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     );
 
     return items;
-  }, [onSelectTool, onSelectBranchRoadmap, onOpenLegal]);
+  }, [onSelectTool, onSelectBranchRoadmap, onOpenLegal, onOpenSupport]);
 
   // Filter commands by search query
   const filteredCommands = useMemo(() => {

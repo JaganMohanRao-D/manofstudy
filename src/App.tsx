@@ -23,11 +23,13 @@ import {
   Bot,
   FileCheck,
   ShoppingBag,
+  Heart,
 } from 'lucide-react';
 import { ToolTab, ToolMeta, WorkspaceView } from './types';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { LegalModals, LegalModalType } from './components/LegalModals';
+import { SupportModal } from './components/SupportModal';
 import { ApEapcetRadar, EapcetPhaseTab } from './components/ApEapcetRadar';
 import { AttendanceDefender } from './components/AttendanceDefender';
 import { GlobalGpaHub } from './components/GlobalGpaHub';
@@ -144,6 +146,7 @@ export default function App() {
   const [legalModal, setLegalModal] = useState<LegalModalType | null>(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState<boolean>(false);
+  const [isSupportModalOpen, setIsSupportModalOpen] = useState<boolean>(false);
   const [targetRoadmapBranchId, setTargetRoadmapBranchId] = useState<string | undefined>(undefined);
   const [gpaSubTab, setGpaSubTab] = useState<'gpa' | 'internal'>('gpa');
   const [academicSubTab, setAcademicSubTab] = useState<'attendance' | 'gpa' | 'internal'>('attendance');
@@ -354,6 +357,7 @@ export default function App() {
         onSelectEapcetPhase={handleSelectEapcetPhase}
         onOpenLegal={(type) => setLegalModal(type)}
         onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+        onOpenSupport={() => setIsSupportModalOpen(true)}
       />
 
       {/* 2. Main Content Container */}
@@ -660,7 +664,19 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-1.5 pt-1 sm:pt-0">
+              <div className="flex flex-wrap items-center gap-2 pt-1 sm:pt-0">
+                {/* High-visibility heart-themed Support Button in Footer */}
+                <button
+                  type="button"
+                  id="footer-support-btn"
+                  onClick={() => setIsSupportModalOpen(true)}
+                  className="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800 font-semibold px-3 py-1.5 rounded-full text-xs flex items-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer"
+                  title="Support the Developer / Keep StudyMacha Free"
+                >
+                  <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 animate-pulse" />
+                  <span>☕ Support StudyMacha</span>
+                </button>
+
                 <button
                   type="button"
                   onClick={handleCopyEmail}
@@ -903,6 +919,16 @@ export default function App() {
                 <li>
                   <button
                     type="button"
+                    onClick={() => setIsSupportModalOpen(true)}
+                    className="hover:text-rose-600 transition-colors text-left cursor-pointer flex items-center gap-1.5 font-bold text-rose-600 dark:text-rose-400"
+                  >
+                    <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 animate-pulse" />
+                    <span>☕ Support StudyMacha (Donation)</span>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
                     onClick={() => {
                       handleSelectWorkspace('hub');
                       setTimeout(() => {
@@ -977,12 +1003,19 @@ export default function App() {
         onSwitchType={(type) => setLegalModal(type)}
       />
 
+      {/* Support & Keep StudyMacha Free Modal */}
+      <SupportModal
+        isOpen={isSupportModalOpen}
+        onClose={() => setIsSupportModalOpen(false)}
+      />
+
       {/* 7. Global Command Palette (Ctrl/Cmd + K) */}
       <CommandPalette
         isOpen={isCommandPaletteOpen}
         onClose={() => setIsCommandPaletteOpen(false)}
         onSelectTool={handleSelectToolFromPalette}
         onSelectBranchRoadmap={handleSelectBranchRoadmapFromPalette}
+        onOpenSupport={() => setIsSupportModalOpen(true)}
       />
     </div>
   );

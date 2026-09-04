@@ -16,6 +16,7 @@ import {
   ChevronRight,
   Terminal,
   ShoppingBag,
+  Heart,
 } from 'lucide-react';
 import { ToolTab, WorkspaceView } from '../types';
 import { LegalModalType } from './LegalModals';
@@ -28,6 +29,7 @@ export interface HeaderProps {
   onSelectEapcetPhase?: (phase: string) => void;
   onOpenLegal?: (type: LegalModalType) => void;
   onOpenCommandPalette?: () => void;
+  onOpenSupport?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -38,6 +40,7 @@ export const Header: React.FC<HeaderProps> = ({
   onSelectEapcetPhase,
   onOpenLegal,
   onOpenCommandPalette,
+  onOpenSupport,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
@@ -212,8 +215,21 @@ export const Header: React.FC<HeaderProps> = ({
             })}
           </nav>
 
-          {/* Right Navigation Controls: Search, Theme Toggle & Hamburger */}
+          {/* Right Navigation Controls: Support Button, Search, Theme Toggle & Hamburger */}
           <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* High-Visibility Heart-Themed Support Button */}
+            <button
+              type="button"
+              id="header-support-btn"
+              onClick={onOpenSupport}
+              className="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800 font-semibold px-3 py-1.5 rounded-full text-xs flex items-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+              title="Support StudyMacha & Keep It 100% Free Forever"
+            >
+              <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 animate-pulse shrink-0" />
+              <span className="hidden sm:inline">☕ Support StudyMacha</span>
+              <span className="sm:hidden">☕ Support</span>
+            </button>
+
             {/* Universal Search Bar / Command Palette Trigger */}
             <button
               type="button"
@@ -278,6 +294,19 @@ export const Header: React.FC<HeaderProps> = ({
             <kbd className="text-[10px] bg-white dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700">
               ⌘K
             </kbd>
+          </button>
+
+          {/* Mobile Support Button */}
+          <button
+            type="button"
+            onClick={() => {
+              setMobileMenuOpen(false);
+              onOpenSupport?.();
+            }}
+            className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800 font-bold text-xs transition-all cursor-pointer shadow-xs active:scale-95"
+          >
+            <Heart className="w-4 h-4 text-rose-500 fill-rose-500 animate-pulse" />
+            <span>☕ Support StudyMacha (Keep It 100% Free)</span>
           </button>
 
           {/* Workspaces List */}
