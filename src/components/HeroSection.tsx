@@ -4,12 +4,13 @@ import {
   Compass,
   GraduationCap,
   FileText,
-  Code2,
   Sparkles,
   ArrowRight,
   ShieldCheck,
   Award,
   ShoppingBag,
+  Zap,
+  BookOpen,
 } from 'lucide-react';
 import { WorkspaceView } from '../types';
 
@@ -18,7 +19,7 @@ export interface HeroSectionProps {
   onSelectWorkspace?: (ws: WorkspaceView) => void;
 }
 
-interface WorkspaceItem {
+interface WorkspaceCardItem {
   id: string;
   workspace: WorkspaceView;
   title: string;
@@ -27,86 +28,132 @@ interface WorkspaceItem {
   description: string;
   icon: React.ComponentType<{ className?: string }>;
   accentColor: string;
-  hoverRing: string;
+  iconBg: string;
+  glowColor: string;
+  hoverBorder: string;
+  hoverShadow: string;
 }
 
-const WORKSPACES: WorkspaceItem[] = [
+const WORKSPACES: WorkspaceCardItem[] = [
   {
     id: 'ws-attendance',
     workspace: 'attendance',
     title: 'Attendance Defender & Bunk Planner',
     badge: '75% Mandatory',
-    badgeColor: 'bg-rose-50 text-rose-600 border-rose-200',
-    description: 'Calculate exact classes you can safely bunk or must attend to maintain 75% or 85% college criteria with zero detention risk.',
+    badgeColor: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+    description:
+      'Calculate exact classes you can safely bunk or must attend to maintain 75% or 85% college criteria with zero detention risk.',
     icon: ShieldCheck,
-    accentColor: 'text-rose-600 bg-rose-50 border-rose-100',
-    hoverRing: 'hover:border-rose-300 hover:shadow-rose-100/50',
+    accentColor: 'text-rose-400',
+    iconBg: 'bg-rose-500/10 border-rose-500/30 text-rose-400',
+    glowColor: 'from-rose-500/20 via-rose-500/5 to-transparent',
+    hoverBorder: 'hover:border-rose-500/60',
+    hoverShadow: 'hover:shadow-rose-500/20',
   },
   {
     id: 'ws-gpa',
     workspace: 'gpa',
     title: 'GPA Hub & Internal Marks Cutoff Calculator',
     badge: 'JNTU / Autonomous',
-    badgeColor: 'bg-blue-50 text-blue-600 border-blue-200',
-    description: 'Calculate exact external exam marks needed based on mid-term internals and estimate SGPA/CGPA with official grading scales.',
+    badgeColor: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
+    description:
+      'Calculate exact external exam marks needed based on mid-term internals and estimate SGPA/CGPA with official grading scales.',
     icon: Award,
-    accentColor: 'text-blue-600 bg-blue-50 border-blue-100',
-    hoverRing: 'hover:border-blue-300 hover:shadow-blue-100/50',
+    accentColor: 'text-sky-400',
+    iconBg: 'bg-sky-500/10 border-sky-500/30 text-sky-400',
+    glowColor: 'from-sky-500/20 via-sky-500/5 to-transparent',
+    hoverBorder: 'hover:border-sky-500/60',
+    hoverShadow: 'hover:shadow-sky-500/20',
   },
   {
     id: 'ws-eapcet',
     workspace: 'eapcet',
     title: 'EAPCET College & Leftover Seat Matrix Radar',
     badge: 'Phase 2 Live',
-    badgeColor: 'bg-emerald-50 text-emerald-600 border-emerald-200',
-    description: 'Live college-wise seat vacancy matrix, branch leftover seats & official tuition fees across AP colleges.',
+    badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+    description:
+      'Live college-wise seat vacancy matrix, branch leftover seats & official tuition fees across AP colleges.',
     icon: Flame,
-    accentColor: 'text-emerald-600 bg-emerald-50 border-emerald-100',
-    hoverRing: 'hover:border-emerald-300 hover:shadow-emerald-100/50',
-  },
-  {
-    id: 'ws-roadmaps',
-    workspace: 'roadmaps',
-    title: '24-Branch Engineering Career & Placement Roadmaps',
-    badge: '24 Disciplines',
-    badgeColor: 'bg-indigo-100 text-indigo-800 border-indigo-200',
-    description: 'Semester curriculum, essential modern tech stacks, projects, GATE prep & printable PDF roadmaps.',
-    icon: Compass,
-    accentColor: 'text-indigo-600 bg-indigo-50 border-indigo-100',
-    hoverRing: 'hover:border-indigo-300 hover:shadow-indigo-100/50',
+    accentColor: 'text-emerald-400',
+    iconBg: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
+    glowColor: 'from-emerald-500/20 via-emerald-500/5 to-transparent',
+    hoverBorder: 'hover:border-emerald-500/60',
+    hoverShadow: 'hover:shadow-emerald-500/20',
   },
   {
     id: 'ws-scholarships',
     workspace: 'scholarships',
     title: 'Verified 2026 Scholarships Hub (School to B.Tech)',
     badge: 'Govt & CSR',
-    badgeColor: 'bg-amber-100 text-amber-800 border-amber-200',
-    description: 'Reliance, SBI Asha, AICTE Pragati, Tata Pankh & HDFC grants with direct official application portals.',
+    badgeColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+    description:
+      'Reliance, SBI Asha, AICTE Pragati, Tata Pankh & HDFC grants with direct official application portals.',
     icon: GraduationCap,
-    accentColor: 'text-amber-600 bg-amber-50 border-amber-100',
-    hoverRing: 'hover:border-amber-300 hover:shadow-amber-100/50',
+    accentColor: 'text-amber-400',
+    iconBg: 'bg-amber-500/10 border-amber-500/30 text-amber-400',
+    glowColor: 'from-amber-500/20 via-amber-500/5 to-transparent',
+    hoverBorder: 'hover:border-amber-500/60',
+    hoverShadow: 'hover:shadow-amber-500/20',
+  },
+  {
+    id: 'ws-roadmaps',
+    workspace: 'roadmaps',
+    title: '24-Branch Engineering Career & Placement Roadmaps',
+    badge: '24 Disciplines',
+    badgeColor: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+    description:
+      'Semester curriculum, essential modern tech stacks, projects, GATE prep & printable PDF roadmaps.',
+    icon: Compass,
+    accentColor: 'text-purple-400',
+    iconBg: 'bg-purple-500/10 border-purple-500/30 text-purple-400',
+    glowColor: 'from-purple-500/20 via-purple-500/5 to-transparent',
+    hoverBorder: 'hover:border-purple-500/60',
+    hoverShadow: 'hover:shadow-purple-500/20',
   },
   {
     id: 'ws-pdf',
     workspace: 'utilities',
     title: 'Private Client-Side PDF Tools & 20KB Photo Resizer',
     badge: '100% In-Browser',
-    badgeColor: 'bg-sky-100 text-sky-800 border-sky-200',
-    description: 'Merge, split, protect PDFs and resize ID photos to strict 20KB–50KB exam specs with zero server uploads.',
+    badgeColor: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+    description:
+      'Merge, split, protect PDFs and resize ID photos to strict 20KB–50KB exam specs with zero server uploads.',
     icon: FileText,
-    accentColor: 'text-sky-600 bg-sky-50 border-sky-100',
-    hoverRing: 'hover:border-sky-300 hover:shadow-sky-100/50',
+    accentColor: 'text-cyan-400',
+    iconBg: 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400',
+    glowColor: 'from-cyan-500/20 via-cyan-500/5 to-transparent',
+    hoverBorder: 'hover:border-cyan-500/60',
+    hoverShadow: 'hover:shadow-cyan-500/20',
+  },
+  {
+    id: 'ws-guides',
+    workspace: 'hub',
+    title: '8-Chapter Student & Tier-3 Survival Editorial Hub',
+    badge: '8 In-Depth Chapters',
+    badgeColor: 'bg-blue-500/15 text-blue-300 border-blue-500/30',
+    description:
+      'Master Phase-2 sliding rules, the 75% attendance condonation doctrine, backlog recovery, and budget developer gear.',
+    icon: BookOpen,
+    accentColor: 'text-blue-400',
+    iconBg: 'bg-blue-500/10 border-blue-500/30 text-blue-400',
+    glowColor: 'from-blue-500/20 via-blue-500/5 to-transparent',
+    hoverBorder: 'hover:border-blue-500/60',
+    hoverShadow: 'hover:shadow-blue-500/20',
   },
   {
     id: 'ws-essentials',
     workspace: 'essentials',
-    title: '🛍️ Student Essentials & Academic Gear Store',
+    title: 'Student Essentials & Academic Gear Store',
     badge: 'Amazon Verified',
-    badgeColor: 'bg-amber-50 text-amber-800 border-amber-200',
-    description: 'Casio fx-991CW calculators, engineering laptops, EAPCET/NEET PYQ bundles, and silent study peripherals.',
+    badgeColor: 'bg-orange-500/15 text-orange-300 border-orange-500/30',
+    description:
+      'Casio fx-991CW calculators, engineering laptops, EAPCET/NEET PYQ bundles, and silent study peripherals.',
     icon: ShoppingBag,
-    accentColor: 'text-amber-600 bg-amber-50 border-amber-100',
-    hoverRing: 'hover:border-amber-300 hover:shadow-amber-100/50',
+    accentColor: 'text-orange-400',
+    iconBg: 'bg-orange-500/10 border-orange-500/30 text-orange-400',
+    glowColor: 'from-orange-500/20 via-orange-500/5 to-transparent',
+    hoverBorder: 'hover:border-orange-500/60',
+    hoverShadow: 'hover:shadow-orange-500/20',
   },
 ];
 
@@ -114,139 +161,150 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   activeWorkspace = 'hub',
   onSelectWorkspace,
 }) => {
-  const handleLaunchWorkspace = (ws: WorkspaceView) => {
+  const handleLaunchWorkspace = (item: WorkspaceCardItem) => {
+    if (item.id === 'ws-guides') {
+      const el = document.getElementById('guides-hub');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+    }
     if (onSelectWorkspace) {
-      onSelectWorkspace(ws);
+      onSelectWorkspace(item.workspace);
     }
   };
 
   return (
     <section
       id="hero-banner"
-      className="relative overflow-hidden rounded-3xl bg-white border border-slate-200/90 shadow-xs p-5 sm:p-7 lg:p-8 space-y-6"
+      className="relative overflow-hidden bg-slate-950 text-white py-16 sm:py-24 px-4 sm:px-8 border-b border-slate-800 rounded-3xl shadow-2xl space-y-12"
     >
-      {/* Ambient background glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-48 bg-gradient-to-r from-sky-400/10 via-indigo-500/10 to-teal-400/10 blur-3xl pointer-events-none -mt-16" />
+      {/* Dynamic Animated Ambient Radial Blurs (Deep Indigo, Cyan, and Emerald Glows) */}
+      <div className="absolute -top-32 left-1/4 w-96 h-96 rounded-full bg-indigo-600/20 blur-[110px] pointer-events-none animate-pulse duration-1000" />
+      <div className="absolute top-1/3 -right-20 w-96 h-96 rounded-full bg-cyan-500/20 blur-[120px] pointer-events-none" />
+      <div className="absolute -bottom-20 left-10 w-96 h-96 rounded-full bg-emerald-500/15 blur-[120px] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(#38bdf812_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
 
-      {/* Prominent Brand Presentation */}
-      <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="space-y-1.5 max-w-2xl">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-900 text-white shadow-xs">
-              <Sparkles className="w-3.5 h-3.5 text-sky-400" />
-              StudyMacha 2026 Engine
-            </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              100% In-Browser Privacy
-            </span>
-          </div>
-
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
-            StudyMacha — All-in-One Telugu Engineering &amp; Career Engine
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed pt-0.5">
-            The high-performance workspace designed for Telugu &amp; Indian students: AP EAPCET counselling analytics, 24 engineering branch career roadmaps, verified scholarships radar, client-side PDF power tools, and placement coding sandboxes.
-          </p>
+      {/* Hero Header & Value Proposition */}
+      <div className="relative z-10 max-w-5xl mx-auto text-center space-y-6">
+        {/* Top Glassmorphic Badges */}
+        <div className="flex flex-wrap items-center justify-center gap-2.5">
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md bg-slate-900/80 text-sky-300 border border-sky-500/30 shadow-lg">
+            <Zap className="w-3.5 h-3.5 text-sky-400 fill-sky-400" />
+            🚀 2026 Academic Operating System
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md bg-slate-900/80 text-emerald-300 border border-emerald-500/30 shadow-lg">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+            🔒 100% Client-Side Private (Zero Data Tracking)
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold backdrop-blur-md bg-slate-900/80 text-amber-300 border border-amber-500/30 shadow-lg">
+            <Flame className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+            ⚡ EAPCET Live Seat Radar
+          </span>
         </div>
 
-        {/* Quick Highlights / Stats Pill */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0 self-start md:self-center">
-          <div className="px-3.5 py-2.5 rounded-2xl bg-slate-50 border border-slate-200/90 text-center">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
-              Workspaces
-            </span>
-            <span className="text-base sm:text-lg font-black text-slate-900 font-mono">
-              6 Workspaces
-            </span>
+        {/* Headline with Gradient Accent */}
+        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight sm:leading-none">
+          OF THE STUDENT, BY THE STUDENT,{' '}
+          <span className="bg-gradient-to-r from-blue-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent font-black tracking-tight block sm:inline mt-1 sm:mt-0">
+            FOR THE STUDENT
+          </span>
+        </h1>
+
+        {/* Sub-headline */}
+        <p className="text-sm sm:text-lg text-slate-300 max-w-3xl mx-auto leading-relaxed font-normal">
+          From Tier-3 hostel rooms to high-growth tech careers: Phase-2 Seat Radar, Attendance Defender, 24+ Multi-Discipline Roadmaps, and In-Browser Instant PDF/Photo Power Tools.
+        </p>
+
+        {/* Metrics Strip */}
+        <div className="pt-2 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs sm:text-sm font-semibold text-slate-300">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-900/90 border border-slate-800/90 backdrop-blur-md shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <span>28+ Verified Scholarships</span>
           </div>
-          <div className="px-3.5 py-2.5 rounded-2xl bg-sky-50/80 border border-sky-200/90 text-center">
-            <span className="text-[10px] uppercase font-bold text-sky-600 block tracking-wider">
-              Student Access
-            </span>
-            <span className="text-base sm:text-lg font-black text-sky-900 font-mono">
-              Free &amp; Open
-            </span>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-900/90 border border-slate-800/90 backdrop-blur-md shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-blue-400" />
+            <span>24+ Degree &amp; B.Tech Roadmaps</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-900/90 border border-slate-800/90 backdrop-blur-md shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-purple-400" />
+            <span>8+ Comprehensive Student Field Guides</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-900/90 border border-slate-800/90 backdrop-blur-md shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-amber-400" />
+            <span>100% Free Forever</span>
           </div>
         </div>
       </div>
 
-      {/* Action Directive Banner */}
-      <div className="relative z-10 flex items-center justify-between gap-3 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-sky-50 via-indigo-50/50 to-slate-50 border border-sky-200/70 text-slate-800">
-        <div className="flex items-center gap-2">
-          <span className="text-base animate-bounce" role="img" aria-label="point-right">
-            👉
+      {/* Quick-Action Workspace Cards (Glassmorphic Bento Grid with Dedicated Micro-Glow Accents) */}
+      <div className="relative z-10 max-w-7xl mx-auto space-y-4">
+        <div className="flex items-center justify-between px-1">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+            <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+            Interactive Workspaces &amp; Engines
           </span>
-          <span className="text-xs sm:text-sm font-bold text-slate-900 tracking-tight">
-            Select a tool below to launch workspace instantly.
+          <span className="text-xs text-slate-400 hidden sm:inline">
+            Click any card to launch workspace instantly
           </span>
         </div>
-        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-sky-700 hidden sm:flex">
-          <span>Click any card to enter full workspace</span>
-          <ArrowRight className="w-3.5 h-3.5" />
-        </div>
-      </div>
 
-      {/* Modern 6 Bento Cards Grid */}
-      <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
-        {WORKSPACES.map((item) => {
-          const Icon = item.icon;
-          const isActive = item.workspace === activeWorkspace;
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {WORKSPACES.map((item) => {
+            const Icon = item.icon;
+            const isActive = item.workspace === activeWorkspace && item.id !== 'ws-guides';
 
-          return (
-            <div
-              key={item.id}
-              onClick={() => handleLaunchWorkspace(item.workspace)}
-              className={`p-4 sm:p-5 rounded-2xl border transition-all duration-200 ease-out flex flex-col justify-between space-y-3 cursor-pointer group relative overflow-hidden bg-white hover:-translate-y-1 hover:shadow-xl ${
-                isActive
-                  ? 'border-sky-500 shadow-md ring-2 ring-sky-400/20'
-                  : `border-slate-200/90 ${item.hoverRing}`
-              }`}
-            >
-              {/* Header with Icon and Badge */}
-              <div className="flex items-start justify-between gap-2 w-full">
+            return (
+              <div
+                key={item.id}
+                onClick={() => handleLaunchWorkspace(item)}
+                className={`group relative overflow-hidden rounded-3xl p-6 backdrop-blur-md bg-slate-900/80 border border-slate-800 hover:-translate-y-1.5 hover:shadow-2xl transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-4 ${item.hoverBorder} ${item.hoverShadow} ${
+                  isActive ? 'ring-2 ring-sky-400 border-sky-400' : ''
+                }`}
+              >
+                {/* Dedicated Ambient Micro-Glow Gradient */}
                 <div
-                  className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-transform duration-200 group-hover:scale-105 ${item.accentColor}`}
-                >
-                  <Icon className="w-5 h-5" />
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <span
-                    className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border ${item.badgeColor}`}
-                  >
-                    {item.badge}
-                  </span>
-                  {isActive && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-900 text-white">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      Active
+                  className={`absolute -top-20 -right-20 w-48 h-48 rounded-full bg-gradient-to-br ${item.glowColor} blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500`}
+                />
+
+                <div className="relative z-10 space-y-3">
+                  {/* Card Header: Icon & Badge */}
+                  <div className="flex items-center justify-between gap-2">
+                    <div
+                      className={`w-11 h-11 rounded-2xl border flex items-center justify-center transition-transform duration-300 group-hover:scale-110 shadow-xs ${item.iconBg}`}
+                    >
+                      <Icon className="w-5 h-5" />
+                    </div>
+
+                    <span
+                      className={`px-3 py-1 rounded-full text-[11px] font-bold border backdrop-blur-xs ${item.badgeColor}`}
+                    >
+                      {item.badge}
                     </span>
-                  )}
+                  </div>
+
+                  {/* Title & Description */}
+                  <div className="space-y-1.5">
+                    <h3 className="text-base font-bold text-white group-hover:text-sky-300 transition-colors leading-snug">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-slate-400 leading-relaxed line-clamp-3">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Card Footer: Action Trigger */}
+                <div className="relative z-10 pt-3 border-t border-slate-800/80 flex items-center justify-end text-xs font-semibold text-slate-300 group-hover:text-white">
+                  <div className="inline-flex items-center gap-1 text-xs font-bold text-sky-400 group-hover:text-sky-300">
+                    <span>Launch</span>
+                    <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />
+                  </div>
                 </div>
               </div>
-
-              {/* Title & Description */}
-              <div className="space-y-1">
-                <h3 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-sky-700 transition-colors leading-snug">
-                  {item.title}
-                </h3>
-                <p className="text-[11px] sm:text-xs text-slate-500 leading-relaxed line-clamp-2">
-                  {item.description}
-                </p>
-              </div>
-
-              {/* Footer Indicator / Direct Button Trigger */}
-              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-700 group-hover:text-sky-700">
-                <span className="flex items-center gap-1">
-                  Launch Workspace
-                </span>
-                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 group-hover:bg-sky-600 group-hover:text-white transition-colors">
-                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
-                </span>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </section>
   );

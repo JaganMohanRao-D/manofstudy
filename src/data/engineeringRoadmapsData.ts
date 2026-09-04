@@ -2091,10 +2091,13 @@ const CORE_ROADMAPS: BranchRoadmap[] = [
   },
 ];
 
+import { DEGREE_STREAMS_ROADMAPS } from './degreeStreamsRoadmaps';
+
 const ALL_RAW_ROADMAPS: BranchRoadmap[] = [
   ...CORE_ROADMAPS,
   IOT_ROADMAP,
   ...EXTENDED_ROADMAPS,
+  ...DEGREE_STREAMS_ROADMAPS,
 ];
 
 const ORDERED_PRIMARY_IDS = [
@@ -2133,3 +2136,5 @@ export const ENGINEERING_ROADMAPS: BranchRoadmap[] = [
   ...orderedPrimary,
   ...remainingRoadmaps,
 ];
+
+export { DEGREE_STREAMS_ROADMAPS };

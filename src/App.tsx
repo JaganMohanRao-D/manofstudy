@@ -24,6 +24,7 @@ import {
   FileCheck,
   ShoppingBag,
   Heart,
+  BookOpen,
 } from 'lucide-react';
 import { ToolTab, ToolMeta, WorkspaceView } from './types';
 import { Header } from './components/Header';
@@ -41,6 +42,7 @@ import { InternalExamEstimator } from './components/InternalExamEstimator';
 import { ScholarshipsHub } from './components/ScholarshipsHub';
 import { EngineeringRoadmaps } from './components/EngineeringRoadmaps';
 import { EducationalGuideAndSeo } from './components/EducationalGuideAndSeo';
+import { GuidesHub } from './components/GuidesHub';
 import { StudentFaq } from './components/StudentFaq';
 import { StudentTestimonials } from './components/StudentTestimonials';
 import { CommandPalette } from './components/CommandPalette';
@@ -225,6 +227,18 @@ export default function App() {
         else if (hash === 'resume-checker') setUtilitySubTab('resume-checker');
         else if (hash === 'humanizer') setUtilitySubTab('humanizer');
         else setUtilitySubTab('pdf-tools');
+      } else if (hash === 'guides' || hash === 'editorial' || hash === 'survival' || hash.startsWith('guide-')) {
+        setActiveWorkspace('guides');
+      } else if (hash === 'privacy' || hash === 'privacy-policy') {
+        setLegalModal('privacy');
+      } else if (hash === 'about' || hash === 'about-us') {
+        setLegalModal('about');
+      } else if (hash === 'disclaimer') {
+        setLegalModal('disclaimer');
+      } else if (hash === 'contact' || hash === 'contact-us') {
+        setLegalModal('contact');
+      } else if (hash === 'terms') {
+        setLegalModal('terms');
       } else if (hash === 'hub' || hash === '') {
         setActiveWorkspace('hub');
       }
@@ -332,6 +346,11 @@ export default function App() {
           title: 'StudyMacha CodeStudio | Online Code Playground & Compiler',
           icon: <Terminal className="w-4 h-4 text-teal-600" />,
         };
+      case 'guides':
+        return {
+          title: 'Student & Tier-3 Survival Editorial Hub (8 Chapters)',
+          icon: <BookOpen className="w-4 h-4 text-sky-500" />,
+        };
       case 'essentials':
       case 'store':
         return {
@@ -374,6 +393,11 @@ export default function App() {
 
             {/* High-Trust Reviews: Continuous Horizontal Marquee Carousel */}
             <StudentTestimonials />
+
+            {/* Authoritative 8-Chapter Student & Tier-3 Survival Editorial Hub */}
+            <GuidesHub
+              onSelectWorkspace={(ws) => handleSelectWorkspace(ws as WorkspaceView)}
+            />
 
             {/* Educational Guides & Transparent Methodology Documentation */}
             <EducationalGuideAndSeo />
@@ -536,6 +560,12 @@ export default function App() {
 
               {activeWorkspace === 'compiler' && (
                 <CodeStudioCompiler />
+              )}
+
+              {activeWorkspace === 'guides' && (
+                <GuidesHub
+                  onSelectWorkspace={(ws) => handleSelectWorkspace(ws as WorkspaceView)}
+                />
               )}
 
               {(activeWorkspace === 'essentials' || activeWorkspace === 'store') && (
@@ -871,6 +901,15 @@ export default function App() {
                 Legal &amp; Compliance
               </h4>
               <ul className="space-y-2 text-slate-600 dark:text-slate-400">
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => handleSelectWorkspace('guides')}
+                    className="hover:text-sky-600 transition-colors text-left cursor-pointer flex items-center gap-1.5 font-bold text-sky-600 dark:text-sky-400"
+                  >
+                    <span>📖 Editorial Hub (8 Chapters)</span>
+                  </button>
+                </li>
                 <li>
                   <button
                     type="button"

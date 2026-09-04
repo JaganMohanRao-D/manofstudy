@@ -418,17 +418,17 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
             </div>
           )}
 
-          {/* SECTION 4: 4-Year Semester-by-Semester Matrix */}
+          {/* SECTION 4: Semester-by-Semester Matrix */}
           <div className="space-y-4 pt-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-2 text-slate-900 font-extrabold text-sm sm:text-base tracking-tight">
                 <Calendar className="w-4 h-4 text-indigo-600" />
-                <span>4-Year Semester-by-Semester Curriculum &amp; Milestones</span>
+                <span>{branch.years ? branch.years.length : 4}-Year Semester-by-Semester Curriculum &amp; Milestones</span>
               </div>
 
               {/* Year Switcher Tabs */}
               <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-xl">
-                {[1, 2, 3, 4].map((yearNum) => (
+                {(branch.years || []).map((y) => y.yearNumber).map((yearNum) => (
                   <button
                     key={yearNum}
                     type="button"
@@ -456,7 +456,7 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
                 </p>
               </div>
               <span className="shrink-0 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-indigo-600 text-white">
-                Year {selectedYear} of 4
+                Year {selectedYear} of {branch.years ? branch.years.length : 4}
               </span>
             </div>
 

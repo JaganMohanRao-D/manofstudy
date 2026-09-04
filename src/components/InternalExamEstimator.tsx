@@ -43,25 +43,30 @@ export const InternalExamEstimator: React.FC<InternalExamEstimatorProps> = ({ on
 
   return (
     <div className="space-y-6">
-      {/* Tool Header Banner */}
-      <section className="p-5 sm:p-6 rounded-2xl border bg-white border-slate-200 shadow-sm">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      {/* Tool Header Banner: Indigo/Violet Academic Precision Theme */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-900 text-white border border-indigo-500/30 rounded-2xl p-5 sm:p-7 shadow-xl">
+        {/* Subtle Ambient Glows */}
+        <div className="absolute -top-12 -right-12 w-64 h-64 rounded-full bg-indigo-500/15 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-12 left-1/4 w-64 h-64 rounded-full bg-violet-500/15 blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(#818cf815_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
+
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 text-sky-600 text-xs font-semibold uppercase tracking-wider mb-1">
-              <Calculator className="w-4 h-4" />
+            <div className="inline-flex items-center gap-2 text-indigo-300 text-xs font-bold uppercase tracking-wider mb-1 bg-indigo-500/20 border border-indigo-400/30 px-2.5 py-0.5 rounded-full backdrop-blur-xs">
+              <Calculator className="w-3.5 h-3.5 text-indigo-400" />
               <span>Internal Exam Cutoff Estimator</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
-              Internal Exam Cutoff & External Marks Calculator
+            <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white mt-1">
+              Internal Exam Cutoff &amp; External Marks Calculator
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 max-w-2xl mt-1 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-300 max-w-2xl mt-1 leading-relaxed">
               Consolidate Mid-terms, Assignments, and Attendance marks using Best-of-2 or 80:20 weighted average formulas. Instantly calculates minimum external marks required to hit your target grade.
             </p>
           </div>
 
           {/* Quick Target Grade Buttons */}
-          <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-slate-100 border border-slate-200">
-            <span className="text-xs font-medium text-slate-500 px-2">Preset:</span>
+          <div className="flex flex-wrap items-center gap-1.5 p-1.5 rounded-xl bg-slate-900/80 border border-indigo-500/30 backdrop-blur-xs">
+            <span className="text-xs font-semibold text-indigo-300 px-2">Preset:</span>
             {[
               { label: 'Pass (40%)', val: 40 },
               { label: 'FC (60%)', val: 60 },
@@ -72,10 +77,10 @@ export const InternalExamEstimator: React.FC<InternalExamEstimatorProps> = ({ on
               <button
                 key={p.val}
                 onClick={() => updateField('targetGradePercent', p.val)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200 ease-out active:scale-95 cursor-pointer ${
+                className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all duration-200 ease-out active:scale-95 cursor-pointer ${
                   calcState.targetGradePercent === p.val
-                    ? 'bg-sky-500 text-white font-semibold shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                    ? 'bg-indigo-600 text-white shadow-xs'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
                 }`}
               >
                 {p.label}
@@ -88,7 +93,7 @@ export const InternalExamEstimator: React.FC<InternalExamEstimatorProps> = ({ on
       {/* Main Grid: Inputs + Dynamic Result Banner */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Marks Configuration Form */}
-        <div className="lg:col-span-7 rounded-2xl border bg-white border-slate-200 p-5 sm:p-6 space-y-5 shadow-sm">
+        <div className="lg:col-span-7 rounded-2xl border bg-white dark:bg-slate-900/90 border-slate-200 dark:border-slate-800 p-5 sm:p-6 space-y-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
           <div className="flex items-center justify-between border-b border-slate-200 pb-3">
             <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500 flex items-center gap-2">
               Academic Internal Inputs

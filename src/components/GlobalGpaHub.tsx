@@ -54,18 +54,25 @@ export const GlobalGpaHub: React.FC<GlobalGpaHubProps> = ({ onNavigateToStore })
   return (
     <div id="global-gpa-hub-tool" className="space-y-6">
       
-      {/* Tool Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:p-6 rounded-2xl border bg-white border-slate-200 shadow-sm">
-        <div>
-          <div className="flex items-center gap-2 text-sky-600">
-            <GraduationCap className="w-4 h-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider">Academic Grade Engine</span>
+      {/* Tool Header Banner: Indigo/Violet Academic Precision Theme */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-900 text-white border border-indigo-500/30 rounded-2xl p-5 sm:p-7 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        {/* Subtle Indigo & Violet Ambient Glows */}
+        <div className="absolute -top-12 -right-12 w-64 h-64 rounded-full bg-indigo-500/15 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-12 left-1/4 w-64 h-64 rounded-full bg-violet-500/15 blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(#818cf815_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
+
+        <div className="relative z-10 space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 backdrop-blur-xs">
+              <GraduationCap className="w-3.5 h-3.5 text-indigo-400" />
+              ACADEMIC PRECISION ENGINE
+            </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mt-1">
-            Global GPA Hub
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight">
+            Global GPA &amp; Academic Grade Hub
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Convert CGPA/SGPA with 11 university formula presets, US 4.0 GPA equivalence, and target milestone forecasting.
+          <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
+            Convert CGPA/SGPA with 11 university formula presets, calculate US 4.0 GPA equivalence, and model target graduation milestone trajectories.
           </p>
         </div>
       </div>
@@ -75,14 +82,14 @@ export const GlobalGpaHub: React.FC<GlobalGpaHubProps> = ({ onNavigateToStore })
         
         {/* FEATURE 1: SGPA / CGPA CONVERTER */}
         <div className="lg:col-span-6 space-y-5">
-          <div className="p-5 sm:p-6 rounded-2xl border bg-white border-slate-200 shadow-sm space-y-5 h-full flex flex-col justify-between">
+          <div className="p-5 sm:p-6 rounded-2xl border bg-white dark:bg-slate-900/90 border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg space-y-5 h-full flex flex-col justify-between">
             <div className="space-y-5">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500 flex items-center gap-2">
-                  <Calculator className="w-4 h-4 text-sky-600" />
+                  <Calculator className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                   SGPA / CGPA Converter
                 </h3>
-                <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-sky-50 text-sky-700 border border-sky-200">
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 dark:bg-indigo-950/50 dark:text-indigo-300 dark:border-indigo-800 backdrop-blur-xs">
                   Instant Output
                 </span>
               </div>
@@ -246,14 +253,14 @@ export const GlobalGpaHub: React.FC<GlobalGpaHubProps> = ({ onNavigateToStore })
 
         {/* FEATURE 2: FUTURE GPA PREDICTOR */}
         <div className="lg:col-span-6 space-y-5">
-          <div className="p-5 sm:p-6 rounded-2xl border bg-white border-slate-200 shadow-sm space-y-5 h-full flex flex-col justify-between">
+          <div className="p-5 sm:p-6 rounded-2xl border bg-white dark:bg-slate-900/90 border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg space-y-5 h-full flex flex-col justify-between">
             <div className="space-y-5">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500 flex items-center gap-2">
-                  <Target className="w-4 h-4 text-sky-600" />
+                  <Target className="w-4 h-4 text-violet-600 dark:text-violet-400" />
                   Target Milestone Predictor
                 </h3>
-                <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-violet-50 text-violet-700 border border-violet-200 dark:bg-violet-950/50 dark:text-violet-300 dark:border-violet-800 backdrop-blur-xs">
                   Target Forecaster
                 </span>
               </div>

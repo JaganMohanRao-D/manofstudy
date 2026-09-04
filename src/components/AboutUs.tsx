@@ -1,0 +1,134 @@
+import React from 'react';
+import { Heart, Sparkles, GraduationCap, Compass, ShieldCheck, ArrowLeft, Mail, Award, Users } from 'lucide-react';
+
+export interface AboutUsProps {
+  onBack?: () => void;
+  onOpenSupport?: () => void;
+}
+
+export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
+  const supportEmail = 'support.jamord@gmail.com';
+
+  return (
+    <div id="about-us-view" className="max-w-4xl mx-auto space-y-8 py-6 animate-in fade-in duration-200">
+      {onBack && (
+        <button
+          onClick={onBack}
+          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 transition-colors cursor-pointer"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" />
+          <span>Back to App</span>
+        </button>
+      )}
+
+      {/* Hero Header */}
+      <div className="relative overflow-hidden rounded-3xl bg-slate-950 text-white border border-slate-800 p-6 sm:p-10 space-y-4 shadow-xl">
+        <div className="absolute -top-16 -right-16 w-80 h-80 rounded-full bg-blue-600/20 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-16 left-1/3 w-80 h-80 rounded-full bg-emerald-500/20 blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-400/30">
+            <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+            <span>Grassroots Educational Mission</span>
+          </div>
+
+          <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+            About StudyMacha
+          </h1>
+
+          <p className="text-sm sm:text-base text-slate-300 max-w-3xl leading-relaxed">
+            Built from the ground up by <strong>Jagan Mohan Rao</strong>, StudyMacha is an open, client-side academic and career operating system created to empower students across Andhra Pradesh and Telangana to bridge the gap between tier-3 engineering classrooms and high-growth global technology careers.
+          </p>
+        </div>
+      </div>
+
+      {/* Founder Story & Purpose */}
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-sm space-y-6 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+        <section className="space-y-3">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <GraduationCap className="w-5 h-5 text-blue-600" />
+            <span>The Origin Story: Solving Real Student Pain</span>
+          </h2>
+          <p>
+            Every year, hundreds of thousands of Telugu students step out of intermediate colleges and into technical education. What they encounter on the internet is a frustrating landscape:
+          </p>
+          <ul className="list-disc pl-5 space-y-2 text-slate-600 dark:text-slate-400">
+            <li>
+              <strong>Predatory Web Tools:</strong> PDF tools and image resizers saturated with deceptive ads, popup malware, and mandatory file uploads that store sensitive student hall tickets and identity documents on unverified remote servers.
+            </li>
+            <li>
+              <strong>Opaque Counselling Information:</strong> AP EAPCET Phase-2 leftover vacancies and college fee schedules buried across fragmented government PDF notifications, leaving students anxious during crucial web option selections.
+            </li>
+            <li>
+              <strong>The Tier-3 Mentorship Void:</strong> Students in rural and semi-urban engineering campuses struggling with outdated curricula, 75% attendance detention stress, fear of backlogs, and zero guidance on building modern software portfolios.
+            </li>
+          </ul>
+          <p>
+            StudyMacha was created by Jagan Mohan Rao to eliminate this chaos. We set out to build a clean, blazing-fast, and 100% private platform where students can calculate bunks with mathematical certainty, analyze live EAPCET vacancies, access 24+ semester-by-semester degree roadmaps, and convert exam documents without uploading a single byte to a server.
+          </p>
+        </section>
+
+        {/* Our 4 Guiding Commitments */}
+        <section className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <Award className="w-5 h-5 text-emerald-600" />
+            <span>Our Core Operating Principles</span>
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
+              <span className="font-bold text-slate-900 dark:text-white text-xs block">1. 100% Free Forever</span>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Education tools should never be gated behind paywalls. Every calculator, PDF tool, branch roadmap, and scholarship listing on StudyMacha is free for every student.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
+              <span className="font-bold text-slate-900 dark:text-white text-xs block">2. In-Browser Privacy By Design</span>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Zero server-side file uploads. Everything runs locally in WebAssembly and JavaScript in your device's memory. Your personal documents never leave your hands.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
+              <span className="font-bold text-slate-900 dark:text-white text-xs block">3. Rigorous Empirical Accuracy</span>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                We calibrate formulas against official university ordinances (JNTUK, JNTUA, AU, VTU, Anna University) and verified public government datasets.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
+              <span className="font-bold text-slate-900 dark:text-white text-xs block">4. Practical Tier-3 Empowerment</span>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Actionable advice that acknowledges real-world constraints: building verifiable public GitHub proof-of-work, winning off-campus referrals, and mastering problem-solving patterns.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Support Section */}
+        <section className="p-6 rounded-2xl bg-gradient-to-r from-rose-50 via-amber-50 to-orange-50 dark:from-rose-950/20 dark:via-amber-950/20 dark:to-orange-950/20 border border-rose-200/80 dark:border-rose-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-1.5">
+              <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
+              <span>Keep StudyMacha Independent &amp; Ad-Clean</span>
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400">
+              StudyMacha is maintained independently. If our tools saved your attendance or helped you plan Phase-2 options, consider buying a coffee.
+            </p>
+          </div>
+          {onOpenSupport && (
+            <button
+              onClick={onOpenSupport}
+              className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-colors shadow-xs shrink-0 cursor-pointer"
+            >
+              Support StudyMacha ☕
+            </button>
+          )}
+        </section>
+      </div>
+    </div>
+  );
+};
+
+export default AboutUs;

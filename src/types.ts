@@ -10,7 +10,8 @@ export type WorkspaceView =
   | 'attendance'
   | 'gpa'
   | 'essentials'
-  | 'store';
+  | 'store'
+  | 'guides';
 
 export type ToolTab = 
   | 'eapcet-radar'
@@ -47,17 +48,21 @@ export interface YearPlan {
   semesters: [SemesterPlan, SemesterPlan];
 }
 
+export type DegreeStream = 'all' | 'engineering' | 'science' | 'commerce' | 'humanities';
+
 export interface BranchRoadmap {
   id: string;
   code: string;
   name: string;
-  category: 'computing' | 'electronics' | 'mechanical' | 'civil';
+  category: 'computing' | 'electronics' | 'mechanical' | 'civil' | 'biotech' | 'science' | 'commerce' | 'humanities' | string;
   categoryLabel: string;
   badge: string;
   tagline: string;
   acronym?: string;
   topicsCount?: string;
-  bannerCategory?: 'computing' | 'security' | 'electronics' | 'mechanical' | 'civil';
+  degreeType?: string; // e.g. 'B.Tech' | 'B.Sc' | 'B.Com' | 'B.A.'
+  stream?: 'engineering' | 'science' | 'commerce' | 'humanities';
+  bannerCategory?: 'computing' | 'security' | 'electronics' | 'mechanical' | 'civil' | 'biotech' | 'science' | 'commerce' | 'humanities' | string;
   strategicOverview: {
     corporateViability: string;
     corporateSummary: string;
