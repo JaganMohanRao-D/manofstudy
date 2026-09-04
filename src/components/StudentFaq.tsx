@@ -146,7 +146,7 @@ export const StudentFaq: React.FC<StudentFaqProps> = ({ onSelectTab, onOpenLegal
       icon: GraduationCap,
       question: 'What types of scholarships are tracked in the StudyMacha Scholarships Hub?',
       answer:
-        'We monitor verified national, state, and corporate scholarship programs for undergraduate engineers. These include national schemes (National Scholarship Portal, Pragati & Saksham for girls/differently-abled, PMSS), Andhra Pradesh & Telangana state programs (Jagananna Vidya Deevena JVD, Vasathi Deevena, ePASS), and premier corporate CSR grants (Reliance Foundation, Tata Capital Pankh, Aditya Birla, HDFC Badhte Kadam, ONGC, and Google Generation).',
+        'We monitor verified national, state, and corporate scholarship programs for undergraduate engineers. These include national schemes (National Scholarship Portal, Pragati & Saksham for girls/differently-abled, PMSS), Andhra Pradesh & Telangana state programs (Post-Matric Tuition Fee Reimbursement RTF, Maintenance Fee MTF, ePASS), and premier corporate CSR grants (Reliance Foundation, Tata Capital Pankh, Aditya Birla, HDFC Badhte Kadam, ONGC, and Google Generation).',
       actionText: 'Explore Scholarships Radar',
       actionTarget: { type: 'tab', tab: 'scholarships' },
     },

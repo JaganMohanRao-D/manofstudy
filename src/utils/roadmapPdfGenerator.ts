@@ -2,424 +2,459 @@ import { jsPDF } from 'jspdf';
 import { BranchRoadmap } from '../types';
 
 /**
- * Generates a clean, branded multi-page PDF for the selected engineering branch roadmap.
- * Adheres strictly to branding:
- * - Brand: "StudyMacha — All-in-One Student & Career Utility Hub"
- * - Platform URL: "studymacha.pages.dev"
+ * StudyMacha - Engineering & Degree Roadmap PDF Generator
+ * Generates an authoritative, beautifully typeset, printable A4 document.
+ * 
+ * Specifications:
+ * - Margins: Top 18mm, Bottom 18mm, Left 16mm, Right 16mm.
+ * - Watermark: Ultra-subtle background opacity 0.05, 45-degree angled, non-obscuring.
+ * - Header: Deep Indigo to Cyan accent bar, StudyMacha emblem, Roadmap category, verified URL badge.
+ * - Section Cards: Crisp white boxes with 0.5px #e2e8f0 borders, 12px padding, 10px margin-bottom.
+ * - Typography: Clean line-height (1.45), orphan prevention (page-break-inside: avoid).
  */
+
 export function generateRoadmapPdf(roadmap: BranchRoadmap): void {
   const doc = new jsPDF({
     orientation: 'portrait',
-    unit: 'pt',
+    unit: 'mm',
     format: 'a4',
   });
 
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
-  const margin = 40;
-  const contentWidth = pageWidth - margin * 2;
-  let y = margin;
+  const pageWidth = 210;
+  const pageHeight = 297;
+  const marginLeft = 16;
+  const marginRight = 16;
+  const marginTop = 18;
+  const marginBottom = 18;
+  const contentWidth = pageWidth - marginLeft - marginRight; // 178mm
+  const maxY = pageHeight - marginBottom - 6; // 273mm
 
-  const BRAND_HEADER = 'StudyMacha — All-in-One Student & Career Utility Hub';
+  const BRAND_NAME = 'STUDYMACHA';
   const BRAND_URL = 'studymacha.pages.dev';
   const BRAND_WATERMARK = 'STUDYMACHA • studymacha.pages.dev';
 
-  const addHeaderAndWatermark = (pageNum: number) => {
-    // Watermark in background (soft light gray)
+  let currentY = marginTop + 4;
+
+  // ----------------------------------------------------
+  // WATERMARK (Strictly 0.05 Opacity, Background Only)
+  // ----------------------------------------------------
+  const renderBackgroundWatermark = () => {
     doc.saveGraphicsState();
+    try {
+      // jsPDF GState for true 0.05 alpha transparency
+      // @ts-ignore
+      if (typeof doc.GState === 'function') {
+        // @ts-ignore
+        doc.setGState(new doc.GState({ opacity: 0.05 }));
+      }
+    } catch {
+      // Graceful fallback to ultra-light tint
+    }
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(28);
-    doc.setTextColor(232, 237, 245);
-    // Draw diagonal or centered watermark
+    doc.setFontSize(26);
+    doc.setTextColor(218, 224, 233); // Ultra subtle slate-200 tint
     doc.text(BRAND_WATERMARK, pageWidth / 2, pageHeight / 2, {
       align: 'center',
-      angle: 35,
+      angle: 45,
+    });
+
+    // Outer margin perimeter watermark for verified authenticity
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(6.5);
+    doc.setTextColor(226, 232, 240);
+    doc.text('STUDYMACHA OFFICIAL ACADEMIC OPERATING SYSTEM • 100% CLIENT-SIDE VERIFIED', pageWidth / 2, 292, {
+      align: 'center',
     });
     doc.restoreGraphicsState();
-
-    // Top Header Banner
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8.5);
-    doc.setTextColor(30, 41, 59); // Slate 800
-    doc.text(BRAND_HEADER, margin, 26);
-
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(14, 116, 144); // Sky/Cyan
-    doc.text(BRAND_URL, pageWidth - margin, 26, { align: 'right' });
-
-    // Top border line
-    doc.setDrawColor(203, 213, 225); // Slate 300
-    doc.setLineWidth(0.75);
-    doc.line(margin, 32, pageWidth - margin, 32);
   };
 
-  const addFooter = (pageNum: number, totalPages: number) => {
+  // ----------------------------------------------------
+  // VECTOR ACCENT HEADER (Deep Indigo to Cyan Gradient Bar)
+  // ----------------------------------------------------
+  const renderHeader = () => {
+    // 1. Sleek top gradient accent bar across entire page width
+    const barHeight = 2.8;
+    const segW = pageWidth / 4;
+    // Deep Indigo (#1e1b4b)
+    doc.setFillColor(30, 27, 75);
+    doc.rect(0, 0, segW, barHeight, 'F');
+    // Violet/Indigo (#4338ca)
+    doc.setFillColor(67, 56, 202);
+    doc.rect(segW, 0, segW, barHeight, 'F');
+    // Sky Blue (#0284c7)
+    doc.setFillColor(2, 132, 199);
+    doc.rect(segW * 2, 0, segW, barHeight, 'F');
+    // Bright Cyan (#06b6d4)
+    doc.setFillColor(6, 182, 212);
+    doc.rect(segW * 3, 0, segW, barHeight, 'F');
+
+    // 2. StudyMacha Emblem Badge Pill (Left)
+    doc.setFillColor(15, 23, 42); // Slate 900
+    doc.setDrawColor(51, 65, 85); // Slate 700
+    doc.setLineWidth(0.2);
+    doc.roundedRect(marginLeft, 5.5, 33, 6.2, 1.8, 1.8, 'FD');
+
+    // Emblem Dot
+    doc.setFillColor(6, 182, 212); // Cyan dot
+    doc.circle(marginLeft + 3.8, 8.6, 1.1, 'F');
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(6.8);
+    doc.setTextColor(255, 255, 255);
+    doc.text(BRAND_NAME, marginLeft + 6.8, 9.7);
+
+    // 3. Category & Discipline Label (Center-Left)
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7.2);
+    doc.setTextColor(71, 85, 105); // Slate 600
+    doc.text(`${roadmap.categoryLabel.toUpperCase()} • 4-YEAR BLUEPRINT`, marginLeft + 37, 9.7);
+
+    // 4. Verified URL Badge Pill (Right)
+    const urlBadgeW = 38;
+    const urlBadgeX = pageWidth - marginRight - urlBadgeW;
+    doc.setFillColor(240, 249, 255); // Sky 50
+    doc.setDrawColor(186, 230, 253); // Sky 200
+    doc.roundedRect(urlBadgeX, 5.5, urlBadgeW, 6.2, 1.8, 1.8, 'FD');
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(6.6);
+    doc.setTextColor(2, 132, 199); // Sky 600
+    doc.text(BRAND_URL, urlBadgeX + urlBadgeW / 2, 9.7, { align: 'center' });
+
+    // 5. Clean Divider Line
+    doc.setDrawColor(226, 232, 240); // Slate 200
+    doc.setLineWidth(0.25);
+    doc.line(marginLeft, 14.5, pageWidth - marginRight, 14.5);
+  };
+
+  // ----------------------------------------------------
+  // FOOTER (Page Numbering & Disclaimer)
+  // ----------------------------------------------------
+  const renderFooter = (pageIdx: number, totalPages: number) => {
     doc.setDrawColor(226, 232, 240);
-    doc.setLineWidth(0.5);
-    doc.line(margin, pageHeight - 28, pageWidth - margin, pageHeight - 28);
+    doc.setLineWidth(0.25);
+    doc.line(marginLeft, 281, pageWidth - marginRight, 281);
 
     doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8);
-    doc.setTextColor(100, 116, 139);
-    const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    doc.setFontSize(6.8);
+    doc.setTextColor(100, 116, 139); // Slate 500
+    const printDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
     doc.text(
-      `Official Career Guide • ${roadmap.code} - ${roadmap.name} • ${BRAND_URL} • ${dateStr}`,
-      margin,
-      pageHeight - 16
+      `Official Career Guide • ${roadmap.code} - ${roadmap.name} • ${BRAND_URL} • ${printDate}`,
+      marginLeft,
+      286.5
     );
 
-    doc.text(`Page ${pageNum} of ${totalPages}`, pageWidth - margin, pageHeight - 16, {
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(71, 85, 105);
+    doc.text(`Page ${pageIdx} of ${totalPages}`, pageWidth - marginRight, 286.5, {
       align: 'right',
     });
   };
 
-  const ensureSpace = (requiredHeight: number) => {
-    if (y + requiredHeight > pageHeight - 45) {
+  // Helper to ensure page space with orphan avoidance
+  const ensurePageSpace = (requiredHeightMm: number) => {
+    if (currentY + requiredHeightMm > maxY) {
       doc.addPage();
-      y = 48;
+      renderBackgroundWatermark();
+      renderHeader();
+      currentY = marginTop + 4;
     }
   };
 
-  // ----------------------------------------------------
-  // COVER / HEADER BLOCK
-  // ----------------------------------------------------
-  y = 48;
+  // Helper to draw a section card (rounded box with #e2e8f0 border, white background)
+  const drawCardBox = (heightMm: number) => {
+    doc.setFillColor(255, 255, 255); // White background ensures crisp text above watermark
+    doc.setDrawColor(226, 232, 240); // 0.5px #e2e8f0 border
+    doc.setLineWidth(0.22);
+    doc.roundedRect(marginLeft, currentY, contentWidth, heightMm, 2.5, 2.5, 'FD');
+  };
 
-  // Title Box
-  doc.setFillColor(248, 250, 252); // Slate 50
-  doc.setDrawColor(226, 232, 240);
-  doc.roundedRect(margin, y, contentWidth, 68, 4, 4, 'FD');
+  // Initialize Page 1
+  renderBackgroundWatermark();
+  renderHeader();
 
+  // ----------------------------------------------------
+  // SECTION: HERO TITLE & DEGREE OVERVIEW CARD
+  // ----------------------------------------------------
+  const taglineLines = doc.splitTextToSize(roadmap.tagline, contentWidth - 14);
+  const heroCardHeight = 24 + taglineLines.length * 4.2;
+
+  ensurePageSpace(heroCardHeight);
+  drawCardBox(heroCardHeight);
+
+  // Branch Code & Title
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(16);
-  doc.setTextColor(15, 23, 42);
-  doc.text(`${roadmap.code}: ${roadmap.name}`, margin + 14, y + 24);
+  doc.setFontSize(13);
+  doc.setTextColor(15, 23, 42); // Slate 900
+  doc.text(`${roadmap.code}: ${roadmap.name}`, marginLeft + 5, currentY + 7.5);
 
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(9.5);
-  doc.setTextColor(71, 85, 105);
-  const taglineLines = doc.splitTextToSize(roadmap.tagline, contentWidth - 28);
-  doc.text(taglineLines, margin + 14, y + 42);
-
-  // Badge pill on top right
-  doc.setFillColor(224, 242, 254);
-  doc.setDrawColor(186, 230, 253);
-  doc.roundedRect(pageWidth - margin - 120, y + 12, 106, 18, 9, 9, 'FD');
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(7.5);
-  doc.setTextColor(3, 105, 161);
-  doc.text(roadmap.categoryLabel, pageWidth - margin - 67, y + 24, { align: 'center' });
-
-  y += 78;
-
-  // ----------------------------------------------------
-  // SECTION: STRATEGIC OVERVIEW & SALARIES
-  // ----------------------------------------------------
-  ensureSpace(130);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(11);
-  doc.setTextColor(3, 105, 161);
-  doc.text('1. STRATEGIC CAREER & COMPENSATION OVERVIEW', margin, y);
-  y += 14;
-
-  // Table-style card for salary brackets
-  const salaryCardWidth = contentWidth;
+  // Category Pill Tag
+  const categoryPillW = doc.getTextWidth(roadmap.categoryLabel) + 6;
   doc.setFillColor(241, 245, 249);
-  doc.roundedRect(margin, y, salaryCardWidth, 34, 3, 3, 'F');
-
-  const colW = salaryCardWidth / 3;
+  doc.setDrawColor(203, 213, 225);
+  doc.roundedRect(pageWidth - marginRight - categoryPillW - 4, currentY + 3.2, categoryPillW, 5.2, 1.2, 1.2, 'FD');
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(7.5);
-  doc.setTextColor(71, 85, 105);
-  doc.text('ENTRY TIER (0-2 YRS)', margin + 10, y + 12);
-  doc.text('MID TIER (3-6 YRS)', margin + colW + 10, y + 12);
-  doc.text('PEAK / PRODUCT TIER', margin + colW * 2 + 10, y + 12);
+  doc.setFontSize(6.5);
+  doc.setTextColor(51, 65, 85);
+  doc.text(roadmap.categoryLabel, pageWidth - marginRight - 4 - categoryPillW / 2, currentY + 6.8, { align: 'center' });
+
+  // Tagline / Value Proposition
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8);
+  doc.setTextColor(71, 85, 105); // Slate 600
+  doc.text(taglineLines, marginLeft + 5, currentY + 14);
+
+  currentY += heroCardHeight + 3.2; // 10px margin-bottom
+
+  // ----------------------------------------------------
+  // SECTION 1: STRATEGIC CAREER & COMPENSATION OVERVIEW
+  // ----------------------------------------------------
+  const sec1TitleHeight = 6;
+  ensurePageSpace(sec1TitleHeight + 36);
 
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(9.5);
-  doc.setTextColor(15, 23, 42);
-  doc.text(roadmap.strategicOverview.salaryBrackets.entryTier, margin + 10, y + 26);
-  doc.text(roadmap.strategicOverview.salaryBrackets.midTier, margin + colW + 10, y + 26);
-  doc.text(roadmap.strategicOverview.salaryBrackets.peakTier, margin + colW * 2 + 10, y + 26);
+  doc.setTextColor(2, 132, 199); // Sky 600
+  doc.text('1. STRATEGIC CAREER & COMPENSATION OVERVIEW', marginLeft, currentY + 4);
+  currentY += sec1TitleHeight;
 
-  y += 42;
+  // Salary Tiers Card Box
+  const colW = (contentWidth - 6) / 3;
+  const salaryCardHeight = 24;
+  drawCardBox(salaryCardHeight);
 
-  // Corporate vs Govt Viability
-  ensureSpace(60);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8.5);
-  doc.setTextColor(30, 41, 59);
-  doc.text(`Corporate Viability: ${roadmap.strategicOverview.corporateViability}`, margin, y);
-  doc.setFont('helvetica', 'normal');
-  doc.setTextColor(71, 85, 105);
-  const corpLines = doc.splitTextToSize(roadmap.strategicOverview.corporateSummary, contentWidth);
-  doc.text(corpLines, margin, y + 11);
-  y += 11 + corpLines.length * 10 + 4;
+  const tiers = [
+    { label: 'ENTRY TIER (0-2 YRS)', val: roadmap.salaryInsight.entryTier, bg: [248, 250, 252], col: [71, 85, 105] },
+    { label: 'MID TIER (3-6 YRS)', val: roadmap.salaryInsight.midTier, bg: [240, 253, 250], col: [15, 118, 110] },
+    { label: 'PEAK / PRODUCT TIER', val: roadmap.salaryInsight.peakTier, bg: [240, 249, 255], col: [3, 105, 161] },
+  ];
 
-  ensureSpace(50);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8.5);
-  doc.setTextColor(30, 41, 59);
-  doc.text(`Govt & PSU Viability: ${roadmap.strategicOverview.govtPsuViability}`, margin, y);
-  doc.setFont('helvetica', 'normal');
-  doc.setTextColor(71, 85, 105);
-  const govtLines = doc.splitTextToSize(roadmap.strategicOverview.govtPsuSummary, contentWidth);
-  doc.text(govtLines, margin, y + 11);
-  y += 11 + govtLines.length * 10 + 4;
+  tiers.forEach((t, i) => {
+    const tx = marginLeft + 3 + i * colW;
+    doc.setFillColor(t.bg[0], t.bg[1], t.bg[2]);
+    doc.setDrawColor(226, 232, 240);
+    doc.roundedRect(tx, currentY + 2.5, colW - 2.5, 18.5, 1.8, 1.8, 'FD');
 
-  ensureSpace(40);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8.5);
-  doc.setTextColor(30, 41, 59);
-  doc.text('Target Roles: ', margin, y);
-  doc.setFont('helvetica', 'normal');
-  doc.setTextColor(71, 85, 105);
-  const rolesText = roadmap.strategicOverview.targetRoles.join(' • ');
-  const rolesLines = doc.splitTextToSize(rolesText, contentWidth - 65);
-  doc.text(rolesLines, margin + 65, y);
-  y += rolesLines.length * 11 + 10;
-
-  // ----------------------------------------------------
-  // SECTION: TIER-1 VS TIER-3 REALITY & OFF-CAMPUS TACTICS
-  // ----------------------------------------------------
-  if (roadmap.strategicOverview.tierReality) {
-    const tr = roadmap.strategicOverview.tierReality;
-    ensureSpace(120);
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
-    doc.setTextColor(3, 105, 161);
-    doc.text('2. INDUSTRY & CAMPUS RECRUITMENT REALITY (TIER-1 VS TIER-3)', margin, y);
-    y += 14;
+    doc.setFontSize(6.5);
+    doc.setTextColor(t.col[0], t.col[1], t.col[2]);
+    doc.text(t.label, tx + (colW - 2.5) / 2, currentY + 7.5, { align: 'center' });
 
-    // Side-by-side or stacked tier reality
-    ensureSpace(45);
-    doc.setFillColor(240, 253, 244); // Light emerald
-    doc.roundedRect(margin, y, contentWidth, 38, 3, 3, 'F');
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8);
-    doc.setTextColor(22, 101, 52);
-    doc.text(`TIER-1 COLLEGES (${tr.tier1Salary}):`, margin + 8, y + 12);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(21, 128, 61);
-    const t1Lines = doc.splitTextToSize(tr.tier1Reality, contentWidth - 16);
-    doc.text(t1Lines, margin + 8, y + 23);
-    y += 44;
-
-    ensureSpace(45);
-    doc.setFillColor(254, 242, 242); // Light red/rose
-    doc.roundedRect(margin, y, contentWidth, 38, 3, 3, 'F');
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8);
-    doc.setTextColor(153, 27, 27);
-    doc.text(`TIER-3 COLLEGES (${tr.tier3Salary}):`, margin + 8, y + 12);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(185, 28, 28);
-    const t3Lines = doc.splitTextToSize(tr.tier3Reality, contentWidth - 16);
-    doc.text(t3Lines, margin + 8, y + 23);
-    y += 44;
-
-    if (tr.offCampusTactics && tr.offCampusTactics.length > 0) {
-      ensureSpace(40);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(8.5);
-      doc.setTextColor(30, 41, 59);
-      doc.text('Key Off-Campus Cracking Tactics for Tier-3 Students:', margin, y);
-      y += 12;
-
-      tr.offCampusTactics.forEach((tactic) => {
-        ensureSpace(20);
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(8);
-        doc.setTextColor(3, 105, 161);
-        doc.text('•', margin + 8, y);
-        doc.setFont('helvetica', 'normal');
-        doc.setTextColor(51, 65, 85);
-        const tLines = doc.splitTextToSize(tactic, contentWidth - 24);
-        doc.text(tLines, margin + 18, y);
-        y += Math.max(12, tLines.length * 9.5 + 3);
-      });
-      y += 6;
-    }
-  }
-
-  // ----------------------------------------------------
-  // SECTION: STANDARD TECH STACK & HIGHER STUDIES GATE
-  // ----------------------------------------------------
-  if (roadmap.strategicOverview.standardTechStack || roadmap.strategicOverview.higherStudiesGate) {
-    ensureSpace(80);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
-    doc.setTextColor(3, 105, 161);
-    doc.text('3. STANDARD TECH STACK & HIGHER STUDIES PATHWAYS', margin, y);
-    y += 14;
-
-    if (roadmap.strategicOverview.standardTechStack) {
-      ensureSpace(35);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(8.5);
-      doc.setTextColor(15, 23, 42);
-      doc.text('Industry-Expected Standard Tech Stack:', margin, y);
-      y += 11;
-
-      roadmap.strategicOverview.standardTechStack.forEach((stack) => {
-        ensureSpace(16);
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(8);
-        doc.setTextColor(51, 65, 85);
-        const sLines = doc.splitTextToSize(`• ${stack}`, contentWidth - 12);
-        doc.text(sLines, margin + 6, y);
-        y += sLines.length * 9.5 + 2;
-      });
-      y += 6;
-    }
-
-    if (roadmap.strategicOverview.higherStudiesGate) {
-      const hg = roadmap.strategicOverview.higherStudiesGate;
-      ensureSpace(45);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(8.5);
-      doc.setTextColor(15, 23, 42);
-      doc.text(`Higher Studies & GATE Gateway (${hg.exam}):`, margin, y);
-      y += 11;
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(8);
-      doc.setTextColor(51, 65, 85);
-      const gateDetails = `Top Institutes: ${hg.topInstitutes.join(', ')} | M.Tech Specializations: ${hg.mtechSpecializations.join(', ')} | MS Abroad: ${hg.msAbroadScope}`;
-      const gLines = doc.splitTextToSize(gateDetails, contentWidth - 12);
-      doc.text(gLines, margin + 6, y);
-      y += gLines.length * 9.5 + 8;
-    }
-  }
-
-  // ----------------------------------------------------
-  // SECTION: SKILLS & PLATFORMS MATRIX
-  // ----------------------------------------------------
-  ensureSpace(65);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(11);
-  doc.setTextColor(3, 105, 161);
-  doc.text('4. INDUSTRY SKILLS & SOFTWARE MATRIX', margin, y);
-  y += 14;
-
-  const renderSkillRow = (label: string, items: string[]) => {
-    ensureSpace(24);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8);
-    doc.setTextColor(15, 23, 42);
-    doc.text(`${label}:`, margin, y);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(71, 85, 105);
-    const text = items.join(', ');
-    const lines = doc.splitTextToSize(text, contentWidth - 100);
-    doc.text(lines, margin + 100, y);
-    y += Math.max(14, lines.length * 10 + 4);
-  };
-
-  renderSkillRow('Foundational Core', roadmap.skillsMatrix.foundational);
-  renderSkillRow('Advanced & Specialization', roadmap.skillsMatrix.advanced);
-  renderSkillRow('Software & Industry Tools', roadmap.skillsMatrix.industryTools);
-
-  y += 10;
-
-  // ----------------------------------------------------
-  // SECTION: 4-YEAR SEMESTER-WISE ACTION PLAN
-  // ----------------------------------------------------
-  ensureSpace(40);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(11);
-  doc.setTextColor(3, 105, 161);
-  doc.text('5. 4-YEAR SEMESTER-BY-SEMESTER ACTION PLAN', margin, y);
-  y += 16;
-
-  roadmap.years.forEach((yr) => {
-    ensureSpace(50);
-    // Year Header Banner
-    doc.setFillColor(224, 231, 255); // Indigo 100
-    doc.roundedRect(margin, y, contentWidth, 20, 3, 3, 'F');
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(9);
-    doc.setTextColor(30, 27, 75); // Indigo 950
-    doc.text(`${yr.yearTitle} — ${yr.theme}`, margin + 8, y + 13);
-    y += 26;
-
-    yr.semesters.forEach((sem) => {
-      ensureSpace(120);
-
-      // Semester Box
-      doc.setDrawColor(203, 213, 225);
-      doc.setFillColor(255, 255, 255);
-      doc.rect(margin, y, contentWidth, 8, 'F'); // Small top anchor
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(8.5);
-      doc.setTextColor(15, 23, 42);
-      doc.text(sem.title, margin + 4, y);
-      y += 12;
-
-      const printSubItem = (prefix: string, content: string) => {
-        ensureSpace(20);
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(7.5);
-        doc.setTextColor(71, 85, 105);
-        doc.text(`${prefix}:`, margin + 8, y);
-
-        doc.setFont('helvetica', 'normal');
-        doc.setTextColor(30, 41, 59);
-        const prefixWidth = doc.getTextWidth(`${prefix}: `) + 4;
-        const lines = doc.splitTextToSize(content, contentWidth - prefixWidth - 16);
-        doc.text(lines, margin + 8 + prefixWidth, y);
-        y += lines.length * 9.5 + 3;
-      };
-
-      printSubItem('Core Subjects', sem.coreSubjects.join(', '));
-      printSubItem('Industry Skills', sem.industrySkills.join(', '));
-      printSubItem('Tools & Platforms', sem.toolsAndPlatforms.join(', '));
-      printSubItem('Portfolio Projects', sem.keyProjects.join('; '));
-      printSubItem('Internship Milestone', sem.internshipOrMilestone);
-      printSubItem('Placement / Exam Prep', sem.examOrPlacementPrep);
-
-      y += 6;
-    });
-
-    y += 8;
+    doc.setTextColor(15, 23, 42);
+    doc.text(t.val, tx + (colW - 2.5) / 2, currentY + 14, { align: 'center' });
   });
 
-  // ----------------------------------------------------
-  // SECTION: PRO TIPS FOR PLACEMENT CRACKING
-  // ----------------------------------------------------
-  ensureSpace(70);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(11);
-  doc.setTextColor(3, 105, 161);
-  doc.text('6. STRATEGIC TIPS FOR CRACKING TIER-1 PLACEMENTS', margin, y);
-  y += 14;
+  currentY += salaryCardHeight + 3.2;
 
-  roadmap.proTips.forEach((tip, idx) => {
-    ensureSpace(25);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8);
-    doc.setTextColor(15, 23, 42);
-    doc.text(`${idx + 1}.`, margin + 6, y);
+  // Career Roles & Reality Notes Card
+  const rolesText = `Primary Career Roles: ${roadmap.careerRoles.slice(0, 5).join(' • ')}`;
+  const rolesLines = doc.splitTextToSize(rolesText, contentWidth - 10);
+  const noteLines = doc.splitTextToSize(`Placement Reality: ${roadmap.salaryInsight.notes}`, contentWidth - 10);
+  const careerCardHeight = 7 + rolesLines.length * 4.2 + noteLines.length * 4.0;
+
+  ensurePageSpace(careerCardHeight);
+  drawCardBox(careerCardHeight);
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(7.5);
+  doc.setTextColor(15, 23, 42);
+  doc.text(rolesLines, marginLeft + 5, currentY + 6);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7.2);
+  doc.setTextColor(71, 85, 105);
+  doc.text(noteLines, marginLeft + 5, currentY + 7 + rolesLines.length * 4.2);
+
+  currentY += careerCardHeight + 3.2;
+
+  // ----------------------------------------------------
+  // SECTION 2: INDUSTRY SKILLS & SOFTWARE MATRIX
+  // ----------------------------------------------------
+  const skillsTitleHeight = 6;
+  ensurePageSpace(skillsTitleHeight + 30);
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9.5);
+  doc.setTextColor(2, 132, 199);
+  doc.text('2. INDUSTRY SKILLS & TECHNICAL STACK MATRIX', marginLeft, currentY + 4);
+  currentY += skillsTitleHeight;
+
+  const fLines = doc.splitTextToSize(`Foundational Core: ${roadmap.skillsMatrix.foundational.join(', ')}`, contentWidth - 10);
+  const aLines = doc.splitTextToSize(`Advanced & Specialization: ${roadmap.skillsMatrix.advanced.join(', ')}`, contentWidth - 10);
+  const tLines = doc.splitTextToSize(`Software & Industry Tools: ${roadmap.skillsMatrix.industryTools.join(', ')}`, contentWidth - 10);
+  const skillsCardHeight = 8 + (fLines.length + aLines.length + tLines.length) * 4.2;
+
+  ensurePageSpace(skillsCardHeight);
+  drawCardBox(skillsCardHeight);
+
+  let sY = currentY + 5.5;
+  const renderSkillBlock = (lines: string[]) => {
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7.5);
+    doc.setTextColor(30, 41, 59);
+    doc.text(lines, marginLeft + 5, sY);
+    sY += lines.length * 4.2 + 1.2;
+  };
+
+  renderSkillBlock(fLines);
+  renderSkillBlock(aLines);
+  renderSkillBlock(tLines);
+
+  currentY += skillsCardHeight + 3.2;
+
+  // Optional: Higher Studies & GATE Gateway
+  if (roadmap.strategicOverview?.higherStudiesGate) {
+    const hg = roadmap.strategicOverview.higherStudiesGate;
+    const gateStr = `GATE / Higher Studies Gateway (${hg.exam}): Top Institutes: ${hg.topInstitutes.join(', ')} | M.Tech Tracks: ${hg.mtechSpecializations.join(', ')} | MS Scope: ${hg.msAbroadScope}`;
+    const gateLines = doc.splitTextToSize(gateStr, contentWidth - 10);
+    const gateCardHeight = 6 + gateLines.length * 4.2;
+
+    ensurePageSpace(gateCardHeight);
+    drawCardBox(gateCardHeight);
 
     doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7.2);
     doc.setTextColor(51, 65, 85);
-    const lines = doc.splitTextToSize(tip, contentWidth - 24);
-    doc.text(lines, margin + 20, y);
-    y += lines.length * 10 + 4;
+    doc.text(gateLines, marginLeft + 5, currentY + 5.5);
+
+    currentY += gateCardHeight + 3.2;
+  }
+
+  // ----------------------------------------------------
+  // SECTION 3: 4-YEAR SEMESTER-BY-SEMESTER ACTION PLAN
+  // ----------------------------------------------------
+  ensurePageSpace(12);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9.5);
+  doc.setTextColor(2, 132, 199);
+  doc.text('3. 4-YEAR SEMESTER-BY-SEMESTER ACTION PLAN', marginLeft, currentY + 4);
+  currentY += 7;
+
+  roadmap.years.forEach((yr) => {
+    // Year Header Banner
+    ensurePageSpace(12);
+    doc.setFillColor(238, 242, 255); // Indigo 50
+    doc.setDrawColor(199, 210, 254); // Indigo 200
+    doc.setLineWidth(0.2);
+    doc.roundedRect(marginLeft, currentY, contentWidth, 7.5, 1.8, 1.8, 'FD');
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.setTextColor(49, 46, 129); // Indigo 900
+    doc.text(`${yr.yearTitle.toUpperCase()} — ${yr.theme}`, marginLeft + 4, currentY + 5.2);
+    currentY += 10;
+
+    yr.semesters.forEach((sem) => {
+      // Calculate content lines to determine card height (avoiding orphan titles)
+      const subItems = [
+        { label: 'Core Subjects', val: sem.coreSubjects.join(', ') },
+        { label: 'Industry Skills', val: sem.industrySkills.join(', ') },
+        { label: 'Tools & Platforms', val: sem.toolsAndPlatforms.join(', ') },
+        { label: 'Portfolio Projects', val: sem.keyProjects.join('; ') },
+        { label: 'Internship Milestone', val: sem.internshipOrMilestone },
+        { label: 'Placement / Exam Prep', val: sem.examOrPlacementPrep },
+      ];
+
+      // Measure total height for this semester card
+      const labelW = 34; // mm
+      const valueW = contentWidth - labelW - 12; // mm
+      let innerContentHeight = 6; // Header space
+
+      const formattedSubItems = subItems.map((item) => {
+        const lines = doc.splitTextToSize(item.val, valueW);
+        const itemH = Math.max(3.8, lines.length * 3.6 + 0.8);
+        innerContentHeight += itemH;
+        return { label: item.label, lines, itemH };
+      });
+
+      const semCardHeight = innerContentHeight + 4; // top & bottom padding 12px
+
+      // Prevent orphan cards: page-break-inside: avoid
+      ensurePageSpace(semCardHeight + 2);
+      drawCardBox(semCardHeight);
+
+      // Semester Card Header
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8.2);
+      doc.setTextColor(15, 23, 42); // Slate 900
+      doc.text(sem.title, marginLeft + 5, currentY + 5.5);
+
+      // Small accent tag
+      doc.setFillColor(6, 182, 212);
+      doc.circle(marginLeft + 2.5, currentY + 4.8, 0.8, 'F');
+
+      let itemY = currentY + 9;
+      formattedSubItems.forEach((fItem) => {
+        // Label (Left Column)
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(6.8);
+        doc.setTextColor(71, 85, 105); // Slate 600
+        doc.text(`${fItem.label}:`, marginLeft + 5, itemY);
+
+        // Value (Right Column with line-height 1.45)
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(6.8);
+        doc.setTextColor(30, 41, 59); // Slate 800
+        doc.text(fItem.lines, marginLeft + labelW + 6, itemY);
+
+        itemY += fItem.itemH;
+      });
+
+      currentY += semCardHeight + 3.0; // 10px margin-bottom
+    });
+
+    currentY += 2.0;
   });
 
   // ----------------------------------------------------
-  // APPLY HEADERS, FOOTERS & TOTAL PAGES
+  // SECTION 4: STRATEGIC TIPS FOR CRACKING TIER-1 PLACEMENTS
+  // ----------------------------------------------------
+  ensurePageSpace(14);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9.5);
+  doc.setTextColor(2, 132, 199);
+  doc.text('4. STRATEGIC TIPS FOR CRACKING HIGH-GROWTH PLACEMENTS', marginLeft, currentY + 4);
+  currentY += 7;
+
+  roadmap.proTips.forEach((tip, idx) => {
+    const tipLines = doc.splitTextToSize(tip, contentWidth - 14);
+    const tipCardH = 6 + tipLines.length * 3.8;
+
+    ensurePageSpace(tipCardH);
+    drawCardBox(tipCardH);
+
+    // Number Badge
+    doc.setFillColor(241, 245, 249);
+    doc.roundedRect(marginLeft + 3, currentY + 2.8, 5, 5, 1, 1, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(6.5);
+    doc.setTextColor(2, 132, 199);
+    doc.text(`${idx + 1}`, marginLeft + 5.5, currentY + 6.3, { align: 'center' });
+
+    // Tip Body Text
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7);
+    doc.setTextColor(51, 65, 85);
+    doc.text(tipLines, marginLeft + 10.5, currentY + 5.8);
+
+    currentY += tipCardH + 2.8;
+  });
+
+  // ----------------------------------------------------
+  // RENDER FOOTERS ACROSS ALL PAGES
   // ----------------------------------------------------
   const totalPages = doc.getNumberOfPages();
   for (let i = 1; i <= totalPages; i++) {
     doc.setPage(i);
-    addHeaderAndWatermark(i);
-    addFooter(i, totalPages);
+    renderFooter(i, totalPages);
   }
 
-  // Save the PDF
+  // ----------------------------------------------------
+  // SAVE / DOWNLOAD PDF
+  // ----------------------------------------------------
   const filename = `${roadmap.code}_Engineering_Career_Roadmap_StudyMacha.pdf`;
   doc.save(filename);
 }

@@ -35,7 +35,7 @@ export const GUIDES_CHAPTERS: GuideChapter[] = [
     chapterNumber: 1,
     slug: 'eapcet-phase-2-counselling-strategy',
     title: 'AP EAPCET Phase-2 Counselling & Leftover Vacancy Strategy',
-    subtitle: 'A strategic blueprint for maximizing college upgrades, sliding rules, and securing JVD fee reimbursement',
+    subtitle: 'A strategic blueprint for maximizing college upgrades, sliding rules, and securing Post-Matric Tuition Fee Reimbursement (RTF)',
     readTime: '8 min read',
     category: 'Counselling',
     badge: 'Admissions 2026',
@@ -44,7 +44,7 @@ export const GUIDES_CHAPTERS: GuideChapter[] = [
       {
         id: 'phase-2-dynamics',
         heading: 'Phase-2 Vacancy Dynamics: Why Premium Seats Remain Open',
-        content: `Following Phase-1 reporting, students often believe top-tier engineering institutions (such as Gayatri Vidya Parishad, VR Siddhartha, JNTU Kakinada, and AU College of Engineering) have zero vacancies. In reality, a significant number of seats re-enter the pool due to multiple structural dynamics:
+        content: `Following Phase-1 reporting, students often believe top-tier engineering institutions (such as Andhra University, JNTU Kakinada, JNTU Anantapur, and SVUCE) have zero vacancies. In reality, a significant number of seats re-enter the pool due to multiple structural dynamics:
 
 1. **IIT/NIT/IIIT JoSAA & CSAB Seat Allotments:** Thousands of top-ranking AP students register for AP EAPCET as a safety backup. Once JoSAA rounds 5 and 6 conclude alongside CSAB special rounds, these high rankers surrender their AP state seats.
 2. **Category & Regional Conversion Cycles:** Unfilled reserved category seats (SC, ST, BC-E, Girls, and EWS) undergo phased sliding rules as mandated by APSCHE. When eligible category candidates exhaust options within a specific bracket, seats gradually slide across sub-categories or into the general merit conversion pool.
@@ -67,7 +67,7 @@ Understanding this dynamic is critical: **Phase-2 is not a leftover scrap round;
             ['Top College Vacancy', 'Perceived as 100% full upon initial reporting', 'High rankers surrender state seats after JoSAA/CSAB rounds 5 & 6 conclusion'],
             ['Reserved Category Seats', 'Rigid quota allocation (SC/ST/BC/EWS/Girls)', 'Unfilled category seats slide across sub-brackets into the general merit pool'],
             ['Reporting Time Window', 'Standard provisional document scrutiny', 'Strict 48–72 hour verification or instant irreversible seat cancellation'],
-            ['JVD Fee Reimbursement', 'Sanctioned for Category-A convener quota', '100% full tuition waiver remains intact if admitted via Convener quota']
+            ['Fee Reimbursement (RTF)', 'Sanctioned for Category-A convener quota (including 30-35% State Private Univ quota)', 'Direct 100% tuition coverage intact if admitted via Convener rank counselling']
           ]
         },
       },
@@ -76,13 +76,13 @@ Understanding this dynamic is critical: **Phase-2 is not a leftover scrap round;
         heading: 'Strategic Web Option Structuring: The Three-Tier Ladder',
         content: `Many students make the fatal mistake of listing only 5 to 10 colleges or placing lower-grade private institutions above their current seat. To avoid disastrous downgrades, use the **Three-Tier Ladder Matrix**:
 
-- **Tier A (Aspirational Upgrades - Top 30% of your list):** Colleges with cutoffs 2,000–5,000 ranks above your rank. Examples: AU, JNTUK, GVP, Vasireddy Venkatadri, or VR Siddhartha for CSE/IT/ECE. You may secure these due to unexpected Phase-2 seat surrender.
+- **Tier A (Aspirational Upgrades - Top 30% of your list):** Colleges with cutoffs 2,000–5,000 ranks above your rank. Examples: AU, JNTUK, JNTUA, SVUCE, or top convener quotas in State Private Universities for CSE/IT/ECE. You may secure these due to unexpected Phase-2 seat surrender.
 - **Tier B (Realistic Competitors - Middle 40%):** Colleges whose Phase-1 closing ranks matched your rank within a ±1,500 rank margin. Look closely at newly expanded specializations (AI & ML, Data Science, Cyber Security) where cutoffs fluctuate significantly.
 - **Tier C (Safe Defensive Backups - Bottom 30%):** Only include colleges here if you DO NOT currently hold a Phase-1 seat and face the risk of completing counselling with zero admissions. If you already have a Phase-1 seat, omit Tier C entirely.`,
         table: {
           headers: ['Option Tier', 'Target Strategy', 'Rank Margin', 'Action & Institutional Targets'],
           rows: [
-            ['Tier A (Aspirational Upgrades)', 'Top 30% of submitted options', '2,000–5,000 ranks above your rank', 'AUCE, JNTUK, GVP, VRSEC, VVIT (Capture Phase-2 surrendered seats)'],
+            ['Tier A (Aspirational Upgrades)', 'Top 30% of submitted options', '2,000–5,000 ranks above your rank', 'AUCE, JNTUK, JNTUA, SVUCE, top convener seats (Capture Phase-2 surrendered seats)'],
             ['Tier B (Realistic Competitors)', 'Middle 40% of submitted options', '±1,500 rank margin of Phase-1 cutoff', 'Target fluctuating specializations (AI/ML, Data Science, Cyber Security)'],
             ['Tier C (Defensive Safety Net)', 'Bottom 30% (Only if holding NO seat)', '3,000–8,000 ranks below your rank', 'Critical safety backup to prevent complete counselling zero-allocation']
           ]
@@ -109,17 +109,19 @@ Understanding this dynamic is critical: **Phase-2 is not a leftover scrap round;
         ],
         callout: {
           type: 'warning',
-          title: 'Aadhaar & Bank Account Seeding for JVD',
-          text: 'Ensure the student’s and mother’s Aadhaar numbers are active, bio-authenticated, and linked to an NPCI-mapped savings bank account for smooth Jagananna Vidya Deevena (JVD) fee reimbursement disbursements.',
+          title: 'Aadhaar & Bank Account Seeding for RTF & MTF',
+          text: 'Ensure the student’s and mother’s Aadhaar numbers are active, bio-authenticated, and linked to an NPCI-mapped savings bank account for smooth Post-Matric Tuition Fee Reimbursement (RTF) and Maintenance Fee (MTF) disbursements.',
         },
       },
       {
-        id: 'rtf-jvd-compliance',
-        heading: 'Fee Reimbursement (RTF & JVD) Regulatory Compliance',
-        content: `Under Andhra Pradesh's Jagananna Vidya Deevena (RTF - Reimbursement of Tuition Fee) regulations:
-1. **Full Tuition Reimbursement** applies to eligible SC, ST, BC, EWS, Minority, and Kapu students admitted through convener quota (Category A) whose annual household income is beneath ₹2.50 Lakhs and who own less than specified land ceilings.
-2. **Attendance Stipulation:** 75% to 80% biometric student attendance recorded through the institutional Facial Recognition Attendance System (FRAS) is non-negotiable. Falling short can trigger reimbursement withholding for that quarter.
-3. **Internal Examination Compliance:** Students must attempt internal midterms and maintain active academic status without disciplinary sanctions.`,
+        id: 'rtf-mtf-compliance',
+        heading: 'Post-Matric Fee Reimbursement (RTF & MTF) Regulatory Compliance',
+        content: `Under Andhra Pradesh's Post-Matric Tuition Fee Reimbursement (RTF) and Maintenance Fee (MTF) regulations:
+
+1. **Post-Matric Tuition Fee Reimbursement (RTF - Reimbursement of Tuition Fee):** Direct institutional tuition fee coverage applies to eligible SC, ST, BC, EWS, Minority, and Kapu students admitted through convener quota (Category A, including the statutory 30%–35% convener quota in State Private Universities) whose annual household income is beneath ₹2.50 Lakhs and who satisfy land ceiling criteria.
+2. **Maintenance Fee / Hostel Allowance (MTF - Maintenance Fee):** Food and living support allowance disbursed directly to eligible scholars.
+3. **Attendance Stipulation:** 75% to 80% biometric student attendance recorded through the institutional Facial Recognition Attendance System (FRAS) is non-negotiable. Falling short can trigger reimbursement withholding for that quarter.
+4. **Internal Examination Compliance:** Students must attempt internal midterms and maintain active academic status without disciplinary sanctions.`,
       },
     ],
   },
@@ -180,96 +182,99 @@ This mathematical reality illustrates why proactive attendance tracking is far e
     id: 'guide-ch3',
     chapterNumber: 3,
     slug: 'autonomous-vs-affiliated-colleges-grading',
-    title: 'Affiliated & Autonomous Colleges vs Top Deemed Private Universities (VRSEC, GVP, VIT-AP, SRM AP, AU, JNTUK)',
-    subtitle: 'Evaluating Fee ROI, Academic Flexibility, Campus Life, and Real Placement Outcomes Across Andhra Pradesh',
+    title: 'Premier State Universities vs State Private Universities vs Deemed-to-be Universities (AU, JNTUK, VIT-AP, SRM AP, SAHE/VRSEC, GVP, KL)',
+    subtitle: 'A Policy-Accurate Blueprint of Regulation, Convener Quota Caps, Fee Structures, and RTF Fee Reimbursement Across Andhra Pradesh',
     readTime: '9 min read',
     category: 'Academic',
     badge: 'Institutional Guide',
-    summary: 'A critical comparative breakdown of state universities, elite autonomous colleges, and top deemed private campuses: fee return-on-investment, academic autonomy, placement dynamics, and the ground reality of engineering success.',
+    summary: 'A critical, policy-grounded breakdown across Andhra Pradesh engineering institutions: statutory governance, mandatory 30–35% convener quota surrender in State Private Universities, Deemed University fee autonomy, and Post-Matric Tuition Fee Reimbursement (RTF) eligibility.',
     sections: [
       {
         id: 'core-comparison-matrix',
-        heading: 'Core Comparison Matrix: State Universities vs Autonomous vs Deemed Private Campuses',
-        content: `Choosing between a state university campus, an elite UGC autonomous engineering college, or a top deemed private university is one of the most critical financial and academic decisions for an engineering student. Below is the multi-dimensional benchmark analyzing parent university governance, fee models, syllabus agility, batch competition, and grading standards:`,
+        heading: 'Core Comparison Matrix: Premier State vs State Private vs Deemed-to-be Universities',
+        content: `Choosing between a premier state university, a state private university, or a deemed-to-be university is one of the most consequential academic and financial choices for an engineering aspirant in Andhra Pradesh. Below is the statutory and operational benchmark analyzing governing legislation, entrance gateways, mandatory convener quota proportions, and Post-Matric Fee Reimbursement (RTF & MTF) eligibility:`,
         table: {
           headers: [
             'Evaluation Metric',
-            'Premier State Univ (AU, JNTUK)',
-            'Elite Autonomous (VRSEC, GVP)',
-            'Top Deemed Private (VIT-AP, SRM AP)',
+            'Premier State Univ (AU, JNTUK, SVUCE, JNTUA)',
+            'State Private Univ (VIT-AP, SRM AP, VVIT, Aditya)',
+            'Deemed-to-be Univ (SAHE/VRSEC, GVP, KL, VFSTR, GITAM)',
           ],
           rows: [
             [
-              '1. Parent University & Regulation',
-              'State Government Public Universities governed by legislative acts (AU / JNTUK)',
-              'UGC Autonomous Institutions affiliated with state university with academic autonomy',
-              'Deemed-to-be / State Private Universities operating under independent UGC / AICTE mandates',
+              '1. Statutory Regulation & Legal Status',
+              'State Public Universities enacted under AP State Legislative Acts (AU, JNTUK, JNTUA, SVU).',
+              'Formed under Andhra Pradesh State Private Universities (Establishment and Regulation) Act.',
+              'Declared under Section 3 of UGC Act / Central Ministry of Education Deemed University regulations.',
             ],
             [
-              '2. Tuition & Living Expenses',
-              '₹15,000–₹50,000/yr tuition (100% covered under JVD fee reimbursement scheme)',
-              '₹50,000–₹1,05,000/yr (Govt regulated convener quota; 100% JVD fee waiver eligible)',
-              '₹2,50,000–₹4,50,000+/yr tuition + hostel fees (Not eligible for JVD state fee reimbursement)',
+              '2. AP EAPCET Convener Quota Proportion',
+              '100% engineering seats allocated strictly through AP State EAPCET Convener Counselling.',
+              'Statutorily required to surrender 30% to 35% of total engineering seats to AP EAPCET Convener Quota.',
+              'Zero regular EAPCET Convener Quota counseling. Admissions run via institutional tests (KLEEE, VSAT, GAT).',
             ],
             [
-              '3. Curriculum Agility & Tech Electives',
-              'Centralized 3–4 year university revision cycles; traditional core fundamentals',
-              'Annual Board of Studies updates with industry electives (AI, Cloud, React, Embedded systems)',
-              'Hyper-agile semester updates, flexible credit course selection (FFCS) & corporate certifications',
+              '3. State Fee Reimbursement (RTF & MTF) Eligibility',
+              '100% full Post-Matric Tuition Fee Reimbursement (RTF) & Maintenance Allowance (MTF) for eligible candidates.',
+              'Candidates securing seats under the 30%–35% EAPCET convener quota ARE FULLY ELIGIBLE for RTF & MTF. Non-convener seats ineligible.',
+              'State government fee reimbursement schemes (RTF/MTF) DO NOT apply. Tuition is set autonomously without state reimbursement.',
             ],
             [
-              '4. Placement Demographics & Competition',
-              'Batch size 300–600; strong legacy alumni pull in PSUs, core engineering & IT services',
-              'Batch size 600–1,200; established regional placement cells with direct Tier-1 tech recruitments',
-              'Mega-batch pooling (3,000–5,000+ candidates across campuses); intense peer competition for high-bracket offers',
+              '4. Tuition & Overall Living Expenses',
+              '₹15,000–₹50,000/yr tuition (lowest in state, completely covered under RTF for eligible scholars).',
+              'State-regulated convener tuition for 30–35% quota (RTF eligible); ₹2,50,000–₹4,50,000+/yr for institutional/management quotas.',
+              '₹2,20,000–₹4,20,000+/yr tuition + hostel expenses; entirely self-funded with zero state fee reimbursement support.',
             ],
             [
-              '5. Evaluation Rigor & Grading',
-              'Strict external university spot-valuation; longer supplementary examination waiting cycles',
-              'Autonomous internal continuous evaluation (40/60 or 30/70); rapid backlog clearance exam cycles',
-              'Continuous relative grading curves; digital portals, project-centric assignments & frequent quizzes',
+              '5. Batch Sizes & Placement Pathways',
+              'Batch size 300–600 per campus; unrivaled alumni brand for GATE, PSUs, ISRO, DRDO, and global MS admissions.',
+              'Multi-thousand pooled batches; hyper-agile modern curricula (FFCS), global exchange, and national tech recruiter drives.',
+              'Substantial campus-level cohorts; advanced private research labs, corporate hackathons, and centralized corporate placement cells.',
             ],
           ],
         },
         keyPoints: [
-          'Premier state universities provide highest fee ROI, zero debt, and unmatched credibility for public sector exams (GATE/PSUs) and foreign MS admissions.',
-          'Elite autonomous colleges (VRSEC, GVP) balance government fee reimbursement (JVD) with industry-relevant electives and disciplined academic schedules.',
-          'Deemed private universities offer premier infrastructure and cosmopolitan campus exposure, but require personal discipline to navigate massive batch sizes and high capital outlay.',
+          'Premier State Universities (AUCE, JNTUK, JNTUA, SVUCE) fill 100% of seats via AP EAPCET convener quota with complete RTF fee reimbursement coverage and highest public-sector credibility.',
+          'Under AP State Private Universities Act, 30% to 35% of engineering seats are mandatorily surrendered to AP EAPCET Convener Quota, and students admitted under this quota ARE ELIGIBLE for state fee reimbursement (RTF).',
+          'Deemed-to-be Universities (SAHE/VRSEC, GVP deemed status, KL, Vignan VFSTR, GITAM) operate under central UGC regulations without state convener quota, and state fee reimbursement (RTF/MTF) DOES NOT apply.',
         ],
       },
       {
         id: 'institutional-breakdown',
-        heading: 'Institutional Breakdown: Ground Reality Across Andhra Pradesh',
-        content: `A closer inspection of each institutional tier reveals distinct operational strengths, placement channels, and campus cultures:
+        heading: 'Institutional Breakdown: Ground Realities Across Andhra Pradesh',
+        content: `A rigorous analysis of each institutional category clarifies their governing statutory frameworks, admission gateways, and financial realities:
 
-1. **Premier State Universities (AUCE Visakhapatnam, JNTU Kakinada):**
-   - **Academic & Financial ROI:** Modest fee structures combined with 100% JVD eligibility make these the highest value-for-money institutions in Andhra Pradesh.
-   - **Alumni Capital & Recognition:** Decades of alumni holding senior executive, scientific, and civil administration posts across India, Silicon Valley, and Europe. Unsurpassed brand equity for GATE, IES, ISRO, DRDO, PSUs, and Ivy League/top-tier international graduate admissions.
-   - **Student Profile:** Attracts the state's top EAPCET rankers, creating a deeply competitive, self-reliant peer group.
+1. **Premier State Public Universities (AU College of Engineering Visakhapatnam, JNTU Kakinada, JNTU Anantapur, SVU College of Engineering Tirupati):**
+   - **100% Convener Allocation:** Every single engineering seat is filled transparently through AP EAPCET convener rank counseling.
+   - **Maximum Financial ROI & Full RTF Coverage:** Highly subsidized public tuition structures (₹15,000–₹50,000/year) combined with 100% Post-Matric Tuition Fee Reimbursement (RTF) and Maintenance Fee (MTF) for eligible income/reservation categories.
+   - **Unrivaled Institutional Pedigree:** Decades of legacy alumni heading research institutions (ISRO, DRDO, BARC), public sector undertakings (BHEL, IOCL, ONGC), Indian Engineering Services (IES), and elite global university graduate programs.
+   - **Student Caliber:** Absorbs the state's top-tier EAPCET rank holders, creating an organic culture of competitive problem solving and GATE excellence.
 
-2. **Elite Autonomous Institutions (Gayatri Vidya Parishad - GVP, Velagapudi Ramakrishna Siddhartha Engineering College - VRSEC):**
-   - **Proven Regional Engines:** Proven regional placement engines with strong local alumni ties across Hyderabad, Bengaluru, and Chennai tech hubs.
-   - **Curriculum Agility:** Autonomous Boards of Studies update syllabi annually with industry partners, bypassing traditional 4-year state university latency.
-   - **Regulatory Protection:** Full state fee reimbursement compliance (JVD) under Convener Category-A, delivering high-quality engineering degrees at minimal cost for eligible families.
+2. **State Private Universities (VIT-AP Amravati, SRM University-AP Mangalagiri, VVIT Private University status, Aditya University, Mohan Babu University MBU, Centurion University AP):**
+   - **Statutory 30%–35% Convener Quota Mandate:** Under the Andhra Pradesh State Private Universities (Establishment and Regulation) Act, these universities are mandatorily required to surrender 30% to 35% of their total engineering seats to the AP State EAPCET Convener Quota.
+   - **State Fee Reimbursement (RTF) Eligibility for Convener Scholars:** Candidates who secure admission within this 30%–35% convener bracket through their AP EAPCET rank ARE FULLY ELIGIBLE for Post-Matric Tuition Fee Reimbursement (RTF) and MTF, provided they meet standard government household income (under ₹2.50 Lakhs) and category guidelines.
+   - **Institutional Entrance & Management Quotas (65%–70%):** The remaining 65% to 70% of seats are admitted through national/institutional entrance tests (e.g., VITEEE, SRMJEEE) or institutional management categories. Students admitted through these channels pay full private university tuition (₹2.50–₹4.50 Lakhs/year) and are ineligible for state fee reimbursement.
+   - **Modern Infrastructure & Academic Flexibility:** Fully Flexible Credit Systems (FFCS), high-end computing laboratories, cosmopolitan peer demographics, and active hackathon environments.
 
-3. **Top Private Deemed Campuses (VIT-AP, SRM University-AP):**
-   - **Modern Infrastructure & Global Immersion:** High-tech modern infrastructure, global immersion, diverse national peer groups, advanced laboratories, and vibrant hackathon cultures.
-   - **Curriculum Flexibility:** Fully Flexible Credit Systems (FFCS) allowing students to choose specialized technical tracks, preferred instructors, and interdisciplinary minors.
-   - **Financial Tradeoff & Competition:** Considerably higher fee structures (₹10–18 Lakhs across 4 years including residential costs) and intense competition during pooled campus placements with thousands of peer candidates.`,
+3. **Deemed-to-be Universities (SAHE comprising VRSEC Vijayawada, Gayatri Vidya Parishad - GVP deemed status, KL University - KLEF, Vignan's Foundation VFSTR Vadlamudi, GITAM University Visakhapatnam):**
+   - **Central UGC/MoE Deemed Regulations:** These institutions operate under Section 3 of the UGC Act and Central Ministry of Education guidelines rather than state affiliating university systems.
+   - **No Regular State Convener Quota:** Admissions are conducted independently via their own national entrance examinations (such as KLEEE, VSAT, GAT) or institutional merit screening. They do not participate in regular AP EAPCET state convener seat matrix distribution.
+   - **Ineligibility for State Fee Reimbursement:** Andhra Pradesh state fee reimbursement schemes (RTF and MTF) DO NOT apply to these deemed universities. Tuition and hostel fee structures are determined completely autonomously by institutional management boards.
+   - **Autonomous Academic Rigor:** Rapid syllabus modernization, strong regional placement networks across southern tech hubs, and modern campus infrastructure.`,
         keyPoints: [
-          'AU and JNTUK alumni networks are especially dominant in core engineering, government research (ISRO, DRDO), and foreign higher education.',
-          'VRSEC and GVP are the benchmark autonomous colleges in AP with high placement conversion rates for tech roles.',
-          'Deemed private campuses reward proactive, highly ambitious coders with top-tier hackathons and direct multinational placement pipelines.',
+          'State Private Universities mandatorily surrender 30% to 35% of engineering seats to EAPCET convener counseling, unlocking RTF fee reimbursement for eligible rankers.',
+          'Deemed-to-be Universities (SAHE/VRSEC, GVP, KL, Vignan, GITAM) do not participate in state convener quotas and are not covered by state RTF/MTF reimbursement schemes.',
+          'Premier state universities (AU, JNTUK, JNTUA, SVU) maintain 100% convener allocation, lowest costs, and unrivaled standing for GATE, PSUs, and international master’s admissions.',
         ],
       },
       {
         id: 'student-empowerment-note',
         heading: 'Student Empowerment Note (Motivational Ground Truth)',
-        content: `Regardless of whether your allotment reads a state university, a local autonomous college, or a prestigious deemed private campus, your engineering career is decided by what you build, not where you sleep.`,
+        content: `Regardless of whether your allotment reads a premier state university, a state private university convener seat, or an autonomous deemed campus, your engineering outcome is dictated by the software you build and the fundamentals you master.`,
         callout: {
           type: 'empowerment',
           title: 'STUDENT EMPOWERMENT NOTE (MOTIVATIONAL GROUND TRUTH)',
-          text: 'The Truth Every Engineer Must Know: The college gates you walk through on Day 1 do not define the engineer you become on Day 1460. Whether you study at an affiliated rural college, an autonomous institution like VRSEC or GVP, or a sprawling private university like VIT or SRM—code compilers and technical interviewers do not care about your campus architecture. They evaluate your problem-solving resilience, system architecture depth, and real-world project commits. Own your trajectory, master your core fundamentals, build authentic software, and remember: Great engineers are never manufactured by institutions; they forge themselves.',
+          text: 'The Truth Every Engineer Must Know: The college gates you walk through on Day 1 do not define the engineer you become on Day 1460. Whether you study at a premier public university like AUCE or JNTUK, secure an EAPCET convener quota seat at a state private university like VIT-AP or SRM-AP, or attend a deemed campus like SAHE (VRSEC), GVP, or KL University—code compilers and technical interviewers do not care about campus marble or administrative classification. They evaluate data structures mastery, system design depth, problem-solving resilience, and verifiable project commits. Own your trajectory, build authentic systems, contribute to open source, and remember: Great engineers are never manufactured by institutions; they forge themselves.',
         },
       },
     ],
