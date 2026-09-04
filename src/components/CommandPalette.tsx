@@ -27,6 +27,7 @@ import {
   ChevronRight,
   MessageSquare,
   HelpCircle,
+  Terminal,
 } from 'lucide-react';
 import { ToolTab } from '../types';
 import { ENGINEERING_ROADMAPS } from '../data/engineeringRoadmapsData';
@@ -179,6 +180,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         icon: <Bot className="w-4 h-4 text-pink-500" />,
         keywords: ['humanizer', 'ai', 'detector', 'chatgpt', 'paraphrase', 'academic rewriting'],
         action: () => onSelectTool('humanizer'),
+      },
+      {
+        id: 'tool-compiler',
+        title: '💻 Online CodeStudio Compiler',
+        subtitle: 'Multi-language compiler & sandbox for Python 3, C, C++, Java, and JavaScript with Piston execution',
+        category: 'Core Tools',
+        badge: 'IDE & Coding',
+        icon: <Terminal className="w-4 h-4 text-teal-500" />,
+        keywords: ['compiler', 'code', 'python', 'c', 'cpp', 'java', 'javascript', 'ide', 'run code', 'lab', 'programming', 'codestudio'],
+        action: () => onSelectTool('compiler'),
       }
     );
 

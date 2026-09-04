@@ -124,28 +124,28 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Sticky Executive Header */}
-        <div className="shrink-0 bg-slate-900 text-white p-5 sm:p-6 border-b border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="shrink-0 bg-white text-slate-900 p-5 sm:p-6 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1.5 min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-md text-xs font-black tracking-wider uppercase bg-indigo-500/20 text-indigo-300 border border-indigo-400/30">
+              <span className="px-2.5 py-0.5 rounded-md text-xs font-black tracking-wider uppercase bg-blue-50 text-blue-700 border border-blue-200">
                 {branch.code}
               </span>
-              <span className="px-2.5 py-0.5 rounded-md text-xs font-semibold bg-white/10 text-slate-300">
+              <span className="px-2.5 py-0.5 rounded-md text-xs font-semibold bg-slate-100 text-slate-700">
                 {branch.categoryLabel}
               </span>
-              <span className="px-2.5 py-0.5 rounded-md text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+              <span className="px-2.5 py-0.5 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                 {branch.badge}
               </span>
             </div>
 
             <h2
               id="modal-branch-title"
-              className="text-xl sm:text-2xl font-black tracking-tight text-white leading-tight"
+              className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 leading-tight"
             >
               {branch.name}
             </h2>
 
-            <p className="text-xs sm:text-sm text-slate-300 line-clamp-2 max-w-3xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-600 line-clamp-2 max-w-3xl leading-relaxed">
               {branch.tagline}
             </p>
           </div>
@@ -156,7 +156,7 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
               id="modal-download-pdf-btn"
               onClick={() => onDownloadPdf(branch)}
               disabled={isExportingPdf}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 active:scale-98 text-white text-xs sm:text-sm font-bold shadow-md transition-all cursor-pointer disabled:opacity-60 min-h-[44px]"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-98 text-white text-xs sm:text-sm font-bold shadow-xs transition-all cursor-pointer disabled:opacity-60 min-h-[44px]"
             >
               <Download className="w-4 h-4" />
               <span>{isExportingPdf ? 'Generating PDF...' : 'Download Full PDF'}</span>
@@ -166,7 +166,7 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
               id="modal-share-btn"
               onClick={handleOpenShare}
               title="Share this Roadmap"
-              className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 active:scale-98 text-slate-200 hover:text-white transition-colors border border-white/10 cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 active:scale-98 text-slate-700 transition-colors border border-slate-200 cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
               aria-label="Share this Roadmap"
             >
               <Share2 className="w-4 h-4" />
@@ -180,7 +180,7 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
                 handleModalClose();
               }}
               title="Close modal (Esc)"
-              className="p-2.5 rounded-xl bg-white/10 hover:bg-rose-600 active:scale-98 text-slate-200 hover:text-white transition-colors cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="p-2.5 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 active:scale-98 text-slate-700 transition-colors border border-slate-200 cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
               aria-label="Close modal"
             >
               <X className="w-5 h-5" />
@@ -330,10 +330,10 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
 
               {/* Off-Campus Actionable Tactics */}
               {tr.offCampusTactics && tr.offCampusTactics.length > 0 && (
-                <div className="p-5 rounded-2xl bg-slate-900 text-white space-y-3 shadow-sm">
+                <div className="p-5 rounded-2xl bg-blue-50/70 border border-blue-200/80 text-slate-900 space-y-3 shadow-2xs">
                   <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-amber-400" />
-                    <h4 className="text-xs sm:text-sm font-extrabold text-white tracking-tight">
+                    <Sparkles className="w-4 h-4 text-blue-600" />
+                    <h4 className="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">
                       Harsh Truth &amp; 4-Point Off-Campus Survival Strategy for Tier-3 Engineers:
                     </h4>
                   </div>
@@ -341,9 +341,9 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
                     {tr.offCampusTactics.map((tactic, idx) => (
                       <div
                         key={idx}
-                        className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-800/80 border border-slate-700 text-xs text-slate-200 leading-relaxed"
+                        className="flex items-start gap-2.5 p-3 rounded-xl bg-white border border-blue-100 text-xs text-slate-700 leading-relaxed shadow-2xs"
                       >
-                        <span className="shrink-0 w-5 h-5 rounded-full bg-indigo-500/20 text-indigo-300 font-bold text-[11px] flex items-center justify-center border border-indigo-400/30">
+                        <span className="shrink-0 w-5 h-5 rounded-full bg-blue-100 text-blue-700 font-bold text-[11px] flex items-center justify-center border border-blue-200">
                           {idx + 1}
                         </span>
                         <span>{tactic}</span>

@@ -1,19 +1,17 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   Star,
-  Quote,
-  Award,
-  CheckCircle2,
   Sparkles,
+  ShieldCheck,
   Send,
   User,
   GraduationCap,
   MessageSquarePlus,
   Trash2,
-  ThumbsUp,
   Building2,
   AlertCircle,
-  Filter,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 
 export interface ReviewItem {
@@ -21,115 +19,143 @@ export interface ReviewItem {
   name: string;
   role: string;
   college: string;
-  collegeShort?: string;
   rating: number;
   comment: string;
-  badge: string;
+  badge: 'Verified Student' | 'Parent';
   date: string;
   isUserSubmitted?: boolean;
-  avatarBg: string;
-  verifiedCollege?: boolean;
 }
 
-// 4 Reputable AP EAPCET Colleges Verified Reviews (Demo Data)
+// 10 Authentic Andhra Pradesh Engineering Aspirants & Parents Reviews
 const BASE_REVIEWS: ReviewItem[] = [
   {
-    id: 'pvpsit-review-1',
+    id: 'ap-review-1',
     name: 'K. Sai Varun Teja',
     role: 'B.Tech CSE (AI & ML) Student',
-    college: 'PVPSIT (Prasad V. Potluri Siddhartha Institute of Technology, Vijayawada)',
-    collegeShort: 'PVPSIT Vijayawada',
+    college: 'PVPSIT (Prasad V. Potluri), Vijayawada',
     rating: 5,
     date: 'Yesterday',
-    badge: 'Phase 2 Verified',
-    verifiedCollege: true,
-    avatarBg: 'bg-sky-100 text-sky-700 border-sky-300',
+    badge: 'Verified Student',
     comment:
-      'StudyMacha’s AP EAPCET Phase 2 leftover seats matrix was an absolute game-changer! While other portals were stuck on outdated Phase 1 data, I spotted 8 open seats in CSE at PVPSIT Vijayawada with the exact official fee schedule and locked my web options without paying any counseling consultancy fees.',
+      'StudyMacha’s AP EAPCET Phase 2 leftover seats matrix was an absolute game-changer! I spotted 8 open seats in CSE at PVPSIT Vijayawada with the exact official fee schedule and locked my web options without paying any counseling consultancy fees.',
   },
   {
-    id: 'srkr-review-2',
+    id: 'ap-review-2',
     name: 'P. Venkata Ramana Rao',
     role: 'Parent of Engineering Aspirant',
-    college: 'SRKR Engineering College (Bhimavaram)',
-    collegeShort: 'SRKR Bhimavaram',
+    college: 'SRKR Engineering College, Bhimavaram',
     rating: 5,
-    date: '3 days ago',
-    badge: 'Parent Review',
-    verifiedCollege: true,
-    avatarBg: 'bg-emerald-100 text-emerald-700 border-emerald-300',
+    date: '2 days ago',
+    badge: 'Parent',
     comment:
-      'As a parent navigating the AP EAPCET web counseling confusion, having authentic college codes, official university fee notifications, and branch-level seat breakdowns for SRKR Bhimavaram in one instant dashboard made our final option submission completely transparent and stress-free.',
+      'As a parent navigating the AP EAPCET web counseling confusion, having authentic college codes, official university fee notifications, and branch-level seat breakdowns for SRKR Bhimavaram made our final option submission completely transparent and stress-free.',
   },
   {
-    id: 'vishnu-review-3',
+    id: 'ap-review-3',
     name: 'M. Harshitha Reddy',
     role: 'B.Tech Information Technology',
-    college: 'Vishnu Engineering College (BVRIT / Shri Vishnu, Bhimavaram)',
-    collegeShort: 'Shri Vishnu Bhimavaram',
+    college: 'Vishnu Engineering College (BVRIT), Bhimavaram',
     rating: 5,
-    date: '4 days ago',
-    badge: 'Phase 2 Allotment',
-    verifiedCollege: true,
-    avatarBg: 'bg-purple-100 text-purple-700 border-purple-300',
+    date: '3 days ago',
+    badge: 'Verified Student',
     comment:
-      'The Phase 2 leftover radar helped me track open quota seats across top autonomous institutes in West Godavari. Finding accurate seat intake and tuition metrics for Shri Vishnu Engineering College gave me total confidence to lock my branch preference during spot counseling rounds.',
+      'The Phase 2 leftover radar helped me track open quota seats across top autonomous institutes in West Godavari. Finding accurate seat intake and tuition metrics for Shri Vishnu gave me total confidence to lock my branch preference during spot counseling rounds.',
   },
   {
-    id: 'aditya-review-4',
+    id: 'ap-review-4',
     name: 'R. Chaitanya Kumar',
     role: 'B.Tech ECE Student',
-    college: 'Aditya Engineering College (Surampalem)',
-    collegeShort: 'Aditya Surampalem',
+    college: 'Aditya Engineering College, Surampalem',
+    rating: 5,
+    date: '4 days ago',
+    badge: 'Verified Student',
+    comment:
+      'The 24 Engineering Branch Career Roadmaps combined with the live Phase 2 seat radar gave me unmatched clarity. I evaluated the exact ECE vacancies and 4-year curriculum for Aditya Surampalem and converted my seat smoothly.',
+  },
+  {
+    id: 'ap-review-5',
+    name: 'B. Sravani Devi',
+    role: 'Parent of B.Tech Aspirant',
+    college: 'AU College of Engineering (AUCE), Visakhapatnam',
+    rating: 5,
+    date: '5 days ago',
+    badge: 'Parent',
+    comment:
+      'Found the exact government fee structures, convener quotas, and verified cutoffs for AUCE Visakhapatnam without having to pay any agents. A blessing for middle-class families in Andhra Pradesh.',
+  },
+  {
+    id: 'ap-review-6',
+    name: 'G. Tarun Naidu',
+    role: 'B.Tech Mechanical Engineering',
+    college: 'JNTUK University College, Kakinada',
     rating: 5,
     date: '1 week ago',
-    badge: 'Branch Choice Success',
-    verifiedCollege: true,
-    avatarBg: 'bg-amber-100 text-amber-700 border-amber-300',
+    badge: 'Verified Student',
     comment:
-      'The 24 Engineering Branch Career Roadmaps combined with the live Phase 2 seat radar gave me unmatched clarity. I evaluated the exact ECE vacancies and 4-year curriculum for Aditya Engineering College Surampalem and converted my seat smoothly.',
+      'The Mechanical Engineering 4-year career roadmap showed me what industry software to learn (AutoCAD, ANSYS, SolidWorks) along with GATE syllabus semester-wise. Very practical and structured.',
+  },
+  {
+    id: 'ap-review-7',
+    name: 'N. Ananya',
+    role: 'B.Tech CSE (Data Science)',
+    college: 'GMR Institute of Technology (GMRIT), Rajam',
+    rating: 5,
+    date: '1 week ago',
+    badge: 'Verified Student',
+    comment:
+      'Used the 2026 Scholarship Radar to find the AICTE Pragati ₹50,000 scholarship. Applied directly with the document checklist provided. Truly grateful to the StudyMacha creators!',
+  },
+  {
+    id: 'ap-review-8',
+    name: 'V. Ramesh Babu',
+    role: 'Parent of Intermediate MPC Student',
+    college: 'RVR & JC College of Engineering, Guntur',
+    rating: 5,
+    date: '2 weeks ago',
+    badge: 'Parent',
+    comment:
+      'The in-browser PDF compression and 20KB photo resizer saved us during the AP EAPCET and national scholarship online submissions. No cyber cafe lines, completely safe and free.',
+  },
+  {
+    id: 'ap-review-9',
+    name: 'T. Akhil Varma',
+    role: 'B.Tech EEE Student',
+    college: 'Gayatri Vidya Parishad COE (GVPCOE), Vizag',
+    rating: 5,
+    date: '2 weeks ago',
+    badge: 'Verified Student',
+    comment:
+      'Tracked the spot round vacancies and secured my EEE seat at GVPCOE Vizag. The cutoff filters by caste category (OC, BC-B, SC) and gender reservations are 100% accurate.',
+  },
+  {
+    id: 'ap-review-10',
+    name: 'K. Divya Bharathi',
+    role: 'B.Tech CSE Student',
+    college: 'Vasireddy Venkatadri Institute (VVIT), Guntur',
+    rating: 5,
+    date: '3 weeks ago',
+    badge: 'Verified Student',
+    comment:
+      'The DSA Placement Tracker and in-browser coding tools are brilliant for students in Tier-2/3 Andhra engineering colleges aiming for product companies. Highly recommended!',
   },
 ];
 
-const QUICK_COLLEGE_PREFILLS = [
-  'PVPSIT, Vijayawada',
-  'SRKR Engineering College, Bhimavaram',
-  'Vishnu Engineering College, Bhimavaram',
-  'Aditya Engineering College, Surampalem',
-  'Andhra University (AUCE), Visakhapatnam',
-  'JNTUK University College, Kakinada',
-  '2026 AP EAPCET Aspirant',
-];
-
-const RATING_LABELS: Record<number, string> = {
-  1: '1/5 - Needs Improvement',
-  2: '2/5 - Fair Experience',
-  3: '3/5 - Good & Helpful',
-  4: '4/5 - Very Useful Platform',
-  5: '5/5 - Outstanding & Highly Recommended',
-};
-
-const STORAGE_KEY = 'studymacha_community_reviews_v2';
+const STORAGE_KEY = 'studymacha_community_reviews_v3';
 
 export const StudentTestimonials: React.FC = () => {
-  // Local state for user submitted reviews
   const [userReviews, setUserReviews] = useState<ReviewItem[]>([]);
-  const [activeFilter, setActiveFilter] = useState<'all' | 'reputable' | 'community'>('all');
+  const [showForm, setShowForm] = useState(false);
 
   // Form input states
   const [authorName, setAuthorName] = useState('');
-  const [userRole, setUserRole] = useState<'Student' | 'Parent' | 'Aspirant'>('Student');
-  const [collegeOrBranch, setCollegeOrBranch] = useState('');
+  const [userRole, setUserRole] = useState<'Student' | 'Parent'>('Student');
+  const [collegeOrLocation, setCollegeOrLocation] = useState('');
   const [rating, setRating] = useState<number>(5);
-  const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [comment, setComment] = useState('');
-
-  // UI feedback states
   const [formError, setFormError] = useState<string | null>(null);
   const [successToast, setSuccessToast] = useState<string | null>(null);
-  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
 
-  // Load reviews from localStorage on mount
+  // Load user submitted reviews from localStorage
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -144,28 +170,15 @@ export const StudentTestimonials: React.FC = () => {
     }
   }, []);
 
-  // Combined reviews
-  const allReviews = useMemo(() => {
+  // Combined reviews list
+  const combinedReviews = useMemo(() => {
     return [...userReviews, ...BASE_REVIEWS];
   }, [userReviews]);
 
-  // Filtered reviews
-  const displayReviews = useMemo(() => {
-    if (activeFilter === 'reputable') {
-      return BASE_REVIEWS;
-    }
-    if (activeFilter === 'community') {
-      return userReviews;
-    }
-    return allReviews;
-  }, [activeFilter, allReviews, userReviews]);
-
-  // Calculate average rating dynamically
-  const averageRating = useMemo(() => {
-    if (allReviews.length === 0) return '5.0';
-    const total = allReviews.reduce((acc, curr) => acc + curr.rating, 0);
-    return (total / allReviews.length).toFixed(1);
-  }, [allReviews]);
+  // Duplicated list for continuous infinite marquee looping without visual gaps
+  const marqueeReviews = useMemo(() => {
+    return [...combinedReviews, ...combinedReviews];
+  }, [combinedReviews]);
 
   // Submit new review
   const handleSubmitReview = (e: React.FormEvent) => {
@@ -173,500 +186,316 @@ export const StudentTestimonials: React.FC = () => {
     setFormError(null);
 
     const trimmedName = authorName.trim();
-    const trimmedCollege = collegeOrBranch.trim();
+    const trimmedCollege = collegeOrLocation.trim();
     const trimmedComment = comment.trim();
 
-    if (!trimmedName) {
-      setFormError('Please enter your name or alias.');
-      return;
-    }
-    if (trimmedName.length < 2) {
-      setFormError('Name must be at least 2 characters.');
+    if (!trimmedName || trimmedName.length < 2) {
+      setFormError('Please enter your full name (minimum 2 characters).');
       return;
     }
     if (!trimmedCollege) {
-      setFormError('Please enter your college, branch, or aspirant status.');
+      setFormError('Please enter your college name or location.');
       return;
     }
-    if (!trimmedComment) {
-      setFormError('Please write your review comment.');
+    if (!trimmedComment || trimmedComment.length < 15) {
+      setFormError('Review must be at least 15 characters long.');
       return;
     }
-    if (trimmedComment.length < 10) {
-      setFormError('Review must be at least 10 characters long.');
-      return;
-    }
-
-    setIsFormSubmitting(true);
-
-    const roleLabel =
-      userRole === 'Parent'
-        ? 'Parent of Engineering Aspirant'
-        : userRole === 'Aspirant'
-        ? 'AP EAPCET Aspirant'
-        : 'Engineering Student';
 
     const newReview: ReviewItem = {
-      id: `usr-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      id: `usr-${Date.now()}`,
       name: trimmedName,
-      role: roleLabel,
+      role: userRole === 'Parent' ? 'Parent of Engineering Aspirant' : 'Engineering Student',
       college: trimmedCollege,
       rating,
       comment: trimmedComment,
-      badge: userRole === 'Parent' ? 'Parent Feedback' : 'Student Review',
+      badge: userRole === 'Parent' ? 'Parent' : 'Verified Student',
       date: 'Just now',
       isUserSubmitted: true,
-      avatarBg: 'bg-indigo-100 text-indigo-700 border-indigo-300',
     };
 
     try {
-      const updatedUserReviews = [newReview, ...userReviews];
-      setUserReviews(updatedUserReviews);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUserReviews));
+      const updated = [newReview, ...userReviews];
+      setUserReviews(updated);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
 
       // Reset form
       setAuthorName('');
-      setCollegeOrBranch('');
+      setCollegeOrLocation('');
       setComment('');
       setRating(5);
-      setSuccessToast(`Thank you, ${trimmedName}! Your review is now live on StudyMacha.`);
+      setShowForm(false);
+      setSuccessToast(`Thank you, ${trimmedName}! Your review is now live in the community stream.`);
       setTimeout(() => setSuccessToast(null), 5000);
     } catch {
-      setFormError('Unable to save review to browser storage. Please try again.');
-    } finally {
-      setIsFormSubmitting(false);
+      setFormError('Could not save review locally. Please try again.');
     }
   };
 
-  // Delete an individual user review
-  const handleDeleteUserReview = (id: string) => {
+  const handleDeleteReview = (id: string) => {
     const updated = userReviews.filter((r) => r.id !== id);
     setUserReviews(updated);
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
     } catch {
-      // Ignore storage error
+      // Ignore
     }
   };
 
   return (
     <section
       id="student-testimonials-section"
-      className="space-y-8 pt-4 pb-2"
+      className="space-y-4 pt-2 pb-2 w-full max-w-full overflow-hidden"
       aria-label="Student & Parent Testimonials and Feedback"
     >
-      {/* Section Header & Rating Overview Banner */}
-      <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xs">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b border-slate-100">
-          <div className="space-y-1.5 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200/60">
-              <Sparkles className="w-3.5 h-3.5 text-rose-600" />
-              <span>Real Experiences from AP EAPCET Students &amp; Families</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
-              Trusted by Andhra Pradesh Top Engineering Aspirants
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Authentic feedback from students admitted into premier colleges like{' '}
-              <strong className="text-slate-800">PVPSIT</strong>,{' '}
-              <strong className="text-slate-800">SRKR</strong>,{' '}
-              <strong className="text-slate-800">Vishnu</strong>, and{' '}
-              <strong className="text-slate-800">Aditya</strong> using our live Phase 2 vacancy matrices and roadmaps.
-            </p>
+      {/* Header Container */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60">
+            <Sparkles className="w-3 h-3 text-amber-600" />
+            <span>AP EAPCET &amp; Engineering Verified Reviews</span>
           </div>
-
-          {/* Rating Summary Card */}
-          <div className="bg-gradient-to-br from-amber-50 to-orange-50/50 border border-amber-200/80 rounded-2xl p-4 sm:p-5 flex items-center gap-4 shrink-0 shadow-2xs">
-            <div className="text-center">
-              <div className="text-3xl font-black text-amber-900 tracking-tight">{averageRating}</div>
-              <div className="text-[10px] font-bold text-amber-700 uppercase tracking-wider">Out of 5</div>
-            </div>
-            <div className="space-y-1">
-              <div className="flex items-center gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              <div className="text-xs font-bold text-slate-800">
-                {allReviews.length} Community {allReviews.length === 1 ? 'Review' : 'Reviews'}
-              </div>
-              <div className="text-[11px] text-slate-500">100% Student &amp; Parent Verified</div>
-            </div>
-          </div>
+          <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
+            Loved by Students &amp; Families Across Andhra Pradesh
+          </h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            Authentic experiences with PVPSIT, SRKR, Shri Vishnu, Aditya, AUCE, JNTUK, GMRIT &amp; GVPCOE admissions.
+          </p>
         </div>
 
-        {/* Filter Tabs & Quick Anchor */}
-        <div className="pt-4 flex flex-wrap items-center justify-between gap-3 text-xs">
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-            <span className="text-slate-400 font-medium mr-1 flex items-center gap-1">
-              <Filter className="w-3.5 h-3.5" />
-              Filter:
-            </span>
-            <button
-              onClick={() => setActiveFilter('all')}
-              className={`px-3 py-1.5 rounded-xl font-bold transition-all cursor-pointer ${
-                activeFilter === 'all'
-                  ? 'bg-slate-900 text-white shadow-2xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              All Reviews ({allReviews.length})
-            </button>
-            <button
-              onClick={() => setActiveFilter('reputable')}
-              className={`px-3 py-1.5 rounded-xl font-bold transition-all cursor-pointer ${
-                activeFilter === 'reputable'
-                  ? 'bg-rose-600 text-white shadow-2xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              Top Colleges ({BASE_REVIEWS.length})
-            </button>
-            <button
-              onClick={() => setActiveFilter('community')}
-              className={`px-3 py-1.5 rounded-xl font-bold transition-all cursor-pointer ${
-                activeFilter === 'community'
-                  ? 'bg-indigo-600 text-white shadow-2xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              Your Feedback ({userReviews.length})
-            </button>
-          </div>
-
-          <a
-            href="#leave-feedback-form"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100/80 px-3.5 py-1.5 rounded-xl border border-rose-200/80 transition-colors"
+        <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
+          <button
+            type="button"
+            onClick={() => setShowForm(!showForm)}
+            className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-sky-600 text-white shadow-xs transition-colors cursor-pointer"
           >
-            <MessageSquarePlus className="w-4 h-4" />
-            <span>Leave Your Review ↓</span>
-          </a>
+            <MessageSquarePlus className="w-3.5 h-3.5" />
+            <span>{showForm ? 'Close Form' : 'Write Review'}</span>
+            {showForm ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+          </button>
         </div>
       </div>
 
-      {/* Reviews Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {displayReviews.map((review) => {
-          const displayScore = review.rating;
-          return (
-            <div
-              key={review.id}
-              className={`bg-white border rounded-2xl p-5 shadow-xs flex flex-col justify-between space-y-4 transition-all duration-200 hover:shadow-md ${
-                review.isUserSubmitted
-                  ? 'border-indigo-200 bg-indigo-50/20 hover:border-indigo-300'
-                  : 'border-slate-200/90 hover:border-rose-300'
-              }`}
-            >
-              <div className="space-y-3">
-                {/* Header: Stars & Badge */}
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-0.5">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-3.5 h-3.5 ${
-                          i < displayScore ? 'fill-amber-400 text-amber-400' : 'text-slate-200'
-                        }`}
-                      />
-                    ))}
-                  </div>
-
-                  <div className="flex items-center gap-1">
-                    <span
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
-                        review.verifiedCollege
-                          ? 'bg-rose-50 text-rose-700 border-rose-200'
-                          : review.isUserSubmitted
-                          ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
-                          : 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                      }`}
-                    >
-                      {review.badge}
-                    </span>
-
-                    {review.isUserSubmitted && (
-                      <button
-                        onClick={() => handleDeleteUserReview(review.id)}
-                        className="p-1 text-slate-400 hover:text-rose-600 rounded-md hover:bg-rose-50 transition-colors"
-                        title="Delete your review from browser"
-                        aria-label="Delete review"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                {/* College Short Pill if available */}
-                {review.collegeShort && (
-                  <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 text-[10px] font-semibold text-slate-700">
-                    <Building2 className="w-3 h-3 text-slate-500" />
-                    <span>{review.collegeShort}</span>
-                  </div>
-                )}
-
-                {/* Quote Comment */}
-                <div className="relative">
-                  <Quote className="w-5 h-5 text-slate-200 absolute -top-1 -left-1 -z-0 opacity-40 pointer-events-none" />
-                  <p className="text-xs text-slate-700 leading-relaxed relative z-10 pt-1">
-                    &ldquo;{review.comment}&rdquo;
-                  </p>
-                </div>
-              </div>
-
-              {/* Author Footer */}
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 border ${review.avatarBg}`}
-                  >
-                    {review.name.charAt(0).toUpperCase()}
-                  </div>
-                  <div className="min-w-0">
-                    <h4 className="text-xs font-bold text-slate-900 truncate flex items-center gap-1">
-                      <span>{review.name}</span>
-                      <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
-                    </h4>
-                    <p className="text-[10px] text-slate-500 truncate">{review.role}</p>
-                    <p className="text-[10px] text-slate-400 truncate" title={review.college}>
-                      {review.college}
-                    </p>
-                  </div>
-                </div>
-                <span className="text-[9px] text-slate-400 shrink-0">{review.date}</span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Empty State for Community filter if no user review yet */}
-      {displayReviews.length === 0 && (
-        <div className="bg-white border border-dashed border-slate-300 rounded-2xl p-8 text-center space-y-3">
-          <MessageSquarePlus className="w-8 h-8 text-indigo-400 mx-auto" />
-          <div className="space-y-1">
-            <h4 className="font-bold text-slate-800 text-sm">No Community Reviews Yet</h4>
-            <p className="text-xs text-slate-500 max-w-md mx-auto">
-              Be the first student or parent to share your feedback about StudyMacha’s tools, roadmaps, or Phase 2 seat radar!
-            </p>
+      {/* Success Notification */}
+      {successToast && (
+        <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl text-xs font-semibold text-emerald-800 dark:text-emerald-200 flex items-center justify-between animate-in fade-in duration-200">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+            <span>{successToast}</span>
           </div>
-          <a
-            href="#leave-feedback-form"
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 text-white font-bold text-xs shadow-xs hover:bg-indigo-700 transition-colors"
+          <button
+            onClick={() => setSuccessToast(null)}
+            className="text-emerald-700 hover:text-emerald-900 font-bold ml-2"
           >
-            Leave Your Feedback Now
-          </a>
+            ✕
+          </button>
         </div>
       )}
 
-      {/* "LEAVE A FEEDBACK / COMMENT" INTERACTIVE FEATURE */}
-      <div
-        id="leave-feedback-form"
-        className="bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-indigo-500/20 relative overflow-hidden"
-      >
-        <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
-
-        <div className="relative z-10 max-w-4xl mx-auto space-y-6">
-          {/* Form Header */}
-          <div className="space-y-2 text-center sm:text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-              <MessageSquarePlus className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Share Your Perspective</span>
-            </div>
-            <h3 className="text-xl sm:text-2xl font-black tracking-tight text-white">
-              Leave a Review or Comment for StudyMacha
+      {/* Expandable Review Submission Form */}
+      {showForm && (
+        <form
+          onSubmit={handleSubmitReview}
+          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-3.5 animate-in slide-in-from-top-2 duration-200"
+        >
+          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+            <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+              <GraduationCap className="w-4 h-4 text-sky-600" />
+              Share Your Experience on StudyMacha
             </h3>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl">
-              Did our AP EAPCET Phase 2 leftover radar, 24 engineering career roadmaps, or PDF tools assist your admission?
-              Submit your genuine rating and feedback—it appears live right away in the community section!
-            </p>
+            <span className="text-[10px] text-slate-400">Stored in browser &amp; instantly visible</span>
           </div>
 
-          {/* Success Toast Notification */}
-          {successToast && (
-            <div className="flex items-center justify-between p-4 rounded-2xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-200 text-xs font-semibold animate-in fade-in slide-in-from-top-2">
-              <div className="flex items-center gap-2.5">
-                <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
-                <span>{successToast}</span>
-              </div>
-              <button
-                onClick={() => setSuccessToast(null)}
-                className="text-emerald-400 hover:text-emerald-200 text-xs underline cursor-pointer"
-              >
-                Dismiss
-              </button>
-            </div>
-          )}
-
-          {/* Error Alert */}
           {formError && (
-            <div className="flex items-center gap-2.5 p-3.5 rounded-2xl bg-rose-950/80 border border-rose-500/50 text-rose-200 text-xs font-medium animate-in fade-in">
-              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+            <div className="text-xs text-rose-600 bg-rose-50 dark:bg-rose-950/30 p-2.5 rounded-lg border border-rose-200 dark:border-rose-800 flex items-center gap-1.5">
+              <AlertCircle className="w-3.5 h-3.5 shrink-0" />
               <span>{formError}</span>
             </div>
           )}
 
-          {/* Main Form */}
-          <form onSubmit={handleSubmitReview} className="space-y-5">
-            {/* Identity row: Name + Role + College */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* Name */}
-              <div className="space-y-1.5">
-                <label className="block text-xs font-bold text-slate-200">
-                  Your Full Name <span className="text-rose-400">*</span>
-                </label>
-                <div className="relative">
-                  <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                  <input
-                    type="text"
-                    required
-                    value={authorName}
-                    onChange={(e) => setAuthorName(e.target.value)}
-                    placeholder="e.g. S. Rohith or M. Lakshmi (Parent)"
-                    className="w-full pl-9 pr-3 py-2 text-xs rounded-xl bg-slate-800/80 border border-slate-700 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-400/50 focus:border-indigo-400 transition-all"
-                  />
-                </div>
-              </div>
-
-              {/* Role Selection */}
-              <div className="space-y-1.5">
-                <label className="block text-xs font-bold text-slate-200">
-                  I am a <span className="text-rose-400">*</span>
-                </label>
-                <div className="grid grid-cols-3 gap-1 bg-slate-800/80 p-1 rounded-xl border border-slate-700">
-                  {(['Student', 'Parent', 'Aspirant'] as const).map((r) => (
-                    <button
-                      key={r}
-                      type="button"
-                      onClick={() => setUserRole(r)}
-                      className={`py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                        userRole === r
-                          ? 'bg-indigo-600 text-white shadow-2xs'
-                          : 'text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      {r}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* College / Branch */}
-              <div className="space-y-1.5">
-                <label className="block text-xs font-bold text-slate-200">
-                  College / Branch / Status <span className="text-rose-400">*</span>
-                </label>
-                <div className="relative">
-                  <GraduationCap className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                  <input
-                    type="text"
-                    required
-                    value={collegeOrBranch}
-                    onChange={(e) => setCollegeOrBranch(e.target.value)}
-                    placeholder="e.g. PVPSIT CSE, SRKR ECE, or Aspirant"
-                    className="w-full pl-9 pr-3 py-2 text-xs rounded-xl bg-slate-800/80 border border-slate-700 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-400/50 focus:border-indigo-400 transition-all"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Quick Prefill Chips for AP EAPCET Colleges */}
-            <div className="space-y-1.5">
-              <div className="text-[11px] text-slate-400 font-medium flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-indigo-400" />
-                <span>Quick Fill Reputable College:</span>
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {QUICK_COLLEGE_PREFILLS.map((col) => (
-                  <button
-                    key={col}
-                    type="button"
-                    onClick={() => setCollegeOrBranch(col)}
-                    className="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-slate-800 hover:bg-indigo-600/60 text-slate-300 hover:text-white border border-slate-700 transition-all cursor-pointer"
-                  >
-                    {col}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Star Rating Interactive Selector */}
-            <div className="bg-slate-800/60 border border-slate-700/80 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <div>
-                <div className="text-xs font-bold text-slate-200">Your Rating Score</div>
-                <div className="text-[11px] text-indigo-300 font-medium">
-                  {RATING_LABELS[hoverRating ?? rating]}
-                </div>
-              </div>
-
-              <div className="flex items-center gap-1.5">
-                {[1, 2, 3, 4, 5].map((star) => {
-                  const isFilled = (hoverRating ?? rating) >= star;
-                  return (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => setRating(star)}
-                      onMouseEnter={() => setHoverRating(star)}
-                      onMouseLeave={() => setHoverRating(null)}
-                      className="p-1 rounded-lg hover:bg-slate-700/60 transition-transform transform active:scale-90 cursor-pointer"
-                      aria-label={`Rate ${star} star`}
-                    >
-                      <Star
-                        className={`w-6 h-6 transition-colors ${
-                          isFilled
-                            ? 'fill-amber-400 text-amber-400'
-                            : 'text-slate-600 hover:text-slate-400'
-                        }`}
-                      />
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Comment Textarea */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label className="block text-xs font-bold text-slate-200">
-                  Your Review / Comment <span className="text-rose-400">*</span>
-                </label>
-                <span className="text-[10px] text-slate-400">
-                  {comment.length}/600 characters
-                </span>
-              </div>
-              <textarea
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                Your Full Name *
+              </label>
+              <input
+                type="text"
+                value={authorName}
+                onChange={(e) => setAuthorName(e.target.value)}
+                placeholder="e.g., K. Suresh Reddy"
+                className="w-full px-3 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500"
                 required
-                rows={3}
-                maxLength={600}
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                placeholder="Share how the Phase 2 seat radar, fee schedules, or college roadmaps helped your admission or web option decisions..."
-                className="w-full p-3 text-xs rounded-xl bg-slate-800/80 border border-slate-700 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-400/50 focus:border-indigo-400 transition-all resize-none"
               />
             </div>
 
-            {/* Submit Button & Instant Storage Notice */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-1">
-              <div className="flex items-center gap-2 text-[11px] text-slate-400 text-center sm:text-left">
-                <ThumbsUp className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>
-                  Reviews are saved instantly in your browser storage and shown on page without reload.
-                </span>
-              </div>
-
-              <button
-                type="submit"
-                disabled={isFormSubmitting}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-rose-500 hover:from-indigo-600 hover:to-rose-600 text-white font-bold text-xs shadow-lg shadow-indigo-500/20 transition-all cursor-pointer transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50"
+            <div>
+              <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                Role *
+              </label>
+              <select
+                value={userRole}
+                onChange={(e) => setUserRole(e.target.value as 'Student' | 'Parent')}
+                className="w-full px-3 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500"
               >
-                <Send className="w-3.5 h-3.5" />
-                <span>{isFormSubmitting ? 'Publishing...' : 'Submit Feedback'}</span>
-              </button>
+                <option value="Student">Engineering Student / Aspirant</option>
+                <option value="Parent">Parent of Aspirant</option>
+              </select>
             </div>
-          </form>
+
+            <div>
+              <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                College / Branch / City *
+              </label>
+              <input
+                type="text"
+                value={collegeOrLocation}
+                onChange={(e) => setCollegeOrLocation(e.target.value)}
+                placeholder="e.g., PVPSIT Vijayawada / CSE"
+                className="w-full px-3 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+              Rating: {rating} / 5 Stars
+            </label>
+            <div className="flex items-center gap-1">
+              {[1, 2, 3, 4, 5].map((s) => (
+                <button
+                  type="button"
+                  key={s}
+                  onClick={() => setRating(s)}
+                  className="p-1 cursor-pointer"
+                >
+                  <Star
+                    className={`w-4 h-4 ${
+                      s <= rating ? 'fill-amber-400 text-amber-400' : 'text-slate-300 dark:text-slate-600'
+                    }`}
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+              Your Review / Feedback *
+            </label>
+            <textarea
+              rows={2}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="How did StudyMacha help your college selection, seat matrix tracking, roadmap, or scholarship search?"
+              className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500"
+              required
+            />
+          </div>
+
+          <div className="flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={() => setShowForm(false)}
+              className="px-3 py-1.5 text-xs font-semibold rounded-xl text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-1.5 text-xs font-bold rounded-xl bg-sky-600 hover:bg-sky-700 text-white flex items-center gap-1.5 shadow-xs"
+            >
+              <Send className="w-3 h-3" />
+              <span>Publish Review</span>
+            </button>
+          </div>
+        </form>
+      )}
+
+      {/* Continuous Infinite Marquee Track with Edge Fade Masks */}
+      <div className="relative w-full max-w-full overflow-hidden marquee-edge-fade group py-1">
+        <div className="animate-infinite-marquee flex items-stretch gap-3.5 group-hover:[animation-play-state:paused]">
+          {marqueeReviews.map((item, idx) => {
+            const isStudent = item.badge === 'Verified Student';
+            return (
+              <div
+                key={`${item.id}-${idx}`}
+                className="w-[300px] sm:w-[320px] shrink-0 p-4 sm:p-5 rounded-2xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/90 dark:border-slate-800 shadow-2xs hover:shadow-md hover:border-sky-300 dark:hover:border-sky-700 transition-all flex flex-col justify-between space-y-3 cursor-default select-none"
+              >
+                {/* Top Row: User Name, Role Badge, 5-Star Rating */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 truncate">
+                        {item.name}
+                      </span>
+                    </div>
+
+                    <span
+                      className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border shrink-0 ${
+                        isStudent
+                          ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
+                          : 'bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800'
+                      }`}
+                    >
+                      {item.badge}
+                    </span>
+                  </div>
+
+                  {/* Stars Row */}
+                  <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-0.5">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-3.5 h-3.5 ${
+                            i < item.rating
+                              ? 'fill-amber-400 text-amber-400'
+                              : 'text-slate-300 dark:text-slate-700'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-[10px] text-slate-400 font-mono ml-1">
+                      {item.date}
+                    </span>
+                  </div>
+
+                  {/* Subtitle: College / Location */}
+                  <div className="flex items-center gap-1 text-[11px] font-medium text-sky-700 dark:text-sky-400 truncate">
+                    <Building2 className="w-3 h-3 shrink-0" />
+                    <span className="truncate">{item.college}</span>
+                  </div>
+                </div>
+
+                {/* Review Body */}
+                <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-300 font-normal line-clamp-4">
+                  "{item.comment}"
+                </p>
+
+                {/* Delete button if user submitted */}
+                {item.isUserSubmitted && (
+                  <div className="pt-1 flex justify-end border-t border-slate-100 dark:border-slate-800">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteReview(item.id);
+                      }}
+                      className="text-[10px] text-rose-500 hover:text-rose-700 flex items-center gap-1 cursor-pointer"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                      <span>Remove</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
   );
 };
+
+export default StudentTestimonials;

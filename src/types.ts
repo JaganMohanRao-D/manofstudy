@@ -1,8 +1,21 @@
+export type WorkspaceView =
+  | 'hub'
+  | 'eapcet'
+  | 'roadmaps'
+  | 'scholarships'
+  | 'utilities'
+  | 'compiler'
+  | 'dsa'
+  | 'academics'
+  | 'attendance'
+  | 'gpa';
+
 export type ToolTab = 
   | 'eapcet-radar'
   | 'roadmaps'
   | 'scholarships'
   | 'pdf-tools'
+  | 'compiler'
   | 'resume-checker'
   | 'attendance' 
   | 'gpa' 

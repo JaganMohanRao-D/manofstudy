@@ -22,7 +22,9 @@ import {
   Layers,
   ArrowUpRight,
   BookOpen,
+  Eye,
 } from 'lucide-react';
+import { ScholarshipDetailsModal } from './ScholarshipDetailsModal';
 
 export interface IndianScholarship {
   id: string;
@@ -34,6 +36,48 @@ export interface IndianScholarship {
   amount: string;
   deadline: string;
   apply_link: string;
+}
+
+export function isExclusivelyForGirls(s: IndianScholarship): boolean {
+  const exclusiveGirlIds = [
+    'aicte-pragati-scholarship-2026',
+    'kotak-kanya-scholarship-2026',
+    'amazon-future-engineer-2026',
+    'loreal-for-young-women-2026',
+    'begum-hazrat-mahal-2026',
+    'dr-reddy-sashakt-scholarship-2026',
+    'adobe-women-in-tech-2026',
+  ];
+  if (exclusiveGirlIds.includes(s.id)) return true;
+  const titleAndTarget = (s.title + ' ' + s.target).toLowerCase();
+  return (
+    titleAndTarget.includes('for girls') ||
+    titleAndTarget.includes('kanya') ||
+    titleAndTarget.includes('female engineering')
+  );
+}
+
+export function getScholarshipSummary(s: IndianScholarship): string {
+  if (s.id === 'sbi-asha-scholarship-2026') {
+    return 'Merit & need grant for Class 9–12 and college students across India with family income ≤ ₹3–6 Lakhs. Open to all genders.';
+  }
+  if (s.id === 'reliance-foundation-ug-2026') {
+    return 'Prestigious CSR grant of up to ₹2 Lakhs for 1st-year undergraduates across all disciplines with household income < ₹15 Lakhs.';
+  }
+  if (s.id === 'hdfc-parivartan-ecss-2026') {
+    return 'Crisis support grant covering up to ₹75,000 for school, diploma, polytechnic, and undergraduate students from vulnerable families.';
+  }
+  if (s.id === 'aicte-pragati-scholarship-2026') {
+    return 'Special government grant of ₹50,000/year for meritorious female students enrolled in AICTE technical degree and diploma colleges.';
+  }
+  if (s.id === 'tata-capital-pankh-2026') {
+    return 'Financial grant of up to 80% tuition fees for Class 11-12, diploma, and undergraduate students with family income ≤ ₹4 Lakhs.';
+  }
+  const parts = s.eligibility.split('.');
+  if (parts.length > 1 && parts[0].length >= 40) {
+    return parts[0].trim() + '.';
+  }
+  return s.eligibility.length > 130 ? s.eligibility.slice(0, 125).trim() + '.' : s.eligibility;
 }
 
 // Initial full dataset matching /public/indian_scholarships.json
@@ -66,7 +110,7 @@ const INITIAL_SCHOLARSHIPS: IndianScholarship[] = [
     provider: 'SBI Foundation',
     category: 'Corporate CSR',
     target: 'Class 9–12, UG, PG, Medical, IIT, IIM & Overseas Students',
-    eligibility: 'Min 75% marks/7.5 CGPA (relaxation to 65% for SC/ST, 60% for PwBD), family income ≤ ₹3 Lakhs (school) or ≤ ₹6 Lakhs (UG/PG/Medical/IIT/IIM), 50% seats reserved for girls',
+    eligibility: 'Min 75% marks/7.5 CGPA (relaxation to 65% for SC/ST, 60% for PwBD), family income ≤ ₹3 Lakhs (school) or ≤ ₹6 Lakhs (UG/PG/Medical/IIT/IIM). Open to All Genders (Boys & Girls, with 50% reservation for female students)',
     amount: '₹15,000 (School) to ₹15,00,000+ (Overseas PG); ₹75,000 (UG), ₹2,50,000 (PG), ₹4,50,000 (Medical)',
     deadline: 'Check Official Portal (typically Jul–Sep)',
     apply_link: 'https://www.sbiashascholarship.co.in',
@@ -352,6 +396,7 @@ type FastFilter = 'all' | 'engineering' | 'corporate' | 'govt' | 'girls';
 
 export const ScholarshipsHub: React.FC = () => {
   const [scholarships, setScholarships] = useState<IndianScholarship[]>(INITIAL_SCHOLARSHIPS);
+  const [selectedScholarship, setSelectedScholarship] = useState<IndianScholarship | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeFilter, setActiveFilter] = useState<FastFilter>('all');
@@ -445,14 +490,7 @@ export const ScholarshipsHub: React.FC = () => {
           s.category.toLowerCase().includes('scheme') ||
           s.category.toLowerCase().includes('portal');
       } else if (activeFilter === 'girls') {
-        const text = (s.title + ' ' + s.target + ' ' + s.eligibility).toLowerCase();
-        matchFilter =
-          text.includes('girl') ||
-          text.includes('female') ||
-          text.includes('women') ||
-          text.includes('kanya') ||
-          s.id.includes('pragati') ||
-          s.id.includes('begum');
+        matchFilter = isExclusivelyForGirls(s) || (s.title + ' ' + s.target).toLowerCase().includes('girls') || s.eligibility.toLowerCase().includes('reservation for female');
       }
 
       // 2. Search Query Matching across all fields
@@ -524,17 +562,9 @@ export const ScholarshipsHub: React.FC = () => {
     {
       id: 'girls',
       label: 'Girl Students & STEM',
-      count: scholarships.filter((s) => {
-        const text = (s.title + ' ' + s.target + ' ' + s.eligibility).toLowerCase();
-        return (
-          text.includes('girl') ||
-          text.includes('female') ||
-          text.includes('women') ||
-          text.includes('kanya') ||
-          s.id.includes('pragati') ||
-          s.id.includes('begum')
-        );
-      }).length,
+      count: scholarships.filter(
+        (s) => isExclusivelyForGirls(s) || (s.title + ' ' + s.target).toLowerCase().includes('girls') || s.eligibility.toLowerCase().includes('reservation for female')
+      ).length,
     },
   ];
 
@@ -610,42 +640,39 @@ export const ScholarshipsHub: React.FC = () => {
 
       {/* 1. Flagship Scholarship Showcase Carousel */}
       {currentFlagship && (
-        <div className="relative overflow-hidden rounded-3xl bg-slate-950 text-white border border-slate-800 shadow-xl p-6 sm:p-8">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-sky-500/15 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none -ml-20 -mb-20" />
-
+        <div className="relative overflow-hidden rounded-2xl bg-white text-slate-900 border border-slate-200/90 shadow-sm p-5 sm:p-7">
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="space-y-3 max-w-2xl">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-500/20 text-sky-300 border border-sky-500/30">
-                  <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
+                  <Sparkles className="w-3.5 h-3.5 text-blue-600" />
                   Flagship Opportunity #{carouselIndex + 1} of {flagshipScholarships.length}
                 </span>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
                   {currentFlagship.category}
                 </span>
               </div>
 
               <div>
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-white leading-tight">
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">
                   {currentFlagship.title}
                 </h2>
-                <p className="text-xs sm:text-sm text-sky-300/90 font-medium mt-1 flex items-center gap-1.5">
-                  <Building2 className="w-3.5 h-3.5 text-sky-400" />
+                <p className="text-xs sm:text-sm text-blue-600 font-medium mt-1 flex items-center gap-1.5">
+                  <Building2 className="w-3.5 h-3.5 text-blue-600" />
                   Provided by {currentFlagship.provider}
                 </p>
               </div>
 
-              <p className="text-xs sm:text-sm text-slate-300 line-clamp-2 leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-600 line-clamp-2 leading-relaxed">
                 {currentFlagship.eligibility}
               </p>
 
               <div className="flex flex-wrap items-center gap-3 pt-1">
-                <div className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold text-xs sm:text-sm">
-                  <IndianRupee className="w-4 h-4 text-emerald-400" />
+                <div className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold text-xs sm:text-sm">
+                  <IndianRupee className="w-4 h-4 text-emerald-600" />
                   <span>{currentFlagship.amount}</span>
                 </div>
-                <div className="inline-flex items-center gap-1 text-xs text-slate-400">
+                <div className="inline-flex items-center gap-1 text-xs text-slate-500">
                   <Calendar className="w-3.5 h-3.5 text-slate-400" />
                   <span>{currentFlagship.deadline}</span>
                 </div>
@@ -658,7 +685,7 @@ export const ScholarshipsHub: React.FC = () => {
                 href={currentFlagship.apply_link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/20 transition-all duration-200 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-500/20 transition-all duration-200 cursor-pointer"
               >
                 <span>Apply Now</span>
                 <ExternalLink className="w-4 h-4" />
@@ -672,7 +699,7 @@ export const ScholarshipsHub: React.FC = () => {
                       key={idx}
                       onClick={() => setCarouselIndex(idx)}
                       className={`h-2 rounded-full transition-all cursor-pointer ${
-                        carouselIndex === idx ? 'w-6 bg-sky-400' : 'w-2 bg-slate-700 hover:bg-slate-500'
+                        carouselIndex === idx ? 'w-6 bg-blue-600' : 'w-2 bg-slate-300 hover:bg-slate-400'
                       }`}
                       aria-label={`Slide ${idx + 1}`}
                     />
@@ -682,14 +709,14 @@ export const ScholarshipsHub: React.FC = () => {
                 <div className="flex items-center gap-1 ml-2">
                   <button
                     onClick={handlePrevFlagship}
-                    className="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 transition-colors cursor-pointer"
+                    className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
                     aria-label="Previous Scholarship"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
                   <button
                     onClick={handleNextFlagship}
-                    className="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 transition-colors cursor-pointer"
+                    className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
                     aria-label="Next Scholarship"
                   >
                     <ChevronRight className="w-4 h-4" />
@@ -739,7 +766,7 @@ export const ScholarshipsHub: React.FC = () => {
               onClick={() => setActiveFilter(btn.id)}
               className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-semibold transition-all whitespace-nowrap cursor-pointer ${
                 activeFilter === btn.id
-                  ? 'bg-slate-950 text-white shadow-xs'
+                  ? 'bg-blue-600 text-white shadow-xs font-bold'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
               }`}
             >
@@ -759,16 +786,8 @@ export const ScholarshipsHub: React.FC = () => {
       {/* 3. Scholarship Card Grid (Responsive 3-Column Layout) */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
         {filteredScholarships.map((scholarship) => {
-          const isGirlsTarget =
-            (scholarship.title + ' ' + scholarship.target + ' ' + scholarship.eligibility)
-              .toLowerCase()
-              .includes('girl') ||
-            (scholarship.title + ' ' + scholarship.target + ' ' + scholarship.eligibility)
-              .toLowerCase()
-              .includes('female') ||
-            (scholarship.title + ' ' + scholarship.target + ' ' + scholarship.eligibility)
-              .toLowerCase()
-              .includes('kanya');
+          const isExclusiveGirls = isExclusivelyForGirls(scholarship);
+          const genderTag = isExclusiveGirls ? 'Girl Students Only' : 'All Genders (Boys & Girls)';
 
           const isGovt =
             scholarship.category.toLowerCase().includes('government') ||
@@ -778,7 +797,8 @@ export const ScholarshipsHub: React.FC = () => {
           return (
             <div
               key={scholarship.id}
-              className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs hover:shadow-md hover:border-sky-300 transition-all duration-200 flex flex-col justify-between space-y-4 group"
+              onClick={() => setSelectedScholarship(scholarship)}
+              className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs hover:shadow-md hover:border-sky-300 transition-all duration-200 flex flex-col justify-between space-y-4 group cursor-pointer"
             >
               {/* Card Top: Provider Icon, Category Badge & Target */}
               <div className="space-y-3">
@@ -804,11 +824,15 @@ export const ScholarshipsHub: React.FC = () => {
                   </div>
 
                   <div className="flex flex-col items-end gap-1">
-                    {isGirlsTarget && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-pink-50 text-pink-700 border border-pink-200">
-                        Girl Students
-                      </span>
-                    )}
+                    <span
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                        isExclusiveGirls
+                          ? 'bg-pink-50 text-pink-700 border-pink-200'
+                          : 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                      }`}
+                    >
+                      {genderTag}
+                    </span>
                     <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-600 text-right max-w-[120px] truncate">
                       {scholarship.target.split('(')[0].trim()}
                     </span>
@@ -837,14 +861,20 @@ export const ScholarshipsHub: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Eligibility Summary */}
+                {/* Clean 2-Line Summary (No arbitrary ... truncation) */}
                 <div className="text-xs text-slate-600 space-y-1 bg-slate-50/80 rounded-xl p-3 border border-slate-100">
-                  <span className="font-bold text-slate-700 block text-[11px] uppercase tracking-wider flex items-center gap-1">
-                    <BookOpen className="w-3 h-3 text-slate-400" />
-                    Eligibility Criteria:
-                  </span>
-                  <p className="text-[11px] leading-relaxed text-slate-600 line-clamp-3">
-                    {scholarship.eligibility}
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-slate-700 block text-[11px] uppercase tracking-wider flex items-center gap-1">
+                      <BookOpen className="w-3 h-3 text-slate-400" />
+                      Eligibility Summary
+                    </span>
+                    <span className="text-[10px] text-sky-600 font-bold group-hover:underline flex items-center gap-0.5">
+                      <Eye className="w-3 h-3" />
+                      Details
+                    </span>
+                  </div>
+                  <p className="text-[11px] leading-relaxed text-slate-600 font-normal">
+                    {getScholarshipSummary(scholarship)}
                   </p>
                 </div>
 
@@ -857,21 +887,39 @@ export const ScholarshipsHub: React.FC = () => {
                 </div>
               </div>
 
-              {/* Card Footer: Action Buttons with prominent "Apply Now" button */}
+              {/* Card Footer: Action Buttons with prominent "Apply Now" and "View Details" buttons */}
               <div className="space-y-2 pt-3 border-t border-slate-100">
-                <a
-                  href={scholarship.apply_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-emerald-600 text-white font-bold text-xs transition-colors cursor-pointer group/btn shadow-xs"
-                >
-                  <span>Apply Now</span>
-                  <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
-                </a>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedScholarship(scholarship);
+                    }}
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors cursor-pointer"
+                  >
+                    <Eye className="w-3.5 h-3.5 text-slate-600" />
+                    <span>View Details</span>
+                  </button>
+
+                  <a
+                    href={scholarship.apply_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-colors cursor-pointer group/btn shadow-xs"
+                  >
+                    <span>Apply Now</span>
+                    <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                  </a>
+                </div>
 
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => handleShareToWhatsApp(scholarship)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleShareToWhatsApp(scholarship);
+                    }}
                     className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-[11px] font-medium text-emerald-800 transition-colors cursor-pointer"
                     title="Share details via WhatsApp"
                   >
@@ -880,7 +928,10 @@ export const ScholarshipsHub: React.FC = () => {
                   </button>
 
                   <button
-                    onClick={() => handleCopyLink(scholarship.id, scholarship.apply_link)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCopyLink(scholarship.id, scholarship.apply_link);
+                    }}
                     className="flex items-center justify-center gap-1 py-1.5 px-3 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-[11px] font-medium text-slate-600 transition-colors cursor-pointer"
                     title="Copy official portal URL"
                   >
@@ -1022,6 +1073,14 @@ export const ScholarshipsHub: React.FC = () => {
           })}
         </div>
       </div>
+
+      {/* Comprehensive Details Modal */}
+      {selectedScholarship && (
+        <ScholarshipDetailsModal
+          scholarship={selectedScholarship}
+          onClose={() => setSelectedScholarship(null)}
+        />
+      )}
     </div>
   );
 };

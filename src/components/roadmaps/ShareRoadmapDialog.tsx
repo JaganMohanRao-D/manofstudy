@@ -134,24 +134,24 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-slate-900 text-white p-5 flex items-start justify-between gap-3 border-b border-slate-800">
+        <div className="bg-slate-50 text-slate-900 p-5 flex items-start justify-between gap-3 border-b border-slate-200">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded-md text-[11px] font-black uppercase tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-400/30">
+              <span className="px-2 py-0.5 rounded-md text-[11px] font-black uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
                 {branch.code}
               </span>
-              <span className="text-xs font-semibold text-slate-300">
+              <span className="text-xs font-semibold text-slate-600">
                 {branch.categoryLabel}
               </span>
             </div>
             <h3
               id="share-dialog-title"
-              className="text-lg sm:text-xl font-black tracking-tight text-white flex items-center gap-2"
+              className="text-lg sm:text-xl font-black tracking-tight text-slate-900 flex items-center gap-2"
             >
-              <Share2 className="w-5 h-5 text-indigo-400" />
+              <Share2 className="w-5 h-5 text-blue-600" />
               <span>Share this Roadmap</span>
             </h3>
-            <p className="text-xs text-slate-300 line-clamp-1">
+            <p className="text-xs text-slate-600 line-clamp-1">
               {branch.name}
             </p>
           </div>
@@ -166,7 +166,7 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
               handleClose();
             }}
             title="Close dialog (Esc)"
-            className="p-2 rounded-xl bg-white/10 hover:bg-rose-600 active:scale-95 text-slate-200 hover:text-white transition-all cursor-pointer min-h-[40px] min-w-[40px] flex items-center justify-center"
+            className="p-2 rounded-xl bg-white hover:bg-rose-50 hover:text-rose-600 active:scale-95 text-slate-700 transition-all border border-slate-200 cursor-pointer min-h-[40px] min-w-[40px] flex items-center justify-center"
             aria-label="Close share dialog"
           >
             <X className="w-5 h-5" />

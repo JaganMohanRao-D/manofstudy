@@ -19,7 +19,6 @@ import { ENGINEERING_ROADMAPS } from '../data/engineeringRoadmapsData';
 import { generateRoadmapPdf } from '../utils/roadmapPdfGenerator';
 import { BranchCard } from './roadmaps/BranchCard';
 import { RoadmapModal } from './roadmaps/RoadmapModal';
-import { CleanAdBanner } from './CleanAdBanner';
 
 export interface EngineeringRoadmapsProps {
   targetBranchId?: string;
@@ -194,18 +193,18 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
   return (
     <div id="engineering-roadmaps-hub" className="space-y-6">
       {/* Top Banner Header */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-slate-800 p-6 sm:p-8 text-white shadow-md">
+      <div className="relative overflow-hidden rounded-2xl bg-white border border-slate-200/90 p-5 sm:p-6 text-slate-900 shadow-sm">
         <div className="relative z-10 max-w-4xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-            <Compass className="w-3.5 h-3.5 text-indigo-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+            <Compass className="w-3.5 h-3.5 text-blue-600" />
             <span>24 B.TECH COUNSELING BLUEPRINTS • ZERO SERVER CALLS</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
             Engineering Career &amp; Branch Roadmaps
           </h1>
 
-          <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-3xl">
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-3xl">
             Actionable 4-year semester blueprints, essential industry tech stacks, Tier-1 vs Tier-3 recruitment reality, high-impact portfolio projects, and 1-click PDF downloads for all major engineering branches.
           </p>
 
@@ -213,39 +212,25 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
             <button
               id="roadmap-share-link"
               onClick={handleShareHub}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-98 text-slate-200 hover:text-white text-xs sm:text-sm font-medium border border-white/10 transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 active:scale-98 text-slate-700 hover:text-slate-900 text-xs sm:text-sm font-medium border border-slate-200 transition-all cursor-pointer"
             >
               {copiedLink ? (
                 <>
-                  <Check className="w-4 h-4 text-emerald-400" />
-                  <span className="text-emerald-300">Link Copied!</span>
+                  <Check className="w-4 h-4 text-emerald-600" />
+                  <span className="text-emerald-700 font-bold">Link Copied!</span>
                 </>
               ) : (
                 <>
-                  <Share2 className="w-4 h-4" />
+                  <Share2 className="w-4 h-4 text-slate-500" />
                   <span>Share Roadmaps Hub</span>
                 </>
               )}
             </button>
-
-            {/* SmartLink Educational Callout Pill */}
-            <a
-              id="roadmap-smartlink-banner"
-              href="https://www.profitableratecpmnetwork.com/sb7m20ujb?key=eddca7b7e2f0ff83646873b5bc091020"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-500/20 hover:bg-indigo-500/30 active:scale-98 text-indigo-200 hover:text-white text-xs sm:text-sm font-semibold border border-indigo-400/30 transition-all shadow-xs group"
-              title="Verified partner technical internships, free certifications & job drives"
-            >
-              <Sparkles className="w-4 h-4 text-indigo-400" />
-              <span>Explore Top Tech Internships &amp; Certifications</span>
-              <span className="font-bold text-indigo-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
-            </a>
           </div>
         </div>
 
-        {/* Decorative background grid effect */}
-        <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-indigo-500/10 to-transparent pointer-events-none" />
+        {/* Decorative subtle gradient */}
+        <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-blue-50/50 to-transparent pointer-events-none" />
       </div>
 
       {/* Real-time Search & Navigation Bar */}
@@ -261,21 +246,8 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
             </p>
           </div>
 
-          {/* Stats Counter & SmartLink action pill */}
+          {/* Stats Counter */}
           <div className="flex flex-wrap items-center gap-2">
-            <a
-              id="roadmap-smartlink-toolbar"
-              href="https://www.profitableratecpmnetwork.com/sb7m20ujb?key=eddca7b7e2f0ff83646873b5bc091020"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 hover:bg-indigo-100/90 text-indigo-700 border border-indigo-200/80 transition-all shadow-2xs group"
-              title="Verified tech internships, free certifications & job drives"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-              <span>Explore Top Tech Internships &amp; Certifications</span>
-              <span className="font-bold text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
-            </a>
-
             <span
               id="roadmap-stats-counter"
               className="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200"
@@ -425,9 +397,6 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
           </div>
         )}
       </div>
-
-      {/* Clean Iframe Adsterra Display Banner */}
-      <CleanAdBanner />
 
       {/* Detailed Modal */}
       {activeModalBranch && (

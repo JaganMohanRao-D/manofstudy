@@ -252,17 +252,17 @@ export const ApEapcetRadar: React.FC<ApEapcetRadarProps> = () => {
   return (
     <div id="eapcet-radar-container" className="space-y-4">
       {/* 1. Dedicated Header Banner for Phase 2 Left Over Seats */}
-      <div className="bg-white border border-rose-200/90 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 mt-2">
         <div className="flex items-start sm:items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center shrink-0 shadow-2xs">
-            <Flame className="w-6 h-6 text-rose-600" />
+          <div className="w-11 h-11 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center shrink-0 shadow-xs">
+            <Flame className="w-6 h-6 text-blue-600" />
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
                 AP EAPCET Phase 2 Left Over Seats Radar
               </h2>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
                 Phase 2 Vacancies
               </span>
             </div>
@@ -272,20 +272,20 @@ export const ApEapcetRadar: React.FC<ApEapcetRadarProps> = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0 self-start md:self-auto bg-slate-50 border border-slate-200/80 rounded-xl px-3 py-2 text-xs">
-          <div>
-            <div className="text-[10px] uppercase font-bold text-slate-400">Total Vacant</div>
-            <div className="text-sm font-extrabold text-rose-600">{filteredTotalVacancies.toLocaleString('en-IN')}</div>
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0 self-start md:self-auto bg-slate-50 border border-slate-200/80 rounded-xl px-3.5 py-2.5 text-xs">
+          <div className="min-w-[72px]">
+            <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">TOTAL VACANT</div>
+            <div className="text-sm sm:text-base font-extrabold text-blue-600 font-mono">{filteredTotalVacancies.toLocaleString('en-IN')}</div>
           </div>
-          <div className="w-px h-6 bg-slate-200" />
-          <div>
-            <div className="text-[10px] uppercase font-bold text-slate-400">Colleges</div>
-            <div className="text-sm font-extrabold text-slate-900">{filteredTotalColleges}</div>
+          <div className="w-px h-7 bg-slate-200" />
+          <div className="min-w-[64px]">
+            <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">COLLEGES</div>
+            <div className="text-sm sm:text-base font-extrabold text-slate-900 font-mono">{filteredTotalColleges}</div>
           </div>
-          <div className="w-px h-6 bg-slate-200" />
-          <div>
-            <div className="text-[10px] uppercase font-bold text-slate-400">Total Intake</div>
-            <div className="text-sm font-extrabold text-emerald-700">{totalSystemIntake.toLocaleString('en-IN')}</div>
+          <div className="w-px h-7 bg-slate-200" />
+          <div className="min-w-[78px]">
+            <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">TOTAL INTAKE</div>
+            <div className="text-sm sm:text-base font-extrabold text-emerald-700 font-mono">{totalSystemIntake.toLocaleString('en-IN')}</div>
           </div>
         </div>
       </div>
@@ -346,7 +346,7 @@ export const ApEapcetRadar: React.FC<ApEapcetRadarProps> = () => {
                     setCurrentPage(1);
                   }}
                   placeholder="Search college name, code (e.g. VRSE, AUCE, JNTUK, VITAP) or city..."
-                  className="w-full pl-10 pr-9 py-2.5 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all"
+                  className="w-full pl-10 pr-9 py-2.5 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 />
                 {searchQuery && (
                   <button
@@ -364,7 +364,7 @@ export const ApEapcetRadar: React.FC<ApEapcetRadarProps> = () => {
                   <strong>{filteredTotalColleges}</strong> Colleges
                 </span>
                 <span className="text-slate-300">•</span>
-                <span className="font-bold text-rose-700">
+                <span className="font-bold text-blue-700">
                   <strong>{filteredTotalVacancies.toLocaleString('en-IN')}</strong> Phase 2 Leftover Seats
                 </span>
                 <span className="text-slate-300">•</span>
@@ -384,7 +384,7 @@ export const ApEapcetRadar: React.FC<ApEapcetRadarProps> = () => {
                     setSelectedDistrict(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 font-medium cursor-pointer"
+                  className="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-medium cursor-pointer"
                 >
                   <option value="all">📍 All Districts ({districts.length})</option>
                   {districts.map((d) => (
@@ -403,7 +403,7 @@ export const ApEapcetRadar: React.FC<ApEapcetRadarProps> = () => {
                     setSelectedBranch(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 font-medium cursor-pointer"
+                  className="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-medium cursor-pointer"
                 >
                   <option value="all">⚡ All Branches ({branchCodes.length})</option>
                   {branchCodes.map((b) => (
@@ -419,7 +419,7 @@ export const ApEapcetRadar: React.FC<ApEapcetRadarProps> = () => {
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 font-medium cursor-pointer"
+                  className="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-medium cursor-pointer"
                 >
                   <option value="all">👥 Quota: All Categories</option>
                   <option value="OC">OC (Open Competition)</option>
@@ -444,7 +444,7 @@ export const ApEapcetRadar: React.FC<ApEapcetRadarProps> = () => {
                       setHideZeroVacancy(e.target.checked);
                       setCurrentPage(1);
                     }}
-                    className="w-4 h-4 text-rose-600 rounded border-slate-300 focus:ring-rose-500"
+                    className="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500"
                   />
                   <span>Hide 0 Left</span>
                 </label>
@@ -467,7 +467,7 @@ export const ApEapcetRadar: React.FC<ApEapcetRadarProps> = () => {
             {paginatedColleges.map((college) => (
               <div
                 key={college.inst_code}
-                className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs hover:border-rose-300 transition-colors space-y-4"
+                className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs hover:border-blue-300 transition-colors space-y-4"
               >
                 {/* College Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
@@ -519,42 +519,48 @@ export const ApEapcetRadar: React.FC<ApEapcetRadarProps> = () => {
 
                 {/* Branches Vacancy Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-                  {college.branches.map((b) => (
-                    <div
-                      key={b.branch_code}
-                      className={`p-3 rounded-xl border transition-colors flex items-center justify-between gap-2 ${
-                        b.left_over_seats > 0
-                          ? 'bg-rose-50/40 border-rose-200/70 text-slate-900'
-                          : 'bg-slate-50 border-slate-200 text-slate-400'
-                      }`}
-                    >
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-bold text-xs font-mono text-slate-900">
-                            {b.branch_code}
-                          </span>
-                          <span className="text-[10px] text-slate-500 truncate">
-                            ({b.branch_name})
-                          </span>
-                        </div>
-                        <div className="text-[10px] text-slate-500 mt-0.5">
-                          ₹{b.fee.toLocaleString('en-IN')}/year
-                        </div>
-                      </div>
+                  {college.branches.map((b) => {
+                    const seats = parseInt(String((b as any).leftSeats ?? (b as any).seats ?? b.left_over_seats ?? 0), 10);
+                    const totalSeats = parseInt(String(b.total_seats ?? 0), 10);
+                    const hasAvailableSeats = seats > 0;
 
-                      <div className="text-right shrink-0">
-                        <span
-                          className={`inline-block px-2 py-0.5 rounded-full text-xs font-bold ${
-                            b.left_over_seats > 0
-                              ? 'bg-rose-600 text-white shadow-2xs'
-                              : 'bg-slate-200 text-slate-600'
-                          }`}
-                        >
-                          {b.left_over_seats} / {b.total_seats} Left
-                        </span>
+                    return (
+                      <div
+                        key={b.branch_code}
+                        className={`p-3 rounded-xl border transition-colors flex items-center justify-between gap-2 ${
+                          hasAvailableSeats
+                            ? 'bg-emerald-50/40 border-emerald-200/80 text-slate-900'
+                            : 'bg-slate-50 border-slate-200 text-slate-400'
+                        }`}
+                      >
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-bold text-xs font-mono text-slate-900">
+                              {b.branch_code}
+                            </span>
+                            <span className="text-[10px] text-slate-500 truncate">
+                              ({b.branch_name})
+                            </span>
+                          </div>
+                          <div className="text-[10px] text-slate-500 mt-0.5">
+                            ₹{b.fee.toLocaleString('en-IN')}/year
+                          </div>
+                        </div>
+
+                        <div className="text-right shrink-0">
+                          <span
+                            className={`inline-block ${
+                              hasAvailableSeats
+                                ? 'bg-emerald-500 text-white font-bold px-3 py-1 rounded-full text-xs shadow-sm'
+                                : 'bg-rose-600 text-white font-bold px-3 py-1 rounded-full text-xs shadow-sm'
+                            }`}
+                          >
+                            {seats} / {totalSeats} Left
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             ))}
