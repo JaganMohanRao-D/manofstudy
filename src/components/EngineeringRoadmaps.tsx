@@ -19,10 +19,12 @@ import { ENGINEERING_ROADMAPS } from '../data/engineeringRoadmapsData';
 import { generateRoadmapPdf } from '../utils/roadmapPdfGenerator';
 import { BranchCard } from './roadmaps/BranchCard';
 import { RoadmapModal } from './roadmaps/RoadmapModal';
+import { BranchToolsBanner } from './BranchToolsBanner';
 
 export interface EngineeringRoadmapsProps {
   targetBranchId?: string;
   onSelectBranch?: (branchId: string) => void;
+  onNavigateToStore?: (category?: string) => void;
 }
 
 const POPULAR_QUICK_SEARCHES = [
@@ -51,6 +53,7 @@ const CATEGORY_TABS = [
 export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
   targetBranchId,
   onSelectBranch,
+  onNavigateToStore,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -364,6 +367,11 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
         )}
       </div>
 
+      {/* In-Context Recommended Tools & Laptops Banner */}
+      <BranchToolsBanner
+        onNavigateToStore={onNavigateToStore}
+      />
+
       {/* Visual Directory: 3-Column / 4-Column Grid of Branch Cards */}
       <div className="space-y-4">
         {filteredBranches.length > 0 ? (
@@ -406,6 +414,7 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
           onClose={handleCloseBranchModal}
           onDownloadPdf={handleDownloadPdf}
           isExportingPdf={isExportingPdf}
+          onNavigateToStore={onNavigateToStore}
         />
       )}
     </div>

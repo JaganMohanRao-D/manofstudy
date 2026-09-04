@@ -2,8 +2,13 @@ import React, { useState, useMemo } from 'react';
 import { GraduationCap, Calculator, Target, BookOpen, Info, CheckCircle2, AlertCircle } from 'lucide-react';
 import { GpaFormulaId, FutureGpaState } from '../types';
 import { GPA_FORMULAS, convertGpaToPercentage, predictFutureGpa } from '../utils/gpa';
+import { CasioCalculatorCard } from './CasioCalculatorCard';
 
-export const GlobalGpaHub: React.FC = () => {
+export interface GlobalGpaHubProps {
+  onNavigateToStore?: () => void;
+}
+
+export const GlobalGpaHub: React.FC<GlobalGpaHubProps> = ({ onNavigateToStore }) => {
   // Feature 1: SGPA / CGPA Converter State
   const [scoreInput, setScoreInput] = useState<number>(8.5);
   const [selectedFormula, setSelectedFormula] = useState<GpaFormulaId>('jntu_standard');
@@ -504,6 +509,9 @@ export const GlobalGpaHub: React.FC = () => {
           </table>
         </div>
       </div>
+
+      {/* Mandatory Engineering Exam Equipment Card */}
+      <CasioCalculatorCard onNavigateToStore={onNavigateToStore} />
     </div>
   );
 };

@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { BranchRoadmap } from '../../types';
 import { ShareRoadmapDialog } from './ShareRoadmapDialog';
+import { BranchToolsBanner } from '../BranchToolsBanner';
 
 export interface RoadmapModalProps {
   branch: BranchRoadmap;
@@ -31,6 +32,7 @@ export interface RoadmapModalProps {
   onClose: () => void;
   onDownloadPdf: (branch: BranchRoadmap) => void;
   isExportingPdf: boolean;
+  onNavigateToStore?: (category?: string) => void;
 }
 
 export const RoadmapModal: React.FC<RoadmapModalProps> = ({
@@ -39,6 +41,7 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
   onClose,
   onDownloadPdf,
   isExportingPdf,
+  onNavigateToStore,
 }) => {
   const [selectedYear, setSelectedYear] = useState<number>(1);
   const [copiedLink, setCopiedLink] = useState(false);
@@ -564,6 +567,18 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* SECTION 6: In-Context Recommended Tools & Laptops */}
+          <div className="pt-2">
+            <BranchToolsBanner
+              branchName={branch.name}
+              branchCode={branch.code}
+              onNavigateToStore={onNavigateToStore ? () => {
+                handleModalClose();
+                onNavigateToStore('Engineering & Laptops');
+              } : undefined}
+            />
           </div>
         </div>
 

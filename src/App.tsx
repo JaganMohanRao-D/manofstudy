@@ -22,6 +22,7 @@ import {
   Award,
   Bot,
   FileCheck,
+  ShoppingBag,
 } from 'lucide-react';
 import { ToolTab, ToolMeta, WorkspaceView } from './types';
 import { Header } from './components/Header';
@@ -43,6 +44,7 @@ import { StudentTestimonials } from './components/StudentTestimonials';
 import { CommandPalette } from './components/CommandPalette';
 import { DsaPlacementTracker } from './components/DsaPlacementTracker';
 import { CodeStudioCompiler } from './components/CodeStudioCompiler';
+import { StudentEssentialsStore } from './components/StudentEssentialsStore';
 
 export const TOOLS_CONFIG: ToolMeta[] = [
   {
@@ -125,6 +127,14 @@ export const TOOLS_CONFIG: ToolMeta[] = [
     description: 'Real-feel AI pattern scanner & natural conversational rewriter',
     badge: 'AI Scanner',
   },
+  {
+    id: 'essentials',
+    name: 'Student Essentials & Academic Gear Store',
+    shortName: 'Student Gear',
+    category: 'academic',
+    description: 'Verified scientific calculators, coding laptops, PYQs, and study gear with direct Amazon links',
+    badge: 'Amazon Store',
+  },
 ];
 
 export default function App() {
@@ -192,6 +202,14 @@ export default function App() {
       } else if (hash === 'academics') {
         setActiveWorkspace('academics');
       } else if (
+        hash === 'essentials' ||
+        hash === 'store' ||
+        hash === 'gear' ||
+        hash === 'academic-store' ||
+        hash === 'student-gear'
+      ) {
+        setActiveWorkspace('essentials');
+      } else if (
         hash === 'utilities' ||
         hash === 'pdf-tools' ||
         hash === 'pdf' ||
@@ -246,6 +264,8 @@ export default function App() {
       handleSelectWorkspace('compiler');
     } else if (tab === 'attendance') {
       handleSelectWorkspace('attendance');
+    } else if (tab === 'essentials' || tab === 'store') {
+      handleSelectWorkspace('essentials');
     } else if (tab === 'gpa' || tab === 'internal-calc') {
       handleSelectWorkspace('gpa');
       if (tab === 'internal-calc') setGpaSubTab('internal');
@@ -308,6 +328,12 @@ export default function App() {
         return {
           title: 'StudyMacha CodeStudio | Online Code Playground & Compiler',
           icon: <Terminal className="w-4 h-4 text-teal-600" />,
+        };
+      case 'essentials':
+      case 'store':
+        return {
+          title: 'Verified Student Essentials & Academic Gear Store',
+          icon: <ShoppingBag className="w-4 h-4 text-amber-500" />,
         };
       default:
         return {
@@ -420,7 +446,11 @@ export default function App() {
                     </button>
                   </div>
 
-                  {gpaSubTab === 'gpa' ? <GlobalGpaHub /> : <InternalExamEstimator />}
+                  {gpaSubTab === 'gpa' ? (
+                    <GlobalGpaHub onNavigateToStore={() => handleSelectWorkspace('essentials')} />
+                  ) : (
+                    <InternalExamEstimator onNavigateToStore={() => handleSelectWorkspace('essentials')} />
+                  )}
                 </div>
               )}
 
@@ -467,8 +497,12 @@ export default function App() {
                   </div>
 
                   {academicSubTab === 'attendance' && <AttendanceDefender />}
-                  {academicSubTab === 'gpa' && <GlobalGpaHub />}
-                  {academicSubTab === 'internal' && <InternalExamEstimator />}
+                  {academicSubTab === 'gpa' && (
+                    <GlobalGpaHub onNavigateToStore={() => handleSelectWorkspace('essentials')} />
+                  )}
+                  {academicSubTab === 'internal' && (
+                    <InternalExamEstimator onNavigateToStore={() => handleSelectWorkspace('essentials')} />
+                  )}
                 </div>
               )}
 
@@ -480,6 +514,7 @@ export default function App() {
                 <EngineeringRoadmaps
                   targetBranchId={targetRoadmapBranchId}
                   onSelectBranch={(branchId) => setTargetRoadmapBranchId(branchId)}
+                  onNavigateToStore={() => handleSelectWorkspace('essentials')}
                 />
               )}
 
@@ -497,6 +532,12 @@ export default function App() {
 
               {activeWorkspace === 'compiler' && (
                 <CodeStudioCompiler />
+              )}
+
+              {(activeWorkspace === 'essentials' || activeWorkspace === 'store') && (
+                <StudentEssentialsStore
+                  onNavigateToRoadmaps={() => handleSelectWorkspace('roadmaps')}
+                />
               )}
 
               {activeWorkspace === 'utilities' && (
@@ -541,8 +582,12 @@ export default function App() {
                     {utilitySubTab === 'pdf-tools' && <PdfPowerTools />}
                     {utilitySubTab === 'resizer' && <ImageResizer />}
                     {utilitySubTab === 'resume-checker' && <AtsResumeMatcher />}
-                    {utilitySubTab === 'gpa' && <GlobalGpaHub />}
-                    {utilitySubTab === 'internal-calc' && <InternalExamEstimator />}
+                    {utilitySubTab === 'gpa' && (
+                      <GlobalGpaHub onNavigateToStore={() => handleSelectWorkspace('essentials')} />
+                    )}
+                    {utilitySubTab === 'internal-calc' && (
+                      <InternalExamEstimator onNavigateToStore={() => handleSelectWorkspace('essentials')} />
+                    )}
                     {utilitySubTab === 'attendance' && <AttendanceDefender />}
                     {utilitySubTab === 'humanizer' && <AiHumanizer />}
                   </div>

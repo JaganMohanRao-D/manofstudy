@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   ChevronRight,
   Terminal,
+  ShoppingBag,
 } from 'lucide-react';
 import { ToolTab, WorkspaceView } from '../types';
 import { LegalModalType } from './LegalModals';
@@ -134,6 +135,12 @@ export const Header: React.FC<HeaderProps> = ({
       label: 'DSA & Coding',
       icon: Code2,
     },
+    {
+      id: 'essentials',
+      workspace: 'essentials',
+      label: '🛍️ Student Gear',
+      icon: ShoppingBag,
+    },
   ];
 
   return (
@@ -178,6 +185,7 @@ export const Header: React.FC<HeaderProps> = ({
               const Icon = item.icon;
               const isActive =
                 activeWorkspace === item.workspace ||
+                (item.workspace === 'essentials' && (activeWorkspace === 'store' || activeWorkspace === 'essentials')) ||
                 (item.workspace === 'academics' && (activeWorkspace === 'attendance' || activeWorkspace === 'gpa')) ||
                 (item.workspace === 'dsa' && activeWorkspace === 'compiler');
 
@@ -281,6 +289,7 @@ export const Header: React.FC<HeaderProps> = ({
               const Icon = item.icon;
               const isActive =
                 activeWorkspace === item.workspace ||
+                (item.workspace === 'essentials' && (activeWorkspace === 'store' || activeWorkspace === 'essentials')) ||
                 (item.workspace === 'academics' && (activeWorkspace === 'attendance' || activeWorkspace === 'gpa')) ||
                 (item.workspace === 'dsa' && activeWorkspace === 'compiler');
 

@@ -9,6 +9,7 @@ import {
   ArrowRight,
   ShieldCheck,
   Award,
+  ShoppingBag,
 } from 'lucide-react';
 import { WorkspaceView } from '../types';
 
@@ -95,6 +96,17 @@ const WORKSPACES: WorkspaceItem[] = [
     icon: FileText,
     accentColor: 'text-sky-600 bg-sky-50 border-sky-100',
     hoverRing: 'hover:border-sky-300 hover:shadow-sky-100/50',
+  },
+  {
+    id: 'ws-essentials',
+    workspace: 'essentials',
+    title: '🛍️ Student Essentials & Academic Gear Store',
+    badge: 'Amazon Verified',
+    badgeColor: 'bg-amber-50 text-amber-800 border-amber-200',
+    description: 'Casio fx-991CW calculators, engineering laptops, EAPCET/NEET PYQ bundles, and silent study peripherals.',
+    icon: ShoppingBag,
+    accentColor: 'text-amber-600 bg-amber-50 border-amber-100',
+    hoverRing: 'hover:border-amber-300 hover:shadow-amber-100/50',
   },
 ];
 

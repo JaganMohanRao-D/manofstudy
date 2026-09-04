@@ -28,6 +28,7 @@ import {
   MessageSquare,
   HelpCircle,
   Terminal,
+  ShoppingBag,
 } from 'lucide-react';
 import { ToolTab } from '../types';
 import { ENGINEERING_ROADMAPS } from '../data/engineeringRoadmapsData';
@@ -190,6 +191,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         icon: <Terminal className="w-4 h-4 text-teal-500" />,
         keywords: ['compiler', 'code', 'python', 'c', 'cpp', 'java', 'javascript', 'ide', 'run code', 'lab', 'programming', 'codestudio'],
         action: () => onSelectTool('compiler'),
+      },
+      {
+        id: 'tool-essentials',
+        title: '🛍️ Student Essentials & Academic Gear Store',
+        subtitle: 'Casio fx-991CW calculators, engineering laptops, EAPCET/NEET PYQs & study audio',
+        category: 'Core Tools',
+        badge: 'Amazon Store',
+        icon: <ShoppingBag className="w-4 h-4 text-amber-500" />,
+        keywords: ['store', 'gear', 'essentials', 'calculator', 'casio', 'fx991cw', 'laptop', 'amazon', 'books', 'pyq', 'keyboard', 'mouse', 'headphones'],
+        action: () => onSelectTool('essentials'),
       }
     );
 

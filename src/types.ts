@@ -8,7 +8,9 @@ export type WorkspaceView =
   | 'dsa'
   | 'academics'
   | 'attendance'
-  | 'gpa';
+  | 'gpa'
+  | 'essentials'
+  | 'store';
 
 export type ToolTab = 
   | 'eapcet-radar'
@@ -21,7 +23,9 @@ export type ToolTab =
   | 'gpa' 
   | 'internal-calc'
   | 'resizer' 
-  | 'humanizer';
+  | 'humanizer'
+  | 'essentials'
+  | 'store';
 
 export type ToolCategory = 'academic' | 'document' | 'writing' | 'counselling' | 'scholarship';
 

@@ -10,8 +10,13 @@ import {
 } from 'lucide-react';
 import { InternalCalcState, MidCalcMethod } from '../types';
 import { calculateInternalCutoff } from '../utils/internalCalc';
+import { CasioCalculatorCard } from './CasioCalculatorCard';
 
-export const InternalExamEstimator: React.FC = () => {
+export interface InternalExamEstimatorProps {
+  onNavigateToStore?: () => void;
+}
+
+export const InternalExamEstimator: React.FC<InternalExamEstimatorProps> = ({ onNavigateToStore }) => {
   const [calcState, setCalcState] = useState<InternalCalcState>({
     mid1Scored: 24,
     mid1Max: 30,
@@ -481,6 +486,9 @@ export const InternalExamEstimator: React.FC = () => {
           </table>
         </div>
       </section>
+
+      {/* Mandatory Exam Scientific Calculator Recommendation */}
+      <CasioCalculatorCard onNavigateToStore={onNavigateToStore} />
     </div>
   );
 };
