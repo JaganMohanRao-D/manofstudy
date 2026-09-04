@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   X,
   Download,
@@ -23,8 +23,9 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { BranchRoadmap } from '../../types';
+import { ShareRoadmapDialog } from './ShareRoadmapDialog';
 
-interface RoadmapModalProps {
+export interface RoadmapModalProps {
   branch: BranchRoadmap;
   isOpen: boolean;
   onClose: () => void;
@@ -41,23 +42,49 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
 }) => {
   const [selectedYear, setSelectedYear] = useState<number>(1);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [showShareDialog, setShowShareDialog] = useState<boolean>(false);
 
-  // Close on Escape
+  // Safe modal close handler with residual dimmer DOM cleanup
+  const handleModalClose = useCallback(() => {
+    setShowShareDialog(false);
+    document.body.style.overflow = '';
+    onClose();
+
+    // DOM cleanup safeguard to prevent any orphaned dimmer loops
+    setTimeout(() => {
+      const strayDimmers = document.querySelectorAll('#roadmap-modal-dimmer, #share-dialog-dimmer');
+      strayDimmers.forEach((el) => {
+        if (el.parentNode && el.parentNode.childNodes.length === 1) {
+          el.parentNode.removeChild(el);
+        }
+      });
+    }, 50);
+  }, [onClose]);
+
+  // Global keydown listener for immediate Escape key dismissal
   useEffect(() => {
+    if (!isOpen) return;
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose();
+        e.preventDefault();
+        e.stopPropagation();
+        if (showShareDialog) {
+          setShowShareDialog(false);
+        } else {
+          handleModalClose();
+        }
       }
     };
-    if (isOpen) {
-      window.addEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'hidden';
-    }
+
+    window.addEventListener('keydown', handleKeyDown, true);
+    document.body.style.overflow = 'hidden';
+
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'auto';
+      window.removeEventListener('keydown', handleKeyDown, true);
+      document.body.style.overflow = '';
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, showShareDialog, handleModalClose]);
 
   if (!isOpen) return null;
 
@@ -66,27 +93,35 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
   const techStack = branch.strategicOverview.standardTechStack;
   const higherStudies = branch.strategicOverview.higherStudiesGate;
 
-  const handleShare = () => {
-    const url = `${window.location.origin}${window.location.pathname}#branch=${branch.id}`;
-    navigator.clipboard.writeText(url);
-    setCopiedLink(true);
-    setTimeout(() => setCopiedLink(false), 2500);
+  const handleOpenShare = () => {
+    setShowShareDialog(true);
   };
 
   return (
     <div
       id="roadmap-modal-overlay"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-hidden"
     >
+      {/* 1. Strict Background Dimmer Overlay with direct Click & TouchEnd listeners */}
+      <div
+        id="roadmap-modal-dimmer"
+        className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm cursor-pointer z-0 transition-opacity animate-in fade-in duration-200"
+        onClick={handleModalClose}
+        onTouchEnd={(e) => {
+          e.preventDefault();
+          handleModalClose();
+        }}
+        aria-label="Close roadmap modal backdrop"
+      />
+
+      {/* 2. Modal Content Container */}
       <div
         id="roadmap-modal-container"
-        className="relative w-full max-w-5xl max-h-[92vh] flex flex-col bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-200"
+        className="relative z-10 w-full max-w-5xl max-h-[92vh] flex flex-col bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-200"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-branch-title"
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Sticky Executive Header */}
         <div className="shrink-0 bg-slate-900 text-white p-5 sm:p-6 border-b border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -121,7 +156,7 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
               id="modal-download-pdf-btn"
               onClick={() => onDownloadPdf(branch)}
               disabled={isExportingPdf}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 active:scale-98 text-white text-xs sm:text-sm font-bold shadow-md transition-all cursor-pointer disabled:opacity-60"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 active:scale-98 text-white text-xs sm:text-sm font-bold shadow-md transition-all cursor-pointer disabled:opacity-60 min-h-[44px]"
             >
               <Download className="w-4 h-4" />
               <span>{isExportingPdf ? 'Generating PDF...' : 'Download Full PDF'}</span>
@@ -129,22 +164,24 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
 
             <button
               id="modal-share-btn"
-              onClick={handleShare}
-              title="Copy shareable link"
-              className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 active:scale-98 text-slate-200 transition-colors border border-white/10 cursor-pointer"
+              onClick={handleOpenShare}
+              title="Share this Roadmap"
+              className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 active:scale-98 text-slate-200 hover:text-white transition-colors border border-white/10 cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
+              aria-label="Share this Roadmap"
             >
-              {copiedLink ? (
-                <Check className="w-4 h-4 text-emerald-400" />
-              ) : (
-                <Share2 className="w-4 h-4" />
-              )}
+              <Share2 className="w-4 h-4" />
             </button>
 
             <button
               id="modal-close-btn"
-              onClick={onClose}
+              onClick={handleModalClose}
+              onTouchEnd={(e) => {
+                e.preventDefault();
+                handleModalClose();
+              }}
               title="Close modal (Esc)"
-              className="p-2.5 rounded-xl bg-white/10 hover:bg-rose-600 active:scale-98 text-slate-200 hover:text-white transition-colors cursor-pointer"
+              className="p-2.5 rounded-xl bg-white/10 hover:bg-rose-600 active:scale-98 text-slate-200 hover:text-white transition-colors cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
+              aria-label="Close modal"
             >
               <X className="w-5 h-5" />
             </button>
@@ -541,8 +578,12 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <button
               type="button"
-              onClick={onClose}
-              className="flex-1 sm:flex-initial px-4 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs border border-slate-200 transition-colors cursor-pointer"
+              onClick={handleModalClose}
+              onTouchEnd={(e) => {
+                e.preventDefault();
+                handleModalClose();
+              }}
+              className="flex-1 sm:flex-initial px-4 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs border border-slate-200 transition-colors cursor-pointer min-h-[40px]"
             >
               Close
             </button>
@@ -551,7 +592,7 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
               type="button"
               onClick={() => onDownloadPdf(branch)}
               disabled={isExportingPdf}
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white font-bold text-xs shadow-xs transition-all cursor-pointer disabled:opacity-60"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white font-bold text-xs shadow-xs transition-all cursor-pointer disabled:opacity-60 min-h-[40px]"
             >
               <Download className="w-4 h-4" />
               <span>{isExportingPdf ? 'Generating PDF...' : 'Download PDF Roadmap'}</span>
@@ -559,6 +600,15 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
           </div>
         </div>
       </div>
+
+      {/* 3. Share this Roadmap Dialog */}
+      {showShareDialog && (
+        <ShareRoadmapDialog
+          branch={branch}
+          isOpen={showShareDialog}
+          onClose={() => setShowShareDialog(false)}
+        />
+      )}
     </div>
   );
 };

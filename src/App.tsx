@@ -29,8 +29,10 @@ import { InternalExamEstimator } from './components/InternalExamEstimator';
 import { ScholarshipsHub } from './components/ScholarshipsHub';
 import { EngineeringRoadmaps } from './components/EngineeringRoadmaps';
 import { EducationalGuideAndSeo } from './components/EducationalGuideAndSeo';
+import { StudentFaq } from './components/StudentFaq';
 import { StudentTestimonials } from './components/StudentTestimonials';
 import { CommandPalette } from './components/CommandPalette';
+import { CleanAdBanner } from './components/CleanAdBanner';
 
 export const TOOLS_CONFIG: ToolMeta[] = [
   {
@@ -374,7 +376,18 @@ export default function App() {
 
         {/* 4. Educational Guides & Methodology Documentation */}
         <EducationalGuideAndSeo />
+
+        {/* 5. Comprehensive Expandable Student FAQ */}
+        <StudentFaq
+          onSelectTab={(tab) => handleTabChange(tab)}
+          onOpenLegal={(type) => setLegalModal(type)}
+        />
       </main>
+
+      {/* Clean Iframe Adsterra Display Banner: Just above the footer across main pages */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <CleanAdBanner />
+      </div>
 
       {/* 5. Comprehensive AdSense-Ready Footer */}
       <footer
@@ -644,6 +657,17 @@ export default function App() {
                     className="hover:text-sky-600 transition-colors text-left cursor-pointer"
                   >
                     Contact Grievance Officer
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => {
+                      const el = document.getElementById('student-faq-section');
+                      if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="hover:text-sky-600 transition-colors text-left cursor-pointer flex items-center gap-1.5 font-semibold text-slate-800"
+                  >
+                    <span>❓ Student FAQs &amp; Knowledge Base</span>
                   </button>
                 </li>
                 <li>

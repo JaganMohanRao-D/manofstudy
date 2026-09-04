@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   X,
   ShieldCheck,
@@ -36,6 +36,27 @@ export const LegalModals: React.FC<LegalModalsProps> = ({
   const [contactSender, setContactSender] = useState('');
   const [contactSent, setContactSent] = useState(false);
 
+  // Close on Escape key and clean up body scroll
+  useEffect(() => {
+    if (!type) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown, true);
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown, true);
+      document.body.style.overflow = '';
+    };
+  }, [type, onClose]);
+
   if (!type) return null;
 
   const supportEmail = 'support.jamord@gmail.com';
@@ -57,8 +78,31 @@ export const LegalModals: React.FC<LegalModalsProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs overflow-y-auto">
-      <div className="bg-white border border-slate-200 rounded-2xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl space-y-6 my-8 animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
+    <div
+      id="legal-modal-root"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto"
+      role="region"
+      aria-label="Legal compliance dialog"
+    >
+      {/* Background Dimmer Overlay with direct click & touch listener */}
+      <div
+        id="legal-modal-dimmer"
+        className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs cursor-pointer z-0 transition-opacity animate-in fade-in duration-150"
+        onClick={onClose}
+        onTouchEnd={(e) => {
+          e.preventDefault();
+          onClose();
+        }}
+        aria-label="Close dialog background"
+      />
+
+      {/* Modal Container */}
+      <div
+        className="relative z-10 bg-white border border-slate-200 rounded-2xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl space-y-6 my-8 animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+      >
         {/* Modal Header */}
         <div className="flex items-start justify-between gap-4 pb-4 border-b border-slate-100 shrink-0">
           <div className="flex items-center gap-3">

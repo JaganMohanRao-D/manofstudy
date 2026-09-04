@@ -251,6 +251,19 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         },
       },
       {
+        id: 'action-faq',
+        title: 'Frequently Asked Questions (FAQ)',
+        subtitle: 'Engineering roadmaps, PDF privacy, scholarships & developer mission',
+        category: 'Quick Actions',
+        badge: 'Help',
+        icon: <HelpCircle className="w-4 h-4 text-sky-500" />,
+        keywords: ['faq', 'questions', 'developer', 'mission', 'btech', 'pdf tools', 'roadmaps', 'scholarships', 'privacy'],
+        action: () => {
+          const el = document.getElementById('student-faq-section');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        },
+      },
+      {
         id: 'action-grievance',
         title: 'Contact Grievance Officer',
         subtitle: 'Direct support for student grievances & counseling assistance',

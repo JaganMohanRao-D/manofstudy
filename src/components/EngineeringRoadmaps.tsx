@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import {
   Compass,
   Download,
@@ -19,6 +19,7 @@ import { ENGINEERING_ROADMAPS } from '../data/engineeringRoadmapsData';
 import { generateRoadmapPdf } from '../utils/roadmapPdfGenerator';
 import { BranchCard } from './roadmaps/BranchCard';
 import { RoadmapModal } from './roadmaps/RoadmapModal';
+import { CleanAdBanner } from './CleanAdBanner';
 
 export interface EngineeringRoadmapsProps {
   targetBranchId?: string;
@@ -59,6 +60,15 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
   const [isSearchFocused, setIsSearchFocused] = useState<boolean>(false);
   const [navFeedback, setNavFeedback] = useState<string | null>(null);
+
+  // Clean dismissal handler that clears modal state and URL hash without looping
+  const handleCloseBranchModal = useCallback(() => {
+    setActiveModalBranch(null);
+    document.body.style.overflow = '';
+    if (typeof window !== 'undefined' && window.location.hash.includes('branch=')) {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  }, []);
 
   // Sync when targetBranchId prop changes from parent or Command Palette
   useEffect(() => {
@@ -217,6 +227,20 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
                 </>
               )}
             </button>
+
+            {/* SmartLink Educational Callout Pill */}
+            <a
+              id="roadmap-smartlink-banner"
+              href="https://www.profitableratecpmnetwork.com/sb7m20ujb?key=eddca7b7e2f0ff83646873b5bc091020"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-500/20 hover:bg-indigo-500/30 active:scale-98 text-indigo-200 hover:text-white text-xs sm:text-sm font-semibold border border-indigo-400/30 transition-all shadow-xs group"
+              title="Verified partner technical internships, free certifications & job drives"
+            >
+              <Sparkles className="w-4 h-4 text-indigo-400" />
+              <span>Explore Top Tech Internships &amp; Certifications</span>
+              <span className="font-bold text-indigo-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
+            </a>
           </div>
         </div>
 
@@ -237,11 +261,24 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
             </p>
           </div>
 
-          {/* Stats Counter */}
-          <div className="flex items-center gap-2">
+          {/* Stats Counter & SmartLink action pill */}
+          <div className="flex flex-wrap items-center gap-2">
+            <a
+              id="roadmap-smartlink-toolbar"
+              href="https://www.profitableratecpmnetwork.com/sb7m20ujb?key=eddca7b7e2f0ff83646873b5bc091020"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 hover:bg-indigo-100/90 text-indigo-700 border border-indigo-200/80 transition-all shadow-2xs group"
+              title="Verified tech internships, free certifications & job drives"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+              <span>Explore Top Tech Internships &amp; Certifications</span>
+              <span className="font-bold text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
+            </a>
+
             <span
               id="roadmap-stats-counter"
-              className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200"
+              className="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200"
             >
               Showing {filteredBranches.length} of {ENGINEERING_ROADMAPS.length} Engineering Branches
             </span>
@@ -389,12 +426,15 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
         )}
       </div>
 
+      {/* Clean Iframe Adsterra Display Banner */}
+      <CleanAdBanner />
+
       {/* Detailed Modal */}
       {activeModalBranch && (
         <RoadmapModal
           branch={activeModalBranch}
           isOpen={Boolean(activeModalBranch)}
-          onClose={() => setActiveModalBranch(null)}
+          onClose={handleCloseBranchModal}
           onDownloadPdf={handleDownloadPdf}
           isExportingPdf={isExportingPdf}
         />
