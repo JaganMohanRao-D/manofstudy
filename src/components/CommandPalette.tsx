@@ -30,6 +30,8 @@ import {
   Terminal,
   ShoppingBag,
   Heart,
+  Briefcase,
+  Star,
 } from 'lucide-react';
 import { ToolTab } from '../types';
 import { ENGINEERING_ROADMAPS } from '../data/engineeringRoadmapsData';
@@ -94,6 +96,30 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         icon: <Flame className="w-4 h-4 text-rose-500" />,
         keywords: ['eapcet', 'phase 2', 'leftover', 'seats', 'cutoff', 'counseling', 'colleges', 'fee', 'vacancy'],
         action: () => onSelectTool('eapcet-radar'),
+      },
+      {
+        id: 'tool-projects',
+        title: 'Campus Placement Major Projects Hub',
+        subtitle: '15+ high-impact resume projects with architectural diagrams (URL shortener, Blockchain, OS)',
+        category: 'Core Tools',
+        badge: 'Major Projects',
+        icon: <Star className="w-4 h-4 text-amber-500" />,
+        keywords: ['project', 'major project', 'resume', 'architecture', 'blockchain', 'url shortener', 'scheduler', 'placement'],
+        action: () => {
+          onSelectTool('projects' as any);
+        },
+      },
+      {
+        id: 'tool-internships',
+        title: 'Verified Student Internships Radar',
+        subtitle: '100% verified non-scam internships: AICTE Portal, GSoC, DRDO/ISRO Trainees, LFX',
+        category: 'Core Tools',
+        badge: 'Internships',
+        icon: <Briefcase className="w-4 h-4 text-emerald-500" />,
+        keywords: ['internship', 'aicte', 'gsoc', 'google summer of code', 'isro', 'drdo', 'stipend', 'trainee'],
+        action: () => {
+          onSelectTool('internships' as any);
+        },
       },
       {
         id: 'tool-roadmaps',

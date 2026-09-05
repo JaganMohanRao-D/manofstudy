@@ -18,9 +18,12 @@ import {
   ShoppingBag,
   Heart,
   BookOpen,
+  Briefcase,
+  Star,
 } from 'lucide-react';
 import { ToolTab, WorkspaceView } from '../types';
 import { LegalModalType } from './LegalModals';
+import { NavigationDrawer } from './NavigationDrawer';
 
 export interface HeaderProps {
   activeWorkspace?: WorkspaceView;
@@ -44,6 +47,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenSupport,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const [isMegaDrawerOpen, setIsMegaDrawerOpen] = useState<boolean>(false);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
   // Initialize theme from localStorage or document class
@@ -269,14 +273,16 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </button>
 
-          {/* Mobile Hamburger Menu Toggle */}
+          {/* Top-Right Hamburger Slide-Over Mega Drawer Trigger (Accessible on all viewports) */}
           <button
             type="button"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer flex-shrink-0"
-            aria-label="Toggle Navigation Menu"
+            id="header-hamburger-drawer-btn"
+            onClick={() => setIsMegaDrawerOpen(true)}
+            className="p-2 text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-cyan-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer flex-shrink-0 flex items-center justify-center border border-slate-200 dark:border-slate-800 shadow-2xs"
+            title="Open StudyMacha Mega Menu & Student Hubs"
+            aria-label="Open Navigation Mega Drawer"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            <Menu className="w-5 h-5 text-indigo-600 dark:text-cyan-400" />
           </button>
         </div>
       </div>
@@ -399,6 +405,17 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
       )}
+
+      {/* Top-Right Hamburger Slide-Over Mega Drawer */}
+      <NavigationDrawer
+        isOpen={isMegaDrawerOpen}
+        onClose={() => setIsMegaDrawerOpen(false)}
+        onSelectWorkspace={(ws, subTab) => {
+          handleNavClick(ws, subTab as any);
+        }}
+        onOpenSupport={onOpenSupport}
+        onOpenFeedback={() => onOpenLegal?.('contact')}
+      />
     </header>
   );
 };

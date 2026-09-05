@@ -36,33 +36,46 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap): void {
   let currentY = marginTop + 4;
 
   // ----------------------------------------------------
-  // WATERMARK (Strictly 0.05 Opacity, Background Only)
+  // WATERMARK (Strictly 0.08 Opacity, Vector Emblem + Stylized Brand)
   // ----------------------------------------------------
   const renderBackgroundWatermark = () => {
     doc.saveGraphicsState();
     try {
-      // jsPDF GState for true 0.05 alpha transparency
+      // jsPDF GState for true 0.08 alpha transparency (never obscures text)
       // @ts-ignore
       if (typeof doc.GState === 'function') {
         // @ts-ignore
-        doc.setGState(new doc.GState({ opacity: 0.05 }));
+        doc.setGState(new doc.GState({ opacity: 0.08 }));
       }
     } catch {
       // Graceful fallback to ultra-light tint
     }
+
+    // Centered angled (38-degree) security watermark
+    const centerX = pageWidth / 2;
+    const centerY = pageHeight / 2;
+
+    // Stylish Vector Emblem & Text at 40 degrees
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(26);
-    doc.setTextColor(218, 224, 233); // Ultra subtle slate-200 tint
-    doc.text(BRAND_WATERMARK, pageWidth / 2, pageHeight / 2, {
+    doc.setFontSize(28);
+    doc.setTextColor(100, 116, 139); // Slate-500 with 0.08 opacity
+    doc.text(BRAND_WATERMARK, centerX, centerY, {
       align: 'center',
-      angle: 45,
+      angle: 40,
+    });
+
+    // Secondary subtle angle watermark below center
+    doc.setFontSize(14);
+    doc.text('OFFICIAL VERIFIED BLUEPRINT • AUTHENTIC ACADEMIC ASSET', centerX, centerY + 28, {
+      align: 'center',
+      angle: 40,
     });
 
     // Outer margin perimeter watermark for verified authenticity
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(6.5);
-    doc.setTextColor(226, 232, 240);
-    doc.text('STUDYMACHA OFFICIAL ACADEMIC OPERATING SYSTEM • 100% CLIENT-SIDE VERIFIED', pageWidth / 2, 292, {
+    doc.setTextColor(148, 163, 184);
+    doc.text('STUDYMACHA OFFICIAL ACADEMIC OPERATING SYSTEM • 100% CLIENT-SIDE VERIFIED • ANTI-SCRAPING PROTECTED', pageWidth / 2, 292, {
       align: 'center',
     });
     doc.restoreGraphicsState();
@@ -219,9 +232,8 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap): void {
   doc.text('1. STRATEGIC CAREER & COMPENSATION OVERVIEW', marginLeft, currentY + 4);
   currentY += sec1TitleHeight;
 
-  // Salary Tiers Card Box
-  const colW = (contentWidth - 6) / 3;
-  const salaryCardHeight = 24;
+  // Salary Tiers Card Box (3-column structured grid with explicit column widths: 31% width, 2% gap)
+  const salaryCardHeight = 28;
   drawCardBox(salaryCardHeight);
 
   const salaryBrackets = roadmap.strategicOverview?.salaryBrackets || {
@@ -230,27 +242,65 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap): void {
     peakTier: '₹35+ LPA / Global',
   };
 
+  const colWidthMm = contentWidth * 0.31; // ~55.2mm (31% width)
+  const gapWidthMm = contentWidth * 0.02; // ~3.6mm (2% margin-right gap)
+  const gridStartX = marginLeft + (contentWidth - (3 * colWidthMm + 2 * gapWidthMm)) / 2;
+
   const tiers = [
-    { label: 'ENTRY TIER (0-2 YRS)', val: salaryBrackets.entryTier, bg: [248, 250, 252], col: [71, 85, 105] },
-    { label: 'MID TIER (3-6 YRS)', val: salaryBrackets.midTier, bg: [240, 253, 250], col: [15, 118, 110] },
-    { label: 'PEAK / PRODUCT TIER', val: salaryBrackets.peakTier, bg: [240, 249, 255], col: [3, 105, 161] },
+    {
+      label: 'ENTRY TIER (0-2 YRS)',
+      val: salaryBrackets.entryTier,
+      subtext: 'Campus hiring & junior roles',
+      bg: [248, 250, 252], // #f8fafc
+      border: [226, 232, 240], // #e2e8f0
+      labelCol: [71, 85, 105], // Slate 600
+    },
+    {
+      label: 'MID TIER (3-6 YRS)',
+      val: salaryBrackets.midTier,
+      subtext: 'Senior tech / domain lead',
+      bg: [248, 250, 252], // #f8fafc
+      border: [226, 232, 240], // #e2e8f0
+      labelCol: [15, 118, 110], // Teal 700
+    },
+    {
+      label: 'PEAK / PRODUCT TIER',
+      val: salaryBrackets.peakTier,
+      subtext: 'Principal / MNC & Global',
+      bg: [248, 250, 252], // #f8fafc
+      border: [226, 232, 240], // #e2e8f0
+      labelCol: [3, 105, 161], // Sky 700
+    },
   ];
 
   tiers.forEach((t, i) => {
-    const tx = marginLeft + 3 + i * colW;
+    const tx = gridStartX + i * (colWidthMm + gapWidthMm);
+    const boxH = 22; // 8px padding equivalent
+    const boxY = currentY + 3;
+
+    // Structured column container: 31% width, 2% gap, #f8fafc bg, #e2e8f0 border, 8px radius
     doc.setFillColor(t.bg[0], t.bg[1], t.bg[2]);
-    doc.setDrawColor(226, 232, 240);
-    doc.roundedRect(tx, currentY + 2.5, colW - 2.5, 18.5, 1.8, 1.8, 'FD');
+    doc.setDrawColor(t.border[0], t.border[1], t.border[2]);
+    doc.setLineWidth(0.25);
+    doc.roundedRect(tx, boxY, colWidthMm, boxH, 2.5, 2.5, 'FD');
 
+    // Distinct Line 1: Tier Title (dedicated line-height)
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(6.5);
-    doc.setTextColor(t.col[0], t.col[1], t.col[2]);
-    doc.text(t.label, tx + (colW - 2.5) / 2, currentY + 7.5, { align: 'center' });
+    doc.setFontSize(6.4);
+    doc.setTextColor(t.labelCol[0], t.labelCol[1], t.labelCol[2]);
+    doc.text(t.label, tx + colWidthMm / 2, boxY + 5.8, { align: 'center' });
 
+    // Distinct Line 2: Minimum-Maximum LPA (bold, dedicated vertical spacing, zero collision)
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(9);
-    doc.setTextColor(15, 23, 42);
-    doc.text(t.val, tx + (colW - 2.5) / 2, currentY + 14, { align: 'center' });
+    doc.setFontSize(8.8);
+    doc.setTextColor(15, 23, 42); // Slate 900
+    doc.text(t.val, tx + colWidthMm / 2, boxY + 12.8, { align: 'center' });
+
+    // Distinct Line 3: Subtext / Scope
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(5.8);
+    doc.setTextColor(100, 116, 139); // Slate 500
+    doc.text(t.subtext, tx + colWidthMm / 2, boxY + 18.2, { align: 'center' });
   });
 
   currentY += salaryCardHeight + 3.2;

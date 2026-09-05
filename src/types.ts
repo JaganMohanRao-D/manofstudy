@@ -11,7 +11,9 @@ export type WorkspaceView =
   | 'gpa'
   | 'essentials'
   | 'store'
-  | 'guides';
+  | 'guides'
+  | 'projects'
+  | 'internships';
 
 export type ToolTab = 
   | 'eapcet-radar'
@@ -26,7 +28,9 @@ export type ToolTab =
   | 'resizer' 
   | 'humanizer'
   | 'essentials'
-  | 'store';
+  | 'store'
+  | 'projects'
+  | 'internships';
 
 export type ToolCategory = 'academic' | 'document' | 'writing' | 'counselling' | 'scholarship';
 

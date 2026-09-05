@@ -49,6 +49,8 @@ import { CommandPalette } from './components/CommandPalette';
 import { DsaPlacementTracker } from './components/DsaPlacementTracker';
 import { CodeStudioCompiler } from './components/CodeStudioCompiler';
 import { StudentEssentialsStore } from './components/StudentEssentialsStore';
+import { MajorProjectsHub } from './components/MajorProjectsHub';
+import { InternshipsRadar } from './components/InternshipsRadar';
 
 export const TOOLS_CONFIG: ToolMeta[] = [
   {
@@ -58,6 +60,22 @@ export const TOOLS_CONFIG: ToolMeta[] = [
     category: 'counselling',
     description: 'Live AP EAPCET Phase 2 leftover seats, college matrices & official branch fee schedules',
     badge: 'Phase 2 Live',
+  },
+  {
+    id: 'projects',
+    name: 'Campus Placement Major Projects Hub',
+    shortName: 'Major Projects',
+    category: 'academic',
+    description: '15+ high-impact resume projects with architectural diagrams: Distributed URL shortener, Blockchain, Mini OS, ER Triage',
+    badge: '⭐ 15+ Projects',
+  },
+  {
+    id: 'internships',
+    name: 'Verified Student Internships Radar',
+    shortName: 'Internships Radar',
+    category: 'academic',
+    description: '100% verified non-scam internships: AICTE Portal, Google Summer of Code, DRDO/ISRO Trainees, LFX Mentorship',
+    badge: '💼 Verified',
   },
   {
     id: 'roadmaps',
@@ -191,6 +209,10 @@ export default function App() {
         setEapcetPhase('phase2');
       } else if (hash.startsWith('roadmap') || hash === 'curriculum' || hash === 'branch') {
         setActiveWorkspace('roadmaps');
+      } else if (hash === 'projects' || hash === 'major-projects' || hash === 'majorprojects') {
+        setActiveWorkspace('projects');
+      } else if (hash === 'internships' || hash === 'internship' || hash === 'internships-radar') {
+        setActiveWorkspace('internships');
       } else if (hash === 'scholarships' || hash === 'scholarship') {
         setActiveWorkspace('scholarships');
       } else if (hash === 'dsa' || hash === 'tracker' || hash === 'placement') {
@@ -544,6 +566,14 @@ export default function App() {
                   onSelectBranch={(branchId) => setTargetRoadmapBranchId(branchId)}
                   onNavigateToStore={() => handleSelectWorkspace('essentials')}
                 />
+              )}
+
+              {activeWorkspace === 'projects' && (
+                <MajorProjectsHub />
+              )}
+
+              {activeWorkspace === 'internships' && (
+                <InternshipsRadar />
               )}
 
               {activeWorkspace === 'scholarships' && (

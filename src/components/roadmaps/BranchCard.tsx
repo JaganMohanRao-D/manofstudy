@@ -252,49 +252,49 @@ export const BranchCard: React.FC<BranchCardProps> = ({
       </div>
 
       {/* Card Content Body */}
-      <div className="flex-1 p-5 flex flex-col justify-between space-y-4 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100">
+      <div className="flex-1 p-5 flex flex-col justify-between space-y-4 bg-slate-900 text-slate-100 dark:bg-slate-900 dark:text-slate-100">
         <div className="space-y-2">
           {/* Badge Pill */}
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-900/50">
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 dark:bg-indigo-950/60 text-indigo-300 dark:text-indigo-300 border border-indigo-400/30 dark:border-indigo-900/50">
               <Compass className="w-3 h-3" />
               {branch.badge}
             </span>
             {branch.degreeType && (
-              <span className="inline-flex items-center text-[10px] font-black px-2 py-0.5 rounded-full bg-slate-200/80 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700">
+              <span className="inline-flex items-center text-[10px] font-black px-2 py-0.5 rounded-full bg-slate-800 text-slate-200 border border-slate-700">
                 {branch.degreeType}
               </span>
             )}
           </div>
 
           {/* Title */}
-          <h3 className="text-base font-extrabold text-slate-900 dark:text-slate-100 tracking-tight leading-snug group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">
+          <h3 className="text-base font-extrabold text-white dark:text-white tracking-tight leading-snug group-hover:text-cyan-300 dark:group-hover:text-cyan-300 transition-colors line-clamp-2">
             {branch.name}
           </h3>
 
-          {/* Tagline */}
-          <p className="text-xs text-slate-700 dark:text-slate-300 font-normal leading-relaxed line-clamp-2">
+          {/* Tagline / High-Contrast Description */}
+          <p className="text-slate-100 dark:text-slate-100 font-medium text-xs sm:text-sm leading-relaxed opacity-95 line-clamp-2">
             {branch.tagline}
           </p>
         </div>
 
         {/* Quick Highlights */}
-        <div className="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-800 text-xs">
+        <div className="space-y-2 pt-2 border-t border-slate-800 text-xs">
           {/* Entry Salary Preview */}
-          <div className="flex items-center justify-between text-slate-700 dark:text-slate-300">
-            <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1">
-              <TrendingUp className="w-3.5 h-3.5 text-emerald-500" />
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-medium text-slate-300 dark:text-slate-300 flex items-center gap-1">
+              <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
               Entry Tier:
             </span>
-            <span className="font-bold text-slate-900 dark:text-slate-100 text-[11px]">
+            <span className="text-emerald-400 font-bold text-xs sm:text-sm">
               {branch.strategicOverview.salaryBrackets.entryTier}
             </span>
           </div>
 
           {/* Target Role preview */}
-          <div className="flex items-center gap-1.5 text-[11px] text-slate-600 dark:text-slate-400 truncate">
+          <div className="flex items-center gap-1.5 truncate">
             <Briefcase className="w-3 h-3 text-slate-400 shrink-0" />
-            <span className="truncate">
+            <span className="text-slate-200 dark:text-slate-200 font-medium text-xs truncate">
               {branch.strategicOverview.targetRoles.slice(0, 2).join(' • ')}
             </span>
           </div>
@@ -315,7 +315,7 @@ export const BranchCard: React.FC<BranchCardProps> = ({
             type="button"
             title={`Download ${branch.code} PDF Roadmap`}
             onClick={(e) => onDownloadPdf(e, branch)}
-            className="shrink-0 p-2 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 active:scale-98 text-slate-700 dark:text-slate-200 hover:text-indigo-700 dark:hover:text-indigo-400 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer min-h-[38px] min-w-[38px] flex items-center justify-center"
+            className="shrink-0 p-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-98 text-slate-200 hover:text-white transition-colors border border-slate-700 cursor-pointer min-h-[38px] min-w-[38px] flex items-center justify-center"
             aria-label={`Download ${branch.code} PDF`}
           >
             <Download className="w-4 h-4" />
