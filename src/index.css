@@ -108,3 +108,37 @@
     background-color: #0f172a;
   }
 }
+
+/* ==========================================================
+   Hardware Acceleration & Mobile Performance Optimizations
+   ========================================================== */
+
+/* Apply content-visibility: auto to long below-the-fold sections */
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 800px;
+}
+
+/* GPU layer promotion for sliding interactive components */
+#slideover-drawer-panel,
+#command-palette-backdrop,
+#support-modal-backdrop,
+#legal-modal-backdrop {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Optimize animations & transitions on mobile to eliminate touch stutter */
+@media (max-width: 768px) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 150ms !important;
+  }
+
+  /* Exclude spinners and essential feedback */
+  .animate-spin {
+    animation: spin 1s linear infinite !important;
+  }
+}
+

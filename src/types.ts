@@ -13,7 +13,8 @@ export type WorkspaceView =
   | 'store'
   | 'guides'
   | 'projects'
-  | 'internships';
+  | 'internships'
+  | 'humanizer';
 
 export type ToolTab = 
   | 'eapcet-radar'

@@ -4,15 +4,22 @@ import { AiScanAnalysis, HumanizerResult, HumanizeMode } from '../types';
 const ROBOTIC_CLICHES = [
   { phrase: 'delve into', replacement: 'explore' },
   { phrase: 'in conclusion', replacement: 'ultimately' },
+  { phrase: 'vital role', replacement: 'key part' },
+  { phrase: 'crucial role', replacement: 'important part' },
+  { phrase: 'plays a pivotal role', replacement: 'matters greatly' },
+  { phrase: 'pivotal role', replacement: 'central role' },
+  { phrase: 'testament to', replacement: 'proof of' },
+  { phrase: 'serves as a testament', replacement: 'proves' },
+  { phrase: 'testament', replacement: 'proof' },
   { phrase: 'furthermore', replacement: 'also' },
   { phrase: 'moreover', replacement: 'in addition' },
-  { phrase: 'testament to', replacement: 'proof of' },
   { phrase: 'it is worth noting that', replacement: 'notably,' },
-  { phrase: 'crucial role', replacement: 'key part' },
   { phrase: 'tapestry of', replacement: 'range of' },
+  { phrase: 'rich tapestry', replacement: 'diverse mix' },
   { phrase: 'multifaceted', replacement: 'complex' },
   { phrase: 'in today\'s fast-paced world', replacement: 'today' },
-  { phrase: 'plays a pivotal role', replacement: 'matters greatly' },
+  { phrase: 'in today\'s digital landscape', replacement: 'nowadays' },
+  { phrase: 'in today\'s digital era', replacement: 'today' },
   { phrase: 'harness the power of', replacement: 'leverage' },
   { phrase: 'beacon of', replacement: 'model of' },
   { phrase: 'it is imperative that', replacement: 'we must' },
@@ -20,16 +27,19 @@ const ROBOTIC_CLICHES = [
   { phrase: 'by and large', replacement: 'mostly' },
   { phrase: 'navigating the landscape of', replacement: 'dealing with' },
   { phrase: 'embark on a journey', replacement: 'begin' },
-  { phrase: 'rich tapestry', replacement: 'diverse mix' },
   { phrase: 'paramount importance', replacement: 'top priority' },
+  { phrase: 'of paramount importance', replacement: 'vital' },
   { phrase: 'fosters a sense of', replacement: 'builds' },
+  { phrase: 'foster a culture of', replacement: 'encourage' },
   { phrase: 'game changer', replacement: 'major breakthrough' },
   { phrase: 'in essence', replacement: 'basically' },
-  { phrase: 'serves as a testament', replacement: 'demonstrates' },
   { phrase: 'at its core', replacement: 'fundamentally' },
   { phrase: 'ever-evolving landscape', replacement: 'changing field' },
   { phrase: 'seamlessly integrate', replacement: 'connect easily' },
-  { phrase: 'unlock the potential', replacement: 'open opportunities' }
+  { phrase: 'unlock the potential', replacement: 'open opportunities' },
+  { phrase: 'it is widely acknowledged that', replacement: 'clearly,' },
+  { phrase: 'a plethora of', replacement: 'many' },
+  { phrase: 'stands as a beacon', replacement: 'leads as a model' }
 ];
 
 export function scanAiPatterns(text: string): AiScanAnalysis {
@@ -106,36 +116,43 @@ export function scanAiPatterns(text: string): AiScanAnalysis {
   // Weights: Low burstiness (30%), Cliches presence (35%), Uniformity/Low perplexity (20%), Passive voice (15%)
   let aiScore = 0;
 
-  // Cliche penalty
-  const clichePenalty = Math.min(45, clicheCount * 12);
-  aiScore += clichePenalty;
+  if (clicheCount === 0 && burstinessScore >= 50) {
+    // Pure human text with high variance and zero cliches: strictly under 15%
+    aiScore = Math.min(12, Math.max(4, Math.round(14 - (burstinessScore / 10))));
+  } else {
+    // Cliche penalty
+    const clichePenalty = Math.min(50, Math.max(25, clicheCount * 18));
+    aiScore += clichePenalty;
 
-  // Sentence uniformity penalty (lack of burstiness)
-  if (burstinessScore < 30) {
-    aiScore += 30;
-  } else if (burstinessScore < 55) {
-    aiScore += 18;
-  } else if (burstinessScore < 75) {
-    aiScore += 8;
+    // Sentence uniformity penalty (lack of burstiness)
+    if (burstinessScore < 30) {
+      aiScore += 25;
+    } else if (burstinessScore < 55) {
+      aiScore += 18;
+    } else if (burstinessScore < 75) {
+      aiScore += 10;
+    }
+
+    // Uniform length around 18-24 words is standard GPT output
+    if (averageSentenceLength >= 15 && averageSentenceLength <= 25 && stdDev < 5) {
+      aiScore += 15;
+    }
+
+    // Passive voice weight
+    if (passiveVoiceRatio > 30) {
+      aiScore += 10;
+    }
+
+    aiScore = Math.min(98, Math.max(18, aiScore));
   }
-
-  // Uniform length around 18-24 words is standard GPT output
-  if (averageSentenceLength >= 16 && averageSentenceLength <= 24 && stdDev < 4) {
-    aiScore += 15;
-  }
-
-  // Passive voice weight
-  if (passiveVoiceRatio > 35) {
-    aiScore += 10;
-  }
-
-  aiScore = Math.min(99, Math.max(8, aiScore));
 
   let verdict: AiScanAnalysis['verdict'] = 'Human-Written Flow';
-  if (aiScore >= 68) {
+  if (aiScore >= 65) {
     verdict = 'Highly AI Generated';
-  } else if (aiScore >= 40) {
+  } else if (aiScore >= 15) {
     verdict = 'Likely AI with Mixed Patterns';
+  } else {
+    verdict = 'Human-Written Flow';
   }
 
   const metrics = [
@@ -327,7 +344,8 @@ export function deepHumanizeText(text: string, mode: HumanizeMode): HumanizerRes
 }
 
 export const SAMPLE_AI_TEXTS = {
-  academicEssay: `In today's fast-paced world, artificial intelligence plays a pivotal role across various sectors. Furthermore, it is worth noting that machine learning models serve as a testament to human ingenuity. Delve into the multifaceted tapestry of modern data science, and one will discover that neural networks are crucial for analyzing complex paradigms. In conclusion, navigating the landscape of technological innovation is of paramount importance for societal advancement.`,
+  academicEssay: `In today's fast-paced world, artificial intelligence plays a vital role across various sectors. Furthermore, it is worth noting that machine learning models serve as a testament to human ingenuity. Delve into the multifaceted tapestry of modern data science, and one will discover that neural networks are crucial for analyzing complex paradigms. In conclusion, navigating the landscape of technological innovation is of paramount importance for societal advancement.`,
   coverLetter: `I am writing to express my profound enthusiasm for the Senior Software Engineer position. Throughout my career, I have consistently harnessed the power of scalable cloud architectures to foster a sense of excellence within engineering teams. Furthermore, my multifaceted background in full-stack development serves as a testament to my dedication. In essence, my ability to seamlessly integrate distributed systems will be a game changer for your esteemed organization.`,
-  blogPost: `Embarking on a journey into web performance optimization is crucial in today's digital sphere. Moreover, it is imperative that developers delve into Core Web Vitals to unlock the true potential of their user experience. At its core, fast page load speeds serve as a beacon of trust for modern consumers.`
+  blogPost: `Embarking on a journey into web performance optimization is crucial in today's digital sphere. Moreover, it is imperative that developers delve into Core Web Vitals to unlock the true potential of their user experience. At its core, fast page load speeds serve as a beacon of trust for modern consumers.`,
+  verifiedHuman: `Last night before our semester results came out, my roommates and I couldn't sleep at all. We walked over to the tea stall outside our college gate at 2 AM. The tea was boiling hot, spicy with ginger, and surprisingly cheap. Karthik was biting his nails over his Engineering Physics internal marks, while Sai kept refreshing the student portal every thirty seconds. Honestly? It was stressful, but those late-night chai breaks are what make engineering college truly unforgettable.`
 };

@@ -1,6 +1,6 @@
 {
   "name": "StudyMacha",
-  "description": "Free all-in-one student & career utility hub. 24 engineering branch roadmaps with 4-year blueprints & PDF export, 30+ client-side PDF tools, image compressor to 20kb-50kb, verified scholarships, and real-time AP EAPCET college vacancy radar.",
+  "description": "StudyMacha: The All-in-One Telugu Academic OS. AP EAPCET Phase-2 Seat Radar, 75% Attendance Defender, 24+ Degree & B.Tech Roadmaps, Verified Scholarships, and In-Browser Tools.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

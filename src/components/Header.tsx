@@ -274,16 +274,18 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
 
           {/* Top-Right Hamburger Slide-Over Mega Drawer Trigger (Accessible on all viewports) */}
-          <button
-            type="button"
-            id="header-hamburger-drawer-btn"
-            onClick={() => setIsMegaDrawerOpen(true)}
-            className="p-2 text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-cyan-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer flex-shrink-0 flex items-center justify-center border border-slate-200 dark:border-slate-800 shadow-2xs"
-            title="Open StudyMacha Mega Menu & Student Hubs"
-            aria-label="Open Navigation Mega Drawer"
-          >
-            <Menu className="w-5 h-5 text-indigo-600 dark:text-cyan-400" />
-          </button>
+          <div className="flex-shrink-0 z-50">
+            <button
+              type="button"
+              id="header-hamburger-drawer-btn"
+              onClick={() => setIsMegaDrawerOpen(true)}
+              className="p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-white border border-slate-700 active:scale-95 transition-all flex items-center justify-center cursor-pointer shadow-sm"
+              title="Open StudyMacha Mega Menu & Student Hubs"
+              aria-label="Open Navigation Mega Drawer"
+            >
+              <Menu className="w-5 h-5 text-white" />
+            </button>
+          </div>
         </div>
       </div>
 
