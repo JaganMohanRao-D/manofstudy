@@ -48,21 +48,21 @@ export interface YearPlan {
   semesters: [SemesterPlan, SemesterPlan];
 }
 
-export type DegreeStream = 'all' | 'engineering' | 'science' | 'commerce' | 'humanities';
+export type DegreeStream = 'all' | 'engineering' | 'science' | 'commerce' | 'humanities' | 'bipc' | 'healthcare';
 
 export interface BranchRoadmap {
   id: string;
   code: string;
   name: string;
-  category: 'computing' | 'electronics' | 'mechanical' | 'civil' | 'biotech' | 'science' | 'commerce' | 'humanities' | string;
+  category: 'computing' | 'electronics' | 'mechanical' | 'civil' | 'biotech' | 'science' | 'commerce' | 'humanities' | 'pharma' | 'agri' | 'nursing' | 'healthcare' | string;
   categoryLabel: string;
   badge: string;
   tagline: string;
   acronym?: string;
   topicsCount?: string;
-  degreeType?: string; // e.g. 'B.Tech' | 'B.Sc' | 'B.Com' | 'B.A.'
-  stream?: 'engineering' | 'science' | 'commerce' | 'humanities';
-  bannerCategory?: 'computing' | 'security' | 'electronics' | 'mechanical' | 'civil' | 'biotech' | 'science' | 'commerce' | 'humanities' | string;
+  degreeType?: string; // e.g. 'B.Tech' | 'B.Sc' | 'B.Com' | 'B.A.' | 'B.Pharm' | 'Pharm.D'
+  stream?: 'engineering' | 'science' | 'commerce' | 'humanities' | 'bipc' | 'healthcare';
+  bannerCategory?: 'computing' | 'security' | 'electronics' | 'mechanical' | 'civil' | 'biotech' | 'science' | 'commerce' | 'humanities' | 'healthcare' | string;
   strategicOverview: {
     corporateViability: string;
     corporateSummary: string;
@@ -75,6 +75,8 @@ export interface BranchRoadmap {
       peakTier: string;
     };
     tierReality?: {
+      tier1Label?: string;
+      tier3Label?: string;
       tier1Salary: string;
       tier1Reality: string;
       tier3Salary: string;

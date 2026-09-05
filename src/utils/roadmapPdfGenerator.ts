@@ -224,10 +224,16 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap): void {
   const salaryCardHeight = 24;
   drawCardBox(salaryCardHeight);
 
+  const salaryBrackets = roadmap.strategicOverview?.salaryBrackets || {
+    entryTier: '₹4.5 - ₹8 LPA',
+    midTier: '₹12 - ₹22 LPA',
+    peakTier: '₹35+ LPA / Global',
+  };
+
   const tiers = [
-    { label: 'ENTRY TIER (0-2 YRS)', val: roadmap.salaryInsight.entryTier, bg: [248, 250, 252], col: [71, 85, 105] },
-    { label: 'MID TIER (3-6 YRS)', val: roadmap.salaryInsight.midTier, bg: [240, 253, 250], col: [15, 118, 110] },
-    { label: 'PEAK / PRODUCT TIER', val: roadmap.salaryInsight.peakTier, bg: [240, 249, 255], col: [3, 105, 161] },
+    { label: 'ENTRY TIER (0-2 YRS)', val: salaryBrackets.entryTier, bg: [248, 250, 252], col: [71, 85, 105] },
+    { label: 'MID TIER (3-6 YRS)', val: salaryBrackets.midTier, bg: [240, 253, 250], col: [15, 118, 110] },
+    { label: 'PEAK / PRODUCT TIER', val: salaryBrackets.peakTier, bg: [240, 249, 255], col: [3, 105, 161] },
   ];
 
   tiers.forEach((t, i) => {
@@ -250,9 +256,11 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap): void {
   currentY += salaryCardHeight + 3.2;
 
   // Career Roles & Reality Notes Card
-  const rolesText = `Primary Career Roles: ${roadmap.careerRoles.slice(0, 5).join(' • ')}`;
+  const targetRoles = roadmap.strategicOverview?.targetRoles || [];
+  const rolesText = `Primary Career Roles: ${targetRoles.slice(0, 5).join(' • ') || 'Core Engineer • Technical Specialist • Systems Analyst'}`;
   const rolesLines = doc.splitTextToSize(rolesText, contentWidth - 10);
-  const noteLines = doc.splitTextToSize(`Placement Reality: ${roadmap.salaryInsight.notes}`, contentWidth - 10);
+  const realityNote = roadmap.strategicOverview?.tierReality?.tier1Reality || roadmap.strategicOverview?.corporateSummary || 'Focus on verifiable projects, core fundamentals, and hands-on skill development.';
+  const noteLines = doc.splitTextToSize(`Placement Reality: ${realityNote}`, contentWidth - 10);
   const careerCardHeight = 7 + rolesLines.length * 4.2 + noteLines.length * 4.0;
 
   ensurePageSpace(careerCardHeight);
