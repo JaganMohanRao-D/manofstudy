@@ -11,14 +11,43 @@ import {
   ShoppingBag,
   Zap,
   BookOpen,
+  Terminal,
+  ShieldAlert,
+  Code2,
 } from 'lucide-react';
 
 /**
- * Pure, static lightweight configuration for the 8 home workspace cards.
+ * Pure, static lightweight configuration for the home workspace cards.
  * Prevents parsing large JSON files during homepage mounting to ensure
  * instantaneous render without freezing main thread on mobile.
  */
 const WORKSPACES = [
+  {
+    id: 'ws-vault',
+    workspace: 'vault',
+    title: 'Placement Viva & Practical Code Vault',
+    badge: '100% In-Browser',
+    badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+    description:
+      '3D interview flashcards with model answers + verified practical code snippets (Python, C, C++) with 1-click clipboard copy.',
+    icon: Terminal,
+    accentColor: 'text-emerald-400',
+    iconBg: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
+    hoverBorder: 'hover:border-emerald-500/60',
+  },
+  {
+    id: 'ws-backlog',
+    workspace: 'backlog',
+    title: 'Smart Backlog Recovery Planner',
+    badge: '30-Day Blueprint',
+    badgeColor: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+    description:
+      'Calculate external pass marks required from mid-term scores and follow an interactive 30-day recovery checklist saved to local storage.',
+    icon: ShieldAlert,
+    accentColor: 'text-rose-400',
+    iconBg: 'bg-rose-500/10 border-rose-500/30 text-rose-400',
+    hoverBorder: 'hover:border-rose-500/60',
+  },
   {
     id: 'ws-attendance',
     workspace: 'attendance',

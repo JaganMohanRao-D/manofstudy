@@ -114,6 +114,13 @@ export const Header: React.FC<HeaderProps> = ({
       icon: ShieldCheck,
     },
     {
+      id: 'vault',
+      workspace: 'vault',
+      label: 'Code Vault',
+      icon: Terminal,
+      badge: 'Viva',
+    },
+    {
       id: 'eapcet',
       workspace: 'eapcet',
       label: 'EAPCET Radar',
@@ -147,7 +154,7 @@ export const Header: React.FC<HeaderProps> = ({
     {
       id: 'dsa',
       workspace: 'dsa',
-      label: 'DSA & Coding',
+      label: 'DSA Tracker',
       icon: Code2,
     },
     {
@@ -200,8 +207,7 @@ export const Header: React.FC<HeaderProps> = ({
             const isActive =
               activeWorkspace === item.workspace ||
               (item.workspace === 'essentials' && (activeWorkspace === 'store' || activeWorkspace === 'essentials')) ||
-              (item.workspace === 'academics' && (activeWorkspace === 'attendance' || activeWorkspace === 'gpa')) ||
-              (item.workspace === 'dsa' && activeWorkspace === 'compiler');
+              (item.workspace === 'academics' && (activeWorkspace === 'attendance' || activeWorkspace === 'gpa' || activeWorkspace === 'backlog'));
 
             return (
               <button
@@ -333,8 +339,7 @@ export const Header: React.FC<HeaderProps> = ({
               const isActive =
                 activeWorkspace === item.workspace ||
                 (item.workspace === 'essentials' && (activeWorkspace === 'store' || activeWorkspace === 'essentials')) ||
-                (item.workspace === 'academics' && (activeWorkspace === 'attendance' || activeWorkspace === 'gpa')) ||
-                (item.workspace === 'dsa' && activeWorkspace === 'compiler');
+                (item.workspace === 'academics' && (activeWorkspace === 'attendance' || activeWorkspace === 'gpa' || activeWorkspace === 'backlog'));
 
               return (
                 <button

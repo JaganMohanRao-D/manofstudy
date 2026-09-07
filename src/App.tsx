@@ -20,12 +20,11 @@ import {
   Image as ImageIcon,
   Calculator,
   Award,
-  Bot,
   FileCheck,
   ShoppingBag,
   Heart,
   BookOpen,
-  Wand2,
+  ShieldAlert,
 } from 'lucide-react';
 import { ToolTab, ToolMeta, WorkspaceView } from './types';
 import { Header } from './components/Header';
@@ -80,14 +79,14 @@ const AtsResumeMatcher = lazy(() =>
     default: m.AtsResumeMatcher || m.default,
   }))
 );
-const AiHumanizer = lazy(() =>
-  import('./components/AiHumanizer').then((m: any) => ({
-    default: m.AiHumanizer || m.default,
+const PlacementCodeVault = lazy(() =>
+  import('./components/PlacementCodeVault').then((m: any) => ({
+    default: m.PlacementCodeVault || m.default,
   }))
 );
-const CodeStudioCompiler = lazy(() =>
-  import('./components/CodeStudioCompiler').then((m: any) => ({
-    default: m.CodeStudioCompiler || m.default,
+const BacklogPlanner = lazy(() =>
+  import('./components/BacklogPlanner').then((m: any) => ({
+    default: m.BacklogPlanner || m.default,
   }))
 );
 const DsaPlacementTracker = lazy(() =>
@@ -313,10 +312,12 @@ export default function App() {
         setActiveWorkspace('internships');
       } else if (hash === 'scholarships' || hash === 'scholarship') {
         setActiveWorkspace('scholarships');
+      } else if (hash === 'vault' || hash === 'code-vault' || hash === 'viva' || hash === 'compiler' || hash === 'code' || hash === 'codestudio') {
+        setActiveWorkspace('vault');
+      } else if (hash === 'backlog' || hash === 'backlogs' || hash === 'backlog-planner') {
+        setActiveWorkspace('backlog');
       } else if (hash === 'dsa' || hash === 'tracker' || hash === 'placement') {
         setActiveWorkspace('dsa');
-      } else if (hash === 'compiler' || hash === 'code' || hash === 'codestudio') {
-        setActiveWorkspace('compiler');
       } else if (hash === 'attendance' || hash === 'bunk' || hash === 'bunk-planner') {
         setActiveWorkspace('attendance');
       } else if (hash === 'gpa' || hash === 'cgpa' || hash === 'sgpa' || hash === 'gpa-hub') {
@@ -334,8 +335,6 @@ export default function App() {
         hash === 'student-gear'
       ) {
         setActiveWorkspace('essentials');
-      } else if (hash === 'humanizer' || hash === 'ai-humanizer' || hash === 'detector') {
-        setActiveWorkspace('humanizer');
       } else if (
         hash === 'utilities' ||
         hash === 'pdf-tools' ||
@@ -397,14 +396,14 @@ export default function App() {
       handleSelectWorkspace('roadmaps');
     } else if (tab === 'scholarships') {
       handleSelectWorkspace('scholarships');
-    } else if (tab === 'compiler') {
-      handleSelectWorkspace('compiler');
+    } else if (tab === 'vault' || tab === 'compiler') {
+      handleSelectWorkspace('vault');
+    } else if (tab === 'backlog') {
+      handleSelectWorkspace('backlog');
     } else if (tab === 'attendance') {
       handleSelectWorkspace('attendance');
     } else if (tab === 'essentials' || tab === 'store') {
       handleSelectWorkspace('essentials');
-    } else if (tab === 'humanizer') {
-      handleSelectWorkspace('humanizer');
     } else if (tab === 'gpa' || tab === 'internal-calc') {
       handleSelectWorkspace('gpa');
       if (tab === 'internal-calc') setGpaSubTab('internal');
@@ -463,10 +462,15 @@ export default function App() {
           title: 'DSA & Coding Placement Tracker',
           icon: <Code2 className="w-4 h-4 text-purple-500" />,
         };
-      case 'compiler':
+      case 'vault':
         return {
-          title: 'StudyMacha CodeStudio | Online Code Playground & Compiler',
-          icon: <Terminal className="w-4 h-4 text-teal-600" />,
+          title: 'Placement Viva Flashcards & Practical Code Vault',
+          icon: <Terminal className="w-4 h-4 text-emerald-500" />,
+        };
+      case 'backlog':
+        return {
+          title: 'Smart Backlog Recovery Planner (Pass Cutoffs & 30-Day Strategy)',
+          icon: <ShieldAlert className="w-4 h-4 text-rose-500" />,
         };
       case 'guides':
         return {
@@ -478,11 +482,6 @@ export default function App() {
         return {
           title: 'Verified Student Essentials & Academic Gear Store',
           icon: <ShoppingBag className="w-4 h-4 text-amber-500" />,
-        };
-      case 'humanizer':
-        return {
-          title: 'AI Text Detector & In-Browser Humanizer (Zero Uploads)',
-          icon: <Wand2 className="w-4 h-4 text-rose-500" />,
         };
       default:
         return {
@@ -697,13 +696,17 @@ export default function App() {
                 {activeWorkspace === 'dsa' && (
                   <DsaPlacementTracker
                     onOpenCompilerWithProblem={() => {
-                      handleSelectWorkspace('compiler');
+                      handleSelectWorkspace('vault');
                     }}
                   />
                 )}
 
-                {activeWorkspace === 'compiler' && (
-                  <CodeStudioCompiler />
+                {activeWorkspace === 'vault' && (
+                  <PlacementCodeVault />
+                )}
+
+                {activeWorkspace === 'backlog' && (
+                  <BacklogPlanner />
                 )}
 
                 {activeWorkspace === 'guides' && (
@@ -718,10 +721,6 @@ export default function App() {
                   />
                 )}
 
-                {activeWorkspace === 'humanizer' && (
-                  <AiHumanizer />
-                )}
-
                 {activeWorkspace === 'utilities' && (
                   <div className="space-y-6">
                     {/* Utility Sub-Tab Switcher */}
@@ -729,13 +728,12 @@ export default function App() {
                       <div className="flex items-center gap-1 overflow-x-auto no-scrollbar pb-1 text-xs">
                         {[
                           { id: 'pdf-tools' as ToolTab, label: '30+ PDF Tools', icon: FileText },
-                          { id: 'compiler' as ToolTab, label: '💻 Online CodeStudio', icon: Terminal },
+                          { id: 'vault' as ToolTab, label: 'Code & Viva Vault', icon: Terminal },
                           { id: 'resizer' as ToolTab, label: '20KB Image Resizer', icon: ImageIcon },
                           { id: 'resume-checker' as ToolTab, label: 'ATS Resume Matcher', icon: FileCheck },
                           { id: 'gpa' as ToolTab, label: 'Global GPA Hub', icon: Award },
                           { id: 'internal-calc' as ToolTab, label: 'Internal Cutoff', icon: Calculator },
                           { id: 'attendance' as ToolTab, label: 'Attendance Defender', icon: ShieldCheck },
-                          { id: 'humanizer' as ToolTab, label: 'AI Humanizer', icon: Bot },
                         ].map((item) => {
                           const Icon = item.icon;
                           const isSubActive = utilitySubTab === item.id;
@@ -760,7 +758,7 @@ export default function App() {
 
                     {/* Sub-Utility Component View */}
                     <div>
-                      {utilitySubTab === 'compiler' && <CodeStudioCompiler />}
+                      {utilitySubTab === 'vault' && <PlacementCodeVault />}
                       {utilitySubTab === 'pdf-tools' && <PdfPowerTools />}
                       {utilitySubTab === 'resizer' && <ImageResizer />}
                       {utilitySubTab === 'resume-checker' && <AtsResumeMatcher />}
@@ -771,7 +769,6 @@ export default function App() {
                         <InternalExamEstimator onNavigateToStore={() => handleSelectWorkspace('essentials')} />
                       )}
                       {utilitySubTab === 'attendance' && <AttendanceDefender />}
-                      {utilitySubTab === 'humanizer' && <AiHumanizer />}
                     </div>
                   </div>
                 )}

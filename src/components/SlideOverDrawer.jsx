@@ -14,13 +14,15 @@ import {
   Cpu,
   Pill,
   Search,
-  Wand2,
   FileText,
   ShoppingBag,
   Mail,
   Heart,
   Compass,
   GraduationCap,
+  Code2,
+  Terminal,
+  ShieldAlert,
 } from 'lucide-react';
 
 /**
@@ -243,6 +245,27 @@ export const SlideOverDrawer = ({
 
               <button
                 type="button"
+                id="drawer-academics-backlog-btn"
+                onClick={() => handleNavigate('backlog')}
+                className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-800/70 text-left transition-colors cursor-pointer group border border-transparent hover:border-slate-800 bg-rose-950/20"
+              >
+                <div className="flex items-start gap-2.5">
+                  <ShieldAlert className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="text-xs font-bold text-white group-hover:text-rose-300 transition-colors flex items-center gap-1.5">
+                      <span>Smart Backlog Recovery Planner</span>
+                      <span className="text-[9px] bg-rose-500/20 text-rose-300 px-1.5 py-0.2 rounded font-mono">NEW</span>
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      Pass cutoff calculator &amp; 30-day revision blueprint
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-600 group-hover:text-slate-300 shrink-0" />
+              </button>
+
+              <button
+                type="button"
                 id="drawer-academics-roadmaps-btn"
                 onClick={() => handleNavigate('roadmaps', 'engineering')}
                 className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-800/70 text-left transition-colors cursor-pointer group border border-transparent hover:border-slate-800"
@@ -284,13 +307,55 @@ export const SlideOverDrawer = ({
             </div>
           </div>
 
-          {/* CATEGORY 3: CAREER */}
+          {/* CATEGORY 3: CAREER & SKILLS */}
           <div className="space-y-2">
             <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-emerald-400">
               <Briefcase className="w-3.5 h-3.5" />
-              <span>Career</span>
+              <span>Career &amp; Skills</span>
             </div>
             <div className="space-y-1">
+              <button
+                type="button"
+                id="drawer-career-vault-btn"
+                onClick={() => handleNavigate('vault')}
+                className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-800/70 text-left transition-colors cursor-pointer group border border-transparent hover:border-slate-800 bg-emerald-950/20"
+              >
+                <div className="flex items-start gap-2.5">
+                  <Terminal className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
+                      <span>Placement Viva &amp; Code Vault</span>
+                      <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded font-mono">NEW</span>
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      Viva flashcards &amp; ready Python, C, C++ lab snippets
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-600 group-hover:text-slate-300 shrink-0" />
+              </button>
+
+              <button
+                type="button"
+                id="drawer-career-dsa-btn"
+                onClick={() => handleNavigate('dsa')}
+                className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-800/70 text-left transition-colors cursor-pointer group border border-transparent hover:border-slate-800"
+              >
+                <div className="flex items-start gap-2.5">
+                  <Code2 className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="text-xs font-bold text-white group-hover:text-purple-300 transition-colors flex items-center gap-1.5">
+                      <span>DSA &amp; Placement Tracker</span>
+                      <span className="text-[9px] bg-purple-500/20 text-purple-300 px-1.5 py-0.2 rounded font-mono">450 Sheet</span>
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      Curated coding interview problem progress tracker
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-600 group-hover:text-slate-300 shrink-0" />
+              </button>
+
               <button
                 type="button"
                 id="drawer-career-projects-btn"
@@ -355,34 +420,13 @@ export const SlideOverDrawer = ({
             </div>
           </div>
 
-          {/* CATEGORY 4: TOOLS */}
+          {/* CATEGORY 4: OFFLINE UTILITIES & TOOLS */}
           <div className="space-y-2">
-            <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-rose-400">
-              <Wand2 className="w-3.5 h-3.5" />
-              <span>Tools</span>
+            <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-sky-400">
+              <FileText className="w-3.5 h-3.5" />
+              <span>Offline Utilities</span>
             </div>
             <div className="space-y-1">
-              <button
-                type="button"
-                id="drawer-tools-humanizer-btn"
-                onClick={() => handleNavigate('humanizer')}
-                className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-800/70 text-left transition-colors cursor-pointer group border border-transparent hover:border-slate-800 bg-slate-800/30"
-              >
-                <div className="flex items-start gap-2.5">
-                  <Wand2 className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
-                  <div>
-                    <div className="text-xs font-bold text-white group-hover:text-rose-300 transition-colors flex items-center gap-1.5">
-                      <span>AI Text Detector &amp; Humanizer</span>
-                      <span className="text-[9px] bg-rose-500/20 text-rose-300 px-1.5 py-0.2 rounded font-mono">NEW</span>
-                    </div>
-                    <div className="text-[10px] text-slate-400">
-                      Scan robotic cliches &amp; rewrite with human cadence (Zero uploads)
-                    </div>
-                  </div>
-                </div>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-600 group-hover:text-slate-300 shrink-0" />
-              </button>
-
               <button
                 type="button"
                 id="drawer-tools-pdf-btn"
@@ -390,11 +434,11 @@ export const SlideOverDrawer = ({
                 className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-800/70 text-left transition-colors cursor-pointer group border border-transparent hover:border-slate-800"
               >
                 <div className="flex items-start gap-2.5">
-                  <FileText className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+                  <FileText className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />
                   <div>
-                    <div className="text-xs font-bold text-white group-hover:text-red-300 transition-colors flex items-center gap-1.5">
+                    <div className="text-xs font-bold text-white group-hover:text-sky-300 transition-colors flex items-center gap-1.5">
                       <span>Client-Side PDF Suite (20KB Resizer)</span>
-                      <span className="text-[9px] bg-red-500/20 text-red-300 px-1.5 py-0.2 rounded font-mono">30+ Tools</span>
+                      <span className="text-[9px] bg-sky-500/20 text-sky-300 px-1.5 py-0.2 rounded font-mono">30+ Tools</span>
                     </div>
                     <div className="text-[10px] text-slate-400">
                       Merge, Split, Watermark, Compress &amp; Exam Photo Resizer
