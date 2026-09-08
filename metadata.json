@@ -1,6 +1,6 @@
 {
   "name": "StudyMacha",
-  "description": "StudyMacha: The All-in-One Telugu Academic OS. AP EAPCET Phase-2 Seat Radar, 75% Attendance Defender, 24+ Degree & B.Tech Roadmaps, Verified Scholarships, and In-Browser Tools.",
+  "description": "StudyMacha is an all-in-one private academic operating system engineered by Dunna Jagan Mohan Rao for Indian and Telugu students. Features live AP EAPCET seat radar, 75% attendance defender, 24+ engineering/degree blueprints, and client-side private tools.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
