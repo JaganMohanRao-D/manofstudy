@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { X, Heart, Sparkles, ShieldCheck, Zap, Coffee } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { X, Heart, Sparkles, ShieldCheck, Zap, Coffee, Copy, Check, Share2 } from 'lucide-react';
 
 export interface SupportModalProps {
   isOpen: boolean;
@@ -7,6 +7,26 @@ export interface SupportModalProps {
 }
 
 export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) => {
+  const [copiedUrl, setCopiedUrl] = useState<boolean>(false);
+
+  const handleCopyPlatformUrl = async () => {
+    try {
+      await navigator.clipboard.writeText('https://javisak.vercel.app');
+      setCopiedUrl(true);
+      setTimeout(() => setCopiedUrl(false), 2500);
+    } catch {
+      // Fallback
+      const tempInput = document.createElement('input');
+      tempInput.value = 'https://javisak.vercel.app';
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      setCopiedUrl(true);
+      setTimeout(() => setCopiedUrl(false), 2500);
+    }
+  };
+
   // Close on ESC key and prevent body scroll when open
   useEffect(() => {
     if (!isOpen) return;
@@ -31,11 +51,11 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
 
   // Dynamic encrypted UPI intent link with payment note pre-filled
   const upiIntentUri =
-    'upi://pay?pa=7842587883@ybl&pn=StudyMacha%20Developer&tn=A%20kind%20support%20and%20gratitude%20for%20StudyMacha';
+    'upi://pay?pa=7842587883@ybl&pn=JAVISAK%20Developer&tn=A%20kind%20support%20and%20gratitude%20for%20JAVISAK';
 
   // Fast dynamic QR Code from reliable server generator
   const qrCodeUrl =
-    'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi%3A%2F%2Fpay%3Fpa%3D7842587883%40ybl%26pn%3DStudyMacha%2520Developer%26tn%3DA%2520kind%2520support%2520and%2520gratitude%2520for%2520StudyMacha';
+    'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi%3A%2F%2Fpay%3Fpa%3D7842587883%40ybl%26pn%3DJAVISAK%2520Developer%26tn%3DA%2520kind%2520support%2520and%2520gratitude%2520for%2520JAVISAK';
 
   return (
     <div
@@ -80,16 +100,16 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
           id="support-modal-title"
           className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-tight mb-3"
         >
-          Help Us Keep StudyMacha{' '}
+          Support JAVISAK Development{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-600 via-pink-600 to-amber-600 dark:from-rose-400 dark:via-pink-400 dark:to-amber-400">
-            100% Free Forever
+            • 100% Free Forever
           </span>
         </h2>
 
         {/* Emotional Narrative Storyline */}
         <div className="space-y-2 text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed text-left bg-slate-50/90 dark:bg-slate-800/40 p-3.5 sm:p-4 rounded-2xl border border-slate-100 dark:border-slate-800/70 mb-5">
           <p>
-            StudyMacha started with zero budget from a hostel room to rescue thousands of Telugu students from entrance confusion, attendance panic, and expensive ed-tech traps.
+            JAVISAK started with zero budget from a hostel room to rescue thousands of Telugu students from entrance confusion, attendance panic, and expensive ed-tech traps.
           </p>
           <p>
             We host everything with <strong>zero paywalls, zero sketchy ads, and 100% student privacy</strong>. But running high-speed servers, radar scrapers, and database tools costs real money every month.
@@ -121,7 +141,7 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
           <div className="relative p-2 bg-white rounded-xl shadow-xs border border-slate-200/90">
             <img
               src={qrCodeUrl}
-              alt="Scan to Donate &amp; Support StudyMacha via UPI"
+              alt="Scan to Donate &amp; Support JAVISAK via UPI"
               width={190}
               height={190}
               className="rounded-lg object-contain"
@@ -154,6 +174,40 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
           <p className="text-[10px] text-slate-400 mt-1.5 sm:hidden">
             (Tap above to directly open your installed UPI app)
           </p>
+        </div>
+
+        {/* SHARE PLATFORM & COPY URL */}
+        <div className="mb-4 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 space-y-2 text-center">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
+              Can't donate right now? Share with classmates:
+            </span>
+            <button
+              type="button"
+              id="copy-platform-url-btn"
+              onClick={handleCopyPlatformUrl}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-xs shadow-xs transition-all cursor-pointer shrink-0"
+              title="Copy Platform URL"
+            >
+              {copiedUrl ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-300" />
+                  <span>Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>Share Link</span>
+                </>
+              )}
+            </button>
+          </div>
+          {copiedUrl && (
+            <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center justify-center gap-1 animate-in fade-in">
+              <Check className="w-3.5 h-3.5" />
+              <span>Link copied to clipboard!</span>
+            </p>
+          )}
         </div>
 
         {/* TRUST & GRATITUDE FOOTER */}

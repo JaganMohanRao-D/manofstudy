@@ -152,7 +152,7 @@ Understanding this dynamic is critical: **Phase-2 is not a leftover scrap round;
         callout: {
           type: 'checklist',
           title: 'The Safe Bunk Formula',
-          text: 'If your current attendance is A out of C total periods, the maximum safe bunks B you can take while staying above 75% is: B = floor((A - 0.75 * C) / 0.75). Use StudyMacha’s Attendance Defender tool for exact dynamic calculations.',
+          text: 'If your current attendance is A out of C total periods, the maximum safe bunks B you can take while staying above 75% is: B = floor((A - 0.75 * C) / 0.75). Use JAVISAK’s Attendance Defender tool for exact dynamic calculations.',
         },
       },
       {
@@ -350,7 +350,7 @@ If you rely solely on clicking "Apply" on corporate career sites, you are compet
 A high-converting outreach message adheres to the **Value-First Principle**:
 1. **Target Specific Engineers:** Search LinkedIn for engineers who graduated from non-IIT/NIT colleges 2 to 4 years ago and currently work at your target company.
 2. **Reference Specific Job IDs:** Never ask them to find a job for you. Provide the exact Job ID, title, and link.
-3. **Highlight 3 Relevant Metrics:** Quantify your work (e.g., *"Built a distributed task queue handling 5,000 req/sec; solved 300+ LeetCode problems; created StudyMacha with 10k monthly active users"*).
+3. **Highlight 3 Relevant Metrics:** Quantify your work (e.g., *"Built a distributed task queue handling 5,000 req/sec; solved 300+ LeetCode problems; created JAVISAK with 10k monthly active users"*).
 4. **Include a Tailored 1-Click Blurb:** Write a concise 4-sentence blurb that the engineer can copy-paste directly into their internal company referral portal without editing.`,
         callout: {
           type: 'tip',

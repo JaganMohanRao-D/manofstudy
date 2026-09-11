@@ -33,11 +33,11 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
-            About StudyMacha
+            About JAVISAK
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-3xl leading-relaxed">
-            Built from the ground up by <strong>Jagan Mohan Rao</strong>, StudyMacha is an open, client-side academic and career operating system created to empower students across Andhra Pradesh and Telangana to bridge the gap between tier-3 engineering classrooms and high-growth global technology careers.
+            Built from the ground up by <strong>Dunna Jagan Mohan Rao</strong> (creator of PlantMokk AI), JAVISAK is an open, client-side academic and career operating system created to empower students across Andhra Pradesh and Telangana to bridge the gap between tier-3 engineering classrooms and high-growth global technology careers.
           </p>
         </div>
       </div>
@@ -64,7 +64,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
             </li>
           </ul>
           <p>
-            StudyMacha was created by Jagan Mohan Rao to eliminate this chaos. We set out to build a clean, blazing-fast, and 100% private platform where students can calculate bunks with mathematical certainty, analyze live EAPCET vacancies, access 24+ semester-by-semester degree roadmaps, and convert exam documents without uploading a single byte to a server.
+            JAVISAK was created by Dunna Jagan Mohan Rao to eliminate this chaos. We set out to build a clean, blazing-fast, and 100% private platform where students can calculate bunks with mathematical certainty, analyze live EAPCET vacancies, access 24+ semester-by-semester degree roadmaps, and convert exam documents without uploading a single byte to a server.
           </p>
         </section>
 
@@ -79,7 +79,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
               <span className="font-bold text-slate-900 dark:text-white text-xs block">1. 100% Free Forever</span>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Education tools should never be gated behind paywalls. Every calculator, PDF tool, branch roadmap, and scholarship listing on StudyMacha is free for every student.
+                Education tools should never be gated behind paywalls. Every calculator, PDF tool, branch roadmap, and scholarship listing on JAVISAK is free for every student.
               </p>
             </div>
 
@@ -111,10 +111,10 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
           <div className="space-y-1">
             <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-1.5">
               <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
-              <span>Keep StudyMacha Independent &amp; Ad-Clean</span>
+              <span>Keep JAVISAK Independent &amp; Ad-Clean</span>
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-400">
-              StudyMacha is maintained independently. If our tools saved your attendance or helped you plan Phase-2 options, consider buying a coffee.
+              JAVISAK is maintained independently. If our tools saved your attendance or helped you plan Phase-2 options, consider buying a coffee.
             </p>
           </div>
           {onOpenSupport && (
@@ -122,7 +122,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
               onClick={onOpenSupport}
               className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-colors shadow-xs shrink-0 cursor-pointer"
             >
-              Support StudyMacha ☕
+              Support JAVISAK ☕
             </button>
           )}
         </section>

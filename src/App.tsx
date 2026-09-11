@@ -485,7 +485,7 @@ export default function App() {
         };
       default:
         return {
-          title: 'StudyMacha Feature Hub',
+          title: 'JAVISAK Feature Hub',
           icon: <Sparkles className="w-4 h-4 text-sky-500" />,
         };
     }
@@ -556,7 +556,7 @@ export default function App() {
                 type="button"
                 onClick={() => handleSelectWorkspace('hub')}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-all cursor-pointer shadow-2xs group shrink-0 self-start sm:self-auto"
-                title="Return to StudyMacha Feature Hub"
+                title="Return to JAVISAK Feature Hub"
               >
                 <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
                 <span>← Back to Feature Hub</span>
@@ -786,7 +786,7 @@ export default function App() {
               <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             </div>
             <p className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 text-left">
-              StudyMacha — 100% Free &amp; Open-Source Educational Tooling for Students.
+              JAVISAK — 100% Free &amp; Open-Source Educational Tooling for Students.
             </p>
           </div>
           <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 font-medium">
@@ -806,12 +806,21 @@ export default function App() {
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-slate-100 dark:border-slate-800">
             <div className="space-y-1.5 max-w-xl">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-slate-950 dark:bg-slate-800 text-white flex items-center justify-center font-bold text-xs">
-                  <Sparkles className="w-4 h-4 text-sky-400" />
+                <div className="relative w-8 h-8 rounded-xl overflow-hidden shadow-xs border border-slate-700/60 bg-slate-900 flex items-center justify-center p-0.5 shrink-0">
+                  <img 
+                    src="https://i.ibb.co/0yhSPd8M/Chat-GPT-Image-Sep-11-2026-09-55-22-PM.png" 
+                    alt="JAVISAK Logo" 
+                    className="w-full h-full object-contain"
+                  />
                 </div>
-                <span className="text-lg font-black tracking-tight text-slate-900 dark:text-white font-sans">
-                  STUDY<span className="text-sky-600 dark:text-sky-400">MACHA</span>
-                </span>
+                <a
+                  href="https://javisak.vercel.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-lg font-black tracking-tight text-slate-900 dark:text-white font-sans hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors"
+                >
+                  JAVIS<span className="text-sky-600 dark:text-sky-400">AK</span>
+                </a>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                   VERIFIED STUDENT PORTAL
                 </span>
@@ -847,10 +856,10 @@ export default function App() {
                   id="footer-support-btn"
                   onClick={() => setIsSupportModalOpen(true)}
                   className="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800 font-semibold px-3 py-1.5 rounded-full text-xs flex items-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer"
-                  title="Support the Developer / Keep StudyMacha Free"
+                  title="Support the Developer / Keep JAVISAK Free"
                 >
                   <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 animate-pulse" />
-                  <span>☕ Support StudyMacha</span>
+                  <span>☕ Support JAVISAK</span>
                 </button>
 
                 <button
@@ -1062,7 +1071,7 @@ export default function App() {
                     onClick={() => setLegalModal('about')}
                     className="hover:text-sky-600 transition-colors text-left cursor-pointer"
                   >
-                    About StudyMacha
+                    About JAVISAK
                   </button>
                 </li>
                 <li>
@@ -1108,7 +1117,7 @@ export default function App() {
                     className="hover:text-rose-600 transition-colors text-left cursor-pointer flex items-center gap-1.5 font-bold text-rose-600 dark:text-rose-400"
                   >
                     <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 animate-pulse" />
-                    <span>☕ Support StudyMacha (Donation)</span>
+                    <span>☕ Support JAVISAK (Donation)</span>
                   </button>
                 </li>
                 <li>
@@ -1161,7 +1170,7 @@ export default function App() {
               </button>
             </div>
             <p className="text-xs text-amber-900/90 dark:text-amber-200/80 leading-relaxed">
-              <strong>Disclaimer:</strong> StudyMacha is an independent informational and utility platform. AP EAPCET data, college vacancy counts, and scholarship listings are aggregated from publicly available official portals for educational guidance only. StudyMacha is <strong>NOT affiliated with APSCHE, APCFSS, National Scholarship Portal (NSP), or any government body</strong>. Official cutoffs, deadlines, and seat allotments are subject to change by respective authorities. Users must verify all critical details on official government portals.
+              <strong>Disclaimer:</strong> JAVISAK is an independent informational and utility platform. AP EAPCET data, college vacancy counts, and scholarship listings are aggregated from publicly available official portals for educational guidance only. JAVISAK is <strong>NOT affiliated with APSCHE, APCFSS, National Scholarship Portal (NSP), or any government body</strong>. Official cutoffs, deadlines, and seat allotments are subject to change by respective authorities. Users must verify all critical details on official government portals.
             </p>
           </div>
 
@@ -1172,7 +1181,16 @@ export default function App() {
               <span>100% In-Memory Sandbox • No Personal Files or Resumes Stored on Remote Servers</span>
             </div>
             <div>
-              <span>© 2026 StudyMacha Platform. Official Support: </span>
+              <span>© 2026 </span>
+              <a
+                href="https://javisak.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-slate-800 dark:text-white hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors"
+              >
+                JAVISAK
+              </a>
+              <span> Platform. Official Support: </span>
               <a href={`mailto:${supportEmail}`} className="font-mono text-slate-700 dark:text-slate-300 hover:text-sky-600 font-semibold">
                 {supportEmail}
               </a>
@@ -1192,7 +1210,7 @@ export default function App() {
         </Suspense>
       )}
 
-      {/* Support & Keep StudyMacha Free Modal */}
+      {/* Support & Keep JAVISAK Free Modal */}
       {isSupportModalOpen && (
         <Suspense fallback={null}>
           <SupportModal

@@ -234,7 +234,7 @@ export const ApEapcetRadar: React.FC<ApEapcetRadarProps> = () => {
       )
       .join('\n');
 
-    const message = `🎓 *AP EAPCET Phase 2 Leftover Seat Vacancies*\n\n🏫 *${college.inst_name}* (Code: *${college.inst_code}*)\n📍 ${college.place}, ${college.district} (${college.affiliated_to})\n\n📊 *Branch Vacancies:*\n${branchesText}\n\n🔍 Check live AP EAPCET Phase 2 college matrix on StudyMacha:\n${window.location.origin}/#eapcet-radar`;
+    const message = `🎓 *AP EAPCET Phase 2 Leftover Seat Vacancies*\n\n🏫 *${college.inst_name}* (Code: *${college.inst_code}*)\n📍 ${college.place}, ${college.district} (${college.affiliated_to})\n\n📊 *Branch Vacancies:*\n${branchesText}\n\n🔍 Check live AP EAPCET Phase 2 college matrix on JAVISAK:\n${window.location.origin}/#eapcet-radar`;
 
     const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');

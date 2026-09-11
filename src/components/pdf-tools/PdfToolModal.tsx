@@ -87,7 +87,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
   const [compressLevel, setCompressLevel] = useState<number>(0.65);
 
   // Watermark
-  const [watermarkText, setWatermarkText] = useState<string>('STUDYMACHA');
+  const [watermarkText, setWatermarkText] = useState<string>('JAVISAK');
   const [watermarkOpacity, setWatermarkOpacity] = useState<number>(0.25);
   const [watermarkAngle, setWatermarkAngle] = useState<number>(-45);
   const [watermarkColor, setWatermarkColor] = useState<string>('#475569');
@@ -103,7 +103,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
   const [passwordInput, setPasswordInput] = useState<string>('');
 
   // Edit Overlay
-  const [overlayText, setOverlayText] = useState<string>('APPROVED - STUDYMACHA');
+  const [overlayText, setOverlayText] = useState<string>('APPROVED - JAVISAK');
   const [overlayPage, setOverlayPage] = useState<number>(1);
   const [overlayColor, setOverlayColor] = useState<string>('#0284c7');
 
@@ -112,7 +112,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
 
   // HTML content for HTML to PDF
   const [htmlCode, setHtmlCode] = useState<string>(
-    '<h1>Student Project Report</h1>\n<p>Generated smoothly with StudyMacha client-side engine.</p>'
+    '<h1>Student Project Report</h1>\n<p>Generated smoothly with JAVISAK client-side engine.</p>'
   );
 
   // Sign Pad State
@@ -512,7 +512,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
         }
 
         case 'html-to-pdf': {
-          const res = await htmlToPdf(htmlCode, 'StudyMacha Document', (pct, msg) => {
+          const res = await htmlToPdf(htmlCode, 'JAVISAK Document', (pct, msg) => {
             setProgress((prev) => ({ ...prev, progressPercent: pct, statusMessage: msg }));
           });
           const downloadUrl = URL.createObjectURL(res.blob);
@@ -1050,7 +1050,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
                   type="text"
                   value={watermarkText}
                   onChange={(e) => setWatermarkText(e.target.value)}
-                  placeholder="CONFIDENTIAL / STUDYMACHA"
+                  placeholder="CONFIDENTIAL / JAVISAK"
                   className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 font-bold uppercase tracking-wider"
                 />
               </div>

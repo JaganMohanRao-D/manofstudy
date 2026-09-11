@@ -1004,7 +1004,7 @@ export async function signPdfDocument(
 // ============================================================================
 export async function watermarkPdf(
   file: File,
-  watermarkText: string = 'STUDYMACHA CONFIDENTIAL',
+  watermarkText: string = 'JAVISAK CONFIDENTIAL',
   options: {
     opacity: number;
     angle: number;
@@ -1177,8 +1177,8 @@ export async function protectPdf(
 
   // Set document security metadata
   pdfDoc.setTitle(`[PROTECTED] ${file.name}`);
-  pdfDoc.setSubject(`Encrypted via StudyMacha Security Suite`);
-  pdfDoc.setProducer(`StudyMacha Client Security Engine`);
+  pdfDoc.setSubject(`Encrypted via JAVISAK Security Suite`);
+  pdfDoc.setProducer(`JAVISAK Client Security Engine`);
 
   onProgress?.(80, 'Applying cryptographic structure...');
   const pdfBytes = await pdfDoc.save();
@@ -1234,8 +1234,8 @@ export async function convertToPdfA(
 
   onProgress?.(60, 'Standardizing metadata and stripping dynamic scripts...');
   pdfDoc.setTitle(file.name.replace(/\.pdf$/i, ''));
-  pdfDoc.setAuthor('StudyMacha Archival Engine (PDF/A-1b Standard)');
-  pdfDoc.setProducer('StudyMacha Long-Term Archival Compiler');
+  pdfDoc.setAuthor('JAVISAK Archival Engine (PDF/A-1b Standard)');
+  pdfDoc.setProducer('JAVISAK Long-Term Archival Compiler');
   pdfDoc.setCreationDate(new Date());
   pdfDoc.setModificationDate(new Date());
 
@@ -1689,7 +1689,7 @@ export async function exportPdfToMarkdown(
 
   onProgress?.(75, 'Formatting into clean Markdown document...');
   let md = `# ${file.name.replace(/\.pdf$/i, '')}\n\n`;
-  md += `> **Source**: Extracted via StudyMacha PDF Engine\n`;
+  md += `> **Source**: Extracted via JAVISAK PDF Engine\n`;
   md += `> **Pages**: ${pageCount} | **Export Date**: ${new Date().toLocaleDateString()}\n\n---\n\n`;
 
   pageTexts.forEach((text, idx) => {

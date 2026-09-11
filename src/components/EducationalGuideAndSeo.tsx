@@ -73,7 +73,7 @@ export const EducationalGuideAndSeo: React.FC = () => {
           Engine Specifications & Academic Formula Guide
         </h2>
         <p className="text-xs sm:text-sm text-slate-500">
-          Understand the mathematical models, formulas, and client-side processing algorithms powering STUDYMACHA.
+          Understand the mathematical models, formulas, and client-side processing algorithms powering JAVISAK.
         </p>
       </div>
 

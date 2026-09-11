@@ -14,14 +14,15 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
   onClose,
 }) => {
   const [copied, setCopied] = useState<boolean>(false);
+  const [copiedPlatform, setCopiedPlatform] = useState<boolean>(false);
 
   // Generate shareable URL for this specific branch
-  const shareUrl = typeof window !== 'undefined'
+  const shareUrl = typeof window !== 'undefined' && !window.location.origin.includes('pages.dev')
     ? `${window.location.origin}${window.location.pathname}#branch=${branch.id}`
-    : `https://studymacha.pages.dev/#branch=${branch.id}`;
+    : `https://javisak.vercel.app/#branch=${branch.id}`;
 
-  const shareTitle = `${branch.name} (${branch.code}) 4-Year Career Roadmap • StudyMacha`;
-  const shareText = `Explore the official 4-Year ${branch.name} Engineering Roadmap on StudyMacha with core subjects, industry skills, and salary benchmarks.`;
+  const shareTitle = `${branch.name} (${branch.code}) 4-Year Career Roadmap • JAVISAK`;
+  const shareText = `Explore the official 4-Year ${branch.name} Engineering Roadmap on JAVISAK with core subjects, industry skills, and salary benchmarks.`;
 
   // Explicit, safe close handler that ensures immediate cleanup of overlays
   const handleClose = useCallback(() => {
@@ -216,6 +217,38 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
                 <span>Link copied to clipboard! You can paste it into chats or study groups.</span>
               </p>
             )}
+
+            {/* Copy Platform Main URL */}
+            <div className="pt-2 flex items-center justify-between border-t border-slate-100">
+              <span className="text-xs text-slate-500 font-medium">Platform URL:</span>
+              <button
+                type="button"
+                id="copy-platform-url-btn"
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText('https://javisak.vercel.app');
+                    setCopiedPlatform(true);
+                    setTimeout(() => setCopiedPlatform(false), 2500);
+                  } catch {
+                    // Fallback
+                  }
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold cursor-pointer transition-colors"
+                title="Copy Platform URL"
+              >
+                {copiedPlatform ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                    <span className="text-emerald-600">Link copied to clipboard!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3.5 h-3.5 text-slate-500" />
+                    <span>Copy Platform URL</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
 
           {/* Social Share Grid */}

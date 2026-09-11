@@ -39,7 +39,7 @@ export const PlacementCodeVault = () => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [revisedCards, setRevisedCards] = useState(() => {
     try {
-      const saved = localStorage.getItem('studymacha_revised_viva_cards');
+      const saved = localStorage.getItem('javisak_revised_viva_cards') || localStorage.getItem('studymacha_revised_viva_cards');
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -49,7 +49,7 @@ export const PlacementCodeVault = () => {
   // Save revised cards to localStorage
   useEffect(() => {
     try {
-      localStorage.setItem('studymacha_revised_viva_cards', JSON.stringify(revisedCards));
+      localStorage.setItem('javisak_revised_viva_cards', JSON.stringify(revisedCards));
     } catch (e) {
       console.error('Failed to save revised cards', e);
     }
@@ -179,7 +179,7 @@ export const PlacementCodeVault = () => {
               <span>100% In-Browser Placement & Lab Suite</span>
             </div>
             <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-white">
-              Placement Viva &amp; Practical Code Vault
+              JAVISAK Placement Code Vault &amp; Viva Flashcards
             </h1>
             <p className="text-sm text-slate-300 max-w-2xl leading-relaxed">
               50+ high-frequency technical interview viva flashcards across OOPs, DBMS, OS, Networks &amp; DSA, plus 27 self-contained, non-blocking Python, C, and C++ code templates with zero infinite loops.

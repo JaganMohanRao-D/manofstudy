@@ -25,7 +25,7 @@ export const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     const mailtoUrl = `mailto:${supportEmail}?subject=${encodeURIComponent(
-      `[StudyMacha ${subjectCategory}] from ${senderName || 'Student'} (${senderCollege || 'College'})`
+      `[JAVISAK ${subjectCategory}] from ${senderName || 'Student'} (${senderCollege || 'College'})`
     )}&body=${encodeURIComponent(message)}`;
     window.location.href = mailtoUrl;
     setIsPrepared(true);
@@ -56,7 +56,7 @@ export const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
-            Contact StudyMacha
+            Contact JAVISAK
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-2xl leading-relaxed">
@@ -109,7 +109,7 @@ export const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
               Platform Operator
             </span>
             <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-              StudyMacha is engineered and curated by Jagan Mohan Rao. Your suggestions directly influence upcoming feature releases and academic tools.
+              JAVISAK is engineered and curated by Dunna Jagan Mohan Rao (creator of PlantMokk AI). Your suggestions directly influence upcoming feature releases and academic tools.
             </p>
           </div>
         </div>

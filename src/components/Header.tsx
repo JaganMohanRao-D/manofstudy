@@ -53,7 +53,7 @@ export const Header: React.FC<HeaderProps> = ({
   // Initialize theme from localStorage or document class
   useEffect(() => {
     try {
-      const savedTheme = localStorage.getItem('studymacha_theme');
+      const savedTheme = localStorage.getItem('javisak_theme') || localStorage.getItem('studymacha_theme');
       if (savedTheme === 'dark' || document.documentElement.classList.contains('dark')) {
         setIsDarkMode(true);
         document.documentElement.classList.add('dark');
@@ -72,10 +72,10 @@ export const Header: React.FC<HeaderProps> = ({
     try {
       if (next) {
         document.documentElement.classList.add('dark');
-        localStorage.setItem('studymacha_theme', 'dark');
+        localStorage.setItem('javisak_theme', 'dark');
       } else {
         document.documentElement.classList.remove('dark');
-        localStorage.setItem('studymacha_theme', 'light');
+        localStorage.setItem('javisak_theme', 'light');
       }
     } catch {
       // ignore
@@ -173,32 +173,42 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Main Streamlined Navigation Bar */}
       <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 flex items-center justify-between gap-2 h-16">
         
-        {/* Brand Logo on Left: STUDYMACHA with PRO / Verified badge */}
-        <div
+        {/* Brand Logo on Left: JAVISAK with PRO / Verified badge */}
+        <a
+          href="https://javisak.vercel.app"
           id="brand-logo"
-          onClick={() => handleNavClick('hub')}
-          className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0 cursor-pointer select-none group"
-          title="Go to StudyMacha Feature Hub"
+          onClick={(e) => {
+            if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+              e.preventDefault();
+              handleNavClick('hub');
+              window.history.pushState(null, '', '/');
+            }
+          }}
+          className="flex items-center gap-3 select-none flex-shrink-0 cursor-pointer group no-underline"
+          title="JAVISAK — All-in-One Engineering & Career Engine"
         >
-          <div className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-950 dark:bg-sky-950 text-white shadow-md ring-1 ring-slate-800 dark:ring-sky-700 transition-transform duration-200 group-hover:scale-105">
-            <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-sky-500/20 via-teal-400/10 to-transparent pointer-events-none" />
-            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-sky-400 relative z-10 transition-transform duration-300 group-hover:rotate-12" />
+          <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden shadow-md border border-slate-700/60 bg-slate-900 flex items-center justify-center p-0.5">
+            <img 
+              src="https://i.ibb.co/0yhSPd8M/Chat-GPT-Image-Sep-11-2026-09-55-22-PM.png" 
+              alt="JAVISAK Brand Logo" 
+              className="w-full h-full object-contain transform scale-95 transition-transform duration-200 group-hover:scale-105"
+              loading="eager"
+            />
           </div>
-          <div>
+          <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
-              <span className="text-sm sm:text-base font-black tracking-tight text-slate-900 dark:text-white font-sans">
-                STUDY<span className="text-sky-600 dark:text-sky-400">MACHA</span>
+              <span className="text-lg sm:text-xl font-black tracking-tight text-slate-900 dark:text-white uppercase font-mono group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
+                JAVISAK
               </span>
-              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold tracking-wider uppercase bg-slate-900 dark:bg-slate-800 text-slate-100 shadow-2xs">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
                 PRO
               </span>
             </div>
-            <p className="text-[10px] font-medium text-slate-400 hidden sm:block">
+            <span className="text-[10px] text-slate-400 font-medium tracking-wide hidden sm:block">
               All-in-One Engineering &amp; Career Engine
-            </p>
+            </span>
           </div>
-        </div>
+        </a>
 
         {/* Desktop Direct Workspace Switchers (Zero Clutter, No Clipping) */}
         <nav className="hidden lg:flex items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar py-1">
@@ -240,10 +250,10 @@ export const Header: React.FC<HeaderProps> = ({
             id="header-support-btn"
             onClick={onOpenSupport}
             className="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800 font-semibold px-2.5 sm:px-3 py-1.5 rounded-full text-xs flex items-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer flex-shrink-0"
-            title="Support StudyMacha & Keep It 100% Free Forever"
+            title="Support JAVISAK & Keep It 100% Free Forever"
           >
             <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 animate-pulse flex-shrink-0" />
-            <span className="hidden sm:inline font-bold">☕ Support StudyMacha</span>
+            <span className="hidden sm:inline font-bold">☕ Support JAVISAK</span>
             <span className="sm:hidden font-bold">☕ Support</span>
           </button>
 
@@ -286,7 +296,7 @@ export const Header: React.FC<HeaderProps> = ({
               id="header-hamburger-drawer-btn"
               onClick={() => setIsMegaDrawerOpen(true)}
               className="p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-white border border-slate-700 active:scale-95 transition-all flex items-center justify-center cursor-pointer shadow-sm"
-              title="Open StudyMacha Mega Menu & Student Hubs"
+              title="Open JAVISAK Mega Menu & Student Hubs"
               aria-label="Open Navigation Mega Drawer"
             >
               <Menu className="w-5 h-5 text-white" />
@@ -309,7 +319,7 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <div className="flex items-center gap-2">
               <Search className="w-4 h-4 text-sky-600" />
-              <span>Search StudyMacha Tools &amp; Roadmaps</span>
+              <span>Search JAVISAK Tools &amp; Roadmaps</span>
             </div>
             <kbd className="text-[10px] bg-white dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700">
               ⌘K
@@ -326,7 +336,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800 font-bold text-xs transition-all cursor-pointer shadow-xs active:scale-95"
           >
             <Heart className="w-4 h-4 text-rose-500 fill-rose-500 animate-pulse" />
-            <span>☕ Support StudyMacha (Keep It 100% Free)</span>
+            <span>☕ Support JAVISAK (Keep It 100% Free)</span>
           </button>
 
           {/* Workspaces List */}

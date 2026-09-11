@@ -316,8 +316,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         },
       },
       {
-        id: 'action-support-studymacha',
-        title: '☕ Support the Developer / Keep StudyMacha Free',
+        id: 'action-support-javisak',
+        title: '☕ Support the Developer / Keep JAVISAK Free',
         subtitle: 'Help us pay server and scraper bills with a quick contribution via UPI',
         category: 'Quick Actions',
         badge: 'Donate',
