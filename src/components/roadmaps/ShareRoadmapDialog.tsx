@@ -17,7 +17,7 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
   const [copiedPlatform, setCopiedPlatform] = useState<boolean>(false);
 
   // Generate shareable URL for this specific branch
-  const shareUrl = typeof window !== 'undefined' && !window.location.origin.includes('pages.dev')
+  const shareUrl = typeof window !== 'undefined' && window.location.origin.includes('javisak.vercel.app')
     ? `${window.location.origin}${window.location.pathname}#branch=${branch.id}`
     : `https://javisak.vercel.app/#branch=${branch.id}`;
 

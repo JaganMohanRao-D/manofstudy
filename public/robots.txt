@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: PerplexityBot
 Allow: /
+
+Sitemap: https://javisak.vercel.app/sitemap.xml
