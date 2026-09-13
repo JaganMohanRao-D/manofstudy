@@ -1,6 +1,7 @@
 export type WorkspaceView =
   | 'hub'
   | 'eapcet'
+  | 'tg-allotments'
   | 'roadmaps'
   | 'scholarships'
   | 'utilities'
@@ -20,6 +21,7 @@ export type WorkspaceView =
 
 export type ToolTab = 
   | 'eapcet-radar'
+  | 'tg-allotments'
   | 'roadmaps'
   | 'scholarships'
   | 'pdf-tools'

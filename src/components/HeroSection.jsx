@@ -88,6 +88,19 @@ const WORKSPACES = [
     hoverBorder: 'hover:border-emerald-500/60',
   },
   {
+    id: 'ws-tg-allotments',
+    workspace: 'tg-allotments',
+    title: 'TG EAPCET 2026 Final Allotment & Cutoff Radar',
+    badge: 'Final Phase 2026',
+    badgeColor: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+    description:
+      'Official student allotment registers, category closing cutoffs, gender ratios & admission analytics across top colleges.',
+    icon: Award,
+    accentColor: 'text-rose-400',
+    iconBg: 'bg-rose-500/10 border-rose-500/30 text-rose-400',
+    hoverBorder: 'hover:border-rose-500/60',
+  },
+  {
     id: 'ws-scholarships',
     workspace: 'scholarships',
     title: 'Verified 2026 Scholarships Hub (School to B.Tech)',

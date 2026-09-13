@@ -49,6 +49,11 @@ const ApEapcetRadar = lazy(() =>
     default: m.ApEapcetRadar || m.default,
   }))
 );
+const TgAllotmentExplorer = lazy(() =>
+  import('./components/TgAllotmentExplorer').then((m: any) => ({
+    default: m.TgAllotmentExplorer || m.default,
+  }))
+);
 const AttendanceDefender = lazy(() =>
   import('./components/AttendanceDefender').then((m: any) => ({
     default: m.AttendanceDefender || m.default,
@@ -150,6 +155,14 @@ const LoadingFallback: React.FC = () => (
 
 
 export const TOOLS_CONFIG: ToolMeta[] = [
+  {
+    id: 'tg-allotments',
+    name: 'TG EAPCET 2026 Final Phase Allotment & Cutoff Radar',
+    shortName: 'TG Allotments 2026',
+    category: 'counselling',
+    description: 'Official student allotment registers, category closing cutoffs, and real admission analytics',
+    badge: '2026 Final Phase',
+  },
   {
     id: 'eapcet-radar',
     name: 'AP EAPCET Phase 2 Vacancy Radar',
@@ -294,6 +307,16 @@ export default function App() {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '').toLowerCase();
       if (
+        hash === 'tg-allotments' ||
+        hash === 'tg-allotment' ||
+        hash === 'tg-cutoff' ||
+        hash === 'tg-eapcet' ||
+        hash === 'tgeapcet' ||
+        hash.startsWith('tg-') ||
+        hash.startsWith('tg_')
+      ) {
+        setActiveWorkspace('tg-allotments');
+      } else if (
         hash === 'eapcet-radar' ||
         hash === 'eapcet' ||
         hash === 'phase1' ||
@@ -392,6 +415,8 @@ export default function App() {
     setIsCommandPaletteOpen(false);
     if (tab === 'eapcet-radar') {
       handleSelectWorkspace('eapcet');
+    } else if (tab === 'tg-allotments') {
+      handleSelectWorkspace('tg-allotments');
     } else if (tab === 'roadmaps') {
       handleSelectWorkspace('roadmaps');
     } else if (tab === 'scholarships') {
@@ -441,6 +466,11 @@ export default function App() {
         return {
           title: 'AP EAPCET Phase 2 Vacancy Radar & Fees',
           icon: <Flame className="w-4 h-4 text-rose-500" />,
+        };
+      case 'tg-allotments':
+        return {
+          title: 'TG EAPCET 2026 Final Phase Allotment & Cutoff Radar',
+          icon: <Award className="w-4 h-4 text-indigo-500" />,
         };
       case 'roadmaps':
         return {
@@ -671,6 +701,10 @@ export default function App() {
 
                 {activeWorkspace === 'eapcet' && (
                   <ApEapcetRadar initialTab={eapcetPhase} />
+                )}
+
+                {activeWorkspace === 'tg-allotments' && (
+                  <TgAllotmentExplorer />
                 )}
 
                 {activeWorkspace === 'roadmaps' && (

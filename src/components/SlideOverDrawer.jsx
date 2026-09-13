@@ -188,6 +188,27 @@ export const SlideOverDrawer = ({
 
               <button
                 type="button"
+                id="drawer-counseling-tg-allotments-btn"
+                onClick={() => handleNavigate('tg-allotments')}
+                className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-800/70 text-left transition-colors cursor-pointer group border border-transparent hover:border-slate-800"
+              >
+                <div className="flex items-start gap-2.5">
+                  <Award className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="text-xs font-bold text-white group-hover:text-rose-300 transition-colors flex items-center gap-1.5">
+                      <span>TG EAPCET 2026 Final Allotments</span>
+                      <span className="text-[9px] bg-rose-500/20 text-rose-300 px-1.5 py-0.2 rounded font-mono">NEW</span>
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      Official candidate allotments, cutoff ranks &amp; admission stats
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-600 group-hover:text-slate-300 shrink-0" />
+              </button>
+
+              <button
+                type="button"
                 id="drawer-counseling-guides-btn"
                 onClick={() => handleNavigate('guides')}
                 className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-800/70 text-left transition-colors cursor-pointer group border border-transparent hover:border-slate-800"
