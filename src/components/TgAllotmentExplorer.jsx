@@ -282,7 +282,10 @@ export default function TgAllotmentExplorer() {
         count,
         pct: total > 0 ? ((count / total) * 100).toFixed(1) : 0
       }))
-      .sort((a, b) => b.count - a.count);
+      .sort((a, b) => {
+        if (b.count !== a.count) return b.count - a.count;
+        return a.caste.localeCompare(b.caste);
+      });
 
     return {
       totalAllotted: total,
@@ -420,6 +423,79 @@ export default function TgAllotmentExplorer() {
     if (q.startsWith('ST')) return { bg: 'bg-rose-500', text: 'text-rose-400', border: 'border-rose-500/30', lightBg: 'bg-rose-500/10' };
     if (q.startsWith('EWS')) return { bg: 'bg-purple-500', text: 'text-purple-400', border: 'border-purple-500/30', lightBg: 'bg-purple-500/10' };
     return { bg: 'bg-teal-500', text: 'text-teal-400', border: 'border-teal-500/30', lightBg: 'bg-teal-500/10' };
+  };
+
+  // Dynamic color palette helper for Caste / Community spread
+  const getCommunityColorClasses = (communityName) => {
+    const c = (communityName || '').toUpperCase().trim();
+    if (c === 'OC' || c === 'OPEN') {
+      return {
+        bar: 'from-emerald-500 to-teal-400',
+        badge: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+        text: 'text-emerald-400'
+      };
+    }
+    if (c.startsWith('EWS')) {
+      return {
+        bar: 'from-teal-500 to-emerald-400',
+        badge: 'bg-teal-500/15 text-teal-300 border-teal-500/30',
+        text: 'text-teal-400'
+      };
+    }
+    if (c.startsWith('BC_A') || c.startsWith('BC-A')) {
+      return {
+        bar: 'from-cyan-500 to-blue-500',
+        badge: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+        text: 'text-cyan-400'
+      };
+    }
+    if (c.startsWith('BC_B') || c.startsWith('BC-B')) {
+      return {
+        bar: 'from-blue-500 to-indigo-500',
+        badge: 'bg-blue-500/15 text-blue-300 border-blue-500/30',
+        text: 'text-blue-400'
+      };
+    }
+    if (c.startsWith('BC_C') || c.startsWith('BC-C')) {
+      return {
+        bar: 'from-sky-500 to-cyan-500',
+        badge: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
+        text: 'text-sky-400'
+      };
+    }
+    if (c.startsWith('BC_D') || c.startsWith('BC-D')) {
+      return {
+        bar: 'from-indigo-500 to-sky-500',
+        badge: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30',
+        text: 'text-indigo-400'
+      };
+    }
+    if (c.startsWith('BC_E') || c.startsWith('BC-E')) {
+      return {
+        bar: 'from-violet-500 to-purple-500',
+        badge: 'bg-violet-500/15 text-violet-300 border-violet-500/30',
+        text: 'text-violet-400'
+      };
+    }
+    if (c.startsWith('SC')) {
+      return {
+        bar: 'from-amber-500 to-orange-400',
+        badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+        text: 'text-amber-400'
+      };
+    }
+    if (c.startsWith('ST')) {
+      return {
+        bar: 'from-rose-500 to-pink-500',
+        badge: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+        text: 'text-rose-400'
+      };
+    }
+    return {
+      bar: 'from-fuchsia-500 to-rose-400',
+      badge: 'bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/30',
+      text: 'text-fuchsia-400'
+    };
   };
 
   return (
@@ -1122,65 +1198,69 @@ export default function TgAllotmentExplorer() {
                 )}
 
                 {/* Demographics & Quota Visual Flex-Bars */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
                   {/* Gender Ratio */}
-                  <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-2.5">
-                    <div className="flex justify-between items-center text-xs font-semibold">
-                      <span className="text-slate-300 flex items-center gap-1.5">
-                        <Users className="w-3.5 h-3.5 text-cyan-400" />
-                        Gender Ratio
-                      </span>
-                      <span className="text-slate-400 font-mono text-[10px]">
-                        {analytics.totalAllotted} Students
-                      </span>
+                  <div className="lg:col-span-3 bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-2.5 flex flex-col justify-between">
+                    <div>
+                      <div className="flex justify-between items-center text-xs font-semibold mb-2.5">
+                        <span className="text-slate-300 flex items-center gap-1.5">
+                          <Users className="w-3.5 h-3.5 text-cyan-400" />
+                          Gender Ratio
+                        </span>
+                        <span className="text-slate-400 font-mono text-[10px]">
+                          {analytics.totalAllotted} Students
+                        </span>
+                      </div>
+
+                      <div className="h-3 w-full bg-slate-800 rounded-full overflow-hidden flex p-0.5 shadow-inner">
+                        <div 
+                          style={{ width: `${analytics.malePct}%` }}
+                          className="h-full bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-l-full transition-all duration-500"
+                          title={`Boys: ${analytics.maleCount} (${analytics.malePct}%)`}
+                        />
+                        <div 
+                          style={{ width: `${analytics.femalePct}%` }}
+                          className="h-full bg-gradient-to-r from-rose-500 to-purple-500 rounded-r-full transition-all duration-500"
+                          title={`Girls: ${analytics.femaleCount} (${analytics.femalePct}%)`}
+                        />
+                      </div>
                     </div>
 
-                    <div className="h-3 w-full bg-slate-800 rounded-full overflow-hidden flex p-0.5">
-                      <div 
-                        style={{ width: `${analytics.malePct}%` }}
-                        className="h-full bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-l-full transition-all duration-500"
-                        title={`Boys: ${analytics.maleCount} (${analytics.malePct}%)`}
-                      />
-                      <div 
-                        style={{ width: `${analytics.femalePct}%` }}
-                        className="h-full bg-gradient-to-r from-rose-500 to-purple-500 rounded-r-full transition-all duration-500"
-                        title={`Girls: ${analytics.femaleCount} (${analytics.femalePct}%)`}
-                      />
-                    </div>
-
-                    <div className="flex justify-between text-[11px]">
+                    <div className="flex justify-between text-[11px] pt-1 border-t border-slate-800/60">
                       <span className="text-cyan-400 font-mono">Boys: {analytics.maleCount} ({analytics.malePct}%)</span>
                       <span className="text-rose-400 font-mono">Girls: {analytics.femaleCount} ({analytics.femalePct}%)</span>
                     </div>
                   </div>
 
                   {/* Quota Breakdown */}
-                  <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-2.5">
-                    <div className="flex justify-between items-center text-xs font-semibold">
-                      <span className="text-slate-300 flex items-center gap-1.5">
-                        <Layers className="w-3.5 h-3.5 text-indigo-400" />
-                        Quota Groups
-                      </span>
-                      <span className="text-slate-400 font-mono text-[10px]">
-                        {analytics.quotaDistribution.length} Families
-                      </span>
+                  <div className="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-2.5 flex flex-col justify-between">
+                    <div>
+                      <div className="flex justify-between items-center text-xs font-semibold mb-2.5">
+                        <span className="text-slate-300 flex items-center gap-1.5">
+                          <Layers className="w-3.5 h-3.5 text-indigo-400" />
+                          Quota Groups
+                        </span>
+                        <span className="text-slate-400 font-mono text-[10px]">
+                          {analytics.quotaDistribution.length} Families
+                        </span>
+                      </div>
+
+                      <div className="h-3 w-full bg-slate-800 rounded-full overflow-hidden flex p-0.5 gap-0.5 shadow-inner">
+                        {analytics.quotaDistribution.map((item) => {
+                          const colors = getQuotaColorClasses(item.name);
+                          return (
+                            <div
+                              key={item.name}
+                              style={{ width: `${item.pct}%` }}
+                              className={`h-full ${colors.bg} rounded-xs`}
+                              title={`${item.name}: ${item.count} (${item.pct}%)`}
+                            />
+                          );
+                        })}
+                      </div>
                     </div>
 
-                    <div className="h-3 w-full bg-slate-800 rounded-full overflow-hidden flex p-0.5 gap-0.5">
-                      {analytics.quotaDistribution.map((item) => {
-                        const colors = getQuotaColorClasses(item.name);
-                        return (
-                          <div
-                            key={item.name}
-                            style={{ width: `${item.pct}%` }}
-                            className={`h-full ${colors.bg} rounded-xs`}
-                            title={`${item.name}: ${item.count} (${item.pct}%)`}
-                          />
-                        );
-                      })}
-                    </div>
-
-                    <div className="flex flex-wrap gap-1 max-h-16 overflow-y-auto text-[10px] font-mono">
+                    <div className="flex flex-wrap gap-1 max-h-20 overflow-y-auto text-[10px] font-mono pt-1 border-t border-slate-800/60">
                       {analytics.quotaDistribution.map((item) => (
                         <span key={item.name} className="px-1.5 py-0.5 bg-slate-950 rounded text-slate-300 border border-slate-800">
                           {item.name}: {item.count}
@@ -1189,33 +1269,53 @@ export default function TgAllotmentExplorer() {
                     </div>
                   </div>
 
-                  {/* Caste Spread */}
-                  <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-2.5">
+                  {/* Caste / Community Spread (Render EVERY community dynamically) */}
+                  <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-2.5 flex flex-col">
                     <div className="flex justify-between items-center text-xs font-semibold">
                       <span className="text-slate-300 flex items-center gap-1.5">
                         <PieChart className="w-3.5 h-3.5 text-amber-400" />
                         Caste / Community Spread
                       </span>
-                      <span className="text-slate-400 font-mono text-[10px]">
+                      <span className="px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-[10px] font-semibold">
                         {analytics.casteDistribution.length} Communities
                       </span>
                     </div>
 
-                    <div className="space-y-1 max-h-24 overflow-y-auto pr-1">
-                      {analytics.casteDistribution.slice(0, 4).map((c) => (
-                        <div key={c.caste} className="space-y-0.5 text-[10px] font-mono">
-                          <div className="flex justify-between text-slate-300">
-                            <span>{c.caste}</span>
-                            <span>{c.count} ({c.pct}%)</span>
-                          </div>
-                          <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                            <div
-                              style={{ width: `${c.pct}%` }}
-                              className="h-full bg-amber-500 rounded-full"
-                            />
-                          </div>
+                    {/* Responsive Dual-Column / Scrollable Grid Container */}
+                    <div className="max-h-56 overflow-y-auto pr-1.5 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
+                      {analytics.casteDistribution.length === 0 ? (
+                        <div className="text-center py-4 text-xs text-slate-500">
+                          No community data available
                         </div>
-                      ))}
+                      ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {analytics.casteDistribution.map((c) => {
+                            const colors = getCommunityColorClasses(c.caste);
+                            return (
+                              <div
+                                key={c.caste}
+                                className="bg-slate-950/70 border border-slate-800/80 hover:border-slate-700/80 rounded-lg p-2 space-y-1.5 transition-colors"
+                              >
+                                <div className="flex items-center justify-between text-xs font-mono">
+                                  <span className={`px-1.5 py-0.5 rounded text-[11px] font-bold border ${colors.badge}`}>
+                                    {c.caste}
+                                  </span>
+                                  <span className="text-slate-300 text-[11px] font-semibold">
+                                    {c.count}{' '}
+                                    <span className="text-slate-400 font-normal">({c.pct}%)</span>
+                                  </span>
+                                </div>
+                                <div className="h-1.5 w-full bg-slate-800/90 rounded-full overflow-hidden">
+                                  <div
+                                    style={{ width: `${c.pct}%` }}
+                                    className={`h-full bg-gradient-to-r ${colors.bar} rounded-full transition-all duration-500 ease-out`}
+                                  />
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

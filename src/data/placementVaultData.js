@@ -1,5 +1,5 @@
 // ============================================================================
-// JAVISAK PLACEMENT VIVA FLASHCARDS (50 HIGH-FREQUENCY INTERVIEW QUESTIONS)
+// MAN OF STUDY PLACEMENT VIVA FLASHCARDS (50 HIGH-FREQUENCY INTERVIEW QUESTIONS)
 // Categories: OOPs (10), DBMS (10), OS (10), Computer Networks (10), DSA (10)
 // ============================================================================
 
@@ -680,7 +680,7 @@ export const VIVA_FLASHCARDS = [
 ];
 
 // ============================================================================
-// JAVISAK 25+ SELF-CONTAINED PRACTICAL CODE SNIPPETS
+// MAN OF STUDY 25+ SELF-CONTAINED PRACTICAL CODE SNIPPETS
 // Languages: Python (9), C (9), C++ (9) = 27 Templates
 // Strict rule: 100% self-executable, zero interactive input loops, expected output in comments
 // ============================================================================
@@ -839,7 +839,7 @@ def is_anagram(str1, str2):
 
 # Self-contained validations
 p1 = "A man a plan a canal Panama"
-p2 = "JAVISAK"
+p2 = "MANOFSTUDY"
 print(f"'{p1}' is palindrome: {is_palindrome(p1)}")
 print(f"'{p2}' is palindrome: {is_palindrome(p2)}")
 
@@ -848,7 +848,7 @@ print(f"'{a1}' and '{a2}' are anagrams: {is_anagram(a1, a2)}")
 
 # Expected Output:
 # 'A man a plan a canal Panama' is palindrome: True
-# 'JAVISAK' is palindrome: False
+# 'MANOFSTUDY' is palindrome: False
 # 'listen' and 'silent' are anagrams: True`
   },
   {
@@ -1246,7 +1246,7 @@ After Swap:  num1 = 90, num2 = 45
 #include <ctype.h>
 
 int main() {
-    char str[] = "JAVISAK 2026 Batch!";
+    char str[] = "MAN OF STUDY 2026!";
     int vowels = 0, consonants = 0, digits = 0, spaces = 0;
 
     for (int i = 0; str[i] != '\\0'; i++) {
@@ -1270,8 +1270,8 @@ int main() {
 }
 
 /* Expected Output:
-String: 'JAVISAK 2026 Batch!'
-Vowels: 3 | Consonants: 8 | Digits: 4 | Spaces: 2
+String: 'MAN OF STUDY 2026!'
+Vowels: 3 | Consonants: 7 | Digits: 4 | Spaces: 3
 */`
   },
   {

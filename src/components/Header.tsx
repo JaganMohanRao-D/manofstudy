@@ -181,9 +181,9 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Main Streamlined Navigation Bar */}
       <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 flex items-center justify-between gap-2 h-16">
         
-        {/* Brand Logo on Left: JAVISAK with PRO / Verified badge */}
+        {/* Brand Logo on Left: MAN OF STUDY with MOS compact badge */}
         <a
-          href="https://javisak.vercel.app"
+          href="https://manofstudy.com"
           id="brand-logo"
           onClick={(e) => {
             if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
@@ -192,28 +192,31 @@ export const Header: React.FC<HeaderProps> = ({
               window.history.pushState(null, '', '/');
             }
           }}
-          className="flex items-center gap-3 select-none flex-shrink-0 cursor-pointer group no-underline"
-          title="JAVISAK — All-in-One Engineering & Career Engine"
+          className="flex items-center gap-2.5 sm:gap-3 select-none flex-shrink-0 cursor-pointer group no-underline"
+          title="MAN OF STUDY — The Definitive Engineering & Academic Launchpad for Pan-Indian Students"
         >
-          <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden shadow-md border border-slate-700/60 bg-slate-900 flex items-center justify-center p-0.5">
+          <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden shadow-md border border-slate-700/60 bg-slate-900 flex items-center justify-center p-0.5 shrink-0">
             <img 
-              src="https://i.ibb.co/0yhSPd8M/Chat-GPT-Image-Sep-11-2026-09-55-22-PM.png" 
-              alt="JAVISAK Brand Logo" 
+              src="https://i.ibb.co/zHPk2tv4/Chat-GPT-Image-Sep-13-2026-08-04-48-PM.png" 
+              alt="MAN OF STUDY Logo" 
               className="w-full h-full object-contain transform scale-95 transition-transform duration-200 group-hover:scale-105"
               loading="eager"
             />
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
-              <span className="text-lg sm:text-xl font-black tracking-tight text-slate-900 dark:text-white uppercase font-mono group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
-                JAVISAK
+              <span className="hidden sm:inline text-lg sm:text-xl font-black tracking-tight text-slate-900 dark:text-white uppercase font-mono group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors">
+                MAN OF STUDY
+              </span>
+              <span className="sm:hidden text-lg font-black tracking-tight text-slate-900 dark:text-white uppercase font-mono group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors">
+                MOS
               </span>
               <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
                 PRO
               </span>
             </div>
             <span className="text-[10px] text-slate-400 font-medium tracking-wide hidden sm:block">
-              All-in-One Engineering &amp; Career Engine
+              Engineering &amp; Academic Companion
             </span>
           </div>
         </a>
@@ -258,10 +261,10 @@ export const Header: React.FC<HeaderProps> = ({
             id="header-support-btn"
             onClick={onOpenSupport}
             className="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800 font-semibold px-2.5 sm:px-3 py-1.5 rounded-full text-xs flex items-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer flex-shrink-0"
-            title="Support JAVISAK & Keep It 100% Free Forever"
+            title="Support MAN OF STUDY & Keep It 100% Free Forever"
           >
             <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 animate-pulse flex-shrink-0" />
-            <span className="hidden sm:inline font-bold">☕ Support JAVISAK</span>
+            <span className="hidden sm:inline font-bold">☕ Support MOS</span>
             <span className="sm:hidden font-bold">☕ Support</span>
           </button>
 
@@ -304,7 +307,7 @@ export const Header: React.FC<HeaderProps> = ({
               id="header-hamburger-drawer-btn"
               onClick={() => setIsMegaDrawerOpen(true)}
               className="p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-white border border-slate-700 active:scale-95 transition-all flex items-center justify-center cursor-pointer shadow-sm"
-              title="Open JAVISAK Mega Menu & Student Hubs"
+              title="Open MAN OF STUDY Mega Menu & Student Hubs"
               aria-label="Open Navigation Mega Drawer"
             >
               <Menu className="w-5 h-5 text-white" />
@@ -326,8 +329,8 @@ export const Header: React.FC<HeaderProps> = ({
             className="w-full flex items-center justify-between p-3 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs cursor-pointer"
           >
             <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-sky-600" />
-              <span>Search JAVISAK Tools &amp; Roadmaps</span>
+              <Search className="w-4 h-4 text-emerald-500" />
+              <span>Search MOS Tools &amp; Roadmaps</span>
             </div>
             <kbd className="text-[10px] bg-white dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700">
               ⌘K
@@ -344,7 +347,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800 font-bold text-xs transition-all cursor-pointer shadow-xs active:scale-95"
           >
             <Heart className="w-4 h-4 text-rose-500 fill-rose-500 animate-pulse" />
-            <span>☕ Support JAVISAK (Keep It 100% Free)</span>
+            <span>☕ Support MAN OF STUDY (100% Free)</span>
           </button>
 
           {/* Workspaces List */}

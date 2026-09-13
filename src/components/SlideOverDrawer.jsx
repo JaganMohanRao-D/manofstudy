@@ -101,7 +101,7 @@ export const SlideOverDrawer = ({
           {/* Header with Title and Prominent Close Button */}
           <div className="flex items-center justify-between pb-4 border-b border-slate-800">
             <a
-              href="https://javisak.vercel.app"
+              href="https://manofstudy.com"
               onClick={(e) => {
                 if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
                   e.preventDefault();
@@ -109,21 +109,21 @@ export const SlideOverDrawer = ({
                 }
               }}
               className="flex items-center gap-2.5 no-underline cursor-pointer group"
-              title="JAVISAK"
+              title="MAN OF STUDY"
             >
               <div className="relative w-8 h-8 rounded-xl overflow-hidden shadow-md border border-slate-700/60 bg-slate-900 flex items-center justify-center p-0.5 shrink-0">
                 <img 
-                  src="https://i.ibb.co/0yhSPd8M/Chat-GPT-Image-Sep-11-2026-09-55-22-PM.png" 
-                  alt="JAVISAK Logo" 
+                  src="https://i.ibb.co/zHPk2tv4/Chat-GPT-Image-Sep-13-2026-08-04-48-PM.png" 
+                  alt="MAN OF STUDY Logo" 
                   className="w-full h-full object-contain"
                 />
               </div>
               <div>
-                <h2 className="text-sm font-black tracking-tight text-white uppercase font-mono group-hover:text-cyan-400 transition-colors">
-                  JAVISAK <span className="text-cyan-400">Hubs</span>
+                <h2 className="text-sm font-black tracking-tight text-white uppercase font-mono group-hover:text-emerald-400 transition-colors">
+                  MAN OF STUDY <span className="text-emerald-400">Hubs</span>
                 </h2>
                 <p className="text-[10px] text-slate-400 font-medium">
-                  Telugu Student Academic OS
+                  Engineering &amp; Academic Launchpad
                 </p>
               </div>
             </a>
@@ -542,7 +542,7 @@ export const SlideOverDrawer = ({
 
           <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] text-slate-400">
             <p className="font-semibold text-slate-300">
-              JAVISAK Telugu Academic OS
+              MAN OF STUDY (MOS) Launchpad
             </p>
             <p className="text-[10px] text-slate-500 mt-0.5">
               OF THE STUDENT, BY THE STUDENT, FOR THE STUDENT.

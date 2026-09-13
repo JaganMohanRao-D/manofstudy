@@ -2,18 +2,18 @@ import { jsPDF } from 'jspdf';
 import { BranchRoadmap } from '../types';
 
 /**
- * JAVISAK - Engineering & Degree Roadmap PDF Generator
+ * MAN OF STUDY - Engineering & Degree Roadmap PDF Generator
  * Authoritative, beautifully typeset, printable A4 document.
  * 
  * Specifications:
  * - Page Dimensions: 210mm x 297mm (A4 Portrait)
  * - Margins: Left: 14mm, Right: 14mm, Content Width: 182mm (14mm to 196mm)
  * - Vertical Margins: Top: 16mm, Bottom: 16mm (maxY: 281mm)
- * - Watermark: Ultra-subtle background opacity 0.04, -45 degree angle, single word "JAVISAK"
+ * - Watermark: Ultra-subtle background opacity 0.04, -45 degree angle, single word "MAN OF STUDY"
  * - Section 1 Compensation: 3 distinct non-overlapping columns (58mm width, 4mm gap)
  * - Auto-Wrapping: All narrative text, roles, semester descriptions strictly auto-wrapped via splitTextToSize
- * - Footer: Strict 3-part non-colliding grid (Left: Official Career Blueprint • CODE, Center: clickable JAVISAK link, Right: Page X of Y)
- * - Interactive Callout Banners: Clickable links directing to https://javisak.vercel.app/#career-blueprints
+ * - Footer: Strict 3-part non-colliding grid (Left: Official Career Blueprint • CODE, Center: clickable MAN OF STUDY link, Right: Page X of Y)
+ * - Interactive Callout Banners: Clickable links directing to https://manofstudy.com/#career-blueprints
  */
 
 export function generateRoadmapPdf(roadmap: BranchRoadmap): void {
@@ -32,14 +32,14 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap): void {
   const contentWidth = 182; // Strict 182mm usable content width (14mm to 196mm)
   const maxY = pageHeight - marginBottom; // 281mm
 
-  const BRAND_NAME = 'JAVISAK';
-  const TARGET_URL = 'https://javisak.vercel.app';
-  const EXPLORE_URL = 'https://javisak.vercel.app/#career-blueprints';
+  const BRAND_NAME = 'MAN OF STUDY';
+  const TARGET_URL = 'https://manofstudy.com';
+  const EXPLORE_URL = 'https://manofstudy.com/#career-blueprints';
 
   let currentY = marginTop + 3;
 
   // ----------------------------------------------------
-  // WATERMARK (Strictly 0.04 Opacity, Single Word "JAVISAK", -45 Degree Angle)
+  // WATERMARK (Strictly 0.04 Opacity, Single Word "MAN OF STUDY", -45 Degree Angle)
   // ----------------------------------------------------
   const renderBackgroundWatermark = () => {
     doc.saveGraphicsState();
@@ -58,9 +58,9 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap): void {
     const centerY = 148.5;
 
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(40);
+    doc.setFontSize(36);
     doc.setTextColor(100, 116, 139); // Slate-500 with 0.04 opacity
-    doc.text('JAVISAK', centerX, centerY, {
+    doc.text('MAN OF STUDY', centerX, centerY, {
       align: 'center',
       angle: -45,
     });
@@ -88,7 +88,7 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap): void {
     doc.setFillColor(6, 182, 212);
     doc.rect(segW * 3, 0, segW, barHeight, 'F');
 
-    // 2. JAVISAK Emblem Badge Pill (Left)
+    // 2. MAN OF STUDY Emblem Badge Pill (Left)
     doc.setFillColor(15, 23, 42); // Slate 900
     doc.setDrawColor(51, 65, 85); // Slate 700
     doc.setLineWidth(0.2);
@@ -107,7 +107,7 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap): void {
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(7.2);
     doc.setTextColor(71, 85, 105); // Slate 600
-    const catLabel = `JAVISAK — 4-YEAR CAREER BLUEPRINT • ${roadmap.categoryLabel.toUpperCase()}`;
+    const catLabel = `MAN OF STUDY — 4-YEAR CAREER BLUEPRINT • ${roadmap.categoryLabel.toUpperCase()}`;
     const maxCatW = contentWidth - 30 - 36 - 8;
     const catLines = doc.splitTextToSize(catLabel, maxCatW);
     doc.text(catLines[0], marginLeft + 34, 9.7);
@@ -137,7 +137,7 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap): void {
   // ----------------------------------------------------
   // STRICT FOOTER GRID LAYOUT (y = pageHeight - 8 = 289mm)
   // Left: Official Career Blueprint • CODE (max width: 90mm)
-  // Center: Clickable "JAVISAK" link at X = 105mm
+  // Center: Clickable "MAN OF STUDY" link at X = 105mm
   // Right: Page X of Y at X = 196mm
   // ----------------------------------------------------
   const renderFooter = (pageIdx: number, totalPages: number) => {
@@ -153,12 +153,12 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap): void {
     const leftText = `Official Career Blueprint • ${roadmap.code}`;
     doc.text(leftText, marginLeft, pageHeight - 8);
 
-    // Center at X = 105mm: Render an interactive clickable link labeled "JAVISAK"
+    // Center at X = 105mm: Render an interactive clickable link labeled "MAN OF STUDY"
     doc.setTextColor(37, 99, 235);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(8);
     // @ts-ignore
-    doc.textWithLink('JAVISAK', 105, pageHeight - 8, {
+    doc.textWithLink('MAN OF STUDY', 105, pageHeight - 8, {
       url: TARGET_URL,
       align: 'center',
     });
@@ -203,7 +203,7 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap): void {
     doc.setTextColor(79, 70, 229);
     // @ts-ignore
     doc.textWithLink(
-      '👉 Click here to explore & download other 24+ Engineering & Degree Roadmaps on JAVISAK',
+      '👉 Click here to explore & download other 24+ Engineering & Degree Roadmaps on MAN OF STUDY',
       105,
       currentY + 6.5,
       { url: EXPLORE_URL, align: 'center' }
@@ -562,7 +562,7 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap): void {
   // ----------------------------------------------------
   // SAVE / DOWNLOAD PDF
   // ----------------------------------------------------
-  const filename = `${roadmap.code}_Engineering_Career_Roadmap_JAVISAK.pdf`;
+  const filename = `${roadmap.code}_Engineering_Career_Roadmap_MAN_OF_STUDY.pdf`;
   doc.save(filename);
 }
 

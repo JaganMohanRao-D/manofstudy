@@ -80,7 +80,7 @@ export const ScholarshipDetailsModal: React.FC<ScholarshipDetailsModalProps> = (
   };
 
   const handleShareWhatsApp = () => {
-    const text = `🎓 *${scholarship.title}*\n🏛️ *Provider:* ${scholarship.provider}\n💰 *Benefit:* ${scholarship.amount}\n🎯 *Target:* ${scholarship.target}\n📋 *Eligibility:* ${scholarship.eligibility}\n📅 *Deadline:* ${scholarship.deadline}\n\n🔗 *Direct Apply Official Link:*\n${scholarship.apply_link}\n\n✨ Verified on JAVISAK Scholarships Radar`;
+    const text = `🎓 *${scholarship.title}*\n🏛️ *Provider:* ${scholarship.provider}\n💰 *Benefit:* ${scholarship.amount}\n🎯 *Target:* ${scholarship.target}\n📋 *Eligibility:* ${scholarship.eligibility}\n📅 *Deadline:* ${scholarship.deadline}\n\n🔗 *Direct Apply Official Link:*\n${scholarship.apply_link}\n\n✨ Verified on MAN OF STUDY Scholarships Hub`;
     const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank');
   };

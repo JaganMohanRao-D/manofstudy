@@ -509,7 +509,7 @@ export const ScholarshipsHub: React.FC = () => {
   }, [scholarships, searchQuery, activeFilter]);
 
   const handleShareToWhatsApp = (scholarship: IndianScholarship) => {
-    const text = `🎓 *${scholarship.title}*\n🏛️ *Provider:* ${scholarship.provider}\n💰 *Benefit:* ${scholarship.amount}\n🎯 *Target:* ${scholarship.target}\n📋 *Eligibility:* ${scholarship.eligibility}\n📅 *Deadline:* ${scholarship.deadline}\n\n🔗 *Direct Apply Official Link:*\n${scholarship.apply_link}\n\n✨ Verified on JAVISAK Scholarships Radar: ${window.location.origin}/#scholarships`;
+    const text = `🎓 *${scholarship.title}*\n🏛️ *Provider:* ${scholarship.provider}\n💰 *Benefit:* ${scholarship.amount}\n🎯 *Target:* ${scholarship.target}\n📋 *Eligibility:* ${scholarship.eligibility}\n📅 *Deadline:* ${scholarship.deadline}\n\n🔗 *Direct Apply Official Link:*\n${scholarship.apply_link}\n\n✨ Verified on MAN OF STUDY Scholarships Hub: ${window.location.origin}/#scholarships`;
     const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank');
   };

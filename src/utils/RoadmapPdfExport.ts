@@ -1,5 +1,5 @@
 /**
- * JAVISAK - Roadmap PDF & Printable Blueprint Generator (TypeScript)
+ * MAN OF STUDY - Roadmap PDF & Printable Blueprint Generator (TypeScript)
  * Implements 3 distinct non-overlapping responsive columns (58mm width, 4mm gap)
  * with strict auto-wrapping, zero collision & 0.04 opacity security watermark.
  */
@@ -21,14 +21,14 @@ export const PDF_COMPENSATION_GRID_STYLES = {
     { title: 'PEAK / GLOBAL TIER', defaultValue: '₹45 - ₹90+ LPA', subtext: 'Principal / Tier-1 Global AI Labs' },
   ],
   watermark: {
-    text: 'JAVISAK',
+    text: 'MAN OF STUDY',
     opacity: 0.04,
     angle: -45,
     zIndex: 0,
   },
   banner: {
-    text: '👉 Click here to explore & download other 24+ Engineering & Degree Roadmaps on JAVISAK',
-    url: 'https://javisak.vercel.app/#career-blueprints',
+    text: '👉 Click here to explore & download other 24+ Engineering & Degree Roadmaps on MAN OF STUDY',
+    url: 'https://manofstudy.com/#career-blueprints',
   },
 };
 

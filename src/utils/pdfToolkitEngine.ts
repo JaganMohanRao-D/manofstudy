@@ -1004,7 +1004,7 @@ export async function signPdfDocument(
 // ============================================================================
 export async function watermarkPdf(
   file: File,
-  watermarkText: string = 'JAVISAK CONFIDENTIAL',
+  watermarkText: string = 'MAN OF STUDY CONFIDENTIAL',
   options: {
     opacity: number;
     angle: number;
@@ -1177,8 +1177,8 @@ export async function protectPdf(
 
   // Set document security metadata
   pdfDoc.setTitle(`[PROTECTED] ${file.name}`);
-  pdfDoc.setSubject(`Encrypted via JAVISAK Security Suite`);
-  pdfDoc.setProducer(`JAVISAK Client Security Engine`);
+  pdfDoc.setSubject(`Encrypted via MAN OF STUDY Security Suite`);
+  pdfDoc.setProducer(`MAN OF STUDY Client Security Engine`);
 
   onProgress?.(80, 'Applying cryptographic structure...');
   const pdfBytes = await pdfDoc.save();
@@ -1234,8 +1234,8 @@ export async function convertToPdfA(
 
   onProgress?.(60, 'Standardizing metadata and stripping dynamic scripts...');
   pdfDoc.setTitle(file.name.replace(/\.pdf$/i, ''));
-  pdfDoc.setAuthor('JAVISAK Archival Engine (PDF/A-1b Standard)');
-  pdfDoc.setProducer('JAVISAK Long-Term Archival Compiler');
+  pdfDoc.setAuthor('MAN OF STUDY Archival Engine (PDF/A-1b Standard)');
+  pdfDoc.setProducer('MAN OF STUDY Long-Term Archival Compiler');
   pdfDoc.setCreationDate(new Date());
   pdfDoc.setModificationDate(new Date());
 
@@ -1689,7 +1689,7 @@ export async function exportPdfToMarkdown(
 
   onProgress?.(75, 'Formatting into clean Markdown document...');
   let md = `# ${file.name.replace(/\.pdf$/i, '')}\n\n`;
-  md += `> **Source**: Extracted via JAVISAK PDF Engine\n`;
+  md += `> **Source**: Extracted via MAN OF STUDY PDF Engine\n`;
   md += `> **Pages**: ${pageCount} | **Export Date**: ${new Date().toLocaleDateString()}\n\n---\n\n`;
 
   pageTexts.forEach((text, idx) => {

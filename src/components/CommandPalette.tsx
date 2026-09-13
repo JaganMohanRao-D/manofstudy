@@ -326,13 +326,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         },
       },
       {
-        id: 'action-support-javisak',
-        title: '☕ Support the Developer / Keep JAVISAK Free',
+        id: 'action-support-mos',
+        title: '☕ Support the Developer / Keep MAN OF STUDY Free',
         subtitle: 'Help us pay server and scraper bills with a quick contribution via UPI',
         category: 'Quick Actions',
         badge: 'Donate',
         icon: <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />,
-        keywords: ['support', 'donate', 'donation', 'upi', 'developer', 'chai', 'coffee', 'fund', 'contribute', 'free forever'],
+        keywords: ['support', 'donate', 'donation', 'upi', 'developer', 'chai', 'coffee', 'fund', 'contribute', 'free forever', 'man of study', 'mos'],
         action: () => onOpenSupport?.(),
       },
       {

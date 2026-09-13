@@ -600,7 +600,7 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
           <div className="space-y-3 pt-6">
             <div className="flex items-center gap-2 text-slate-900 dark:text-slate-100 font-extrabold text-sm sm:text-base tracking-tight">
               <Compass className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-              <span>JAVISAK Strategic Placement Tips for {branch.code}</span>
+              <span>MAN OF STUDY Strategic Placement Tips for {branch.code}</span>
             </div>
 
             <div className="space-y-2.5">
@@ -634,7 +634,7 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
         {/* Modal Footer */}
         <div className="shrink-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
-            <span className="font-bold text-slate-800 dark:text-slate-200">Official JAVISAK Blueprint</span>
+            <span className="font-bold text-slate-800 dark:text-slate-200">Official MAN OF STUDY Blueprint</span>
             <span>•</span>
             <span>Zero server calls • 100% Client-side export</span>
           </div>

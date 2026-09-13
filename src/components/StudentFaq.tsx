@@ -50,9 +50,9 @@ export const StudentFaq: React.FC<StudentFaqProps> = ({ onSelectTab, onOpenLegal
       category: 'developer',
       categoryLabel: 'About the Developer',
       icon: User,
-      question: 'Who created JAVISAK, and what is the core mission behind the platform?',
+      question: 'Who created MAN OF STUDY, and what is the core mission behind the platform?',
       answer:
-        'JAVISAK was conceived, architected, and engineered by Dunna Jagan Mohan Rao (creator of PlantMokk AI) with a dedicated mission to empower fellow engineering scholars nationwide. Having directly navigated the realities of university curricula, information asymmetry in campus placements, and fragmented scholarship notifications, the creator built JAVISAK as a free, privacy-first companion. Our purpose is to democratize high-grade curriculum blueprints, career roadmaps, and client-side academic utilities, enabling every student to thrive and succeed in life regardless of institutional tier.',
+        'MAN OF STUDY was conceived, architected, and engineered by Dunna Jagan Mohan Rao (creator of PlantMokk AI) with a dedicated mission to empower fellow engineering scholars nationwide. Having directly navigated the realities of university curricula, information asymmetry in campus placements, and fragmented scholarship notifications, the creator built MAN OF STUDY as a free, privacy-first companion. Our purpose is to democratize high-grade curriculum blueprints, career roadmaps, and client-side academic utilities, enabling every student to thrive and succeed in life regardless of institutional tier.',
       actionText: 'Contact Developer Desk',
       actionTarget: { type: 'email' },
     },
@@ -61,11 +61,11 @@ export const StudentFaq: React.FC<StudentFaqProps> = ({ onSelectTab, onOpenLegal
       category: 'developer',
       categoryLabel: 'About the Developer',
       icon: Heart,
-      question: 'Is JAVISAK completely free for engineering students?',
+      question: 'Is MAN OF STUDY completely free for engineering students?',
       answer:
-        'Yes, 100% free and open access. Every tool—from the 24 Engineering Branch Roadmaps with downloadable PDF blueprints, to the AP EAPCET Leftover Seat Radar, Scholarships Hub, Attendance Defender, and Client-Side PDF Power Tools—is freely accessible without mandatory paywalls, subscription fees, or account logins.',
+        'Yes, 100% free and open access. Every tool—from the 24 Engineering Branch Roadmaps with downloadable PDF blueprints, to the TG/AP EAPCET Leftover Seat & Allotment Explorer, Scholarships Hub, Attendance Defender, and Client-Side PDF Power Tools—is freely accessible without mandatory paywalls, subscription fees, or account logins.',
       actionText: 'Explore Verified Tools',
-      actionTarget: { type: 'tab', tab: 'eapcet-radar' },
+      actionTarget: { type: 'tab', tab: 'tg-allotments' },
     },
     {
       id: 'faq-developer-feedback',
@@ -122,7 +122,7 @@ export const StudentFaq: React.FC<StudentFaqProps> = ({ onSelectTab, onOpenLegal
       icon: Lock,
       question: 'Are my uploaded documents and assignments safe when using PDF Power Tools?',
       answer:
-        'JAVISAK operates under a strict Zero-Server architecture for document processing. When you merge semester marksheets, split syllabus booklets, add text watermarks, or convert PDFs, your files are processed entirely inside your browser memory (RAM) using client-side WebAssembly and pdf-lib. Zero bytes of your documents or personal files are ever uploaded or transmitted to any external server.',
+        'MAN OF STUDY operates under a strict Zero-Server architecture for document processing. When you merge semester marksheets, split syllabus booklets, add text watermarks, or convert PDFs, your files are processed entirely inside your browser memory (RAM) using client-side WebAssembly and pdf-lib. Zero bytes of your documents or personal files are ever uploaded or transmitted to any external server.',
       actionText: 'Open PDF Power Tools',
       actionTarget: { type: 'tab', tab: 'pdf-tools' },
     },
@@ -144,10 +144,10 @@ export const StudentFaq: React.FC<StudentFaqProps> = ({ onSelectTab, onOpenLegal
       category: 'scholarships',
       categoryLabel: 'Scholarships Hub',
       icon: GraduationCap,
-      question: 'What types of scholarships are tracked in the JAVISAK Scholarships Hub?',
+      question: 'What types of scholarships are tracked in the MAN OF STUDY Scholarships Hub?',
       answer:
         'We monitor verified national, state, and corporate scholarship programs for undergraduate engineers. These include national schemes (National Scholarship Portal, Pragati & Saksham for girls/differently-abled, PMSS), Andhra Pradesh & Telangana state programs (Post-Matric Tuition Fee Reimbursement RTF, Maintenance Fee MTF, ePASS), and premier corporate CSR grants (Reliance Foundation, Tata Capital Pankh, Aditya Birla, HDFC Badhte Kadam, ONGC, and Google Generation).',
-      actionText: 'Explore Scholarships Radar',
+      actionText: 'Explore Scholarships Hub',
       actionTarget: { type: 'tab', tab: 'scholarships' },
     },
     {
@@ -179,9 +179,9 @@ export const StudentFaq: React.FC<StudentFaqProps> = ({ onSelectTab, onOpenLegal
       category: 'privacy',
       categoryLabel: 'Privacy & Security',
       icon: ShieldCheck,
-      question: 'How does JAVISAK protect student data and comply with privacy best practices?',
+      question: 'How does MAN OF STUDY protect student data and comply with privacy best practices?',
       answer:
-        'JAVISAK is designed from the ground up to respect student digital autonomy. We do not require account registration, passwords, phone numbers, or academic profile harvesting. All calculations—including Attendance percentages, Internal/External score estimations, CGPA conversions, and resume parsing—run locally in your browser. We never monetize or sell personal student information.',
+        'MAN OF STUDY is designed from the ground up to respect student digital autonomy. We do not require account registration, passwords, phone numbers, or academic profile harvesting. All calculations—including Attendance percentages, Internal/External score estimations, CGPA conversions, and resume parsing—run locally in your browser. We never monetize or sell personal student information.',
       actionText: 'Read Full Privacy Policy',
       actionTarget: { type: 'legal', modal: 'privacy' },
     },
@@ -192,7 +192,7 @@ export const StudentFaq: React.FC<StudentFaqProps> = ({ onSelectTab, onOpenLegal
       icon: Lock,
       question: 'How do website advertisements work, and can I dismiss them without tracking?',
       answer:
-        'To cover bandwidth and domain hosting infrastructure while maintaining free student access, JAVISAK utilizes non-intrusive native monetization units. If you dismiss or hide any ad unit, your choice is preserved for your active session and 24 hours locally in your browser storage (sessionStorage/localStorage). We never use intrusive pop-up loops, background redirects, or personal behavioral tracking.',
+        'To cover bandwidth and domain hosting infrastructure while maintaining free student access, MAN OF STUDY utilizes non-intrusive native monetization units. If you dismiss or hide any ad unit, your choice is preserved for your active session and 24 hours locally in your browser storage (sessionStorage/localStorage). We never use intrusive pop-up loops, background redirects, or personal behavioral tracking.',
       actionText: 'View Compliance & Terms',
       actionTarget: { type: 'legal', modal: 'terms' },
     },
@@ -251,7 +251,7 @@ export const StudentFaq: React.FC<StudentFaqProps> = ({ onSelectTab, onOpenLegal
     } else if (item.actionTarget.type === 'legal' && onOpenLegal) {
       onOpenLegal(item.actionTarget.modal);
     } else if (item.actionTarget.type === 'email') {
-      window.location.href = 'mailto:support.jamord@gmail.com?subject=[JAVISAK%20Inquiry]%20Student%20Query';
+      window.location.href = 'mailto:support.jamord@gmail.com?subject=[MAN%20OF%20STUDY%20Inquiry]%20Student%20Query';
     }
   };
 
@@ -280,7 +280,7 @@ export const StudentFaq: React.FC<StudentFaqProps> = ({ onSelectTab, onOpenLegal
 
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
               Transparent answers regarding our 4-year engineering roadmaps, 100% private browser PDF tools, verified
-              scholarships, data privacy policies, and the student mission behind JAVISAK.
+              scholarships, data privacy policies, and the student mission behind MAN OF STUDY.
             </p>
           </div>
 
@@ -464,14 +464,14 @@ export const StudentFaq: React.FC<StudentFaqProps> = ({ onSelectTab, onOpenLegal
                 Built by a B.Tech Student for Engineering Scholars
               </h4>
               <p className="text-xs text-slate-600 max-w-2xl leading-relaxed">
-                JAVISAK was created by an engineering student dedicated to helping his fellow peers excel academically,
+                MAN OF STUDY was created by an engineering student dedicated to helping his fellow peers excel academically,
                 demystify career roadmaps, discover life-changing scholarships, and protect their privacy with modern browser-first tools.
               </p>
             </div>
           </div>
 
           <a
-            href="mailto:support.jamord@gmail.com?subject=[JAVISAK%20Student%20Desk]%20Hello"
+            href="mailto:support.jamord@gmail.com?subject=[MAN%20OF%20STUDY%20Student%20Desk]%20Hello"
             className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-slate-100 active:scale-98 border border-slate-200 text-slate-800 font-bold text-xs shadow-2xs transition-all cursor-pointer min-h-[42px]"
           >
             <Mail className="w-4 h-4 text-sky-600" />

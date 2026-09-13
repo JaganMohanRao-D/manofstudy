@@ -218,7 +218,7 @@ export const InternshipsRadar: React.FC = () => {
         <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
         <div className="space-y-1">
           <p className="font-bold text-amber-300 text-sm">
-            JAVISAK Anti-Fraud Student Guarantee
+            MAN OF STUDY Anti-Fraud Student Guarantee
           </p>
           <p className="leading-relaxed opacity-90">
             Never pay any fee for an internship training certificate or HR registration. Genuine companies pay you for your talent; they never demand "training deposits". Every link below routes strictly to official, authenticated government and corporate portals.

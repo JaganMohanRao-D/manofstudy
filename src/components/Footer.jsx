@@ -5,12 +5,12 @@ export const Footer = () => {
     <footer className="w-full py-4 text-center text-xs text-slate-400">
       <span>Official Portal: </span>
       <a
-        href="https://javisak.vercel.app"
+        href="https://manofstudy.com"
         target="_blank"
         rel="noopener noreferrer"
         className="font-bold text-white hover:text-emerald-400 transition-colors"
       >
-        JAVISAK
+        MAN OF STUDY
       </a>
     </footer>
   );
