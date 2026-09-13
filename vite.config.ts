@@ -102,6 +102,52 @@ function tgAllotmentPlugin(): Plugin {
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify({ error: 'Manifest not found' }));
       });
+
+      // Serve /TG_EAPCET_2026_ALLOTMENT/ requests directly with code-alias fallback and 404 JSON protection
+      server.middlewares.use((req, res, next) => {
+        const url = req.url ? req.url.split('?')[0] : '';
+        if (url.startsWith('/TG_EAPCET_2026_ALLOTMENT/')) {
+          const rawFilename = path.basename(decodeURIComponent(url));
+          const dir = path.join(__dirname, 'public/TG_EAPCET_2026_ALLOTMENT');
+
+          // 1. Direct file match
+          const exactPath = path.join(dir, rawFilename);
+          if (fs.existsSync(exactPath) && fs.statSync(exactPath).isFile()) {
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            fs.createReadStream(exactPath).pipe(res);
+            return;
+          }
+
+          // 2. Code alias match (e.g. VJEC.json, VASV.json, etc.)
+          if (rawFilename.endsWith('.json')) {
+            const code = rawFilename.replace(/\.json$/i, '').toUpperCase();
+            if (fs.existsSync(dir)) {
+              const files = fs.readdirSync(dir).filter(f => f.endsWith('.json') && f !== 'manifest.json');
+              const match = files.find(f => {
+                const base = f.replace(/\.json$/i, '').toUpperCase();
+                return base === code || base.endsWith('_' + code) || base.split('_').includes(code);
+              });
+              if (match) {
+                const matchPath = path.join(dir, match);
+                res.setHeader('Content-Type', 'application/json; charset=utf-8');
+                fs.createReadStream(matchPath).pipe(res);
+                return;
+              }
+            }
+
+            // 3. Not found: return JSON 404 so Vite never returns HTML index.html
+            res.statusCode = 404;
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            res.end(JSON.stringify({
+              error: `College allotment file not found for '${code}'.`,
+              code,
+              message: `File '${rawFilename}' is not available in public/TG_EAPCET_2026_ALLOTMENT/.`
+            }));
+            return;
+          }
+        }
+        next();
+      });
     }
   };
 }
