@@ -9,6 +9,7 @@ import {
   ChevronLeft, 
   ChevronRight, 
   ChevronDown,
+  ChevronUp,
   Copy, 
   Check, 
   Flame,
@@ -21,11 +22,14 @@ import {
   X,
   ShieldCheck,
   TrendingUp,
-  Hash
+  Globe2,
+  ExternalLink,
+  Loader2,
+  SlidersHorizontal
 } from 'lucide-react';
 import { TG_EAPCET_COLLEGE_MANIFEST } from '../data/tgEapcetCollegeManifest';
 
-// Featured top engineering colleges for quick access
+// Top engineering colleges for quick access
 const FEATURED_COLLEGES = [
   { code: "CBIT", name: "CHAITANYA BHARATHI INSTITUTE OF TECHNOLOGY" },
   { code: "VJEC", name: "VNR VIGNANA JYOTHI INSTITUTE OF ENGG & TECH" },
@@ -70,6 +74,15 @@ export default function TgAllotmentExplorer() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(30);
   const [copiedTicket, setCopiedTicket] = useState(null);
+
+  // Global Cross-College Search State
+  const [isGlobalSearchActive, setIsGlobalSearchActive] = useState(false);
+  const [globalSearchResults, setGlobalSearchResults] = useState([]);
+  const [isSearchingGlobal, setIsSearchingGlobal] = useState(false);
+  const [globalSearchError, setGlobalSearchError] = useState(null);
+
+  // Bottom Analytics Drawer / Section Collapsible State
+  const [isAnalyticsExpanded, setIsAnalyticsExpanded] = useState(true);
 
   // Close dropdowns on outside click
   useEffect(() => {
@@ -206,7 +219,6 @@ export default function TgAllotmentExplorer() {
       }
     });
 
-    // Sort by opening rank ascending (best rank first)
     return Object.values(map).sort((a, b) => a.openingRank - b.openingRank);
   }, [currentBundle]);
 
@@ -237,11 +249,9 @@ export default function TgAllotmentExplorer() {
       if (r.gender === 'M') male++;
       if (r.gender === 'F') female++;
 
-      // Caste aggregation
       const caste = r.caste || 'OTHER';
       casteMap[caste] = (casteMap[caste] || 0) + 1;
 
-      // Quota group aggregation (e.g. OC, BC_A, BC_B, SC, ST, EWS)
       let broadQuota = 'OTHER';
       const catUpper = (r.seatCategory || '').toUpperCase();
       if (catUpper.startsWith('OC') || catUpper.startsWith('OPEN')) broadQuota = 'OC';
@@ -301,7 +311,7 @@ export default function TgAllotmentExplorer() {
     return categoryCutoffs.map((c) => c.category);
   }, [categoryCutoffs]);
 
-  // Filtered Candidates List
+  // Filtered Candidates in current branch
   const filteredCandidates = useMemo(() => {
     if (!currentBundle || !currentBundle.records) return [];
     let list = [...currentBundle.records];
@@ -318,7 +328,7 @@ export default function TgAllotmentExplorer() {
       list = list.filter((r) => r.seatCategory === seatCategoryFilter);
     }
 
-    if (searchQuery.trim() !== '') {
+    if (searchQuery.trim() !== '' && !isGlobalSearchActive) {
       const q = searchQuery.toLowerCase().trim();
       list = list.filter((r) => 
         (r.name && r.name.toLowerCase().includes(q)) ||
@@ -331,14 +341,51 @@ export default function TgAllotmentExplorer() {
 
     list.sort((a, b) => (sortOrder === 'ASC' ? a.rank - b.rank : b.rank - a.rank));
     return list;
-  }, [currentBundle, searchQuery, genderFilter, casteFilter, seatCategoryFilter, sortOrder]);
+  }, [currentBundle, searchQuery, genderFilter, casteFilter, seatCategoryFilter, sortOrder, isGlobalSearchActive]);
 
-  const totalPages = Math.ceil(filteredCandidates.length / itemsPerPage) || 1;
+  // Global Cross-College Search Handler
+  const handleExecuteGlobalSearch = async (term) => {
+    const q = (term !== undefined ? term : searchQuery).trim();
+    if (!q || q.length < 2) {
+      setIsGlobalSearchActive(false);
+      setGlobalSearchResults([]);
+      return;
+    }
+
+    setIsSearchingGlobal(true);
+    setGlobalSearchError(null);
+    setIsGlobalSearchActive(true);
+
+    try {
+      const res = await fetch(`/api/tg-allotment/search?q=${encodeURIComponent(q)}`);
+      if (!res.ok) throw new Error('Global search request failed');
+      const data = await res.json();
+      setGlobalSearchResults(data.results || []);
+      setCurrentPage(1);
+    } catch (err) {
+      console.warn('Global search notice:', err);
+      setGlobalSearchError('Cross-college search currently scanning offline. Showing local matches.');
+      setGlobalSearchResults([]);
+    } finally {
+      setIsSearchingGlobal(false);
+    }
+  };
+
+  const clearGlobalSearch = () => {
+    setIsGlobalSearchActive(false);
+    setGlobalSearchResults([]);
+    setGlobalSearchError(null);
+    setCurrentPage(1);
+  };
+
+  // Active candidates list (local branch vs global cross-college)
+  const activeDisplayList = isGlobalSearchActive ? globalSearchResults : filteredCandidates;
+  const totalPages = Math.ceil(activeDisplayList.length / itemsPerPage) || 1;
 
   const paginatedCandidates = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
-    return filteredCandidates.slice(start, start + itemsPerPage);
-  }, [filteredCandidates, currentPage, itemsPerPage]);
+    return activeDisplayList.slice(start, start + itemsPerPage);
+  }, [activeDisplayList, currentPage, itemsPerPage]);
 
   const handleCopyTicket = (ticket) => {
     if (!ticket) return;
@@ -347,9 +394,24 @@ export default function TgAllotmentExplorer() {
     setTimeout(() => setCopiedTicket(null), 2000);
   };
 
+  // Jump to specific college & branch from global search result card
+  const handleJumpToCollegeBranch = (collegeCode, branchCode) => {
+    if (collegeCode) {
+      setSelectedCollegeCode(collegeCode);
+    }
+    if (branchCode) {
+      setSelectedBranchCode(branchCode);
+    }
+    setIsGlobalSearchActive(false);
+    setGlobalSearchResults([]);
+    setSearchQuery('');
+    setCurrentPage(1);
+    window.scrollTo({ top: 120, behavior: 'smooth' });
+  };
+
   // Color mapping helper for quota badges/bars
   const getQuotaColorClasses = (quotaName) => {
-    const q = quotaName.toUpperCase();
+    const q = (quotaName || '').toUpperCase();
     if (q === 'OC') return { bg: 'bg-emerald-500', text: 'text-emerald-400', border: 'border-emerald-500/30', lightBg: 'bg-emerald-500/10' };
     if (q.startsWith('BC-B') || q.startsWith('BC_B')) return { bg: 'bg-blue-500', text: 'text-blue-400', border: 'border-blue-500/30', lightBg: 'bg-blue-500/10' };
     if (q.startsWith('BC-A') || q.startsWith('BC_A')) return { bg: 'bg-cyan-500', text: 'text-cyan-400', border: 'border-cyan-500/30', lightBg: 'bg-cyan-500/10' };
@@ -361,40 +423,39 @@ export default function TgAllotmentExplorer() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 py-8 px-4 sm:px-6 lg:px-8 font-sans">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="min-h-screen bg-slate-950 text-slate-100 py-4 sm:py-8 px-3 sm:px-6 lg:px-8 font-sans">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
 
-        {/* Header */}
-        <div className="text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold tracking-wide">
+        {/* 1. BRANDING & TERMINOLOGY OVERHAUL */}
+        <div className="text-center space-y-2 sm:space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-semibold tracking-wide">
             <Flame className="w-4 h-4 text-rose-500 fill-rose-500 animate-pulse" />
-            <span>🔥 AP & TG FINAL PHASE ALLOTMENTS NAME WISE</span>
+            <span>🔥 TG EAPCET 2026 Final Phase Seat Allotments Name Wise</span>
           </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
-            TG EAPCET 2026 Allotment Radar
+          <h1 className="text-xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
+            TG EAPCET 2026 Final Phase Seat Allotments Name Wise
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            తెలంగాణ ఇంజనీరింగ్ కాలేజీల వారీగా, బ్రాంచ్ వారీగా విద్యార్థుల అలాట్‌మెంట్ జాబితా & కట్-ఆఫ్ ర్యాంకులు (151+ కాలేజీలు, 71,600+ సీట్లు)
+          <p className="text-xs sm:text-sm text-slate-400 max-w-2xl mx-auto leading-relaxed px-1">
+            తెలంగాణ ఇంజనీరింగ్ కాలేజీల వారీగా, బ్రాంచ్ వారీగా విద్యార్థుల అలాట్‌మెంట్ జాబితా &amp; కట్-ఆఫ్ ర్యాంకులు (151+ కాలేజీలు, 71,600+ సీట్లు)
           </p>
         </div>
 
-        {/* Interactive Searchable Selectors Container */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-2xl space-y-5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {/* 2. TOP SELECTORS & QUICK SEARCH (MOBILE-FIRST) */}
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 sm:p-5 shadow-xl space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
 
-            {/* 1. SEARCHABLE INSTITUTION DROPDOWN */}
+            {/* Institution Selector */}
             <div className="relative" ref={collegeDropdownRef}>
-              <label className="text-xs font-bold text-slate-300 mb-1.5 flex items-center justify-between">
+              <label className="text-xs font-bold text-slate-300 mb-1 flex items-center justify-between">
                 <span className="flex items-center gap-1.5">
-                  <Building2 className="w-4 h-4 text-emerald-400" />
+                  <Building2 className="w-3.5 h-3.5 text-emerald-400" />
                   Select Institution / కళాశాల
                 </span>
-                <span className="text-[11px] text-slate-400 font-mono">
-                  {TG_EAPCET_COLLEGE_MANIFEST.length} Colleges Available
+                <span className="text-[10px] sm:text-[11px] text-slate-400 font-mono">
+                  {TG_EAPCET_COLLEGE_MANIFEST.length} Colleges
                 </span>
               </label>
 
-              {/* Dropdown trigger button */}
               <button
                 type="button"
                 id="college-dropdown-trigger"
@@ -403,40 +464,39 @@ export default function TgAllotmentExplorer() {
                   setIsBranchDropdownOpen(false);
                   setCollegeSearchTerm('');
                 }}
-                className="w-full flex items-center justify-between bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-200 text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-emerald-500 transition-all text-left shadow-inner"
+                className="w-full flex items-center justify-between bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs sm:text-sm rounded-xl px-3 py-2.5 focus:outline-none focus:border-emerald-500 transition-all text-left shadow-inner"
               >
                 <div className="flex items-center gap-2 truncate pr-2">
-                  <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-xs font-bold shrink-0">
+                  <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-xs font-bold shrink-0">
                     {selectedCollegeCode}
                   </span>
-                  <span className="truncate text-slate-100 font-medium text-xs sm:text-sm">
+                  <span className="truncate text-slate-100 font-medium">
                     {currentCollegeMeta.collegeName}
                   </span>
                 </div>
                 <ChevronDown className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${isCollegeDropdownOpen ? 'rotate-180 text-emerald-400' : ''}`} />
               </button>
 
-              {/* Dropdown Menu Popover */}
+              {/* Popover */}
               {isCollegeDropdownOpen && (
-                <div className="absolute z-50 left-0 right-0 mt-2 bg-slate-900 border border-slate-700/80 rounded-xl shadow-2xl overflow-hidden backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150">
-                  {/* Embedded Search Input */}
-                  <div className="p-2.5 border-b border-slate-800 bg-slate-950/80">
+                <div className="absolute z-50 left-0 right-0 mt-1.5 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl overflow-hidden backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150">
+                  <div className="p-2 border-b border-slate-800 bg-slate-950">
                     <div className="relative">
-                      <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                      <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
                       <input
                         type="text"
                         autoFocus
                         id="institution-search-input"
                         value={collegeSearchTerm}
                         onChange={(e) => setCollegeSearchTerm(e.target.value)}
-                        placeholder="Type college name or code (e.g. CBIT, VNR, Vasavi)..."
-                        className="w-full bg-slate-900 border border-slate-700/80 rounded-lg pl-9 pr-8 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500"
+                        placeholder="Search college code or name..."
+                        className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-8 pr-7 py-1.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500"
                       />
                       {collegeSearchTerm && (
                         <button
                           type="button"
                           onClick={() => setCollegeSearchTerm('')}
-                          className="absolute right-2.5 top-2.5 text-slate-400 hover:text-white"
+                          className="absolute right-2 top-2 text-slate-400 hover:text-white"
                         >
                           <X className="w-3.5 h-3.5" />
                         </button>
@@ -444,10 +504,9 @@ export default function TgAllotmentExplorer() {
                     </div>
                   </div>
 
-                  {/* Options List */}
-                  <div className="max-h-64 overflow-y-auto divide-y divide-slate-800/50 scrollbar-thin scrollbar-thumb-slate-700">
+                  <div className="max-h-56 overflow-y-auto divide-y divide-slate-800/40 text-xs">
                     {filteredColleges.length === 0 ? (
-                      <div className="p-4 text-center text-xs text-slate-400">
+                      <div className="p-3 text-center text-slate-400">
                         No colleges found matching "{collegeSearchTerm}"
                       </div>
                     ) : (
@@ -460,21 +519,22 @@ export default function TgAllotmentExplorer() {
                             onClick={() => {
                               setSelectedCollegeCode(c.collegeCode);
                               setIsCollegeDropdownOpen(false);
+                              clearGlobalSearch();
                               setCurrentPage(1);
                             }}
-                            className={`w-full text-left px-3.5 py-2.5 text-xs flex items-center justify-between hover:bg-slate-800/80 transition-colors ${
-                              isSelected ? 'bg-emerald-500/15 text-emerald-300 font-semibold' : 'text-slate-200'
+                            className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-slate-800 transition-colors ${
+                              isSelected ? 'bg-emerald-500/15 text-emerald-300 font-bold' : 'text-slate-200'
                             }`}
                           >
-                            <div className="flex items-center gap-2 truncate pr-2">
-                              <span className={`px-1.5 py-0.5 rounded font-mono text-[11px] font-bold ${
+                            <div className="flex items-center gap-1.5 truncate pr-2">
+                              <span className={`px-1 py-0.5 rounded font-mono text-[10px] font-bold ${
                                 isSelected ? 'bg-emerald-500/30 text-emerald-200' : 'bg-slate-800 text-slate-300'
                               }`}>
                                 {c.collegeCode}
                               </span>
                               <span className="truncate">{c.collegeName}</span>
                             </div>
-                            <span className="text-[11px] text-slate-400 font-mono shrink-0 ml-2">
+                            <span className="text-[10px] text-slate-400 font-mono shrink-0 ml-1">
                               {c.recordCount} seats
                             </span>
                           </button>
@@ -486,19 +546,18 @@ export default function TgAllotmentExplorer() {
               )}
             </div>
 
-            {/* 2. SEARCHABLE BRANCH DROPDOWN */}
+            {/* Branch Selector */}
             <div className="relative" ref={branchDropdownRef}>
-              <label className="text-xs font-bold text-slate-300 mb-1.5 flex items-center justify-between">
+              <label className="text-xs font-bold text-slate-300 mb-1 flex items-center justify-between">
                 <span className="flex items-center gap-1.5">
-                  <GitBranch className="w-4 h-4 text-indigo-400" />
+                  <GitBranch className="w-3.5 h-3.5 text-indigo-400" />
                   Select Branch / ఇంజనీరింగ్ బ్రాంచ్
                 </span>
-                <span className="text-[11px] text-slate-400 font-mono">
-                  {availableBranches.length} Branches Available
+                <span className="text-[10px] sm:text-[11px] text-slate-400 font-mono">
+                  {availableBranches.length} Branches
                 </span>
               </label>
 
-              {/* Dropdown trigger button */}
               <button
                 type="button"
                 id="branch-dropdown-trigger"
@@ -508,40 +567,39 @@ export default function TgAllotmentExplorer() {
                   setIsCollegeDropdownOpen(false);
                   setBranchSearchTerm('');
                 }}
-                className="w-full flex items-center justify-between bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-200 text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-indigo-500 transition-all text-left shadow-inner disabled:opacity-50"
+                className="w-full flex items-center justify-between bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs sm:text-sm rounded-xl px-3 py-2.5 focus:outline-none focus:border-indigo-500 transition-all text-left shadow-inner disabled:opacity-50"
               >
                 <div className="flex items-center gap-2 truncate pr-2">
-                  <span className="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-mono text-xs font-bold shrink-0">
+                  <span className="px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-mono text-xs font-bold shrink-0">
                     {selectedBranchCode || 'None'}
                   </span>
-                  <span className="truncate text-slate-100 font-medium text-xs sm:text-sm">
-                    {currentBundle ? (currentBundle.branchName || currentBundle.branchCode) : 'Select a branch'}
+                  <span className="truncate text-slate-100 font-medium">
+                    {currentBundle ? (currentBundle.branchName || currentBundle.branchCode) : 'Select branch'}
                   </span>
                 </div>
                 <ChevronDown className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${isBranchDropdownOpen ? 'rotate-180 text-indigo-400' : ''}`} />
               </button>
 
-              {/* Dropdown Menu Popover */}
+              {/* Popover */}
               {isBranchDropdownOpen && (
-                <div className="absolute z-50 left-0 right-0 mt-2 bg-slate-900 border border-slate-700/80 rounded-xl shadow-2xl overflow-hidden backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150">
-                  {/* Embedded Search Input */}
-                  <div className="p-2.5 border-b border-slate-800 bg-slate-950/80">
+                <div className="absolute z-50 left-0 right-0 mt-1.5 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl overflow-hidden backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150">
+                  <div className="p-2 border-b border-slate-800 bg-slate-950">
                     <div className="relative">
-                      <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                      <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
                       <input
                         type="text"
                         autoFocus
                         id="branch-search-input"
                         value={branchSearchTerm}
                         onChange={(e) => setBranchSearchTerm(e.target.value)}
-                        placeholder="Filter branch name or code (e.g. CSE, CSM, ECE)..."
-                        className="w-full bg-slate-900 border border-slate-700/80 rounded-lg pl-9 pr-8 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-indigo-500"
+                        placeholder="Search branch code or name (e.g. CSE, CSM)..."
+                        className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-8 pr-7 py-1.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-indigo-500"
                       />
                       {branchSearchTerm && (
                         <button
                           type="button"
                           onClick={() => setBranchSearchTerm('')}
-                          className="absolute right-2.5 top-2.5 text-slate-400 hover:text-white"
+                          className="absolute right-2 top-2 text-slate-400 hover:text-white"
                         >
                           <X className="w-3.5 h-3.5" />
                         </button>
@@ -549,10 +607,9 @@ export default function TgAllotmentExplorer() {
                     </div>
                   </div>
 
-                  {/* Options List */}
-                  <div className="max-h-64 overflow-y-auto divide-y divide-slate-800/50 scrollbar-thin scrollbar-thumb-slate-700">
+                  <div className="max-h-56 overflow-y-auto divide-y divide-slate-800/40 text-xs">
                     {filteredBranches.length === 0 ? (
-                      <div className="p-4 text-center text-xs text-slate-400">
+                      <div className="p-3 text-center text-slate-400">
                         No branches found matching "{branchSearchTerm}"
                       </div>
                     ) : (
@@ -565,21 +622,22 @@ export default function TgAllotmentExplorer() {
                             onClick={() => {
                               setSelectedBranchCode(b.code);
                               setIsBranchDropdownOpen(false);
+                              clearGlobalSearch();
                               setCurrentPage(1);
                             }}
-                            className={`w-full text-left px-3.5 py-2.5 text-xs flex items-center justify-between hover:bg-slate-800/80 transition-colors ${
-                              isSelected ? 'bg-indigo-500/15 text-indigo-300 font-semibold' : 'text-slate-200'
+                            className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-slate-800 transition-colors ${
+                              isSelected ? 'bg-indigo-500/15 text-indigo-300 font-bold' : 'text-slate-200'
                             }`}
                           >
-                            <div className="flex items-center gap-2 truncate pr-2">
-                              <span className={`px-1.5 py-0.5 rounded font-mono text-[11px] font-bold ${
+                            <div className="flex items-center gap-1.5 truncate pr-2">
+                              <span className={`px-1 py-0.5 rounded font-mono text-[10px] font-bold ${
                                 isSelected ? 'bg-indigo-500/30 text-indigo-200' : 'bg-slate-800 text-slate-300'
                               }`}>
                                 {b.code}
                               </span>
                               <span className="truncate">{b.name}</span>
                             </div>
-                            <span className="text-[11px] text-slate-400 font-mono shrink-0 ml-2">
+                            <span className="text-[10px] text-slate-400 font-mono shrink-0 ml-1">
                               {b.allottedCount} seats
                             </span>
                           </button>
@@ -593,129 +651,168 @@ export default function TgAllotmentExplorer() {
 
           </div>
 
-          {/* Quick-Select Filter Chips for Featured Top Colleges */}
-          <div className="pt-1 border-t border-slate-800/60">
-            <span className="text-[11px] font-semibold text-slate-400 block mb-2 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              Quick Select Top Institutions:
-            </span>
-            <div className="flex flex-wrap gap-1.5">
-              {FEATURED_COLLEGES.slice(0, 10).map((c) => {
-                const isCurrent = c.code === selectedCollegeCode;
-                return (
+          {/* 3. GLOBAL CROSS-COLLEGE & LOCAL CANDIDATE SEARCH BAR */}
+          <div className="space-y-2 pt-1 border-t border-slate-800/70">
+            <div className="flex flex-col sm:flex-row gap-2">
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                <input
+                  type="text"
+                  id="candidate-search-input"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    if (isGlobalSearchActive) {
+                      setIsGlobalSearchActive(false);
+                    }
+                    setCurrentPage(1);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleExecuteGlobalSearch();
+                    }
+                  }}
+                  placeholder="Type Student Name, Hall Ticket, or Rank..."
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-8 py-2 text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-rose-500 placeholder-slate-500 shadow-inner"
+                />
+                {searchQuery && (
                   <button
-                    key={`quick-${c.code}`}
                     type="button"
                     onClick={() => {
-                      setSelectedCollegeCode(c.code);
-                      setCurrentPage(1);
+                      setSearchQuery('');
+                      clearGlobalSearch();
                     }}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-mono font-medium transition-all ${
-                      isCurrent
-                        ? 'bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20'
-                        : 'bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-slate-700'
-                    }`}
+                    className="absolute right-2.5 top-2.5 text-slate-400 hover:text-white"
                   >
-                    {c.code}
+                    <X className="w-4 h-4" />
                   </button>
-                );
-              })}
-            </div>
-          </div>
+                )}
+              </div>
 
-          {/* Search and Filters Bar */}
-          <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 pt-2">
-            {/* Search Input */}
-            <div className="sm:col-span-5 relative">
-              <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
-              <input
-                type="text"
-                id="search-candidates"
-                value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setCurrentPage(1);
-                }}
-                placeholder="Search Name, Hall Ticket, or Rank..."
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2 text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-emerald-500 placeholder-slate-500 shadow-inner"
-              />
-            </div>
+              {/* Action Buttons: Global Search + Filter toggles */}
+              <div className="flex gap-2 shrink-0">
+                <button
+                  type="button"
+                  id="btn-global-search"
+                  onClick={() => handleExecuteGlobalSearch()}
+                  disabled={isSearchingGlobal || !searchQuery.trim()}
+                  className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all ${
+                    isGlobalSearchActive
+                      ? 'bg-rose-500 text-white shadow-md shadow-rose-500/30'
+                      : 'bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300'
+                  } disabled:opacity-40 cursor-pointer`}
+                  title="Search across all 151 Telangana engineering colleges"
+                >
+                  {isSearchingGlobal ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  ) : (
+                    <Globe2 className="w-3.5 h-3.5" />
+                  )}
+                  <span>Search All Colleges</span>
+                </button>
 
-            {/* Gender Filter */}
-            <div className="sm:col-span-2">
-              <select
-                id="gender-filter"
-                value={genderFilter}
-                onChange={(e) => {
-                  setGenderFilter(e.target.value);
-                  setCurrentPage(1);
-                }}
-                className="w-full bg-slate-950 border border-slate-800 text-slate-200 text-xs sm:text-sm rounded-xl px-3 py-2 focus:outline-none focus:border-emerald-500 cursor-pointer shadow-inner"
-              >
-                <option value="ALL">All Genders</option>
-                <option value="M">Boys (M)</option>
-                <option value="F">Girls (F)</option>
-              </select>
+                <button
+                  type="button"
+                  onClick={() => setSortOrder((prev) => (prev === 'ASC' ? 'DESC' : 'ASC'))}
+                  className="flex items-center gap-1 px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-300 text-xs font-semibold"
+                >
+                  <ArrowUpDown className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="hidden sm:inline">{sortOrder === 'ASC' ? 'Rank: Low-High' : 'Rank: High-Low'}</span>
+                </button>
+              </div>
             </div>
 
-            {/* Caste Filter */}
-            <div className="sm:col-span-2">
-              <select
-                id="caste-filter"
-                value={casteFilter}
-                onChange={(e) => {
-                  setCasteFilter(e.target.value);
-                  setCurrentPage(1);
-                }}
-                className="w-full bg-slate-950 border border-slate-800 text-slate-200 text-xs sm:text-sm rounded-xl px-3 py-2 focus:outline-none focus:border-emerald-500 cursor-pointer shadow-inner"
-              >
-                <option value="ALL">All Castes</option>
-                {availableCastes.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
-            </div>
+            {/* Quick Filters Strip */}
+            {!isGlobalSearchActive && (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-xs">
+                {/* Gender */}
+                <select
+                  value={genderFilter}
+                  onChange={(e) => {
+                    setGenderFilter(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-300 text-xs focus:outline-none focus:border-emerald-500"
+                >
+                  <option value="ALL">All Genders</option>
+                  <option value="M">Boys (M)</option>
+                  <option value="F">Girls (F)</option>
+                </select>
 
-            {/* Seat Category Filter */}
-            <div className="sm:col-span-3">
-              <select
-                id="quota-filter"
-                value={seatCategoryFilter}
-                onChange={(e) => {
-                  setSeatCategoryFilter(e.target.value);
-                  setCurrentPage(1);
-                }}
-                className="w-full bg-slate-950 border border-slate-800 text-slate-200 text-xs sm:text-sm rounded-xl px-3 py-2 focus:outline-none focus:border-emerald-500 cursor-pointer shadow-inner"
-              >
-                <option value="ALL">All Categories / Quotas</option>
-                {availableSeatCategories.map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
-            </div>
+                {/* Caste */}
+                <select
+                  value={casteFilter}
+                  onChange={(e) => {
+                    setCasteFilter(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-300 text-xs focus:outline-none focus:border-emerald-500"
+                >
+                  <option value="ALL">All Castes</option>
+                  {availableCastes.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
+
+                {/* Quota */}
+                <select
+                  value={seatCategoryFilter}
+                  onChange={(e) => {
+                    setSeatCategoryFilter(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className="col-span-2 bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-300 text-xs focus:outline-none focus:border-emerald-500"
+                >
+                  <option value="ALL">All Seat Categories / Quotas</option>
+                  {availableSeatCategories.map((q) => (
+                    <option key={q} value={q}>{q}</option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Graceful Error Notification */}
+        {/* Global Search Banner (when active) */}
+        {isGlobalSearchActive && (
+          <div className="bg-rose-500/10 border border-rose-500/30 rounded-xl p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5">
+            <div className="flex items-center gap-2">
+              <Globe2 className="w-4 h-4 text-rose-400 shrink-0" />
+              <div className="text-xs">
+                <span className="font-bold text-white">Global Student Tracker Active: </span>
+                <span className="text-rose-300">
+                  Found {globalSearchResults.length} student record{globalSearchResults.length === 1 ? '' : 's'} matching "{searchQuery}" across all 151 colleges.
+                </span>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={clearGlobalSearch}
+              className="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-xs font-semibold shrink-0"
+            >
+              Back to {selectedCollegeCode} Branch ✕
+            </button>
+          </div>
+        )}
+
+        {/* Error Notification */}
         {errorMessage && (
-          <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-5 text-amber-200 flex items-start gap-3.5">
+          <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 text-amber-200 flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-            <div className="space-y-2">
-              <h4 className="text-sm font-bold text-amber-300">
-                {errorMessage}
-              </h4>
-              <p className="text-xs text-amber-200/80">
-                క్రింద ఉన్న ప్రముఖ కాలేజీలలో ఒకదానిని తక్షణమే వీక్షించడానికి క్లిక్ చేయండి:
-              </p>
-              <div className="flex flex-wrap gap-2 pt-1">
+            <div className="space-y-1 text-xs">
+              <h4 className="font-bold text-amber-300">{errorMessage}</h4>
+              <div className="flex flex-wrap gap-1.5 pt-1">
                 {['CBIT', 'VJEC', 'VASV', 'CVRH', 'VBIT'].map((c) => (
                   <button
                     key={c}
                     type="button"
-                    onClick={() => setSelectedCollegeCode(c)}
-                    className="px-3 py-1 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 rounded-lg text-xs font-semibold"
+                    onClick={() => {
+                      setSelectedCollegeCode(c);
+                      clearGlobalSearch();
+                    }}
+                    className="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 rounded-lg text-xs font-semibold"
                   >
-                    {c} వీక్షించండి
+                    View {c}
                   </button>
                 ))}
               </div>
@@ -723,264 +820,23 @@ export default function TgAllotmentExplorer() {
           </div>
         )}
 
-        {/* Content Area */}
+        {/* 3. DIRECT CANDIDATE CARDS GRID (IMMEDIATE VISIBILITY) */}
         {loading ? (
-          <div className="py-24 text-center space-y-3">
-            <div className="inline-block w-8 h-8 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-emerald-400 font-mono text-sm animate-pulse">
-              [{selectedCollegeCode}] అలాట్‌మెంట్ డేటాను లోడ్ చేస్తోంది...
+          <div className="py-20 text-center space-y-3">
+            <div className="inline-block w-8 h-8 border-2 border-rose-500 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-rose-400 font-mono text-xs sm:text-sm animate-pulse">
+              [{selectedCollegeCode}] అలాట్‌మెంట్ రికార్డులను లోడ్ చేస్తోంది...
             </p>
           </div>
         ) : (
-          <>
-            {/* KPI Cards Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-lg">
-                <span className="text-xs text-slate-400 font-medium">Total Allotted Seats</span>
-                <div className="text-2xl font-black text-white mt-1">{analytics.totalAllotted}</div>
-                <div className="text-[11px] text-slate-400 mt-0.5">
-                  M: {analytics.maleCount} ({analytics.malePct}%) | F: {analytics.femaleCount} ({analytics.femalePct}%)
-                </div>
-              </div>
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-lg">
-                <span className="text-xs text-slate-400 font-medium">Opening Cutoff Rank</span>
-                <div className="text-2xl font-black text-emerald-400 mt-1">
-                  {analytics.openingRank > 0 ? `#${analytics.openingRank.toLocaleString()}` : '—'}
-                </div>
-                <div className="text-[11px] text-emerald-400/80 mt-0.5">Best Overall Rank</div>
-              </div>
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-lg">
-                <span className="text-xs text-slate-400 font-medium">Closing Cutoff Rank</span>
-                <div className="text-2xl font-black text-rose-400 mt-1">
-                  {analytics.closingRank > 0 ? `#${analytics.closingRank.toLocaleString()}` : '—'}
-                </div>
-                <div className="text-[11px] text-rose-400/80 mt-0.5">Last Allotted Rank</div>
-              </div>
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-lg">
-                <span className="text-xs text-slate-400 font-medium">College Branches</span>
-                <div className="text-2xl font-black text-white mt-1">{availableBranches.length}</div>
-                <div className="text-[11px] text-slate-400 mt-0.5 truncate">
-                  Stream: {currentBundle?.branchCode || 'None'}
-                </div>
-              </div>
-            </div>
-
-            {/* FEATURE 1: CATEGORY-WISE OPENING & CLOSING RANKS (Best & Last Rank per Quota) */}
-            {categoryCutoffs.length > 0 && (
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-3.5">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
-                  <div>
-                    <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
-                      <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                      Category-Wise Opening & Closing Ranks (Best & Last Rank per Quota)
-                    </h3>
-                    <p className="text-xs text-slate-400 mt-0.5">
-                      {currentBundle?.branchCode} — {categoryCutoffs.length} Quota Categories found in real final allotments
-                    </p>
-                  </div>
-                  <div className="text-[11px] text-slate-400 font-mono bg-slate-950 px-2.5 py-1 rounded-lg border border-slate-800">
-                    Sorted by Best Opening Rank
-                  </div>
-                </div>
-
-                {/* High-visibility Category Cards Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5">
-                  {categoryCutoffs.map((item) => {
-                    const isSelected = seatCategoryFilter === item.category;
-                    const colors = getQuotaColorClasses(item.category);
-                    return (
-                      <div
-                        key={item.category}
-                        onClick={() => setSeatCategoryFilter(isSelected ? 'ALL' : item.category)}
-                        className={`cursor-pointer rounded-xl p-3 border transition-all duration-200 ${
-                          isSelected
-                            ? 'bg-slate-800/90 border-emerald-500 shadow-md ring-1 ring-emerald-500/50'
-                            : 'bg-slate-950/70 border-slate-800/90 hover:border-slate-700 hover:bg-slate-900'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded ${colors.lightBg} ${colors.text} border ${colors.border} truncate max-w-[170px]`}>
-                            {item.category}
-                          </span>
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-medium">
-                            {item.count} {item.count === 1 ? 'seat' : 'seats'}
-                          </span>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-1">
-                          <div className="bg-slate-900/90 rounded-lg p-1.5 border border-slate-800">
-                            <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Best (Open)</span>
-                            <span className="text-emerald-400 font-bold text-xs">
-                              #{item.openingRank.toLocaleString()}
-                            </span>
-                          </div>
-                          <div className="bg-slate-900/90 rounded-lg p-1.5 border border-slate-800">
-                            <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Last (Close)</span>
-                            <span className="text-rose-400 font-bold text-xs">
-                              #{item.closingRank.toLocaleString()}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-between text-[10px] text-slate-400 mt-2 px-0.5">
-                          <span>Gender: M:{item.maleCount} | F:{item.femaleCount}</span>
-                          {isSelected && (
-                            <span className="text-emerald-400 font-semibold">Active Filter ✓</span>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* FEATURE 2: REAL-TIME ANALYTICS VISUAL BARS & DISTRIBUTION CHARTS */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-6">
-              <div className="border-b border-slate-800/80 pb-3">
-                <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
-                  <BarChart3 className="w-4 h-4 text-cyan-400" />
-                  Real-Time Allotment Distribution & Demographics ({currentBundle?.branchCode})
-                </h3>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  Live calculated from all {analytics.totalAllotted} confirmed candidate records
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-                {/* 1. GENDER RATIO BAR */}
-                <div className="bg-slate-950 border border-slate-800/80 rounded-xl p-4 space-y-3">
-                  <div className="flex justify-between items-center text-xs font-semibold">
-                    <span className="text-slate-300 flex items-center gap-1.5">
-                      <Users className="w-3.5 h-3.5 text-cyan-400" />
-                      Gender Ratio
-                    </span>
-                    <span className="text-slate-400 font-mono text-[11px]">
-                      {analytics.totalAllotted} Students
-                    </span>
-                  </div>
-
-                  {/* Dual-tone Progress Bar */}
-                  <div className="h-4 w-full bg-slate-800 rounded-full overflow-hidden flex p-0.5 shadow-inner">
-                    <div 
-                      style={{ width: `${analytics.malePct}%` }}
-                      className="h-full bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-l-full transition-all duration-700 relative group cursor-pointer"
-                      title={`Boys: ${analytics.maleCount} (${analytics.malePct}%)`}
-                    />
-                    <div 
-                      style={{ width: `${analytics.femalePct}%` }}
-                      className="h-full bg-gradient-to-r from-rose-500 to-purple-500 rounded-r-full transition-all duration-700 relative group cursor-pointer"
-                      title={`Girls: ${analytics.femaleCount} (${analytics.femalePct}%)`}
-                    />
-                  </div>
-
-                  {/* Legend & Stats */}
-                  <div className="grid grid-cols-2 gap-2 pt-1 text-xs">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400/50"></span>
-                      <div>
-                        <span className="text-slate-400 text-[11px] block">Boys (M)</span>
-                        <span className="font-bold text-white font-mono">{analytics.maleCount} ({analytics.malePct}%)</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full bg-rose-400 shadow-sm shadow-rose-400/50"></span>
-                      <div>
-                        <span className="text-slate-400 text-[11px] block">Girls (F)</span>
-                        <span className="font-bold text-white font-mono">{analytics.femaleCount} ({analytics.femalePct}%)</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 2. CATEGORY QUOTA PROPORTIONAL BREAKDOWN */}
-                <div className="bg-slate-950 border border-slate-800/80 rounded-xl p-4 space-y-3">
-                  <div className="flex justify-between items-center text-xs font-semibold">
-                    <span className="text-slate-300 flex items-center gap-1.5">
-                      <Layers className="w-3.5 h-3.5 text-indigo-400" />
-                      Quota Breakdown
-                    </span>
-                    <span className="text-slate-400 font-mono text-[11px]">
-                      {analytics.quotaDistribution.length} Groups
-                    </span>
-                  </div>
-
-                  {/* Multi-segment Proportional Flex Bar */}
-                  <div className="h-4 w-full bg-slate-800 rounded-full overflow-hidden flex p-0.5 shadow-inner gap-0.5">
-                    {analytics.quotaDistribution.map((item) => {
-                      const colors = getQuotaColorClasses(item.name);
-                      return (
-                        <div
-                          key={item.name}
-                          style={{ width: `${item.pct}%` }}
-                          className={`h-full ${colors.bg} rounded-sm transition-all duration-700 cursor-pointer`}
-                          title={`${item.name}: ${item.count} seats (${item.pct}%)`}
-                        />
-                      );
-                    })}
-                  </div>
-
-                  {/* Top Quota Badges */}
-                  <div className="flex flex-wrap gap-1.5 max-h-20 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-800 pt-1">
-                    {analytics.quotaDistribution.map((item) => {
-                      const colors = getQuotaColorClasses(item.name);
-                      return (
-                        <div
-                          key={item.name}
-                          className="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-[11px] flex items-center gap-1 font-mono"
-                        >
-                          <span className={`w-2 h-2 rounded-full ${colors.bg}`} />
-                          <span className="text-slate-300 font-medium">{item.name}:</span>
-                          <span className={`${colors.text} font-bold`}>{item.count}</span>
-                          <span className="text-slate-500 text-[10px]">({item.pct}%)</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* 3. CASTE/COMMUNITY SPREAD */}
-                <div className="bg-slate-950 border border-slate-800/80 rounded-xl p-4 space-y-3">
-                  <div className="flex justify-between items-center text-xs font-semibold">
-                    <span className="text-slate-300 flex items-center gap-1.5">
-                      <PieChart className="w-3.5 h-3.5 text-amber-400" />
-                      Caste / Community Spread
-                    </span>
-                    <span className="text-slate-400 font-mono text-[11px]">
-                      {analytics.casteDistribution.length} Castes
-                    </span>
-                  </div>
-
-                  {/* Horizontal Bar Breakdown for Castes */}
-                  <div className="space-y-1.5 max-h-28 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-800">
-                    {analytics.casteDistribution.slice(0, 5).map((c) => (
-                      <div key={c.caste} className="space-y-0.5">
-                        <div className="flex justify-between text-[11px] font-mono">
-                          <span className="text-slate-300">{c.caste}</span>
-                          <span className="text-slate-400">{c.count} seats ({c.pct}%)</span>
-                        </div>
-                        <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                          <div
-                            style={{ width: `${c.pct}%` }}
-                            className="h-full bg-gradient-to-r from-amber-500 to-indigo-500 rounded-full transition-all duration-700"
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-            {/* Results Counter & Pagination Top Bar */}
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-3 bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-400">
+          <div className="space-y-3">
+            {/* Header & Pagination status */}
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-2 bg-slate-900/90 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-400">
               <div className="flex items-center gap-2 flex-wrap">
                 <span>
-                  Showing <span className="text-white font-bold">{filteredCandidates.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}</span> – <span className="text-white font-bold">{Math.min(currentPage * itemsPerPage, filteredCandidates.length)}</span> of <span className="text-white font-bold">{filteredCandidates.length}</span> candidates in {currentBundle?.branchCode}
+                  Showing <span className="text-white font-bold">{activeDisplayList.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}</span> – <span className="text-white font-bold">{Math.min(currentPage * itemsPerPage, activeDisplayList.length)}</span> of <span className="text-white font-bold">{activeDisplayList.length}</span> students {isGlobalSearchActive ? '(All Colleges)' : `in [${selectedCollegeCode} - ${currentBundle?.branchCode}]`}
                 </span>
-                {(genderFilter !== 'ALL' || casteFilter !== 'ALL' || seatCategoryFilter !== 'ALL' || searchQuery) && (
+                {(genderFilter !== 'ALL' || casteFilter !== 'ALL' || seatCategoryFilter !== 'ALL' || searchQuery) && !isGlobalSearchActive && (
                   <button
                     type="button"
                     onClick={() => {
@@ -990,70 +846,73 @@ export default function TgAllotmentExplorer() {
                       setSearchQuery('');
                       setCurrentPage(1);
                     }}
-                    className="ml-2 px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px] hover:bg-rose-500/30 transition-colors"
+                    className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px]"
                   >
-                    Reset Filters ✕
+                    Clear Filter ✕
                   </button>
                 )}
               </div>
 
-              <div className="flex items-center gap-3">
-                {/* Sort Toggle */}
-                <button
-                  type="button"
-                  id="sort-toggle-header"
-                  onClick={() => setSortOrder((prev) => (prev === 'ASC' ? 'DESC' : 'ASC'))}
-                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-300 font-medium transition-colors text-xs"
-                >
-                  <ArrowUpDown className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>{sortOrder === 'ASC' ? 'Rank: Low to High' : 'Rank: High to Low'}</span>
-                </button>
-
-                {totalPages > 1 && (
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      type="button"
-                      disabled={currentPage <= 1}
-                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                      className="p-1 rounded bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:hover:bg-slate-800 text-slate-200"
-                    >
-                      <ChevronLeft className="w-4 h-4" />
-                    </button>
-                    <span className="font-mono px-2 py-0.5 rounded bg-slate-950 text-slate-300 text-[11px]">
-                      {currentPage} / {totalPages}
-                    </span>
-                    <button
-                      type="button"
-                      disabled={currentPage >= totalPages}
-                      onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                      className="p-1 rounded bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:hover:bg-slate-800 text-slate-200"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                  </div>
-                )}
-              </div>
+              {totalPages > 1 && (
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    disabled={currentPage <= 1}
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    className="p-1 rounded bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-200"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5" />
+                  </button>
+                  <span className="font-mono px-2 py-0.5 rounded bg-slate-950 text-slate-300 text-[11px]">
+                    Page {currentPage} / {totalPages}
+                  </span>
+                  <button
+                    type="button"
+                    disabled={currentPage >= totalPages}
+                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                    className="p-1 rounded bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-200"
+                  >
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Candidate List Cards */}
-            {filteredCandidates.length === 0 ? (
-              <div className="py-16 text-center text-slate-500 bg-slate-900 border border-slate-800 rounded-2xl space-y-2">
+            {activeDisplayList.length === 0 ? (
+              <div className="py-14 text-center text-slate-400 bg-slate-900 border border-slate-800 rounded-2xl space-y-2 p-4">
                 <Users className="w-8 h-8 mx-auto text-slate-600 mb-1" />
-                <p className="text-sm font-medium text-slate-300">No candidates match the selected filters or search query.</p>
-                <p className="text-xs text-slate-400">Try adjusting the category quota, gender, or search keyword.</p>
+                <p className="text-sm font-semibold text-white">No candidate records found</p>
+                <p className="text-xs text-slate-400">
+                  {isGlobalSearchActive 
+                    ? `No candidate matching "${searchQuery}" was found in any of the 151 Telangana engineering colleges.` 
+                    : `Try searching across all colleges using "Search All Colleges" or resetting branch filters.`}
+                </p>
+                {!isGlobalSearchActive && searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => handleExecuteGlobalSearch()}
+                    className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500 text-white text-xs font-bold shadow-md shadow-rose-500/20"
+                  >
+                    <Globe2 className="w-3.5 h-3.5" />
+                    Search "{searchQuery}" across all 151 Colleges
+                  </button>
+                )}
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {paginatedCandidates.map((c) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3">
+                {paginatedCandidates.map((c, idx) => (
                   <div 
-                    key={`${c.hallTicket || ''}-${c.rank}`} 
-                    className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-2.5 hover:border-slate-700 hover:bg-slate-900/90 transition-all shadow-sm"
+                    key={`${c.hallTicket || ''}-${c.rank}-${idx}`} 
+                    className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-3.5 space-y-2 hover:border-slate-700 hover:bg-slate-900/90 transition-all shadow-sm"
                   >
                     <div className="flex justify-between items-start gap-2">
-                      <div className="space-y-0.5 min-w-0">
-                        <h4 className="text-sm font-bold text-white tracking-tight truncate">{c.name}</h4>
+                      <div className="space-y-0.5 min-w-0 flex-1">
+                        <h4 className="text-xs sm:text-sm font-bold text-white tracking-tight truncate" title={c.name}>
+                          {c.name}
+                        </h4>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs text-slate-400 font-mono">HT: {c.hallTicket}</span>
+                          <span className="text-[11px] text-slate-400 font-mono">HT: {c.hallTicket}</span>
                           <button
                             type="button"
                             onClick={() => handleCopyTicket(c.hallTicket)}
@@ -1061,33 +920,51 @@ export default function TgAllotmentExplorer() {
                             className="text-slate-500 hover:text-emerald-400 transition-colors"
                           >
                             {copiedTicket === c.hallTicket ? (
-                              <Check className="w-3.5 h-3.5 text-emerald-400" />
+                              <Check className="w-3 h-3 text-emerald-400" />
                             ) : (
-                              <Copy className="w-3.5 h-3.5" />
+                              <Copy className="w-3 h-3" />
                             )}
                           </button>
                         </div>
                       </div>
-                      <span className="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-lg text-xs font-mono font-bold shrink-0">
+                      <span className="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-lg text-xs font-mono font-bold shrink-0">
                         #{c.rank?.toLocaleString()}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2 pt-1 text-[11px] flex-wrap">
-                      <span className={`px-2 py-0.5 rounded font-medium ${
+                    {/* If Global Search Result: Show College & Branch with Quick Switch Action */}
+                    {isGlobalSearchActive && c.collegeCode && (
+                      <div className="pt-1 pb-0.5 border-t border-slate-800/60 flex items-center justify-between gap-1 text-[11px]">
+                        <div className="truncate text-slate-300">
+                          <span className="font-bold text-rose-300 font-mono mr-1">[{c.collegeCode}]</span>
+                          <span className="font-mono text-cyan-300">{c.branchCode}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleJumpToCollegeBranch(c.collegeCode, c.branchCode)}
+                          className="text-[10px] text-emerald-400 hover:underline flex items-center gap-0.5 shrink-0"
+                        >
+                          <span>Open College</span>
+                          <ExternalLink className="w-2.5 h-2.5" />
+                        </button>
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-1.5 pt-0.5 text-[10px] sm:text-[11px] flex-wrap">
+                      <span className={`px-1.5 py-0.2 rounded font-medium ${
                         c.gender === 'M' ? 'bg-cyan-500/15 text-cyan-300' : 'bg-rose-500/15 text-rose-300'
                       }`}>
                         {c.gender === 'M' ? 'Boys (M)' : c.gender === 'F' ? 'Girls (F)' : c.gender}
                       </span>
-                      <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-medium">
+                      <span className="px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 font-medium">
                         {c.caste}
                       </span>
                       {c.region && (
-                        <span className="px-2 py-0.5 rounded bg-slate-800/80 text-slate-400 text-[10px]">
+                        <span className="px-1.5 py-0.2 rounded bg-slate-800/80 text-slate-400">
                           {c.region}
                         </span>
                       )}
-                      <span className="ml-auto px-2.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-mono font-semibold text-[11px]">
+                      <span className="ml-auto px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-mono font-semibold text-[10px]">
                         {c.seatCategory}
                       </span>
                     </div>
@@ -1096,17 +973,17 @@ export default function TgAllotmentExplorer() {
               </div>
             )}
 
-            {/* Bottom Pagination */}
+            {/* 4. PAGINATION CONTROLS */}
             {totalPages > 1 && (
-              <div className="flex justify-center items-center gap-2 pt-2">
+              <div className="flex justify-center items-center gap-2 pt-2 pb-4">
                 <button
                   type="button"
                   disabled={currentPage <= 1}
                   onClick={() => {
                     setCurrentPage((p) => Math.max(1, p - 1));
-                    window.scrollTo({ top: 350, behavior: 'smooth' });
+                    window.scrollTo({ top: 150, behavior: 'smooth' });
                   }}
-                  className="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 disabled:opacity-40 text-xs font-medium text-slate-200"
+                  className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 disabled:opacity-40 text-xs font-medium text-slate-200"
                 >
                   Previous Page
                 </button>
@@ -1118,15 +995,234 @@ export default function TgAllotmentExplorer() {
                   disabled={currentPage >= totalPages}
                   onClick={() => {
                     setCurrentPage((p) => Math.min(totalPages, p + 1));
-                    window.scrollTo({ top: 350, behavior: 'smooth' });
+                    window.scrollTo({ top: 150, behavior: 'smooth' });
                   }}
-                  className="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 disabled:opacity-40 text-xs font-medium text-slate-200"
+                  className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 disabled:opacity-40 text-xs font-medium text-slate-200"
                 >
                   Next Page
                 </button>
               </div>
             )}
-          </>
+          </div>
+        )}
+
+        {/* 5. ANALYTICS & DISTRIBUTION VISUALS (POSITIONED AT BOTTOM) */}
+        {!loading && !isGlobalSearchActive && currentBundle && (
+          <div className="pt-4 border-t border-slate-800/80 space-y-4">
+            {/* Header toggle for bottom analytics */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <BarChart3 className="w-4 h-4 text-emerald-400" />
+                <h3 className="text-sm sm:text-base font-bold text-white">
+                  Allotment Analytics &amp; Category Cutoffs [{selectedCollegeCode} — {currentBundle.branchCode}]
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAnalyticsExpanded(!isAnalyticsExpanded)}
+                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 text-xs font-medium"
+              >
+                <span>{isAnalyticsExpanded ? 'Hide Analytics' : 'Show Analytics'}</span>
+                {isAnalyticsExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+              </button>
+            </div>
+
+            {isAnalyticsExpanded && (
+              <div className="space-y-4 animate-in fade-in duration-200">
+                {/* KPI Overview Row */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
+                  <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 shadow-md">
+                    <span className="text-[11px] text-slate-400 font-medium">Total Allotted Seats</span>
+                    <div className="text-xl sm:text-2xl font-black text-white mt-0.5">{analytics.totalAllotted}</div>
+                    <div className="text-[10px] text-slate-400 mt-0.5 truncate">
+                      Boys: {analytics.maleCount} | Girls: {analytics.femaleCount}
+                    </div>
+                  </div>
+                  <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 shadow-md">
+                    <span className="text-[11px] text-slate-400 font-medium">Opening Cutoff Rank</span>
+                    <div className="text-xl sm:text-2xl font-black text-emerald-400 mt-0.5">
+                      {analytics.openingRank > 0 ? `#${analytics.openingRank.toLocaleString()}` : '—'}
+                    </div>
+                    <div className="text-[10px] text-emerald-400/80 mt-0.5">First Allotted Candidate</div>
+                  </div>
+                  <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 shadow-md">
+                    <span className="text-[11px] text-slate-400 font-medium">Closing Cutoff Rank</span>
+                    <div className="text-xl sm:text-2xl font-black text-rose-400 mt-0.5">
+                      {analytics.closingRank > 0 ? `#${analytics.closingRank.toLocaleString()}` : '—'}
+                    </div>
+                    <div className="text-[10px] text-rose-400/80 mt-0.5">Last Allotted Candidate</div>
+                  </div>
+                  <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 shadow-md">
+                    <span className="text-[11px] text-slate-400 font-medium">Stream / Total Branches</span>
+                    <div className="text-xl sm:text-2xl font-black text-white mt-0.5">{availableBranches.length}</div>
+                    <div className="text-[10px] text-slate-400 mt-0.5 truncate">
+                      Code: {currentBundle.branchCode}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Category-Wise Opening & Closing Ranks Grid */}
+                {categoryCutoffs.length > 0 && (
+                  <div className="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 sm:p-5 space-y-3 shadow-lg">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 border-b border-slate-800 pb-2.5">
+                      <h4 className="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
+                        <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                        Category-Wise Opening &amp; Closing Ranks (Best &amp; Last Rank per Quota)
+                      </h4>
+                      <span className="text-[10px] text-slate-400 font-mono">
+                        {categoryCutoffs.length} Quotas in {currentBundle.branchCode}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
+                      {categoryCutoffs.map((item) => {
+                        const isSelected = seatCategoryFilter === item.category;
+                        const colors = getQuotaColorClasses(item.category);
+                        return (
+                          <div
+                            key={item.category}
+                            onClick={() => {
+                              setSeatCategoryFilter(isSelected ? 'ALL' : item.category);
+                              window.scrollTo({ top: 150, behavior: 'smooth' });
+                            }}
+                            className={`cursor-pointer rounded-xl p-2.5 border transition-all ${
+                              isSelected
+                                ? 'bg-slate-800 border-emerald-500 shadow-md ring-1 ring-emerald-500/50'
+                                : 'bg-slate-950/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between mb-1.5">
+                              <span className={`text-[11px] font-mono font-bold px-1.5 py-0.5 rounded ${colors.lightBg} ${colors.text} border ${colors.border} truncate max-w-[150px]`}>
+                                {item.category}
+                              </span>
+                              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-300">
+                                {item.count} {item.count === 1 ? 'seat' : 'seats'}
+                              </span>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-1.5 text-xs font-mono">
+                              <div className="bg-slate-900 rounded p-1 border border-slate-800">
+                                <span className="text-[9px] text-slate-400 uppercase block">Best (Open)</span>
+                                <span className="text-emerald-400 font-bold text-xs">
+                                  #{item.openingRank.toLocaleString()}
+                                </span>
+                              </div>
+                              <div className="bg-slate-900 rounded p-1 border border-slate-800">
+                                <span className="text-[9px] text-slate-400 uppercase block">Last (Close)</span>
+                                <span className="text-rose-400 font-bold text-xs">
+                                  #{item.closingRank.toLocaleString()}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Demographics & Quota Visual Flex-Bars */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {/* Gender Ratio */}
+                  <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-2.5">
+                    <div className="flex justify-between items-center text-xs font-semibold">
+                      <span className="text-slate-300 flex items-center gap-1.5">
+                        <Users className="w-3.5 h-3.5 text-cyan-400" />
+                        Gender Ratio
+                      </span>
+                      <span className="text-slate-400 font-mono text-[10px]">
+                        {analytics.totalAllotted} Students
+                      </span>
+                    </div>
+
+                    <div className="h-3 w-full bg-slate-800 rounded-full overflow-hidden flex p-0.5">
+                      <div 
+                        style={{ width: `${analytics.malePct}%` }}
+                        className="h-full bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-l-full transition-all duration-500"
+                        title={`Boys: ${analytics.maleCount} (${analytics.malePct}%)`}
+                      />
+                      <div 
+                        style={{ width: `${analytics.femalePct}%` }}
+                        className="h-full bg-gradient-to-r from-rose-500 to-purple-500 rounded-r-full transition-all duration-500"
+                        title={`Girls: ${analytics.femaleCount} (${analytics.femalePct}%)`}
+                      />
+                    </div>
+
+                    <div className="flex justify-between text-[11px]">
+                      <span className="text-cyan-400 font-mono">Boys: {analytics.maleCount} ({analytics.malePct}%)</span>
+                      <span className="text-rose-400 font-mono">Girls: {analytics.femaleCount} ({analytics.femalePct}%)</span>
+                    </div>
+                  </div>
+
+                  {/* Quota Breakdown */}
+                  <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-2.5">
+                    <div className="flex justify-between items-center text-xs font-semibold">
+                      <span className="text-slate-300 flex items-center gap-1.5">
+                        <Layers className="w-3.5 h-3.5 text-indigo-400" />
+                        Quota Groups
+                      </span>
+                      <span className="text-slate-400 font-mono text-[10px]">
+                        {analytics.quotaDistribution.length} Families
+                      </span>
+                    </div>
+
+                    <div className="h-3 w-full bg-slate-800 rounded-full overflow-hidden flex p-0.5 gap-0.5">
+                      {analytics.quotaDistribution.map((item) => {
+                        const colors = getQuotaColorClasses(item.name);
+                        return (
+                          <div
+                            key={item.name}
+                            style={{ width: `${item.pct}%` }}
+                            className={`h-full ${colors.bg} rounded-xs`}
+                            title={`${item.name}: ${item.count} (${item.pct}%)`}
+                          />
+                        );
+                      })}
+                    </div>
+
+                    <div className="flex flex-wrap gap-1 max-h-16 overflow-y-auto text-[10px] font-mono">
+                      {analytics.quotaDistribution.map((item) => (
+                        <span key={item.name} className="px-1.5 py-0.5 bg-slate-950 rounded text-slate-300 border border-slate-800">
+                          {item.name}: {item.count}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Caste Spread */}
+                  <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-2.5">
+                    <div className="flex justify-between items-center text-xs font-semibold">
+                      <span className="text-slate-300 flex items-center gap-1.5">
+                        <PieChart className="w-3.5 h-3.5 text-amber-400" />
+                        Caste / Community Spread
+                      </span>
+                      <span className="text-slate-400 font-mono text-[10px]">
+                        {analytics.casteDistribution.length} Communities
+                      </span>
+                    </div>
+
+                    <div className="space-y-1 max-h-24 overflow-y-auto pr-1">
+                      {analytics.casteDistribution.slice(0, 4).map((c) => (
+                        <div key={c.caste} className="space-y-0.5 text-[10px] font-mono">
+                          <div className="flex justify-between text-slate-300">
+                            <span>{c.caste}</span>
+                            <span>{c.count} ({c.pct}%)</span>
+                          </div>
+                          <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                            <div
+                              style={{ width: `${c.pct}%` }}
+                              className="h-full bg-amber-500 rounded-full"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            )}
+          </div>
         )}
 
       </div>

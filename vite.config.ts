@@ -103,6 +103,79 @@ function tgAllotmentPlugin(): Plugin {
         res.end(JSON.stringify({ error: 'Manifest not found' }));
       });
 
+      // Global Candidate Search across all 151 Telangana Colleges
+      server.middlewares.use('/api/tg-allotment/search', (req, res) => {
+        try {
+          const parsedUrl = new URL(req.url || '', 'http://localhost');
+          const q = (parsedUrl.searchParams.get('q') || '').trim().toLowerCase();
+          if (!q || q.length < 2) {
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            res.end(JSON.stringify({ query: q, results: [] }));
+            return;
+          }
+
+          const dir = path.join(__dirname, 'public/TG_EAPCET_2026_ALLOTMENT');
+          if (!fs.existsSync(dir)) {
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            res.end(JSON.stringify({ query: q, results: [] }));
+            return;
+          }
+
+          const files = fs.readdirSync(dir).filter(f => f.endsWith('.json') && f !== 'manifest.json');
+          const matches: any[] = [];
+          const MAX_MATCHES = 50;
+
+          for (const file of files) {
+            if (matches.length >= MAX_MATCHES) break;
+            try {
+              const filePath = path.join(dir, file);
+              const content = fs.readFileSync(filePath, 'utf-8');
+              // Quick check if string exists in file before parsing JSON for high speed
+              if (!content.toLowerCase().includes(q)) continue;
+
+              const data = JSON.parse(content);
+              const collegeCode = data.collegeCode || file.replace(/\.json$/i, '');
+              const collegeName = data.collegeName || collegeCode;
+              const branches = Array.isArray(data.branches) ? data.branches : (Array.isArray(data) ? data : [data]);
+
+              for (const branch of branches) {
+                if (matches.length >= MAX_MATCHES) break;
+                const branchCode = branch.branchCode || 'ENGG';
+                const branchName = branch.branchName || branchCode;
+                const records = Array.isArray(branch.records) ? branch.records : [];
+
+                for (const r of records) {
+                  if (matches.length >= MAX_MATCHES) break;
+                  const nameMatch = r.name && r.name.toLowerCase().includes(q);
+                  const htMatch = r.hallTicket && r.hallTicket.toLowerCase().includes(q);
+                  const rankMatch = r.rank && r.rank.toString() === q;
+
+                  if (nameMatch || htMatch || rankMatch) {
+                    matches.push({
+                      ...r,
+                      collegeCode,
+                      collegeName,
+                      branchCode,
+                      branchName
+                    });
+                  }
+                }
+              }
+            } catch (fileErr) {
+              // skip unreadable
+            }
+          }
+
+          res.setHeader('Content-Type', 'application/json; charset=utf-8');
+          res.end(JSON.stringify({ query: q, total: matches.length, results: matches }));
+        } catch (err: any) {
+          console.error('[tgAllotmentSearch] error:', err);
+          res.statusCode = 500;
+          res.setHeader('Content-Type', 'application/json; charset=utf-8');
+          res.end(JSON.stringify({ error: err.message, results: [] }));
+        }
+      });
+
       // Serve /TG_EAPCET_2026_ALLOTMENT/ requests directly with code-alias fallback and 404 JSON protection
       server.middlewares.use((req, res, next) => {
         const url = req.url ? req.url.split('?')[0] : '';

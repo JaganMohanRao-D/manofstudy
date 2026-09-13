@@ -157,7 +157,7 @@ const LoadingFallback: React.FC = () => (
 export const TOOLS_CONFIG: ToolMeta[] = [
   {
     id: 'tg-allotments',
-    name: 'TG EAPCET 2026 Final Phase Allotment & Cutoff Radar',
+    name: 'TG EAPCET 2026 Final Phase Seat Allotments Name Wise',
     shortName: 'TG Allotments 2026',
     category: 'counselling',
     description: 'Official student allotment registers, category closing cutoffs, and real admission analytics',

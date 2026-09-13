@@ -25,13 +25,13 @@ const WORKSPACES = [
   {
     id: 'ws-tg-allotments',
     workspace: 'tg-allotments',
-    title: 'TG EAPCET 2026 Final Allotment & Cutoff Radar',
+    title: 'TG EAPCET 2026 Final Phase Seat Allotments Name Wise',
     tag: 'Final Phase Live',
     badge: '100% Verified Records',
     badgeColor: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
     description:
       'Official student allotment registers, category closing cutoffs, and name-wise rank lookup with zero latency.',
-    actionText: 'Launch Radar',
+    actionText: 'Search Allotments',
     icon: Award,
     accentColor: 'text-rose-400',
     iconBg: 'bg-rose-500/10 border-rose-500/30 text-rose-400',
