@@ -20,6 +20,7 @@ import {
   BookOpen,
   Briefcase,
   Star,
+  Award,
 } from 'lucide-react';
 import { ToolTab, WorkspaceView } from '../types';
 import { LegalModalType } from './LegalModals';
@@ -125,6 +126,13 @@ export const Header: React.FC<HeaderProps> = ({
       workspace: 'eapcet',
       label: 'EAPCET Radar',
       icon: Flame,
+    },
+    {
+      id: 'tg-allotments',
+      workspace: 'tg-allotments',
+      label: 'TG Allotments',
+      icon: Award,
+      badge: '2026',
     },
     {
       id: 'roadmaps',

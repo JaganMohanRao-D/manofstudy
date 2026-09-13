@@ -89,6 +89,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     // 1. Primary Tools
     items.push(
       {
+        id: 'tool-tg-allotments',
+        title: 'TG EAPCET 2026 Final Phase Allotments & Cutoffs',
+        subtitle: 'Official candidate allotments, cutoff ranks & admission stats',
+        category: 'Core Tools',
+        badge: 'TG 2026',
+        icon: <Award className="w-4 h-4 text-rose-500" />,
+        keywords: ['tg', 'tgeapcet', 'tg eapcet', 'telangana', 'allotment', 'cutoff', 'ranks', '2026', 'counseling', 'jntuh', 'ou'],
+        action: () => onSelectTool('tg-allotments'),
+      },
+      {
         id: 'tool-eapcet-radar',
         title: 'AP EAPCET Phase 2 Vacancy Radar',
         subtitle: 'Live leftover seats, college intake matrix & official branch fees',
