@@ -520,4 +520,50 @@ export interface InternalCalcResult {
   cutoffBreakdown: GradeCutoffRow[];
 }
 
+export interface TgCandidateRecord {
+  rank: number;
+  name: string;
+  gender: 'M' | 'F' | string;
+  caste: string;
+  seatCategory: string;
+  region: string;
+  hallTicket: string;
+  collegeCode: string;
+  collegeName: string;
+  branchCode: string;
+  branchName: string;
+  phase?: string;
+}
+
+export interface TgBranchSummary {
+  branchCode: string;
+  branchName: string;
+  openingRank: number;
+  closingRank: number;
+  totalAllotted: number;
+}
+
+export interface TgBranchData extends TgBranchSummary {
+  collegeCode: string;
+  collegeName: string;
+  records: TgCandidateRecord[];
+}
+
+export interface TgCollegeFullData {
+  collegeCode: string;
+  collegeName: string;
+  branches: TgBranchData[];
+}
+
+export interface TgCollegeIndexItem {
+  collegeCode: string;
+  collegeName: string;
+  filename: string;
+  branchCount: number;
+  branches: TgBranchSummary[];
+  totalAllotted: number;
+  minRank: number;
+  maxRank: number;
+}
+
 
