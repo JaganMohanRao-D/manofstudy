@@ -17,8 +17,6 @@ import {
   ChevronRight,
   RefreshCw,
   Sparkles,
-  Download,
-  Share2,
   ArrowUpDown,
   GraduationCap,
   Flame,
@@ -26,7 +24,7 @@ import {
   CheckCircle2,
   ExternalLink,
 } from 'lucide-react';
-import rawDataset from '../data/TG_EAPCET_2026_FINAL_PHASE.json';
+import tgData from '../data/TG_EAPCET_2026_FINAL_PHASE.json';
 
 /**
  * Color-coded theme helpers for reservation and category tags
@@ -78,7 +76,7 @@ export const TgAllotmentExplorer = () => {
   // 1. Colleges List derived from dataset
   const collegesList = useMemo(() => {
     const map = new Map();
-    for (const item of rawDataset) {
+    for (const item of tgData) {
       if (!map.has(item.collegeCode)) {
         map.set(item.collegeCode, {
           code: item.collegeCode,
@@ -99,7 +97,7 @@ export const TgAllotmentExplorer = () => {
 
   // Available Branches for selected college
   const availableBranches = useMemo(() => {
-    return rawDataset
+    return tgData
       .filter((b) => b.collegeCode === selectedCollegeCode)
       .map((b) => ({
         code: b.branchCode,
@@ -142,12 +140,12 @@ export const TgAllotmentExplorer = () => {
   // Selected College-Branch Bundle
   const selectedBundle = useMemo(() => {
     return (
-      rawDataset.find(
+      tgData.find(
         (b) =>
           b.collegeCode === selectedCollegeCode &&
           b.branchCode === selectedBranchCode
       ) ||
-      rawDataset[0] ||
+      tgData[0] ||
       null
     );
   }, [selectedCollegeCode, selectedBranchCode]);
@@ -173,7 +171,6 @@ export const TgAllotmentExplorer = () => {
   // Expanded candidate card
   const [expandedHallTicket, setExpandedHallTicket] = useState(null);
   const [copiedHallTicket, setCopiedHallTicket] = useState(null);
-  const [shareToast, setShareToast] = useState(false);
 
   // Reset page when filters change
   useEffect(() => {
@@ -251,56 +248,6 @@ export const TgAllotmentExplorer = () => {
     navigator.clipboard.writeText(ht);
     setCopiedHallTicket(ht);
     setTimeout(() => setCopiedHallTicket(null), 2000);
-  };
-
-  // Share current view URL
-  const handleShareView = () => {
-    const url = `${window.location.origin}${window.location.pathname}#tg-allotments?col=${selectedCollegeCode}&br=${selectedBranchCode}`;
-    navigator.clipboard.writeText(url);
-    setShareToast(true);
-    setTimeout(() => setShareToast(false), 2500);
-  };
-
-  // Export filtered list to CSV
-  const handleExportCSV = () => {
-    if (!filteredRecords.length) return;
-    const headers = [
-      'Rank',
-      'Name',
-      'HallTicket',
-      'Gender',
-      'Caste',
-      'SeatCategory',
-      'Region',
-      'Phase',
-      'CollegeCode',
-      'BranchCode',
-    ];
-    const rows = filteredRecords.map((r) => [
-      r.rank,
-      `"${r.name}"`,
-      `"${r.hallTicket}"`,
-      r.gender,
-      r.caste,
-      r.seatCategory,
-      r.region,
-      `"${r.phase}"`,
-      selectedCollegeCode,
-      selectedBranchCode,
-    ]);
-    const csvContent =
-      'data:text/csv;charset=utf-8,' +
-      [headers.join(','), ...rows.map((e) => e.join(','))].join('\n');
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute(
-      'download',
-      `TG_EAPCET_2026_${selectedCollegeCode}_${selectedBranchCode}_Allotments.csv`
-    );
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   // -------------------------------------------------------------
@@ -433,37 +380,6 @@ export const TgAllotmentExplorer = () => {
                 OU / UR / NL Categories
               </span>
             </div>
-          </div>
-
-          {/* Quick Actions */}
-          <div className="flex items-center gap-2 shrink-0 self-start md:self-center">
-            <button
-              type="button"
-              onClick={handleExportCSV}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold border border-slate-300 dark:border-slate-700 shadow-2xs transition-all cursor-pointer"
-              title="Download filtered candidates CSV"
-            >
-              <Download className="w-3.5 h-3.5 text-indigo-500" />
-              <span>Export CSV</span>
-            </button>
-            <button
-              type="button"
-              onClick={handleShareView}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white text-xs font-bold shadow-xs transition-all cursor-pointer"
-              title="Share or Copy Link"
-            >
-              {shareToast ? (
-                <>
-                  <Check className="w-3.5 h-3.5 text-white" />
-                  <span>Copied!</span>
-                </>
-              ) : (
-                <>
-                  <Share2 className="w-3.5 h-3.5" />
-                  <span>Share View</span>
-                </>
-              )}
-            </button>
           </div>
         </div>
       </div>

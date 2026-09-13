@@ -23,6 +23,35 @@ import {
  */
 const WORKSPACES = [
   {
+    id: 'ws-tg-allotments',
+    workspace: 'tg-allotments',
+    title: 'TG EAPCET 2026 Final Allotment & Cutoff Radar',
+    tag: 'Final Phase Live',
+    badge: '100% Verified Records',
+    badgeColor: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+    description:
+      'Official student allotment registers, category closing cutoffs, and name-wise rank lookup with zero latency.',
+    actionText: 'Launch Radar',
+    icon: Award,
+    accentColor: 'text-rose-400',
+    iconBg: 'bg-rose-500/10 border-rose-500/30 text-rose-400',
+    hoverBorder: 'hover:border-rose-500/60',
+  },
+  {
+    id: 'ws-eapcet',
+    workspace: 'eapcet',
+    title: 'AP EAPCET College & Leftover Seat Matrix Radar',
+    badge: 'Phase 2 Live',
+    badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+    description:
+      'Live college-wise seat vacancy matrix, branch leftover seats & official tuition fees across AP colleges.',
+    actionText: 'Launch Radar',
+    icon: Flame,
+    accentColor: 'text-emerald-400',
+    iconBg: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
+    hoverBorder: 'hover:border-emerald-500/60',
+  },
+  {
     id: 'ws-vault',
     workspace: 'vault',
     title: 'Placement Viva & Practical Code Vault',
@@ -73,32 +102,6 @@ const WORKSPACES = [
     accentColor: 'text-sky-400',
     iconBg: 'bg-sky-500/10 border-sky-500/30 text-sky-400',
     hoverBorder: 'hover:border-sky-500/60',
-  },
-  {
-    id: 'ws-eapcet',
-    workspace: 'eapcet',
-    title: 'EAPCET College & Leftover Seat Matrix Radar',
-    badge: 'Phase 2 Live',
-    badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
-    description:
-      'Live college-wise seat vacancy matrix, branch leftover seats & official tuition fees across AP colleges.',
-    icon: Flame,
-    accentColor: 'text-emerald-400',
-    iconBg: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
-    hoverBorder: 'hover:border-emerald-500/60',
-  },
-  {
-    id: 'ws-tg-allotments',
-    workspace: 'tg-allotments',
-    title: 'TG EAPCET 2026 Final Allotment & Cutoff Radar',
-    badge: 'Final Phase 2026',
-    badgeColor: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
-    description:
-      'Official student allotment registers, category closing cutoffs, gender ratios & admission analytics across top colleges.',
-    icon: Award,
-    accentColor: 'text-rose-400',
-    iconBg: 'bg-rose-500/10 border-rose-500/30 text-rose-400',
-    hoverBorder: 'hover:border-rose-500/60',
   },
   {
     id: 'ws-scholarships',
@@ -204,9 +207,12 @@ export const HeroSection = ({
       <div className="relative z-10 max-w-5xl mx-auto text-center space-y-5 sm:space-y-6">
         {/* Top Badges */}
         <div className="flex flex-wrap items-center justify-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider bg-slate-900/90 text-sky-300 border border-sky-500/30 shadow-md">
-            <Zap className="w-3.5 h-3.5 text-sky-400 fill-sky-400" />
-            2026 Academic OS
+          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider bg-slate-900/90 text-rose-300 border border-rose-500/40 shadow-lg shadow-rose-500/20">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500" />
+            </span>
+            🔥 AP &amp; TG FINAL PHASE ALLOTMENTS NAME WISE
           </span>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-semibold bg-slate-900/90 text-emerald-300 border border-emerald-500/30 shadow-md">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
@@ -283,10 +289,17 @@ export const HeroSection = ({
                 <div className="relative z-10 space-y-3">
                   {/* Card Header: Icon & Badge */}
                   <div className="flex items-center justify-between gap-2">
-                    <div
-                      className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl border flex items-center justify-center transition-transform duration-200 group-hover:scale-105 shadow-xs ${item.iconBg}`}
-                    >
-                      <Icon className="w-5 h-5" />
+                    <div className="flex items-center gap-2">
+                      <div
+                        className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl border flex items-center justify-center transition-transform duration-200 group-hover:scale-105 shadow-xs ${item.iconBg}`}
+                      >
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      {item.tag && (
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-rose-600 via-rose-500 to-red-600 text-white shadow-xs border border-rose-400/40">
+                          {item.tag}
+                        </span>
+                      )}
                     </div>
 
                     <span
@@ -309,8 +322,8 @@ export const HeroSection = ({
 
                 {/* Card Footer: Action Trigger */}
                 <div className="relative z-10 pt-3 border-t border-slate-800 flex items-center justify-end text-xs font-semibold text-slate-300 group-hover:text-white">
-                  <div className="inline-flex items-center gap-1 text-xs font-bold text-sky-400 group-hover:text-sky-300">
-                    <span>Launch</span>
+                  <div className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-400 group-hover:text-sky-300">
+                    <span>{item.actionText || 'Launch'}</span>
                     <ArrowRight className="w-3.5 h-3.5 transition-transform duration-150 group-hover:translate-x-1" />
                   </div>
                 </div>
