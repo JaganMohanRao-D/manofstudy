@@ -1,0 +1,73 @@
+{
+  "collegeCode": "AURH",
+  "collegeName": "Ramappa Engineering College (AURH)",
+  "branches": [
+    {
+      "collegeCode": "AURH",
+      "collegeName": "Ramappa Engineering College (AURH)",
+      "branchCode": "CSD",
+      "branchName": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)",
+      "openingRank": 81184,
+      "closingRank": 119891,
+      "totalAllotted": 4,
+      "records": [
+        {
+          "rank": 81184,
+          "name": "GUGULOTH THIRUPATHI",
+          "gender": "M",
+          "caste": "ST",
+          "seatCategory": "OC_GEN_UR",
+          "region": "OU",
+          "hallTicket": "2623T04144",
+          "collegeCode": "AURH",
+          "collegeName": "Ramappa Engineering College (AURH)",
+          "branchCode": "CSD",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)",
+          "phase": "2026 Final Phase"
+        },
+        {
+          "rank": 88591,
+          "name": "KAPU SONAL RAJ",
+          "gender": "M",
+          "caste": "BC_D",
+          "seatCategory": "OC_CAP_GEN_UR(0)",
+          "region": "OU",
+          "hallTicket": "2625H03102",
+          "collegeCode": "AURH",
+          "collegeName": "Ramappa Engineering College (AURH)",
+          "branchCode": "CSD",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)",
+          "phase": "2026 Final Phase"
+        },
+        {
+          "rank": 118031,
+          "name": "KAPARTHI POOJA",
+          "gender": "F",
+          "caste": "OC",
+          "seatCategory": "SC_III_GIRLS_UR",
+          "region": "OU",
+          "hallTicket": "2622A23323",
+          "collegeCode": "AURH",
+          "collegeName": "Ramappa Engineering College (AURH)",
+          "branchCode": "CSD",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)",
+          "phase": "2026 Final Phase"
+        },
+        {
+          "rank": 119891,
+          "name": "M PRANAV",
+          "gender": "M",
+          "caste": "BC_D",
+          "seatCategory": "OC_PHH_GIRLS_OU",
+          "region": "OU",
+          "hallTicket": "2621C08182",
+          "collegeCode": "AURH",
+          "collegeName": "Ramappa Engineering College (AURH)",
+          "branchCode": "CSD",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)",
+          "phase": "2026 Final Phase"
+        }
+      ]
+    }
+  ]
+}

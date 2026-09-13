@@ -1,0 +1,168 @@
+{
+  "collegeCode": "TPCE",
+  "collegeName": "TALLA PADMAVATHI COLL OF ENGINEERING (TPCE)",
+  "branches": [
+    {
+      "collegeCode": "TPCE",
+      "collegeName": "TALLA PADMAVATHI COLL OF ENGINEERING (TPCE)",
+      "branchCode": "CSE",
+      "branchName": "COMPUTER SCIENCE AND ENGINEERING (CSE)",
+      "openingRank": 60192,
+      "closingRank": 141658,
+      "totalAllotted": 6,
+      "records": [
+        {
+          "rank": 60192,
+          "name": "ONAPAKALA RAHUL",
+          "gender": "M",
+          "caste": "SC_II",
+          "seatCategory": "OC_GEN_UR",
+          "region": "OU",
+          "hallTicket": "2625T02369",
+          "collegeCode": "TPCE",
+          "collegeName": "TALLA PADMAVATHI COLL OF ENGINEERING (TPCE)",
+          "branchCode": "CSE",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (CSE)",
+          "phase": "2026 Final Phase"
+        },
+        {
+          "rank": 90561,
+          "name": "GOGULA SHANMUKH",
+          "gender": "M",
+          "caste": "BC_A",
+          "seatCategory": "OC_GEN_OU",
+          "region": "OU",
+          "hallTicket": "2623T03034",
+          "collegeCode": "TPCE",
+          "collegeName": "TALLA PADMAVATHI COLL OF ENGINEERING (TPCE)",
+          "branchCode": "CSE",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (CSE)",
+          "phase": "2026 Final Phase"
+        },
+        {
+          "rank": 112246,
+          "name": "VEMUGANTI SANTHOSH",
+          "gender": "M",
+          "caste": "SC_II",
+          "seatCategory": "SC_II_GIRLS_UR",
+          "region": "OU",
+          "hallTicket": "2625C06124",
+          "collegeCode": "TPCE",
+          "collegeName": "TALLA PADMAVATHI COLL OF ENGINEERING (TPCE)",
+          "branchCode": "CSE",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (CSE)",
+          "phase": "2026 Final Phase"
+        },
+        {
+          "rank": 123661,
+          "name": "GADICHARLA TEJASRI",
+          "gender": "F",
+          "caste": "BC_D",
+          "seatCategory": "SC_III_GIRLS_UR",
+          "region": "OU",
+          "hallTicket": "2623T09034",
+          "collegeCode": "TPCE",
+          "collegeName": "TALLA PADMAVATHI COLL OF ENGINEERING (TPCE)",
+          "branchCode": "CSE",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (CSE)",
+          "phase": "2026 Final Phase"
+        },
+        {
+          "rank": 135136,
+          "name": "MANTHINI PRUTHVI SHARMA",
+          "gender": "M",
+          "caste": "SC_II",
+          "seatCategory": "SC_II_GEN_OU",
+          "region": "OU",
+          "hallTicket": "2626T02255",
+          "collegeCode": "TPCE",
+          "collegeName": "TALLA PADMAVATHI COLL OF ENGINEERING (TPCE)",
+          "branchCode": "CSE",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (CSE)",
+          "phase": "2026 Final Phase"
+        },
+        {
+          "rank": 141658,
+          "name": "VANKUDOTH SRIHANSIKA",
+          "gender": "F",
+          "caste": "ST",
+          "seatCategory": "ST_GIRLS_OU",
+          "region": "OU",
+          "hallTicket": "2621T02651",
+          "collegeCode": "TPCE",
+          "collegeName": "TALLA PADMAVATHI COLL OF ENGINEERING (TPCE)",
+          "branchCode": "CSE",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (CSE)",
+          "phase": "2026 Final Phase"
+        }
+      ]
+    },
+    {
+      "collegeCode": "TPCE",
+      "collegeName": "TALLA PADMAVATHI COLL OF ENGINEERING (TPCE)",
+      "branchCode": "CSM",
+      "branchName": "COMPUTER SCIENCE AND ENGINEERING (ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)",
+      "openingRank": 41703,
+      "closingRank": 135972,
+      "totalAllotted": 4,
+      "records": [
+        {
+          "rank": 41703,
+          "name": "MANTHENA DINESH KARTHIK",
+          "gender": "M",
+          "caste": "SC_II",
+          "seatCategory": "OC_CAP_GEN_UR(0)",
+          "region": "OU",
+          "hallTicket": "2623T03201",
+          "collegeCode": "TPCE",
+          "collegeName": "TALLA PADMAVATHI COLL OF ENGINEERING (TPCE)",
+          "branchCode": "CSM",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)",
+          "phase": "2026 Final Phase"
+        },
+        {
+          "rank": 104293,
+          "name": "AELAKANTI KARUNASRI",
+          "gender": "F",
+          "caste": "BC_B",
+          "seatCategory": "BC_B_GIRLS_UR",
+          "region": "OU",
+          "hallTicket": "2626C12456",
+          "collegeCode": "TPCE",
+          "collegeName": "TALLA PADMAVATHI COLL OF ENGINEERING (TPCE)",
+          "branchCode": "CSM",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)",
+          "phase": "2026 Final Phase"
+        },
+        {
+          "rank": 118458,
+          "name": "GADDAM AJAY",
+          "gender": "M",
+          "caste": "BC_B",
+          "seatCategory": "BC_D_GEN_UR",
+          "region": "OU",
+          "hallTicket": "2622T07065",
+          "collegeCode": "TPCE",
+          "collegeName": "TALLA PADMAVATHI COLL OF ENGINEERING (TPCE)",
+          "branchCode": "CSM",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)",
+          "phase": "2026 Final Phase"
+        },
+        {
+          "rank": 135972,
+          "name": "KADARI SIDDARTHA",
+          "gender": "M",
+          "caste": "SC_II",
+          "seatCategory": "SC_II_GEN_UR",
+          "region": "OU",
+          "hallTicket": "2623T02500",
+          "collegeCode": "TPCE",
+          "collegeName": "TALLA PADMAVATHI COLL OF ENGINEERING (TPCE)",
+          "branchCode": "CSM",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)",
+          "phase": "2026 Final Phase"
+        }
+      ]
+    }
+  ]
+}

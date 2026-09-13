@@ -1,0 +1,226 @@
+{
+  "collegeCode": "VISA",
+  "collegeName": "VATHSALYA INSTITUTE OF SCIENCE AND TECHNOLOGY (VISA)",
+  "branches": [
+    {
+      "collegeCode": "VISA",
+      "collegeName": "VATHSALYA INSTITUTE OF SCIENCE AND TECHNOLOGY (VISA)",
+      "branchCode": "CSE",
+      "branchName": "COMPUTER SCIENCE AND ENGINEERING (CSE)",
+      "openingRank": 27563,
+      "closingRank": 116282,
+      "totalAllotted": 4,
+      "records": [
+        {
+          "rank": 27563,
+          "name": "GANTA SRI HARSHA VARDHAN",
+          "gender": "M",
+          "caste": "BC_D",
+          "seatCategory": "OC_CAP_GEN_UR(0)",
+          "region": "OU",
+          "hallTicket": "2623L08184",
+          "collegeCode": "VISA",
+          "collegeName": "VATHSALYA INSTITUTE OF SCIENCE AND TECHNOLOGY (VISA)",
+          "branchCode": "CSE",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (CSE)",
+          "phase": "2026 Final Phase"
+        },
+        {
+          "rank": 38291,
+          "name": "VYSHNAVI KOTAGIRI",
+          "gender": "F",
+          "caste": "OC",
+          "seatCategory": "OC_GEN_OU",
+          "region": "OU",
+          "hallTicket": "2622L07016",
+          "collegeCode": "VISA",
+          "collegeName": "VATHSALYA INSTITUTE OF SCIENCE AND TECHNOLOGY (VISA)",
+          "branchCode": "CSE",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (CSE)",
+          "phase": "2026 Final Phase"
+        },
+        {
+          "rank": 99334,
+          "name": "KONDA SHIVA CHARAN",
+          "gender": "M",
+          "caste": "BC_D",
+          "seatCategory": "BC_B_GEN_UR",
+          "region": "OU",
+          "hallTicket": "2624A08063",
+          "collegeCode": "VISA",
+          "collegeName": "VATHSALYA INSTITUTE OF SCIENCE AND TECHNOLOGY (VISA)",
+          "branchCode": "CSE",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (CSE)",
+          "phase": "2026 Final Phase"
+        },
+        {
+          "rank": 116282,
+          "name": "AKSHINTALA SARANYA",
+          "gender": "F",
+          "caste": "OC",
+          "seatCategory": "BC_B_GIRLS_UR",
+          "region": "OU",
+          "hallTicket": "2626E04212",
+          "collegeCode": "VISA",
+          "collegeName": "VATHSALYA INSTITUTE OF SCIENCE AND TECHNOLOGY (VISA)",
+          "branchCode": "CSE",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (CSE)",
+          "phase": "2026 Final Phase"
+        }
+      ]
+    },
+    {
+      "collegeCode": "VISA",
+      "collegeName": "VATHSALYA INSTITUTE OF SCIENCE AND TECHNOLOGY (VISA)",
+      "branchCode": "CSM",
+      "branchName": "COMPUTER SCIENCE AND ENGINEERING (ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)",
+      "openingRank": 135518,
+      "closingRank": 142116,
+      "totalAllotted": 2,
+      "records": [
+        {
+          "rank": 135518,
+          "name": "AMARLAPUDI SANJANA",
+          "gender": "F",
+          "caste": "SC_III",
+          "seatCategory": "SC_II_GEN_UR",
+          "region": "OU",
+          "hallTicket": "2624H01261",
+          "collegeCode": "VISA",
+          "collegeName": "VATHSALYA INSTITUTE OF SCIENCE AND TECHNOLOGY (VISA)",
+          "branchCode": "CSM",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)",
+          "phase": "2026 Final Phase"
+        },
+        {
+          "rank": 142116,
+          "name": "MEKALA JEREMIAH",
+          "gender": "M",
+          "caste": "SC_II",
+          "seatCategory": "BC_C_GIRLS_UR",
+          "region": "OU",
+          "hallTicket": "2621D04151",
+          "collegeCode": "VISA",
+          "collegeName": "VATHSALYA INSTITUTE OF SCIENCE AND TECHNOLOGY (VISA)",
+          "branchCode": "CSM",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)",
+          "phase": "2026 Final Phase"
+        }
+      ]
+    },
+    {
+      "collegeCode": "VISA",
+      "collegeName": "VATHSALYA INSTITUTE OF SCIENCE AND TECHNOLOGY (VISA)",
+      "branchCode": "CSD",
+      "branchName": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)",
+      "openingRank": 41839,
+      "closingRank": 123766,
+      "totalAllotted": 2,
+      "records": [
+        {
+          "rank": 41839,
+          "name": "KOPPOLU SHESHU KAUSHIK",
+          "gender": "M",
+          "caste": "OC",
+          "seatCategory": "OC_PHV_GIRLS_OU",
+          "region": "OU",
+          "hallTicket": "2622D22127",
+          "collegeCode": "VISA",
+          "collegeName": "VATHSALYA INSTITUTE OF SCIENCE AND TECHNOLOGY (VISA)",
+          "branchCode": "CSD",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)",
+          "phase": "2026 Final Phase"
+        },
+        {
+          "rank": 123766,
+          "name": "S U THARUN",
+          "gender": "M",
+          "caste": "BC_D",
+          "seatCategory": "BC_B_GEN_UR",
+          "region": "OU",
+          "hallTicket": "2624D12128",
+          "collegeCode": "VISA",
+          "collegeName": "VATHSALYA INSTITUTE OF SCIENCE AND TECHNOLOGY (VISA)",
+          "branchCode": "CSD",
+          "branchName": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)",
+          "phase": "2026 Final Phase"
+        }
+      ]
+    },
+    {
+      "collegeCode": "VISA",
+      "collegeName": "VATHSALYA INSTITUTE OF SCIENCE AND TECHNOLOGY (VISA)",
+      "branchCode": "ECE",
+      "branchName": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)",
+      "openingRank": 140471,
+      "closingRank": 140471,
+      "totalAllotted": 1,
+      "records": [
+        {
+          "rank": 140471,
+          "name": "BHUKYA NAVYA",
+          "gender": "F",
+          "caste": "ST",
+          "seatCategory": "OC_PHV_GIRLS_OU",
+          "region": "OU",
+          "hallTicket": "2623T04145",
+          "collegeCode": "VISA",
+          "collegeName": "VATHSALYA INSTITUTE OF SCIENCE AND TECHNOLOGY (VISA)",
+          "branchCode": "ECE",
+          "branchName": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)",
+          "phase": "2026 Final Phase"
+        }
+      ]
+    },
+    {
+      "collegeCode": "VISA",
+      "collegeName": "VATHSALYA INSTITUTE OF SCIENCE AND TECHNOLOGY (VISA)",
+      "branchCode": "INF",
+      "branchName": "INFORMATION TECHNOLOGY (INF)",
+      "openingRank": 94590,
+      "closingRank": 94590,
+      "totalAllotted": 1,
+      "records": [
+        {
+          "rank": 94590,
+          "name": "BADRAMONI RAHUL",
+          "gender": "M",
+          "caste": "BC_D",
+          "seatCategory": "BC_D_GEN_UR",
+          "region": "OU",
+          "hallTicket": "2622M02045",
+          "collegeCode": "VISA",
+          "collegeName": "VATHSALYA INSTITUTE OF SCIENCE AND TECHNOLOGY (VISA)",
+          "branchCode": "INF",
+          "branchName": "INFORMATION TECHNOLOGY (INF)",
+          "phase": "2026 Final Phase"
+        }
+      ]
+    },
+    {
+      "collegeCode": "VISA",
+      "collegeName": "VATHSALYA INSTITUTE OF SCIENCE AND TECHNOLOGY (VISA)",
+      "branchCode": "MEC",
+      "branchName": "MECHANICAL ENGINEERING (MEC)",
+      "openingRank": 40312,
+      "closingRank": 40312,
+      "totalAllotted": 1,
+      "records": [
+        {
+          "rank": 40312,
+          "name": "PAMULAPARTHI VENKATESH",
+          "gender": "M",
+          "caste": "BC_B",
+          "seatCategory": "OC_GIRLS_OU",
+          "region": "OU",
+          "hallTicket": "2624A20228",
+          "collegeCode": "VISA",
+          "collegeName": "VATHSALYA INSTITUTE OF SCIENCE AND TECHNOLOGY (VISA)",
+          "branchCode": "MEC",
+          "branchName": "MECHANICAL ENGINEERING (MEC)",
+          "phase": "2026 Final Phase"
+        }
+      ]
+    }
+  ]
+}
