@@ -18,8 +18,6 @@ import {
   ShoppingBag,
   Heart,
   BookOpen,
-  Briefcase,
-  Star,
   Award,
 } from 'lucide-react';
 import { ToolTab, WorkspaceView } from '../types';
@@ -37,6 +35,17 @@ export interface HeaderProps {
   onOpenSupport?: () => void;
 }
 
+interface NavModuleItem {
+  id: string;
+  workspace: WorkspaceView;
+  label: string;
+  shortLabel?: string;
+  icon: React.ComponentType<{ className?: string }>;
+  badge?: string;
+  badgeColor?: string;
+  matchWorkspaces?: WorkspaceView[];
+}
+
 export const Header: React.FC<HeaderProps> = ({
   activeWorkspace = 'hub',
   onSelectWorkspace,
@@ -47,7 +56,6 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenCommandPalette,
   onOpenSupport,
 }) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [isMegaDrawerOpen, setIsMegaDrawerOpen] = useState<boolean>(false);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
@@ -90,98 +98,94 @@ export const Header: React.FC<HeaderProps> = ({
     if (tabFallback && setActiveTab) {
       setActiveTab(tabFallback);
     }
-    setMobileMenuOpen(false);
   };
 
-  interface HeaderNavItem {
-    id: string;
-    workspace: WorkspaceView;
-    label: string;
-    icon: React.ComponentType<{ className?: string }>;
-    badge?: string;
-  }
-
-  const navItems: HeaderNavItem[] = [
+  /**
+   * High-contrast secondary strip navigation items:
+   * 1. Feature Hub
+   * 2. Academics
+   * 3. Code Vault
+   * 4. TG Allotments (Name Wise)
+   * 5. AP EAPCET Matrix
+   * 6. Attendance Defender
+   * 7. Study Guides
+   */
+  const primaryModules: NavModuleItem[] = [
     {
-      id: 'hub',
+      id: 'tier2-hub',
       workspace: 'hub',
       label: 'Feature Hub',
       icon: Home,
     },
     {
-      id: 'academics',
+      id: 'tier2-academics',
       workspace: 'academics',
       label: 'Academics',
       icon: ShieldCheck,
+      matchWorkspaces: ['academics', 'gpa', 'backlog'],
     },
     {
-      id: 'vault',
+      id: 'tier2-vault',
       workspace: 'vault',
       label: 'Code Vault',
       icon: Terminal,
       badge: 'Viva',
+      badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
     },
     {
-      id: 'eapcet',
+      id: 'tier2-tg-allotments',
+      workspace: 'tg-allotments',
+      label: 'TG Allotments (Name Wise)',
+      shortLabel: 'TG Allotments',
+      icon: Award,
+      badge: '2026',
+      badgeColor: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
+    },
+    {
+      id: 'tier2-eapcet',
       workspace: 'eapcet',
-      label: 'EAPCET Radar',
+      label: 'AP EAPCET Matrix',
       icon: Flame,
     },
     {
-      id: 'tg-allotments',
-      workspace: 'tg-allotments',
-      label: 'TG Allotments',
-      icon: Award,
-      badge: '2026',
+      id: 'tier2-attendance',
+      workspace: 'attendance',
+      label: 'Attendance Defender',
+      icon: ShieldCheck,
+      badge: '75%',
+      badgeColor: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
     },
     {
-      id: 'roadmaps',
-      workspace: 'roadmaps',
-      label: '24 Roadmaps',
-      icon: Compass,
-    },
-    {
-      id: 'scholarships',
-      workspace: 'scholarships',
-      label: 'Scholarships',
-      icon: GraduationCap,
-    },
-    {
-      id: 'guides',
+      id: 'tier2-guides',
       workspace: 'guides',
-      label: 'Editorial Hub',
+      label: 'Study Guides',
       icon: BookOpen,
       badge: '8 Ch',
-    },
-    {
-      id: 'utilities',
-      workspace: 'utilities',
-      label: 'PDF & Tools',
-      icon: FileText,
-    },
-    {
-      id: 'dsa',
-      workspace: 'dsa',
-      label: 'DSA Tracker',
-      icon: Code2,
-    },
-    {
-      id: 'essentials',
-      workspace: 'essentials',
-      label: '🛍️ Student Gear',
-      icon: ShoppingBag,
+      badgeColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
     },
   ];
+
+  const isModuleActive = (item: NavModuleItem) => {
+    if (item.matchWorkspaces && activeWorkspace) {
+      if (item.matchWorkspaces.some((ws) => ws === activeWorkspace)) {
+        return true;
+      }
+    }
+    return activeWorkspace === item.workspace;
+  };
 
   return (
     <header
       id="main-header"
-      className="sticky top-0 z-50 backdrop-blur-md border-b transition-colors duration-200 border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 text-slate-900 dark:text-slate-100 shadow-xs w-full"
+      className="sticky top-0 z-50 backdrop-blur-md transition-colors duration-200 bg-slate-950/95 text-slate-100 shadow-md w-full border-b border-slate-800/80"
     >
-      {/* Main Streamlined Navigation Bar */}
-      <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 flex items-center justify-between gap-2 h-16">
-        
-        {/* Brand Logo on Left: MAN OF STUDY with MOS compact badge */}
+      {/* ========================================================================= */}
+      {/* TIER 1: Top Primary Bar                                                  */}
+      {/* Left: Brand Logo + MAN OF STUDY                                          */}
+      {/* Right: Quick Search, Support MOS, Theme Toggle, Hamburger Drawer Trigger */}
+      {/* ========================================================================= */}
+      <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 h-16">
+        {/* Brand Logo & Platform Title (Zero truncation, No PRO badge) */}
         <a
           href="https://manofstudy.com"
           id="brand-logo"
@@ -192,254 +196,149 @@ export const Header: React.FC<HeaderProps> = ({
               window.history.pushState(null, '', '/');
             }
           }}
-          className="flex items-center gap-2.5 sm:gap-3 select-none flex-shrink-0 cursor-pointer group no-underline"
+          className="flex items-center gap-2.5 sm:gap-3 select-none shrink-0 cursor-pointer group no-underline min-w-0"
           title="MAN OF STUDY — The Definitive Engineering & Academic Launchpad for Pan-Indian Students"
         >
-          <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden shadow-md border border-slate-700/60 bg-slate-900 flex items-center justify-center p-0.5 shrink-0">
-            <img 
-              src="https://i.ibb.co/zHPk2tv4/Chat-GPT-Image-Sep-13-2026-08-04-48-PM.png" 
-              alt="MAN OF STUDY Logo" 
+          <div className="relative w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-xl overflow-hidden shadow-md border border-slate-700/60 bg-slate-900 flex items-center justify-center p-0.5 shrink-0">
+            <img
+              src="https://i.ibb.co/zHPk2tv4/Chat-GPT-Image-Sep-13-2026-08-04-48-PM.png"
+              alt="MAN OF STUDY Logo"
+              width="40"
+              height="40"
               className="w-full h-full object-contain transform scale-95 transition-transform duration-200 group-hover:scale-105"
               loading="eager"
             />
           </div>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1.5">
-              <span className="hidden sm:inline text-lg sm:text-xl font-black tracking-tight text-slate-900 dark:text-white uppercase font-mono group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors">
-                MAN OF STUDY
-              </span>
-              <span className="sm:hidden text-lg font-black tracking-tight text-slate-900 dark:text-white uppercase font-mono group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors">
-                MOS
-              </span>
-              <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                PRO
-              </span>
-            </div>
-            <span className="text-[10px] text-slate-400 font-medium tracking-wide hidden sm:block">
-              Engineering &amp; Academic Companion
+          <div className="flex flex-col min-w-0">
+            <span className="text-sm sm:text-base md:text-lg font-black tracking-tight text-white uppercase font-mono drop-shadow-sm group-hover:text-emerald-400 transition-colors whitespace-nowrap">
+              MAN OF STUDY
+            </span>
+            <span className="text-[10px] text-slate-400 font-medium tracking-wide hidden sm:block truncate">
+              Engineering &amp; Academic Launchpad
             </span>
           </div>
         </a>
 
-        {/* Desktop Direct Workspace Switchers (Zero Clutter, No Clipping) */}
-        <nav className="hidden lg:flex items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar py-1">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive =
-              activeWorkspace === item.workspace ||
-              (item.workspace === 'essentials' && (activeWorkspace === 'store' || activeWorkspace === 'essentials')) ||
-              (item.workspace === 'academics' && (activeWorkspace === 'attendance' || activeWorkspace === 'gpa' || activeWorkspace === 'backlog'));
-
-            return (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => handleNavClick(item.workspace)}
-                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl transition-all cursor-pointer whitespace-nowrap flex-shrink-0 text-xs font-medium ${
-                  isActive
-                    ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs font-bold'
-                    : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 hover:text-slate-900 dark:hover:text-white'
-                }`}
-              >
-                <Icon className="w-3.5 h-3.5 flex-shrink-0" />
-                <span>{item.label}</span>
-                {item.badge && !isActive && (
-                  <span className="px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 flex-shrink-0">
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </nav>
-
-        {/* Right Navigation Controls: Support Button, Search, Theme Toggle & Hamburger */}
-        <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
-          {/* High-Visibility Heart-Themed Support Button - NEVER clipped */}
-          <button
-            type="button"
-            id="header-support-btn"
-            onClick={onOpenSupport}
-            className="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800 font-semibold px-2.5 sm:px-3 py-1.5 rounded-full text-xs flex items-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer flex-shrink-0"
-            title="Support MAN OF STUDY & Keep It 100% Free Forever"
-          >
-            <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 animate-pulse flex-shrink-0" />
-            <span className="hidden sm:inline font-bold">☕ Support MOS</span>
-            <span className="sm:hidden font-bold">☕ Support</span>
-          </button>
-
+        {/* Right Navigation Controls */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {/* Universal Search Bar / Command Palette Trigger */}
           <button
             type="button"
             id="header-command-palette-trigger"
             onClick={onOpenCommandPalette}
-            className="flex items-center gap-2 px-2.5 sm:px-3 py-1.5 bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-all cursor-pointer shadow-2xs flex-shrink-0"
+            className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 bg-slate-900/90 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 hover:border-slate-700 rounded-xl text-xs transition-all cursor-pointer shadow-2xs shrink-0"
             title="Open Quick Search & Command Palette (Ctrl/Cmd+K)"
           >
-            <Search className="w-3.5 h-3.5 text-slate-400 dark:text-slate-400 shrink-0" />
-            <span className="hidden md:inline font-medium text-slate-500 dark:text-slate-400">
-              Search...
+            <Search className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+            <span className="hidden md:inline font-medium text-slate-300">
+              Quick Search...
             </span>
-            <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[9px] font-mono font-bold text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded">
+            <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[9px] font-mono font-bold text-slate-400 bg-slate-950 border border-slate-800 rounded">
               ⌘K
             </kbd>
+          </button>
+
+          {/* High-Visibility Heart-Themed Support Button */}
+          <button
+            type="button"
+            id="header-support-btn"
+            onClick={onOpenSupport}
+            className="bg-rose-950/50 hover:bg-rose-900/60 text-rose-300 border border-rose-800/80 hover:border-rose-700 font-semibold px-2.5 sm:px-3.5 py-1.5 rounded-full text-xs flex items-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+            title="Support MAN OF STUDY & Keep It 100% Free Forever"
+          >
+            <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 animate-pulse shrink-0" />
+            <span className="hidden sm:inline font-bold">☕ Support MOS</span>
+            <span className="sm:hidden font-bold text-[11px]">Support</span>
           </button>
 
           {/* Subtle Dark / Light Mode Toggle */}
           <button
             type="button"
             onClick={toggleDarkMode}
-            className="p-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer flex-shrink-0"
+            className="p-1.5 sm:p-2 text-slate-400 hover:text-white bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 rounded-xl transition-colors cursor-pointer shrink-0"
             title={isDarkMode ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
             aria-label="Toggle Theme"
           >
             {isDarkMode ? (
               <Sun className="w-4 h-4 text-amber-400" />
             ) : (
-              <Moon className="w-4 h-4 text-slate-600" />
+              <Moon className="w-4 h-4 text-slate-300" />
             )}
           </button>
 
-          {/* Top-Right Hamburger Slide-Over Mega Drawer Trigger (Accessible on all viewports) */}
-          <div className="flex-shrink-0 z-50">
+          {/* Top-Right Hamburger Slide-Over Mega Drawer Trigger */}
+          <div className="shrink-0 z-50">
             <button
               type="button"
               id="header-hamburger-drawer-btn"
               onClick={() => setIsMegaDrawerOpen(true)}
-              className="p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-white border border-slate-700 active:scale-95 transition-all flex items-center justify-center cursor-pointer shadow-sm"
-              title="Open MAN OF STUDY Mega Menu & Student Hubs"
+              className="p-1.5 sm:p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white border border-slate-700 active:scale-95 transition-all flex items-center justify-center cursor-pointer shadow-sm"
+              title="Open MAN OF STUDY Mega Menu & All Hubs"
               aria-label="Open Navigation Mega Drawer"
             >
-              <Menu className="w-5 h-5 text-white" />
+              <Menu className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Navigation Drawer */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 pt-3 pb-6 space-y-4 shadow-xl animate-in slide-in-from-top duration-200 w-full max-w-full overflow-hidden">
-          {/* Quick Search Button in Drawer */}
-          <button
-            type="button"
-            onClick={() => {
-              setMobileMenuOpen(false);
-              onOpenCommandPalette?.();
-            }}
-            className="w-full flex items-center justify-between p-3 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs cursor-pointer"
-          >
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-emerald-500" />
-              <span>Search MOS Tools &amp; Roadmaps</span>
-            </div>
-            <kbd className="text-[10px] bg-white dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700">
-              ⌘K
-            </kbd>
-          </button>
+      {/* ========================================================================= */}
+      {/* TIER 2: Secondary Feature Strip (Desktop & Tablet)                        */}
+      {/* Renders all key tools as sleek interactive pills with zero horizontal     */}
+      {/* scrolling, wrapping naturally into a centered row.                         */}
+      {/* On mobile screens, hidden to preserve screen real estate for the drawer.  */}
+      {/* ========================================================================= */}
+      <div
+        id="tier2-secondary-feature-strip"
+        className="hidden md:block border-t border-slate-800/80 bg-slate-950/90 backdrop-blur-md px-4 sm:px-6 lg:px-8 py-2"
+      >
+        <div className="max-w-7xl mx-auto flex items-center justify-start lg:justify-center gap-1 sm:gap-2 flex-wrap">
+          {primaryModules.map((item) => {
+            const Icon = item.icon;
+            const active = isModuleActive(item);
 
-          {/* Mobile Support Button */}
-          <button
-            type="button"
-            onClick={() => {
-              setMobileMenuOpen(false);
-              onOpenSupport?.();
-            }}
-            className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800 font-bold text-xs transition-all cursor-pointer shadow-xs active:scale-95"
-          >
-            <Heart className="w-4 h-4 text-rose-500 fill-rose-500 animate-pulse" />
-            <span>☕ Support MAN OF STUDY (100% Free)</span>
-          </button>
-
-          {/* Workspaces List */}
-          <div className="space-y-1">
-            <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider px-2 block mb-1">
-              Select Workspace
-            </span>
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive =
-                activeWorkspace === item.workspace ||
-                (item.workspace === 'essentials' && (activeWorkspace === 'store' || activeWorkspace === 'essentials')) ||
-                (item.workspace === 'academics' && (activeWorkspace === 'attendance' || activeWorkspace === 'gpa' || activeWorkspace === 'backlog'));
-
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => handleNavClick(item.workspace)}
-                  className={`w-full flex items-center justify-between p-3 rounded-xl transition-colors text-left cursor-pointer ${
-                    isActive
-                      ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-bold'
-                      : 'hover:bg-slate-100 dark:hover:bg-slate-900 text-slate-800 dark:text-slate-200'
+            return (
+              <button
+                key={item.id}
+                type="button"
+                id={item.id}
+                onClick={() => handleNavClick(item.workspace)}
+                className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 cursor-pointer whitespace-nowrap select-none ${
+                  active
+                    ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-xs shadow-emerald-500/10 font-bold'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60 border border-transparent hover:border-slate-800'
+                }`}
+                title={`Open ${item.label}`}
+              >
+                <Icon
+                  className={`w-3.5 h-3.5 transition-colors shrink-0 ${
+                    active ? 'text-emerald-400' : 'text-slate-500 group-hover:text-slate-300'
                   }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Icon className="w-4 h-4" />
-                    <span className="text-xs font-semibold">{item.label}</span>
-                  </div>
-                  {item.badge ? (
-                    <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300">
-                      {item.badge}
-                    </span>
-                  ) : (
-                    <ChevronRight className="w-3.5 h-3.5 opacity-50" />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Bottom Legal / Policy Links */}
-          <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenLegal?.('about');
-              }}
-              className="hover:underline cursor-pointer"
-            >
-              About
-            </button>
-            <span>•</span>
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenLegal?.('privacy');
-              }}
-              className="hover:underline cursor-pointer"
-            >
-              Privacy
-            </button>
-            <span>•</span>
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenLegal?.('terms');
-              }}
-              className="hover:underline cursor-pointer"
-            >
-              Terms
-            </button>
-            <span>•</span>
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenLegal?.('contact');
-              }}
-              className="hover:underline cursor-pointer"
-            >
-              Contact
-            </button>
-          </div>
+                />
+                <span className="tracking-tight">{item.label}</span>
+                {item.badge && (
+                  <span
+                    className={`text-[9px] font-bold px-1.5 py-0.2 rounded-full border ${
+                      active
+                        ? 'bg-emerald-400/20 text-emerald-300 border-emerald-400/40'
+                        : item.badgeColor || 'bg-slate-800 text-slate-300 border-slate-700'
+                    }`}
+                  >
+                    {item.badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
-      )}
+      </div>
 
-      {/* Top-Right Hamburger Slide-Over Mega Drawer */}
+      {/* Top-Right Hamburger Slide-Over Mega Drawer for Mobile & Full Workspace Hierarchy */}
       <NavigationDrawer
         isOpen={isMegaDrawerOpen}
         onClose={() => setIsMegaDrawerOpen(false)}
-        onSelectWorkspace={(ws, subTab) => {
-          handleNavClick(ws, subTab as any);
+        onSelectWorkspace={(ws: WorkspaceView, subTab?: string) => {
+          handleNavClick(ws, subTab as ToolTab);
         }}
         onOpenSupport={onOpenSupport}
         onOpenFeedback={() => onOpenLegal?.('contact')}
