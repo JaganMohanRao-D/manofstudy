@@ -19,6 +19,7 @@ import {
   Heart,
   BookOpen,
   Award,
+  Users,
 } from 'lucide-react';
 import { ToolTab, WorkspaceView } from '../types';
 import { LegalModalType } from './LegalModals';
@@ -160,8 +161,17 @@ export const Header: React.FC<HeaderProps> = ({
       workspace: 'guides',
       label: 'Study Guides',
       icon: BookOpen,
-      badge: '8 Ch',
+      badge: '9 Ch',
       badgeColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
+    },
+    {
+      id: 'tier2-campus-connect',
+      workspace: 'campus-connect',
+      label: 'CampusConnect',
+      shortLabel: 'Connect',
+      icon: Users,
+      badge: 'NEW',
+      badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
     },
   ];
 

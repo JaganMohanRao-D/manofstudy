@@ -25,6 +25,7 @@ import {
   Heart,
   BookOpen,
   ShieldAlert,
+  Users,
 } from 'lucide-react';
 import { ToolTab, ToolMeta, WorkspaceView } from './types';
 import { Header } from './components/Header';
@@ -53,6 +54,11 @@ const ApEapcetRadar = lazy(() =>
 const TgAllotmentExplorer = lazy(() =>
   import('./components/TgAllotmentExplorer').then((m: any) => ({
     default: m.TgAllotmentExplorer || m.default,
+  }))
+);
+const TgCollegePredictor = lazy(() =>
+  import('./components/TgCollegePredictor').then((m: any) => ({
+    default: m.TgCollegePredictor || m.default,
   }))
 );
 const AttendanceDefender = lazy(() =>
@@ -115,6 +121,11 @@ const InternshipsRadar = lazy(() =>
     default: m.InternshipsRadar || m.default,
   }))
 );
+const CampusConnect = lazy(() =>
+  import('./components/CampusConnect').then((m: any) => ({
+    default: m.CampusConnect || m.default,
+  }))
+);
 const EducationalGuideAndSeo = lazy(() =>
   import('./components/EducationalGuideAndSeo').then((m: any) => ({
     default: m.EducationalGuideAndSeo || m.default,
@@ -156,6 +167,14 @@ const LoadingFallback: React.FC = () => (
 
 
 export const TOOLS_CONFIG: ToolMeta[] = [
+  {
+    id: 'tg-predictor',
+    name: 'TG EAPCET College Predictor',
+    shortName: 'TG Predictor',
+    category: 'counselling',
+    description: 'Check admission chances across 151 colleges using 71,646 official 2026 allotment cutoffs.',
+    badge: '2026 Phase-3 Data',
+  },
   {
     id: 'tg-allotments',
     name: 'TG EAPCET 2026 Final Phase Seat Allotments Name Wise',
@@ -308,6 +327,14 @@ export default function App() {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '').toLowerCase();
       if (
+        hash === 'tg-predictor' ||
+        hash === 'tg-college-predictor' ||
+        hash === 'college-predictor' ||
+        hash === 'rank-predictor' ||
+        hash === 'buffer-radar'
+      ) {
+        setActiveWorkspace('tg-predictor');
+      } else if (
         hash === 'tg-allotments' ||
         hash === 'tg-allotment' ||
         hash === 'tg-cutoff' ||
@@ -364,14 +391,18 @@ export default function App() {
         hash === 'pdf-tools' ||
         hash === 'pdf' ||
         hash === 'resizer' ||
+        hash === 'image-tools' ||
+        hash === 'photo-resizer' ||
         hash === 'resume-checker'
       ) {
         setActiveWorkspace('utilities');
-        if (hash === 'resizer') setUtilitySubTab('resizer');
+        if (hash === 'resizer' || hash === 'image-tools' || hash === 'photo-resizer') setUtilitySubTab('resizer');
         else if (hash === 'resume-checker') setUtilitySubTab('resume-checker');
         else setUtilitySubTab('pdf-tools');
       } else if (hash === 'guides' || hash === 'editorial' || hash === 'survival' || hash.startsWith('guide-')) {
         setActiveWorkspace('guides');
+      } else if (hash === 'campus-connect' || hash === 'campus' || hash === 'community' || hash === 'connect') {
+        setActiveWorkspace('campus-connect');
       } else if (hash === 'privacy' || hash === 'privacy-policy') {
         setLegalModal('privacy');
       } else if (hash === 'about' || hash === 'about-us') {
@@ -414,7 +445,11 @@ export default function App() {
 
   const handleSelectToolFromPalette = (tab: ToolTab) => {
     setIsCommandPaletteOpen(false);
-    if (tab === 'eapcet-radar') {
+    if (tab === 'tg-predictor') {
+      handleSelectWorkspace('tg-predictor');
+    } else if (tab === 'campus-connect') {
+      handleSelectWorkspace('campus-connect');
+    } else if (tab === 'eapcet-radar') {
       handleSelectWorkspace('eapcet');
     } else if (tab === 'tg-allotments') {
       handleSelectWorkspace('tg-allotments');
@@ -434,6 +469,8 @@ export default function App() {
       handleSelectWorkspace('gpa');
       if (tab === 'internal-calc') setGpaSubTab('internal');
       else setGpaSubTab('gpa');
+    } else if (tab === 'guides' || tab === 'hub') {
+      handleSelectWorkspace('guides');
     } else {
       handleSelectWorkspace('utilities', tab);
     }
@@ -473,6 +510,11 @@ export default function App() {
           title: 'TG EAPCET 2026 Final Phase Allotment & Cutoff Radar',
           icon: <Award className="w-4 h-4 text-indigo-500" />,
         };
+      case 'tg-predictor':
+        return {
+          title: 'TG EAPCET College Predictor',
+          icon: <Compass className="w-4 h-4 text-emerald-500" />,
+        };
       case 'roadmaps':
         return {
           title: '24-Branch Engineering Career & Placement Roadmaps',
@@ -505,8 +547,13 @@ export default function App() {
         };
       case 'guides':
         return {
-          title: 'Student & Tier-3 Survival Editorial Hub (8 Chapters)',
+          title: 'MOS Student Knowledge HUB (9 Chapters)',
           icon: <BookOpen className="w-4 h-4 text-sky-500" />,
+        };
+      case 'campus-connect':
+        return {
+          title: 'MOS CampusConnect — Student Network',
+          icon: <Users className="w-4 h-4 text-emerald-500" />,
         };
       case 'essentials':
       case 'store':
@@ -708,6 +755,10 @@ export default function App() {
                   <TgAllotmentExplorer />
                 )}
 
+                {activeWorkspace === 'tg-predictor' && (
+                  <TgCollegePredictor />
+                )}
+
                 {activeWorkspace === 'roadmaps' && (
                   <EngineeringRoadmaps
                     targetBranchId={targetRoadmapBranchId}
@@ -747,6 +798,17 @@ export default function App() {
                 {activeWorkspace === 'guides' && (
                   <GuidesHub
                     onSelectWorkspace={(ws) => handleSelectWorkspace(ws as WorkspaceView)}
+                  />
+                )}
+
+                {activeWorkspace === 'campus-connect' && (
+                  <CampusConnect
+                    onNavigateToTool={(tool) =>
+                      handleSelectWorkspace(
+                        'utilities',
+                        tool === 'image-tools' || tool === 'resizer' ? 'resizer' : 'pdf-tools'
+                      )
+                    }
                   />
                 )}
 

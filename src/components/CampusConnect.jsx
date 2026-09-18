@@ -1,0 +1,1514 @@
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import {
+  MessageSquare,
+  Plus,
+  Send,
+  Upload,
+  FileText,
+  Download,
+  Share2,
+  ThumbsUp,
+  Lock,
+  Unlock,
+  AlertCircle,
+  Building2,
+  GraduationCap,
+  Sparkles,
+  Search,
+  CheckCircle2,
+  Clock,
+  HelpCircle,
+  Megaphone,
+  X,
+  Code2,
+  ChevronDown,
+  Filter,
+  Check,
+  Flame,
+  ArrowRight,
+  ExternalLink,
+  ShieldCheck,
+  User,
+  Users,
+  Compass,
+  Image as ImageIcon,
+} from 'lucide-react';
+
+const STORAGE_KEY = 'mos_campus_connect_posts_v1';
+const UPVOTES_KEY = 'mos_campus_connect_user_upvotes_v1';
+
+const POPULAR_COLLEGES = [
+  'CBIT (Chaitanya Bharathi)',
+  'OUCE (Osmania University)',
+  'JNTUH College of Engineering',
+  'VNR Vignana Jyothi (VNR VJIET)',
+  'Vasavi College of Engineering',
+  'CVR College of Engineering',
+  'PVP Siddhartha (Vijayawada)',
+  'VR Siddhartha Engineering College',
+  'Andhra University CE (AUCE)',
+  'GMR Institute of Technology (GMRIT)',
+  'Gayatri Vidya Parishad (GVPCE)',
+  'JNTUK Kakinada',
+  'Sreenidhi Institute of Sci & Tech (SNIST)',
+  'KMIT (Keshav Memorial)',
+  'MGIT (Mahatma Gandhi)',
+  'BVRIT Hyderabad / Narsapur',
+  'Other Engineering College',
+];
+
+const BRANCH_OPTIONS = [
+  'Computer Science (CSE)',
+  'AI & Machine Learning (CSM)',
+  'Data Science (CSD)',
+  'Information Technology (IT)',
+  'Electronics & Comm (ECE)',
+  'Electrical & Electronics (EEE)',
+  'Mechanical Engineering (MECH)',
+  'Civil Engineering (CIVIL)',
+  'Chemical / Biotech (CHEM/BIO)',
+  'All Engineering Branches',
+];
+
+const INITIAL_SEED_POSTS = [
+  {
+    id: 'post-seed-1',
+    type: 'dispatch',
+    title: 'CBIT Semester 5 Operating Systems Lab Viva Questions & Model Answers PDF',
+    content: `Professors at CBIT covered CPU scheduling, Peterson's algorithm, dining philosophers problem, and page replacement edge cases for upcoming external practicals. Uploaded the verified 14-page handwritten viva notes with code syntax!`,
+    branch: 'Computer Science (CSE)',
+    college: 'CBIT (Chaitanya Bharathi)',
+    authorName: 'Sanjay Reddy',
+    authorYear: '3rd Year B.Tech',
+    isAnonymous: false,
+    timestamp: '2 hours ago',
+    attachment: {
+      name: 'OS_Lab_Viva_Verified_2026.pdf',
+      size: '2.4 MB',
+      url: 'https://cdn.manofstudy.com/notes/mos-student-notes/cbit_os_lab_viva_2026.pdf',
+    },
+    upvotes: 42,
+    replies: [
+      {
+        id: 'reply-1-1',
+        authorName: 'Anonymous Scholar',
+        authorCollege: 'VNR Vignana Jyothi',
+        authorYear: '3rd Year',
+        isAnonymous: true,
+        content: 'Thanks for sharing Sanjay! JNTU R22 scheme also has the exact same virtual memory FIFO vs LRU numericals. Extremely helpful for our mid-lab.',
+        timestamp: '1 hour ago',
+        upvotes: 9,
+        isVerifiedSolution: true,
+      },
+      {
+        id: 'reply-1-2',
+        authorName: 'Kavitha P.',
+        authorCollege: 'OUCE',
+        authorYear: '3rd Year',
+        isAnonymous: false,
+        content: 'Page 7 semaphore implementation code compiled cleanly on Ubuntu GCC. Bookmarked!',
+        timestamp: '35 mins ago',
+        upvotes: 4,
+      },
+    ],
+  },
+  {
+    id: 'post-seed-2',
+    type: 'doubt',
+    title: 'Tier-3 Off-Campus Hiring: How do recruiters view AWS Solutions Architect cert without full-time exp?',
+    content: `I am currently in 6th semester at an affiliated JNTUH college. My CGPA is 8.4 and I have solved ~280 LeetCode problems (Array, DP, Graphs). Is it worth investing $150 in the AWS Solutions Architect Associate exam right now, or should I focus exclusively on building distributed backend projects with Spring Boot/Docker?`,
+    branch: 'Computer Science (CSE)',
+    college: 'JNTUH Affiliated College',
+    authorName: 'Anonymous Scholar',
+    authorYear: '3rd Year B.Tech',
+    isAnonymous: true,
+    timestamp: '5 hours ago',
+    urgency: 'Placement Prep',
+    codeSnippet: `// Current Project Tech Stack:
+Backend: Node.js / Go microservices
+Storage: PostgreSQL + Redis caching
+Cloud: Deployed on free AWS EC2 t2.micro via Docker`,
+    upvotes: 38,
+    replies: [
+      {
+        id: 'reply-2-1',
+        authorName: 'Aditya Varma',
+        authorCollege: 'VNR Vignana Jyothi',
+        authorYear: 'Alumni (Placed @ Amazon)',
+        isAnonymous: false,
+        content: 'As someone who graduated from Tier-3 last year: DO NOT spend $150 on certs yet. In off-campus tech screens, interviewers grill you on how you debugged connection pooling in Redis, how your DB migrations handle concurrent requests, and basic System Design. A live GitHub repo with automated CI/CD and architectural README carries 10x more weight than an entry-level certificate.',
+        timestamp: '4 hours ago',
+        upvotes: 27,
+        isVerifiedSolution: true,
+      },
+    ],
+  },
+  {
+    id: 'post-seed-3',
+    type: 'dispatch',
+    title: 'PVP Siddhartha Vijayawada: Microchip Core Embedded Internship Drive Checklist',
+    content: `Microchip Technology team visited our campus for ECE & EEE circuit design roles. Key topics they tested: 8051 timers, ARM Cortex-M architecture, I2C/SPI waveform debugging, and basic C pointer arithmetic. Attaching the technical syllabus guide!`,
+    branch: 'Electronics & Comm (ECE)',
+    college: 'PVP Siddhartha (Vijayawada)',
+    authorName: 'Nikhila K.',
+    authorYear: 'Final Year B.Tech',
+    isAnonymous: false,
+    timestamp: '1 day ago',
+    attachment: {
+      name: 'Microchip_ECE_Interview_CheatSheet.pdf',
+      size: '1.8 MB',
+      url: 'https://cdn.manofstudy.com/notes/mos-student-notes/pvpsit_microchip_ece_2026.pdf',
+    },
+    upvotes: 56,
+    replies: [
+      {
+        id: 'reply-3-1',
+        authorName: 'Rohan Sharma',
+        authorCollege: 'Gayatri Vidya Parishad',
+        authorYear: '4th Year',
+        isAnonymous: false,
+        content: 'Spot on! The SPI vs I2C pull-up resistor calculation was asked in our Texas Instruments written test as well.',
+        timestamp: '18 hours ago',
+        upvotes: 8,
+      },
+    ],
+  },
+  {
+    id: 'post-seed-4',
+    type: 'doubt',
+    title: 'ECE to Software Migration: JNTUK R20 external backlog clearance vs full-stack prep balance?',
+    content: `Have 1 backlog in M3 (Complex Variables & Numerical Methods) and want to crack TCS Digital / Cognizant GenC Next. Mid exams are in 3 weeks. How to partition daily 6 hours between clearing M3 and solving DSA?`,
+    branch: 'Electronics & Comm (ECE)',
+    college: 'JNTUK Kakinada',
+    authorName: 'Anonymous Scholar',
+    authorYear: '3rd Year B.Tech',
+    isAnonymous: true,
+    timestamp: '1 day ago',
+    urgency: 'Mid Exams Near',
+    upvotes: 29,
+    replies: [
+      {
+        id: 'reply-4-1',
+        authorName: 'Sai Kumar',
+        authorCollege: 'Vasavi College',
+        authorYear: '4th Year',
+        isAnonymous: false,
+        content: 'Dedicate 3.5 hours every morning to M3 past 5-year question papers (Runge-Kutta, Newton-Raphson, Cauchy-Riemann equations). Clear that single backlog first because companies reject candidates with active backlogs at the test registration portal! Keep DSA to 2.5 hours evening.',
+        timestamp: '22 hours ago',
+        upvotes: 16,
+        isVerifiedSolution: true,
+      },
+    ],
+  },
+];
+
+export const CampusConnect = ({ onNavigateToTool }) => {
+  // State: Posts and User Interactions
+  const [posts, setPosts] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch {
+      // ignore
+    }
+    return INITIAL_SEED_POSTS;
+  });
+
+  const [upvotedPostIds, setUpvotedPostIds] = useState(() => {
+    try {
+      const saved = localStorage.getItem(UPVOTES_KEY);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  // Filters & Search
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedBranchFilter, setSelectedBranchFilter] = useState('All');
+
+  // Modals & Bottom Sheets
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [createMode, setCreateMode] = useState('dispatch');
+  const [activeReplyPost, setActiveReplyPost] = useState(null);
+  const [replyInputText, setReplyInputText] = useState('');
+  const [replyAnonymous, setReplyAnonymous] = useState(false);
+  const [replyAuthorName, setReplyAuthorName] = useState('Student Peer');
+  const [replyAuthorCollege, setReplyAuthorCollege] = useState('Telangana / AP College');
+  const [shareSuccessId, setShareSuccessId] = useState(null);
+
+  // Form Fields for Create Modal
+  const [formTitle, setFormTitle] = useState('');
+  const [formContent, setFormContent] = useState('');
+  const [formBranch, setFormBranch] = useState('Computer Science (CSE)');
+  const [formCollege, setFormCollege] = useState('');
+  const [formAuthorName, setFormAuthorName] = useState('');
+  const [formAuthorYear, setFormAuthorYear] = useState('3rd Year B.Tech');
+  const [formIsAnonymous, setFormIsAnonymous] = useState(true);
+  const [formUrgency, setFormUrgency] = useState('Casual');
+  const [formCodeSnippet, setFormCodeSnippet] = useState('');
+  const [formAttachments, setFormAttachments] = useState([]);
+  const [isUploadingFile, setIsUploadingFile] = useState(false);
+  const [formError, setFormError] = useState(null);
+
+  const fileInputRef = useRef(null);
+
+  // Multi-attachment file selection handler
+  const handleFilesSelected = (e) => {
+    setFormError(null);
+    const selected = Array.from(e.target.files || []);
+    if (!selected.length) return;
+
+    if (formAttachments.length + selected.length > 4) {
+      setFormError({
+        message: `You can attach up to 4 files total. You currently have ${formAttachments.length} attached.`,
+      });
+      return;
+    }
+
+    const newAttachments = [];
+    for (const file of selected) {
+      const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+      const isImage = file.type.startsWith('image/') || /\.(jpg|jpeg|png|webp)$/i.test(file.name);
+
+      if (!isPdf && !isImage) {
+        setFormError({
+          message: `File "${file.name}" is not supported. Please upload PDF documents or image files (.jpg, .png, .webp).`,
+        });
+        return;
+      }
+
+      // PDF 50 MB limit
+      if (isPdf && file.size > 50 * 1024 * 1024) {
+        setFormError({
+          message: `PDF "${file.name}" exceeds 50 MB limit.`,
+          link: '#pdf-tools',
+          linkText: 'Compress PDF here using our client-side tools',
+        });
+        return;
+      }
+
+      // Image 3 MB limit
+      if (isImage && file.size > 3 * 1024 * 1024) {
+        setFormError({
+          message: `Image "${file.name}" exceeds 3 MB limit.`,
+          link: '#image-tools',
+          linkText: 'Compress/Resize here before uploading',
+        });
+        return;
+      }
+
+      const fileSizeFormatted = file.size > 1024 * 1024
+        ? `${(file.size / (1024 * 1024)).toFixed(1)} MB`
+        : `${Math.round(file.size / 1024)} KB`;
+
+      let previewUrl = '';
+      if (isImage) {
+        try {
+          previewUrl = URL.createObjectURL(file);
+        } catch {
+          previewUrl = '';
+        }
+      }
+
+      newAttachments.push({
+        id: `att-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+        file,
+        name: file.name,
+        size: fileSizeFormatted === '0.0 MB' ? `${Math.round(file.size / 1024)} KB` : fileSizeFormatted,
+        type: isPdf ? 'pdf' : 'image',
+        previewUrl,
+      });
+    }
+
+    setFormAttachments((prev) => [...prev, ...newAttachments]);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleRemoveAttachment = (attachmentId) => {
+    setFormAttachments((prev) => {
+      const item = prev.find((a) => a.id === attachmentId);
+      if (item && item.previewUrl) {
+        URL.revokeObjectURL(item.previewUrl);
+      }
+      return prev.filter((a) => a.id !== attachmentId);
+    });
+  };
+
+  // Persist to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+    } catch {
+      // localStorage quota
+    }
+  }, [posts]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(UPVOTES_KEY, JSON.stringify(upvotedPostIds));
+    } catch {
+      // ignore
+    }
+  }, [upvotedPostIds]);
+
+  // Upvote Handler
+  const handleToggleUpvote = (postId) => {
+    const isUpvoted = !!upvotedPostIds[postId];
+    setUpvotedPostIds((prev) => ({
+      ...prev,
+      [postId]: !isUpvoted,
+    }));
+
+    setPosts((prev) =>
+      prev.map((p) => {
+        if (p.id === postId) {
+          return {
+            ...p,
+            upvotes: isUpvoted ? Math.max(0, p.upvotes - 1) : p.upvotes + 1,
+          };
+        }
+        return p;
+      })
+    );
+
+    if (activeReplyPost && activeReplyPost.id === postId) {
+      setActiveReplyPost((prev) => (prev ? {
+        ...prev,
+        upvotes: isUpvoted ? Math.max(0, prev.upvotes - 1) : prev.upvotes + 1,
+      } : null));
+    }
+  };
+
+  // Upvote a reply
+  const handleReplyUpvote = (replyId) => {
+    if (!activeReplyPost) return;
+    const updatedReplies = activeReplyPost.replies.map((r) => {
+      if (r.id === replyId) {
+        return { ...r, upvotes: r.upvotes + 1 };
+      }
+      return r;
+    });
+
+    const updatedPost = { ...activeReplyPost, replies: updatedReplies };
+    setActiveReplyPost(updatedPost);
+
+    setPosts((prev) =>
+      prev.map((p) => (p.id === activeReplyPost.id ? updatedPost : p))
+    );
+  };
+
+  // Add Reply
+  const handleAddReply = (e) => {
+    e.preventDefault();
+    if (!activeReplyPost || !replyInputText.trim()) return;
+
+    const newReply = {
+      id: `reply-${Date.now()}`,
+      authorName: replyAnonymous ? 'Anonymous Scholar' : (replyAuthorName.trim() || 'Student Peer'),
+      authorCollege: replyAnonymous ? 'Telangana / AP College' : (replyAuthorCollege.trim() || 'Engineering College'),
+      authorYear: 'B.Tech Student',
+      isAnonymous: replyAnonymous,
+      content: replyInputText.trim(),
+      timestamp: 'Just now',
+      upvotes: 1,
+    };
+
+    const updatedReplies = [newReply, ...activeReplyPost.replies];
+    const updatedPost = { ...activeReplyPost, replies: updatedReplies };
+
+    setActiveReplyPost(updatedPost);
+    setPosts((prev) =>
+      prev.map((p) => (p.id === activeReplyPost.id ? updatedPost : p))
+    );
+
+    setReplyInputText('');
+  };
+
+  // Web Share API or Clipboard Fallback
+  const handleSharePost = async (post) => {
+    const shareData = {
+      title: `${post.title} — MOS CampusConnect`,
+      text: `[${post.college} • ${post.branch}] ${post.title}\nRead peer answers on MAN OF STUDY CampusConnect:`,
+      url: window.location.href,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        setShareSuccessId(post.id);
+        setTimeout(() => setShareSuccessId(null), 2500);
+      } catch {
+        // User dismissed
+      }
+    } else {
+      // Fallback: Copy to clipboard
+      try {
+        await navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`);
+        setShareSuccessId(post.id);
+        setTimeout(() => setShareSuccessId(null), 2500);
+      } catch {
+        // clipboard error
+      }
+    }
+  };
+
+  // Handle Create Post Submit
+  const handleCreatePostSubmit = async (e) => {
+    e.preventDefault();
+    setFormError(null);
+
+    if (!formTitle.trim()) {
+      setFormError('Please enter a descriptive post title.');
+      return;
+    }
+    if (!formCollege.trim()) {
+      setFormError('Please enter your college name (e.g. PVP Siddhartha, CBIT, JNTU...).');
+      return;
+    }
+    if (!formContent.trim()) {
+      setFormError('Please write your campus dispatch or query content.');
+      return;
+    }
+
+    let uploadedAttachments = [];
+
+    // Process attached files
+    if (formAttachments.length > 0) {
+      setIsUploadingFile(true);
+      await new Promise((resolve) => setTimeout(resolve, 600));
+      uploadedAttachments = formAttachments.map((att) => ({
+        id: att.id,
+        name: att.name,
+        size: att.size,
+        type: att.type,
+        url: att.previewUrl || `https://cdn.manofstudy.com/notes/mos-student-notes/${Date.now()}_${att.name.replace(/\s+/g, '_')}`,
+      }));
+      setIsUploadingFile(false);
+    }
+
+    const newPost = {
+      id: `post-${Date.now()}`,
+      type: createMode,
+      title: formTitle.trim(),
+      content: formContent.trim(),
+      branch: formBranch,
+      college: formCollege.trim(),
+      authorName: formIsAnonymous ? 'Anonymous Scholar' : (formAuthorName.trim() || 'Verified Scholar'),
+      authorYear: formAuthorYear,
+      isAnonymous: formIsAnonymous,
+      timestamp: 'Just now',
+      urgency: createMode === 'doubt' ? formUrgency : undefined,
+      codeSnippet: formCodeSnippet.trim() ? formCodeSnippet.trim() : undefined,
+      attachments: uploadedAttachments,
+      attachment: uploadedAttachments[0] || undefined,
+      upvotes: 1,
+      replies: [],
+    };
+
+    setPosts([newPost, ...posts]);
+    setUpvotedPostIds((prev) => ({ ...prev, [newPost.id]: true }));
+
+    // Reset Form & Close Modal
+    setFormTitle('');
+    setFormContent('');
+    setFormCodeSnippet('');
+    setFormCollege('');
+    setFormAttachments([]);
+    setFormError(null);
+    setIsCreateModalOpen(false);
+  };
+
+  // Filter Categories
+  const filterChips = [
+    { id: 'all', label: '🔥 All Feeds' },
+    { id: 'dispatches', label: '💡 Campus Insights' },
+    { id: 'doubts', label: '❓ Peer Doubts' },
+    { id: 'cse', label: '💻 CSE/IT' },
+    { id: 'core', label: '⚡ Core Engg' },
+    { id: 'ai', label: '🤖 AI & Data' },
+    { id: 'unresolved', label: '⏳ Unresolved Doubts' },
+  ];
+
+  // Filtered Posts Computation
+  const filteredPosts = useMemo(() => {
+    return posts.filter((post) => {
+      // Category Chip Filter
+      if (activeFilter === 'dispatches' && post.type !== 'dispatch') return false;
+      if (activeFilter === 'doubts' && post.type !== 'doubt') return false;
+      if (activeFilter === 'unresolved' && (post.type !== 'doubt' || post.replies.length > 0)) return false;
+      if (activeFilter === 'cse' && !post.branch.includes('Computer') && !post.branch.includes('Information')) return false;
+      if (activeFilter === 'ai' && !post.branch.includes('AI') && !post.branch.includes('Data')) return false;
+      if (activeFilter === 'core' && (post.branch.includes('Computer') || post.branch.includes('Information') || post.branch.includes('AI') || post.branch.includes('Data'))) return false;
+
+      // Branch Dropdown Filter
+      if (selectedBranchFilter !== 'All') {
+        if (!post.branch.includes(selectedBranchFilter)) return false;
+      }
+
+      // Search Query
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase();
+        const matchesTitle = post.title.toLowerCase().includes(query);
+        const matchesContent = post.content.toLowerCase().includes(query);
+        const matchesCollege = post.college.toLowerCase().includes(query);
+        const matchesBranch = post.branch.toLowerCase().includes(query);
+        if (!matchesTitle && !matchesContent && !matchesCollege && !matchesBranch) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }, [posts, activeFilter, selectedBranchFilter, searchQuery]);
+
+  return (
+    <div className="w-full max-w-full overflow-x-hidden bg-slate-950 text-slate-100 min-h-screen pb-24 md:pb-16 break-words">
+      {/* 1. Header Banner & Identity */}
+      <div className="relative border-b border-slate-800 bg-linear-to-b from-slate-900 via-slate-950 to-slate-950 px-3 sm:px-6 py-5 sm:py-7">
+        <div className="max-w-4xl mx-auto space-y-3">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+              <Sparkles className="w-3.5 h-3.5" />
+              MOS CampusConnect
+            </span>
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-800 text-slate-200 border border-slate-700">
+              <Users className="w-3.5 h-3.5 text-cyan-400" />
+              Student Network
+            </span>
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+              100% Free &amp; Open Access
+            </span>
+          </div>
+
+          <h1 className="text-xl sm:text-3xl font-black text-white tracking-tight break-words">
+            MOS CampusConnect
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
+            Real campus updates, senior guidance, and peer doubt resolution across colleges.
+          </p>
+
+          {/* Quick Search & Mobile Filter Bar */}
+          <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search queries, lab topics, or colleges (e.g., OS Viva, CBIT, Microchip)..."
+                className="w-full bg-slate-900/90 border border-slate-800 focus:border-emerald-500/60 rounded-xl pl-9 pr-3 py-2 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-hidden transition-all shadow-inner"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <select
+                value={selectedBranchFilter}
+                onChange={(e) => setSelectedBranchFilter(e.target.value)}
+                className="bg-slate-900 border border-slate-800 text-xs text-slate-300 rounded-xl px-3 py-2 focus:outline-hidden focus:border-emerald-500/50 cursor-pointer min-h-[44px]"
+              >
+                <option value="All">All Branches</option>
+                <option value="Computer">CSE / IT Streams</option>
+                <option value="AI">AI &amp; Data Science</option>
+                <option value="Electronics">ECE / EEE</option>
+                <option value="Mechanical">Mechanical</option>
+                <option value="Civil">Civil</option>
+              </select>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setCreateMode('dispatch');
+                  setIsCreateModalOpen(true);
+                }}
+                className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 min-h-[44px] bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold shadow-sm transition-all active:scale-95 cursor-pointer whitespace-nowrap"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Post Query / Dispatch</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Horizontal Scrollable Chip Strip (Touch Carousel) */}
+      <div className="sticky top-16 z-30 bg-slate-950/95 backdrop-blur-md border-b border-slate-800/80 py-2.5 px-3 sm:px-6">
+        <div className="max-w-4xl mx-auto flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth">
+          {filterChips.map((chip) => {
+            const isActive = activeFilter === chip.id;
+            return (
+              <button
+                key={chip.id}
+                type="button"
+                onClick={() => setActiveFilter(chip.id)}
+                className={`min-h-[44px] px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-150 cursor-pointer select-none shrink-0 flex items-center justify-center active:scale-95 ${
+                  isActive
+                    ? 'bg-emerald-500 text-slate-950 font-bold shadow-xs shadow-emerald-500/20'
+                    : 'bg-slate-900/80 text-slate-400 hover:text-slate-200 border border-slate-800 hover:border-slate-700'
+                }`}
+              >
+                {chip.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 3. Main Single-Column Feed Container */}
+      <div className="max-w-4xl mx-auto px-3 sm:px-6 py-4 space-y-4">
+        {/* Quick Post Box (Desktop / Tablet trigger) */}
+        <div
+          onClick={() => {
+            setCreateMode('dispatch');
+            setIsCreateModalOpen(true);
+          }}
+          className="hidden sm:flex items-center justify-between p-3.5 bg-slate-900/60 border border-slate-800/90 rounded-2xl cursor-pointer hover:border-slate-700 hover:bg-slate-900 transition-all shadow-xs group"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+              <Plus className="w-4 h-4 group-hover:rotate-90 transition-transform duration-200" />
+            </div>
+            <div>
+              <p className="text-xs sm:text-sm font-semibold text-slate-300">
+                Share a campus dispatch or post an academic doubt...
+              </p>
+              <p className="text-[11px] text-slate-500">
+                Lab exam questions, placement drives, syllabus updates &amp; anonymous queries
+              </p>
+            </div>
+          </div>
+          <span className="text-xs font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-3 py-1.5 rounded-xl">
+            Post Now
+          </span>
+        </div>
+
+        {/* Empty State */}
+        {filteredPosts.length === 0 && (
+          <div className="text-center py-12 px-4 bg-slate-900/40 border border-slate-800/80 rounded-2xl space-y-3">
+            <AlertCircle className="w-8 h-8 text-slate-500 mx-auto" />
+            <h3 className="text-sm sm:text-base font-bold text-white">No discussions found</h3>
+            <p className="text-xs text-slate-400 max-w-sm mx-auto">
+              No queries match your active filter. Be the first to share an update or question for your college!
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setActiveFilter('all');
+                setSelectedBranchFilter('All');
+                setSearchQuery('');
+              }}
+              className="text-xs text-emerald-400 font-bold hover:underline cursor-pointer"
+            >
+              Reset all filters
+            </button>
+          </div>
+        )}
+
+        {/* List of Community Posts */}
+        {filteredPosts.map((post) => {
+          const isUpvoted = !!upvotedPostIds[post.id];
+          return (
+            <article
+              key={post.id}
+              className="bg-slate-900/80 border border-slate-800/90 hover:border-slate-700/90 rounded-2xl p-3.5 sm:p-5 transition-all shadow-xs space-y-3 overflow-hidden break-words"
+            >
+              {/* Card Header: Meta row */}
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div
+                    className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border ${
+                      post.isAnonymous
+                        ? 'bg-slate-800 text-slate-400 border-slate-700'
+                        : post.type === 'dispatch'
+                        ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
+                        : 'bg-purple-500/15 text-purple-400 border-purple-500/30'
+                    }`}
+                  >
+                    {post.isAnonymous ? (
+                      <Lock className="w-3.5 h-3.5 text-slate-400" />
+                    ) : post.type === 'dispatch' ? (
+                      <Megaphone className="w-3.5 h-3.5 text-emerald-400" />
+                    ) : (
+                      <HelpCircle className="w-3.5 h-3.5 text-purple-400" />
+                    )}
+                  </div>
+
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="text-xs font-bold text-white truncate max-w-[140px] sm:max-w-none">
+                        {post.authorName}
+                      </span>
+                      {post.isAnonymous ? (
+                        <span className="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.2 rounded font-mono">
+                          Anonymous
+                        </span>
+                      ) : (
+                        <span className="text-[10px] text-slate-400 truncate">
+                          • {post.authorYear}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-1.5 text-[11px] text-slate-400 flex-wrap">
+                      <span className="text-cyan-400 font-medium truncate max-w-[180px] sm:max-w-none">
+                        {post.college}
+                      </span>
+                      <span>•</span>
+                      <span className="text-slate-500">{post.timestamp}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Badges: Type & Urgency */}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  {post.type === 'dispatch' ? (
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                      Dispatch
+                    </span>
+                  ) : (
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/30">
+                      Query
+                    </span>
+                  )}
+
+                  {post.urgency && (
+                    <span
+                      className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${
+                        post.urgency === 'Mid Exams Near'
+                          ? 'bg-rose-500/15 text-rose-300 border-rose-500/30 animate-pulse'
+                          : post.urgency === 'Sem Exams Near'
+                          ? 'bg-red-500/15 text-red-300 border-red-500/30 font-bold'
+                          : post.urgency === 'Placement Prep'
+                          ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                          : post.urgency === 'Internship Advice'
+                          ? 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30'
+                          : 'bg-slate-800 text-slate-400 border-slate-700'
+                      }`}
+                    >
+                      {post.urgency}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Branch Pill */}
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-medium text-slate-400 bg-slate-950 px-2 py-0.5 rounded-md border border-slate-800">
+                  {post.branch}
+                </span>
+              </div>
+
+              {/* Title & Body */}
+              <div className="space-y-1.5">
+                <h2 className="text-sm sm:text-base font-bold text-slate-100 tracking-tight leading-snug break-words">
+                  {post.title}
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed break-words whitespace-pre-line">
+                  {post.content}
+                </p>
+              </div>
+
+              {/* Optional Code Snippet */}
+              {post.codeSnippet && (
+                <div className="bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs font-mono text-emerald-400 overflow-x-auto">
+                  <pre className="whitespace-pre">{post.codeSnippet}</pre>
+                </div>
+              )}
+
+              {/* Multi-Attachment List */}
+              {(() => {
+                const allAttachments = post.attachments && Array.isArray(post.attachments) && post.attachments.length > 0
+                  ? post.attachments
+                  : post.attachment ? [post.attachment] : [];
+
+                if (!allAttachments.length) return null;
+
+                return (
+                  <div className="space-y-2 pt-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {allAttachments.map((att, idx) => {
+                        const isPdf = att.type === 'pdf' || att.name?.toLowerCase().endsWith('.pdf');
+                        return (
+                          <div
+                            key={att.id || idx}
+                            className="flex items-center justify-between p-2.5 bg-slate-950/70 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors gap-2"
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <div
+                                className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${
+                                  isPdf
+                                    ? 'bg-rose-500/15 border-rose-500/30 text-rose-400'
+                                    : 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400'
+                                }`}
+                              >
+                                {isPdf ? <FileText className="w-4 h-4" /> : <ImageIcon className="w-4 h-4" />}
+                              </div>
+                              <div className="min-w-0">
+                                <p className="text-xs font-bold text-slate-200 truncate">
+                                  {att.name}
+                                </p>
+                                <p className="text-[10px] text-slate-500 font-mono">
+                                  {att.size || 'Attached File'} • {isPdf ? 'PDF Document' : 'Image'}
+                                </p>
+                              </div>
+                            </div>
+
+                            <a
+                              href={att.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="min-h-[38px] px-3 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors shrink-0 cursor-pointer active:scale-95"
+                              title="Open attached file"
+                            >
+                              <Download className="w-3.5 h-3.5" />
+                              <span className="text-[11px]">View</span>
+                            </a>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Engagement Row (Sticky Thumb-Friendly Tap Targets) */}
+              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between gap-1 text-xs">
+                {/* Left Controls: Upvotes & Answers */}
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleToggleUpvote(post.id)}
+                    className={`min-h-[44px] px-3 rounded-xl flex items-center gap-1.5 font-bold transition-all active:scale-95 cursor-pointer ${
+                      isUpvoted
+                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-xs'
+                        : 'bg-slate-950 hover:bg-slate-800 text-slate-400 border border-slate-800 hover:border-slate-700'
+                    }`}
+                    title="Mark helpful / Upvote"
+                  >
+                    <ThumbsUp
+                      className={`w-3.5 h-3.5 ${
+                        isUpvoted ? 'fill-emerald-400 text-emerald-400' : ''
+                      }`}
+                    />
+                    <span>{post.upvotes}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveReplyPost(post)}
+                    className="min-h-[44px] px-3 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 flex items-center gap-1.5 font-semibold transition-all active:scale-95 cursor-pointer"
+                    title="View & post replies"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>
+                      {post.replies.length} {post.replies.length === 1 ? 'Answer' : 'Answers'}
+                    </span>
+                  </button>
+                </div>
+
+                {/* Right Controls: Share Action */}
+                <button
+                  type="button"
+                  onClick={() => handleSharePost(post)}
+                  className="min-h-[44px] px-3 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 hover:border-slate-700 flex items-center gap-1.5 font-medium transition-all active:scale-95 cursor-pointer"
+                  title="Share to WhatsApp or Telegram"
+                >
+                  {shareSuccessId === post.id ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      <span className="text-emerald-400 font-bold">Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Share2 className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Share</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      {/* 4. Sticky Bottom Floating Action Button (Thumb-Reachable 44px+ Trigger) */}
+      <div className="fixed bottom-4 right-4 z-40">
+        <button
+          type="button"
+          onClick={() => {
+            setCreateMode('doubt');
+            setIsCreateModalOpen(true);
+          }}
+          className="min-h-[52px] px-4 py-3 bg-linear-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black rounded-full shadow-lg shadow-emerald-950/80 flex items-center gap-2 transition-all duration-200 active:scale-95 cursor-pointer border border-emerald-300/40"
+          title="Create a new query or campus dispatch"
+        >
+          <Plus className="w-5 h-5 stroke-[3]" />
+          <span className="text-xs sm:text-sm font-bold tracking-tight">Post Doubt / Dispatch</span>
+        </button>
+      </div>
+
+      {/* 5. Create Modal (Mode A: Campus Dispatch vs Mode B: Peer Doubt) */}
+      <AnimatePresence>
+        {isCreateModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/80 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, y: 100 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 100 }}
+              transition={{ duration: 0.2 }}
+              className="w-full sm:max-w-lg bg-slate-900 border border-slate-800 rounded-t-3xl sm:rounded-2xl p-4 sm:p-6 max-h-[90vh] overflow-y-auto space-y-4 shadow-2xl"
+            >
+              {/* Modal Header */}
+              <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+                <div className="flex items-center gap-2">
+                  <span className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                    <Plus className="w-4 h-4" />
+                  </span>
+                  <h3 className="text-base font-bold text-white">
+                    Create New Community Post
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsCreateModalOpen(false)}
+                  className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 active:scale-95 cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Mode Switcher: Dispatch vs Doubt */}
+              <div className="grid grid-cols-2 gap-2 p-1 bg-slate-950 rounded-xl border border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => setCreateMode('dispatch')}
+                  className={`min-h-[44px] py-2 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-95 ${
+                    createMode === 'dispatch'
+                      ? 'bg-emerald-500 text-slate-950 shadow-xs'
+                      : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  <Megaphone className="w-3.5 h-3.5" />
+                  <span>Campus Dispatch</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCreateMode('doubt')}
+                  className={`min-h-[44px] py-2 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-95 ${
+                    createMode === 'doubt'
+                      ? 'bg-purple-500 text-white shadow-xs'
+                      : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  <HelpCircle className="w-3.5 h-3.5" />
+                  <span>Ask Peer Doubt</span>
+                </button>
+              </div>
+
+              {formError && (
+                <div className="p-3 bg-rose-500/15 border border-rose-500/30 rounded-xl text-xs text-rose-300 flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-rose-400 mt-0.5" />
+                  <div className="flex-1 space-y-1">
+                    <p className="font-medium">
+                      {typeof formError === 'string' ? formError : formError.message}
+                    </p>
+                    {typeof formError === 'object' && formError.link && (
+                      <a
+                        href={formError.link}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setIsCreateModalOpen(false);
+                          window.location.hash = formError.link;
+                          if (onNavigateToTool) {
+                            onNavigateToTool(formError.link.replace('#', ''));
+                          }
+                        }}
+                        className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 hover:text-emerald-300 underline underline-offset-2 cursor-pointer"
+                      >
+                        <span>{formError.linkText}</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Form Body */}
+              <form onSubmit={handleCreatePostSubmit} className="space-y-3 text-xs">
+                {/* Title */}
+                <div>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+                    {createMode === 'dispatch' ? 'Dispatch Headline *' : 'Question Title *'}
+                  </label>
+                  <input
+                    type="text"
+                    value={formTitle}
+                    onChange={(e) => setFormTitle(e.target.value)}
+                    placeholder={
+                      createMode === 'dispatch'
+                        ? 'e.g., VNR VJIET Semester 6 Advanced Java Lab Experiments'
+                        : 'e.g., How to solve Peterson algorithm critical section in OS?'
+                    }
+                    className="w-full min-h-[44px] bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl px-3 py-2.5 text-white text-xs sm:text-sm focus:outline-hidden"
+                  />
+                </div>
+
+                {/* College and Branch Row */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+                      College / Campus *
+                    </label>
+                    <input
+                      type="text"
+                      value={formCollege}
+                      onChange={(e) => setFormCollege(e.target.value)}
+                      placeholder="Enter your college name (e.g. PVP Siddhartha, CBIT, JNTU...)"
+                      className="w-full min-h-[44px] bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl px-3 py-2 text-white text-xs placeholder-slate-500 focus:outline-hidden"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+                      Branch / Stream *
+                    </label>
+                    <select
+                      value={formBranch}
+                      onChange={(e) => setFormBranch(e.target.value)}
+                      className="w-full min-h-[44px] bg-slate-950 border border-slate-800 text-white rounded-xl px-2.5 py-2.5 text-xs focus:outline-hidden focus:border-emerald-500"
+                    >
+                      {BRANCH_OPTIONS.map((b) => (
+                        <option key={b} value={b}>
+                          {b}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* Urgency Tag (Mode B: Doubt) */}
+                {createMode === 'doubt' && (
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+                      Urgency Level
+                    </label>
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                      {[
+                        'Casual',
+                        'Mid Exams Near',
+                        'Sem Exams Near',
+                        'Placement Prep',
+                        'Internship Advice',
+                      ].map((urg) => (
+                        <button
+                          key={urg}
+                          type="button"
+                          onClick={() => setFormUrgency(urg)}
+                          className={`min-h-[40px] px-3 py-1.5 rounded-xl text-xs transition-all cursor-pointer active:scale-95 whitespace-nowrap ${
+                            formUrgency === urg
+                              ? 'bg-purple-600 text-white border border-purple-500 shadow-xs font-bold'
+                              : 'bg-slate-950 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-700 font-medium'
+                          }`}
+                        >
+                          {urg}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Content Details */}
+                <div>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+                    {createMode === 'dispatch' ? 'Dispatch Details (Markdown enabled) *' : 'Explain your Query / Context *'}
+                  </label>
+                  <textarea
+                    rows={4}
+                    value={formContent}
+                    onChange={(e) => setFormContent(e.target.value)}
+                    placeholder="Provide specific details, syllabus references, professor guidelines, or what you've tried..."
+                    className="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl p-3 text-white text-xs sm:text-sm focus:outline-hidden resize-y"
+                  />
+                </div>
+
+                {/* Optional Code Snippet */}
+                {createMode === 'doubt' && (
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+                      Code Snippet / Terminal Log (Optional)
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={formCodeSnippet}
+                      onChange={(e) => setFormCodeSnippet(e.target.value)}
+                      placeholder="// Paste relevant error trace, C++, Java, or Python code here..."
+                      className="w-full font-mono bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl p-2.5 text-emerald-400 text-xs focus:outline-hidden resize-y"
+                    />
+                  </div>
+                )}
+
+                {/* Multi-Attachment Section (PDFs and Images) */}
+                <div className="p-3 bg-slate-950 border border-dashed border-slate-800 rounded-xl space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Upload className="w-4 h-4 text-emerald-400" />
+                      <span className="text-[11px] font-bold text-slate-200">
+                        Attach Notes, Cheatsheets or Screenshots
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-mono text-slate-400">
+                      {formAttachments.length}/4 attached
+                    </span>
+                  </div>
+
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    accept=".pdf,image/png,image/jpeg,image/webp"
+                    onChange={handleFilesSelected}
+                    className="hidden"
+                  />
+
+                  {/* Attachment Preview Strip */}
+                  {formAttachments.length > 0 && (
+                    <div className="space-y-1.5">
+                      {formAttachments.map((att) => (
+                        <div
+                          key={att.id}
+                          className="flex items-center justify-between p-2 bg-slate-900/80 border border-slate-800 rounded-lg text-xs gap-2"
+                        >
+                          <div className="flex items-center gap-2 min-w-0">
+                            {att.type === 'pdf' ? (
+                              <FileText className="w-4 h-4 text-rose-400 shrink-0" />
+                            ) : att.previewUrl ? (
+                              <img
+                                src={att.previewUrl}
+                                alt={att.name}
+                                className="w-6 h-6 rounded object-cover border border-slate-700 shrink-0"
+                              />
+                            ) : (
+                              <ImageIcon className="w-4 h-4 text-emerald-400 shrink-0" />
+                            )}
+                            <span className="text-slate-200 truncate text-[11px] font-medium">
+                              {att.name}
+                            </span>
+                            <span className="text-[10px] text-slate-500 font-mono shrink-0">
+                              {att.size}
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveAttachment(att.id)}
+                            className="min-w-[32px] min-h-[32px] flex items-center justify-center text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded cursor-pointer transition-colors"
+                            title="Remove attachment"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {formAttachments.length < 4 && (
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="w-full min-h-[44px] py-2 border border-slate-800 hover:border-slate-700 bg-slate-900/60 rounded-lg text-slate-300 hover:text-white text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all"
+                    >
+                      <Plus className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Add File (PDF ≤ 50MB, Image ≤ 3MB)</span>
+                    </button>
+                  )}
+
+                  <p className="text-[10px] text-slate-500 leading-normal">
+                    Direct high-speed CDN delivery for instant mobile viewing. Need to reduce size? Use our built-in compressors.
+                  </p>
+                </div>
+
+                {/* Identity & Privacy Toggle */}
+                <div className="p-3 bg-slate-950/70 border border-slate-800 rounded-xl space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="post-anon-toggle"
+                      className="flex items-center gap-2 cursor-pointer select-none"
+                    >
+                      {formIsAnonymous ? (
+                        <Lock className="w-4 h-4 text-amber-400" />
+                      ) : (
+                        <Unlock className="w-4 h-4 text-slate-400" />
+                      )}
+                      <div>
+                        <span className="font-bold text-slate-200">Post Anonymously</span>
+                        <p className="text-[10px] text-slate-400">
+                          Renders as &ldquo;Anonymous Scholar&rdquo; to eliminate embarrassment for shy students.
+                        </p>
+                      </div>
+                    </label>
+                    <input
+                      id="post-anon-toggle"
+                      type="checkbox"
+                      checked={formIsAnonymous}
+                      onChange={(e) => setFormIsAnonymous(e.target.checked)}
+                      className="w-4 h-4 accent-emerald-500 cursor-pointer"
+                    />
+                  </div>
+
+                  {!formIsAnonymous && (
+                    <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800">
+                      <div>
+                        <input
+                          type="text"
+                          value={formAuthorName}
+                          onChange={(e) => setFormAuthorName(e.target.value)}
+                          placeholder="Your Name (e.g. Priya R.)"
+                          className="w-full min-h-[44px] bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-hidden"
+                        />
+                      </div>
+                      <div>
+                        <input
+                          type="text"
+                          value={formAuthorYear}
+                          onChange={(e) => setFormAuthorYear(e.target.value)}
+                          placeholder="Year (e.g. 3rd Year B.Tech)"
+                          className="w-full min-h-[44px] bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-hidden"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Action Submit Button */}
+                <div className="pt-2 flex items-center justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsCreateModalOpen(false)}
+                    className="min-h-[44px] px-4 py-2 text-slate-400 hover:text-white rounded-xl text-xs font-semibold cursor-pointer active:scale-95"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isUploadingFile}
+                    className="min-h-[44px] px-6 py-2 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition-all active:scale-95 cursor-pointer shadow-md flex items-center gap-2"
+                  >
+                    {isUploadingFile ? (
+                      <span>Uploading Attachments...</span>
+                    ) : (
+                      <>
+                        <Send className="w-3.5 h-3.5" />
+                        <span>Publish {createMode === 'dispatch' ? 'Dispatch' : 'Query'}</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* 6. Mobile Bottom Sheet / Drawer for Threaded Replies */}
+      <AnimatePresence>
+        {activeReplyPost && (
+          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/85 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, y: 120 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 120 }}
+              transition={{ duration: 0.22 }}
+              className="w-full sm:max-w-2xl bg-slate-900 border border-slate-800 rounded-t-3xl sm:rounded-2xl p-4 sm:p-6 max-h-[90vh] flex flex-col shadow-2xl overflow-hidden"
+            >
+              {/* Header */}
+              <div className="flex items-start justify-between pb-3 border-b border-slate-800 gap-2 shrink-0">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                      {activeReplyPost.college}
+                    </span>
+                    <span className="text-[11px] text-slate-400">
+                      {activeReplyPost.timestamp}
+                    </span>
+                  </div>
+                  <h3 className="text-sm sm:text-base font-bold text-white mt-1 break-words line-clamp-2">
+                    {activeReplyPost.title}
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setActiveReplyPost(null)}
+                  className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 shrink-0 active:scale-95 cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Scrollable Answers List */}
+              <div className="flex-1 overflow-y-auto py-3 space-y-3">
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800/80 text-xs text-slate-300 leading-relaxed break-words whitespace-pre-line">
+                  {activeReplyPost.content}
+                </div>
+
+                {/* Active Post Attachments */}
+                {(() => {
+                  const allAttachments = activeReplyPost.attachments && Array.isArray(activeReplyPost.attachments) && activeReplyPost.attachments.length > 0
+                    ? activeReplyPost.attachments
+                    : activeReplyPost.attachment ? [activeReplyPost.attachment] : [];
+                  if (!allAttachments.length) return null;
+                  return (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {allAttachments.map((att, idx) => {
+                        const isPdf = att.type === 'pdf' || att.name?.toLowerCase().endsWith('.pdf');
+                        return (
+                          <div
+                            key={att.id || idx}
+                            className="flex items-center justify-between p-2.5 bg-slate-950/70 border border-slate-800 rounded-xl text-xs gap-2"
+                          >
+                            <div className="flex items-center gap-2 min-w-0">
+                              {isPdf ? (
+                                <FileText className="w-4 h-4 text-rose-400 shrink-0" />
+                              ) : (
+                                <ImageIcon className="w-4 h-4 text-emerald-400 shrink-0" />
+                              )}
+                              <span className="text-slate-200 font-medium truncate text-xs">{att.name}</span>
+                              <span className="text-[10px] text-slate-500 shrink-0">{att.size}</span>
+                            </div>
+                            <a
+                              href={att.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="px-2.5 py-1 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 rounded-lg text-xs font-bold flex items-center gap-1 shrink-0"
+                            >
+                              <Download className="w-3 h-3" />
+                              <span>View</span>
+                            </a>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })()}
+
+                <div className="flex items-center justify-between pt-1">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                    <MessageSquare className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Peer Solutions ({activeReplyPost.replies.length})</span>
+                  </h4>
+                </div>
+
+                {activeReplyPost.replies.length === 0 ? (
+                  <div className="text-center py-8 text-xs text-slate-500 space-y-1">
+                    <p>No answers posted yet.</p>
+                    <p className="text-slate-400 font-medium">
+                      Be the first senior or peer to answer this query!
+                    </p>
+                  </div>
+                ) : (
+                  activeReplyPost.replies.map((reply) => (
+                    <div
+                      key={reply.id}
+                      className={`p-3 rounded-xl border text-xs space-y-2 ${
+                        reply.isVerifiedSolution
+                          ? 'bg-emerald-950/20 border-emerald-500/30'
+                          : 'bg-slate-950/60 border-slate-800'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-slate-200">
+                            {reply.authorName}
+                          </span>
+                          <span className="text-[10px] text-slate-400">
+                            • {reply.authorCollege}
+                          </span>
+                        </div>
+
+                        {reply.isVerifiedSolution && (
+                          <span className="inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                            Verified Solution
+                          </span>
+                        )}
+                      </div>
+
+                      <p className="text-slate-300 leading-relaxed whitespace-pre-line break-words">
+                        {reply.content}
+                      </p>
+
+                      <div className="flex items-center justify-between pt-1 text-[11px] text-slate-500">
+                        <span>{reply.timestamp}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleReplyUpvote(reply.id)}
+                          className="min-h-[44px] px-3 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 flex items-center gap-1 cursor-pointer transition-all active:scale-95"
+                        >
+                          <ThumbsUp className="w-3 h-3 text-emerald-400" />
+                          <span>{reply.upvotes} Helpful</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              {/* Sticky Bottom Reply Input */}
+              <form
+                onSubmit={handleAddReply}
+                className="pt-3 border-t border-slate-800 space-y-2 shrink-0 bg-slate-900"
+              >
+                <div className="flex items-center justify-between text-[11px] text-slate-400 px-1">
+                  <label className="flex items-center gap-1.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={replyAnonymous}
+                      onChange={(e) => setReplyAnonymous(e.target.checked)}
+                      className="w-3.5 h-3.5 accent-emerald-500 cursor-pointer"
+                    />
+                    <span>Reply Anonymously</span>
+                  </label>
+                  <span>Markdown formatting supported</span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={replyInputText}
+                    onChange={(e) => setReplyInputText(e.target.value)}
+                    placeholder="Write a clear answer or verified tip..."
+                    className="flex-1 min-h-[44px] bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl px-3 text-xs text-white placeholder-slate-500 focus:outline-hidden"
+                  />
+                  <button
+                    type="submit"
+                    disabled={!replyInputText.trim()}
+                    className="min-h-[44px] min-w-[44px] px-4 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer shrink-0"
+                  >
+                    <Send className="w-4 h-4" />
+                    <span className="hidden sm:inline">Submit</span>
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default CampusConnect;

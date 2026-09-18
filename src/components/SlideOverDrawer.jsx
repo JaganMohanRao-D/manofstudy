@@ -23,6 +23,7 @@ import {
   Code2,
   Terminal,
   ShieldAlert,
+  Users,
 } from 'lucide-react';
 
 /**
@@ -188,6 +189,27 @@ export const SlideOverDrawer = ({
 
               <button
                 type="button"
+                id="drawer-counseling-tg-predictor-btn"
+                onClick={() => handleNavigate('tg-predictor')}
+                className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-800/70 text-left transition-colors cursor-pointer group border border-transparent hover:border-slate-800 bg-emerald-950/20"
+              >
+                <div className="flex items-start gap-2.5">
+                  <Compass className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
+                      <span>TG EAPCET College Predictor</span>
+                      <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded font-mono">2026 Live</span>
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      Admission probability &amp; web options buffer across 151 colleges
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-600 group-hover:text-slate-300 shrink-0" />
+              </button>
+
+              <button
+                type="button"
                 id="drawer-counseling-tg-allotments-btn"
                 onClick={() => handleNavigate('tg-allotments')}
                 className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-800/70 text-left transition-colors cursor-pointer group border border-transparent hover:border-slate-800"
@@ -217,11 +239,32 @@ export const SlideOverDrawer = ({
                   <BookOpen className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
                   <div>
                     <div className="text-xs font-bold text-white group-hover:text-indigo-300 transition-colors flex items-center gap-1.5">
-                      <span>8-Chapter Survival Guides</span>
-                      <span className="text-[9px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.2 rounded font-mono">RTF/MTF</span>
+                      <span>MOS Student Knowledge HUB</span>
+                      <span className="text-[9px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.2 rounded font-mono">9 Chapters</span>
                     </div>
                     <div className="text-[10px] text-slate-400">
-                      B.Tech 1st Year, Jagananna reimbursement &amp; college laws
+                      OC quota math, reservation dynamics, Phase-2 &amp; college laws
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-600 group-hover:text-slate-300 shrink-0" />
+              </button>
+
+              <button
+                type="button"
+                id="drawer-campus-connect-btn"
+                onClick={() => handleNavigate('campus-connect')}
+                className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-800/70 text-left transition-colors cursor-pointer group border border-transparent hover:border-slate-800 bg-emerald-950/20"
+              >
+                <div className="flex items-start gap-2.5">
+                  <Users className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
+                      <span>MOS CampusConnect</span>
+                      <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded font-mono">NEW</span>
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      Real campus updates, senior guidance, and peer doubt resolution across colleges
                     </div>
                   </div>
                 </div>

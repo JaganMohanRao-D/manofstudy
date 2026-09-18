@@ -33,6 +33,8 @@ import {
   Briefcase,
   Star,
   ShieldAlert,
+  Users,
+  BookOpen,
 } from 'lucide-react';
 import { ToolTab } from '../types';
 import { ENGINEERING_ROADMAPS } from '../data/engineeringRoadmapsData';
@@ -88,6 +90,26 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
     // 1. Primary Tools
     items.push(
+      {
+        id: 'tool-campus-connect',
+        title: 'MOS CampusConnect — Student Network',
+        subtitle: 'Real campus updates, senior guidance, and peer doubt resolution across colleges',
+        category: 'Core Tools',
+        badge: 'NEW',
+        icon: <Users className="w-4 h-4 text-emerald-500" />,
+        keywords: ['campus', 'connect', 'community', 'doubt', 'query', 'viva', 'lab', 'cbit', 'ou', 'jntu', 'vnr', 'notes', 'placement'],
+        action: () => onSelectTool('campus-connect'),
+      },
+      {
+        id: 'tool-tg-predictor',
+        title: 'TG EAPCET College Predictor',
+        subtitle: 'Check admission chances across 151 colleges using 71,646 official 2026 allotment cutoffs',
+        category: 'Core Tools',
+        badge: '2026 Phase-3 Data',
+        icon: <Compass className="w-4 h-4 text-emerald-500" />,
+        keywords: ['predictor', 'college predictor', 'tg predictor', 'rank buffer', 'admission chances', 'closing rank', 'web options', 'tg eapcet', 'cutoff', 'counseling', 'buffer'],
+        action: () => onSelectTool('tg-predictor'),
+      },
       {
         id: 'tool-tg-allotments',
         title: 'TG EAPCET 2026 Final Phase Allotments & Cutoffs',
@@ -241,6 +263,34 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         icon: <ShoppingBag className="w-4 h-4 text-amber-500" />,
         keywords: ['store', 'gear', 'essentials', 'calculator', 'casio', 'fx991cw', 'laptop', 'amazon', 'books', 'pyq', 'keyboard', 'mouse', 'headphones'],
         action: () => onSelectTool('essentials'),
+      },
+      {
+        id: 'tool-guides-hub',
+        title: 'MOS Student Knowledge HUB (9 Chapters)',
+        subtitle: 'Chapter 9: Demystifying Engineering Seat Allotment, OC quota math & Phase-2 sliding rules',
+        category: 'Core Tools',
+        badge: '9 Chapters',
+        icon: <BookOpen className="w-4 h-4 text-blue-500" />,
+        keywords: [
+          'guides',
+          'editorial',
+          'chapter 9',
+          'reservation',
+          'quota',
+          'seat allotment',
+          'open category',
+          'oc',
+          'general',
+          'ews',
+          'obc',
+          'sc',
+          'st',
+          'phase 2',
+          'sliding',
+          'attendance',
+          'knowledge hub',
+        ],
+        action: () => onSelectTool('guides'),
       }
     );
 

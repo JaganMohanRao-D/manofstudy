@@ -2,6 +2,7 @@ export type WorkspaceView =
   | 'hub'
   | 'eapcet'
   | 'tg-allotments'
+  | 'tg-predictor'
   | 'roadmaps'
   | 'scholarships'
   | 'utilities'
@@ -17,11 +18,14 @@ export type WorkspaceView =
   | 'guides'
   | 'projects'
   | 'internships'
+  | 'campus-connect'
   | 'humanizer';
 
 export type ToolTab = 
   | 'eapcet-radar'
   | 'tg-allotments'
+  | 'tg-predictor'
+  | 'campus-connect'
   | 'roadmaps'
   | 'scholarships'
   | 'pdf-tools'
@@ -37,7 +41,9 @@ export type ToolTab =
   | 'essentials'
   | 'store'
   | 'projects'
-  | 'internships';
+  | 'internships'
+  | 'guides'
+  | 'hub';
 
 export type ToolCategory = 'academic' | 'document' | 'writing' | 'counselling' | 'scholarship';
 

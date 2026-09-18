@@ -259,6 +259,8 @@ export const GuidesHub: React.FC<GuidesHubProps> = ({
         return { ws: 'gpa', label: 'Calculate Internal Exam Safety Margins' };
       case 8:
         return { ws: 'essentials', label: 'Browse Verified Student Hardware Store' };
+      case 9:
+        return { ws: 'eapcet', label: 'Launch EAPCET & Cutoff Rank Simulator' };
       default:
         return null;
     }
@@ -279,7 +281,7 @@ export const GuidesHub: React.FC<GuidesHubProps> = ({
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-400/30 backdrop-blur-xs">
               <BookOpen className="w-3.5 h-3.5 text-blue-400" />
-              8-CHAPTER EDITORIAL COMPENDIUM
+              9-CHAPTER EDITORIAL COMPENDIUM
             </span>
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-400/30">
               Verified Academic Guidance 2026
@@ -287,11 +289,11 @@ export const GuidesHub: React.FC<GuidesHubProps> = ({
           </div>
 
           <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
-            Student &amp; Tier-3 Survival Editorial Hub
+            MOS Student Knowledge HUB
           </h2>
 
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-3xl">
-            Authoritative, field-tested guides for students in Andhra Pradesh and Telangana. From decoding Phase-2 seat surrender dynamics and avoiding attendance detention to self-taught coding mastery and budget developer workstations.
+            Authoritative, Field-Tested Technical &amp; Counselling Insights for Indian Students. From decoding Open Competition (OC) reservation mathematics and Phase-2 seat surrender dynamics to attendance condonation doctrines and developer workstations.
           </p>
 
           {/* Quick Category Switcher & Search Bar */}
