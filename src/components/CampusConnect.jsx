@@ -32,6 +32,8 @@ import {
   User,
   Users,
   Compass,
+  Heart,
+  Mail,
   Image as ImageIcon,
 } from 'lucide-react';
 
@@ -252,6 +254,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
   const [formIsAnonymous, setFormIsAnonymous] = useState(true);
   const [formUrgency, setFormUrgency] = useState('Casual');
   const [formCodeSnippet, setFormCodeSnippet] = useState('');
+  const [formAuthorEmail, setFormAuthorEmail] = useState('');
   const [formAttachments, setFormAttachments] = useState([]);
   const [isUploadingFile, setIsUploadingFile] = useState(false);
   const [formError, setFormError] = useState(null);
@@ -410,13 +413,17 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     e.preventDefault();
     if (!activeReplyPost || !replyInputText.trim()) return;
 
+    const replyContentText = replyInputText.trim();
+    const replyAuthorNameFormatted = replyAnonymous ? 'Anonymous Scholar' : (replyAuthorName.trim() || 'Student Peer');
+    const replyCollegeFormatted = replyAnonymous ? 'Telangana / AP College' : (replyAuthorCollege.trim() || 'Engineering College');
+
     const newReply = {
       id: `reply-${Date.now()}`,
-      authorName: replyAnonymous ? 'Anonymous Scholar' : (replyAuthorName.trim() || 'Student Peer'),
-      authorCollege: replyAnonymous ? 'Telangana / AP College' : (replyAuthorCollege.trim() || 'Engineering College'),
+      authorName: replyAuthorNameFormatted,
+      authorCollege: replyCollegeFormatted,
       authorYear: 'B.Tech Student',
       isAnonymous: replyAnonymous,
-      content: replyInputText.trim(),
+      content: replyContentText,
       timestamp: 'Just now',
       upvotes: 1,
     };
@@ -428,6 +435,26 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     setPosts((prev) =>
       prev.map((p) => (p.id === activeReplyPost.id ? updatedPost : p))
     );
+
+    // Trigger automated email alert if post author provided a notification email
+    const recipientEmail = activeReplyPost.author_email || activeReplyPost.authorEmail;
+    if (recipientEmail && typeof recipientEmail === 'string' && recipientEmail.includes('@')) {
+      fetch('/api/send-reply-alert', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          toEmail: recipientEmail.trim(),
+          questionTitle: activeReplyPost.title,
+          replyAuthor: newReply.authorName || 'A fellow student',
+          replyContent: newReply.content,
+          college: activeReplyPost.college || 'Campus',
+        }),
+      }).catch((err) => {
+        console.warn('[CampusConnect] Email notification alert error:', err);
+      });
+    }
 
     setReplyInputText('');
   };
@@ -504,6 +531,8 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       authorName: formIsAnonymous ? 'Anonymous Scholar' : (formAuthorName.trim() || 'Verified Scholar'),
       authorYear: formAuthorYear,
       isAnonymous: formIsAnonymous,
+      author_email: formAuthorEmail.trim() || undefined,
+      authorEmail: formAuthorEmail.trim() || undefined,
       timestamp: 'Just now',
       urgency: createMode === 'doubt' ? formUrgency : undefined,
       codeSnippet: formCodeSnippet.trim() ? formCodeSnippet.trim() : undefined,
@@ -520,6 +549,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     setFormTitle('');
     setFormContent('');
     setFormCodeSnippet('');
+    setFormAuthorEmail('');
     setFormCollege('');
     setFormAttachments([]);
     setFormError(null);
@@ -570,49 +600,54 @@ export const CampusConnect = ({ onNavigateToTool }) => {
   }, [posts, activeFilter, selectedBranchFilter, searchQuery]);
 
   return (
-    <div className="w-full max-w-full overflow-x-hidden bg-slate-950 text-slate-100 min-h-screen pb-24 md:pb-16 break-words">
+    <div
+      id="campus-connect"
+      className="w-full max-w-full overflow-x-hidden bg-gradient-to-b from-pink-50 via-rose-50/60 to-white text-slate-900 min-h-screen pb-24 md:pb-16 break-words"
+    >
       {/* 1. Header Banner & Identity */}
-      <div className="relative border-b border-slate-800 bg-linear-to-b from-slate-900 via-slate-950 to-slate-950 px-3 sm:px-6 py-5 sm:py-7">
-        <div className="max-w-4xl mx-auto space-y-3">
+      <div className="relative border-b border-pink-200/80 bg-gradient-to-b from-pink-100/70 via-rose-50/50 to-white px-3 sm:px-6 py-6 sm:py-8">
+        <div className="max-w-4xl mx-auto space-y-3.5">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-              <Sparkles className="w-3.5 h-3.5" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-pink-100 text-pink-700 border border-pink-200 shadow-xs">
+              <Heart className="w-3.5 h-3.5 fill-pink-500 text-pink-500" />
               MOS CampusConnect
             </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-800 text-slate-200 border border-slate-700">
-              <Users className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-pink-100 text-pink-700 border border-pink-200">
+              <Users className="w-3.5 h-3.5 text-pink-600" />
               Student Network
             </span>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-rose-100 text-rose-700 border border-rose-200">
               100% Free &amp; Open Access
             </span>
           </div>
 
-          <h1 className="text-xl sm:text-3xl font-black text-white tracking-tight break-words">
-            MOS CampusConnect
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
-            Real campus updates, senior guidance, and peer doubt resolution across colleges.
-          </p>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-950 tracking-tight break-words">
+              MOS CampusConnect
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl leading-relaxed mt-1">
+              Real campus updates, senior mentorship, viva cheat-sheets, and affectionate peer doubt resolution across engineering colleges.
+            </p>
+          </div>
 
           {/* Quick Search & Mobile Filter Bar */}
-          <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+          <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
             <div className="relative flex-1">
-              <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search queries, lab topics, or colleges (e.g., OS Viva, CBIT, Microchip)..."
-                className="w-full bg-slate-900/90 border border-slate-800 focus:border-emerald-500/60 rounded-xl pl-9 pr-3 py-2 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-hidden transition-all shadow-inner"
+                className="w-full bg-white border border-pink-200 focus:border-pink-400 focus:ring-2 focus:ring-pink-100 rounded-2xl pl-10 pr-9 py-2.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-hidden transition-all shadow-xs"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 cursor-pointer p-1"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-3.5 h-3.5" />
                 </button>
               )}
             </div>
@@ -621,7 +656,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
               <select
                 value={selectedBranchFilter}
                 onChange={(e) => setSelectedBranchFilter(e.target.value)}
-                className="bg-slate-900 border border-slate-800 text-xs text-slate-300 rounded-xl px-3 py-2 focus:outline-hidden focus:border-emerald-500/50 cursor-pointer min-h-[44px]"
+                className="bg-white border border-pink-200 text-xs font-medium text-slate-800 rounded-2xl px-3.5 py-2.5 focus:outline-hidden focus:border-pink-400 focus:ring-2 focus:ring-pink-100 cursor-pointer min-h-[44px] shadow-xs"
               >
                 <option value="All">All Branches</option>
                 <option value="Computer">CSE / IT Streams</option>
@@ -637,10 +672,10 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                   setCreateMode('dispatch');
                   setIsCreateModalOpen(true);
                 }}
-                className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 min-h-[44px] bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold shadow-sm transition-all active:scale-95 cursor-pointer whitespace-nowrap"
+                className="hidden md:inline-flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] bg-pink-500 hover:bg-pink-600 text-white rounded-2xl text-xs font-semibold shadow-sm shadow-pink-300/50 transition-all active:scale-95 cursor-pointer whitespace-nowrap"
               >
-                <Plus className="w-4 h-4" />
-                <span>Post Query / Dispatch</span>
+                <Plus className="w-4 h-4 stroke-[2.5]" />
+                <span>+ Post Query / Dispatch</span>
               </button>
             </div>
           </div>
@@ -648,7 +683,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       </div>
 
       {/* 2. Horizontal Scrollable Chip Strip (Touch Carousel) */}
-      <div className="sticky top-16 z-30 bg-slate-950/95 backdrop-blur-md border-b border-slate-800/80 py-2.5 px-3 sm:px-6">
+      <div className="sticky top-16 z-30 bg-white/90 backdrop-blur-md border-b border-pink-200/70 py-2.5 px-3 sm:px-6 shadow-xs">
         <div className="max-w-4xl mx-auto flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth">
           {filterChips.map((chip) => {
             const isActive = activeFilter === chip.id;
@@ -657,10 +692,10 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                 key={chip.id}
                 type="button"
                 onClick={() => setActiveFilter(chip.id)}
-                className={`min-h-[44px] px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-150 cursor-pointer select-none shrink-0 flex items-center justify-center active:scale-95 ${
+                className={`min-h-[42px] px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-150 cursor-pointer select-none shrink-0 flex items-center justify-center active:scale-95 ${
                   isActive
-                    ? 'bg-emerald-500 text-slate-950 font-bold shadow-xs shadow-emerald-500/20'
-                    : 'bg-slate-900/80 text-slate-400 hover:text-slate-200 border border-slate-800 hover:border-slate-700'
+                    ? 'bg-pink-500 text-white font-semibold border border-pink-500 shadow-sm shadow-pink-300/40'
+                    : 'bg-white border border-pink-200 text-slate-700 hover:bg-pink-50 hover:text-slate-900 shadow-xs'
                 }`}
               >
                 {chip.label}
@@ -671,39 +706,39 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       </div>
 
       {/* 3. Main Single-Column Feed Container */}
-      <div className="max-w-4xl mx-auto px-3 sm:px-6 py-4 space-y-4">
+      <div className="max-w-4xl mx-auto px-3 sm:px-6 py-5 space-y-4">
         {/* Quick Post Box (Desktop / Tablet trigger) */}
         <div
           onClick={() => {
             setCreateMode('dispatch');
             setIsCreateModalOpen(true);
           }}
-          className="hidden sm:flex items-center justify-between p-3.5 bg-slate-900/60 border border-slate-800/90 rounded-2xl cursor-pointer hover:border-slate-700 hover:bg-slate-900 transition-all shadow-xs group"
+          className="hidden sm:flex items-center justify-between p-4 bg-white/95 backdrop-blur-sm border border-pink-100 hover:border-pink-300 rounded-2xl cursor-pointer hover:bg-white transition-all shadow-sm shadow-pink-100/50 hover:shadow-md group"
         >
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-full bg-pink-100 text-pink-600 border border-pink-200 flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
               <Plus className="w-4 h-4 group-hover:rotate-90 transition-transform duration-200" />
             </div>
             <div>
-              <p className="text-xs sm:text-sm font-semibold text-slate-300">
+              <p className="text-xs sm:text-sm font-bold text-slate-900">
                 Share a campus dispatch or post an academic doubt...
               </p>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[11px] text-slate-500 mt-0.5">
                 Lab exam questions, placement drives, syllabus updates &amp; anonymous queries
               </p>
             </div>
           </div>
-          <span className="text-xs font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-3 py-1.5 rounded-xl">
+          <span className="text-xs font-bold text-pink-700 bg-pink-50 border border-pink-200 px-3.5 py-1.5 rounded-xl group-hover:bg-pink-100 transition-colors">
             Post Now
           </span>
         </div>
 
         {/* Empty State */}
         {filteredPosts.length === 0 && (
-          <div className="text-center py-12 px-4 bg-slate-900/40 border border-slate-800/80 rounded-2xl space-y-3">
-            <AlertCircle className="w-8 h-8 text-slate-500 mx-auto" />
-            <h3 className="text-sm sm:text-base font-bold text-white">No discussions found</h3>
-            <p className="text-xs text-slate-400 max-w-sm mx-auto">
+          <div className="text-center py-12 px-4 bg-white/90 border border-pink-200 rounded-2xl space-y-3 shadow-xs">
+            <AlertCircle className="w-9 h-9 text-pink-400 mx-auto" />
+            <h3 className="text-sm sm:text-base font-bold text-slate-950">No discussions found</h3>
+            <p className="text-xs text-slate-600 max-w-sm mx-auto">
               No queries match your active filter. Be the first to share an update or question for your college!
             </p>
             <button
@@ -713,9 +748,10 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                 setSelectedBranchFilter('All');
                 setSearchQuery('');
               }}
-              className="text-xs text-emerald-400 font-bold hover:underline cursor-pointer"
+              className="text-xs text-pink-600 font-bold hover:underline cursor-pointer inline-flex items-center gap-1"
             >
-              Reset all filters
+              <span>Reset all filters</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         )}
@@ -726,47 +762,47 @@ export const CampusConnect = ({ onNavigateToTool }) => {
           return (
             <article
               key={post.id}
-              className="bg-slate-900/80 border border-slate-800/90 hover:border-slate-700/90 rounded-2xl p-3.5 sm:p-5 transition-all shadow-xs space-y-3 overflow-hidden break-words"
+              className="bg-white/95 backdrop-blur-sm border border-pink-100 hover:border-pink-300/70 rounded-2xl p-4 sm:p-5 shadow-sm shadow-pink-200/40 hover:shadow-md transition-all space-y-3.5 overflow-hidden break-words"
             >
               {/* Card Header: Meta row */}
               <div className="flex items-start justify-between gap-2">
-                <div className="flex items-center gap-2 min-w-0">
+                <div className="flex items-center gap-3 min-w-0">
                   <div
-                    className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border ${
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border shadow-xs ${
                       post.isAnonymous
-                        ? 'bg-slate-800 text-slate-400 border-slate-700'
+                        ? 'bg-slate-100 text-slate-600 border-slate-200'
                         : post.type === 'dispatch'
-                        ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
-                        : 'bg-purple-500/15 text-purple-400 border-purple-500/30'
+                        ? 'bg-pink-100 text-pink-600 border-pink-200'
+                        : 'bg-purple-100 text-purple-600 border-purple-200'
                     }`}
                   >
                     {post.isAnonymous ? (
-                      <Lock className="w-3.5 h-3.5 text-slate-400" />
+                      <Lock className="w-4 h-4 text-slate-500" />
                     ) : post.type === 'dispatch' ? (
-                      <Megaphone className="w-3.5 h-3.5 text-emerald-400" />
+                      <Megaphone className="w-4 h-4 text-pink-600" />
                     ) : (
-                      <HelpCircle className="w-3.5 h-3.5 text-purple-400" />
+                      <HelpCircle className="w-4 h-4 text-purple-600" />
                     )}
                   </div>
 
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="text-xs font-bold text-white truncate max-w-[140px] sm:max-w-none">
+                      <span className="text-xs sm:text-sm font-bold text-slate-900 truncate max-w-[140px] sm:max-w-none">
                         {post.authorName}
                       </span>
                       {post.isAnonymous ? (
-                        <span className="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.2 rounded font-mono">
+                        <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-mono border border-slate-200">
                           Anonymous
                         </span>
                       ) : (
-                        <span className="text-[10px] text-slate-400 truncate">
+                        <span className="text-[11px] text-slate-500 truncate">
                           • {post.authorYear}
                         </span>
                       )}
                     </div>
 
-                    <div className="flex items-center gap-1.5 text-[11px] text-slate-400 flex-wrap">
-                      <span className="text-cyan-400 font-medium truncate max-w-[180px] sm:max-w-none">
+                    <div className="flex items-center gap-1.5 text-xs text-slate-500 flex-wrap mt-0.5">
+                      <span className="text-pink-600 font-semibold truncate max-w-[180px] sm:max-w-none">
                         {post.college}
                       </span>
                       <span>•</span>
@@ -776,13 +812,13 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                 </div>
 
                 {/* Badges: Type & Urgency */}
-                <div className="flex items-center gap-1.5 shrink-0">
+                <div className="flex items-center gap-1.5 shrink-0 flex-wrap justify-end">
                   {post.type === 'dispatch' ? (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                    <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-pink-100 text-pink-700 border border-pink-200">
                       Dispatch
                     </span>
                   ) : (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/30">
+                    <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-700 border border-purple-200">
                       Query
                     </span>
                   )}
@@ -791,14 +827,14 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                     <span
                       className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${
                         post.urgency === 'Mid Exams Near'
-                          ? 'bg-rose-500/15 text-rose-300 border-rose-500/30 animate-pulse'
+                          ? 'bg-rose-100 text-rose-800 border-rose-300 animate-pulse'
                           : post.urgency === 'Sem Exams Near'
-                          ? 'bg-red-500/15 text-red-300 border-red-500/30 font-bold'
+                          ? 'bg-red-100 text-red-800 border-red-300 font-bold'
                           : post.urgency === 'Placement Prep'
-                          ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                          ? 'bg-amber-100 text-amber-800 border-amber-300'
                           : post.urgency === 'Internship Advice'
-                          ? 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30'
-                          : 'bg-slate-800 text-slate-400 border-slate-700'
+                          ? 'bg-cyan-100 text-cyan-800 border-cyan-300'
+                          : 'bg-slate-100 text-slate-700 border border-slate-200'
                       }`}
                     >
                       {post.urgency}
@@ -809,24 +845,24 @@ export const CampusConnect = ({ onNavigateToTool }) => {
 
               {/* Branch Pill */}
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-medium text-slate-400 bg-slate-950 px-2 py-0.5 rounded-md border border-slate-800">
+                <span className="text-[10px] font-medium text-pink-700 bg-pink-50 px-2.5 py-0.5 rounded-md border border-pink-200">
                   {post.branch}
                 </span>
               </div>
 
               {/* Title & Body */}
               <div className="space-y-1.5">
-                <h2 className="text-sm sm:text-base font-bold text-slate-100 tracking-tight leading-snug break-words">
+                <h2 className="text-base sm:text-lg font-bold text-slate-950 tracking-tight leading-snug break-words">
                   {post.title}
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed break-words whitespace-pre-line">
+                <p className="text-xs sm:text-sm text-slate-800 leading-relaxed break-words whitespace-pre-line">
                   {post.content}
                 </p>
               </div>
 
               {/* Optional Code Snippet */}
               {post.codeSnippet && (
-                <div className="bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs font-mono text-emerald-400 overflow-x-auto">
+                <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs font-mono text-pink-300 overflow-x-auto shadow-inner">
                   <pre className="whitespace-pre">{post.codeSnippet}</pre>
                 </div>
               )}
@@ -847,20 +883,20 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                         return (
                           <div
                             key={att.id || idx}
-                            className="flex items-center justify-between p-2.5 bg-slate-950/70 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors gap-2"
+                            className="flex items-center justify-between p-3 bg-pink-50/80 border border-pink-200 rounded-xl hover:bg-pink-50 hover:border-pink-300 transition-colors gap-2.5 shadow-xs"
                           >
                             <div className="flex items-center gap-2.5 min-w-0">
                               <div
                                 className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${
                                   isPdf
-                                    ? 'bg-rose-500/15 border-rose-500/30 text-rose-400'
-                                    : 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400'
+                                    ? 'bg-rose-100 border-rose-200 text-rose-600'
+                                    : 'bg-pink-100 border-pink-200 text-pink-600'
                                 }`}
                               >
                                 {isPdf ? <FileText className="w-4 h-4" /> : <ImageIcon className="w-4 h-4" />}
                               </div>
                               <div className="min-w-0">
-                                <p className="text-xs font-bold text-slate-200 truncate">
+                                <p className="text-xs font-bold text-slate-900 truncate">
                                   {att.name}
                                 </p>
                                 <p className="text-[10px] text-slate-500 font-mono">
@@ -873,7 +909,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                               href={att.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="min-h-[38px] px-3 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors shrink-0 cursor-pointer active:scale-95"
+                              className="min-h-[36px] px-3 bg-white border border-pink-200 text-pink-700 hover:bg-pink-100 font-semibold rounded-lg text-xs flex items-center gap-1.5 transition-colors shrink-0 cursor-pointer active:scale-95 shadow-xs"
                               title="Open attached file"
                             >
                               <Download className="w-3.5 h-3.5" />
@@ -888,22 +924,22 @@ export const CampusConnect = ({ onNavigateToTool }) => {
               })()}
 
               {/* Engagement Row (Sticky Thumb-Friendly Tap Targets) */}
-              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between gap-1 text-xs">
+              <div className="pt-3 border-t border-pink-100 flex items-center justify-between gap-1 text-xs">
                 {/* Left Controls: Upvotes & Answers */}
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
                     onClick={() => handleToggleUpvote(post.id)}
-                    className={`min-h-[44px] px-3 rounded-xl flex items-center gap-1.5 font-bold transition-all active:scale-95 cursor-pointer ${
+                    className={`min-h-[42px] px-3.5 rounded-xl flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer shadow-xs ${
                       isUpvoted
-                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-xs'
-                        : 'bg-slate-950 hover:bg-slate-800 text-slate-400 border border-slate-800 hover:border-slate-700'
+                        ? 'bg-pink-500 text-white border border-pink-600 shadow-sm font-bold'
+                        : 'bg-pink-50 border border-pink-200 text-pink-700 hover:bg-pink-100 font-medium'
                     }`}
                     title="Mark helpful / Upvote"
                   >
                     <ThumbsUp
                       className={`w-3.5 h-3.5 ${
-                        isUpvoted ? 'fill-emerald-400 text-emerald-400' : ''
+                        isUpvoted ? 'fill-white text-white' : 'text-pink-600'
                       }`}
                     />
                     <span>{post.upvotes}</span>
@@ -912,10 +948,10 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                   <button
                     type="button"
                     onClick={() => setActiveReplyPost(post)}
-                    className="min-h-[44px] px-3 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 flex items-center gap-1.5 font-semibold transition-all active:scale-95 cursor-pointer"
+                    className="min-h-[42px] px-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center gap-1.5 font-semibold transition-all active:scale-95 cursor-pointer shadow-xs"
                     title="View & post replies"
                   >
-                    <MessageSquare className="w-3.5 h-3.5 text-cyan-400" />
+                    <MessageSquare className="w-3.5 h-3.5 text-slate-600" />
                     <span>
                       {post.replies.length} {post.replies.length === 1 ? 'Answer' : 'Answers'}
                     </span>
@@ -926,13 +962,13 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                 <button
                   type="button"
                   onClick={() => handleSharePost(post)}
-                  className="min-h-[44px] px-3 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 hover:border-slate-700 flex items-center gap-1.5 font-medium transition-all active:scale-95 cursor-pointer"
+                  className="min-h-[42px] px-3.5 rounded-xl bg-slate-50 hover:bg-pink-50 text-slate-600 hover:text-pink-600 border border-slate-200 hover:border-pink-200 flex items-center gap-1.5 font-medium transition-all active:scale-95 cursor-pointer shadow-xs"
                   title="Share to WhatsApp or Telegram"
                 >
                   {shareSuccessId === post.id ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-400" />
-                      <span className="text-emerald-400 font-bold">Copied!</span>
+                      <Check className="w-3.5 h-3.5 text-pink-600" />
+                      <span className="text-pink-600 font-bold">Copied!</span>
                     </>
                   ) : (
                     <>
@@ -947,61 +983,61 @@ export const CampusConnect = ({ onNavigateToTool }) => {
         })}
       </div>
 
-      {/* 4. Sticky Bottom Floating Action Button (Thumb-Reachable 44px+ Trigger) */}
-      <div className="fixed bottom-4 right-4 z-40">
+      {/* 4. Sticky Bottom Floating Action Button */}
+      <div className="fixed bottom-5 right-5 z-40">
         <button
           type="button"
           onClick={() => {
             setCreateMode('doubt');
             setIsCreateModalOpen(true);
           }}
-          className="min-h-[52px] px-4 py-3 bg-linear-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black rounded-full shadow-lg shadow-emerald-950/80 flex items-center gap-2 transition-all duration-200 active:scale-95 cursor-pointer border border-emerald-300/40"
+          className="min-h-[52px] px-5 py-3 bg-pink-500 hover:bg-pink-600 text-white font-bold rounded-full shadow-lg shadow-pink-300 flex items-center gap-2 transition-all duration-200 active:scale-95 cursor-pointer border border-pink-300/40"
           title="Create a new query or campus dispatch"
         >
-          <Plus className="w-5 h-5 stroke-[3]" />
-          <span className="text-xs sm:text-sm font-bold tracking-tight">Post Doubt / Dispatch</span>
+          <Plus className="w-5 h-5 stroke-[2.5]" />
+          <span className="text-xs sm:text-sm font-bold tracking-tight">+ Post Doubt / Dispatch</span>
         </button>
       </div>
 
       {/* 5. Create Modal (Mode A: Campus Dispatch vs Mode B: Peer Doubt) */}
       <AnimatePresence>
         {isCreateModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/80 backdrop-blur-xs">
+          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/40 backdrop-blur-xs">
             <motion.div
               initial={{ opacity: 0, y: 100 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 100 }}
               transition={{ duration: 0.2 }}
-              className="w-full sm:max-w-lg bg-slate-900 border border-slate-800 rounded-t-3xl sm:rounded-2xl p-4 sm:p-6 max-h-[90vh] overflow-y-auto space-y-4 shadow-2xl"
+              className="w-full sm:max-w-lg bg-white border border-pink-200 rounded-t-3xl sm:rounded-3xl p-4 sm:p-6 text-slate-900 max-h-[90vh] overflow-y-auto space-y-4 shadow-2xl shadow-pink-200/50"
             >
               {/* Modal Header */}
-              <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-                <div className="flex items-center gap-2">
-                  <span className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-                    <Plus className="w-4 h-4" />
+              <div className="flex items-center justify-between pb-3 border-b border-pink-100">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-8 h-8 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center border border-pink-200">
+                    <Plus className="w-4 h-4 stroke-[2.5]" />
                   </span>
-                  <h3 className="text-base font-bold text-white">
+                  <h3 className="text-base font-bold text-slate-950">
                     Create New Community Post
                   </h3>
                 </div>
                 <button
                   type="button"
                   onClick={() => setIsCreateModalOpen(false)}
-                  className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 active:scale-95 cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-pink-50 active:scale-95 cursor-pointer transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
               {/* Mode Switcher: Dispatch vs Doubt */}
-              <div className="grid grid-cols-2 gap-2 p-1 bg-slate-950 rounded-xl border border-slate-800">
+              <div className="grid grid-cols-2 gap-2 p-1 bg-pink-50 rounded-2xl border border-pink-200">
                 <button
                   type="button"
                   onClick={() => setCreateMode('dispatch')}
-                  className={`min-h-[44px] py-2 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-95 ${
+                  className={`min-h-[44px] py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-95 ${
                     createMode === 'dispatch'
-                      ? 'bg-emerald-500 text-slate-950 shadow-xs'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-pink-500 text-white shadow-sm'
+                      : 'text-slate-700 hover:text-slate-900 hover:bg-pink-100/60'
                   }`}
                 >
                   <Megaphone className="w-3.5 h-3.5" />
@@ -1010,10 +1046,10 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                 <button
                   type="button"
                   onClick={() => setCreateMode('doubt')}
-                  className={`min-h-[44px] py-2 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-95 ${
+                  className={`min-h-[44px] py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-95 ${
                     createMode === 'doubt'
-                      ? 'bg-purple-500 text-white shadow-xs'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-pink-500 text-white shadow-sm'
+                      : 'text-slate-700 hover:text-slate-900 hover:bg-pink-100/60'
                   }`}
                 >
                   <HelpCircle className="w-3.5 h-3.5" />
@@ -1022,8 +1058,8 @@ export const CampusConnect = ({ onNavigateToTool }) => {
               </div>
 
               {formError && (
-                <div className="p-3 bg-rose-500/15 border border-rose-500/30 rounded-xl text-xs text-rose-300 flex items-start gap-2.5">
-                  <AlertCircle className="w-4 h-4 shrink-0 text-rose-400 mt-0.5" />
+                <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-800 flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-rose-500 mt-0.5" />
                   <div className="flex-1 space-y-1">
                     <p className="font-medium">
                       {typeof formError === 'string' ? formError : formError.message}
@@ -1039,7 +1075,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                             onNavigateToTool(formError.link.replace('#', ''));
                           }
                         }}
-                        className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 hover:text-emerald-300 underline underline-offset-2 cursor-pointer"
+                        className="inline-flex items-center gap-1 text-xs font-bold text-pink-600 hover:text-pink-700 underline underline-offset-2 cursor-pointer"
                       >
                         <span>{formError.linkText}</span>
                         <ExternalLink className="w-3 h-3" />
@@ -1050,10 +1086,10 @@ export const CampusConnect = ({ onNavigateToTool }) => {
               )}
 
               {/* Form Body */}
-              <form onSubmit={handleCreatePostSubmit} className="space-y-3 text-xs">
+              <form onSubmit={handleCreatePostSubmit} className="space-y-3.5 text-xs">
                 {/* Title */}
                 <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1">
                     {createMode === 'dispatch' ? 'Dispatch Headline *' : 'Question Title *'}
                   </label>
                   <input
@@ -1065,33 +1101,33 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                         ? 'e.g., VNR VJIET Semester 6 Advanced Java Lab Experiments'
                         : 'e.g., How to solve Peterson algorithm critical section in OS?'
                     }
-                    className="w-full min-h-[44px] bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl px-3 py-2.5 text-white text-xs sm:text-sm focus:outline-hidden"
+                    className="w-full min-h-[44px] bg-pink-50/40 border border-pink-200 focus:border-pink-500 focus:bg-white rounded-xl px-3.5 py-2.5 text-slate-900 text-xs sm:text-sm placeholder-slate-400 focus:outline-hidden transition-all shadow-xs"
                   />
                 </div>
 
                 {/* College and Branch Row */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1">
                       College / Campus *
                     </label>
                     <input
                       type="text"
                       value={formCollege}
                       onChange={(e) => setFormCollege(e.target.value)}
-                      placeholder="Enter your college name (e.g. PVP Siddhartha, CBIT, JNTU...)"
-                      className="w-full min-h-[44px] bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl px-3 py-2 text-white text-xs placeholder-slate-500 focus:outline-hidden"
+                      placeholder="e.g. PVP Siddhartha, CBIT, JNTU..."
+                      className="w-full min-h-[44px] bg-pink-50/40 border border-pink-200 focus:border-pink-500 focus:bg-white rounded-xl px-3 py-2 text-slate-900 text-xs placeholder-slate-400 focus:outline-hidden transition-all shadow-xs"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1">
                       Branch / Stream *
                     </label>
                     <select
                       value={formBranch}
                       onChange={(e) => setFormBranch(e.target.value)}
-                      className="w-full min-h-[44px] bg-slate-950 border border-slate-800 text-white rounded-xl px-2.5 py-2.5 text-xs focus:outline-hidden focus:border-emerald-500"
+                      className="w-full min-h-[44px] bg-pink-50/40 border border-pink-200 text-slate-900 rounded-xl px-2.5 py-2.5 text-xs focus:outline-hidden focus:border-pink-500 focus:bg-white shadow-xs"
                     >
                       {BRANCH_OPTIONS.map((b) => (
                         <option key={b} value={b}>
@@ -1105,7 +1141,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                 {/* Urgency Tag (Mode B: Doubt) */}
                 {createMode === 'doubt' && (
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                       Urgency Level
                     </label>
                     <div className="flex flex-wrap gap-1.5 sm:gap-2">
@@ -1122,8 +1158,8 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                           onClick={() => setFormUrgency(urg)}
                           className={`min-h-[40px] px-3 py-1.5 rounded-xl text-xs transition-all cursor-pointer active:scale-95 whitespace-nowrap ${
                             formUrgency === urg
-                              ? 'bg-purple-600 text-white border border-purple-500 shadow-xs font-bold'
-                              : 'bg-slate-950 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-700 font-medium'
+                              ? 'bg-pink-500 text-white border border-pink-600 shadow-sm font-bold'
+                              : 'bg-white border border-pink-200 text-slate-700 hover:bg-pink-50 font-medium'
                           }`}
                         >
                           {urg}
@@ -1135,7 +1171,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
 
                 {/* Content Details */}
                 <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1">
                     {createMode === 'dispatch' ? 'Dispatch Details (Markdown enabled) *' : 'Explain your Query / Context *'}
                   </label>
                   <textarea
@@ -1143,14 +1179,14 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                     value={formContent}
                     onChange={(e) => setFormContent(e.target.value)}
                     placeholder="Provide specific details, syllabus references, professor guidelines, or what you've tried..."
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl p-3 text-white text-xs sm:text-sm focus:outline-hidden resize-y"
+                    className="w-full bg-pink-50/40 border border-pink-200 focus:border-pink-500 focus:bg-white rounded-xl p-3 text-slate-900 text-xs sm:text-sm placeholder-slate-400 focus:outline-hidden resize-y transition-all shadow-xs"
                   />
                 </div>
 
                 {/* Optional Code Snippet */}
                 {createMode === 'doubt' && (
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1">
                       Code Snippet / Terminal Log (Optional)
                     </label>
                     <textarea
@@ -1158,21 +1194,51 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                       value={formCodeSnippet}
                       onChange={(e) => setFormCodeSnippet(e.target.value)}
                       placeholder="// Paste relevant error trace, C++, Java, or Python code here..."
-                      className="w-full font-mono bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl p-2.5 text-emerald-400 text-xs focus:outline-hidden resize-y"
+                      className="w-full font-mono bg-slate-900 border border-slate-800 focus:border-pink-500 rounded-xl p-2.5 text-pink-300 text-xs focus:outline-hidden resize-y"
                     />
                   </div>
                 )}
 
+                {/* Optional Email Input in "Ask Peer Doubt" Modal */}
+                {createMode === 'doubt' && (
+                  <div className="p-3 bg-pink-50/50 border border-pink-200 rounded-2xl space-y-1.5 shadow-2xs">
+                    <div className="flex items-center justify-between">
+                      <label
+                        htmlFor="doubt-notification-email"
+                        className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-800"
+                      >
+                        <Mail className="w-3.5 h-3.5 text-pink-600" />
+                        <span>Notification Email</span>
+                        <span className="text-[10px] text-slate-400 font-normal lowercase tracking-normal">(optional)</span>
+                      </label>
+                      <span className="text-[10px] text-pink-700 font-semibold bg-white px-2 py-0.5 rounded-full border border-pink-200 shadow-2xs">
+                        🔒 100% Private
+                      </span>
+                    </div>
+                    <input
+                      id="doubt-notification-email"
+                      type="email"
+                      value={formAuthorEmail}
+                      onChange={(e) => setFormAuthorEmail(e.target.value)}
+                      placeholder="Enter your email (e.g. name@gmail.com)"
+                      className="w-full min-h-[44px] bg-white border border-pink-200 focus:border-pink-500 rounded-xl px-3.5 py-2 text-slate-900 text-xs sm:text-sm placeholder-slate-400 focus:outline-hidden transition-all shadow-2xs"
+                    />
+                    <p className="text-[11px] text-slate-600 leading-normal">
+                      We will alert you instantly when a peer or senior answers your query. 100% private.
+                    </p>
+                  </div>
+                )}
+
                 {/* Multi-Attachment Section (PDFs and Images) */}
-                <div className="p-3 bg-slate-950 border border-dashed border-slate-800 rounded-xl space-y-2.5">
+                <div className="p-3 bg-pink-50/50 border border-dashed border-pink-300 rounded-2xl space-y-2.5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Upload className="w-4 h-4 text-emerald-400" />
-                      <span className="text-[11px] font-bold text-slate-200">
+                      <Upload className="w-4 h-4 text-pink-600" />
+                      <span className="text-[11px] font-bold text-slate-900">
                         Attach Notes, Cheatsheets or Screenshots
                       </span>
                     </div>
-                    <span className="text-[10px] font-mono text-slate-400">
+                    <span className="text-[10px] font-mono text-pink-700 font-bold">
                       {formAttachments.length}/4 attached
                     </span>
                   </div>
@@ -1192,21 +1258,21 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                       {formAttachments.map((att) => (
                         <div
                           key={att.id}
-                          className="flex items-center justify-between p-2 bg-slate-900/80 border border-slate-800 rounded-lg text-xs gap-2"
+                          className="flex items-center justify-between p-2 bg-white border border-pink-200 rounded-xl text-xs gap-2 shadow-xs"
                         >
                           <div className="flex items-center gap-2 min-w-0">
                             {att.type === 'pdf' ? (
-                              <FileText className="w-4 h-4 text-rose-400 shrink-0" />
+                              <FileText className="w-4 h-4 text-rose-500 shrink-0" />
                             ) : att.previewUrl ? (
                               <img
                                 src={att.previewUrl}
                                 alt={att.name}
-                                className="w-6 h-6 rounded object-cover border border-slate-700 shrink-0"
+                                className="w-6 h-6 rounded object-cover border border-pink-200 shrink-0"
                               />
                             ) : (
-                              <ImageIcon className="w-4 h-4 text-emerald-400 shrink-0" />
+                              <ImageIcon className="w-4 h-4 text-pink-500 shrink-0" />
                             )}
-                            <span className="text-slate-200 truncate text-[11px] font-medium">
+                            <span className="text-slate-900 truncate text-[11px] font-medium">
                               {att.name}
                             </span>
                             <span className="text-[10px] text-slate-500 font-mono shrink-0">
@@ -1216,7 +1282,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                           <button
                             type="button"
                             onClick={() => handleRemoveAttachment(att.id)}
-                            className="min-w-[32px] min-h-[32px] flex items-center justify-center text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded cursor-pointer transition-colors"
+                            className="min-w-[32px] min-h-[32px] flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg cursor-pointer transition-colors"
                             title="Remove attachment"
                           >
                             <X className="w-3.5 h-3.5" />
@@ -1230,9 +1296,9 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="w-full min-h-[44px] py-2 border border-slate-800 hover:border-slate-700 bg-slate-900/60 rounded-lg text-slate-300 hover:text-white text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all"
+                      className="w-full min-h-[44px] py-2 border border-pink-200 hover:border-pink-300 bg-white hover:bg-pink-50 rounded-xl text-pink-700 text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all shadow-xs"
                     >
-                      <Plus className="w-3.5 h-3.5 text-emerald-400" />
+                      <Plus className="w-3.5 h-3.5 text-pink-600" />
                       <span>Add File (PDF ≤ 50MB, Image ≤ 3MB)</span>
                     </button>
                   )}
@@ -1243,20 +1309,20 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                 </div>
 
                 {/* Identity & Privacy Toggle */}
-                <div className="p-3 bg-slate-950/70 border border-slate-800 rounded-xl space-y-2">
+                <div className="p-3 bg-pink-50/60 border border-pink-200 rounded-2xl space-y-2">
                   <div className="flex items-center justify-between">
                     <label
                       htmlFor="post-anon-toggle"
                       className="flex items-center gap-2 cursor-pointer select-none"
                     >
                       {formIsAnonymous ? (
-                        <Lock className="w-4 h-4 text-amber-400" />
+                        <Lock className="w-4 h-4 text-pink-600" />
                       ) : (
-                        <Unlock className="w-4 h-4 text-slate-400" />
+                        <Unlock className="w-4 h-4 text-slate-500" />
                       )}
                       <div>
-                        <span className="font-bold text-slate-200">Post Anonymously</span>
-                        <p className="text-[10px] text-slate-400">
+                        <span className="font-bold text-slate-900">Post Anonymously</span>
+                        <p className="text-[10px] text-slate-500">
                           Renders as &ldquo;Anonymous Scholar&rdquo; to eliminate embarrassment for shy students.
                         </p>
                       </div>
@@ -1266,19 +1332,19 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                       type="checkbox"
                       checked={formIsAnonymous}
                       onChange={(e) => setFormIsAnonymous(e.target.checked)}
-                      className="w-4 h-4 accent-emerald-500 cursor-pointer"
+                      className="w-4 h-4 accent-pink-500 cursor-pointer"
                     />
                   </div>
 
                   {!formIsAnonymous && (
-                    <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800">
+                    <div className="grid grid-cols-2 gap-2 pt-2 border-t border-pink-200/80">
                       <div>
                         <input
                           type="text"
                           value={formAuthorName}
                           onChange={(e) => setFormAuthorName(e.target.value)}
                           placeholder="Your Name (e.g. Priya R.)"
-                          className="w-full min-h-[44px] bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-hidden"
+                          className="w-full min-h-[44px] bg-white border border-pink-200 rounded-xl px-3 py-1.5 text-slate-900 text-xs focus:outline-hidden focus:border-pink-500"
                         />
                       </div>
                       <div>
@@ -1287,7 +1353,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                           value={formAuthorYear}
                           onChange={(e) => setFormAuthorYear(e.target.value)}
                           placeholder="Year (e.g. 3rd Year B.Tech)"
-                          className="w-full min-h-[44px] bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-hidden"
+                          className="w-full min-h-[44px] bg-white border border-pink-200 rounded-xl px-3 py-1.5 text-slate-900 text-xs focus:outline-hidden focus:border-pink-500"
                         />
                       </div>
                     </div>
@@ -1295,18 +1361,18 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                 </div>
 
                 {/* Action Submit Button */}
-                <div className="pt-2 flex items-center justify-end gap-2">
+                <div className="pt-2 flex items-center justify-end gap-2.5">
                   <button
                     type="button"
                     onClick={() => setIsCreateModalOpen(false)}
-                    className="min-h-[44px] px-4 py-2 text-slate-400 hover:text-white rounded-xl text-xs font-semibold cursor-pointer active:scale-95"
+                    className="min-h-[44px] px-4 py-2 text-slate-600 hover:text-slate-900 rounded-xl text-xs font-semibold cursor-pointer active:scale-95 hover:bg-pink-50"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isUploadingFile}
-                    className="min-h-[44px] px-6 py-2 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition-all active:scale-95 cursor-pointer shadow-md flex items-center gap-2"
+                    className="min-h-[44px] px-6 py-2 bg-pink-500 hover:bg-pink-600 disabled:opacity-50 text-white rounded-xl text-xs font-semibold transition-all active:scale-95 cursor-pointer shadow-sm shadow-pink-300/50 flex items-center gap-2"
                   >
                     {isUploadingFile ? (
                       <span>Uploading Attachments...</span>
@@ -1327,33 +1393,33 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       {/* 6. Mobile Bottom Sheet / Drawer for Threaded Replies */}
       <AnimatePresence>
         {activeReplyPost && (
-          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/85 backdrop-blur-xs">
+          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/40 backdrop-blur-xs">
             <motion.div
               initial={{ opacity: 0, y: 120 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 120 }}
               transition={{ duration: 0.22 }}
-              className="w-full sm:max-w-2xl bg-slate-900 border border-slate-800 rounded-t-3xl sm:rounded-2xl p-4 sm:p-6 max-h-[90vh] flex flex-col shadow-2xl overflow-hidden"
+              className="w-full sm:max-w-2xl bg-white border border-pink-200 rounded-t-3xl sm:rounded-3xl p-4 sm:p-6 text-slate-900 max-h-[90vh] flex flex-col shadow-2xl shadow-pink-200/50 overflow-hidden"
             >
               {/* Header */}
-              <div className="flex items-start justify-between pb-3 border-b border-slate-800 gap-2 shrink-0">
+              <div className="flex items-start justify-between pb-3.5 border-b border-pink-100 gap-2 shrink-0">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                    <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-pink-100 text-pink-700 border border-pink-200">
                       {activeReplyPost.college}
                     </span>
-                    <span className="text-[11px] text-slate-400">
+                    <span className="text-[11px] text-slate-500">
                       {activeReplyPost.timestamp}
                     </span>
                   </div>
-                  <h3 className="text-sm sm:text-base font-bold text-white mt-1 break-words line-clamp-2">
+                  <h3 className="text-sm sm:text-base font-bold text-slate-950 mt-1.5 break-words line-clamp-2">
                     {activeReplyPost.title}
                   </h3>
                 </div>
                 <button
                   type="button"
                   onClick={() => setActiveReplyPost(null)}
-                  className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 shrink-0 active:scale-95 cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-slate-700 rounded-xl hover:bg-pink-50 shrink-0 active:scale-95 cursor-pointer transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -1361,7 +1427,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
 
               {/* Scrollable Answers List */}
               <div className="flex-1 overflow-y-auto py-3 space-y-3">
-                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800/80 text-xs text-slate-300 leading-relaxed break-words whitespace-pre-line">
+                <div className="p-3.5 bg-pink-50/60 rounded-2xl border border-pink-200 text-xs text-slate-800 leading-relaxed break-words whitespace-pre-line">
                   {activeReplyPost.content}
                 </div>
 
@@ -1378,22 +1444,22 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                         return (
                           <div
                             key={att.id || idx}
-                            className="flex items-center justify-between p-2.5 bg-slate-950/70 border border-slate-800 rounded-xl text-xs gap-2"
+                            className="flex items-center justify-between p-2.5 bg-pink-50/80 border border-pink-200 rounded-xl text-xs gap-2 shadow-xs"
                           >
                             <div className="flex items-center gap-2 min-w-0">
                               {isPdf ? (
-                                <FileText className="w-4 h-4 text-rose-400 shrink-0" />
+                                <FileText className="w-4 h-4 text-rose-500 shrink-0" />
                               ) : (
-                                <ImageIcon className="w-4 h-4 text-emerald-400 shrink-0" />
+                                <ImageIcon className="w-4 h-4 text-pink-500 shrink-0" />
                               )}
-                              <span className="text-slate-200 font-medium truncate text-xs">{att.name}</span>
+                              <span className="text-slate-900 font-medium truncate text-xs">{att.name}</span>
                               <span className="text-[10px] text-slate-500 shrink-0">{att.size}</span>
                             </div>
                             <a
                               href={att.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="px-2.5 py-1 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 rounded-lg text-xs font-bold flex items-center gap-1 shrink-0"
+                              className="px-3 py-1 bg-white hover:bg-pink-50 text-pink-700 border border-pink-200 rounded-lg text-xs font-semibold flex items-center gap-1 shrink-0 shadow-xs"
                             >
                               <Download className="w-3 h-3" />
                               <span>View</span>
@@ -1406,16 +1472,16 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                 })()}
 
                 <div className="flex items-center justify-between pt-1">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                    <MessageSquare className="w-3.5 h-3.5 text-cyan-400" />
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
+                    <MessageSquare className="w-3.5 h-3.5 text-pink-600" />
                     <span>Peer Solutions ({activeReplyPost.replies.length})</span>
                   </h4>
                 </div>
 
                 {activeReplyPost.replies.length === 0 ? (
-                  <div className="text-center py-8 text-xs text-slate-500 space-y-1">
+                  <div className="text-center py-8 text-xs text-slate-500 space-y-1 bg-pink-50/30 rounded-2xl border border-pink-100 p-4">
                     <p>No answers posted yet.</p>
-                    <p className="text-slate-400 font-medium">
+                    <p className="text-pink-700 font-medium">
                       Be the first senior or peer to answer this query!
                     </p>
                   </div>
@@ -1423,31 +1489,31 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                   activeReplyPost.replies.map((reply) => (
                     <div
                       key={reply.id}
-                      className={`p-3 rounded-xl border text-xs space-y-2 ${
+                      className={`p-3.5 rounded-2xl border text-xs space-y-2 shadow-xs ${
                         reply.isVerifiedSolution
-                          ? 'bg-emerald-950/20 border-emerald-500/30'
-                          : 'bg-slate-950/60 border-slate-800'
+                          ? 'bg-emerald-50/70 border-emerald-200'
+                          : 'bg-white border-pink-100'
                       }`}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-slate-200">
+                          <span className="font-bold text-slate-900">
                             {reply.authorName}
                           </span>
-                          <span className="text-[10px] text-slate-400">
+                          <span className="text-[10px] text-slate-500">
                             • {reply.authorCollege}
                           </span>
                         </div>
 
                         {reply.isVerifiedSolution && (
-                          <span className="inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                            <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                          <span className="inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                             Verified Solution
                           </span>
                         )}
                       </div>
 
-                      <p className="text-slate-300 leading-relaxed whitespace-pre-line break-words">
+                      <p className="text-slate-800 leading-relaxed whitespace-pre-line break-words">
                         {reply.content}
                       </p>
 
@@ -1456,9 +1522,9 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                         <button
                           type="button"
                           onClick={() => handleReplyUpvote(reply.id)}
-                          className="min-h-[44px] px-3 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 flex items-center gap-1 cursor-pointer transition-all active:scale-95"
+                          className="min-h-[38px] px-3 py-1 rounded-xl bg-pink-50 hover:bg-pink-100 text-pink-700 border border-pink-200 flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 font-medium shadow-xs"
                         >
-                          <ThumbsUp className="w-3 h-3 text-emerald-400" />
+                          <ThumbsUp className="w-3 h-3 text-pink-600" />
                           <span>{reply.upvotes} Helpful</span>
                         </button>
                       </div>
@@ -1470,15 +1536,15 @@ export const CampusConnect = ({ onNavigateToTool }) => {
               {/* Sticky Bottom Reply Input */}
               <form
                 onSubmit={handleAddReply}
-                className="pt-3 border-t border-slate-800 space-y-2 shrink-0 bg-slate-900"
+                className="pt-3 border-t border-pink-100 space-y-2 shrink-0 bg-white"
               >
-                <div className="flex items-center justify-between text-[11px] text-slate-400 px-1">
-                  <label className="flex items-center gap-1.5 cursor-pointer">
+                <div className="flex items-center justify-between text-[11px] text-slate-500 px-1">
+                  <label className="flex items-center gap-1.5 cursor-pointer select-none">
                     <input
                       type="checkbox"
                       checked={replyAnonymous}
                       onChange={(e) => setReplyAnonymous(e.target.checked)}
-                      className="w-3.5 h-3.5 accent-emerald-500 cursor-pointer"
+                      className="w-3.5 h-3.5 accent-pink-500 cursor-pointer"
                     />
                     <span>Reply Anonymously</span>
                   </label>
@@ -1491,12 +1557,12 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                     value={replyInputText}
                     onChange={(e) => setReplyInputText(e.target.value)}
                     placeholder="Write a clear answer or verified tip..."
-                    className="flex-1 min-h-[44px] bg-slate-950 border border-slate-800 focus:border-emerald-500 rounded-xl px-3 text-xs text-white placeholder-slate-500 focus:outline-hidden"
+                    className="flex-1 min-h-[44px] bg-pink-50/40 border border-pink-200 focus:border-pink-500 focus:bg-white rounded-2xl px-3.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-hidden shadow-xs transition-all"
                   />
                   <button
                     type="submit"
                     disabled={!replyInputText.trim()}
-                    className="min-h-[44px] min-w-[44px] px-4 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer shrink-0"
+                    className="min-h-[44px] min-w-[44px] px-4 bg-pink-500 hover:bg-pink-600 disabled:opacity-40 text-white rounded-2xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer shrink-0 shadow-sm shadow-pink-300/50"
                   >
                     <Send className="w-4 h-4" />
                     <span className="hidden sm:inline">Submit</span>

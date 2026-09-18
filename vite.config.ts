@@ -176,6 +176,92 @@ function tgAllotmentPlugin(): Plugin {
         }
       });
 
+      // Send Reply Alert via Resend
+      server.middlewares.use('/api/send-reply-alert', (req, res) => {
+        if (req.method === 'OPTIONS') {
+          res.setHeader('Access-Control-Allow-Origin', '*');
+          res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+          res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+          res.statusCode = 204;
+          res.end();
+          return;
+        }
+
+        if (req.method !== 'POST') {
+          res.statusCode = 405;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ error: 'Method Not Allowed' }));
+          return;
+        }
+
+        const chunks: Buffer[] = [];
+        req.on('data', chunk => chunks.push(chunk));
+        req.on('end', async () => {
+          try {
+            const raw = Buffer.concat(chunks).toString('utf-8');
+            const data = JSON.parse(raw);
+            const { toEmail, questionTitle, replyAuthor, replyContent, college } = data || {};
+
+            if (!toEmail || typeof toEmail !== 'string' || !toEmail.includes('@')) {
+              res.statusCode = 400;
+              res.setHeader('Content-Type', 'application/json');
+              res.end(JSON.stringify({ success: false, error: 'Valid toEmail required' }));
+              return;
+            }
+
+            const apiKey = process.env.RESEND_API_KEY || 're_2ZBQ4b12_7vRxwSgcwkKrFm2BnnbCyF6y';
+
+            const safeTitle = String(questionTitle || 'Your Question').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const safeAuthor = String(replyAuthor || 'A fellow student').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const safeContent = String(replyContent || '').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br/>');
+
+            const emailHtml = `<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: auto; padding: 24px; border: 1px solid #fbcfe8; border-radius: 16px; background-color: #fffafc;">
+  <h2 style="color: #be185d; margin-top: 0; margin-bottom: 8px; font-size: 20px;">🎓 New Answer on MOS CampusConnect!</h2>
+  <p style="font-size: 15px; color: #334155; margin-top: 0; line-height: 1.5;">Hello! A fellow student from ${college || 'Campus'} just replied to your question:</p>
+  <blockquote style="border-left: 4px solid #f43f5e; padding: 10px 14px; background-color: #ffffff; color: #0f172a; font-weight: 600; margin: 16px 0; border-radius: 4px;">
+    "${safeTitle}"
+  </blockquote>
+  <div style="background-color: #ffffff; padding: 16px; border-radius: 12px; border: 1px solid #fecdd3; margin-bottom: 20px;">
+    <p style="margin: 0 0 8px 0; font-size: 13px; color: #9d174d; font-weight: bold;">💬 Answer from ${safeAuthor}:</p>
+    <p style="margin: 0; color: #1e293b; font-size: 14px; line-height: 1.6;">${safeContent}</p>
+  </div>
+  <div style="text-align: center; margin: 24px 0 16px 0;">
+    <a href="https://manofstudy.vercel.app/#campus-connect" style="display: inline-block; background-color: #ec4899; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 14px;">
+      View Full Discussion on Man of Study
+    </a>
+  </div>
+  <hr style="border: none; border-top: 1px solid #fce7f3; margin: 20px 0 16px 0;" />
+  <p style="margin: 0; font-size: 12px; color: #94a3b8; line-height: 1.4;">
+    You received this email because you opted in for doubt resolution updates on Man of Study (MOS). Your email is 100% private and never visible to peers.
+  </p>
+</div>`;
+
+            const resendRes = await fetch('https://api.resend.com/emails', {
+              method: 'POST',
+              headers: {
+                Authorization: `Bearer ${apiKey}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                from: 'MOS CampusConnect <onboarding@resend.dev>',
+                to: [toEmail.trim()],
+                subject: '🎓 Someone just answered your question on Man of Study!',
+                html: emailHtml,
+              }),
+            });
+
+            const resendData = await resendRes.json();
+            res.statusCode = resendRes.status;
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            res.end(JSON.stringify(resendData));
+          } catch (err: any) {
+            res.statusCode = 500;
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            res.end(JSON.stringify({ success: false, error: err.message }));
+          }
+        });
+      });
+
       // Serve /TG_EAPCET_2026_ALLOTMENT/ requests directly with code-alias fallback and 404 JSON protection
       server.middlewares.use((req, res, next) => {
         const url = req.url ? req.url.split('?')[0] : '';
