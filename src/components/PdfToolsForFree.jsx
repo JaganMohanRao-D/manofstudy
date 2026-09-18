@@ -766,23 +766,40 @@ export const PdfToolsForFree = () => {
         readingTime,
       });
 
-      setStatusMessage('Sending text to live Gemini Flash AI for student exam synthesis...');
+      setStatusMessage('Synthesizing notes with live Gemini Flash AI for exam takeaways...');
 
-      // Call server-side proxy route `/api/gemini/summarize`
-      const response = await fetch('/api/gemini/summarize', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          text: trimmedText,
-          filename: summaryFile.name,
-        }),
-      });
+      const textToSend = trimmedText.slice(0, 30000);
+      let response;
+      let attempt = 0;
+      const maxAttempts = 2;
 
-      if (!response.ok) {
-        const errJson = await response.json().catch(() => ({}));
-        throw new Error(errJson.error || `Server responded with status ${response.status}`);
+      while (attempt < maxAttempts) {
+        attempt++;
+        try {
+          response = await fetch('/api/gemini/summarize', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              text: textToSend,
+              filename: summaryFile.name,
+            }),
+          });
+          if (response) break;
+        } catch (fetchErr) {
+          if (attempt < maxAttempts) {
+            setStatusMessage('Reconnecting to Gemini AI service...');
+            await new Promise((r) => setTimeout(r, 1500));
+          } else {
+            throw new Error('Could not reach the AI summary service. Please check your connection and try again.');
+          }
+        }
+      }
+
+      if (!response || !response.ok) {
+        const errJson = await response?.json().catch(() => ({}));
+        throw new Error(errJson?.error || `Server responded with status ${response?.status || 500}`);
       }
 
       const data = await response.json();

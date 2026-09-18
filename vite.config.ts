@@ -264,10 +264,11 @@ function tgAllotmentPlugin(): Plugin {
 
       // Gemini AI PDF Summarizer API
       server.middlewares.use('/api/gemini/summarize', (req, res) => {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
         if (req.method === 'OPTIONS') {
-          res.setHeader('Access-Control-Allow-Origin', '*');
-          res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-          res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
           res.statusCode = 204;
           res.end();
           return;
@@ -301,7 +302,7 @@ function tgAllotmentPlugin(): Plugin {
             const { GoogleGenAI } = await import('@google/genai');
             const ai = new GoogleGenAI({ apiKey });
 
-            const truncatedText = text.slice(0, 35000);
+            const truncatedText = text.slice(0, 30000);
             const prompt = `Provide a structured 5-bullet summary and key exam takeaways from the following student notes/syllabus text.
 
 Document Text:
@@ -321,28 +322,27 @@ Format the output cleanly in Markdown:
 - **Common Tricky Pitfalls**: Mistakes students often make when solving related problems or derivations.`;
 
             let responseText = '';
-            try {
-              const result = await ai.models.generateContent({
-                model: 'gemini-3.6-flash',
-                contents: prompt,
-              });
-              responseText = result.text || '';
-            } catch (err) {
-              console.warn('[Gemini] Retrying with gemini-3.8-flash due to:', err);
+            const candidateModels = ['gemini-3.6-flash', 'gemini-3.1-flash-lite', 'gemini-3.8-flash'];
+            let lastErr: any = null;
+
+            for (const model of candidateModels) {
               try {
-                const fallbackResult = await ai.models.generateContent({
-                  model: 'gemini-3.8-flash',
+                const result = await ai.models.generateContent({
+                  model,
                   contents: prompt,
                 });
-                responseText = fallbackResult.text || '';
-              } catch (err2) {
-                console.warn('[Gemini] Retrying with gemini-3.1-flash-lite due to:', err2);
-                const liteResult = await ai.models.generateContent({
-                  model: 'gemini-3.1-flash-lite',
-                  contents: prompt,
-                });
-                responseText = liteResult.text || '';
+                if (result && result.text) {
+                  responseText = result.text;
+                  break;
+                }
+              } catch (err: any) {
+                console.warn(`[Gemini] Model ${model} failed, attempting next. Error:`, err.status || err.message);
+                lastErr = err;
               }
+            }
+
+            if (!responseText) {
+              throw new Error(lastErr?.message || 'Unable to generate summary. The AI model is temporarily busy.');
             }
 
             res.statusCode = 200;
