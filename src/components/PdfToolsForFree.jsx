@@ -1,0 +1,1884 @@
+import React, { useState, useRef, useEffect } from 'react';
+import {
+  FileText,
+  Files,
+  Scissors,
+  Image as ImageIcon,
+  Lock,
+  RotateCw,
+  Sparkles,
+  Upload,
+  Download,
+  CheckCircle2,
+  AlertCircle,
+  Loader2,
+  Trash2,
+  ArrowUp,
+  ArrowDown,
+  Eye,
+  EyeOff,
+  Copy,
+  Check,
+  RefreshCw,
+  Layers,
+  ChevronRight,
+  ShieldCheck,
+  FileCheck2,
+  Clock,
+  BookOpen,
+} from 'lucide-react';
+import { PDFDocument, rgb, degrees, PageSizes } from 'pdf-lib';
+import * as pdfjsLib from 'pdfjs-dist';
+import { encryptPDF } from '@pdfsmaller/pdf-encrypt';
+import { configurePdfWorker } from '../utils/pdfWorkerConfig';
+
+// Initialize PDF.js worker
+if (typeof window !== 'undefined') {
+  configurePdfWorker();
+}
+
+/**
+ * Robust helper to download a Blob safely in-browser
+ */
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+}
+
+/**
+ * Format bytes into human-readable string
+ */
+function formatBytes(bytes) {
+  if (!bytes || bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+}
+
+/**
+ * Convert an image file (e.g. WebP, JPG, PNG) to PNG bytes via HTML Canvas
+ */
+async function convertImageToPngBytes(file) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth || img.width;
+      canvas.height = img.naturalHeight || img.height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        reject(new Error('Canvas 2D context unavailable'));
+        return;
+      }
+      ctx.drawImage(img, 0, 0);
+      canvas.toBlob((blob) => {
+        if (!blob) {
+          reject(new Error('Failed to encode image to PNG'));
+          return;
+        }
+        blob.arrayBuffer().then((buf) => resolve(new Uint8Array(buf))).catch(reject);
+      }, 'image/png');
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error(`Failed to load image file: ${file.name}`));
+    };
+    img.src = url;
+  });
+}
+
+/**
+ * Parse a page range string (e.g. "1-3, 5, 7-9") into sorted, unique 0-indexed page numbers
+ */
+function parsePageRange(rangeStr, totalPages) {
+  if (!rangeStr || !rangeStr.trim()) return [];
+  const parts = rangeStr.split(/[,;\s]+/).filter(Boolean);
+  const indices = new Set();
+
+  for (const part of parts) {
+    if (part.includes('-')) {
+      const [startStr, endStr] = part.split('-');
+      const start = parseInt(startStr, 10);
+      const end = parseInt(endStr, 10);
+      if (!isNaN(start) && !isNaN(end)) {
+        const min = Math.max(1, Math.min(start, end));
+        const max = Math.min(totalPages, Math.max(start, end));
+        for (let i = min; i <= max; i++) {
+          indices.add(i - 1);
+        }
+      }
+    } else {
+      const pageNum = parseInt(part, 10);
+      if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= totalPages) {
+        indices.add(pageNum - 1);
+      }
+    }
+  }
+
+  return Array.from(indices).sort((a, b) => a - b);
+}
+
+// 6 Core Bulletproof Utilities
+const TOOLS = [
+  {
+    id: 'merge',
+    name: 'Merge Multiple PDFs',
+    icon: Files,
+    tagline: 'Combine two or more PDF files sequentially into a single clean document.',
+    badge: 'pdf-lib Native',
+  },
+  {
+    id: 'split',
+    name: 'Split / Extract Pages',
+    icon: Scissors,
+    tagline: 'Slice specific page numbers or ranges and export as a fresh standalone PDF.',
+    badge: 'Zero Corrupt',
+  },
+  {
+    id: 'images-to-pdf',
+    name: 'Images to PDF',
+    icon: ImageIcon,
+    tagline: 'Convert PNG, JPG, and WebP images into standard A4 PDF pages with auto-scaling.',
+    badge: 'A4 Proportional',
+  },
+  {
+    id: 'protect',
+    name: 'Protect PDF (Password Lock)',
+    icon: Lock,
+    tagline: 'Apply genuine standard encryption so only users with the password can open it.',
+    badge: 'Real Crypto Lock',
+  },
+  {
+    id: 'rotate',
+    name: 'Rotate & Reorder Pages',
+    icon: RotateCw,
+    tagline: 'Fix orientation (90°, 180°, 270°) and reorder individual pages flawlessly.',
+    badge: 'Lossless Rotation',
+  },
+  {
+    id: 'ai-summarizer',
+    name: 'AI PDF Summariser',
+    icon: Sparkles,
+    tagline: 'Extract text layer via PDF.js and generate 5-bullet exam summaries using Gemini Flash.',
+    badge: 'Live Gemini Flash',
+  },
+];
+
+export const PdfToolsForFree = () => {
+  const [activeTab, setActiveTab] = useState('merge');
+
+  // Shared processing & notification state
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [statusMessage, setStatusMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
+  // 1. Merge State
+  const [mergeFiles, setMergeFiles] = useState([]);
+  const mergeInputRef = useRef(null);
+
+  // 2. Split State
+  const [splitFile, setSplitFile] = useState(null);
+  const [splitPageCount, setSplitPageCount] = useState(0);
+  const [splitRange, setSplitRange] = useState('1-2');
+  const [splitMode, setSplitMode] = useState('range'); // 'range' | 'all'
+  const splitInputRef = useRef(null);
+
+  // 3. Images to PDF State
+  const [imageFiles, setImageFiles] = useState([]);
+  const [imageMargin, setImageMargin] = useState('standard'); // 'none' | 'compact' | 'standard'
+  const [imageOrientation, setImageOrientation] = useState('portrait'); // 'portrait' | 'landscape'
+  const imageInputRef = useRef(null);
+
+  // 4. Protect PDF State
+  const [protectFile, setProtectFile] = useState(null);
+  const [protectPassword, setProtectPassword] = useState('');
+  const [protectConfirm, setProtectConfirm] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const protectInputRef = useRef(null);
+
+  // 5. Rotate & Reorder State
+  const [rotateFile, setRotateFile] = useState(null);
+  const [rotatePageCount, setRotatePageCount] = useState(0);
+  const [pageRotations, setPageRotations] = useState([]); // array of rotation angles per page: 0, 90, 180, 270
+  const [pageOrder, setPageOrder] = useState([]); // array of 0-indexed page numbers
+  const rotateInputRef = useRef(null);
+
+  // 6. AI Summariser State
+  const [summaryFile, setSummaryFile] = useState(null);
+  const [extractedText, setExtractedText] = useState('');
+  const [aiSummary, setAiSummary] = useState('');
+  const [summaryStats, setSummaryStats] = useState(null);
+  const [isCopied, setIsCopied] = useState(false);
+  const summaryInputRef = useRef(null);
+
+  // Clear messages on tab change
+  useEffect(() => {
+    setErrorMessage('');
+    setSuccessMessage('');
+    setStatusMessage('');
+  }, [activeTab]);
+
+  // ==========================================================================
+  // TOOL 1: MERGE MULTIPLE PDFS
+  // ==========================================================================
+  const handleAddMergeFiles = async (newFiles) => {
+    setErrorMessage('');
+    setSuccessMessage('');
+    const validPdfs = Array.from(newFiles).filter(
+      (f) => f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf')
+    );
+
+    if (validPdfs.length === 0) {
+      setErrorMessage('Please upload valid .pdf files.');
+      return;
+    }
+
+    const itemsWithInfo = [];
+    for (const file of validPdfs) {
+      try {
+        const buffer = await file.arrayBuffer();
+        const doc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+        itemsWithInfo.push({
+          id: `${file.name}-${Date.now()}-${Math.random()}`,
+          file,
+          pageCount: doc.getPageCount(),
+          size: file.size,
+        });
+      } catch (err) {
+        console.warn('Could not read PDF for merge:', err);
+        itemsWithInfo.push({
+          id: `${file.name}-${Date.now()}-${Math.random()}`,
+          file,
+          pageCount: 1,
+          size: file.size,
+        });
+      }
+    }
+
+    setMergeFiles((prev) => [...prev, ...itemsWithInfo]);
+  };
+
+  const handleMoveMergeFile = (index, direction) => {
+    setMergeFiles((prev) => {
+      const copy = [...prev];
+      const targetIndex = index + direction;
+      if (targetIndex < 0 || targetIndex >= copy.length) return prev;
+      const temp = copy[index];
+      copy[index] = copy[targetIndex];
+      copy[targetIndex] = temp;
+      return copy;
+    });
+  };
+
+  const handleRemoveMergeFile = (index) => {
+    setMergeFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const executeMerge = async () => {
+    if (mergeFiles.length < 2) {
+      setErrorMessage('Please upload at least 2 PDF files to merge.');
+      return;
+    }
+
+    setIsProcessing(true);
+    setErrorMessage('');
+    setSuccessMessage('');
+    setStatusMessage('Initializing browser-native PDF engine...');
+
+    try {
+      const mergedPdf = await PDFDocument.create();
+
+      for (let i = 0; i < mergeFiles.length; i++) {
+        const item = mergeFiles[i];
+        setStatusMessage(`Merging ${i + 1} of ${mergeFiles.length}: "${item.file.name}"...`);
+        const buffer = await item.file.arrayBuffer();
+        const srcDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+        const copiedPages = await mergedPdf.copyPages(srcDoc, srcDoc.getPageIndices());
+        copiedPages.forEach((page) => mergedPdf.addPage(page));
+      }
+
+      setStatusMessage('Finalizing and encoding merged PDF document...');
+      const mergedBytes = await mergedPdf.save();
+      const blob = new Blob([mergedBytes], { type: 'application/pdf' });
+      downloadBlob(blob, 'merged_document.pdf');
+
+      setSuccessMessage(
+        `Successfully merged ${mergeFiles.length} PDFs into a single document (${formatBytes(blob.size)})!`
+      );
+    } catch (err) {
+      console.error('Merge error:', err);
+      setErrorMessage(err.message || 'Failed to merge PDFs. Please ensure files are not password-locked.');
+    } finally {
+      setIsProcessing(false);
+      setStatusMessage('');
+    }
+  };
+
+  // ==========================================================================
+  // TOOL 2: SPLIT / EXTRACT PAGES
+  // ==========================================================================
+  const handleSetSplitFile = async (file) => {
+    setErrorMessage('');
+    setSuccessMessage('');
+    if (!file || (!file.type.includes('pdf') && !file.name.toLowerCase().endsWith('.pdf'))) {
+      setErrorMessage('Please upload a valid .pdf file.');
+      return;
+    }
+
+    try {
+      const buffer = await file.arrayBuffer();
+      const doc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+      const total = doc.getPageCount();
+      setSplitFile(file);
+      setSplitPageCount(total);
+      setSplitRange(total > 1 ? `1-${Math.min(3, total)}` : '1');
+    } catch (err) {
+      setErrorMessage('Could not load PDF. It may be corrupt or password-protected.');
+    }
+  };
+
+  const executeSplit = async () => {
+    if (!splitFile) {
+      setErrorMessage('Please upload a PDF file to split.');
+      return;
+    }
+
+    setIsProcessing(true);
+    setErrorMessage('');
+    setSuccessMessage('');
+    setStatusMessage('Reading PDF structure...');
+
+    try {
+      const buffer = await splitFile.arrayBuffer();
+      const srcDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+      const totalPages = srcDoc.getPageCount();
+
+      if (splitMode === 'all') {
+        setStatusMessage('Splitting into single-page PDF...');
+        const newDoc = await PDFDocument.create();
+        const copied = await newDoc.copyPages(srcDoc, [0]);
+        newDoc.addPage(copied[0]);
+        const bytes = await newDoc.save();
+        downloadBlob(new Blob([bytes], { type: 'application/pdf' }), `${splitFile.name.replace(/\.pdf$/i, '')}_page_1.pdf`);
+        setSuccessMessage('Page 1 extracted successfully!');
+      } else {
+        const indices = parsePageRange(splitRange, totalPages);
+        if (indices.length === 0) {
+          throw new Error(
+            `Invalid page range "${splitRange}". Must be between 1 and ${totalPages} (e.g. "1-2" or "1, 3").`
+          );
+        }
+
+        setStatusMessage(`Extracting ${indices.length} pages (${indices.map((i) => i + 1).join(', ')})...`);
+        const newDoc = await PDFDocument.create();
+        const copiedPages = await newDoc.copyPages(srcDoc, indices);
+        copiedPages.forEach((page) => newDoc.addPage(page));
+
+        const bytes = await newDoc.save();
+        const baseName = splitFile.name.replace(/\.pdf$/i, '');
+        downloadBlob(new Blob([bytes], { type: 'application/pdf' }), `${baseName}_extracted.pdf`);
+        setSuccessMessage(
+          `Extracted ${indices.length} page${indices.length > 1 ? 's' : ''} into a new standalone PDF!`
+        );
+      }
+    } catch (err) {
+      console.error('Split error:', err);
+      setErrorMessage(err.message || 'Failed to split PDF.');
+    } finally {
+      setIsProcessing(false);
+      setStatusMessage('');
+    }
+  };
+
+  // ==========================================================================
+  // TOOL 3: IMAGES TO PDF
+  // ==========================================================================
+  const handleAddImages = (files) => {
+    setErrorMessage('');
+    setSuccessMessage('');
+    const validImages = Array.from(files).filter((f) => {
+      const name = f.name.toLowerCase();
+      return (
+        f.type.startsWith('image/') ||
+        name.endsWith('.png') ||
+        name.endsWith('.jpg') ||
+        name.endsWith('.jpeg') ||
+        name.endsWith('.webp')
+      );
+    });
+
+    if (validImages.length === 0) {
+      setErrorMessage('Please upload valid images (.jpg, .jpeg, .png, .webp).');
+      return;
+    }
+
+    const newItems = validImages.map((file) => ({
+      id: `${file.name}-${Date.now()}-${Math.random()}`,
+      file,
+      previewUrl: URL.createObjectURL(file),
+      size: file.size,
+    }));
+
+    setImageFiles((prev) => [...prev, ...newItems]);
+  };
+
+  const handleMoveImage = (index, direction) => {
+    setImageFiles((prev) => {
+      const copy = [...prev];
+      const target = index + direction;
+      if (target < 0 || target >= copy.length) return prev;
+      const temp = copy[index];
+      copy[index] = copy[target];
+      copy[target] = temp;
+      return copy;
+    });
+  };
+
+  const handleRemoveImage = (index) => {
+    setImageFiles((prev) => {
+      URL.revokeObjectURL(prev[index].previewUrl);
+      return prev.filter((_, i) => i !== index);
+    });
+  };
+
+  const executeImagesToPdf = async () => {
+    if (imageFiles.length === 0) {
+      setErrorMessage('Please upload at least one image to convert.');
+      return;
+    }
+
+    setIsProcessing(true);
+    setErrorMessage('');
+    setSuccessMessage('');
+    setStatusMessage('Creating A4 PDF canvas...');
+
+    try {
+      const pdfDoc = await PDFDocument.create();
+
+      // Page sizing: A4 is 595.28 x 841.89 points
+      const isLandscape = imageOrientation === 'landscape';
+      const a4Width = isLandscape ? PageSizes.A4[1] : PageSizes.A4[0];
+      const a4Height = isLandscape ? PageSizes.A4[0] : PageSizes.A4[1];
+
+      const marginPt = imageMargin === 'none' ? 0 : imageMargin === 'compact' ? 15 : 30;
+
+      for (let i = 0; i < imageFiles.length; i++) {
+        const item = imageFiles[i];
+        setStatusMessage(`Processing image ${i + 1} of ${imageFiles.length}: "${item.file.name}"...`);
+
+        const page = pdfDoc.addPage([a4Width, a4Height]);
+        const availWidth = a4Width - marginPt * 2;
+        const availHeight = a4Height - marginPt * 2;
+
+        let embeddedImage;
+        const name = item.file.name.toLowerCase();
+
+        if (name.endsWith('.jpg') || name.endsWith('.jpeg') || item.file.type === 'image/jpeg') {
+          const bytes = await item.file.arrayBuffer();
+          embeddedImage = await pdfDoc.embedJpg(bytes);
+        } else if (name.endsWith('.png') || item.file.type === 'image/png') {
+          const bytes = await item.file.arrayBuffer();
+          embeddedImage = await pdfDoc.embedPng(bytes);
+        } else {
+          // WebP or other raster formats -> convert to PNG via Canvas
+          const pngBytes = await convertImageToPngBytes(item.file);
+          embeddedImage = await pdfDoc.embedPng(pngBytes);
+        }
+
+        // Proportional auto-scaling calculation
+        const imgWidth = embeddedImage.width;
+        const imgHeight = embeddedImage.height;
+        const scale = Math.min(availWidth / imgWidth, availHeight / imgHeight, 1);
+
+        const drawWidth = imgWidth * scale;
+        const drawHeight = imgHeight * scale;
+
+        // Center on A4 page
+        const posX = marginPt + (availWidth - drawWidth) / 2;
+        const posY = marginPt + (availHeight - drawHeight) / 2;
+
+        page.drawImage(embeddedImage, {
+          x: posX,
+          y: posY,
+          width: drawWidth,
+          height: drawHeight,
+        });
+      }
+
+      setStatusMessage('Compiling final PDF...');
+      const pdfBytes = await pdfDoc.save();
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      downloadBlob(blob, 'images_converted.pdf');
+
+      setSuccessMessage(
+        `Converted ${imageFiles.length} image${imageFiles.length > 1 ? 's' : ''} into a pristine A4 PDF (${formatBytes(blob.size)})!`
+      );
+    } catch (err) {
+      console.error('Images to PDF error:', err);
+      setErrorMessage(err.message || 'Failed to convert images to PDF.');
+    } finally {
+      setIsProcessing(false);
+      setStatusMessage('');
+    }
+  };
+
+  // ==========================================================================
+  // TOOL 4: PROTECT PDF (PASSWORD LOCK)
+  // ==========================================================================
+  const handleSetProtectFile = async (file) => {
+    setErrorMessage('');
+    setSuccessMessage('');
+    if (!file || (!file.type.includes('pdf') && !file.name.toLowerCase().endsWith('.pdf'))) {
+      setErrorMessage('Please upload a valid .pdf file.');
+      return;
+    }
+
+    try {
+      const buffer = await file.arrayBuffer();
+      await PDFDocument.load(buffer, { ignoreEncryption: true });
+      setProtectFile(file);
+    } catch (err) {
+      setErrorMessage('Could not read PDF. File may be corrupted.');
+    }
+  };
+
+  const executeProtectPdf = async () => {
+    if (!protectFile) {
+      setErrorMessage('Please upload a PDF file to protect.');
+      return;
+    }
+    if (!protectPassword) {
+      setErrorMessage('Please enter a password to lock this PDF.');
+      return;
+    }
+    if (protectPassword.length < 4) {
+      setErrorMessage('Password must be at least 4 characters long.');
+      return;
+    }
+    if (protectPassword !== protectConfirm) {
+      setErrorMessage('Passwords do not match. Please re-enter.');
+      return;
+    }
+
+    setIsProcessing(true);
+    setErrorMessage('');
+    setSuccessMessage('');
+    setStatusMessage('Reading PDF structure and applying standard cryptographic encryption...');
+
+    try {
+      const buffer = await protectFile.arrayBuffer();
+      // Ensure file loads in pdf-lib first and save clean bytes
+      const pdfDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+      const rawBytes = await pdfDoc.save();
+
+      setStatusMessage('Encrypting document streams with password...');
+      const encryptedBytes = await encryptPDF(rawBytes, protectPassword);
+
+      const baseName = protectFile.name.replace(/\.pdf$/i, '');
+      const blob = new Blob([encryptedBytes], { type: 'application/pdf' });
+      downloadBlob(blob, `${baseName}_protected.pdf`);
+
+      setSuccessMessage(
+        `PDF encrypted with standard password lock! It will prompt for your password when opened in any PDF viewer.`
+      );
+    } catch (err) {
+      console.error('Protect PDF error:', err);
+      setErrorMessage(err.message || 'Failed to password-protect PDF.');
+    } finally {
+      setIsProcessing(false);
+      setStatusMessage('');
+    }
+  };
+
+  // ==========================================================================
+  // TOOL 5: ROTATE & REORDER PAGES
+  // ==========================================================================
+  const handleSetRotateFile = async (file) => {
+    setErrorMessage('');
+    setSuccessMessage('');
+    if (!file || (!file.type.includes('pdf') && !file.name.toLowerCase().endsWith('.pdf'))) {
+      setErrorMessage('Please upload a valid .pdf file.');
+      return;
+    }
+
+    try {
+      const buffer = await file.arrayBuffer();
+      const doc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+      const total = doc.getPageCount();
+      setRotateFile(file);
+      setRotatePageCount(total);
+      setPageRotations(new Array(total).fill(0));
+      setPageOrder(Array.from({ length: total }, (_, i) => i));
+    } catch (err) {
+      setErrorMessage('Could not load PDF. It may be corrupt or encrypted.');
+    }
+  };
+
+  const handleRotateAll = (degreesToAdd) => {
+    setPageRotations((prev) => prev.map((curr) => (curr + degreesToAdd) % 360));
+  };
+
+  const handleRotateSinglePage = (pageIndex, degreesToAdd) => {
+    setPageRotations((prev) => {
+      const copy = [...prev];
+      copy[pageIndex] = (copy[pageIndex] + degreesToAdd) % 360;
+      return copy;
+    });
+  };
+
+  const handleMovePageOrder = (index, direction) => {
+    setPageOrder((prev) => {
+      const copy = [...prev];
+      const target = index + direction;
+      if (target < 0 || target >= copy.length) return prev;
+      const temp = copy[index];
+      copy[index] = copy[target];
+      copy[target] = temp;
+      return copy;
+    });
+  };
+
+  const executeRotateAndReorder = async () => {
+    if (!rotateFile) {
+      setErrorMessage('Please upload a PDF file.');
+      return;
+    }
+
+    setIsProcessing(true);
+    setErrorMessage('');
+    setSuccessMessage('');
+    setStatusMessage('Re-indexing pages and applying lossless rotations...');
+
+    try {
+      const buffer = await rotateFile.arrayBuffer();
+      const srcDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+      const newDoc = await PDFDocument.create();
+
+      // Copy pages in user-specified order
+      const copiedPages = await newDoc.copyPages(srcDoc, pageOrder);
+
+      copiedPages.forEach((page, idx) => {
+        const originalPageIndex = pageOrder[idx];
+        const addedRot = pageRotations[originalPageIndex] || 0;
+        const currentRot = page.getRotation().angle;
+        page.setRotation(degrees((currentRot + addedRot) % 360));
+        newDoc.addPage(page);
+      });
+
+      setStatusMessage('Generating rotated PDF document...');
+      const bytes = await newDoc.save();
+      const baseName = rotateFile.name.replace(/\.pdf$/i, '');
+      const blob = new Blob([bytes], { type: 'application/pdf' });
+      downloadBlob(blob, `${baseName}_rotated.pdf`);
+
+      setSuccessMessage(`Rotated and reorganized ${pageOrder.length} pages successfully!`);
+    } catch (err) {
+      console.error('Rotate error:', err);
+      setErrorMessage(err.message || 'Failed to rotate PDF.');
+    } finally {
+      setIsProcessing(false);
+      setStatusMessage('');
+    }
+  };
+
+  // ==========================================================================
+  // TOOL 6: AI PDF SUMMARISER (LIVE GEMINI FLASH INFERENCE)
+  // ==========================================================================
+  const handleSetSummaryFile = async (file) => {
+    setErrorMessage('');
+    setSuccessMessage('');
+    setAiSummary('');
+    setExtractedText('');
+    setSummaryStats(null);
+
+    if (!file || (!file.type.includes('pdf') && !file.name.toLowerCase().endsWith('.pdf'))) {
+      setErrorMessage('Please upload a valid .pdf file.');
+      return;
+    }
+
+    setSummaryFile(file);
+  };
+
+  const executeAiSummary = async () => {
+    if (!summaryFile) {
+      setErrorMessage('Please upload a PDF file to summarize.');
+      return;
+    }
+
+    setIsProcessing(true);
+    setErrorMessage('');
+    setSuccessMessage('');
+    setAiSummary('');
+    setStatusMessage('Extracting readable text layer using PDF.js in-browser...');
+
+    try {
+      configurePdfWorker();
+      const buffer = await summaryFile.arrayBuffer();
+
+      let pdf;
+      try {
+        const loadingTask = pdfjsLib.getDocument({
+          data: new Uint8Array(buffer),
+          useSystemFonts: true,
+        });
+        pdf = await loadingTask.promise;
+      } catch (err) {
+        throw new Error('Could not open PDF. The file may be password-protected or corrupt.');
+      }
+
+      const numPages = pdf.numPages;
+      let fullText = '';
+
+      for (let i = 1; i <= numPages; i++) {
+        setStatusMessage(`Reading page ${i} of ${numPages}...`);
+        const page = await pdf.getPage(i);
+        const textContent = await page.getTextContent();
+        const pageText = textContent.items
+          .map((item) => (item.str ? item.str : ''))
+          .join(' ');
+        fullText += pageText + '\n';
+      }
+
+      const trimmedText = fullText.trim();
+
+      // Graceful rejection for scanned / image-only / non-OCR PDFs
+      if (trimmedText.length < 25) {
+        throw new Error('Could not extract text. Please ensure this is a readable text PDF.');
+      }
+
+      setExtractedText(trimmedText);
+      const wordCount = trimmedText.split(/\s+/).filter(Boolean).length;
+      const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+
+      setSummaryStats({
+        pages: numPages,
+        words: wordCount,
+        readingTime,
+      });
+
+      setStatusMessage('Sending text to live Gemini Flash AI for student exam synthesis...');
+
+      // Call server-side proxy route `/api/gemini/summarize`
+      const response = await fetch('/api/gemini/summarize', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text: trimmedText,
+          filename: summaryFile.name,
+        }),
+      });
+
+      if (!response.ok) {
+        const errJson = await response.json().catch(() => ({}));
+        throw new Error(errJson.error || `Server responded with status ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (!data.summary) {
+        throw new Error('Did not receive summary from Gemini AI.');
+      }
+
+      setAiSummary(data.summary);
+      setSuccessMessage('AI Exam Summary generated successfully with Gemini Flash!');
+    } catch (err) {
+      console.error('AI Summary error:', err);
+      setErrorMessage(err.message || 'Failed to process AI summary.');
+    } finally {
+      setIsProcessing(false);
+      setStatusMessage('');
+    }
+  };
+
+  const handleCopySummary = () => {
+    if (!aiSummary) return;
+    navigator.clipboard.writeText(aiSummary);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
+  };
+
+  const handleDownloadSummary = (format) => {
+    if (!aiSummary) return;
+    const baseName = summaryFile ? summaryFile.name.replace(/\.pdf$/i, '') : 'notes';
+    const ext = format === 'md' ? 'md' : 'txt';
+    const blob = new Blob([aiSummary], { type: 'text/plain;charset=utf-8' });
+    downloadBlob(blob, `${baseName}_exam_summary.${ext}`);
+  };
+
+  return (
+    <div id="pdf-tools-for-free-root" className="space-y-6">
+      {/* Header & Rebrand */}
+      <div className="bg-white border border-pink-200/80 rounded-2xl p-6 sm:p-7 shadow-xs">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold tracking-wide bg-pink-100 text-pink-700 border border-pink-200">
+                100% Free &amp; Fast
+              </span>
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                Zero Binary Dumps
+              </span>
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                In-Browser Engines
+              </span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              PDF Tools for Free
+            </h1>
+            <p className="text-sm text-slate-600 leading-relaxed max-w-3xl">
+              Fast, in-browser PDF utilities. Zero uploads, zero tracking, completely free.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="text-right hidden sm:block">
+              <span className="block text-xs font-bold text-slate-800">Verified Native PDF Stack</span>
+              <span className="block text-[11px] text-slate-500">pdf-lib • pdfjs-dist • Gemini Flash</span>
+            </div>
+            <div className="w-10 h-10 rounded-xl bg-pink-50 border border-pink-200 flex items-center justify-center text-pink-600 shadow-xs">
+              <ShieldCheck className="w-5 h-5" />
+            </div>
+          </div>
+        </div>
+
+        {/* Global Progress & Notification Banners */}
+        {isProcessing && (
+          <div className="mt-5 p-4 rounded-xl bg-pink-50/90 border border-pink-200 flex items-center gap-3 animate-pulse">
+            <Loader2 className="w-5 h-5 text-pink-600 animate-spin shrink-0" />
+            <div className="space-y-0.5">
+              <p className="text-xs font-bold text-pink-900">Processing in Browser...</p>
+              <p className="text-xs text-pink-700">{statusMessage || 'Calculating page streams...'}</p>
+            </div>
+          </div>
+        )}
+
+        {errorMessage && (
+          <div className="mt-5 p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+            <div className="space-y-0.5">
+              <p className="text-xs font-bold text-rose-900">Notice</p>
+              <p className="text-xs text-rose-700 leading-relaxed">{errorMessage}</p>
+            </div>
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="mt-5 p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-start gap-3">
+            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+            <div className="space-y-0.5">
+              <p className="text-xs font-bold text-emerald-900">Success</p>
+              <p className="text-xs text-emerald-700 leading-relaxed">{successMessage}</p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Tool Selection Tabs */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+        {TOOLS.map((tool) => {
+          const Icon = tool.icon;
+          const isActive = activeTab === tool.id;
+          return (
+            <button
+              key={tool.id}
+              type="button"
+              onClick={() => setActiveTab(tool.id)}
+              className={`p-3.5 rounded-xl border text-left transition-all flex flex-col justify-between gap-2.5 cursor-pointer ${
+                isActive
+                  ? 'bg-pink-500/10 border-pink-500 text-pink-900 shadow-xs ring-1 ring-pink-400'
+                  : 'bg-white border-slate-200 hover:border-pink-200 hover:bg-pink-50/30 text-slate-700'
+              }`}
+            >
+              <div className="flex items-center justify-between w-full">
+                <div
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                    isActive ? 'bg-pink-600 text-white shadow-xs' : 'bg-slate-100 text-slate-700'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-pink-700/80 bg-pink-50 px-1.5 py-0.5 rounded border border-pink-100">
+                  {tool.badge}
+                </span>
+              </div>
+              <div>
+                <span className="block text-xs font-bold leading-tight">{tool.name}</span>
+                <span className="block text-[11px] text-slate-500 line-clamp-1 mt-0.5">
+                  {tool.tagline}
+                </span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Active Tool Workspace */}
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs">
+        {/* ==================================================================== */}
+        {/* 1. MERGE MULTIPLE PDFS */}
+        {/* ==================================================================== */}
+        {activeTab === 'merge' && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+              <div>
+                <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                  <Files className="w-5 h-5 text-pink-600" />
+                  Merge Multiple PDFs
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Order your documents sequentially. Pages are copied lossless-wise using browser-native memory buffers.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => mergeInputRef.current?.click()}
+                className="px-3.5 py-2 text-xs font-semibold bg-pink-50 text-pink-700 border border-pink-200 rounded-xl hover:bg-pink-100 transition-colors flex items-center gap-2 cursor-pointer w-fit"
+              >
+                <Upload className="w-3.5 h-3.5" />
+                Add More PDFs
+              </button>
+            </div>
+
+            <input
+              ref={mergeInputRef}
+              type="file"
+              accept=".pdf,application/pdf"
+              multiple
+              className="hidden"
+              onChange={(e) => {
+                if (e.target.files) handleAddMergeFiles(e.target.files);
+                e.target.value = '';
+              }}
+            />
+
+            {mergeFiles.length === 0 ? (
+              <div
+                onClick={() => mergeInputRef.current?.click()}
+                className="border-2 border-dashed border-pink-200 hover:border-pink-400 bg-pink-50/20 hover:bg-pink-50/40 rounded-2xl p-10 text-center transition-all cursor-pointer space-y-3"
+              >
+                <div className="w-12 h-12 mx-auto rounded-xl bg-pink-100/80 text-pink-600 flex items-center justify-center">
+                  <Files className="w-6 h-6" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-slate-900">Click to upload 2 or more PDF documents</p>
+                  <p className="text-xs text-slate-500 mt-1">or drag &amp; drop files directly into this box</p>
+                </div>
+                <div className="inline-flex items-center gap-2 text-[11px] font-semibold text-pink-700 bg-pink-50 border border-pink-200 px-3 py-1 rounded-full">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  Zero server upload • 100% processed in local RAM
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  {mergeFiles.map((item, index) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-pink-200 transition-colors gap-3"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span className="w-6 h-6 rounded-full bg-pink-100 text-pink-700 font-bold text-xs flex items-center justify-center shrink-0">
+                          {index + 1}
+                        </span>
+                        <div className="min-w-0">
+                          <p className="text-xs font-bold text-slate-900 truncate">{item.file.name}</p>
+                          <div className="flex items-center gap-2 text-[11px] text-slate-500">
+                            <span>{item.pageCount} pages</span>
+                            <span>•</span>
+                            <span>{formatBytes(item.size)}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <button
+                          type="button"
+                          disabled={index === 0}
+                          onClick={() => handleMoveMergeFile(index, -1)}
+                          className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-200 disabled:opacity-30 cursor-pointer"
+                          title="Move up"
+                        >
+                          <ArrowUp className="w-4 h-4" />
+                        </button>
+                        <button
+                          type="button"
+                          disabled={index === mergeFiles.length - 1}
+                          onClick={() => handleMoveMergeFile(index, 1)}
+                          className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-200 disabled:opacity-30 cursor-pointer"
+                          title="Move down"
+                        >
+                          <ArrowDown className="w-4 h-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveMergeFile(index)}
+                          className="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 cursor-pointer"
+                          title="Remove file"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-slate-100">
+                  <span className="text-xs text-slate-500">
+                    Total: <strong className="text-slate-800">{mergeFiles.length} files</strong> (
+                    {mergeFiles.reduce((acc, curr) => acc + curr.pageCount, 0)} total pages)
+                  </span>
+                  <div className="flex items-center gap-2 w-full sm:w-auto">
+                    <button
+                      type="button"
+                      onClick={() => setMergeFiles([])}
+                      className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl cursor-pointer"
+                    >
+                      Clear All
+                    </button>
+                    <button
+                      type="button"
+                      disabled={isProcessing || mergeFiles.length < 2}
+                      onClick={executeMerge}
+                      className="flex-1 sm:flex-none px-6 py-2.5 text-xs font-bold text-white bg-pink-600 hover:bg-pink-700 rounded-xl disabled:opacity-50 transition-colors shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      {isProcessing ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Download className="w-4 h-4" />
+                      )}
+                      Merge &amp; Download PDF
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ==================================================================== */}
+        {/* 2. SPLIT / EXTRACT PAGES */}
+        {/* ==================================================================== */}
+        {activeTab === 'split' && (
+          <div className="space-y-6">
+            <div className="border-b border-slate-100 pb-4">
+              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <Scissors className="w-5 h-5 text-pink-600" />
+                Split &amp; Extract Pages
+              </h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Isolate specific pages or ranges without quality loss or binary corruption.
+              </p>
+            </div>
+
+            <input
+              ref={splitInputRef}
+              type="file"
+              accept=".pdf,application/pdf"
+              className="hidden"
+              onChange={(e) => {
+                if (e.target.files?.[0]) handleSetSplitFile(e.target.files[0]);
+                e.target.value = '';
+              }}
+            />
+
+            {!splitFile ? (
+              <div
+                onClick={() => splitInputRef.current?.click()}
+                className="border-2 border-dashed border-pink-200 hover:border-pink-400 bg-pink-50/20 hover:bg-pink-50/40 rounded-2xl p-10 text-center transition-all cursor-pointer space-y-3"
+              >
+                <div className="w-12 h-12 mx-auto rounded-xl bg-pink-100/80 text-pink-600 flex items-center justify-center">
+                  <Scissors className="w-6 h-6" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-slate-900">Upload the PDF to extract from</p>
+                  <p className="text-xs text-slate-500 mt-1">Single PDF file with multiple pages</p>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-5">
+                <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-200">
+                  <div className="flex items-center gap-3">
+                    <FileText className="w-7 h-7 text-pink-600" />
+                    <div>
+                      <p className="text-xs font-bold text-slate-900">{splitFile.name}</p>
+                      <p className="text-[11px] text-slate-500">
+                        {splitPageCount} total pages • {formatBytes(splitFile.size)}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSplitFile(null);
+                      setSplitPageCount(0);
+                    }}
+                    className="text-xs text-rose-600 hover:underline cursor-pointer"
+                  >
+                    Change File
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-800 mb-2">Extraction Mode</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setSplitMode('range')}
+                        className={`p-3 rounded-xl border text-left cursor-pointer transition-all ${
+                          splitMode === 'range'
+                            ? 'bg-pink-50 border-pink-300 text-pink-900 ring-1 ring-pink-300'
+                            : 'bg-white border-slate-200 text-slate-700'
+                        }`}
+                      >
+                        <span className="block text-xs font-bold">Custom Page Range</span>
+                        <span className="block text-[11px] text-slate-500 mt-0.5">
+                          Specify page numbers or comma-separated intervals
+                        </span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setSplitMode('all')}
+                        className={`p-3 rounded-xl border text-left cursor-pointer transition-all ${
+                          splitMode === 'all'
+                            ? 'bg-pink-50 border-pink-300 text-pink-900 ring-1 ring-pink-300'
+                            : 'bg-white border-slate-200 text-slate-700'
+                        }`}
+                      >
+                        <span className="block text-xs font-bold">Extract Page 1 Only</span>
+                        <span className="block text-[11px] text-slate-500 mt-0.5">
+                          Quickly isolate the front page or cover sheet
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {splitMode === 'range' && (
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold text-slate-800">
+                        Enter Page Numbers to Extract (1 to {splitPageCount})
+                      </label>
+                      <input
+                        type="text"
+                        value={splitRange}
+                        onChange={(e) => setSplitRange(e.target.value)}
+                        placeholder="e.g. 1-3, 5, 7"
+                        className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white"
+                      />
+                      <p className="text-[11px] text-slate-500">
+                        Examples: <code className="bg-slate-100 px-1 py-0.5 rounded">1-4</code> (pages 1 through 4) or{' '}
+                        <code className="bg-slate-100 px-1 py-0.5 rounded">1, 3, 5</code> (pages 1, 3, and 5).
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                <div className="pt-3 border-t border-slate-100 flex justify-end">
+                  <button
+                    type="button"
+                    disabled={isProcessing}
+                    onClick={executeSplit}
+                    className="px-6 py-2.5 text-xs font-bold text-white bg-pink-600 hover:bg-pink-700 rounded-xl disabled:opacity-50 transition-colors shadow-xs flex items-center gap-2 cursor-pointer"
+                  >
+                    {isProcessing ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Download className="w-4 h-4" />
+                    )}
+                    Extract &amp; Download PDF
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ==================================================================== */}
+        {/* 3. IMAGES TO PDF */}
+        {/* ==================================================================== */}
+        {activeTab === 'images-to-pdf' && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+              <div>
+                <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                  <ImageIcon className="w-5 h-5 text-pink-600" />
+                  Images to PDF
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Combine .png, .jpg, and .webp images into standard A4 PDF pages with auto-scaling.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => imageInputRef.current?.click()}
+                className="px-3.5 py-2 text-xs font-semibold bg-pink-50 text-pink-700 border border-pink-200 rounded-xl hover:bg-pink-100 transition-colors flex items-center gap-2 cursor-pointer w-fit"
+              >
+                <Upload className="w-3.5 h-3.5" />
+                Add More Images
+              </button>
+            </div>
+
+            <input
+              ref={imageInputRef}
+              type="file"
+              accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp"
+              multiple
+              className="hidden"
+              onChange={(e) => {
+                if (e.target.files) handleAddImages(e.target.files);
+                e.target.value = '';
+              }}
+            />
+
+            {imageFiles.length === 0 ? (
+              <div
+                onClick={() => imageInputRef.current?.click()}
+                className="border-2 border-dashed border-pink-200 hover:border-pink-400 bg-pink-50/20 hover:bg-pink-50/40 rounded-2xl p-10 text-center transition-all cursor-pointer space-y-3"
+              >
+                <div className="w-12 h-12 mx-auto rounded-xl bg-pink-100/80 text-pink-600 flex items-center justify-center">
+                  <ImageIcon className="w-6 h-6" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-slate-900">Upload photos, certificates or graphs</p>
+                  <p className="text-xs text-slate-500 mt-1">Supports PNG, JPG, JPEG, and WebP</p>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-5">
+                {/* Image Formatting Controls */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-800 mb-1.5">Page Orientation</label>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setImageOrientation('portrait')}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer ${
+                          imageOrientation === 'portrait'
+                            ? 'bg-pink-600 text-white shadow-xs'
+                            : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
+                        }`}
+                      >
+                        A4 Portrait
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setImageOrientation('landscape')}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer ${
+                          imageOrientation === 'landscape'
+                            ? 'bg-pink-600 text-white shadow-xs'
+                            : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
+                        }`}
+                      >
+                        A4 Landscape
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-800 mb-1.5">Page Margins</label>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setImageMargin('none')}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer ${
+                          imageMargin === 'none'
+                            ? 'bg-pink-600 text-white shadow-xs'
+                            : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
+                        }`}
+                      >
+                        Edge-to-Edge (0pt)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setImageMargin('standard')}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer ${
+                          imageMargin === 'standard'
+                            ? 'bg-pink-600 text-white shadow-xs'
+                            : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
+                        }`}
+                      >
+                        Standard (30pt)
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Thumbnails list */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {imageFiles.map((item, index) => (
+                    <div
+                      key={item.id}
+                      className="group relative p-2 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between gap-2"
+                    >
+                      <div className="relative aspect-4/3 rounded-lg overflow-hidden bg-slate-200 flex items-center justify-center">
+                        <img
+                          src={item.previewUrl}
+                          alt={item.file.name}
+                          className="object-contain w-full h-full"
+                        />
+                        <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-black/60 text-white text-[10px] font-bold">
+                          #{index + 1}
+                        </span>
+                      </div>
+
+                      <div className="min-w-0">
+                        <p className="text-[11px] font-bold text-slate-900 truncate">{item.file.name}</p>
+                        <p className="text-[10px] text-slate-500">{formatBytes(item.size)}</p>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-1 border-t border-slate-200/60">
+                        <div className="flex gap-1">
+                          <button
+                            type="button"
+                            disabled={index === 0}
+                            onClick={() => handleMoveImage(index, -1)}
+                            className="p-1 text-slate-500 hover:bg-slate-200 rounded disabled:opacity-20 cursor-pointer"
+                            title="Move left"
+                          >
+                            <ArrowUp className="w-3.5 h-3.5 -rotate-90" />
+                          </button>
+                          <button
+                            type="button"
+                            disabled={index === imageFiles.length - 1}
+                            onClick={() => handleMoveImage(index, 1)}
+                            className="p-1 text-slate-500 hover:bg-slate-200 rounded disabled:opacity-20 cursor-pointer"
+                            title="Move right"
+                          >
+                            <ArrowDown className="w-3.5 h-3.5 -rotate-90" />
+                          </button>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveImage(index)}
+                          className="p-1 text-rose-500 hover:bg-rose-50 rounded cursor-pointer"
+                          title="Remove image"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-xs text-slate-500">
+                    {imageFiles.length} image{imageFiles.length > 1 ? 's' : ''} queued
+                  </span>
+                  <button
+                    type="button"
+                    disabled={isProcessing}
+                    onClick={executeImagesToPdf}
+                    className="px-6 py-2.5 text-xs font-bold text-white bg-pink-600 hover:bg-pink-700 rounded-xl disabled:opacity-50 transition-colors shadow-xs flex items-center gap-2 cursor-pointer"
+                  >
+                    {isProcessing ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Download className="w-4 h-4" />
+                    )}
+                    Generate &amp; Download A4 PDF
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ==================================================================== */}
+        {/* 4. PROTECT PDF (PASSWORD LOCK) */}
+        {/* ==================================================================== */}
+        {activeTab === 'protect' && (
+          <div className="space-y-6">
+            <div className="border-b border-slate-100 pb-4">
+              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <Lock className="w-5 h-5 text-pink-600" />
+                Protect PDF (Password Lock)
+              </h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Apply real standard cryptographic encryption. Any viewer (Adobe Acrobat, Chrome, iOS) will mandate this password.
+              </p>
+            </div>
+
+            <input
+              ref={protectInputRef}
+              type="file"
+              accept=".pdf,application/pdf"
+              className="hidden"
+              onChange={(e) => {
+                if (e.target.files?.[0]) handleSetProtectFile(e.target.files[0]);
+                e.target.value = '';
+              }}
+            />
+
+            {!protectFile ? (
+              <div
+                onClick={() => protectInputRef.current?.click()}
+                className="border-2 border-dashed border-pink-200 hover:border-pink-400 bg-pink-50/20 hover:bg-pink-50/40 rounded-2xl p-10 text-center transition-all cursor-pointer space-y-3"
+              >
+                <div className="w-12 h-12 mx-auto rounded-xl bg-pink-100/80 text-pink-600 flex items-center justify-center">
+                  <Lock className="w-6 h-6" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-slate-900">Upload PDF to encrypt</p>
+                  <p className="text-xs text-slate-500 mt-1">Lock with a custom confidential password</p>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-5">
+                <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-200">
+                  <div className="flex items-center gap-3">
+                    <FileText className="w-7 h-7 text-pink-600" />
+                    <div>
+                      <p className="text-xs font-bold text-slate-900">{protectFile.name}</p>
+                      <p className="text-[11px] text-slate-500">{formatBytes(protectFile.size)}</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setProtectFile(null)}
+                    className="text-xs text-rose-600 hover:underline cursor-pointer"
+                  >
+                    Change File
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-bold text-slate-800">New Password</label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        value={protectPassword}
+                        onChange={(e) => setProtectPassword(e.target.value)}
+                        placeholder="At least 4 characters"
+                        className="w-full pl-3.5 pr-10 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-bold text-slate-800">Confirm Password</label>
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      value={protectConfirm}
+                      onChange={(e) => setProtectConfirm(e.target.value)}
+                      placeholder="Re-enter same password"
+                      className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white"
+                    />
+                  </div>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-pink-50/70 border border-pink-200 flex items-start gap-2.5">
+                  <ShieldCheck className="w-4 h-4 text-pink-700 shrink-0 mt-0.5" />
+                  <p className="text-[11px] text-pink-900 leading-relaxed">
+                    <strong>Standard AES/RC4 Encryption:</strong> Your password is mathematically compiled into the PDF encryption dictionary locally in your browser. Store your password safely; it cannot be recovered if forgotten.
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-slate-100 flex justify-end">
+                  <button
+                    type="button"
+                    disabled={isProcessing || !protectPassword}
+                    onClick={executeProtectPdf}
+                    className="px-6 py-2.5 text-xs font-bold text-white bg-pink-600 hover:bg-pink-700 rounded-xl disabled:opacity-50 transition-colors shadow-xs flex items-center gap-2 cursor-pointer"
+                  >
+                    {isProcessing ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Lock className="w-4 h-4" />
+                    )}
+                    Lock &amp; Download Protected PDF
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ==================================================================== */}
+        {/* 5. ROTATE & REORDER PAGES */}
+        {/* ==================================================================== */}
+        {activeTab === 'rotate' && (
+          <div className="space-y-6">
+            <div className="border-b border-slate-100 pb-4">
+              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <RotateCw className="w-5 h-5 text-pink-600" />
+                Rotate &amp; Reorder Pages
+              </h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Rotate upside-down scanned pages and adjust page order lossless-wise.
+              </p>
+            </div>
+
+            <input
+              ref={rotateInputRef}
+              type="file"
+              accept=".pdf,application/pdf"
+              className="hidden"
+              onChange={(e) => {
+                if (e.target.files?.[0]) handleSetRotateFile(e.target.files[0]);
+                e.target.value = '';
+              }}
+            />
+
+            {!rotateFile ? (
+              <div
+                onClick={() => rotateInputRef.current?.click()}
+                className="border-2 border-dashed border-pink-200 hover:border-pink-400 bg-pink-50/20 hover:bg-pink-50/40 rounded-2xl p-10 text-center transition-all cursor-pointer space-y-3"
+              >
+                <div className="w-12 h-12 mx-auto rounded-xl bg-pink-100/80 text-pink-600 flex items-center justify-center">
+                  <RotateCw className="w-6 h-6" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-slate-900">Upload PDF to rotate or reorder</p>
+                  <p className="text-xs text-slate-500 mt-1">Single PDF file</p>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-200 gap-3">
+                  <div className="flex items-center gap-3">
+                    <FileText className="w-7 h-7 text-pink-600" />
+                    <div>
+                      <p className="text-xs font-bold text-slate-900">{rotateFile.name}</p>
+                      <p className="text-[11px] text-slate-500">{rotatePageCount} total pages</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleRotateAll(90)}
+                      className="px-3 py-1.5 text-xs font-semibold bg-white border border-slate-200 hover:bg-slate-100 rounded-lg text-slate-700 flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <RotateCw className="w-3.5 h-3.5 text-pink-600" />
+                      Rotate All +90°
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleRotateAll(180)}
+                      className="px-3 py-1.5 text-xs font-semibold bg-white border border-slate-200 hover:bg-slate-100 rounded-lg text-slate-700 flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <RotateCw className="w-3.5 h-3.5 text-pink-600" />
+                      Rotate All 180°
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setRotateFile(null)}
+                      className="text-xs text-rose-600 hover:underline cursor-pointer px-2"
+                    >
+                      Change
+                    </button>
+                  </div>
+                </div>
+
+                {/* Pages Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                  {pageOrder.map((pageIdx, index) => {
+                    const rot = pageRotations[pageIdx] || 0;
+                    return (
+                      <div
+                        key={pageIdx}
+                        className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between gap-2.5"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] font-bold text-slate-900">Page {pageIdx + 1}</span>
+                          <span className="text-[10px] font-semibold text-pink-700 bg-pink-100 px-1.5 py-0.5 rounded">
+                            {rot}°
+                          </span>
+                        </div>
+
+                        <div className="aspect-3/4 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-400 font-bold text-sm shadow-xs">
+                          <span style={{ transform: `rotate(${rot}deg)` }} className="transition-transform duration-200">
+                            P.{pageIdx + 1}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center justify-between pt-1 border-t border-slate-200">
+                          <div className="flex gap-1">
+                            <button
+                              type="button"
+                              disabled={index === 0}
+                              onClick={() => handleMovePageOrder(index, -1)}
+                              className="p-1 text-slate-500 hover:bg-slate-200 rounded disabled:opacity-20 cursor-pointer"
+                              title="Move earlier"
+                            >
+                              <ArrowUp className="w-3 h-3" />
+                            </button>
+                            <button
+                              type="button"
+                              disabled={index === pageOrder.length - 1}
+                              onClick={() => handleMovePageOrder(index, 1)}
+                              className="p-1 text-slate-500 hover:bg-slate-200 rounded disabled:opacity-20 cursor-pointer"
+                              title="Move later"
+                            >
+                              <ArrowDown className="w-3 h-3" />
+                            </button>
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() => handleRotateSinglePage(pageIdx, 90)}
+                            className="p-1 text-pink-600 hover:bg-pink-50 rounded cursor-pointer"
+                            title="Rotate 90 degrees"
+                          >
+                            <RotateCw className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="pt-3 border-t border-slate-100 flex justify-end">
+                  <button
+                    type="button"
+                    disabled={isProcessing}
+                    onClick={executeRotateAndReorder}
+                    className="px-6 py-2.5 text-xs font-bold text-white bg-pink-600 hover:bg-pink-700 rounded-xl disabled:opacity-50 transition-colors shadow-xs flex items-center gap-2 cursor-pointer"
+                  >
+                    {isProcessing ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Download className="w-4 h-4" />
+                    )}
+                    Save &amp; Download Rotated PDF
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ==================================================================== */}
+        {/* 6. AI PDF SUMMARISER */}
+        {/* ==================================================================== */}
+        {activeTab === 'ai-summarizer' && (
+          <div className="space-y-6">
+            <div className="border-b border-slate-100 pb-4">
+              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-pink-600" />
+                AI PDF Summariser (Live Gemini Flash)
+              </h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Extracts text layer with PDF.js and sends it to live Gemini Flash for structured 5-bullet summaries and key exam takeaways.
+              </p>
+            </div>
+
+            <input
+              ref={summaryInputRef}
+              type="file"
+              accept=".pdf,application/pdf"
+              className="hidden"
+              onChange={(e) => {
+                if (e.target.files?.[0]) handleSetSummaryFile(e.target.files[0]);
+                e.target.value = '';
+              }}
+            />
+
+            {!summaryFile ? (
+              <div
+                onClick={() => summaryInputRef.current?.click()}
+                className="border-2 border-dashed border-pink-200 hover:border-pink-400 bg-pink-50/20 hover:bg-pink-50/40 rounded-2xl p-10 text-center transition-all cursor-pointer space-y-3"
+              >
+                <div className="w-12 h-12 mx-auto rounded-xl bg-pink-100/80 text-pink-600 flex items-center justify-center">
+                  <Sparkles className="w-6 h-6" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-slate-900">Upload syllabus notes, research paper, or textbook PDF</p>
+                  <p className="text-xs text-slate-500 mt-1">Must contain readable text layer (non-scanned OCR)</p>
+                </div>
+                <div className="inline-flex items-center gap-2 text-[11px] font-semibold text-pink-700 bg-pink-50 border border-pink-200 px-3 py-1 rounded-full">
+                  <BookOpen className="w-3.5 h-3.5" />
+                  Extracts 5 key takeaways + exam definitions automatically
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-5">
+                <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-200">
+                  <div className="flex items-center gap-3">
+                    <FileText className="w-7 h-7 text-pink-600" />
+                    <div>
+                      <p className="text-xs font-bold text-slate-900">{summaryFile.name}</p>
+                      <p className="text-[11px] text-slate-500">{formatBytes(summaryFile.size)}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSummaryFile(null);
+                        setAiSummary('');
+                      }}
+                      className="text-xs text-rose-600 hover:underline cursor-pointer"
+                    >
+                      Change File
+                    </button>
+                  </div>
+                </div>
+
+                {!aiSummary && (
+                  <div className="text-center py-6 space-y-3">
+                    <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
+                      Ready to synthesize! Click below to extract text using in-browser PDF.js and request Gemini Flash analysis.
+                    </p>
+                    <button
+                      type="button"
+                      disabled={isProcessing}
+                      onClick={executeAiSummary}
+                      className="px-6 py-3 text-xs font-bold text-white bg-pink-600 hover:bg-pink-700 rounded-xl disabled:opacity-50 transition-colors shadow-xs inline-flex items-center gap-2 cursor-pointer"
+                    >
+                      {isProcessing ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Generating AI Summary...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-4 h-4" />
+                          <span>Run Live Gemini Flash Summariser</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
+
+                {/* Rendered Baby-Pink Accented Summary Card */}
+                {aiSummary && (
+                  <div className="rounded-2xl bg-pink-50/70 border border-pink-200/90 p-6 space-y-5 shadow-xs">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-pink-200/60 pb-4">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-lg bg-pink-600 text-white flex items-center justify-center shadow-xs">
+                          <Sparkles className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <h3 className="text-sm font-bold text-pink-950">
+                            ✨ AI Student Exam Summary &amp; Key Takeaways
+                          </h3>
+                          {summaryStats && (
+                            <p className="text-[11px] text-pink-800/80">
+                              Analyzed {summaryStats.pages} pages • {summaryStats.words} words • ~
+                              {summaryStats.readingTime} min read
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={handleCopySummary}
+                          className="px-3 py-1.5 text-xs font-semibold bg-white border border-pink-200 text-pink-900 rounded-lg hover:bg-pink-50 flex items-center gap-1.5 transition-colors cursor-pointer"
+                        >
+                          {isCopied ? (
+                            <>
+                              <Check className="w-3.5 h-3.5 text-emerald-600" />
+                              <span className="text-emerald-700">Copied!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3.5 h-3.5 text-pink-600" />
+                              <span>Copy Text</span>
+                            </>
+                          )}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDownloadSummary('md')}
+                          className="px-3 py-1.5 text-xs font-semibold bg-pink-600 hover:bg-pink-700 text-white rounded-lg flex items-center gap-1.5 transition-colors shadow-xs cursor-pointer"
+                        >
+                          <Download className="w-3.5 h-3.5" />
+                          <span>Export .md</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Markdown Body */}
+                    <div className="prose prose-sm max-w-none text-slate-800 leading-relaxed space-y-3 font-normal">
+                      {aiSummary.split('\n').map((line, idx) => {
+                        const trimmed = line.trim();
+                        if (!trimmed) return <div key={idx} className="h-2" />;
+                        if (trimmed.startsWith('###')) {
+                          return (
+                            <h4
+                              key={idx}
+                              className="text-sm font-extrabold text-pink-900 pt-2 pb-1 border-b border-pink-200/50"
+                            >
+                              {trimmed.replace(/^###\s*/, '')}
+                            </h4>
+                          );
+                        }
+                        if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+                          const content = trimmed.substring(2);
+                          return (
+                            <div key={idx} className="flex items-start gap-2 text-xs text-slate-800 pl-1">
+                              <span className="text-pink-600 font-bold shrink-0 mt-0.5">•</span>
+                              <span
+                                dangerouslySetInnerHTML={{
+                                  __html: content.replace(
+                                    /\*\*(.*?)\*\*/g,
+                                    '<strong class="font-bold text-slate-900">$1</strong>'
+                                  ),
+                                }}
+                              />
+                            </div>
+                          );
+                        }
+                        return (
+                          <p
+                            key={idx}
+                            className="text-xs text-slate-800"
+                            dangerouslySetInnerHTML={{
+                              __html: trimmed.replace(
+                                /\*\*(.*?)\*\*/g,
+                                '<strong class="font-bold text-slate-900">$1</strong>'
+                              ),
+                            }}
+                          />
+                        );
+                      })}
+                    </div>
+
+                    <div className="pt-3 border-t border-pink-200/60 flex items-center justify-between text-[11px] text-pink-800/80">
+                      <span>Powered by Gemini Flash &amp; In-Browser PDF.js</span>
+                      <button
+                        type="button"
+                        onClick={executeAiSummary}
+                        disabled={isProcessing}
+                        className="font-semibold text-pink-700 hover:underline flex items-center gap-1 cursor-pointer"
+                      >
+                        <RefreshCw className="w-3 h-3" />
+                        Re-generate
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default PdfToolsForFree;

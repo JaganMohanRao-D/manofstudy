@@ -262,6 +262,120 @@ function tgAllotmentPlugin(): Plugin {
         });
       });
 
+      // Gemini AI PDF Summarizer API
+      server.middlewares.use('/api/gemini/summarize', (req, res) => {
+        if (req.method === 'OPTIONS') {
+          res.setHeader('Access-Control-Allow-Origin', '*');
+          res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+          res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+          res.statusCode = 204;
+          res.end();
+          return;
+        }
+
+        if (req.method !== 'POST') {
+          res.statusCode = 405;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ error: 'Method Not Allowed' }));
+          return;
+        }
+
+        const handlePayload = async (data: any) => {
+          try {
+            const { text } = data || {};
+            if (!text || typeof text !== 'string' || text.trim().length < 15) {
+              res.statusCode = 400;
+              res.setHeader('Content-Type', 'application/json');
+              res.end(JSON.stringify({ error: 'Could not extract text. Please ensure this is a readable text PDF.' }));
+              return;
+            }
+
+            const apiKey = process.env.GEMINI_API_KEY;
+            if (!apiKey) {
+              res.statusCode = 500;
+              res.setHeader('Content-Type', 'application/json');
+              res.end(JSON.stringify({ error: 'GEMINI_API_KEY is not configured on the server.' }));
+              return;
+            }
+
+            const { GoogleGenAI } = await import('@google/genai');
+            const ai = new GoogleGenAI({ apiKey });
+
+            const truncatedText = text.slice(0, 35000);
+            const prompt = `Provide a structured 5-bullet summary and key exam takeaways from the following student notes/syllabus text.
+
+Document Text:
+${truncatedText}
+
+Format the output cleanly in Markdown:
+### 📌 5-Bullet Summary
+- [Bullet 1: Main core thesis or topic overview]
+- [Bullet 2: Key theoretical mechanism or principle]
+- [Bullet 3: Primary application, workflow or architecture]
+- [Bullet 4: Critical constraints, edge cases or comparison points]
+- [Bullet 5: Conclusion or overarching practical takeaway]
+
+### 🎯 Key Exam Takeaways
+- **High-Frequency Formulas / Definitions**: Essential formulas, laws, or terms that examiners frequently test.
+- **Midterm & Viva Probable Questions**: Top 2-3 conceptual questions professors or external viva examiners ask.
+- **Common Tricky Pitfalls**: Mistakes students often make when solving related problems or derivations.`;
+
+            let responseText = '';
+            try {
+              const result = await ai.models.generateContent({
+                model: 'gemini-3.6-flash',
+                contents: prompt,
+              });
+              responseText = result.text || '';
+            } catch (err) {
+              console.warn('[Gemini] Retrying with gemini-3.8-flash due to:', err);
+              try {
+                const fallbackResult = await ai.models.generateContent({
+                  model: 'gemini-3.8-flash',
+                  contents: prompt,
+                });
+                responseText = fallbackResult.text || '';
+              } catch (err2) {
+                console.warn('[Gemini] Retrying with gemini-3.1-flash-lite due to:', err2);
+                const liteResult = await ai.models.generateContent({
+                  model: 'gemini-3.1-flash-lite',
+                  contents: prompt,
+                });
+                responseText = liteResult.text || '';
+              }
+            }
+
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            res.end(JSON.stringify({ success: true, summary: responseText }));
+          } catch (err: any) {
+            console.error('[geminiSummarize] error:', err);
+            res.statusCode = 500;
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            res.end(JSON.stringify({ success: false, error: err.message || 'Failed to process AI summary.' }));
+          }
+        };
+
+        if ((req as any).body) {
+          handlePayload((req as any).body);
+          return;
+        }
+
+        const chunks: Buffer[] = [];
+        req.on('data', chunk => chunks.push(chunk));
+        req.on('end', () => {
+          try {
+            const raw = Buffer.concat(chunks).toString('utf-8');
+            const data = JSON.parse(raw);
+            handlePayload(data);
+          } catch (e: any) {
+            res.statusCode = 400;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({ error: 'Invalid JSON body: ' + e.message }));
+          }
+        });
+      });
+
       // Serve /TG_EAPCET_2026_ALLOTMENT/ requests directly with code-alias fallback and 404 JSON protection
       server.middlewares.use((req, res, next) => {
         const url = req.url ? req.url.split('?')[0] : '';

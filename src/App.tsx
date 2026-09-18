@@ -225,11 +225,11 @@ export const TOOLS_CONFIG: ToolMeta[] = [
   },
   {
     id: 'pdf-tools',
-    name: '30+ PDF Power Tools',
-    shortName: '30+ PDF Tools',
+    name: 'PDF Tools for Free',
+    shortName: 'PDF Tools for Free',
     category: 'document',
-    description: 'Zero-server WebAssembly PDF merge, split, compress, watermark, redact & convert',
-    badge: '30 Tools',
+    description: 'Fast, in-browser PDF utilities. Zero uploads, zero tracking, completely free.',
+    badge: '100% Free',
   },
   {
     id: 'resume-checker',
@@ -527,8 +527,8 @@ export default function App() {
         };
       case 'utilities':
         return {
-          title: 'Private Client-Side PDF Tools & 20KB Resizer',
-          icon: <FileText className="w-4 h-4 text-sky-500" />,
+          title: 'PDF Tools for Free & Student Utilities',
+          icon: <FileText className="w-4 h-4 text-pink-500" />,
         };
       case 'dsa':
         return {
@@ -824,7 +824,7 @@ export default function App() {
                     <div className="bg-white border border-slate-200 p-2 rounded-2xl shadow-xs">
                       <div className="flex items-center gap-1 overflow-x-auto no-scrollbar pb-1 text-xs">
                         {[
-                          { id: 'pdf-tools' as ToolTab, label: '30+ PDF Tools', icon: FileText },
+                          { id: 'pdf-tools' as ToolTab, label: 'PDF Tools for Free', icon: FileText },
                           { id: 'vault' as ToolTab, label: 'Code & Viva Vault', icon: Terminal },
                           { id: 'resizer' as ToolTab, label: '20KB Image Resizer', icon: ImageIcon },
                           { id: 'resume-checker' as ToolTab, label: 'ATS Resume Matcher', icon: FileCheck },
