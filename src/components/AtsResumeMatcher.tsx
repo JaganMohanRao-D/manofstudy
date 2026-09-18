@@ -188,18 +188,18 @@ export const AtsResumeMatcher: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Tool Header Banner */}
-      <section className="p-5 sm:p-6 rounded-2xl border bg-white border-slate-200 shadow-sm">
+      <section className="p-5 sm:p-6 rounded-2xl border bg-white dark:bg-slate-900/90 border-slate-200 dark:border-slate-800 shadow-sm text-slate-900 dark:text-slate-100">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 text-sky-600 text-xs font-semibold uppercase tracking-wider mb-1">
+            <div className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 text-xs font-semibold uppercase tracking-wider mb-1">
               <FileSearch className="w-4 h-4" />
               <span>ATS Resume Matcher & 1-Click Builder</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
               ATS Diagnostics & 1-Click Optimized Resume Generator
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 max-w-2xl mt-1 leading-relaxed">
-              Upload any PDF/DOCX/TXT resume to extract text client-side, analyze weak action verbs and missing keywords, and automatically generate an ATS-optimized, single-column resume ready for export.
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-300 max-w-2xl mt-1 leading-relaxed">
+              Extract resume text, analyze missing keywords, and generate ATS-optimized resumes for campus placement.
             </p>
           </div>
 
@@ -208,7 +208,7 @@ export const AtsResumeMatcher: React.FC = () => {
             <button
               onClick={handleGenerateOptimizedResume}
               disabled={!resumeText.trim() || !jdText.trim()}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-semibold text-xs shadow-xs transition-all duration-150 active:scale-95 disabled:opacity-50 cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-xs transition-all duration-150 active:scale-95 disabled:opacity-50 cursor-pointer"
             >
               <Wand2 className="w-4 h-4" />
               <span>1-Click ATS Resume Builder</span>

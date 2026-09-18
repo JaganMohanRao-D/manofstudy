@@ -408,7 +408,7 @@ export const MajorProjectsHub: React.FC = () => {
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-            Curated list of 15+ high-impact resume projects with complete system architectural diagrams, tech stacks, GitHub blueprints, and interview defense answers that turn placement interviews in your favor.
+            High-impact major projects with architecture diagrams, blueprints, and interview defense answers.
           </p>
         </div>
       </div>

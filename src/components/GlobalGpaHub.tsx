@@ -54,11 +54,11 @@ export const GlobalGpaHub: React.FC<GlobalGpaHubProps> = ({ onNavigateToStore })
   return (
     <div id="global-gpa-hub-tool" className="space-y-6">
       
-      {/* Tool Header Banner: Indigo/Violet Academic Precision Theme */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-900 text-white border border-indigo-500/30 rounded-2xl p-5 sm:p-7 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        {/* Subtle Indigo & Violet Ambient Glows */}
+      {/* Tool Header Banner: Indigo Academic Precision Theme */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 text-white border border-indigo-500/30 rounded-2xl p-5 sm:p-7 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        {/* Subtle Indigo Ambient Glows */}
         <div className="absolute -top-12 -right-12 w-64 h-64 rounded-full bg-indigo-500/15 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-12 left-1/4 w-64 h-64 rounded-full bg-violet-500/15 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-12 left-1/4 w-64 h-64 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(#818cf815_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
 
         <div className="relative z-10 space-y-1">
@@ -72,7 +72,7 @@ export const GlobalGpaHub: React.FC<GlobalGpaHubProps> = ({ onNavigateToStore })
             Global GPA &amp; Academic Grade Hub
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-            Convert CGPA/SGPA with 11 university formula presets, calculate US 4.0 GPA equivalence, and model target graduation milestone trajectories.
+            Convert CGPA/SGPA with university formula presets and model target graduation GPA milestone trajectories.
           </p>
         </div>
       </div>
@@ -364,54 +364,65 @@ export const GlobalGpaHub: React.FC<GlobalGpaHubProps> = ({ onNavigateToStore })
               </div>
 
               {/* Dynamic Predictor Result Card */}
-              <div
-                className={`p-4 sm:p-5 rounded-xl border transition-all duration-200 space-y-3 ${
-                  predictionResult.isFeasible
-                    ? 'bg-emerald-50/60 border-emerald-200'
-                    : 'bg-rose-50/60 border-rose-200'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-600">
-                    Required Upcoming SGPA
-                  </span>
-                  <span
-                    className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                      predictionResult.isFeasible
-                        ? 'bg-emerald-100 text-emerald-800'
-                        : 'bg-rose-100 text-rose-800'
-                    }`}
-                  >
-                    {predictionResult.status === 'already_achieved'
-                      ? 'Target Achieved'
-                      : predictionResult.isFeasible
-                      ? 'Mathematically Feasible'
-                      : 'Unattainable (Exceeds 10.0 Cap)'}
-                  </span>
+              {futureState.targetCgpa <= 0 || futureState.currentCgpa <= 0 ? (
+                <div className="p-4 sm:p-5 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/50 text-center space-y-1.5 py-6">
+                  <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    Enter your CGPA criteria to see your projection
+                  </p>
+                  <p className="text-[11px] text-slate-500">
+                    Provide current score and target CGPA to calculate required semester grade points.
+                  </p>
                 </div>
+              ) : (
+                <div
+                  className={`p-4 sm:p-5 rounded-xl border transition-all duration-200 space-y-3 ${
+                    predictionResult.isFeasible
+                      ? 'bg-emerald-50/60 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800/50'
+                      : 'bg-rose-50/60 dark:bg-rose-950/30 border-rose-200 dark:border-rose-800/50'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+                      Required Upcoming SGPA
+                    </span>
+                    <span
+                      className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                        predictionResult.isFeasible
+                          ? 'bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300'
+                          : 'bg-rose-100 dark:bg-rose-900/60 text-rose-800 dark:text-rose-300'
+                      }`}
+                    >
+                      {predictionResult.status === 'already_achieved'
+                        ? 'Target Achieved'
+                        : predictionResult.isFeasible
+                        ? 'Mathematically Feasible'
+                        : 'Unattainable (Exceeds 10.0 Cap)'}
+                    </span>
+                  </div>
 
-                <div className="flex items-baseline gap-2">
-                  <span
-                    className={`text-4xl font-bold tracking-tight ${
-                      predictionResult.isFeasible ? 'text-emerald-700' : 'text-rose-700'
-                    }`}
-                  >
-                    {predictionResult.requiredSgpa.toFixed(2)}
-                  </span>
-                  <span className="text-sm font-medium text-slate-500">
-                    SGPA / Sem ({predictionResult.remainingSemesters} Left)
-                  </span>
+                  <div className="flex items-baseline gap-2">
+                    <span
+                      className={`text-4xl font-bold tracking-tight ${
+                        predictionResult.isFeasible ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-400'
+                      }`}
+                    >
+                      {predictionResult.requiredSgpa.toFixed(2)}
+                    </span>
+                    <span className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                      SGPA / Sem ({predictionResult.remainingSemesters} Left)
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
+                    {predictionResult.message}
+                  </p>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-slate-800 text-[11px] text-slate-500">
+                    <span>Max Possible: <strong className="text-slate-900 dark:text-white font-semibold">{predictionResult.maxPossibleCgpa.toFixed(2)}</strong></span>
+                    <span>Semesters Remaining: <strong className="text-slate-900 dark:text-white font-semibold">{predictionResult.remainingSemesters}</strong></span>
+                  </div>
                 </div>
-
-                <p className="text-xs text-slate-700 leading-relaxed font-normal">
-                  {predictionResult.message}
-                </p>
-
-                <div className="flex items-center justify-between pt-2 border-t border-slate-200 text-[11px] text-slate-500">
-                  <span>Max Possible: <strong className="text-slate-900 font-semibold">{predictionResult.maxPossibleCgpa.toFixed(2)}</strong></span>
-                  <span>Semesters Remaining: <strong className="text-slate-900 font-semibold">{predictionResult.remainingSemesters}</strong></span>
-                </div>
-              </div>
+              )}
             </div>
 
             {/* Quick target buttons */}

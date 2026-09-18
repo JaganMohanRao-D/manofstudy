@@ -208,7 +208,7 @@ export const InternshipsRadar: React.FC = () => {
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-            Direct portal links to trusted, non-scam opportunities: AICTE National Portal, Google Summer of Code, DRDO/ISRO Research Apprenticeships, and Linux Foundation Mentorship.
+            Direct portal links to verified government, research, and open-source student internships.
           </p>
         </div>
       </div>

@@ -598,11 +598,11 @@ export const ScholarshipsHub: React.FC = () => {
 
   return (
     <div id="scholarships-radar-root" className="space-y-6">
-      {/* Top Header Banner for Scholarships Radar with Emerald/Teal Ambient Mesh */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-emerald-950 via-teal-950 to-slate-900 text-white border border-emerald-500/25 rounded-2xl p-5 sm:p-7 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* Top Header Banner for Scholarships Radar with Emerald/Slate Ambient Mesh */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-emerald-950 via-slate-900 to-slate-950 text-white border border-emerald-500/25 rounded-2xl p-5 sm:p-7 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Subtle Ambient Mesh Orbs */}
         <div className="absolute -top-12 -right-12 w-64 h-64 rounded-full bg-emerald-500/15 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-12 left-1/4 w-64 h-64 rounded-full bg-teal-500/15 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-12 left-1/4 w-64 h-64 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(#10b98115_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
 
         <div className="relative z-10 space-y-2">
@@ -619,7 +619,7 @@ export const ScholarshipsHub: React.FC = () => {
             Scholarships Radar &amp; Opportunity Finder
           </h1>
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl">
-            Explore verified 2026 national, state, AICTE, and corporate CSR scholarships for engineering, diploma, and degree students. Every listing links directly to the official government or corporate portal.
+            Explore verified national, state, AICTE, and corporate CSR scholarships for college students.
           </p>
         </div>
 
@@ -645,7 +645,7 @@ export const ScholarshipsHub: React.FC = () => {
 
       {/* 1. Flagship Scholarship Showcase Carousel */}
       {currentFlagship && (
-        <div className="relative overflow-hidden rounded-2xl bg-white text-slate-900 border border-slate-200/90 shadow-sm p-5 sm:p-7">
+        <div className="relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900/90 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-800 shadow-sm p-5 sm:p-7">
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="space-y-3 max-w-2xl">
               <div className="flex flex-wrap items-center gap-2">

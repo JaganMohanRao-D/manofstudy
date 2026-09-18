@@ -37,8 +37,11 @@ import {
   Image as ImageIcon,
 } from 'lucide-react';
 
-const STORAGE_KEY = 'mos_campus_connect_posts_v1';
-const UPVOTES_KEY = 'mos_campus_connect_user_upvotes_v1';
+import { initialCommunityPosts } from '../data/communityPosts';
+export { initialCommunityPosts };
+
+const STORAGE_KEY = 'mos_forum_seed_v2';
+const UPVOTES_KEY = 'mos_forum_upvotes_v2';
 
 const POPULAR_COLLEGES = [
   'CBIT (Chaitanya Bharathi)',
@@ -53,6 +56,7 @@ const POPULAR_COLLEGES = [
   'GMR Institute of Technology (GMRIT)',
   'Gayatri Vidya Parishad (GVPCE)',
   'JNTUK Kakinada',
+  'SRKR Engineering College',
   'Sreenidhi Institute of Sci & Tech (SNIST)',
   'KMIT (Keshav Memorial)',
   'MGIT (Mahatma Gandhi)',
@@ -73,137 +77,7 @@ const BRANCH_OPTIONS = [
   'All Engineering Branches',
 ];
 
-const INITIAL_SEED_POSTS = [
-  {
-    id: 'post-seed-1',
-    type: 'dispatch',
-    title: 'CBIT Semester 5 Operating Systems Lab Viva Questions & Model Answers PDF',
-    content: `Professors at CBIT covered CPU scheduling, Peterson's algorithm, dining philosophers problem, and page replacement edge cases for upcoming external practicals. Uploaded the verified 14-page handwritten viva notes with code syntax!`,
-    branch: 'Computer Science (CSE)',
-    college: 'CBIT (Chaitanya Bharathi)',
-    authorName: 'Sanjay Reddy',
-    authorYear: '3rd Year B.Tech',
-    isAnonymous: false,
-    timestamp: '2 hours ago',
-    attachment: {
-      name: 'OS_Lab_Viva_Verified_2026.pdf',
-      size: '2.4 MB',
-      url: 'https://cdn.manofstudy.com/notes/mos-student-notes/cbit_os_lab_viva_2026.pdf',
-    },
-    upvotes: 42,
-    replies: [
-      {
-        id: 'reply-1-1',
-        authorName: 'Anonymous Scholar',
-        authorCollege: 'VNR Vignana Jyothi',
-        authorYear: '3rd Year',
-        isAnonymous: true,
-        content: 'Thanks for sharing Sanjay! JNTU R22 scheme also has the exact same virtual memory FIFO vs LRU numericals. Extremely helpful for our mid-lab.',
-        timestamp: '1 hour ago',
-        upvotes: 9,
-        isVerifiedSolution: true,
-      },
-      {
-        id: 'reply-1-2',
-        authorName: 'Kavitha P.',
-        authorCollege: 'OUCE',
-        authorYear: '3rd Year',
-        isAnonymous: false,
-        content: 'Page 7 semaphore implementation code compiled cleanly on Ubuntu GCC. Bookmarked!',
-        timestamp: '35 mins ago',
-        upvotes: 4,
-      },
-    ],
-  },
-  {
-    id: 'post-seed-2',
-    type: 'doubt',
-    title: 'Tier-3 Off-Campus Hiring: How do recruiters view AWS Solutions Architect cert without full-time exp?',
-    content: `I am currently in 6th semester at an affiliated JNTUH college. My CGPA is 8.4 and I have solved ~280 LeetCode problems (Array, DP, Graphs). Is it worth investing $150 in the AWS Solutions Architect Associate exam right now, or should I focus exclusively on building distributed backend projects with Spring Boot/Docker?`,
-    branch: 'Computer Science (CSE)',
-    college: 'JNTUH Affiliated College',
-    authorName: 'Anonymous Scholar',
-    authorYear: '3rd Year B.Tech',
-    isAnonymous: true,
-    timestamp: '5 hours ago',
-    urgency: 'Placement Prep',
-    codeSnippet: `// Current Project Tech Stack:
-Backend: Node.js / Go microservices
-Storage: PostgreSQL + Redis caching
-Cloud: Deployed on free AWS EC2 t2.micro via Docker`,
-    upvotes: 38,
-    replies: [
-      {
-        id: 'reply-2-1',
-        authorName: 'Aditya Varma',
-        authorCollege: 'VNR Vignana Jyothi',
-        authorYear: 'Alumni (Placed @ Amazon)',
-        isAnonymous: false,
-        content: 'As someone who graduated from Tier-3 last year: DO NOT spend $150 on certs yet. In off-campus tech screens, interviewers grill you on how you debugged connection pooling in Redis, how your DB migrations handle concurrent requests, and basic System Design. A live GitHub repo with automated CI/CD and architectural README carries 10x more weight than an entry-level certificate.',
-        timestamp: '4 hours ago',
-        upvotes: 27,
-        isVerifiedSolution: true,
-      },
-    ],
-  },
-  {
-    id: 'post-seed-3',
-    type: 'dispatch',
-    title: 'PVP Siddhartha Vijayawada: Microchip Core Embedded Internship Drive Checklist',
-    content: `Microchip Technology team visited our campus for ECE & EEE circuit design roles. Key topics they tested: 8051 timers, ARM Cortex-M architecture, I2C/SPI waveform debugging, and basic C pointer arithmetic. Attaching the technical syllabus guide!`,
-    branch: 'Electronics & Comm (ECE)',
-    college: 'PVP Siddhartha (Vijayawada)',
-    authorName: 'Nikhila K.',
-    authorYear: 'Final Year B.Tech',
-    isAnonymous: false,
-    timestamp: '1 day ago',
-    attachment: {
-      name: 'Microchip_ECE_Interview_CheatSheet.pdf',
-      size: '1.8 MB',
-      url: 'https://cdn.manofstudy.com/notes/mos-student-notes/pvpsit_microchip_ece_2026.pdf',
-    },
-    upvotes: 56,
-    replies: [
-      {
-        id: 'reply-3-1',
-        authorName: 'Rohan Sharma',
-        authorCollege: 'Gayatri Vidya Parishad',
-        authorYear: '4th Year',
-        isAnonymous: false,
-        content: 'Spot on! The SPI vs I2C pull-up resistor calculation was asked in our Texas Instruments written test as well.',
-        timestamp: '18 hours ago',
-        upvotes: 8,
-      },
-    ],
-  },
-  {
-    id: 'post-seed-4',
-    type: 'doubt',
-    title: 'ECE to Software Migration: JNTUK R20 external backlog clearance vs full-stack prep balance?',
-    content: `Have 1 backlog in M3 (Complex Variables & Numerical Methods) and want to crack TCS Digital / Cognizant GenC Next. Mid exams are in 3 weeks. How to partition daily 6 hours between clearing M3 and solving DSA?`,
-    branch: 'Electronics & Comm (ECE)',
-    college: 'JNTUK Kakinada',
-    authorName: 'Anonymous Scholar',
-    authorYear: '3rd Year B.Tech',
-    isAnonymous: true,
-    timestamp: '1 day ago',
-    urgency: 'Mid Exams Near',
-    upvotes: 29,
-    replies: [
-      {
-        id: 'reply-4-1',
-        authorName: 'Sai Kumar',
-        authorCollege: 'Vasavi College',
-        authorYear: '4th Year',
-        isAnonymous: false,
-        content: 'Dedicate 3.5 hours every morning to M3 past 5-year question papers (Runge-Kutta, Newton-Raphson, Cauchy-Riemann equations). Clear that single backlog first because companies reject candidates with active backlogs at the test registration portal! Keep DSA to 2.5 hours evening.',
-        timestamp: '22 hours ago',
-        upvotes: 16,
-        isVerifiedSolution: true,
-      },
-    ],
-  },
-];
+const INITIAL_SEED_POSTS = initialCommunityPosts;
 
 export const CampusConnect = ({ onNavigateToTool }) => {
   // State: Posts and User Interactions
@@ -217,7 +91,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     } catch {
       // ignore
     }
-    return INITIAL_SEED_POSTS;
+    return initialCommunityPosts;
   });
 
   const [upvotedPostIds, setUpvotedPostIds] = useState(() => {
@@ -420,10 +294,12 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     const newReply = {
       id: `reply-${Date.now()}`,
       authorName: replyAuthorNameFormatted,
+      role: replyAnonymous ? 'Anonymous Scholar' : '3rd Year Peer',
       authorCollege: replyCollegeFormatted,
       authorYear: 'B.Tech Student',
       isAnonymous: replyAnonymous,
       content: replyContentText,
+      createdAt: 'Just now',
       timestamp: 'Just now',
       upvotes: 1,
     };
@@ -533,8 +409,9 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       isAnonymous: formIsAnonymous,
       author_email: formAuthorEmail.trim() || undefined,
       authorEmail: formAuthorEmail.trim() || undefined,
+      createdAt: 'Just now',
       timestamp: 'Just now',
-      urgency: createMode === 'doubt' ? formUrgency : undefined,
+      urgency: createMode === 'doubt' ? formUrgency : 'Casual',
       codeSnippet: formCodeSnippet.trim() ? formCodeSnippet.trim() : undefined,
       attachments: uploadedAttachments,
       attachment: uploadedAttachments[0] || undefined,
@@ -562,8 +439,9 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     { id: 'dispatches', label: '💡 Campus Insights' },
     { id: 'doubts', label: '❓ Peer Doubts' },
     { id: 'cse', label: '💻 CSE/IT' },
+    { id: 'internships_placements', label: '🚀 Internships & Placements' },
+    { id: 'first_year_eapcet', label: '🎓 First Year & EAPCET' },
     { id: 'core', label: '⚡ Core Engg' },
-    { id: 'ai', label: '🤖 AI & Data' },
     { id: 'unresolved', label: '⏳ Unresolved Doubts' },
   ];
 
@@ -573,14 +451,41 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       // Category Chip Filter
       if (activeFilter === 'dispatches' && post.type !== 'dispatch') return false;
       if (activeFilter === 'doubts' && post.type !== 'doubt') return false;
-      if (activeFilter === 'unresolved' && (post.type !== 'doubt' || post.replies.length > 0)) return false;
-      if (activeFilter === 'cse' && !post.branch.includes('Computer') && !post.branch.includes('Information')) return false;
-      if (activeFilter === 'ai' && !post.branch.includes('AI') && !post.branch.includes('Data')) return false;
-      if (activeFilter === 'core' && (post.branch.includes('Computer') || post.branch.includes('Information') || post.branch.includes('AI') || post.branch.includes('Data'))) return false;
+      if (activeFilter === 'unresolved' && (post.type !== 'doubt' || (post.replies && post.replies.length > 0))) return false;
+
+      const branchStr = (post.branch || '').toUpperCase();
+      if (activeFilter === 'cse') {
+        const isCSE = branchStr.includes('CSE') || branchStr.includes('COMPUTER') || branchStr.includes('IT') || branchStr.includes('INFORMATION') || branchStr.includes('CSM') || branchStr.includes('CSD');
+        if (!isCSE) return false;
+      }
+      if (activeFilter === 'internships_placements') {
+        const isPlacementUrgency = post.urgency === 'Placement Prep' || post.urgency === 'Internship Advice';
+        const textToSearch = `${post.title} ${post.content}`.toLowerCase();
+        const matchesPlacementText = /placement|internship|package|lpa|hiring|gsoc|dsa|leetcode|off-campus|on-campus|interview|recruiter|referral/i.test(textToSearch);
+        if (!isPlacementUrgency && !matchesPlacementText) return false;
+      }
+      if (activeFilter === 'first_year_eapcet') {
+        const textToSearch = `${post.title} ${post.content}`.toLowerCase();
+        const isFirstYearOrEapcet =
+          /eapcet|counselling|first year|1st year|m1|m2|bee|chemistry|drawing|workshop|fee reimbursement|jvd|epass|sliding round|category b/i.test(textToSearch) ||
+          post.title.includes('M1') ||
+          post.title.includes('ED / CAD') ||
+          post.title.includes('BEE');
+        if (!isFirstYearOrEapcet) return false;
+      }
+      if (activeFilter === 'core') {
+        const isCore = branchStr.includes('ECE') || branchStr.includes('EEE') || branchStr.includes('MECH') || branchStr.includes('CIVIL') || branchStr.includes('ELECTRONICS') || branchStr.includes('MECHANICAL') || branchStr.includes('ELECTRICAL');
+        if (!isCore) return false;
+      }
 
       // Branch Dropdown Filter
       if (selectedBranchFilter !== 'All') {
-        if (!post.branch.includes(selectedBranchFilter)) return false;
+        const branchLower = (post.branch || '').toLowerCase();
+        if (selectedBranchFilter === 'Computer' && !branchLower.includes('cse') && !branchLower.includes('computer') && !branchLower.includes('it') && !branchLower.includes('csm') && !branchLower.includes('csd')) return false;
+        if (selectedBranchFilter === 'AI' && !branchLower.includes('csm') && !branchLower.includes('csd') && !branchLower.includes('ai') && !branchLower.includes('data')) return false;
+        if (selectedBranchFilter === 'Electronics' && !branchLower.includes('ece') && !branchLower.includes('eee') && !branchLower.includes('electronics') && !branchLower.includes('electrical')) return false;
+        if (selectedBranchFilter === 'Mechanical' && !branchLower.includes('mech')) return false;
+        if (selectedBranchFilter === 'Civil' && !branchLower.includes('civil')) return false;
       }
 
       // Search Query
@@ -590,7 +495,8 @@ export const CampusConnect = ({ onNavigateToTool }) => {
         const matchesContent = post.content.toLowerCase().includes(query);
         const matchesCollege = post.college.toLowerCase().includes(query);
         const matchesBranch = post.branch.toLowerCase().includes(query);
-        if (!matchesTitle && !matchesContent && !matchesCollege && !matchesBranch) {
+        const matchesAuthor = (post.authorName || '').toLowerCase().includes(query);
+        if (!matchesTitle && !matchesContent && !matchesCollege && !matchesBranch && !matchesAuthor) {
           return false;
         }
       }
@@ -806,7 +712,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                         {post.college}
                       </span>
                       <span>•</span>
-                      <span className="text-slate-500">{post.timestamp}</span>
+                      <span className="text-slate-500">{post.createdAt || post.timestamp}</span>
                     </div>
                   </div>
                 </div>
@@ -1495,14 +1401,20 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                           : 'bg-white border-pink-100'
                       }`}
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
+                      <div className="flex items-center justify-between flex-wrap gap-1.5">
+                        <div className="flex items-center gap-2 flex-wrap">
                           <span className="font-bold text-slate-900">
                             {reply.authorName}
                           </span>
-                          <span className="text-[10px] text-slate-500">
-                            • {reply.authorCollege}
-                          </span>
+                          {reply.role ? (
+                            <span className="text-[10px] font-semibold text-pink-700 bg-pink-100/80 px-2 py-0.5 rounded-full border border-pink-200">
+                              {reply.role}
+                            </span>
+                          ) : reply.authorCollege ? (
+                            <span className="text-[10px] text-slate-500">
+                              • {reply.authorCollege}
+                            </span>
+                          ) : null}
                         </div>
 
                         {reply.isVerifiedSolution && (
@@ -1518,7 +1430,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                       </p>
 
                       <div className="flex items-center justify-between pt-1 text-[11px] text-slate-500">
-                        <span>{reply.timestamp}</span>
+                        <span>{reply.createdAt || reply.timestamp}</span>
                         <button
                           type="button"
                           onClick={() => handleReplyUpvote(reply.id)}

@@ -778,7 +778,7 @@ export default function TgCollegePredictor() {
                   TG EAPCET College Predictor
                 </h1>
                 <p className="text-xs sm:text-sm text-slate-400">
-                  Data-backed admission probability engine based on 71,646 official 2026 candidate allotments across 151 Telangana engineering colleges.
+                  Admission probability engine backed by 71,646 official allotment records across 151 Telangana engineering colleges.
                 </p>
               </div>
             </div>

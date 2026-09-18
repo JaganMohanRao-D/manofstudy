@@ -139,7 +139,7 @@ export const PdfPowerTools: React.FC = () => {
       {/* Filter and Search Bar */}
       <div
         id="pdf-filter-bar"
-        className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4"
+        className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4"
       >
         {/* Category Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
@@ -147,8 +147,8 @@ export const PdfPowerTools: React.FC = () => {
             onClick={() => setSelectedCategory('all')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
               selectedCategory === 'all'
-                ? 'bg-sky-500 text-white shadow-xs'
-                : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
             }`}
           >
             All Tools ({categoryCounts.all})
@@ -157,8 +157,8 @@ export const PdfPowerTools: React.FC = () => {
             onClick={() => setSelectedCategory('convert')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
               selectedCategory === 'convert'
-                ? 'bg-sky-500 text-white shadow-xs'
-                : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
             }`}
           >
             Convert ({categoryCounts.convert})
@@ -167,8 +167,8 @@ export const PdfPowerTools: React.FC = () => {
             onClick={() => setSelectedCategory('edit')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
               selectedCategory === 'edit'
-                ? 'bg-sky-500 text-white shadow-xs'
-                : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
             }`}
           >
             Edit &amp; Organize ({categoryCounts.edit})
@@ -177,8 +177,8 @@ export const PdfPowerTools: React.FC = () => {
             onClick={() => setSelectedCategory('secure')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
               selectedCategory === 'secure'
-                ? 'bg-sky-500 text-white shadow-xs'
-                : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
             }`}
           >
             Secure &amp; Repair ({categoryCounts.secure})
@@ -187,8 +187,8 @@ export const PdfPowerTools: React.FC = () => {
             onClick={() => setSelectedCategory('optimize')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
               selectedCategory === 'optimize'
-                ? 'bg-sky-500 text-white shadow-xs'
-                : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
             }`}
           >
             Optimize &amp; AI ({categoryCounts.optimize})
