@@ -166,12 +166,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'tool-pdf-tools',
-        title: '30+ PDF Power Tools',
-        subtitle: 'Zero-server WebAssembly PDF merge, split, compress, protect & convert',
+        title: 'free pdf tools for students',
+        subtitle: 'In-browser PDF merge, split, excel to pdf, image to pdf, protect & AI summary',
         category: 'Core Tools',
-        badge: 'PDF Suite',
+        badge: 'free pdf tools for students',
         icon: <FileText className="w-4 h-4 text-emerald-500" />,
-        keywords: ['pdf', 'merge', 'compress', 'split', 'watermark', 'convert', 'protect', 'unlock', 'word to pdf'],
+        keywords: ['pdf', 'merge', 'split', 'excel to pdf', 'image to pdf', 'protect', 'summarize', 'free pdf tools for students'],
         action: () => onSelectTool('pdf-tools'),
       },
       {
@@ -518,7 +518,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           </span>
           {[
             { label: 'All', q: '' },
-            { label: 'PDF Suite', q: 'pdf' },
+            { label: 'free pdf tools for students', q: 'pdf' },
             { label: 'Roadmaps', q: 'roadmap' },
             { label: 'Robotics', q: 'robotics' },
             { label: 'CSE', q: 'cse' },

@@ -146,7 +146,7 @@ export const WORKSPACES = [
   {
     id: 'ws-pdf',
     workspace: 'utilities',
-    title: 'PDF Tools for Free & 20KB Photo Resizer',
+    title: 'free pdf tools for students',
     badge: '100% Free',
     badgeColor: 'bg-pink-500/15 text-pink-700 border-pink-500/30',
     description: 'Fast, in-browser PDF utilities. Zero uploads, zero tracking, completely free.',

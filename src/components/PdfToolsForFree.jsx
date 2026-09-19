@@ -5,7 +5,6 @@ import {
   Scissors,
   Image as ImageIcon,
   Lock,
-  RotateCw,
   Sparkles,
   Upload,
   Download,
@@ -26,10 +25,15 @@ import {
   FileCheck2,
   Clock,
   BookOpen,
+  FileSpreadsheet,
+  Table,
 } from 'lucide-react';
 import { PDFDocument, rgb, degrees, PageSizes } from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist';
 import { encryptPDF } from '@pdfsmaller/pdf-encrypt';
+import { jsPDF } from 'jspdf';
+import * as XLSX from 'xlsx';
+import autoTable from 'jspdf-autotable';
 import { configurePdfWorker } from '../utils/pdfWorkerConfig';
 
 // Initialize PDF.js worker
@@ -63,38 +67,105 @@ function formatBytes(bytes) {
 }
 
 /**
- * Convert an image file (e.g. WebP, JPG, PNG) to PNG bytes via HTML Canvas
+ * Convert a File to Data URL for image embedding
  */
-async function convertImageToPngBytes(file) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    const url = URL.createObjectURL(file);
-    img.onload = () => {
-      URL.revokeObjectURL(url);
-      const canvas = document.createElement('canvas');
-      canvas.width = img.naturalWidth || img.width;
-      canvas.height = img.naturalHeight || img.height;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        reject(new Error('Canvas 2D context unavailable'));
-        return;
-      }
-      ctx.drawImage(img, 0, 0);
-      canvas.toBlob((blob) => {
-        if (!blob) {
-          reject(new Error('Failed to encode image to PNG'));
-          return;
-        }
-        blob.arrayBuffer().then((buf) => resolve(new Uint8Array(buf))).catch(reject);
-      }, 'image/png');
-    };
-    img.onerror = () => {
-      URL.revokeObjectURL(url);
-      reject(new Error(`Failed to load image file: ${file.name}`));
-    };
-    img.src = url;
+export const fileToDataUrl = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
   });
-}
+
+/**
+ * 1. REAL "IMAGE TO PDF" ENGINE (100% FUNCTIONAL)
+ * Uses jsPDF to convert .jpg, .jpeg, .png, .webp directly inside the browser canvas
+ */
+export const convertImagesToPdf = async (imageFiles, options = {}) => {
+  const orientation = options.orientation || 'portrait';
+  const doc = new jsPDF({ orientation, unit: 'mm', format: 'a4' });
+
+  for (let i = 0; i < imageFiles.length; i++) {
+    const file = imageFiles[i];
+    const imgData = await fileToDataUrl(file);
+
+    const img = new Image();
+    img.src = imgData;
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = () => reject(new Error(`Failed to load image: ${file.name}`));
+    });
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+
+    const margin = options.margin === 'compact' ? 5 : options.margin === 'none' ? 0 : 10;
+    const usableWidth = pageWidth - margin * 2;
+    const usableHeight = pageHeight - margin * 2;
+
+    const ratio = Math.min(usableWidth / img.width, usableHeight / img.height);
+    const w = img.width * ratio;
+    const h = img.height * ratio;
+    const x = margin + (usableWidth - w) / 2;
+    const y = margin + (usableHeight - h) / 2;
+
+    if (i > 0) doc.addPage();
+    doc.addImage(imgData, 'JPEG', x, y, w, h);
+  }
+
+  const outName = options.filename || 'Converted_Images.pdf';
+  doc.save(outName);
+  return doc;
+};
+
+/**
+ * 2. REAL "EXCEL TO PDF" ENGINE (100% FUNCTIONAL)
+ * Parse .xlsx / .xls via xlsx (SheetJS) and format table data onto a clean vector table via jspdf-autotable
+ */
+export const convertExcelToPdf = async (excelFile, options = {}) => {
+  const data = await excelFile.arrayBuffer();
+  const workbook = XLSX.read(data, { type: 'array' });
+
+  const orientation = options.orientation || 'landscape';
+  const doc = new jsPDF(orientation);
+  let first = true;
+  let totalSheets = 0;
+
+  const runAutoTable = typeof autoTable === 'function' ? autoTable : (autoTable?.default || doc.autoTable);
+
+  workbook.SheetNames.forEach((sheetName) => {
+    const sheet = workbook.Sheets[sheetName];
+    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+    if (rows.length > 0) {
+      if (!first) doc.addPage();
+      first = false;
+      totalSheets++;
+
+      doc.setFontSize(12);
+      doc.text(`Sheet: ${sheetName}`, 14, 15);
+
+      const head = rows[0] ? [rows[0]] : [];
+      const body = rows.slice(1);
+
+      runAutoTable(doc, {
+        head: head,
+        body: body,
+        startY: 20,
+        styles: { fontSize: 8, cellPadding: 2 },
+        headStyles: { fillColor: [236, 72, 153] },
+      });
+    }
+  });
+
+  if (totalSheets === 0) {
+    throw new Error('Workbook contains no readable rows or sheets.');
+  }
+
+  const outName = `${excelFile.name.replace(/\.[^/.]+$/, '')}.pdf`;
+  doc.save(outName);
+  return doc;
+};
 
 /**
  * Parse a page range string (e.g. "1-3, 5, 7-9") into sorted, unique 0-indexed page numbers
@@ -127,8 +198,22 @@ function parsePageRange(rangeStr, totalPages) {
   return Array.from(indices).sort((a, b) => a - b);
 }
 
-// 6 Core Bulletproof Utilities
+// 6 Core Bulletproof Utilities Curated for Engineering Students
 const TOOLS = [
+  {
+    id: 'images-to-pdf',
+    name: 'Image to PDF',
+    icon: ImageIcon,
+    tagline: 'Multi-image (.jpg, .png, .webp) to auto-scaled, formatted A4 PDF.',
+    badge: 'jsPDF Native',
+  },
+  {
+    id: 'excel-to-pdf',
+    name: 'Excel to PDF',
+    icon: FileSpreadsheet,
+    tagline: 'Sheets to clean tabular vector PDF report with pink headers.',
+    badge: 'SheetJS + AutoTable',
+  },
   {
     id: 'merge',
     name: 'Merge Multiple PDFs',
@@ -144,25 +229,11 @@ const TOOLS = [
     badge: 'Zero Corrupt',
   },
   {
-    id: 'images-to-pdf',
-    name: 'Images to PDF',
-    icon: ImageIcon,
-    tagline: 'Convert PNG, JPG, and WebP images into standard A4 PDF pages with auto-scaling.',
-    badge: 'A4 Proportional',
-  },
-  {
     id: 'protect',
     name: 'Protect PDF (Password Lock)',
     icon: Lock,
     tagline: 'Apply genuine standard encryption so only users with the password can open it.',
     badge: 'Real Crypto Lock',
-  },
-  {
-    id: 'rotate',
-    name: 'Rotate & Reorder Pages',
-    icon: RotateCw,
-    tagline: 'Fix orientation (90°, 180°, 270°) and reorder individual pages flawlessly.',
-    badge: 'Lossless Rotation',
   },
   {
     id: 'ai-summarizer',
@@ -174,7 +245,7 @@ const TOOLS = [
 ];
 
 export const PdfToolsForFree = () => {
-  const [activeTab, setActiveTab] = useState('merge');
+  const [activeTab, setActiveTab] = useState('images-to-pdf');
 
   // Shared processing & notification state
   const [isProcessing, setIsProcessing] = useState(false);
@@ -199,19 +270,19 @@ export const PdfToolsForFree = () => {
   const [imageOrientation, setImageOrientation] = useState('portrait'); // 'portrait' | 'landscape'
   const imageInputRef = useRef(null);
 
-  // 4. Protect PDF State
+  // 4. Excel to PDF State
+  const [excelFile, setExcelFile] = useState(null);
+  const [excelSheetNames, setExcelSheetNames] = useState([]);
+  const [excelOrientation, setExcelOrientation] = useState('landscape'); // 'landscape' | 'portrait'
+  const [excelPreviewRows, setExcelPreviewRows] = useState([]);
+  const excelInputRef = useRef(null);
+
+  // 5. Protect PDF State
   const [protectFile, setProtectFile] = useState(null);
   const [protectPassword, setProtectPassword] = useState('');
   const [protectConfirm, setProtectConfirm] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const protectInputRef = useRef(null);
-
-  // 5. Rotate & Reorder State
-  const [rotateFile, setRotateFile] = useState(null);
-  const [rotatePageCount, setRotatePageCount] = useState(0);
-  const [pageRotations, setPageRotations] = useState([]); // array of rotation angles per page: 0, 90, 180, 270
-  const [pageOrder, setPageOrder] = useState([]); // array of 0-indexed page numbers
-  const rotateInputRef = useRef(null);
 
   // 6. AI Summariser State
   const [summaryFile, setSummaryFile] = useState(null);
@@ -460,68 +531,20 @@ export const PdfToolsForFree = () => {
     setIsProcessing(true);
     setErrorMessage('');
     setSuccessMessage('');
-    setStatusMessage('Creating A4 PDF canvas...');
+    setStatusMessage('Rendering images onto jsPDF A4 canvas...');
 
     try {
-      const pdfDoc = await PDFDocument.create();
-
-      // Page sizing: A4 is 595.28 x 841.89 points
-      const isLandscape = imageOrientation === 'landscape';
-      const a4Width = isLandscape ? PageSizes.A4[1] : PageSizes.A4[0];
-      const a4Height = isLandscape ? PageSizes.A4[0] : PageSizes.A4[1];
-
-      const marginPt = imageMargin === 'none' ? 0 : imageMargin === 'compact' ? 15 : 30;
-
-      for (let i = 0; i < imageFiles.length; i++) {
-        const item = imageFiles[i];
-        setStatusMessage(`Processing image ${i + 1} of ${imageFiles.length}: "${item.file.name}"...`);
-
-        const page = pdfDoc.addPage([a4Width, a4Height]);
-        const availWidth = a4Width - marginPt * 2;
-        const availHeight = a4Height - marginPt * 2;
-
-        let embeddedImage;
-        const name = item.file.name.toLowerCase();
-
-        if (name.endsWith('.jpg') || name.endsWith('.jpeg') || item.file.type === 'image/jpeg') {
-          const bytes = await item.file.arrayBuffer();
-          embeddedImage = await pdfDoc.embedJpg(bytes);
-        } else if (name.endsWith('.png') || item.file.type === 'image/png') {
-          const bytes = await item.file.arrayBuffer();
-          embeddedImage = await pdfDoc.embedPng(bytes);
-        } else {
-          // WebP or other raster formats -> convert to PNG via Canvas
-          const pngBytes = await convertImageToPngBytes(item.file);
-          embeddedImage = await pdfDoc.embedPng(pngBytes);
+      await convertImagesToPdf(
+        imageFiles.map((f) => f.file),
+        {
+          orientation: imageOrientation,
+          margin: imageMargin,
+          filename: 'Converted_Images.pdf',
         }
-
-        // Proportional auto-scaling calculation
-        const imgWidth = embeddedImage.width;
-        const imgHeight = embeddedImage.height;
-        const scale = Math.min(availWidth / imgWidth, availHeight / imgHeight, 1);
-
-        const drawWidth = imgWidth * scale;
-        const drawHeight = imgHeight * scale;
-
-        // Center on A4 page
-        const posX = marginPt + (availWidth - drawWidth) / 2;
-        const posY = marginPt + (availHeight - drawHeight) / 2;
-
-        page.drawImage(embeddedImage, {
-          x: posX,
-          y: posY,
-          width: drawWidth,
-          height: drawHeight,
-        });
-      }
-
-      setStatusMessage('Compiling final PDF...');
-      const pdfBytes = await pdfDoc.save();
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      downloadBlob(blob, 'images_converted.pdf');
+      );
 
       setSuccessMessage(
-        `Converted ${imageFiles.length} image${imageFiles.length > 1 ? 's' : ''} into a pristine A4 PDF (${formatBytes(blob.size)})!`
+        `Converted ${imageFiles.length} image${imageFiles.length > 1 ? 's' : ''} into a formatted A4 PDF using browser-native jsPDF!`
       );
     } catch (err) {
       console.error('Images to PDF error:', err);
@@ -533,7 +556,75 @@ export const PdfToolsForFree = () => {
   };
 
   // ==========================================================================
-  // TOOL 4: PROTECT PDF (PASSWORD LOCK)
+  // TOOL: EXCEL TO PDF (SHEETJS + AUTOTABLE)
+  // ==========================================================================
+  const handleSetExcelFile = async (file) => {
+    setErrorMessage('');
+    setSuccessMessage('');
+    if (!file) return;
+
+    const lowerName = file.name.toLowerCase();
+    const isExcel =
+      lowerName.endsWith('.xlsx') ||
+      lowerName.endsWith('.xls') ||
+      lowerName.endsWith('.csv') ||
+      file.type.includes('spreadsheet') ||
+      file.type.includes('excel') ||
+      file.type.includes('csv');
+
+    if (!isExcel) {
+      setErrorMessage('Please upload a valid Excel spreadsheet (.xlsx, .xls) or .csv file.');
+      return;
+    }
+
+    try {
+      const data = await file.arrayBuffer();
+      const workbook = XLSX.read(data, { type: 'array' });
+
+      if (!workbook.SheetNames || workbook.SheetNames.length === 0) {
+        setErrorMessage('This workbook contains no sheets.');
+        return;
+      }
+
+      setExcelFile(file);
+      setExcelSheetNames(workbook.SheetNames);
+
+      // Extract preview rows from the first sheet
+      const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+      const previewData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+      setExcelPreviewRows(previewData.slice(0, 6));
+    } catch (err) {
+      console.error('Failed to read Excel workbook:', err);
+      setErrorMessage('Could not read Excel file. Please ensure it is a valid .xlsx or .xls file.');
+    }
+  };
+
+  const executeExcelToPdf = async () => {
+    if (!excelFile) {
+      setErrorMessage('Please upload an Excel file to convert.');
+      return;
+    }
+
+    setIsProcessing(true);
+    setErrorMessage('');
+    setSuccessMessage('');
+    setStatusMessage('Parsing sheets and formatting tabular vector PDF report...');
+
+    try {
+      await convertExcelToPdf(excelFile, { orientation: excelOrientation });
+      const outName = `${excelFile.name.replace(/\.[^/.]+$/, '')}.pdf`;
+      setSuccessMessage(`Successfully converted spreadsheet sheets into high-res vector PDF (${outName})!`);
+    } catch (err) {
+      console.error('Excel to PDF error:', err);
+      setErrorMessage(err.message || 'Failed to convert Excel to PDF.');
+    } finally {
+      setIsProcessing(false);
+      setStatusMessage('');
+    }
+  };
+
+  // ==========================================================================
+  // TOOL 5: PROTECT PDF (PASSWORD LOCK)
   // ==========================================================================
   const handleSetProtectFile = async (file) => {
     setErrorMessage('');
@@ -594,97 +685,6 @@ export const PdfToolsForFree = () => {
     } catch (err) {
       console.error('Protect PDF error:', err);
       setErrorMessage(err.message || 'Failed to password-protect PDF.');
-    } finally {
-      setIsProcessing(false);
-      setStatusMessage('');
-    }
-  };
-
-  // ==========================================================================
-  // TOOL 5: ROTATE & REORDER PAGES
-  // ==========================================================================
-  const handleSetRotateFile = async (file) => {
-    setErrorMessage('');
-    setSuccessMessage('');
-    if (!file || (!file.type.includes('pdf') && !file.name.toLowerCase().endsWith('.pdf'))) {
-      setErrorMessage('Please upload a valid .pdf file.');
-      return;
-    }
-
-    try {
-      const buffer = await file.arrayBuffer();
-      const doc = await PDFDocument.load(buffer, { ignoreEncryption: true });
-      const total = doc.getPageCount();
-      setRotateFile(file);
-      setRotatePageCount(total);
-      setPageRotations(new Array(total).fill(0));
-      setPageOrder(Array.from({ length: total }, (_, i) => i));
-    } catch (err) {
-      setErrorMessage('Could not load PDF. It may be corrupt or encrypted.');
-    }
-  };
-
-  const handleRotateAll = (degreesToAdd) => {
-    setPageRotations((prev) => prev.map((curr) => (curr + degreesToAdd) % 360));
-  };
-
-  const handleRotateSinglePage = (pageIndex, degreesToAdd) => {
-    setPageRotations((prev) => {
-      const copy = [...prev];
-      copy[pageIndex] = (copy[pageIndex] + degreesToAdd) % 360;
-      return copy;
-    });
-  };
-
-  const handleMovePageOrder = (index, direction) => {
-    setPageOrder((prev) => {
-      const copy = [...prev];
-      const target = index + direction;
-      if (target < 0 || target >= copy.length) return prev;
-      const temp = copy[index];
-      copy[index] = copy[target];
-      copy[target] = temp;
-      return copy;
-    });
-  };
-
-  const executeRotateAndReorder = async () => {
-    if (!rotateFile) {
-      setErrorMessage('Please upload a PDF file.');
-      return;
-    }
-
-    setIsProcessing(true);
-    setErrorMessage('');
-    setSuccessMessage('');
-    setStatusMessage('Re-indexing pages and applying lossless rotations...');
-
-    try {
-      const buffer = await rotateFile.arrayBuffer();
-      const srcDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
-      const newDoc = await PDFDocument.create();
-
-      // Copy pages in user-specified order
-      const copiedPages = await newDoc.copyPages(srcDoc, pageOrder);
-
-      copiedPages.forEach((page, idx) => {
-        const originalPageIndex = pageOrder[idx];
-        const addedRot = pageRotations[originalPageIndex] || 0;
-        const currentRot = page.getRotation().angle;
-        page.setRotation(degrees((currentRot + addedRot) % 360));
-        newDoc.addPage(page);
-      });
-
-      setStatusMessage('Generating rotated PDF document...');
-      const bytes = await newDoc.save();
-      const baseName = rotateFile.name.replace(/\.pdf$/i, '');
-      const blob = new Blob([bytes], { type: 'application/pdf' });
-      downloadBlob(blob, `${baseName}_rotated.pdf`);
-
-      setSuccessMessage(`Rotated and reorganized ${pageOrder.length} pages successfully!`);
-    } catch (err) {
-      console.error('Rotate error:', err);
-      setErrorMessage(err.message || 'Failed to rotate PDF.');
     } finally {
       setIsProcessing(false);
       setStatusMessage('');
@@ -851,7 +851,7 @@ export const PdfToolsForFree = () => {
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              PDF Tools for Free
+              free pdf tools for students
             </h1>
             <p className="text-sm text-slate-600 leading-relaxed max-w-3xl">
               Fast, in-browser PDF utilities. Zero uploads, zero tracking, completely free.
@@ -861,7 +861,7 @@ export const PdfToolsForFree = () => {
           <div className="flex items-center gap-3 shrink-0">
             <div className="text-right hidden sm:block">
               <span className="block text-xs font-bold text-slate-800">Verified Native PDF Stack</span>
-              <span className="block text-[11px] text-slate-500">pdf-lib • pdfjs-dist • Gemini Flash</span>
+              <span className="block text-[11px] text-slate-500">jsPDF • SheetJS • pdf-lib • Gemini Flash</span>
             </div>
             <div className="w-10 h-10 rounded-xl bg-pink-50 border border-pink-200 flex items-center justify-center text-pink-600 shadow-xs">
               <ShieldCheck className="w-5 h-5" />
@@ -1532,145 +1532,164 @@ export const PdfToolsForFree = () => {
         )}
 
         {/* ==================================================================== */}
-        {/* 5. ROTATE & REORDER PAGES */}
+        {/* EXCEL TO PDF (SHEETJS + AUTOTABLE) */}
         {/* ==================================================================== */}
-        {activeTab === 'rotate' && (
+        {activeTab === 'excel-to-pdf' && (
           <div className="space-y-6">
             <div className="border-b border-slate-100 pb-4">
               <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <RotateCw className="w-5 h-5 text-pink-600" />
-                Rotate &amp; Reorder Pages
+                <FileSpreadsheet className="w-5 h-5 text-pink-600" />
+                Excel to PDF (SheetJS + AutoTable)
               </h2>
               <p className="text-xs text-slate-500 mt-0.5">
-                Rotate upside-down scanned pages and adjust page order lossless-wise.
+                Convert .xlsx, .xls, and .csv spreadsheets into clean, high-resolution vector PDF reports with pink table headers.
               </p>
             </div>
 
             <input
-              ref={rotateInputRef}
+              ref={excelInputRef}
               type="file"
-              accept=".pdf,application/pdf"
+              accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"
               className="hidden"
               onChange={(e) => {
-                if (e.target.files?.[0]) handleSetRotateFile(e.target.files[0]);
+                if (e.target.files?.[0]) handleSetExcelFile(e.target.files[0]);
                 e.target.value = '';
               }}
             />
 
-            {!rotateFile ? (
+            {!excelFile ? (
               <div
-                onClick={() => rotateInputRef.current?.click()}
+                onClick={() => excelInputRef.current?.click()}
                 className="border-2 border-dashed border-pink-200 hover:border-pink-400 bg-pink-50/20 hover:bg-pink-50/40 rounded-2xl p-10 text-center transition-all cursor-pointer space-y-3"
               >
                 <div className="w-12 h-12 mx-auto rounded-xl bg-pink-100/80 text-pink-600 flex items-center justify-center">
-                  <RotateCw className="w-6 h-6" />
+                  <FileSpreadsheet className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-slate-900">Upload PDF to rotate or reorder</p>
-                  <p className="text-xs text-slate-500 mt-1">Single PDF file</p>
+                  <p className="text-sm font-bold text-slate-900">Click to upload Excel or CSV file</p>
+                  <p className="text-xs text-slate-500 mt-1">Supports .xlsx, .xls, and .csv formats</p>
+                </div>
+                <div className="inline-flex items-center gap-2 text-[11px] font-semibold text-pink-700 bg-pink-50 border border-pink-200 px-3 py-1 rounded-full">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  Vector table rendering • Zero server uploads
                 </div>
               </div>
             ) : (
               <div className="space-y-5">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-200 gap-3">
                   <div className="flex items-center gap-3">
-                    <FileText className="w-7 h-7 text-pink-600" />
+                    <FileSpreadsheet className="w-7 h-7 text-pink-600" />
                     <div>
-                      <p className="text-xs font-bold text-slate-900">{rotateFile.name}</p>
-                      <p className="text-[11px] text-slate-500">{rotatePageCount} total pages</p>
+                      <p className="text-xs font-bold text-slate-900">{excelFile.name}</p>
+                      <p className="text-[11px] text-slate-500">
+                        {formatBytes(excelFile.size)} • {excelSheetNames.length} sheet{excelSheetNames.length > 1 ? 's' : ''} detected
+                      </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => handleRotateAll(90)}
-                      className="px-3 py-1.5 text-xs font-semibold bg-white border border-slate-200 hover:bg-slate-100 rounded-lg text-slate-700 flex items-center gap-1.5 cursor-pointer"
-                    >
-                      <RotateCw className="w-3.5 h-3.5 text-pink-600" />
-                      Rotate All +90°
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleRotateAll(180)}
-                      className="px-3 py-1.5 text-xs font-semibold bg-white border border-slate-200 hover:bg-slate-100 rounded-lg text-slate-700 flex items-center gap-1.5 cursor-pointer"
-                    >
-                      <RotateCw className="w-3.5 h-3.5 text-pink-600" />
-                      Rotate All 180°
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setRotateFile(null)}
-                      className="text-xs text-rose-600 hover:underline cursor-pointer px-2"
-                    >
-                      Change
-                    </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setExcelFile(null);
+                      setExcelPreviewRows([]);
+                      setExcelSheetNames([]);
+                    }}
+                    className="text-xs text-rose-600 hover:underline cursor-pointer"
+                  >
+                    Change File
+                  </button>
+                </div>
+
+                {/* Configuration Options */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="block text-xs font-bold text-slate-800">Page Orientation</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setExcelOrientation('landscape')}
+                        className={`px-3 py-2 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
+                          excelOrientation === 'landscape'
+                            ? 'bg-pink-50 border-pink-500 text-pink-700 ring-1 ring-pink-400'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        Landscape (Recommended)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setExcelOrientation('portrait')}
+                        className={`px-3 py-2 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
+                          excelOrientation === 'portrait'
+                            ? 'bg-pink-50 border-pink-500 text-pink-700 ring-1 ring-pink-400'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        Portrait
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-xs font-bold text-slate-800">Detected Sheets</label>
+                    <div className="flex flex-wrap gap-1.5 p-2 bg-slate-50 border border-slate-200 rounded-xl min-h-[40px] items-center">
+                      {excelSheetNames.map((sheet, sIdx) => (
+                        <span
+                          key={sIdx}
+                          className="px-2 py-0.5 text-[11px] font-bold bg-pink-100 text-pink-700 border border-pink-200 rounded-md"
+                        >
+                          {sheet}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
-                {/* Pages Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
-                  {pageOrder.map((pageIdx, index) => {
-                    const rot = pageRotations[pageIdx] || 0;
-                    return (
-                      <div
-                        key={pageIdx}
-                        className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between gap-2.5"
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="text-[11px] font-bold text-slate-900">Page {pageIdx + 1}</span>
-                          <span className="text-[10px] font-semibold text-pink-700 bg-pink-100 px-1.5 py-0.5 rounded">
-                            {rot}°
-                          </span>
-                        </div>
+                {/* Live Table Preview */}
+                {excelPreviewRows.length > 0 && (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                        <Table className="w-3.5 h-3.5 text-pink-600" />
+                        First Sheet Sample Data (Top {excelPreviewRows.length} Rows)
+                      </span>
+                      <span className="text-[11px] text-slate-500">Vector Table with Pink Header</span>
+                    </div>
 
-                        <div className="aspect-3/4 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-400 font-bold text-sm shadow-xs">
-                          <span style={{ transform: `rotate(${rot}deg)` }} className="transition-transform duration-200">
-                            P.{pageIdx + 1}
-                          </span>
-                        </div>
-
-                        <div className="flex items-center justify-between pt-1 border-t border-slate-200">
-                          <div className="flex gap-1">
-                            <button
-                              type="button"
-                              disabled={index === 0}
-                              onClick={() => handleMovePageOrder(index, -1)}
-                              className="p-1 text-slate-500 hover:bg-slate-200 rounded disabled:opacity-20 cursor-pointer"
-                              title="Move earlier"
-                            >
-                              <ArrowUp className="w-3 h-3" />
-                            </button>
-                            <button
-                              type="button"
-                              disabled={index === pageOrder.length - 1}
-                              onClick={() => handleMovePageOrder(index, 1)}
-                              className="p-1 text-slate-500 hover:bg-slate-200 rounded disabled:opacity-20 cursor-pointer"
-                              title="Move later"
-                            >
-                              <ArrowDown className="w-3 h-3" />
-                            </button>
-                          </div>
-
-                          <button
-                            type="button"
-                            onClick={() => handleRotateSinglePage(pageIdx, 90)}
-                            className="p-1 text-pink-600 hover:bg-pink-50 rounded cursor-pointer"
-                            title="Rotate 90 degrees"
-                          >
-                            <RotateCw className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                    <div className="border border-slate-200 rounded-xl overflow-x-auto max-h-56 bg-white shadow-xs">
+                      <table className="w-full text-left text-xs border-collapse">
+                        {excelPreviewRows[0] && (
+                          <thead className="bg-pink-600 text-white font-bold sticky top-0">
+                            <tr>
+                              {excelPreviewRows[0].map((cell, cIdx) => (
+                                <th key={cIdx} className="px-3 py-2 border-r border-pink-700/50 truncate max-w-[160px]">
+                                  {cell !== undefined && cell !== null ? String(cell) : `Col ${cIdx + 1}`}
+                                </th>
+                              ))}
+                            </tr>
+                          </thead>
+                        )}
+                        <tbody className="divide-y divide-slate-100 text-slate-700">
+                          {excelPreviewRows.slice(1).map((row, rIdx) => (
+                            <tr key={rIdx} className="hover:bg-pink-50/20">
+                              {row.map((cell, cIdx) => (
+                                <td key={cIdx} className="px-3 py-2 border-r border-slate-100 truncate max-w-[160px]">
+                                  {cell !== undefined && cell !== null ? String(cell) : ''}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
 
                 <div className="pt-3 border-t border-slate-100 flex justify-end">
                   <button
                     type="button"
                     disabled={isProcessing}
-                    onClick={executeRotateAndReorder}
+                    onClick={executeExcelToPdf}
                     className="px-6 py-2.5 text-xs font-bold text-white bg-pink-600 hover:bg-pink-700 rounded-xl disabled:opacity-50 transition-colors shadow-xs flex items-center gap-2 cursor-pointer"
                   >
                     {isProcessing ? (
@@ -1678,7 +1697,7 @@ export const PdfToolsForFree = () => {
                     ) : (
                       <Download className="w-4 h-4" />
                     )}
-                    Save &amp; Download Rotated PDF
+                    Convert &amp; Download PDF
                   </button>
                 </div>
               </div>

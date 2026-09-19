@@ -515,7 +515,7 @@ export const SlideOverDrawer = ({
                   <FileText className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />
                   <div>
                     <div className="text-xs font-bold text-white group-hover:text-sky-300 transition-colors flex items-center gap-1.5">
-                      <span>Client-Side PDF Suite (20KB Resizer)</span>
+                      <span>free pdf tools for students</span>
                       <span className="text-[9px] bg-sky-500/20 text-sky-300 px-1.5 py-0.2 rounded font-mono">30+ Tools</span>
                     </div>
                     <div className="text-[10px] text-slate-400">

@@ -225,8 +225,8 @@ export const TOOLS_CONFIG: ToolMeta[] = [
   },
   {
     id: 'pdf-tools',
-    name: 'PDF Tools for Free',
-    shortName: 'PDF Tools for Free',
+    name: 'free pdf tools for students',
+    shortName: 'free pdf tools for students',
     category: 'document',
     description: 'Fast, in-browser PDF utilities. Zero uploads, zero tracking, completely free.',
     badge: '100% Free',
@@ -527,7 +527,7 @@ export default function App() {
         };
       case 'utilities':
         return {
-          title: 'PDF Tools for Free & Student Utilities',
+          title: 'free pdf tools for students',
           icon: <FileText className="w-4 h-4 text-pink-500" />,
         };
       case 'dsa':
@@ -824,7 +824,7 @@ export default function App() {
                     <div className="bg-white border border-slate-200 p-2 rounded-2xl shadow-xs">
                       <div className="flex items-center gap-1 overflow-x-auto no-scrollbar pb-1 text-xs">
                         {[
-                          { id: 'pdf-tools' as ToolTab, label: 'PDF Tools for Free', icon: FileText },
+                          { id: 'pdf-tools' as ToolTab, label: 'free pdf tools for students', icon: FileText },
                           { id: 'vault' as ToolTab, label: 'Code & Viva Vault', icon: Terminal },
                           { id: 'resizer' as ToolTab, label: '20KB Image Resizer', icon: ImageIcon },
                           { id: 'resume-checker' as ToolTab, label: 'ATS Resume Matcher', icon: FileCheck },
