@@ -4,6 +4,8 @@ import JSZip from 'jszip';
 import * as pdfjsLib from 'pdfjs-dist';
 import { configurePdfWorker, getPdfJsWorkerUrl } from './pdfWorkerConfig';
 import { buildPptxFromSlides } from './pptxBuilder';
+import * as XLSX from 'xlsx';
+import autoTable from 'jspdf-autotable';
 
 // Configure reliable, CORS-friendly PDF.js worker in browser
 if (typeof window !== 'undefined') {
@@ -740,66 +742,199 @@ export async function excelToPdf(
   file: File,
   onProgress?: (progress: number, msg: string) => void
 ): Promise<{ blob: Blob; filename: string }> {
-  onProgress?.(20, 'Reading spreadsheet tabular rows...');
-  const text = await file.text();
-  const rawRows = text.split(/\r?\n/).filter((r) => r.trim().length > 0);
+  onProgress?.(15, 'Reading workbook and detecting sheets...');
+  const data = await file.arrayBuffer();
+  const workbook = XLSX.read(data, { type: 'array', cellDates: true });
 
-  onProgress?.(60, 'Drawing tabular matrix into PDF...');
   const doc = new jsPDF({
     orientation: 'landscape',
     unit: 'pt',
     format: 'a4',
+    compress: true,
   });
 
-  // Title
-  doc.setFontSize(16);
-  doc.setTextColor(15, 23, 42);
-  doc.text(`Spreadsheet Report: ${file.name.replace(/\.[^/.]+$/, '')}`, 40, 45);
+  const isMeaningful = (value: unknown) =>
+    value !== null &&
+    value !== undefined &&
+    String(value).trim() !== '';
 
-  let y = 70;
-  const colWidth = 140;
-  const rowHeight = 22;
-  const startX = 40;
+  const normalizeCell = (value: unknown): string => {
+    if (value === null || value === undefined) return '';
+    if (value instanceof Date) return value.toLocaleDateString();
+    return String(value).replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
+  };
 
-  rawRows.slice(0, 80).forEach((row, rowIdx) => {
-    if (y > doc.internal.pageSize.getHeight() - 40) {
-      doc.addPage();
-      y = 50;
-    }
+  let renderedSheets = 0;
+  const totalSheets = workbook.SheetNames.length;
 
-    const cells = row.split(',').map((c) => c.replace(/^"|"$/g, '').trim());
+  workbook.SheetNames.forEach((sheetName) => {
+    const sheet = workbook.Sheets[sheetName];
+    onProgress?.(
+      20 + Math.round((renderedSheets / Math.max(1, totalSheets)) * 65),
+      'Rendering sheet: ' + sheetName + '...'
+    );
 
-    // Header vs row background
-    if (rowIdx === 0) {
-      doc.setFillColor(14, 165, 233);
-      doc.setTextColor(255, 255, 255);
-      doc.setFont('Helvetica', 'bold');
-      doc.setFontSize(10);
-    } else {
-      doc.setFillColor(rowIdx % 2 === 0 ? 248 : 255, rowIdx % 2 === 0 ? 250 : 255, rowIdx % 2 === 0 ? 252 : 255);
-      doc.setTextColor(51, 65, 85);
-      doc.setFont('Helvetica', 'normal');
-      doc.setFontSize(9);
-    }
+    const rawRows = XLSX.utils.sheet_to_json(sheet, {
+      header: 1,
+      raw: false,
+      defval: '',
+      blankrows: true,
+    }) as unknown[][];
 
-    doc.rect(startX, y, colWidth * Math.min(cells.length, 5), rowHeight, 'F');
-    doc.setDrawColor(226, 232, 240);
-    doc.rect(startX, y, colWidth * Math.min(cells.length, 5), rowHeight, 'S');
+    let minRow = Infinity;
+    let maxRow = -1;
+    let minCol = Infinity;
+    let maxCol = -1;
 
-    cells.slice(0, 5).forEach((cell, cellIdx) => {
-      const truncated = cell.length > 22 ? cell.substring(0, 20) + '...' : cell;
-      doc.text(truncated, startX + cellIdx * colWidth + 8, y + 14);
+    rawRows.forEach((row, rowIndex) => {
+      (row || []).forEach((value, colIndex) => {
+        if (isMeaningful(value)) {
+          minRow = Math.min(minRow, rowIndex);
+          maxRow = Math.max(maxRow, rowIndex);
+          minCol = Math.min(minCol, colIndex);
+          maxCol = Math.max(maxCol, colIndex);
+        }
+      });
     });
 
-    y += rowHeight;
+    if (maxRow < 0 || maxCol < 0) return;
+
+    const columnCount = maxCol - minCol + 1;
+    const rows = rawRows
+      .slice(minRow, maxRow + 1)
+      .map((row) =>
+        Array.from({ length: columnCount }, (_, index) =>
+          normalizeCell(row?.[minCol + index])
+        )
+      );
+
+    const rowScores = rows.map((row) =>
+      row.reduce((count, value) => count + (isMeaningful(value) ? 1 : 0), 0)
+    );
+    const strongestRowScore = Math.max(...rowScores);
+    const headerIndex = Math.max(
+      0,
+      rowScores.findIndex(
+        (score) =>
+          score === strongestRowScore &&
+          score >= Math.min(2, columnCount)
+      )
+    );
+
+    const header = rows[headerIndex].map((value, index) =>
+      isMeaningful(value) ? value : 'Column ' + (index + 1)
+    );
+
+    const body = rows
+      .slice(headerIndex + 1)
+      .filter((row) => row.some(isMeaningful))
+      .map((row) =>
+        Array.from({ length: columnCount }, (_, index) => row[index] ?? '')
+      );
+
+    if (!header.length) return;
+
+    if (renderedSheets > 0) {
+      doc.addPage(undefined, 'landscape');
+    }
+    renderedSheets += 1;
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 28;
+
+    doc.setTextColor(15, 23, 42);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(16);
+    doc.text(
+      file.name.replace(/\.(xlsx|xls|csv)$/i, ''),
+      margin,
+      32
+    );
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(71, 85, 105);
+    doc.text('Sheet: ' + sheetName, margin, 48);
+
+    const titleRows = rows
+      .slice(0, headerIndex)
+      .flatMap((row) => row.filter(isMeaningful))
+      .map((value) => String(value))
+      .filter((value, index, array) => array.indexOf(value) === index)
+      .slice(0, 2);
+
+    let startY = 66;
+    if (titleRows.length > 0) {
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(30, 41, 59);
+      titleRows.forEach((title, index) => {
+        doc.text(title, margin, startY + index * 14);
+      });
+      startY += titleRows.length * 14 + 4;
+    }
+
+    autoTable(doc, {
+      head: [header],
+      body,
+      startY,
+      margin: { top: 28, right: margin, bottom: 32, left: margin },
+      tableWidth: 'auto',
+      theme: 'grid',
+      styles: {
+        font: 'helvetica',
+        fontSize: columnCount >= 10 ? 6.5 : columnCount >= 8 ? 7 : 8,
+        cellPadding: 3,
+        overflow: 'linebreak',
+        valign: 'middle',
+        textColor: [30, 41, 59],
+        lineColor: [203, 213, 225],
+        lineWidth: 0.35,
+      },
+      headStyles: {
+        fillColor: [30, 64, 175],
+        textColor: [255, 255, 255],
+        fontStyle: 'bold',
+        halign: 'center',
+        valign: 'middle',
+      },
+      alternateRowStyles: {
+        fillColor: [248, 250, 252],
+      },
+      bodyStyles: { minCellHeight: 18 },
+      rowPageBreak: 'avoid',
+      pageBreak: 'auto',
+      showHead: 'everyPage',
+      horizontalPageBreak: columnCount > 9,
+      horizontalPageBreakRepeat: columnCount > 9 ? 0 : undefined,
+      didDrawPage: () => {
+        const pageNumber = doc.getNumberOfPages();
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(100, 116, 139);
+        doc.text('Man of Study • ' + sheetName, margin, pageHeight - 14);
+        doc.text(
+          'Page ' + pageNumber,
+          pageWidth - margin,
+          pageHeight - 14,
+          { align: 'right' }
+        );
+      },
+    });
   });
 
+  if (renderedSheets === 0) {
+    throw new Error('Workbook contains no readable spreadsheet data.');
+  }
+
+  const filename = file.name.replace(/\.[^/.]+$/, '') + '.pdf';
   const blob = doc.output('blob');
-  return {
-    blob,
-    filename: `${file.name.replace(/\.[^/.]+$/, '')}.pdf`,
-  };
+  onProgress?.(100, 'Excel workbook converted successfully.');
+
+  return { blob, filename };
 }
+
 
 // ============================================================================
 // 10. EDIT PDF (Add Text Overlay / Annotation Stamp)
