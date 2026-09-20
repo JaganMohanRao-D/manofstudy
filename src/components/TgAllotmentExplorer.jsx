@@ -37,6 +37,7 @@ import {
   TG_EAPCET_GLOBAL_STATS 
 } from '../data/tgEapcetCollegeManifest';
 import TgOverallRankInsights from './TgOverallRankInsights';
+import { searchAllotmentsClientSide, preloadSearchIndex } from '../utils/allotmentClientSearch';
 
 // Top engineering colleges for quick access
 const FEATURED_COLLEGES = [
@@ -469,7 +470,12 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
     return list;
   }, [currentBundle, searchQuery, genderFilter, casteFilter, seatCategoryFilter, sortOrder, isGlobalSearchActive]);
 
-  // High-performance Global / Cross-College Search Handler
+  // Preload static search index in background for instant fallback
+  useEffect(() => {
+    preloadSearchIndex().catch(() => {});
+  }, []);
+
+  // High-performance Global / Cross-College Search Handler with instant static fallback
   const executeGlobalSearch = useCallback(async (options = {}) => {
     const q = (options.q !== undefined ? options.q : searchQuery).trim();
     const college = options.college !== undefined ? options.college : selectedCollegeCode;
@@ -505,18 +511,61 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
         limit: '1000'
       });
 
-      const res = await fetch(`/api/tg-allotment/search?${params.toString()}`);
-      if (!res.ok) {
-        throw new Error(`Search API returned status ${res.status}`);
+      // Try backend endpoint with a 2500ms timeout
+      const controller = new AbortController();
+      const timerId = setTimeout(() => controller.abort(), 2500);
+
+      let data;
+      try {
+        const res = await fetch(`/api/tg-allotment/search?${params.toString()}`, {
+          signal: controller.signal
+        });
+        clearTimeout(timerId);
+        if (res.ok) {
+          data = await res.json();
+        }
+      } catch {
+        // Fallback to client-side static engine
       }
-      const data = await res.json();
+
+      // If backend was not available or timed out, query the static index in-memory
+      if (!data || !Array.isArray(data.results)) {
+        data = await searchAllotmentsClientSide({
+          q,
+          college,
+          branch,
+          gender,
+          caste,
+          category,
+          sort,
+          limit: 1000
+        });
+      }
+
       setGlobalSearchResults(data.results || []);
       setGlobalSearchStats(data.stats || null);
       setCurrentPage(1);
     } catch (err) {
       console.warn('Cross-college search notice:', err);
-      setGlobalSearchError('Search API request timed out or returned an error. Showing local data.');
-      setGlobalSearchResults([]);
+      // Final attempt on client engine
+      try {
+        const fallbackData = await searchAllotmentsClientSide({
+          q,
+          college,
+          branch,
+          gender,
+          caste,
+          category,
+          sort,
+          limit: 1000
+        });
+        setGlobalSearchResults(fallbackData.results || []);
+        setGlobalSearchStats(fallbackData.stats || null);
+        setCurrentPage(1);
+      } catch (fallbackErr) {
+        setGlobalSearchError('Search is temporarily unavailable. Please try again.');
+        setGlobalSearchResults([]);
+      }
     } finally {
       setIsSearchingGlobal(false);
     }

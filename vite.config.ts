@@ -208,6 +208,62 @@ function loadAllCandidateRecords(dir: string): AllotmentCandidateRecord[] {
   if (cachedCandidateRecords) return cachedCandidateRecords;
   if (!fs.existsSync(dir)) return [];
 
+  // Fast path: load instantly from pre-generated search_index.json if available
+  const searchIndexFile = path.join(dir, 'search_index.json');
+  const manifestFile = path.join(dir, 'manifest.json');
+  if (fs.existsSync(searchIndexFile)) {
+    try {
+      const collegeNames: Record<string, string> = {};
+      const branchNames: Record<string, string> = {};
+      if (fs.existsSync(manifestFile)) {
+        const mData = JSON.parse(fs.readFileSync(manifestFile, 'utf8'));
+        (mData.colleges || []).forEach((c: any) => {
+          if (c.collegeCode) collegeNames[c.collegeCode] = c.collegeName || c.collegeCode;
+          (c.branches || []).forEach((b: any) => {
+            if (b.branchCode) branchNames[b.branchCode] = b.branchName || b.branchCode;
+          });
+        });
+      }
+
+      const rawIndex = fs.readFileSync(searchIndexFile, 'utf8');
+      const parsed = JSON.parse(rawIndex);
+      const candidates = parsed.candidates || [];
+      const list: AllotmentCandidateRecord[] = new Array(candidates.length);
+
+      for (let i = 0; i < candidates.length; i++) {
+        const c = candidates[i];
+        // Schema: [rank, name, gender, caste, seatCategory, hallTicket, collegeCode, branchCode, region]
+        const rawName = c[1] || '';
+        const normName = normalizeSearchText(rawName);
+        const collCode = c[6] || '';
+        const brCode = c[7] || '';
+        list[i] = {
+          rank: c[0] || 0,
+          name: rawName,
+          normalizedName: normName,
+          nameWords: normName ? normName.split(' ') : [],
+          gender: c[2] || '',
+          caste: c[3] || '',
+          seatCategory: c[4] || '',
+          region: c[8] || 'OU',
+          hallTicket: c[5] || '',
+          collegeCode: collCode,
+          collegeName: collegeNames[collCode] || collCode,
+          branchCode: brCode,
+          branchName: branchNames[brCode] || brCode,
+          phase: '2026 Final Phase',
+          sourceFile: `${collCode}.json`
+        };
+      }
+
+      cachedCandidateRecords = list;
+      console.log(`[loadAllCandidateRecords] Fast index ready: ${list.length} candidate records loaded from search_index.json.`);
+      return list;
+    } catch (err) {
+      console.warn('[loadAllCandidateRecords] Notice: failed to read search_index.json, scanning college files:', err);
+    }
+  }
+
   const excluded = ['index.json', 'manifest.json', 'predictor_index.json', 'search_index.json'];
   const files = fs.readdirSync(dir).filter(f => f.endsWith('.json') && !excluded.includes(f));
   const list: AllotmentCandidateRecord[] = [];
