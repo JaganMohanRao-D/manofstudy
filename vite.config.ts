@@ -376,6 +376,113 @@ Format the output cleanly in Markdown:
         });
       });
 
+      // Gemini AI Student Gap Analyzer Advisor API
+      server.middlewares.use('/api/gemini/gap-analysis', (req, res) => {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+        if (req.method === 'OPTIONS') {
+          res.statusCode = 204;
+          res.end();
+          return;
+        }
+
+        if (req.method !== 'POST') {
+          res.statusCode = 405;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ error: 'Method Not Allowed' }));
+          return;
+        }
+
+        const handleGapPayload = async (data: any) => {
+          try {
+            const { studentProfile, gapAnalysisResult } = data || {};
+            const strengthsText = gapAnalysisResult?.strengths?.map((s: any) => s.title).slice(0, 3).join(', ') || 'your verified foundations';
+            const topPriority = gapAnalysisResult?.topPriorities?.[0]?.skillName || 'core problem solving';
+            const nextAction = gapAnalysisResult?.nextActions?.[0] || 'solving fundamental problems';
+
+            const apiKey = process.env.GEMINI_API_KEY;
+            if (!apiKey) {
+              res.statusCode = 200;
+              res.setHeader('Content-Type', 'application/json; charset=utf-8');
+              res.end(JSON.stringify({
+                success: true,
+                mentorNote: `Your established proficiency in ${strengthsText} gives you a solid competitive edge for a ${studentProfile?.year || 'current'} student. Dedicate 45 minutes daily to ${topPriority} by ${nextAction}, and you will see your placement readiness surge before your next semester.`
+              }));
+              return;
+            }
+
+            const { GoogleGenAI } = await import('@google/genai');
+            const ai = new GoogleGenAI({ apiKey });
+
+            const prompt = `You are a friendly, pragmatic Senior Placement Advisor & Tech Career Mentor for Indian engineering students on Man of Study.
+Student Profile:
+Year: ${studentProfile?.year || '1st Year'}, Branch: ${studentProfile?.branch || 'CSE'}, CGPA: ${studentProfile?.cgpa || '8.0'}
+Target Career: ${gapAnalysisResult?.careerTitle || 'Software Developer'}
+Match Score: ${gapAnalysisResult?.matchScore || 50}%
+Identified Strengths: ${strengthsText}
+Top 3 Priorities: ${gapAnalysisResult?.topPriorities?.map((p: any) => p.skillName).join(', ') || 'DSA, SQL, OOP'}
+Immediate Next Actions: ${gapAnalysisResult?.nextActions?.join(', ') || 'Learn arrays, solve 5 problems'}
+
+Write a 3-sentence executive mentor brief (under 75 words) speaking directly to the student in second person ("You"):
+1. Acknowledge their genuine current strengths and the edge it provides.
+2. Give clear, calm direction on tackling their #1 priority without panic.
+3. Give an encouraging, realistic closing goal for this semester.`;
+
+            let mentorNote = '';
+            const candidateModels = ['gemini-3.6-flash', 'gemini-3.1-flash-lite', 'gemini-3.8-flash'];
+            for (const model of candidateModels) {
+              try {
+                const result = await ai.models.generateContent({
+                  model,
+                  contents: prompt,
+                });
+                if (result && result.text) {
+                  mentorNote = result.text.trim();
+                  break;
+                }
+              } catch (err: any) {
+                console.warn(`[Gemini Gap Analysis] Model ${model} failed, trying next:`, err.status || err.message);
+              }
+            }
+
+            if (!mentorNote) {
+              mentorNote = `Your established proficiency in ${strengthsText} gives you a solid competitive edge for a ${studentProfile?.year || 'current'} student. Dedicate 45 minutes daily to ${topPriority} by ${nextAction}, and you will see your placement readiness surge before your next semester.`;
+            }
+
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            res.end(JSON.stringify({ success: true, mentorNote }));
+          } catch (err: any) {
+            console.error('[geminiGapAnalysis] error:', err);
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            res.end(JSON.stringify({
+              success: true,
+              mentorNote: 'Build steady momentum on your top priority daily. With structured focus, small daily milestones compound rapidly into interview-ready confidence.'
+            }));
+          }
+        };
+
+        if ((req as any).body) {
+          handleGapPayload((req as any).body);
+          return;
+        }
+
+        const chunks: Buffer[] = [];
+        req.on('data', chunk => chunks.push(chunk));
+        req.on('end', () => {
+          try {
+            const raw = Buffer.concat(chunks).toString('utf-8');
+            const data = JSON.parse(raw);
+            handleGapPayload(data);
+          } catch (e: any) {
+            handleGapPayload({});
+          }
+        });
+      });
+
       // Serve /TG_EAPCET_2026_ALLOTMENT/ requests directly with code-alias fallback and 404 JSON protection
       server.middlewares.use((req, res, next) => {
         const url = req.url ? req.url.split('?')[0] : '';

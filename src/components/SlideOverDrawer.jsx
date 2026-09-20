@@ -394,6 +394,27 @@ export const SlideOverDrawer = ({
             <div className="space-y-1">
               <button
                 type="button"
+                id="drawer-career-gap-analyzer-btn"
+                onClick={() => handleNavigate('gap-analyzer')}
+                className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-800/70 text-left transition-colors cursor-pointer group border border-emerald-500/30 hover:border-emerald-500/60 bg-emerald-950/30"
+              >
+                <div className="flex items-start gap-2.5">
+                  <Sparkles className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
+                      <span>AI Student Gap Analyzer</span>
+                      <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded font-mono">EXPO '26</span>
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      Where am I right now, what am I missing &amp; what should I do next?
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-600 group-hover:text-slate-300 shrink-0" />
+              </button>
+
+              <button
+                type="button"
                 id="drawer-career-vault-btn"
                 onClick={() => handleNavigate('vault')}
                 className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-800/70 text-left transition-colors cursor-pointer group border border-transparent hover:border-slate-800 bg-emerald-950/20"

@@ -91,6 +91,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     // 1. Primary Tools
     items.push(
       {
+        id: 'tool-gap-analyzer',
+        title: 'AI Student Gap Analyzer',
+        subtitle: 'Where am I right now, what am I missing & what should I do next? Expo 2026 Engine',
+        category: 'Core Tools',
+        badge: 'EXPO 2026',
+        icon: <Sparkles className="w-4 h-4 text-emerald-400" />,
+        keywords: ['gap', 'analyzer', 'skills', 'career', 'expo', 'roadmap', 'what next', 'simulator', 'placement gap', 'ai'],
+        action: () => onSelectTool('gap-analyzer'),
+      },
+      {
         id: 'tool-campus-connect',
         title: 'MOS CampusConnect — Student Network',
         subtitle: 'Real campus updates, senior guidance, and peer doubt resolution across colleges',

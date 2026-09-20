@@ -21,6 +21,19 @@ import {
  */
 export const WORKSPACES = [
   {
+    id: 'ws-gap-analyzer',
+    workspace: 'gap-analyzer',
+    title: 'AI Student Gap Analyzer',
+    tag: 'EXPO 2026',
+    badge: 'NEW AI Engine',
+    badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+    description: 'Where am I right now, what am I missing, and what should I do next? Deterministic profile comparison vs industry benchmarks.',
+    actionText: 'Analyze My Gap',
+    icon: Sparkles,
+    iconBg: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
+    hoverBorder: 'hover:border-emerald-500/50',
+  },
+  {
     id: 'ws-tg-predictor',
     workspace: 'tg-predictor',
     title: 'TG EAPCET College Predictor',

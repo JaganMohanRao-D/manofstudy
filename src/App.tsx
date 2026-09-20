@@ -126,6 +126,11 @@ const CampusConnect = lazy(() =>
     default: m.CampusConnect || m.default,
   }))
 );
+const StudentGapAnalyzer = lazy(() =>
+  import('./components/StudentGapAnalyzer/StudentGapAnalyzer').then((m: any) => ({
+    default: m.StudentGapAnalyzer || m.default,
+  }))
+);
 const EducationalGuideAndSeo = lazy(() =>
   import('./components/EducationalGuideAndSeo').then((m: any) => ({
     default: m.EducationalGuideAndSeo || m.default,
@@ -167,6 +172,14 @@ const LoadingFallback: React.FC = () => (
 
 
 export const TOOLS_CONFIG: ToolMeta[] = [
+  {
+    id: 'gap-analyzer',
+    name: 'AI Student Gap Analyzer (Expo 2026)',
+    shortName: 'AI Gap Analyzer',
+    category: 'academic',
+    description: 'Answer: Where am I right now, what am I missing, and what should I do next? Deterministic skill gap & priority roadmap.',
+    badge: 'EXPO 2026',
+  },
   {
     id: 'tg-predictor',
     name: 'TG EAPCET College Predictor',
@@ -403,6 +416,14 @@ export default function App() {
         setActiveWorkspace('guides');
       } else if (hash === 'campus-connect' || hash === 'campus' || hash === 'community' || hash === 'connect') {
         setActiveWorkspace('campus-connect');
+      } else if (
+        hash === 'gap-analyzer' ||
+        hash === 'gap' ||
+        hash === 'analyzer' ||
+        hash === 'student-gap' ||
+        hash === 'career-gap'
+      ) {
+        setActiveWorkspace('gap-analyzer');
       } else if (hash === 'privacy' || hash === 'privacy-policy') {
         setLegalModal('privacy');
       } else if (hash === 'about' || hash === 'about-us') {
@@ -445,7 +466,9 @@ export default function App() {
 
   const handleSelectToolFromPalette = (tab: ToolTab) => {
     setIsCommandPaletteOpen(false);
-    if (tab === 'tg-predictor') {
+    if (tab === 'gap-analyzer') {
+      handleSelectWorkspace('gap-analyzer');
+    } else if (tab === 'tg-predictor') {
       handleSelectWorkspace('tg-predictor');
     } else if (tab === 'campus-connect') {
       handleSelectWorkspace('campus-connect');
@@ -554,6 +577,11 @@ export default function App() {
         return {
           title: 'MOS CampusConnect — Student Network',
           icon: <Users className="w-4 h-4 text-emerald-500" />,
+        };
+      case 'gap-analyzer':
+        return {
+          title: 'AI Student Gap Analyzer (Where Am I, What Am I Missing, What Next?)',
+          icon: <Sparkles className="w-4 h-4 text-emerald-500" />,
         };
       case 'essentials':
       case 'store':
@@ -809,6 +837,15 @@ export default function App() {
                         tool === 'image-tools' || tool === 'resizer' ? 'resizer' : 'pdf-tools'
                       )
                     }
+                  />
+                )}
+
+                {activeWorkspace === 'gap-analyzer' && (
+                  <StudentGapAnalyzer
+                    onNavigateToRoadmaps={() => handleSelectWorkspace('roadmaps')}
+                    onNavigateToProjects={() => handleSelectWorkspace('projects')}
+                    onNavigateToDsa={() => handleSelectWorkspace('dsa')}
+                    onNavigateToVault={() => handleSelectWorkspace('vault')}
                   />
                 )}
 

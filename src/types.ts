@@ -19,13 +19,15 @@ export type WorkspaceView =
   | 'projects'
   | 'internships'
   | 'campus-connect'
-  | 'humanizer';
+  | 'humanizer'
+  | 'gap-analyzer';
 
 export type ToolTab = 
   | 'eapcet-radar'
   | 'tg-allotments'
   | 'tg-predictor'
   | 'campus-connect'
+  | 'gap-analyzer'
   | 'roadmaps'
   | 'scholarships'
   | 'pdf-tools'

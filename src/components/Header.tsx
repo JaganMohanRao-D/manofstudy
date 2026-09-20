@@ -119,6 +119,15 @@ export const Header: React.FC<HeaderProps> = ({
       icon: Home,
     },
     {
+      id: 'tier2-gap-analyzer',
+      workspace: 'gap-analyzer',
+      label: 'AI Gap Analyzer',
+      shortLabel: 'Gap Analyzer',
+      icon: Sparkles,
+      badge: "EXPO '26",
+      badgeColor: 'bg-emerald-500/25 text-emerald-300 border-emerald-500/40',
+    },
+    {
       id: 'tier2-academics',
       workspace: 'academics',
       label: 'Academics',
@@ -231,6 +240,25 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right Navigation Controls */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* AI Gap Analyzer Direct Trigger */}
+          <button
+            type="button"
+            id="header-gap-analyzer-trigger"
+            onClick={() => handleNavClick('gap-analyzer')}
+            className={`hidden md:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs shrink-0 border ${
+              activeWorkspace === 'gap-analyzer'
+                ? 'bg-emerald-500 text-slate-950 border-emerald-400 font-extrabold'
+                : 'bg-emerald-950/40 hover:bg-emerald-900/50 text-emerald-300 border-emerald-700/60 hover:border-emerald-500'
+            }`}
+            title="AI Student Gap Analyzer (Expo '26 Edition)"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+            <span>AI Gap Analyzer</span>
+            <span className="text-[9px] px-1 py-0.2 rounded bg-emerald-500/25 border border-emerald-500/30 text-emerald-200 uppercase font-mono">
+              EXPO
+            </span>
+          </button>
+
           {/* Universal Search Bar / Command Palette Trigger */}
           <button
             type="button"
