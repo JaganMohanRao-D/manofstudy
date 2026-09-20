@@ -251,15 +251,89 @@ const compactPredictorIndex = {
 const predictorIndexFile = path.join(dir, 'predictor_index.json');
 fs.writeFileSync(predictorIndexFile, JSON.stringify(compactPredictorIndex), 'utf8');
 
-// Build compact client-side search index (for static/offline fallback)
-console.log('Generating compact normalized search index...');
+// Build compact client-side search index and compute category rank insights
+console.log('Generating compact normalized search index and category insights...');
+
+const CATEGORY_KEYS = ['OC', 'EWS', 'BC_A', 'BC_B', 'BC_C', 'BC_D', 'BC_E', 'SC_I', 'SC_II', 'SC_III', 'ST'];
+const DISPLAY_LABELS = {
+  OC: 'OC',
+  EWS: 'EWS',
+  BC_A: 'BC-A',
+  BC_B: 'BC-B',
+  BC_C: 'BC-C',
+  BC_D: 'BC-D',
+  BC_E: 'BC-E',
+  SC_I: 'SC-I',
+  SC_II: 'SC-II',
+  SC_III: 'SC-III',
+  ST: 'ST'
+};
+
+const CATEGORY_NAMES = {
+  OC: 'Open Competition (General Merit)',
+  EWS: 'Economically Weaker Sections (10% Quota)',
+  BC_A: 'Backward Class - Group A',
+  BC_B: 'Backward Class - Group B',
+  BC_C: 'Backward Class - Group C (Christian Converts)',
+  BC_D: 'Backward Class - Group D',
+  BC_E: 'Backward Class - Group E (Socially & Educationally Backward Muslims)',
+  SC_I: 'Scheduled Caste - Group I (Sub-categorized)',
+  SC_II: 'Scheduled Caste - Group II (Sub-categorized)',
+  SC_III: 'Scheduled Caste - Group III (Sub-categorized)',
+  ST: 'Scheduled Tribe'
+};
+
+function normalizeAllottedCategory(seatCategory) {
+  if (!seatCategory) return null;
+  const sc = seatCategory.toUpperCase();
+  if (sc.startsWith('EWS')) return 'EWS';
+  if (sc.startsWith('OC')) return 'OC';
+  if (sc.startsWith('BC_A')) return 'BC_A';
+  if (sc.startsWith('BC_B')) return 'BC_B';
+  if (sc.startsWith('BC_C')) return 'BC_C';
+  if (sc.startsWith('BC_D')) return 'BC_D';
+  if (sc.startsWith('BC_E')) return 'BC_E';
+  if (sc.startsWith('SC_III')) return 'SC_III';
+  if (sc.startsWith('SC_II')) return 'SC_II';
+  if (sc.startsWith('SC_I')) return 'SC_I';
+  if (sc.startsWith('ST')) return 'ST';
+  return null;
+}
+
+function createEmptyCategoryStats() {
+  const map = {};
+  for (const k of CATEGORY_KEYS) {
+    map[k] = {
+      category: k,
+      displayLabel: DISPLAY_LABELS[k],
+      categoryName: CATEGORY_NAMES[k],
+      boys: { topRank: null, lastRank: null, recordCount: 0, colleges: new Set(), branches: new Set() },
+      girls: { topRank: null, lastRank: null, recordCount: 0, colleges: new Set(), branches: new Set() },
+      totalRecords: 0,
+      colleges: new Set(),
+      branches: new Set()
+    };
+  }
+  return map;
+}
+
+const quotaInsightsMap = createEmptyCategoryStats();
+const casteInsightsMap = createEmptyCategoryStats();
 const compactCandidates = [];
+const overallCollegesSet = new Set();
+const overallBranchesSet = new Set();
+let validRecordCount = 0;
+
 for (const file of files) {
   try {
     const d = JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
     const cCode = d.collegeCode || file.replace('.json', '');
+    overallCollegesSet.add(cCode);
+
     for (const b of (d.branches || [])) {
       const bCode = b.branchCode || '';
+      if (bCode) overallBranchesSet.add(bCode);
+
       for (const r of (b.records || [])) {
         compactCandidates.push([
           r.rank,
@@ -272,12 +346,92 @@ for (const file of files) {
           bCode,
           r.region || 'OU'
         ]);
+
+        const rank = r.rank;
+        if (typeof rank !== 'number' || isNaN(rank) || rank <= 0) continue;
+        const gender = r.gender;
+        if (gender !== 'M' && gender !== 'F') continue;
+        validRecordCount++;
+
+        // 1. Quota category
+        const quotaCat = normalizeAllottedCategory(r.seatCategory);
+        if (quotaCat && quotaInsightsMap[quotaCat]) {
+          const item = quotaInsightsMap[quotaCat];
+          const g = gender === 'M' ? item.boys : item.girls;
+          if (g.topRank === null || rank < g.topRank) g.topRank = rank;
+          if (g.lastRank === null || rank > g.lastRank) g.lastRank = rank;
+          g.recordCount++;
+          g.colleges.add(cCode);
+          g.branches.add(bCode);
+
+          item.totalRecords++;
+          item.colleges.add(cCode);
+          item.branches.add(bCode);
+        }
+
+        // 2. Candidate Caste category
+        const casteCat = r.caste;
+        if (casteCat && casteInsightsMap[casteCat]) {
+          const item = casteInsightsMap[casteCat];
+          const g = gender === 'M' ? item.boys : item.girls;
+          if (g.topRank === null || rank < g.topRank) g.topRank = rank;
+          if (g.lastRank === null || rank > g.lastRank) g.lastRank = rank;
+          g.recordCount++;
+          g.colleges.add(cCode);
+          g.branches.add(bCode);
+
+          item.totalRecords++;
+          item.colleges.add(cCode);
+          item.branches.add(bCode);
+        }
       }
     }
   } catch (e) {
     console.error('Error indexing file:', file, e);
   }
 }
+
+function serializeInsights(map) {
+  return CATEGORY_KEYS.map(k => {
+    const item = map[k];
+    return {
+      category: item.category,
+      displayLabel: item.displayLabel,
+      categoryName: item.categoryName,
+      boys: {
+        topRank: item.boys.topRank,
+        lastRank: item.boys.lastRank,
+        recordCount: item.boys.recordCount,
+        collegesCount: item.boys.colleges.size,
+        branchesCount: item.boys.branches.size
+      },
+      girls: {
+        topRank: item.girls.topRank,
+        lastRank: item.girls.lastRank,
+        recordCount: item.girls.recordCount,
+        collegesCount: item.girls.colleges.size,
+        branchesCount: item.girls.branches.size
+      },
+      totalRecords: item.totalRecords,
+      collegesRepresented: item.colleges.size,
+      branchesRepresented: item.branches.size
+    };
+  });
+}
+
+const overallInsightsData = {
+  datasetStats: {
+    totalRecords: validRecordCount,
+    totalColleges: overallCollegesSet.size,
+    totalBranches: overallBranchesSet.size,
+    generatedAt: new Date().toISOString()
+  },
+  byAllottedQuota: serializeInsights(quotaInsightsMap),
+  byCandidateCaste: serializeInsights(casteInsightsMap)
+};
+
+const insightsFile = path.join(dir, 'category_insights.json');
+fs.writeFileSync(insightsFile, JSON.stringify(overallInsightsData, null, 2), 'utf8');
 
 const searchIndexObj = {
   total: compactCandidates.length,
@@ -331,9 +485,41 @@ export interface TgAllotmentGlobalStats {
   generatedAt: string;
 }
 
+export interface CategoryGenderInsight {
+  topRank: number | null;
+  lastRank: number | null;
+  recordCount: number;
+  collegesCount: number;
+  branchesCount: number;
+}
+
+export interface CategoryInsightItem {
+  category: string;
+  displayLabel: string;
+  categoryName: string;
+  boys: CategoryGenderInsight;
+  girls: CategoryGenderInsight;
+  totalRecords: number;
+  collegesRepresented: number;
+  branchesRepresented: number;
+}
+
+export interface TgOverallInsightsData {
+  datasetStats: {
+    totalRecords: number;
+    totalColleges: number;
+    totalBranches: number;
+    generatedAt: string;
+  };
+  byAllottedQuota: CategoryInsightItem[];
+  byCandidateCaste: CategoryInsightItem[];
+}
+
 export const TG_EAPCET_GLOBAL_STATS: TgAllotmentGlobalStats = ${JSON.stringify(stats, null, 2)};
 
 export const TG_EAPCET_ALL_BRANCHES: TgBranchGlobalItem[] = ${JSON.stringify(statewideBranches, null, 2)};
+
+export const TG_EAPCET_CATEGORY_INSIGHTS: TgOverallInsightsData = ${JSON.stringify(overallInsightsData, null, 2)};
 
 export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = ${JSON.stringify(manifestClean, null, 2)};
 `;
