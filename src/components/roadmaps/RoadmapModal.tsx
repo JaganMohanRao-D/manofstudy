@@ -21,6 +21,8 @@ import {
   Wrench,
   Terminal,
   ExternalLink,
+  Loader2,
+  AlertCircle,
 } from 'lucide-react';
 import { BranchRoadmap } from '../../types';
 import { ShareRoadmapDialog } from './ShareRoadmapDialog';
@@ -32,6 +34,8 @@ export interface RoadmapModalProps {
   onClose: () => void;
   onDownloadPdf: (branch: BranchRoadmap) => void;
   isExportingPdf: boolean;
+  pdfExportStatus?: 'idle' | 'generating' | 'success' | 'error';
+  pdfErrorMessage?: string | null;
   onNavigateToStore?: (category?: string) => void;
 }
 
@@ -41,6 +45,8 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
   onClose,
   onDownloadPdf,
   isExportingPdf,
+  pdfExportStatus = 'idle',
+  pdfErrorMessage,
   onNavigateToStore,
 }) => {
   const [selectedYear, setSelectedYear] = useState<number>(1);
@@ -655,11 +661,36 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
             <button
               type="button"
               onClick={() => onDownloadPdf(branch)}
-              disabled={isExportingPdf}
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white font-bold text-xs shadow-xs transition-all cursor-pointer disabled:opacity-60 min-h-[40px]"
+              disabled={isExportingPdf || pdfExportStatus === 'generating'}
+              className={`flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl active:scale-98 font-bold text-xs shadow-xs transition-all cursor-pointer min-h-[40px] ${
+                pdfExportStatus === 'success'
+                  ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                  : pdfExportStatus === 'error'
+                  ? 'bg-rose-600 hover:bg-rose-700 text-white'
+                  : 'bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-60'
+              }`}
             >
-              <Download className="w-4 h-4" />
-              <span>{isExportingPdf ? 'Generating PDF...' : 'Download PDF Roadmap'}</span>
+              {isExportingPdf || pdfExportStatus === 'generating' ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Generating PDF...</span>
+                </>
+              ) : pdfExportStatus === 'success' ? (
+                <>
+                  <CheckCircle2 className="w-4 h-4 text-emerald-100" />
+                  <span>PDF downloaded successfully.</span>
+                </>
+              ) : pdfExportStatus === 'error' ? (
+                <>
+                  <AlertCircle className="w-4 h-4 text-rose-100" />
+                  <span>{pdfErrorMessage || 'PDF generation failed. Please try again.'}</span>
+                </>
+              ) : (
+                <>
+                  <Download className="w-4 h-4" />
+                  <span>Download Career Roadmap PDF</span>
+                </>
+              )}
             </button>
           </div>
         </div>

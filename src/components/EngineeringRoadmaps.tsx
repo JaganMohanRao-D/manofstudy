@@ -105,6 +105,8 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeModalBranch, setActiveModalBranch] = useState<BranchRoadmap | null>(null);
   const [isExportingPdf, setIsExportingPdf] = useState<boolean>(false);
+  const [pdfExportStatus, setPdfExportStatus] = useState<'idle' | 'generating' | 'success' | 'error'>('idle');
+  const [pdfErrorMessage, setPdfErrorMessage] = useState<string | null>(null);
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
   const [isSearchFocused, setIsSearchFocused] = useState<boolean>(false);
   const [navFeedback, setNavFeedback] = useState<string | null>(null);
@@ -285,13 +287,28 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
   };
 
   const handleDownloadPdf = async (branch: BranchRoadmap) => {
+    if (isExportingPdf || pdfExportStatus === 'generating') return;
     try {
       setIsExportingPdf(true);
+      setPdfExportStatus('generating');
+      setPdfErrorMessage(null);
       // Allow UI to render spinner
-      await new Promise((resolve) => setTimeout(resolve, 60));
+      await new Promise((resolve) => setTimeout(resolve, 80));
       generateRoadmapPdf(branch);
+      setPdfExportStatus('success');
+      setTimeout(() => {
+        setPdfExportStatus('idle');
+      }, 3000);
     } catch (err) {
-      console.error('PDF export failed:', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('PDF export failed:', err);
+      }
+      setPdfExportStatus('error');
+      setPdfErrorMessage('PDF generation failed. Please try again.');
+      setTimeout(() => {
+        setPdfExportStatus('idle');
+        setPdfErrorMessage(null);
+      }, 4000);
     } finally {
       setIsExportingPdf(false);
     }
@@ -732,6 +749,8 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
           onClose={handleCloseBranchModal}
           onDownloadPdf={handleDownloadPdf}
           isExportingPdf={isExportingPdf}
+          pdfExportStatus={pdfExportStatus}
+          pdfErrorMessage={pdfErrorMessage}
           onNavigateToStore={onNavigateToStore}
         />
       )}
