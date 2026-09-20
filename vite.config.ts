@@ -10,7 +10,8 @@ const __dirname = path.dirname(__filename);
 
 function scanAllotmentDir(dir: string) {
   if (!fs.existsSync(dir)) return null;
-  const files = fs.readdirSync(dir).filter(f => f.endsWith('.json') && f !== 'index.json' && f !== 'manifest.json');
+  const excluded = ['index.json', 'manifest.json', 'predictor_index.json', 'search_index.json'];
+  const files = fs.readdirSync(dir).filter(f => f.endsWith('.json') && !excluded.includes(f));
   
   const manifest = files.map(filename => {
     try {
@@ -82,14 +83,199 @@ function scanAllotmentDir(dir: string) {
   return { stats, colleges: manifest };
 }
 
+interface AllotmentCandidateRecord {
+  rank: number;
+  name: string;
+  normalizedName: string;
+  nameWords: string[];
+  gender: string;
+  caste: string;
+  seatCategory: string;
+  region: string;
+  hallTicket: string;
+  collegeCode: string;
+  collegeName: string;
+  branchCode: string;
+  branchName: string;
+  phase: string;
+  sourceFile: string;
+}
+
+let cachedCandidateRecords: AllotmentCandidateRecord[] | null = null;
+
+function normalizeSearchText(text: string): string {
+  return (text || '').toUpperCase().replace(/[^A-Z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function computeLevenshtein(a: string, b: string): number {
+  const an = a.length;
+  const bn = b.length;
+  if (an === 0) return bn;
+  if (bn === 0) return an;
+  const matrix: number[][] = Array(an + 1).fill(null).map(() => Array(bn + 1).fill(0));
+  for (let i = 0; i <= an; i++) matrix[i][0] = i;
+  for (let j = 0; j <= bn; j++) matrix[0][j] = j;
+  for (let i = 1; i <= an; i++) {
+    for (let j = 1; j <= bn; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      matrix[i][j] = Math.min(
+        matrix[i - 1][j] + 1,
+        matrix[i][j - 1] + 1,
+        matrix[i - 1][j - 1] + cost
+      );
+    }
+  }
+  return matrix[an][bn];
+}
+
+function evaluateCandidateMatch(cand: AllotmentCandidateRecord, qRaw: string) {
+  const qClean = normalizeSearchText(qRaw);
+  if (!qClean) {
+    return { isMatch: true, matchType: 'Filter Match', priority: 100, reason: 'Filter criteria' };
+  }
+
+  const isNumeric = /^\d+$/.test(qClean);
+  const qNum = isNumeric ? parseInt(qClean, 10) : null;
+
+  if (isNumeric && qNum !== null) {
+    if (cand.rank === qNum) {
+      return { isMatch: true, matchType: 'Exact Match', priority: 1000, reason: 'Exact rank match' };
+    }
+    if (cand.hallTicket && cand.hallTicket.toUpperCase().includes(qClean)) {
+      return { isMatch: true, matchType: 'Partial Match', priority: 550, reason: 'Hall ticket match' };
+    }
+    return { isMatch: false, matchType: '', priority: 0, reason: '' };
+  }
+
+  const name = cand.normalizedName;
+  if (!name) return { isMatch: false, matchType: '', priority: 0, reason: '' };
+
+  // 1. Exact full name match
+  if (name === qClean) {
+    return { isMatch: true, matchType: 'Exact Match', priority: 1000, reason: 'Exact full name match' };
+  }
+
+  // 2. Prefix match
+  if (name.startsWith(qClean + ' ') || name.startsWith(qClean)) {
+    return { isMatch: true, matchType: 'Exact Match', priority: 900, reason: 'Name prefix match' };
+  }
+
+  // 3. Exact token/word match (all query words are present as standalone words in name)
+  const qWords = qClean.split(' ');
+  const nameWords = cand.nameWords;
+  const allWordsExact = qWords.every(qw => nameWords.includes(qw));
+  if (allWordsExact) {
+    return { isMatch: true, matchType: 'Exact Match', priority: 800, reason: 'Exact word/token match' };
+  }
+
+  // 4. Word prefix match (all query words are prefixes of words in name)
+  const allWordsPrefix = qWords.every(qw => nameWords.some(nw => nw.startsWith(qw)));
+  if (allWordsPrefix) {
+    return { isMatch: true, matchType: 'Partial Match', priority: 600, reason: 'Word prefix match' };
+  }
+
+  // 5. Substring match
+  if (name.includes(qClean)) {
+    return { isMatch: true, matchType: 'Partial Match', priority: 400, reason: 'Substring match' };
+  }
+
+  // 6. Controlled fuzzy match (only for query tokens >= 4 characters)
+  // All query words must have a valid match in candidate's name (exact word, prefix, or Levenshtein distance <= 1 or 2)
+  if (qClean.length >= 4) {
+    const allWordsMatch = qWords.every(qw => {
+      if (nameWords.includes(qw)) return true;
+      if (nameWords.some(nw => nw.startsWith(qw))) return true;
+      if (qw.length >= 4) {
+        const maxDist = qw.length <= 5 ? 1 : 2;
+        return nameWords.some(nw => {
+          if (nw.length < 4) return false;
+          const dist = computeLevenshtein(qw, nw);
+          return dist <= maxDist && (1 - (dist / Math.max(qw.length, nw.length))) >= 0.78;
+        });
+      }
+      return false;
+    });
+
+    if (allWordsMatch) {
+      return { isMatch: true, matchType: 'Similar Match', priority: 200, reason: 'Close name match' };
+    }
+  }
+
+  return { isMatch: false, matchType: '', priority: 0, reason: '' };
+}
+
+function loadAllCandidateRecords(dir: string): AllotmentCandidateRecord[] {
+  if (cachedCandidateRecords) return cachedCandidateRecords;
+  if (!fs.existsSync(dir)) return [];
+
+  const excluded = ['index.json', 'manifest.json', 'predictor_index.json', 'search_index.json'];
+  const files = fs.readdirSync(dir).filter(f => f.endsWith('.json') && !excluded.includes(f));
+  const list: AllotmentCandidateRecord[] = [];
+
+  for (const filename of files) {
+    try {
+      const filePath = path.join(dir, filename);
+      const raw = fs.readFileSync(filePath, 'utf8');
+      const data = JSON.parse(raw);
+      const collegeCode = (data.collegeCode || filename.replace('.json', '')).trim();
+      const collegeName = (data.collegeName || collegeCode).trim();
+      const branches = Array.isArray(data.branches) ? data.branches : (Array.isArray(data) ? data : [data]);
+
+      for (const branch of branches) {
+        const branchCode = (branch.branchCode || 'ENGG').trim();
+        const branchName = (branch.branchName || branchCode).trim();
+        const records = Array.isArray(branch.records) ? branch.records : [];
+
+        for (const r of records) {
+          const rawName = (r.name || '').trim();
+          const normName = normalizeSearchText(rawName);
+          list.push({
+            rank: typeof r.rank === 'number' ? r.rank : parseInt(r.rank, 10) || 0,
+            name: rawName,
+            normalizedName: normName,
+            nameWords: normName ? normName.split(' ') : [],
+            gender: r.gender || '',
+            caste: r.caste || '',
+            seatCategory: r.seatCategory || '',
+            region: r.region || 'OU',
+            hallTicket: r.hallTicket || '',
+            collegeCode,
+            collegeName,
+            branchCode,
+            branchName,
+            phase: r.phase || '2026 Final Phase',
+            sourceFile: filename
+          });
+        }
+      }
+    } catch (e) {
+      console.error(`[loadAllCandidateRecords] Failed to read ${filename}:`, e);
+    }
+  }
+
+  cachedCandidateRecords = list;
+  console.log(`[loadAllCandidateRecords] In-memory index ready: ${list.length} candidate records cached across ${files.length} colleges.`);
+  return list;
+}
+
 function tgAllotmentPlugin(): Plugin {
   return {
     name: 'tg-allotment-plugin',
     configureServer(server) {
+      const allotmentDir = path.join(__dirname, 'public/TG_EAPCET_2026_ALLOTMENT');
+
+      // Preload in-memory records on background start
+      setTimeout(() => {
+        try {
+          loadAllCandidateRecords(allotmentDir);
+        } catch (err) {
+          console.warn('[tgAllotmentPlugin] Background index preload error:', err);
+        }
+      }, 50);
+
       server.middlewares.use('/api/tg-allotment/manifest', (_req, res) => {
         try {
-          const dir = path.join(__dirname, 'public/TG_EAPCET_2026_ALLOTMENT');
-          const result = scanAllotmentDir(dir);
+          const result = scanAllotmentDir(allotmentDir);
           if (result) {
             res.setHeader('Content-Type', 'application/json');
             res.end(JSON.stringify(result));
@@ -103,71 +289,138 @@ function tgAllotmentPlugin(): Plugin {
         res.end(JSON.stringify({ error: 'Manifest not found' }));
       });
 
-      // Global Candidate Search across all 151 Telangana Colleges
+      // Lightning-fast Candidate Search across all 151 Telangana Colleges with multi-mode filters
       server.middlewares.use('/api/tg-allotment/search', (req, res) => {
         try {
           const parsedUrl = new URL(req.url || '', 'http://localhost');
-          const q = (parsedUrl.searchParams.get('q') || '').trim().toLowerCase();
-          if (!q || q.length < 2) {
+          const q = (parsedUrl.searchParams.get('q') || '').trim();
+          const collegeFilter = (parsedUrl.searchParams.get('college') || 'ALL').trim().toUpperCase();
+          const branchFilter = (parsedUrl.searchParams.get('branch') || 'ALL').trim().toUpperCase();
+          const genderFilter = (parsedUrl.searchParams.get('gender') || 'ALL').trim().toUpperCase();
+          const casteFilter = (parsedUrl.searchParams.get('caste') || 'ALL').trim().toUpperCase();
+          const categoryFilter = (parsedUrl.searchParams.get('category') || 'ALL').trim().toUpperCase();
+          const sortParam = (parsedUrl.searchParams.get('sort') || 'rank_asc').trim().toLowerCase();
+          const limitParam = parseInt(parsedUrl.searchParams.get('limit') || '500', 10);
+
+          const allRecords = loadAllCandidateRecords(allotmentDir);
+
+          // If no query and no college/branch filters, return clean initial state
+          if (!q && collegeFilter === 'ALL' && branchFilter === 'ALL') {
             res.setHeader('Content-Type', 'application/json; charset=utf-8');
-            res.end(JSON.stringify({ query: q, results: [] }));
+            res.end(JSON.stringify({
+              query: q,
+              college: collegeFilter,
+              branch: branchFilter,
+              totalMatches: 0,
+              results: [],
+              stats: { collegeCount: 0, branchCount: 0, minRank: 0, maxRank: 0 }
+            }));
             return;
           }
 
-          const dir = path.join(__dirname, 'public/TG_EAPCET_2026_ALLOTMENT');
-          if (!fs.existsSync(dir)) {
-            res.setHeader('Content-Type', 'application/json; charset=utf-8');
-            res.end(JSON.stringify({ query: q, results: [] }));
-            return;
-          }
+          const matched: any[] = [];
+          const collegesSet = new Set<string>();
+          const branchesSet = new Set<string>();
+          const casteCountMap: Record<string, number> = {};
+          let minObservedRank = 999999;
+          let maxObservedRank = 0;
 
-          const files = fs.readdirSync(dir).filter(f => f.endsWith('.json') && f !== 'manifest.json');
-          const matches: any[] = [];
-          const MAX_MATCHES = 50;
+          for (let i = 0; i < allRecords.length; i++) {
+            const cand = allRecords[i];
 
-          for (const file of files) {
-            if (matches.length >= MAX_MATCHES) break;
-            try {
-              const filePath = path.join(dir, file);
-              const content = fs.readFileSync(filePath, 'utf-8');
-              // Quick check if string exists in file before parsing JSON for high speed
-              if (!content.toLowerCase().includes(q)) continue;
-
-              const data = JSON.parse(content);
-              const collegeCode = data.collegeCode || file.replace(/\.json$/i, '');
-              const collegeName = data.collegeName || collegeCode;
-              const branches = Array.isArray(data.branches) ? data.branches : (Array.isArray(data) ? data : [data]);
-
-              for (const branch of branches) {
-                if (matches.length >= MAX_MATCHES) break;
-                const branchCode = branch.branchCode || 'ENGG';
-                const branchName = branch.branchName || branchCode;
-                const records = Array.isArray(branch.records) ? branch.records : [];
-
-                for (const r of records) {
-                  if (matches.length >= MAX_MATCHES) break;
-                  const nameMatch = r.name && r.name.toLowerCase().includes(q);
-                  const htMatch = r.hallTicket && r.hallTicket.toLowerCase().includes(q);
-                  const rankMatch = r.rank && r.rank.toString() === q;
-
-                  if (nameMatch || htMatch || rankMatch) {
-                    matches.push({
-                      ...r,
-                      collegeCode,
-                      collegeName,
-                      branchCode,
-                      branchName
-                    });
-                  }
-                }
-              }
-            } catch (fileErr) {
-              // skip unreadable
+            // 1. College filter
+            if (collegeFilter !== 'ALL' && cand.collegeCode.toUpperCase() !== collegeFilter) {
+              continue;
             }
+
+            // 2. Branch filter
+            if (branchFilter !== 'ALL' && cand.branchCode.toUpperCase() !== branchFilter) {
+              continue;
+            }
+
+            // 3. Gender filter
+            if (genderFilter !== 'ALL' && cand.gender.toUpperCase() !== genderFilter) {
+              continue;
+            }
+
+            // 4. Caste filter
+            if (casteFilter !== 'ALL' && cand.caste.toUpperCase() !== casteFilter) {
+              continue;
+            }
+
+            // 5. Seat category filter
+            if (categoryFilter !== 'ALL' && cand.seatCategory.toUpperCase() !== categoryFilter) {
+              continue;
+            }
+
+            // 6. Query matching
+            const evalResult = evaluateCandidateMatch(cand, q);
+            if (!evalResult.isMatch) {
+              continue;
+            }
+
+            collegesSet.add(cand.collegeCode);
+            branchesSet.add(cand.branchCode);
+            if (cand.caste) {
+              casteCountMap[cand.caste] = (casteCountMap[cand.caste] || 0) + 1;
+            }
+            if (cand.rank > 0 && cand.rank < minObservedRank) minObservedRank = cand.rank;
+            if (cand.rank > maxObservedRank) maxObservedRank = cand.rank;
+
+            matched.push({
+              rank: cand.rank,
+              name: cand.name,
+              gender: cand.gender,
+              caste: cand.caste,
+              seatCategory: cand.seatCategory,
+              region: cand.region,
+              hallTicket: cand.hallTicket,
+              collegeCode: cand.collegeCode,
+              collegeName: cand.collegeName,
+              branchCode: cand.branchCode,
+              branchName: cand.branchName,
+              phase: cand.phase,
+              sourceFile: cand.sourceFile,
+              matchType: evalResult.matchType,
+              matchPriority: evalResult.priority,
+              matchReason: evalResult.reason
+            });
           }
+
+          // Sorting: Priority first for non-empty search queries, then user-selected order
+          matched.sort((a, b) => {
+            if (q) {
+              // Exact matches precede partial, partial precede similar
+              if (b.matchPriority !== a.matchPriority) {
+                return b.matchPriority - a.matchPriority;
+              }
+            }
+
+            if (sortParam === 'rank_asc') return a.rank - b.rank;
+            if (sortParam === 'rank_desc') return b.rank - a.rank;
+            if (sortParam === 'name_asc') return a.name.localeCompare(b.name);
+            if (sortParam === 'college_asc') return a.collegeName.localeCompare(b.collegeName);
+            return a.rank - b.rank;
+          });
+
+          const totalMatches = matched.length;
+          const cappedResults = matched.slice(0, Math.min(limitParam, 1000));
 
           res.setHeader('Content-Type', 'application/json; charset=utf-8');
-          res.end(JSON.stringify({ query: q, total: matches.length, results: matches }));
+          res.end(JSON.stringify({
+            query: q,
+            college: collegeFilter,
+            branch: branchFilter,
+            totalMatches,
+            results: cappedResults,
+            stats: {
+              collegeCount: collegesSet.size,
+              branchCount: branchesSet.size,
+              minRank: minObservedRank === 999999 ? 0 : minObservedRank,
+              maxRank: maxObservedRank,
+              castes: Object.entries(casteCountMap).map(([caste, count]) => ({ caste, count }))
+            }
+          }));
         } catch (err: any) {
           console.error('[tgAllotmentSearch] error:', err);
           res.statusCode = 500;

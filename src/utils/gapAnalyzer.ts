@@ -135,7 +135,7 @@ export const EXPO_DEMO_PROFILE: StudentProfile = {
 
 export const SAMPLE_PROFILES: { label: string; description: string; profile: StudentProfile }[] = [
   {
-    label: '1st Year CSE — Software Developer (Official Expo Demo)',
+    label: '1st Year CSE — Software Developer (Sample Profile)',
     description: 'Python (Basic), HTML/CSS (Inter), DSA (Beginner), SQL (None), 2 Projects.',
     profile: EXPO_DEMO_PROFILE,
   },

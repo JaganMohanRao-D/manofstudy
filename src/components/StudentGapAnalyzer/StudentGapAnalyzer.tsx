@@ -233,7 +233,7 @@ export const StudentGapAnalyzer: React.FC<StudentGapAnalyzerProps> = ({
             <div className="flex flex-wrap items-center gap-2.5">
               <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5 shadow-xs">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>EXPO 2026 OFFICIAL FEATURE</span>
+                <span>AI SKILL GAP DIAGNOSTIC</span>
               </span>
               <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">
                 Deterministic Gap Engine
@@ -252,7 +252,7 @@ export const StudentGapAnalyzer: React.FC<StudentGapAnalyzerProps> = ({
             </p>
           </div>
 
-          {/* Quick Expo Preset Launchers */}
+          {/* Quick Preset Launchers */}
           <div className="flex flex-col sm:flex-row md:flex-col items-start md:items-end gap-2 shrink-0">
             <button
               type="button"
@@ -267,7 +267,7 @@ export const StudentGapAnalyzer: React.FC<StudentGapAnalyzerProps> = ({
               className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-600/20 cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>⚡ Load Expo Demo Profile (1st Year CSE)</span>
+              <span>⚡ Load Sample Profile (1st Year CSE)</span>
             </button>
 
             <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
@@ -940,7 +940,7 @@ export const StudentGapAnalyzer: React.FC<StudentGapAnalyzerProps> = ({
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold cursor-pointer transition-all shadow-xs"
                 >
                   <Sparkles className="w-3.5 h-3.5" />
-                  <span>⚡ Re-Run Official Expo Demo</span>
+                  <span>⚡ Load Sample Benchmark Profile</span>
                 </button>
               </div>
             </div>

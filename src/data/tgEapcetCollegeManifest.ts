@@ -12,6 +12,7 @@ export interface TgBranchManifestItem {
 export interface TgCollegeManifestItem {
   collegeCode: string;
   collegeName: string;
+  district?: string;
   filename: string;
   file: string;
   branchCount: number;
@@ -19,6 +20,15 @@ export interface TgCollegeManifestItem {
   minRank: number;
   maxRank: number;
   branches: TgBranchManifestItem[];
+}
+
+export interface TgBranchGlobalItem {
+  branchCode: string;
+  branchName: string;
+  totalAllotted: number;
+  collegeCount: number;
+  openingRank: number;
+  closingRank: number;
 }
 
 export interface TgAllotmentGlobalStats {
@@ -34,13 +44,313 @@ export const TG_EAPCET_GLOBAL_STATS: TgAllotmentGlobalStats = {
   "totalRecords": 71646,
   "overallMinRank": 1,
   "overallMaxRank": 400379,
-  "generatedAt": "2026-09-13T12:23:42.471Z"
+  "generatedAt": "2026-09-20T10:37:01.824Z"
 };
+
+export const TG_EAPCET_ALL_BRANCHES: TgBranchGlobalItem[] = [
+  {
+    "branchCode": "CSE",
+    "branchName": "COMPUTER SCIENCE AND ENGINEERING (CSE)",
+    "totalAllotted": 24934,
+    "collegeCount": 147,
+    "openingRank": 1,
+    "closingRank": 400377
+  },
+  {
+    "branchCode": "CSM",
+    "branchName": "COMPUTER SCIENCE AND ENGINEERING (ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)",
+    "totalAllotted": 13309,
+    "collegeCount": 126,
+    "openingRank": 22,
+    "closingRank": 400359
+  },
+  {
+    "branchCode": "ECE",
+    "branchName": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)",
+    "totalAllotted": 9732,
+    "collegeCount": 133,
+    "openingRank": 523,
+    "closingRank": 400378
+  },
+  {
+    "branchCode": "CSD",
+    "branchName": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)",
+    "totalAllotted": 6600,
+    "collegeCount": 86,
+    "openingRank": 1497,
+    "closingRank": 400379
+  },
+  {
+    "branchCode": "INF",
+    "branchName": "INFORMATION TECHNOLOGY (INF)",
+    "totalAllotted": 3211,
+    "collegeCount": 44,
+    "openingRank": 2855,
+    "closingRank": 400342
+  },
+  {
+    "branchCode": "EEE",
+    "branchName": "ELECTRICAL AND ELECTRONICS ENGINEERING (EEE)",
+    "totalAllotted": 3081,
+    "collegeCount": 103,
+    "openingRank": 2097,
+    "closingRank": 400306
+  },
+  {
+    "branchCode": "CIV",
+    "branchName": "CIVIL ENGINEERING (CIV)",
+    "totalAllotted": 2540,
+    "collegeCount": 86,
+    "openingRank": 1888,
+    "closingRank": 400376
+  },
+  {
+    "branchCode": "MEC",
+    "branchName": "MECHANICAL ENGINEERING (MEC)",
+    "totalAllotted": 2143,
+    "collegeCount": 82,
+    "openingRank": 1212,
+    "closingRank": 400368
+  },
+  {
+    "branchCode": "CSC",
+    "branchName": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY) (CSC)",
+    "totalAllotted": 1839,
+    "collegeCount": 30,
+    "openingRank": 702,
+    "closingRank": 144596
+  },
+  {
+    "branchCode": "AID",
+    "branchName": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)",
+    "totalAllotted": 947,
+    "collegeCount": 21,
+    "openingRank": 1042,
+    "closingRank": 400370
+  },
+  {
+    "branchCode": "AIM",
+    "branchName": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)",
+    "totalAllotted": 892,
+    "collegeCount": 16,
+    "openingRank": 1209,
+    "closingRank": 400362
+  },
+  {
+    "branchCode": "CSB",
+    "branchName": "COMPUTER SCIENCE AND BUSINESS SYSTEM (CSB)",
+    "totalAllotted": 279,
+    "collegeCount": 7,
+    "openingRank": 779,
+    "closingRank": 142364
+  },
+  {
+    "branchCode": "CSO",
+    "branchName": "COMPUTER SCIENCE AND ENGINEERING (IOT) (CSO)",
+    "totalAllotted": 242,
+    "collegeCount": 8,
+    "openingRank": 3122,
+    "closingRank": 144652
+  },
+  {
+    "branchCode": "CHE",
+    "branchName": "CHEMICAL ENGINEERING (CHE)",
+    "totalAllotted": 191,
+    "collegeCount": 4,
+    "openingRank": 2013,
+    "closingRank": 134285
+  },
+  {
+    "branchCode": "ANE",
+    "branchName": "AERONAUTICAL ENGINEERING (ANE)",
+    "totalAllotted": 182,
+    "collegeCount": 4,
+    "openingRank": 4786,
+    "closingRank": 142401
+  },
+  {
+    "branchCode": "CSA",
+    "branchName": "COMPUTER SCIENCE AND ENGG (ARTIFICIAL INTELLIGENCE) (CSA)",
+    "totalAllotted": 181,
+    "collegeCount": 2,
+    "openingRank": 13535,
+    "closingRank": 144690
+  },
+  {
+    "branchCode": "MIN",
+    "branchName": "MINING ENGINEERING (MIN)",
+    "totalAllotted": 165,
+    "collegeCount": 6,
+    "openingRank": 11122,
+    "closingRank": 143611
+  },
+  {
+    "branchCode": "EIE",
+    "branchName": "ELECTRONICS AND INSTRUMENTATION ENGINEERING (EIE)",
+    "totalAllotted": 161,
+    "collegeCount": 3,
+    "openingRank": 4639,
+    "closingRank": 142006
+  },
+  {
+    "branchCode": "CIC",
+    "branchName": "CSE (IoT AND CYBER SECURITY INCLUDING BLOCK CHAIN TECHNOLOGY) (CIC)",
+    "totalAllotted": 105,
+    "collegeCount": 3,
+    "openingRank": 1925,
+    "closingRank": 124945
+  },
+  {
+    "branchCode": "BIO",
+    "branchName": "BIO-TECHNOLOGY (BIO)",
+    "totalAllotted": 103,
+    "collegeCount": 4,
+    "openingRank": 6002,
+    "closingRank": 138964
+  },
+  {
+    "branchCode": "CSI",
+    "branchName": "COMPUTER SCIENCE AND INFORMATION TECHNOLOGY (CSI)",
+    "totalAllotted": 93,
+    "collegeCount": 4,
+    "openingRank": 50278,
+    "closingRank": 143412
+  },
+  {
+    "branchCode": "CME",
+    "branchName": "COMPUTER ENGINEERING (CME)",
+    "totalAllotted": 69,
+    "collegeCount": 2,
+    "openingRank": 39311,
+    "closingRank": 400366
+  },
+  {
+    "branchCode": "MET",
+    "branchName": "METALLURGICAL ENGINEERING (MET)",
+    "totalAllotted": 66,
+    "collegeCount": 1,
+    "openingRank": 9282,
+    "closingRank": 74181
+  },
+  {
+    "branchCode": "FDT",
+    "branchName": "FOOD TECHNOLOGY (FDT)",
+    "totalAllotted": 66,
+    "collegeCount": 1,
+    "openingRank": 18691,
+    "closingRank": 103884
+  },
+  {
+    "branchCode": "TEX",
+    "branchName": "TEXTILE TECHNOLOGY / TEXTILE ENGINEERING (TEX)",
+    "totalAllotted": 66,
+    "collegeCount": 1,
+    "openingRank": 26106,
+    "closingRank": 124795
+  },
+  {
+    "branchCode": "BME",
+    "branchName": "BIO-MEDICAL ENGINEERING (BME)",
+    "totalAllotted": 65,
+    "collegeCount": 2,
+    "openingRank": 3384,
+    "closingRank": 134348
+  },
+  {
+    "branchCode": "ETM",
+    "branchName": "ELECTRONICS AND TELEMATICS (ETM)",
+    "totalAllotted": 46,
+    "collegeCount": 1,
+    "openingRank": 10650,
+    "closingRank": 131590
+  },
+  {
+    "branchCode": "CSN",
+    "branchName": "COMPUTER SCIENCE & ENGINEERING (NETWORKS) (CSN)",
+    "totalAllotted": 46,
+    "collegeCount": 1,
+    "openingRank": 22575,
+    "closingRank": 135737
+  },
+  {
+    "branchCode": "MCT",
+    "branchName": "MECHANICAL (MECHTRONICS) ENGINEERING (MCT)",
+    "totalAllotted": 46,
+    "collegeCount": 1,
+    "openingRank": 7455,
+    "closingRank": 141562
+  },
+  {
+    "branchCode": "AUT",
+    "branchName": "AUTOMOBILE ENGINEERING (AUT)",
+    "totalAllotted": 46,
+    "collegeCount": 1,
+    "openingRank": 8127,
+    "closingRank": 137666
+  },
+  {
+    "branchCode": "CSW",
+    "branchName": "COMPUTER ENGINEERING(SOFTWARE ENGINEERING) (CSW)",
+    "totalAllotted": 38,
+    "collegeCount": 2,
+    "openingRank": 73079,
+    "closingRank": 144469
+  },
+  {
+    "branchCode": "GEO",
+    "branchName": "GEO INFORMATICS (GEO)",
+    "totalAllotted": 33,
+    "collegeCount": 1,
+    "openingRank": 8715,
+    "closingRank": 77437
+  },
+  {
+    "branchCode": "MMS",
+    "branchName": "BTECH MECHANICAL WITH MTECH MANUFACTURING SYSTEMS (MMS)",
+    "totalAllotted": 33,
+    "collegeCount": 1,
+    "openingRank": 10210,
+    "closingRank": 86785
+  },
+  {
+    "branchCode": "MTE",
+    "branchName": "BTECH MECHANICAL WITH MTECH THERMAL ENGG (MTE)",
+    "totalAllotted": 33,
+    "collegeCount": 1,
+    "openingRank": 7201,
+    "closingRank": 109701
+  },
+  {
+    "branchCode": "PHE",
+    "branchName": "PHARMACEUTICAL ENGINEERING (PHE)",
+    "totalAllotted": 23,
+    "collegeCount": 1,
+    "openingRank": 34555,
+    "closingRank": 139070
+  },
+  {
+    "branchCode": "CSG",
+    "branchName": "COMPUTER SCIENCE & DESIGN (CSG)",
+    "totalAllotted": 23,
+    "collegeCount": 1,
+    "openingRank": 59680,
+    "closingRank": 137871
+  },
+  {
+    "branchCode": "ECM",
+    "branchName": "ELECTRONICS AND COMPUTER ENGINEERING (ECM)",
+    "totalAllotted": 17,
+    "collegeCount": 1,
+    "openingRank": 54824,
+    "closingRank": 141464
+  }
+];
 
 export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "AARM",
     "collegeName": "AAR MAHAVEER ENGINEERING COLLEGE (AARM)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "AAR_MAHAVEER_ENGINEERING_COLLEGE_AARM.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/AAR_MAHAVEER_ENGINEERING_COLLEGE_AARM.json",
     "branchCount": 5,
@@ -88,6 +398,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "ACEG",
     "collegeName": "A C E ENGINEERING COLLEGE (ACEG)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "A_C_E_ENGINEERING_COLLEGE_ACEG.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/A_C_E_ENGINEERING_COLLEGE_ACEG.json",
     "branchCount": 9,
@@ -163,6 +474,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "AITH",
     "collegeName": "ANNAMACHARYA INSTITUTE OF TECHNOLOGY AND SCIENCE (AITH)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "ANNAMACHARYA_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_AITH.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/ANNAMACHARYA_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_AITH.json",
     "branchCount": 7,
@@ -224,6 +536,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "AIZA",
     "collegeName": "AIZZA COLLEGE OF ENGINEERING AND TECHNOLOGY (AIZA)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "AIZZA_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_AIZA.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/AIZZA_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_AIZA.json",
     "branchCount": 2,
@@ -250,6 +563,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "AKIT",
     "collegeName": "ABDULKALAM INSTITUTE OF TECHNOLOGY AND SCIENCE (AKIT)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "ABDULKALAM_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_AKIT.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/ABDULKALAM_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_AKIT.json",
     "branchCount": 8,
@@ -318,6 +632,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "ANRK",
     "collegeName": "ANURAG ENGINEERING COLLGE (ANRK)",
+    "district": "Nalgonda / Suryapet",
     "filename": "ANURAG_ENGINEERING_COLLGE_ANRK.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/ANURAG_ENGINEERING_COLLGE_ANRK.json",
     "branchCount": 6,
@@ -372,6 +687,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "ARJN",
     "collegeName": "ARJUN COLLEGE OF TECHNOLOGY AND SCIENCE (ARJN)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "ARJUN_COLLEGE_OF_TECHNOLOGY_AND_SCIENCE_ARJN.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/ARJUN_COLLEGE_OF_TECHNOLOGY_AND_SCIENCE_ARJN.json",
     "branchCount": 4,
@@ -412,6 +728,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "ASRA",
     "collegeName": "AVANTHIS SCIENTIFIC TECHNOLOGY AND RESEARCH ACADEMY (ASRA)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "AVANTHIS_SCIENTIFIC_TECHNOLOGY_AND_RESEARCH_ACADEMY_ASRA.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/AVANTHIS_SCIENTIFIC_TECHNOLOGY_AND_RESEARCH_ACADEMY_ASRA.json",
     "branchCount": 7,
@@ -473,6 +790,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "AURG",
     "collegeName": "AURORAS TECHNOLOGICAL, RESEARCH INSTITUTE (AURG)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "AURORAS_TECHNOLOGICAL_RESEARCH_INSTITUTE_AURG.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/AURORAS_TECHNOLOGICAL_RESEARCH_INSTITUTE_AURG.json",
     "branchCount": 4,
@@ -513,6 +831,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "AURH",
     "collegeName": "Ramappa Engineering College (AURH)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "Ramappa_Engineering_College_AURH.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/Ramappa_Engineering_College_AURH.json",
     "branchCount": 1,
@@ -532,6 +851,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "AVIH",
     "collegeName": "AVANTHI INSTITUTE OF ENGINEERING AND TECHNOLOGY (AVIH)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "AVANTHI_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_AVIH.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/AVANTHI_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_AVIH.json",
     "branchCount": 7,
@@ -593,6 +913,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "AVNI",
     "collegeName": "AVN INSTITUTE OF ENGINEERING TECHNOLOGY (AVNI)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "AVN_INSTITUTE_OF_ENGINEERING_TECHNOLOGY_AVNI.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/AVN_INSTITUTE_OF_ENGINEERING_TECHNOLOGY_AVNI.json",
     "branchCount": 8,
@@ -661,6 +982,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "BIET",
     "collegeName": "BHARAT INSTITUTE OF ENGINEERING AND TECHNOLOGY (BIET)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "BHARAT_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_BIET.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/BHARAT_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_BIET.json",
     "branchCount": 9,
@@ -736,6 +1058,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "BITN",
     "collegeName": "BALAJI INSTITUTE OF TECHNOLOGY AND SCIENCE (BITN)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "BALAJI_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_BITN.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/BALAJI_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_BITN.json",
     "branchCount": 8,
@@ -804,6 +1127,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "BOMA",
     "collegeName": "BOMMA INSTITUTE OF TECHNOLOGY AND SCIENCE (BOMA)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "BOMMA_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_BOMA.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/BOMMA_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_BOMA.json",
     "branchCount": 4,
@@ -844,6 +1168,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "BOSE",
     "collegeName": "ANU BOSE INSTITUTE OF TECHNOLOGY (BOSE)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "ANU_BOSE_INSTITUTE_OF_TECHNOLOGY_BOSE.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/ANU_BOSE_INSTITUTE_OF_TECHNOLOGY_BOSE.json",
     "branchCount": 6,
@@ -898,6 +1223,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "BREW",
     "collegeName": "BHOJREDDY ENGINEERING COLLEGE FOR WOMEN (BREW)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "BHOJREDDY_ENGINEERING_COLLEGE_FOR_WOMEN_BREW.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/BHOJREDDY_ENGINEERING_COLLEGE_FOR_WOMEN_BREW.json",
     "branchCount": 5,
@@ -945,6 +1271,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "BRIG",
     "collegeName": "BRILLIANT GRAMMER SCHOOL EDUCATIONAL SOCIETY GROUP OF INSTITUTIONS  (BRIG)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "BRILLIANT_GRAMMER_SCHOOL_EDUCATIONAL_SOCIETY_GROUP_OF_INSTITUTIONS_BRIG.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/BRILLIANT_GRAMMER_SCHOOL_EDUCATIONAL_SOCIETY_GROUP_OF_INSTITUTIONS_BRIG.json",
     "branchCount": 9,
@@ -1020,6 +1347,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "BRIL",
     "collegeName": "BRILLIANT INSTITUTE OF ENGINEERING AND TECHNOLOGY (BRIL)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "BRILLIANT_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_BRIL.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/BRILLIANT_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_BRIL.json",
     "branchCount": 9,
@@ -1095,6 +1423,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "BSKR",
     "collegeName": "BHASKAR ENGINEERING COLLEGE (BSKR)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "BHASKAR_ENGINEERING_COLLEGE_BSKR.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/BHASKAR_ENGINEERING_COLLEGE_BSKR.json",
     "branchCount": 5,
@@ -1142,6 +1471,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "BVRI",
     "collegeName": "B V RAJU INSTITUTE OF TECHNOLOGY (BVRI)",
+    "district": "Medak / Sangareddy",
     "filename": "B_V_RAJU_INSTITUTE_OF_TECHNOLOGY_BVRI.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/B_V_RAJU_INSTITUTE_OF_TECHNOLOGY_BVRI.json",
     "branchCount": 12,
@@ -1238,6 +1568,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "BVRW",
     "collegeName": "BVRIT COLLEGE OF ENGINEERING FOR WOMEN (BVRW)",
+    "district": "Medak / Sangareddy",
     "filename": "BVRIT_COLLEGE_OF_ENGINEERING_FOR_WOMEN_BVRW.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/BVRIT_COLLEGE_OF_ENGINEERING_FOR_WOMEN_BVRW.json",
     "branchCount": 4,
@@ -1278,6 +1609,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "CBIT",
     "collegeName": "CHAITANYA BHARATHI INSTITUTE OF TECHNOLOGY (CBIT)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "CHAITANYA_BHARATHI_INSTITUTE_OF_TECHNOLOGY_CBIT.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/CHAITANYA_BHARATHI_INSTITUTE_OF_TECHNOLOGY_CBIT.json",
     "branchCount": 11,
@@ -1367,6 +1699,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "CHET",
     "collegeName": "SRI CHAITANYA COLLEGE OF ENGINEERING AND TECHNOLOGY (CHET)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SRI_CHAITANYA_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_CHET.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SRI_CHAITANYA_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_CHET.json",
     "branchCount": 7,
@@ -1428,6 +1761,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "CHTN",
     "collegeName": "SREE CHAITANYA COLLEGE OF ENGINEERING (CHTN)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SREE_CHAITANYA_COLLEGE_OF_ENGINEERING_CHTN.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SREE_CHAITANYA_COLLEGE_OF_ENGINEERING_CHTN.json",
     "branchCount": 7,
@@ -1489,6 +1823,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "CHTS",
     "collegeName": "SREE CHAITANYA INSTITUTE OF TECHNOLOGY SCIENCES (CHTS)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SREE_CHAITANYA_INSTITUTE_OF_TECHNOLOGY_SCIENCES_CHTS.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SREE_CHAITANYA_INSTITUTE_OF_TECHNOLOGY_SCIENCES_CHTS.json",
     "branchCount": 4,
@@ -1529,6 +1864,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "CJIT",
     "collegeName": "CHRISTU JYOTHI INSTITUTE OF TECHNOLOGY AND SCI (CJIT)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "CHRISTU_JYOTHI_INSTITUTE_OF_TECHNOLOGY_AND_SCI_CJIT.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/CHRISTU_JYOTHI_INSTITUTE_OF_TECHNOLOGY_AND_SCI_CJIT.json",
     "branchCount": 4,
@@ -1569,6 +1905,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "CMRG",
     "collegeName": "CMR TECHNICAL CAMPUS (CMRG)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "CMR_TECHNICAL_CAMPUS_CMRG.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/CMR_TECHNICAL_CAMPUS_CMRG.json",
     "branchCount": 4,
@@ -1609,6 +1946,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "CMRK",
     "collegeName": "CMR COLLEGE OF ENGINEERING AND TECHNOLOGY (CMRK)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "CMR_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_CMRK.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/CMR_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_CMRK.json",
     "branchCount": 7,
@@ -1670,6 +2008,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "CMRM",
     "collegeName": "CMR INSTITUTE OF TECHNOLOGY (CMRM)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "CMR_INSTITUTE_OF_TECHNOLOGY_CMRM.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/CMR_INSTITUTE_OF_TECHNOLOGY_CMRM.json",
     "branchCount": 4,
@@ -1710,6 +2049,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "CMRN",
     "collegeName": "CMR ENGINEERING COLLEGE (CMRN)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "CMR_ENGINEERING_COLLEGE_CMRN.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/CMR_ENGINEERING_COLLEGE_CMRN.json",
     "branchCount": 4,
@@ -1750,6 +2090,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "CVRH",
     "collegeName": "CVR COLLEGE OF ENGINEERING (CVRH)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "CVR_COLLEGE_OF_ENGINEERING_CVRH.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/CVR_COLLEGE_OF_ENGINEERING_CVRH.json",
     "branchCount": 11,
@@ -1839,6 +2180,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "DCET",
     "collegeName": "DECCAN COLLEGE OF ENGINEERING AND TECHNOLOGY (DCET)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "DECCAN_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_DCET.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/DECCAN_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_DCET.json",
     "branchCount": 7,
@@ -1900,6 +2242,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "DRKI",
     "collegeName": "D R K INSTITUTE OF SCIENCE AND TECHNOLOGY (DRKI)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "D_R_K_INSTITUTE_OF_SCIENCE_AND_TECHNOLOGY_DRKI.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/D_R_K_INSTITUTE_OF_SCIENCE_AND_TECHNOLOGY_DRKI.json",
     "branchCount": 7,
@@ -1961,6 +2304,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "ELEN",
     "collegeName": "ELLENKI COLLGE OF ENGINEERING AND TECHNOLOGY (ELEN)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "ELLENKI_COLLGE_OF_ENGINEERING_AND_TECHNOLOGY_ELEN.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/ELLENKI_COLLGE_OF_ENGINEERING_AND_TECHNOLOGY_ELEN.json",
     "branchCount": 8,
@@ -2029,6 +2373,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "GATE",
     "collegeName": "GATE INSTITUTE OF TECHNOLOGY AND SCIENCES (GATE)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "GATE_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCES_GATE.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/GATE_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCES_GATE.json",
     "branchCount": 5,
@@ -2076,6 +2421,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "GCTC",
     "collegeName": "GEETANJALI COLLEGE OF ENGINEERING AND TECHNOLOGY (GCTC)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "GEETANJALI_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_GCTC.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/GEETANJALI_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_GCTC.json",
     "branchCount": 8,
@@ -2144,6 +2490,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "GLOB",
     "collegeName": "GLOBAL INSTITUTE OF ENGINEERING AND TECHNOLOGY (GLOB)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "GLOBAL_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_GLOB.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/GLOBAL_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_GLOB.json",
     "branchCount": 6,
@@ -2198,6 +2545,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "GLWC",
     "collegeName": "GOKARAJU LAILAVATHI WOMENS ENGINEERING COLLEGE (GLWC)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "GOKARAJU_LAILAVATHI_WOMENS_ENGINEERING_COLLEGE_GLWC.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/GOKARAJU_LAILAVATHI_WOMENS_ENGINEERING_COLLEGE_GLWC.json",
     "branchCount": 2,
@@ -2224,6 +2572,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "GNIT",
     "collegeName": "GURU NANAK INSTITUTE OF TECHNOLOGY (GNIT)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "GURU_NANAK_INSTITUTE_OF_TECHNOLOGY_GNIT.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/GURU_NANAK_INSTITUTE_OF_TECHNOLOGY_GNIT.json",
     "branchCount": 8,
@@ -2292,6 +2641,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "GNTW",
     "collegeName": "G NARAYNAMMA INSTITUTE OF TECHNOLOGY AND SCIENCE (GNTW)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "G_NARAYNAMMA_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_GNTW.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/G_NARAYNAMMA_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_GNTW.json",
     "branchCount": 7,
@@ -2353,6 +2703,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "GRRR",
     "collegeName": "GOKARAJU RANGARAJU INSTITUTE OF ENGINEERING AND TECHNOLOGY (GRRR)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "GOKARAJU_RANGARAJU_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_GRRR.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/GOKARAJU_RANGARAJU_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_GRRR.json",
     "branchCount": 8,
@@ -2421,6 +2772,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "GURU",
     "collegeName": "GURU NANAK INSTITUTIONS TECHNICAL CAMPUS (GURU)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "GURU_NANAK_INSTITUTIONS_TECHNICAL_CAMPUS_GURU.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/GURU_NANAK_INSTITUTIONS_TECHNICAL_CAMPUS_GURU.json",
     "branchCount": 10,
@@ -2503,6 +2855,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "HITM",
     "collegeName": "HYDERABAD INSTITUTE OF TECHNOLOGY AND MANAGEMENT (HITM)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "HYDERABAD_INSTITUTE_OF_TECHNOLOGY_AND_MANAGEMENT_HITM.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/HYDERABAD_INSTITUTE_OF_TECHNOLOGY_AND_MANAGEMENT_HITM.json",
     "branchCount": 6,
@@ -2557,6 +2910,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "HOLY",
     "collegeName": "HOLY MARY INSTITUTE OF TECHNOLOGY SCIENCE (HOLY)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "HOLY_MARY_INSTITUTE_OF_TECHNOLOGY_SCIENCE_HOLY.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/HOLY_MARY_INSTITUTE_OF_TECHNOLOGY_SCIENCE_HOLY.json",
     "branchCount": 8,
@@ -2625,6 +2979,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "IARE",
     "collegeName": "INSTITUTE OF AERONAUTICAL ENGINEERING (IARE)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "INSTITUTE_OF_AERONAUTICAL_ENGINEERING_IARE.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/INSTITUTE_OF_AERONAUTICAL_ENGINEERING_IARE.json",
     "branchCount": 9,
@@ -2700,6 +3055,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "IITT",
     "collegeName": "INDUR INSTITUTE OF ENGINEERING AND TECHNOLOGY (IITT)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "INDUR_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_IITT.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/INDUR_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_IITT.json",
     "branchCount": 4,
@@ -2740,6 +3096,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "INDI",
     "collegeName": "SRI INDU INSTITUTE OF ENGINEERING AND TECHNOLOGY (INDI)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SRI_INDU_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_INDI.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SRI_INDU_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_INDI.json",
     "branchCount": 8,
@@ -2808,6 +3165,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "INDU",
     "collegeName": "SRI INDU COLLEGE OF ENGINEERING AND TECHNOLOGY (INDU)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SRI_INDU_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_INDU.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SRI_INDU_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_INDU.json",
     "branchCount": 11,
@@ -2897,6 +3255,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "ISLC",
     "collegeName": "ISL ENGINEERING COLLEGE (ISLC)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "ISL_ENGINEERING_COLLEGE_ISLC.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/ISL_ENGINEERING_COLLEGE_ISLC.json",
     "branchCount": 5,
@@ -2944,6 +3303,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "JAYA",
     "collegeName": "JAYAMUKHI INSTITUTE OF TECHNOLOGY AND SCIENCES (JAYA)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "JAYAMUKHI_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCES_JAYA.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/JAYAMUKHI_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCES_JAYA.json",
     "branchCount": 1,
@@ -2963,6 +3323,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "JBIT",
     "collegeName": "J B INSTITUTE OF ENGINEERING AND TECHNOLOGY (JBIT)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "J_B_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_JBIT.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/J_B_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_JBIT.json",
     "branchCount": 11,
@@ -3052,6 +3413,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "JMTS",
     "collegeName": "JYOTHISHMATHI INSTITUTE OF TECHNOLOGY AND SCIENCE (JMTS)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "JYOTHISHMATHI_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_JMTS.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/JYOTHISHMATHI_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_JMTS.json",
     "branchCount": 6,
@@ -3106,6 +3468,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "JNKR",
     "collegeName": "JNTUH UNIVERSITY COLLEGE OF ENGINEERING JAGTIAL (JNKR)",
+    "district": "Karimnagar / Jagtial",
     "filename": "JNTUH_UNIVERSITY_COLLEGE_OF_ENGINEERING_JAGTIAL_JNKR.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/JNTUH_UNIVERSITY_COLLEGE_OF_ENGINEERING_JAGTIAL_JNKR.json",
     "branchCount": 5,
@@ -3153,6 +3516,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "JNTH",
     "collegeName": "JNTUH UNIVERSITY COLLEGE OF ENGINEERING HYDERABAD  (JNTH)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "JNTUH_UNIVERSITY_COLLEGE_OF_ENGINEERING_HYDERABAD_JNTH.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/JNTUH_UNIVERSITY_COLLEGE_OF_ENGINEERING_HYDERABAD_JNTH.json",
     "branchCount": 11,
@@ -3242,6 +3606,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "JNTHMT",
     "collegeName": "JNTUH UNIVERSITY COLLEGE OF ENGINEERING -5 YEAR INTEGRATED MTECH SELF FINANCE (JNTHMT)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "JNTUH_UNIVERSITY_COLLEGE_OF_ENGINEERING_-5_YEAR_INTEGRATED_MTECH_SELF_FINANCE_JNTHMT.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/JNTUH_UNIVERSITY_COLLEGE_OF_ENGINEERING_-5_YEAR_INTEGRATED_MTECH_SELF_FINANCE_JNTHMT.json",
     "branchCount": 2,
@@ -3268,6 +3633,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "JNTM",
     "collegeName": "JNTUH UNIVERSITY COLLEGE OF ENGINEERING  MANTHANI (JNTM)",
+    "district": "Peddapalli / Manthani",
     "filename": "JNTUH_UNIVERSITY_COLLEGE_OF_ENGINEERING_MANTHANI_JNTM.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/JNTUH_UNIVERSITY_COLLEGE_OF_ENGINEERING_MANTHANI_JNTM.json",
     "branchCount": 6,
@@ -3322,6 +3688,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "JNTR",
     "collegeName": "JNTUH UNIVERSITY COLLEGE OF ENGINEERING RAJANNA SIRICILLA (JNTR)",
+    "district": "Rajanna Siricilla",
     "filename": "JNTUH_UNIVERSITY_COLLEGE_OF_ENGINEERING_RAJANNA_SIRICILLA_JNTR.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/JNTUH_UNIVERSITY_COLLEGE_OF_ENGINEERING_RAJANNA_SIRICILLA_JNTR.json",
     "branchCount": 5,
@@ -3369,6 +3736,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "JNTS",
     "collegeName": "JNTUH UNIVERSITY COLLEGE OF ENGINEERING SULTANPUR (JNTS)",
+    "district": "Medak / Sangareddy",
     "filename": "JNTUH_UNIVERSITY_COLLEGE_OF_ENGINEERING_SULTANPUR_JNTS.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/JNTUH_UNIVERSITY_COLLEGE_OF_ENGINEERING_SULTANPUR_JNTS.json",
     "branchCount": 7,
@@ -3430,6 +3798,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "JNWN",
     "collegeName": "JNTUH UNIVERSITY COLLEGE OF ENGINEERING WANAPARTHY (JNWN)",
+    "district": "Mahabubnagar / Wanaparthy",
     "filename": "JNTUH_UNIVERSITY_COLLEGE_OF_ENGINEERING_WANAPARTHY_JNWN.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/JNTUH_UNIVERSITY_COLLEGE_OF_ENGINEERING_WANAPARTHY_JNWN.json",
     "branchCount": 5,
@@ -3477,6 +3846,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "JOGI",
     "collegeName": "JOGINPALLY B R ENGINEERING COLLEGE (JOGI)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "JOGINPALLY_B_R_ENGINEERING_COLLEGE_JOGI.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/JOGINPALLY_B_R_ENGINEERING_COLLEGE_JOGI.json",
     "branchCount": 7,
@@ -3538,6 +3908,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "JPNE",
     "collegeName": "JAYA PRAKASH NARAYAN COLLEGE OF ENGINEERING (JPNE)",
+    "district": "Mahabubnagar / Wanaparthy",
     "filename": "JAYA_PRAKASH_NARAYAN_COLLEGE_OF_ENGINEERING_JPNE.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/JAYA_PRAKASH_NARAYAN_COLLEGE_OF_ENGINEERING_JPNE.json",
     "branchCount": 9,
@@ -3613,6 +3984,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "KCEA",
     "collegeName": "KSHATRIYA COLLEGE OF ENGINEERING (KCEA)",
+    "district": "Nizamabad / Kamareddy",
     "filename": "KSHATRIYA_COLLEGE_OF_ENGINEERING_KCEA.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/KSHATRIYA_COLLEGE_OF_ENGINEERING_KCEA.json",
     "branchCount": 6,
@@ -3667,6 +4039,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "KDDW",
     "collegeName": "KODADA INSTITUTE OF TECHNOLOGY AND SCIENCE FOR WOMEN (KDDW)",
+    "district": "Nalgonda / Suryapet",
     "filename": "KODADA_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_FOR_WOMEN_KDDW.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/KODADA_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_FOR_WOMEN_KDDW.json",
     "branchCount": 4,
@@ -3707,6 +4080,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "KGRH",
     "collegeName": "KGREDDY COLLEGE OF ENGINEERING AND TECHNOLOGY (KGRH)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "KGREDDY_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_KGRH.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/KGREDDY_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_KGRH.json",
     "branchCount": 6,
@@ -3761,6 +4135,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "KITS",
     "collegeName": "KAKATIYA INSTITUTE OF TECHNOLOGY AND SCIENCE (KITS)",
+    "district": "Warangal / Hanamkonda",
     "filename": "KAKATIYA_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_KITS.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/KAKATIYA_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_KITS.json",
     "branchCount": 11,
@@ -3850,6 +4225,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "KITW",
     "collegeName": "KAKATIYA INSTITUTE OF TECHNOLOGY SCIENCE FOR WOMEN (KITW)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "KAKATIYA_INSTITUTE_OF_TECHNOLOGY_SCIENCE_FOR_WOMEN_KITW.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/KAKATIYA_INSTITUTE_OF_TECHNOLOGY_SCIENCE_FOR_WOMEN_KITW.json",
     "branchCount": 3,
@@ -3883,6 +4259,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "KLRT",
     "collegeName": "KLR COLLEGE OF ENGINEERING AND TECHNOLOGY PALONCHA (KLRT)",
+    "district": "Khammam / Bhadradri",
     "filename": "KLR_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_PALONCHA_KLRT.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/KLR_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_PALONCHA_KLRT.json",
     "branchCount": 8,
@@ -3951,6 +4328,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "KMEC",
     "collegeName": "KESHAV MEMORIAL ENGINEERING COLLEGE (KMEC)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "KESHAV_MEMORIAL_ENGINEERING_COLLEGE_KMEC.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/KESHAV_MEMORIAL_ENGINEERING_COLLEGE_KMEC.json",
     "branchCount": 2,
@@ -3977,6 +4355,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "KMIT",
     "collegeName": "KESHAV MEMORIAL INSTITUTE OF TECHNOLOGY (KMIT)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "KESHAV_MEMORIAL_INSTITUTE_OF_TECHNOLOGY_KMIT.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/KESHAV_MEMORIAL_INSTITUTE_OF_TECHNOLOGY_KMIT.json",
     "branchCount": 2,
@@ -4003,6 +4382,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "KNRR",
     "collegeName": "KASIREDDY NARAYANAREDDY COLL ENGINEERING & RESEARCH (KNRR)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "KASIREDDY_NARAYANAREDDY_COLL_ENGINEERING_RESEARCH_KNRR.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/KASIREDDY_NARAYANAREDDY_COLL_ENGINEERING_RESEARCH_KNRR.json",
     "branchCount": 8,
@@ -4071,6 +4451,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "KPRT",
     "collegeName": "KOMMURI PRATAP REDDY INSTITUTE OF TECHNOLOGY (KPRT)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "KOMMURI_PRATAP_REDDY_INSTITUTE_OF_TECHNOLOGY_KPRT.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/KOMMURI_PRATAP_REDDY_INSTITUTE_OF_TECHNOLOGY_KPRT.json",
     "branchCount": 4,
@@ -4111,6 +4492,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "KTKM",
     "collegeName": "KAMALA INSTITUTE OF TECHNOLOGY AND SCIENCE (KTKM)",
+    "district": "Karimnagar / Jagtial",
     "filename": "KAMALA_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_KTKM.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/KAMALA_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_KTKM.json",
     "branchCount": 7,
@@ -4172,6 +4554,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "KUEWSF",
     "collegeName": "UNIVERSITY COLLEGE OF ENGINEERING AND TECHNOLOGY FOR WOMEN KU CAMPUS (KUEWSF)",
+    "district": "Warangal / Hanamkonda",
     "filename": "UNIVERSITY_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_FOR_WOMEN_KU_CAMPUS_KUEWSF.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/UNIVERSITY_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_FOR_WOMEN_KU_CAMPUS_KUEWSF.json",
     "branchCount": 6,
@@ -4226,6 +4609,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "KUWL",
     "collegeName": "KU COLLEGE OF ENGINEERING  AND TECHNOLOGY (KUWL)",
+    "district": "Warangal / Hanamkonda",
     "filename": "KU_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_KUWL.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/KU_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_KUWL.json",
     "branchCount": 7,
@@ -4287,6 +4671,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "LRDS",
     "collegeName": "LORDS INSTITUTE OF ENGINEERING AND TECHNOLOGY (LRDS)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "LORDS_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_LRDS.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/LORDS_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_LRDS.json",
     "branchCount": 8,
@@ -4355,6 +4740,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "MDRK",
     "collegeName": "MADHIRA INSTITUTE OF TECHNOLOGY AND SCIENCE (MDRK)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "MADHIRA_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_MDRK.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/MADHIRA_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_MDRK.json",
     "branchCount": 2,
@@ -4381,6 +4767,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "METH",
     "collegeName": "METHODIST COLLEGE OF ENGINEERING AND TECHNOLOGY (METH)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "METHODIST_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_METH.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/METHODIST_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_METH.json",
     "branchCount": 7,
@@ -4442,6 +4829,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "MGHA",
     "collegeName": "MEGHA INSTITUTE OF ENGINEERING AND TECHNOLOGY FOR WOMEN (MGHA)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "MEGHA_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_FOR_WOMEN_MGHA.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/MEGHA_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_FOR_WOMEN_MGHA.json",
     "branchCount": 7,
@@ -4503,6 +4891,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "MGIT",
     "collegeName": "MAHATMA GANDHI INSTITUTE OF TECHNOLOGY (MGIT)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "MAHATMA_GANDHI_INSTITUTE_OF_TECHNOLOGY_MGIT.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/MAHATMA_GANDHI_INSTITUTE_OF_TECHNOLOGY_MGIT.json",
     "branchCount": 10,
@@ -4585,6 +4974,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "MGUNSF",
     "collegeName": "MGU COLLEGE OF ENGINEERING AND TECHNOLOGY (MGUNSF)",
+    "district": "Nalgonda / Suryapet",
     "filename": "MGU_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_MGUNSF.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/MGU_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_MGUNSF.json",
     "branchCount": 3,
@@ -4618,6 +5008,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "MHVR",
     "collegeName": "MAHAVEER INSTITUTE OF SCIENCE AND TECHNOLOGY (MHVR)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "MAHAVEER_INSTITUTE_OF_SCIENCE_AND_TECHNOLOGY_MHVR.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/MAHAVEER_INSTITUTE_OF_SCIENCE_AND_TECHNOLOGY_MHVR.json",
     "branchCount": 8,
@@ -4686,6 +5077,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "MINA",
     "collegeName": "MINA INSTITUTE OF ENGINEERING AND TECHNOLOGY FOR WOMEN (MINA)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "MINA_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_FOR_WOMEN_MINA.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/MINA_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_FOR_WOMEN_MINA.json",
     "branchCount": 3,
@@ -4719,6 +5111,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "MJCT",
     "collegeName": "MUFFAKHAM JAH COLLEGE OF ENGINEERING AND TECHNOLOGY (MJCT)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "MUFFAKHAM_JAH_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_MJCT.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/MUFFAKHAM_JAH_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_MJCT.json",
     "branchCount": 7,
@@ -4780,6 +5173,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "MLID",
     "collegeName": "MLR INSTITUTE OF TECHNOLOGY (MLID)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "MLR_INSTITUTE_OF_TECHNOLOGY_MLID.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/MLR_INSTITUTE_OF_TECHNOLOGY_MLID.json",
     "branchCount": 7,
@@ -4841,6 +5235,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "MLRD",
     "collegeName": "MALLA REDDY COLLEGE OF ENGINEERING TECHNOLOGY (MLRD)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "MALLA_REDDY_COLLEGE_OF_ENGINEERING_TECHNOLOGY_MLRD.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/MALLA_REDDY_COLLEGE_OF_ENGINEERING_TECHNOLOGY_MLRD.json",
     "branchCount": 9,
@@ -4916,6 +5311,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "MLRS",
     "collegeName": "MARRI LAXMAN REDDY INSTITUTE OF TECHNOLOGY AND MANAGEMENT (MLRS)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "MARRI_LAXMAN_REDDY_INSTITUTE_OF_TECHNOLOGY_AND_MANAGEMENT_MLRS.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/MARRI_LAXMAN_REDDY_INSTITUTE_OF_TECHNOLOGY_AND_MANAGEMENT_MLRS.json",
     "branchCount": 7,
@@ -4977,6 +5373,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "MMTZ",
     "collegeName": "MUMTAZ COLLEGE OF ENGINEERING & TECHNOLOGY (MMTZ)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "MUMTAZ_COLLEGE_OF_ENGINEERING_TECHNOLOGY_MMTZ.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/MUMTAZ_COLLEGE_OF_ENGINEERING_TECHNOLOGY_MMTZ.json",
     "branchCount": 2,
@@ -5003,6 +5400,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "MOTK",
     "collegeName": "MOTHER TERESA INSTITUTE OF SCIENCE AND TECHNOLOGY (MOTK)",
+    "district": "Khammam / Bhadradri",
     "filename": "MOTHER_TERESA_INSTITUTE_OF_SCIENCE_AND_TECHNOLOGY_MOTK.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/MOTHER_TERESA_INSTITUTE_OF_SCIENCE_AND_TECHNOLOGY_MOTK.json",
     "branchCount": 6,
@@ -5057,6 +5455,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "MRCE",
     "collegeName": "MALLA REDDY COLLEGE OF ENGINEERING (MRCE)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "MALLA_REDDY_COLLEGE_OF_ENGINEERING_MRCE.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/MALLA_REDDY_COLLEGE_OF_ENGINEERING_MRCE.json",
     "branchCount": 4,
@@ -5097,6 +5496,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "MRCW",
     "collegeName": "MALLA REDDY ENGINEERING COLLEGE FOR WOMEN (MRCW)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "MALLA_REDDY_ENGINEERING_COLLEGE_FOR_WOMEN_MRCW.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/MALLA_REDDY_ENGINEERING_COLLEGE_FOR_WOMEN_MRCW.json",
     "branchCount": 7,
@@ -5158,6 +5558,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "MREM",
     "collegeName": "MALLA REDDY ENGINEERING COLLEGE AND MANAGEMENT SCIENCES (MREM)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "MALLA_REDDY_ENGINEERING_COLLEGE_AND_MANAGEMENT_SCIENCES_MREM.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/MALLA_REDDY_ENGINEERING_COLLEGE_AND_MANAGEMENT_SCIENCES_MREM.json",
     "branchCount": 8,
@@ -5226,6 +5627,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "MRTN",
     "collegeName": "ST MARTINS ENGINEERING COLLEGE (MRTN)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "ST_MARTINS_ENGINEERING_COLLEGE_MRTN.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/ST_MARTINS_ENGINEERING_COLLEGE_MRTN.json",
     "branchCount": 4,
@@ -5266,6 +5668,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "MTEC",
     "collegeName": "MOTHER THERESA COLLEGE OF ENGINEERING AND TECHNOLOGY (MTEC)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "MOTHER_THERESA_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_MTEC.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/MOTHER_THERESA_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_MTEC.json",
     "branchCount": 4,
@@ -5306,6 +5709,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "MVSR",
     "collegeName": "MVSR ENGINEERING COLLEGE (MVSR)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "MVSR_ENGINEERING_COLLEGE_MVSR.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/MVSR_ENGINEERING_COLLEGE_MVSR.json",
     "branchCount": 10,
@@ -5388,6 +5792,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "NAWB",
     "collegeName": "NAWAB SHAH ALAM KHAN COLLEGE OF ENGINEERING AND TECHNOLOGY (NAWB)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "NAWAB_SHAH_ALAM_KHAN_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_NAWB.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/NAWAB_SHAH_ALAM_KHAN_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_NAWB.json",
     "branchCount": 7,
@@ -5449,6 +5854,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "NGIT",
     "collegeName": "NEIL GOGTE INSTITUTE OF TECHNOLOGY (NGIT)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "NEIL_GOGTE_INSTITUTE_OF_TECHNOLOGY_NGIT.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/NEIL_GOGTE_INSTITUTE_OF_TECHNOLOGY_NGIT.json",
     "branchCount": 2,
@@ -5475,6 +5881,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "NNRG",
     "collegeName": "NALLA NARASIMHA REDDY EDUCATIONAL SOCIETY GROUP OF INSTITUTIONS  (NNRG)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "NALLA_NARASIMHA_REDDY_EDUCATIONAL_SOCIETY_GROUP_OF_INSTITUTIONS_NNRG.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/NALLA_NARASIMHA_REDDY_EDUCATIONAL_SOCIETY_GROUP_OF_INSTITUTIONS_NNRG.json",
     "branchCount": 5,
@@ -5522,6 +5929,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "NRCM",
     "collegeName": "NARSIMHA REDDY ENGINEERING COLLEGE (NRCM)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "NARSIMHA_REDDY_ENGINEERING_COLLEGE_NRCM.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/NARSIMHA_REDDY_ENGINEERING_COLLEGE_NRCM.json",
     "branchCount": 8,
@@ -5590,6 +5998,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "NREC",
     "collegeName": "NALLA MALLA REDDY ENGINEERING COLLEGE (NREC)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "NALLA_MALLA_REDDY_ENGINEERING_COLLEGE_NREC.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/NALLA_MALLA_REDDY_ENGINEERING_COLLEGE_NREC.json",
     "branchCount": 6,
@@ -5644,6 +6053,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "OUCE",
     "collegeName": "O U COLLEGE OF ENGINEERING HYDERABAD (OUCE)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "O_U_COLLEGE_OF_ENGINEERING_HYDERABAD_OUCE.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/O_U_COLLEGE_OF_ENGINEERING_HYDERABAD_OUCE.json",
     "branchCount": 8,
@@ -5712,6 +6122,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "OUCT",
     "collegeName": "O U COLLEGE OF TECHNOLOGY  HYDERABAD (OUCT)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "O_U_COLLEGE_OF_TECHNOLOGY_HYDERABAD_OUCT.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/O_U_COLLEGE_OF_TECHNOLOGY_HYDERABAD_OUCT.json",
     "branchCount": 3,
@@ -5745,6 +6156,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "PALV",
     "collegeName": "PALLAVI ENGINEERING COLLEGE (PALV)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "PALLAVI_ENGINEERING_COLLEGE_PALV.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/PALLAVI_ENGINEERING_COLLEGE_PALV.json",
     "branchCount": 7,
@@ -5806,6 +6218,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "PETW",
     "collegeName": "PRINCETON INSTITUTE OF ENGINEERING TECHNOLOGY FOR WOMEN (PETW)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "PRINCETON_INSTITUTE_OF_ENGINEERING_TECHNOLOGY_FOR_WOMEN_PETW.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/PRINCETON_INSTITUTE_OF_ENGINEERING_TECHNOLOGY_FOR_WOMEN_PETW.json",
     "branchCount": 5,
@@ -5853,6 +6266,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "PRIW",
     "collegeName": "PRIYADARSHINI INSTITUTE OF SCIENCE & TECHNOLOGY FOR WOMEN (PRIW)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "PRIYADARSHINI_INSTITUTE_OF_SCIENCE_TECHNOLOGY_FOR_WOMEN_PRIW.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/PRIYADARSHINI_INSTITUTE_OF_SCIENCE_TECHNOLOGY_FOR_WOMEN_PRIW.json",
     "branchCount": 4,
@@ -5893,6 +6307,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "RITW",
     "collegeName": "RISHI MS INSTITUTE OF ENGINEERINGAND TECHNOLOGY FOR WOMEN (RITW)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "RISHI_MS_INSTITUTE_OF_ENGINEERINGAND_TECHNOLOGY_FOR_WOMEN_RITW.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/RISHI_MS_INSTITUTE_OF_ENGINEERINGAND_TECHNOLOGY_FOR_WOMEN_RITW.json",
     "branchCount": 3,
@@ -5926,6 +6341,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SAIS",
     "collegeName": "SAI SPURTI INSTITUTE OF TECHNOLOGY (SAIS)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SAI_SPURTI_INSTITUTE_OF_TECHNOLOGY_SAIS.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SAI_SPURTI_INSTITUTE_OF_TECHNOLOGY_SAIS.json",
     "branchCount": 5,
@@ -5973,6 +6389,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SANA",
     "collegeName": "SANA  ENGINEERING COLLEGE (SANA)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SANA_ENGINEERING_COLLEGE_SANA.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SANA_ENGINEERING_COLLEGE_SANA.json",
     "branchCount": 6,
@@ -6027,6 +6444,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SBIT",
     "collegeName": "SWARNA BHARATHI INSTITUTE OF SCIENCE AND TECHNOLOGY (SBIT)",
+    "district": "Khammam / Bhadradri",
     "filename": "SWARNA_BHARATHI_INSTITUTE_OF_SCIENCE_AND_TECHNOLOGY_SBIT.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SWARNA_BHARATHI_INSTITUTE_OF_SCIENCE_AND_TECHNOLOGY_SBIT.json",
     "branchCount": 5,
@@ -6074,6 +6492,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SCET",
     "collegeName": "SHADHAN COLLEGE OF ENGINEERING AND TECHNOLOGY (SCET)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SHADHAN_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_SCET.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SHADHAN_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_SCET.json",
     "branchCount": 10,
@@ -6156,6 +6575,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SDES",
     "collegeName": "SRI DATTA COLL OF ENGINEERING AND SCIENCE (SDES)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SRI_DATTA_COLL_OF_ENGINEERING_AND_SCIENCE_SDES.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SRI_DATTA_COLL_OF_ENGINEERING_AND_SCIENCE_SDES.json",
     "branchCount": 8,
@@ -6224,6 +6644,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SDEW",
     "collegeName": "SRIDEVI WOMENS ENGINEERING COLLEGE (SDEW)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SRIDEVI_WOMENS_ENGINEERING_COLLEGE_SDEW.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SRIDEVI_WOMENS_ENGINEERING_COLLEGE_SDEW.json",
     "branchCount": 5,
@@ -6271,6 +6692,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SDGI",
     "collegeName": "SREE DATTHA GROUP OF INSTITUTIONS  (SDGI)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SREE_DATTHA_GROUP_OF_INSTITUTIONS_SDGI.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SREE_DATTHA_GROUP_OF_INSTITUTIONS_SDGI.json",
     "branchCount": 5,
@@ -6318,6 +6740,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SIEI",
     "collegeName": "SIDDHARTHA INSTITUTE OF ENGINEERING AND TECHNOLOGY (SIEI)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SIDDHARTHA_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_SIEI.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SIDDHARTHA_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_SIEI.json",
     "branchCount": 7,
@@ -6379,6 +6802,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SISG",
     "collegeName": "SIDDHARTHA INSTITUTE OF TECHNOLOGY AND SCIENCES (SISG)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SIDDHARTHA_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCES_SISG.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SIDDHARTHA_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCES_SISG.json",
     "branchCount": 10,
@@ -6461,6 +6885,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SMED",
     "collegeName": "ST MARYS GROUP OF INSTITUTIONS (SMED)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "ST_MARYS_GROUP_OF_INSTITUTIONS_SMED.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/ST_MARYS_GROUP_OF_INSTITUTIONS_SMED.json",
     "branchCount": 3,
@@ -6494,6 +6919,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SMSK",
     "collegeName": "SAMSKRUTHI COLLEGE OF ENGINEERINGAND TECHNOLOGY (SMSK)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SAMSKRUTHI_COLLEGE_OF_ENGINEERINGAND_TECHNOLOGY_SMSK.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SAMSKRUTHI_COLLEGE_OF_ENGINEERINGAND_TECHNOLOGY_SMSK.json",
     "branchCount": 7,
@@ -6555,6 +6981,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SNIS",
     "collegeName": "SREENIDHI INSTITUTE OF SCIENCE AND TECHNOLOGY (SNIS)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SREENIDHI_INSTITUTE_OF_SCIENCE_AND_TECHNOLOGY_SNIS.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SREENIDHI_INSTITUTE_OF_SCIENCE_AND_TECHNOLOGY_SNIS.json",
     "branchCount": 9,
@@ -6630,6 +7057,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SNTI",
     "collegeName": "SCIENT INSTITUTE OF TECHNOLOGY (SNTI)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SCIENT_INSTITUTE_OF_TECHNOLOGY_SNTI.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SCIENT_INSTITUTE_OF_TECHNOLOGY_SNTI.json",
     "branchCount": 5,
@@ -6677,6 +7105,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SPEC",
     "collegeName": "ST PETERS ENGINEERING COLLEGE (SPEC)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "ST_PETERS_ENGINEERING_COLLEGE_SPEC.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/ST_PETERS_ENGINEERING_COLLEGE_SPEC.json",
     "branchCount": 7,
@@ -6738,6 +7167,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SPHN",
     "collegeName": "SPHOORTHY ENGINEERING COLLEGE (SPHN)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SPHOORTHY_ENGINEERING_COLLEGE_SPHN.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SPHOORTHY_ENGINEERING_COLLEGE_SPHN.json",
     "branchCount": 6,
@@ -6792,6 +7222,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SRHP",
     "collegeName": "SR UNIVERSITY (formerly SR ENGINEERING COLLEGE) (SRHP)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SR_UNIVERSITY_formerly_SR_ENGINEERING_COLLEGE_SRHP.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SR_UNIVERSITY_formerly_SR_ENGINEERING_COLLEGE_SRHP.json",
     "branchCount": 5,
@@ -6839,6 +7270,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SRIW",
     "collegeName": "SUMATHI REDDY INSTITUTE OF TECHNOLOGY FOR WOMEN (SRIW)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SUMATHI_REDDY_INSTITUTE_OF_TECHNOLOGY_FOR_WOMEN_SRIW.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SUMATHI_REDDY_INSTITUTE_OF_TECHNOLOGY_FOR_WOMEN_SRIW.json",
     "branchCount": 5,
@@ -6886,6 +7318,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SRYS",
     "collegeName": "SREYAS INSTITUTE OF ENGINEERING AND TECHNOLOGY (SRYS)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SREYAS_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_SRYS.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SREYAS_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_SRYS.json",
     "branchCount": 4,
@@ -6926,6 +7359,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "STLW",
     "collegeName": "STANLEY COLLEGE OF ENGINEERING AND TECHNOLOGY FOR WOMEN (STLW)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "STANLEY_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_FOR_WOMEN_STLW.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/STANLEY_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_FOR_WOMEN_STLW.json",
     "branchCount": 7,
@@ -6987,6 +7421,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SVES",
     "collegeName": "SRI VENKATESWARA ENGINEERING COLLEGE (SVES)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SRI_VENKATESWARA_ENGINEERING_COLLEGE_SVES.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SRI_VENKATESWARA_ENGINEERING_COLLEGE_SVES.json",
     "branchCount": 6,
@@ -7041,6 +7476,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SVIT",
     "collegeName": "SWAMI VIVEKANANDA INSTITUTE OF TECHNOLOGY (SVIT)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SWAMI_VIVEKANANDA_INSTITUTE_OF_TECHNOLOGY_SVIT.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SWAMI_VIVEKANANDA_INSTITUTE_OF_TECHNOLOGY_SVIT.json",
     "branchCount": 6,
@@ -7095,6 +7531,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SVSE",
     "collegeName": "SVS GROUP OF INSTITUTIONS  - SVS INSTITUTE OF TECHNOLOGY (SVSE)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SVS_GROUP_OF_INSTITUTIONS_-_SVS_INSTITUTE_OF_TECHNOLOGY_SVSE.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SVS_GROUP_OF_INSTITUTIONS_-_SVS_INSTITUTE_OF_TECHNOLOGY_SVSE.json",
     "branchCount": 5,
@@ -7142,6 +7579,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "SWET",
     "collegeName": "SHADHAN WOMENS COLLEGE OF ENGINEERING AND TECHNOLOGY (SWET)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SHADHAN_WOMENS_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_SWET.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SHADHAN_WOMENS_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_SWET.json",
     "branchCount": 6,
@@ -7196,6 +7634,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "TCEK",
     "collegeName": "TRINITY COLLEGE OF ENGINEERING AND TECHNOLOGY (TCEK)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "TRINITY_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_TCEK.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/TRINITY_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_TCEK.json",
     "branchCount": 5,
@@ -7243,6 +7682,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "TCTK",
     "collegeName": "TRINITY COLLEGE OF ENGINEERING AND TECHNOLOGY (TCTK)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "TRINITY_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_TCTK.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/TRINITY_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_TCTK.json",
     "branchCount": 4,
@@ -7283,6 +7723,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "TKEM",
     "collegeName": "TEEGALA KRISHNA REDDY ENGINEERING COLLEGE (TKEM)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "TEEGALA_KRISHNA_REDDY_ENGINEERING_COLLEGE_TKEM.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/TEEGALA_KRISHNA_REDDY_ENGINEERING_COLLEGE_TKEM.json",
     "branchCount": 6,
@@ -7337,6 +7778,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "TKRC",
     "collegeName": "T K R COLLEGE OF ENGINEERING AND TECHNOLOGY (TKRC)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "T_K_R_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_TKRC.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/T_K_R_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_TKRC.json",
     "branchCount": 7,
@@ -7398,6 +7840,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "TPCE",
     "collegeName": "TALLA PADMAVATHI COLL OF ENGINEERING (TPCE)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "TALLA_PADMAVATHI_COLL_OF_ENGINEERING_TPCE.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/TALLA_PADMAVATHI_COLL_OF_ENGINEERING_TPCE.json",
     "branchCount": 2,
@@ -7424,6 +7867,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "VAGE",
     "collegeName": "VAAGDEVI COLLEGE OF ENGINEERING (VAGE)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "VAAGDEVI_COLLEGE_OF_ENGINEERING_VAGE.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/VAAGDEVI_COLLEGE_OF_ENGINEERING_VAGE.json",
     "branchCount": 7,
@@ -7485,6 +7929,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "VASV",
     "collegeName": "VASAVI COLLEGE OF ENGINEERING (VASV)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "VASAVI_COLLEGE_OF_ENGINEERING_VASV.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/VASAVI_COLLEGE_OF_ENGINEERING_VASV.json",
     "branchCount": 7,
@@ -7546,6 +7991,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "VBIT",
     "collegeName": "VIGNAN BHARATI INSTITUTE OF TECHNOLOGY (VBIT)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "VIGNAN_BHARATI_INSTITUTE_OF_TECHNOLOGY_VBIT.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/VIGNAN_BHARATI_INSTITUTE_OF_TECHNOLOGY_VBIT.json",
     "branchCount": 10,
@@ -7628,6 +8074,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "VCET",
     "collegeName": "VISWESWARAYA COLLEGE OF ENGINEERING AND TECHNOLOGY (VCET)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "VISWESWARAYA_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_VCET.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/VISWESWARAYA_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_VCET.json",
     "branchCount": 8,
@@ -7696,6 +8143,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "VGNT",
     "collegeName": "VIGNAN INSTITUTE OF TECHNOLOGY AND SCIENCE (VGNT)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "VIGNAN_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_VGNT.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/VIGNAN_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_VGNT.json",
     "branchCount": 11,
@@ -7785,6 +8233,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "VGSE",
     "collegeName": "VAAGESHWARI COLLEGE OF ENGINEERING (VGSE)",
+    "district": "Karimnagar / Jagtial",
     "filename": "VAAGESHWARI_COLLEGE_OF_ENGINEERING_VGSE.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/VAAGESHWARI_COLLEGE_OF_ENGINEERING_VGSE.json",
     "branchCount": 7,
@@ -7846,6 +8295,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "VGWL",
     "collegeName": "VAAGDEVI ENGINEERING COLLEGE (VGWL)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "VAAGDEVI_ENGINEERING_COLLEGE_VGWL.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/VAAGDEVI_ENGINEERING_COLLEGE_VGWL.json",
     "branchCount": 4,
@@ -7886,6 +8336,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "VISA",
     "collegeName": "VATHSALYA INSTITUTE OF SCIENCE AND TECHNOLOGY (VISA)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "VATHSALYA_INSTITUTE_OF_SCIENCE_AND_TECHNOLOGY_VISA.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/VATHSALYA_INSTITUTE_OF_SCIENCE_AND_TECHNOLOGY_VISA.json",
     "branchCount": 6,
@@ -7940,6 +8391,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "VITS",
     "collegeName": "SRI VISHWESWARAYA INSTITUTE OF TECHNOLOGY AND SCIENCE (VITS)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "SRI_VISHWESWARAYA_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_VITS.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/SRI_VISHWESWARAYA_INSTITUTE_OF_TECHNOLOGY_AND_SCIENCE_VITS.json",
     "branchCount": 3,
@@ -7973,6 +8425,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "VJEC",
     "collegeName": "VNR VIGNANA JYOTHI INSTITUTE OF ENGINEERING AND TECHNOLOGY (VJEC)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "VNR_VIGNANA_JYOTHI_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_VJEC.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/VNR_VIGNANA_JYOTHI_INSTITUTE_OF_ENGINEERING_AND_TECHNOLOGY_VJEC.json",
     "branchCount": 15,
@@ -8090,6 +8543,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "VJIT",
     "collegeName": "VIDYAJYOTHI INSTITUTE OF TECHNOLOGY (VJIT)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "VIDYAJYOTHI_INSTITUTE_OF_TECHNOLOGY_VJIT.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/VIDYAJYOTHI_INSTITUTE_OF_TECHNOLOGY_VJIT.json",
     "branchCount": 8,
@@ -8158,6 +8612,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "VMEG",
     "collegeName": "VARDHAMAN COLLEGE OF ENGINEERING (VMEG)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "VARDHAMAN_COLLEGE_OF_ENGINEERING_VMEG.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/VARDHAMAN_COLLEGE_OF_ENGINEERING_VMEG.json",
     "branchCount": 8,
@@ -8226,6 +8681,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "VMTW",
     "collegeName": "VIGNANS INSTITUTE OF MANAGEMENT AND TECHNOLOGY FOR WOMEN (VMTW)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "VIGNANS_INSTITUTE_OF_MANAGEMENT_AND_TECHNOLOGY_FOR_WOMEN_VMTW.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/VIGNANS_INSTITUTE_OF_MANAGEMENT_AND_TECHNOLOGY_FOR_WOMEN_VMTW.json",
     "branchCount": 5,
@@ -8273,6 +8729,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "VREC",
     "collegeName": "VIJAYA RURAL ENGINEERING COLLEGE (VREC)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "VIJAYA_RURAL_ENGINEERING_COLLEGE_VREC.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/VIJAYA_RURAL_ENGINEERING_COLLEGE_VREC.json",
     "branchCount": 5,
@@ -8320,6 +8777,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "VRKW",
     "collegeName": "DR VRK WOMENS COLLEGE OF ENGINEERING AND TECHNOLOGY (VRKW)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "DR_VRK_WOMENS_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_VRKW.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/DR_VRK_WOMENS_COLLEGE_OF_ENGINEERING_AND_TECHNOLOGY_VRKW.json",
     "branchCount": 5,
@@ -8367,6 +8825,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "WESL",
     "collegeName": "CSI WESLEY INST OF TECHNOLOGY AND SCIENCES (WESL)",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
     "filename": "CSI_WESLEY_INST_OF_TECHNOLOGY_AND_SCIENCES_WESL.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/CSI_WESLEY_INST_OF_TECHNOLOGY_AND_SCIENCES_WESL.json",
     "branchCount": 1,
@@ -8386,6 +8845,7 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
   {
     "collegeCode": "WITS",
     "collegeName": "WARANGAL INSTITUTE OF TECHNOLOGY SCIENCE (WITS)",
+    "district": "Warangal / Hanamkonda",
     "filename": "WARANGAL_INSTITUTE_OF_TECHNOLOGY_SCIENCE_WITS.json",
     "file": "/TG_EAPCET_2026_ALLOTMENT/WARANGAL_INSTITUTE_OF_TECHNOLOGY_SCIENCE_WITS.json",
     "branchCount": 3,

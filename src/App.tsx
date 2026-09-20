@@ -174,27 +174,27 @@ const LoadingFallback: React.FC = () => (
 export const TOOLS_CONFIG: ToolMeta[] = [
   {
     id: 'gap-analyzer',
-    name: 'AI Student Gap Analyzer (Expo 2026)',
+    name: 'AI Student Gap Analyzer',
     shortName: 'AI Gap Analyzer',
     category: 'academic',
-    description: 'Answer: Where am I right now, what am I missing, and what should I do next? Deterministic skill gap & priority roadmap.',
-    badge: 'EXPO 2026',
+    description: 'Understand where you are, identify your skill gaps, and see what to work on next.',
+    badge: 'AI Tool',
   },
   {
     id: 'tg-predictor',
     name: 'TG EAPCET College Predictor',
     shortName: 'TG Predictor',
     category: 'counselling',
-    description: 'Check admission chances across 151 colleges using 71,646 official 2026 allotment cutoffs.',
-    badge: '2026 Phase-3 Data',
+    description: 'Explore historical allotment data to find colleges matching your rank and preferences.',
+    badge: 'Admissions',
   },
   {
     id: 'tg-allotments',
     name: 'TG EAPCET 2026 Final Phase Seat Allotments Name Wise',
     shortName: 'TG Allotments 2026',
     category: 'counselling',
-    description: 'Official student allotment registers, category closing cutoffs, and real admission analytics',
-    badge: '2026 Final Phase',
+    description: 'Search official candidate registers, category cutoffs, and seat distribution across 151 colleges.',
+    badge: 'Admissions',
   },
   {
     id: 'eapcet-radar',
@@ -311,6 +311,8 @@ export default function App() {
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState<boolean>(false);
   const [isSupportModalOpen, setIsSupportModalOpen] = useState<boolean>(false);
   const [targetRoadmapBranchId, setTargetRoadmapBranchId] = useState<string | undefined>(undefined);
+  const [targetAllotmentCollege, setTargetAllotmentCollege] = useState<string>('CBIT');
+  const [targetAllotmentBranch, setTargetAllotmentBranch] = useState<string>('');
   const [gpaSubTab, setGpaSubTab] = useState<'gpa' | 'internal'>('gpa');
   const [academicSubTab, setAcademicSubTab] = useState<'attendance' | 'gpa' | 'internal'>('attendance');
 
@@ -780,11 +782,21 @@ export default function App() {
                 )}
 
                 {activeWorkspace === 'tg-allotments' && (
-                  <TgAllotmentExplorer />
+                  <TgAllotmentExplorer
+                    initialCollegeCode={targetAllotmentCollege}
+                    initialBranchCode={targetAllotmentBranch}
+                  />
                 )}
 
                 {activeWorkspace === 'tg-predictor' && (
-                  <TgCollegePredictor />
+                  <TgCollegePredictor
+                    onNavigateToAllotment={(collegeCode: string, branchCode?: string) => {
+                      if (collegeCode) setTargetAllotmentCollege(collegeCode);
+                      if (branchCode) setTargetAllotmentBranch(branchCode);
+                      setActiveWorkspace('tg-allotments');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                  />
                 )}
 
                 {activeWorkspace === 'roadmaps' && (

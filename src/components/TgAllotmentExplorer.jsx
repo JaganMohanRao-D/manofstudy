@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { 
   Search, 
   Building2, 
@@ -9,7 +9,7 @@ import {
   ChevronLeft, 
   ChevronRight, 
   ChevronDown,
-  ChevronUp,
+  ChevronUp, 
   Copy, 
   Check, 
   Flame,
@@ -25,9 +25,17 @@ import {
   Globe2,
   ExternalLink,
   Loader2,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Compass,
+  CheckCircle2,
+  Zap,
+  BookOpen
 } from 'lucide-react';
-import { TG_EAPCET_COLLEGE_MANIFEST } from '../data/tgEapcetCollegeManifest';
+import { 
+  TG_EAPCET_COLLEGE_MANIFEST, 
+  TG_EAPCET_ALL_BRANCHES, 
+  TG_EAPCET_GLOBAL_STATS 
+} from '../data/tgEapcetCollegeManifest';
 
 // Top engineering colleges for quick access
 const FEATURED_COLLEGES = [
@@ -48,13 +56,40 @@ const FEATURED_COLLEGES = [
   { code: "SNIS", name: "SREENIDHI INSTITUTE OF SCIENCE & TECHNOLOGY" }
 ];
 
-export default function TgAllotmentExplorer() {
-  const [selectedCollegeCode, setSelectedCollegeCode] = useState('CBIT');
+// Top branches for quick access in All Colleges mode
+const TOP_POPULAR_BRANCHES = [
+  { code: "CSE", name: "Computer Science & Engineering", count: "24,934" },
+  { code: "CSM", name: "CSE (AI & Machine Learning)", count: "13,309" },
+  { code: "ECE", name: "Electronics & Communication", count: "9,732" },
+  { code: "CSD", name: "CSE (Data Science)", count: "6,600" },
+  { code: "INF", name: "Information Technology", count: "3,211" },
+  { code: "EEE", name: "Electrical & Electronics", count: "3,081" },
+  { code: "CIV", name: "Civil Engineering", count: "2,540" },
+  { code: "MEC", name: "Mechanical Engineering", count: "2,143" }
+];
+
+export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initialBranchCode = 'ALL' } = {}) {
+  // Navigation & Dropdown Selection State
+  // 'ALL' represents All Colleges / All Branches
+  const [selectedCollegeCode, setSelectedCollegeCode] = useState(initialCollegeCode || 'ALL');
+  const [selectedBranchCode, setSelectedBranchCode] = useState(initialBranchCode || 'ALL');
   const [collegeData, setCollegeData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
-  const [selectedBranchCode, setSelectedBranchCode] = useState('');
-  
+
+  // Sync with incoming props if changed externally
+  useEffect(() => {
+    if (initialCollegeCode !== undefined && initialCollegeCode !== selectedCollegeCode) {
+      setSelectedCollegeCode(initialCollegeCode);
+    }
+  }, [initialCollegeCode]);
+
+  useEffect(() => {
+    if (initialBranchCode !== undefined && initialBranchCode !== selectedBranchCode) {
+      setSelectedBranchCode(initialBranchCode);
+    }
+  }, [initialBranchCode]);
+
   // Searchable dropdown open/search states
   const [isCollegeDropdownOpen, setIsCollegeDropdownOpen] = useState(false);
   const [collegeSearchTerm, setCollegeSearchTerm] = useState('');
@@ -65,8 +100,9 @@ export default function TgAllotmentExplorer() {
   const collegeDropdownRef = useRef(null);
   const branchDropdownRef = useRef(null);
 
-  // Filters & sorting
+  // Active search query & secondary filters
   const [searchQuery, setSearchQuery] = useState('');
+  const [appliedSearchQuery, setAppliedSearchQuery] = useState('');
   const [genderFilter, setGenderFilter] = useState('ALL');
   const [casteFilter, setCasteFilter] = useState('ALL');
   const [seatCategoryFilter, setSeatCategoryFilter] = useState('ALL');
@@ -75,13 +111,14 @@ export default function TgAllotmentExplorer() {
   const [itemsPerPage] = useState(30);
   const [copiedTicket, setCopiedTicket] = useState(null);
 
-  // Global Cross-College Search State
+  // Global / Server Search State
   const [isGlobalSearchActive, setIsGlobalSearchActive] = useState(false);
   const [globalSearchResults, setGlobalSearchResults] = useState([]);
+  const [globalSearchStats, setGlobalSearchStats] = useState(null);
   const [isSearchingGlobal, setIsSearchingGlobal] = useState(false);
   const [globalSearchError, setGlobalSearchError] = useState(null);
 
-  // Bottom Analytics Drawer / Section Collapsible State
+  // Collapsible Analytics State (for specific college/branch views)
   const [isAnalyticsExpanded, setIsAnalyticsExpanded] = useState(true);
 
   // Close dropdowns on outside click
@@ -98,9 +135,15 @@ export default function TgAllotmentExplorer() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Fetch college allotment JSON
+  // Fetch individual college allotment JSON when a specific college is chosen
   useEffect(() => {
-    if (!selectedCollegeCode) return;
+    if (!selectedCollegeCode || selectedCollegeCode === 'ALL') {
+      setCollegeData([]);
+      setLoading(false);
+      setErrorMessage(null);
+      return;
+    }
+
     setLoading(true);
     setErrorMessage(null);
 
@@ -122,11 +165,12 @@ export default function TgAllotmentExplorer() {
         const bundles = Array.isArray(data) ? data : (data.branches || [data]);
         setCollegeData(bundles);
 
-        if (bundles.length > 0) {
-          setSelectedBranchCode((prev) => {
-            const hasBranch = bundles.some((b) => b.branchCode === prev);
-            return hasBranch ? prev : (bundles[0].branchCode || '');
-          });
+        // If currently selected branch is not 'ALL' and not in this college, fallback to 'ALL' or first branch
+        if (bundles.length > 0 && selectedBranchCode !== 'ALL') {
+          const hasBranch = bundles.some((b) => b.branchCode === selectedBranchCode);
+          if (!hasBranch) {
+            setSelectedBranchCode('ALL');
+          }
         }
         setLoading(false);
       })
@@ -134,7 +178,7 @@ export default function TgAllotmentExplorer() {
         console.warn('Notice loading college JSON:', err.message);
         setCollegeData([]);
         setErrorMessage(
-          `కాలేజీ [${normalizedCode}] అలాట్‌మెంట్ డేటా ప్రస్తుతం లోడ్ కాలేదు. దయచేసి అందుబాటులో ఉన్న కాలేజీని ఎంచుకోండి.`
+          `College [${normalizedCode}] allotment data could not be loaded. Please select another college.`
         );
         setLoading(false);
       });
@@ -142,6 +186,14 @@ export default function TgAllotmentExplorer() {
 
   // Selected college info from manifest or fallback
   const currentCollegeMeta = useMemo(() => {
+    if (selectedCollegeCode === 'ALL') {
+      return {
+        collegeCode: 'ALL',
+        collegeName: 'All Colleges (Statewide — 151 Colleges)',
+        recordCount: TG_EAPCET_GLOBAL_STATS?.totalRecords || 71646,
+        branchCount: TG_EAPCET_ALL_BRANCHES?.length || 37
+      };
+    }
     const found = TG_EAPCET_COLLEGE_MANIFEST.find(
       (c) => c.collegeCode.toUpperCase() === selectedCollegeCode.toUpperCase()
     );
@@ -150,11 +202,12 @@ export default function TgAllotmentExplorer() {
     return {
       collegeCode: selectedCollegeCode,
       collegeName: feat ? feat.name : selectedCollegeCode,
-      recordCount: collegeData.reduce((acc, b) => acc + (b.records?.length || 0), 0)
+      recordCount: collegeData.reduce((acc, b) => acc + (b.records?.length || 0), 0),
+      branchCount: collegeData.length
     };
   }, [selectedCollegeCode, collegeData]);
 
-  // Filtered colleges list for searchable dropdown
+  // Filtered colleges list for searchable dropdown (includes "All Colleges" at top)
   const filteredColleges = useMemo(() => {
     const term = collegeSearchTerm.toLowerCase().trim();
     if (!term) return TG_EAPCET_COLLEGE_MANIFEST;
@@ -165,16 +218,43 @@ export default function TgAllotmentExplorer() {
     );
   }, [collegeSearchTerm]);
 
-  // Available branches in currently selected college
+  // Available branches:
+  // When selectedCollegeCode === 'ALL', shows all statewide branches
+  // When specific college selected, shows branches in that college
   const availableBranches = useMemo(() => {
-    return collegeData.map((item) => ({
-      code: item.branchCode || '',
-      name: item.branchName || item.branchCode || '',
-      allottedCount: item.totalAllotted || item.records?.length || 0,
-      openingRank: item.openingRank || 0,
-      closingRank: item.closingRank || 0
-    }));
-  }, [collegeData]);
+    if (selectedCollegeCode === 'ALL') {
+      return [
+        { 
+          code: 'ALL', 
+          name: 'All Branches (Statewide — 37 Branches)', 
+          allottedCount: TG_EAPCET_GLOBAL_STATS?.totalRecords || 71646 
+        },
+        ...TG_EAPCET_ALL_BRANCHES.map((b) => ({
+          code: b.branchCode,
+          name: b.branchName,
+          allottedCount: b.totalAllotted,
+          openingRank: b.openingRank,
+          closingRank: b.closingRank
+        }))
+      ];
+    }
+
+    const collegeTotal = collegeData.reduce((acc, b) => acc + (b.totalAllotted || b.records?.length || 0), 0);
+    return [
+      { 
+        code: 'ALL', 
+        name: 'All Branches (College-wide)', 
+        allottedCount: collegeTotal 
+      },
+      ...collegeData.map((item) => ({
+        code: item.branchCode || '',
+        name: item.branchName || item.branchCode || '',
+        allottedCount: item.totalAllotted || item.records?.length || 0,
+        openingRank: item.openingRank || 0,
+        closingRank: item.closingRank || 0
+      }))
+    ];
+  }, [selectedCollegeCode, collegeData]);
 
   // Filtered branches for searchable dropdown
   const filteredBranches = useMemo(() => {
@@ -187,13 +267,47 @@ export default function TgAllotmentExplorer() {
     );
   }, [availableBranches, branchSearchTerm]);
 
-  // Current selected branch bundle
+  // Current selected branch bundle for local college view
   const currentBundle = useMemo(() => {
+    if (selectedCollegeCode === 'ALL') return null;
     if (!collegeData.length) return null;
-    return collegeData.find((item) => item.branchCode === selectedBranchCode) || collegeData[0] || null;
-  }, [collegeData, selectedBranchCode]);
 
-  // Category-wise Opening & Closing Ranks (Best & Last Rank per Quota)
+    if (selectedBranchCode === 'ALL') {
+      const allRecords = collegeData.flatMap((b) =>
+        (b.records || []).map((r) => ({
+          ...r,
+          collegeCode: r.collegeCode || selectedCollegeCode,
+          collegeName: r.collegeName || currentCollegeMeta.collegeName,
+          branchCode: r.branchCode || b.branchCode,
+          branchName: r.branchName || b.branchName
+        }))
+      );
+      return {
+        branchCode: 'ALL',
+        branchName: 'All Branches in College',
+        totalAllotted: allRecords.length,
+        openingRank: allRecords.length ? Math.min(...allRecords.map((r) => r.rank).filter(Boolean)) : 0,
+        closingRank: allRecords.length ? Math.max(...allRecords.map((r) => r.rank).filter(Boolean)) : 0,
+        records: allRecords
+      };
+    }
+
+    const found = collegeData.find((item) => item.branchCode === selectedBranchCode);
+    if (!found) return collegeData[0] || null;
+
+    return {
+      ...found,
+      records: (found.records || []).map((r) => ({
+        ...r,
+        collegeCode: r.collegeCode || selectedCollegeCode,
+        collegeName: r.collegeName || currentCollegeMeta.collegeName,
+        branchCode: r.branchCode || found.branchCode,
+        branchName: r.branchName || found.branchName
+      }))
+    };
+  }, [collegeData, selectedCollegeCode, selectedBranchCode, currentCollegeMeta]);
+
+  // Category-wise Opening & Closing Ranks (when viewing a specific branch)
   const categoryCutoffs = useMemo(() => {
     if (!currentBundle || !currentBundle.records || currentBundle.records.length === 0) {
       return [];
@@ -222,7 +336,7 @@ export default function TgAllotmentExplorer() {
     return Object.values(map).sort((a, b) => a.openingRank - b.openingRank);
   }, [currentBundle]);
 
-  // Real-time Analytics & Distribution Metrics
+  // Analytics & Distribution Metrics for local branch view
   const analytics = useMemo(() => {
     if (!currentBundle || !currentBundle.records || currentBundle.records.length === 0) {
       return { 
@@ -300,22 +414,28 @@ export default function TgAllotmentExplorer() {
     };
   }, [currentBundle]);
 
-  // Unique castes & seat categories for filters
+  // Unique castes & seat categories available in the current context
   const availableCastes = useMemo(() => {
+    if (selectedCollegeCode === 'ALL') {
+      return ['OC', 'BC_A', 'BC_B', 'BC_C', 'BC_D', 'BC_E', 'SC', 'ST', 'EWS'];
+    }
     if (!currentBundle || !currentBundle.records) return [];
     const set = new Set();
     currentBundle.records.forEach((r) => {
       if (r.caste) set.add(r.caste);
     });
     return Array.from(set).sort();
-  }, [currentBundle]);
+  }, [selectedCollegeCode, currentBundle]);
 
   const availableSeatCategories = useMemo(() => {
+    if (selectedCollegeCode === 'ALL') {
+      return ['OC_GEN_UR', 'OC_GEN_OU', 'OC_GIRLS_UR', 'OC_GIRLS_OU', 'BC_A_GEN_OU', 'BC_B_GEN_OU', 'BC_D_GEN_OU', 'SC_GEN_OU', 'ST_GEN_OU', 'EWS_GEN_OU'];
+    }
     return categoryCutoffs.map((c) => c.category);
-  }, [categoryCutoffs]);
+  }, [selectedCollegeCode, categoryCutoffs]);
 
-  // Filtered Candidates in current branch
-  const filteredCandidates = useMemo(() => {
+  // Filtered candidates in current local branch/college view
+  const filteredLocalCandidates = useMemo(() => {
     if (!currentBundle || !currentBundle.records) return [];
     let list = [...currentBundle.records];
 
@@ -338,7 +458,8 @@ export default function TgAllotmentExplorer() {
         (r.hallTicket && r.hallTicket.toLowerCase().includes(q)) ||
         (r.rank && r.rank.toString().includes(q)) ||
         (r.seatCategory && r.seatCategory.toLowerCase().includes(q)) ||
-        (r.caste && r.caste.toLowerCase().includes(q))
+        (r.caste && r.caste.toLowerCase().includes(q)) ||
+        (r.branchCode && r.branchCode.toLowerCase().includes(q))
       );
     }
 
@@ -346,43 +467,99 @@ export default function TgAllotmentExplorer() {
     return list;
   }, [currentBundle, searchQuery, genderFilter, casteFilter, seatCategoryFilter, sortOrder, isGlobalSearchActive]);
 
-  // Global Cross-College Search Handler
-  const handleExecuteGlobalSearch = async (term) => {
-    const q = (term !== undefined ? term : searchQuery).trim();
-    if (!q || q.length < 2) {
+  // High-performance Global / Cross-College Search Handler
+  const executeGlobalSearch = useCallback(async (options = {}) => {
+    const q = (options.q !== undefined ? options.q : searchQuery).trim();
+    const college = options.college !== undefined ? options.college : selectedCollegeCode;
+    const branch = options.branch !== undefined ? options.branch : selectedBranchCode;
+    const gender = options.gender !== undefined ? options.gender : genderFilter;
+    const caste = options.caste !== undefined ? options.caste : casteFilter;
+    const category = options.category !== undefined ? options.category : seatCategoryFilter;
+    const sort = sortOrder === 'ASC' ? 'rank_asc' : 'rank_desc';
+
+    // If both are 'ALL' and search query is empty, do not run global search;
+    // user is in the Statewide Explorer Hub mode.
+    if (college === 'ALL' && branch === 'ALL' && !q) {
       setIsGlobalSearchActive(false);
       setGlobalSearchResults([]);
+      setGlobalSearchStats(null);
       return;
     }
 
     setIsSearchingGlobal(true);
     setGlobalSearchError(null);
     setIsGlobalSearchActive(true);
+    setAppliedSearchQuery(q);
 
     try {
-      const res = await fetch(`/api/tg-allotment/search?q=${encodeURIComponent(q)}`);
-      if (!res.ok) throw new Error('Global search request failed');
+      const params = new URLSearchParams({
+        q,
+        college,
+        branch,
+        gender,
+        caste,
+        category,
+        sort,
+        limit: '1000'
+      });
+
+      const res = await fetch(`/api/tg-allotment/search?${params.toString()}`);
+      if (!res.ok) {
+        throw new Error(`Search API returned status ${res.status}`);
+      }
       const data = await res.json();
       setGlobalSearchResults(data.results || []);
+      setGlobalSearchStats(data.stats || null);
       setCurrentPage(1);
     } catch (err) {
-      console.warn('Global search notice:', err);
-      setGlobalSearchError('Cross-college search currently scanning offline. Showing local matches.');
+      console.warn('Cross-college search notice:', err);
+      setGlobalSearchError('Search API request timed out or returned an error. Showing local data.');
       setGlobalSearchResults([]);
     } finally {
       setIsSearchingGlobal(false);
     }
-  };
+  }, [searchQuery, selectedCollegeCode, selectedBranchCode, genderFilter, casteFilter, seatCategoryFilter, sortOrder]);
 
-  const clearGlobalSearch = () => {
-    setIsGlobalSearchActive(false);
-    setGlobalSearchResults([]);
-    setGlobalSearchError(null);
+  // Trigger search when 'All Colleges' has a branch selected or filters changed
+  useEffect(() => {
+    if (selectedCollegeCode === 'ALL') {
+      if (selectedBranchCode !== 'ALL' || searchQuery.trim().length > 0) {
+        executeGlobalSearch();
+      } else {
+        setIsGlobalSearchActive(false);
+        setGlobalSearchResults([]);
+        setGlobalSearchStats(null);
+      }
+    }
+  }, [selectedCollegeCode, selectedBranchCode]);
+
+  const clearSearch = () => {
+    setSearchQuery('');
+    setAppliedSearchQuery('');
+    if (selectedCollegeCode === 'ALL' && selectedBranchCode === 'ALL') {
+      setIsGlobalSearchActive(false);
+      setGlobalSearchResults([]);
+      setGlobalSearchStats(null);
+    } else if (selectedCollegeCode === 'ALL') {
+      executeGlobalSearch({ q: '' });
+    } else {
+      setIsGlobalSearchActive(false);
+      setGlobalSearchResults([]);
+    }
     setCurrentPage(1);
   };
 
-  // Active candidates list (local branch vs global cross-college)
-  const activeDisplayList = isGlobalSearchActive ? globalSearchResults : filteredCandidates;
+  // Determine which candidate list to show
+  const activeDisplayList = useMemo(() => {
+    if (isGlobalSearchActive) {
+      return globalSearchResults;
+    }
+    if (selectedCollegeCode !== 'ALL') {
+      return filteredLocalCandidates;
+    }
+    return [];
+  }, [isGlobalSearchActive, globalSearchResults, selectedCollegeCode, filteredLocalCandidates]);
+
   const totalPages = Math.ceil(activeDisplayList.length / itemsPerPage) || 1;
 
   const paginatedCandidates = useMemo(() => {
@@ -397,7 +574,7 @@ export default function TgAllotmentExplorer() {
     setTimeout(() => setCopiedTicket(null), 2000);
   };
 
-  // Jump to specific college & branch from global search result card
+  // Navigate directly into a specific college & branch view from any result card
   const handleJumpToCollegeBranch = (collegeCode, branchCode) => {
     if (collegeCode) {
       setSelectedCollegeCode(collegeCode);
@@ -408,6 +585,7 @@ export default function TgAllotmentExplorer() {
     setIsGlobalSearchActive(false);
     setGlobalSearchResults([]);
     setSearchQuery('');
+    setAppliedSearchQuery('');
     setCurrentPage(1);
     window.scrollTo({ top: 120, behavior: 'smooth' });
   };
@@ -498,13 +676,42 @@ export default function TgAllotmentExplorer() {
     };
   };
 
+  // Match Type badge style generator
+  const getMatchBadge = (matchType) => {
+    if (!matchType) return null;
+    if (matchType === 'Exact Rank Match' || matchType === 'Exact Match') {
+      return (
+        <span className="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold tracking-wide flex items-center gap-1">
+          <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+          {matchType}
+        </span>
+      );
+    }
+    if (matchType === 'Partial Match') {
+      return (
+        <span className="px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[10px] font-bold tracking-wide flex items-center gap-1">
+          <Sparkles className="w-3 h-3 text-cyan-400" />
+          {matchType}
+        </span>
+      );
+    }
+    return (
+      <span className="px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-bold tracking-wide flex items-center gap-1">
+        <Zap className="w-3 h-3 text-amber-400" />
+        {matchType}
+      </span>
+    );
+  };
+
+  const isStatewideOverviewActive = selectedCollegeCode === 'ALL' && selectedBranchCode === 'ALL' && !isGlobalSearchActive;
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 py-4 sm:py-8 px-3 sm:px-6 lg:px-8 font-sans">
       <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
 
-        {/* 1. BRANDING & TERMINOLOGY OVERHAUL */}
+        {/* 1. BRANDING & TITLE */}
         <div className="text-center space-y-2 sm:space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-semibold tracking-wide">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-semibold tracking-wide shadow-sm">
             <Flame className="w-4 h-4 text-rose-500 fill-rose-500 animate-pulse" />
             <span>🔥 TG EAPCET 2026 Final Phase Seat Allotments Name Wise</span>
           </div>
@@ -516,7 +723,7 @@ export default function TgAllotmentExplorer() {
           </p>
         </div>
 
-        {/* 2. TOP SELECTORS & QUICK SEARCH (MOBILE-FIRST) */}
+        {/* 2. TOP SELECTORS (COLLEGE & BRANCH) + GLOBAL SEARCH BAR */}
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 sm:p-5 shadow-xl space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
 
@@ -540,10 +747,18 @@ export default function TgAllotmentExplorer() {
                   setIsBranchDropdownOpen(false);
                   setCollegeSearchTerm('');
                 }}
-                className="w-full flex items-center justify-between bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs sm:text-sm rounded-xl px-3 py-2.5 focus:outline-none focus:border-emerald-500 transition-all text-left shadow-inner"
+                className={`w-full flex items-center justify-between bg-slate-950 border text-slate-200 text-xs sm:text-sm rounded-xl px-3 py-2.5 focus:outline-none transition-all text-left shadow-inner ${
+                  selectedCollegeCode === 'ALL'
+                    ? 'border-rose-500/50 hover:border-rose-400'
+                    : 'border-slate-800 hover:border-slate-700'
+                }`}
               >
                 <div className="flex items-center gap-2 truncate pr-2">
-                  <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-xs font-bold shrink-0">
+                  <span className={`px-1.5 py-0.5 rounded font-mono text-xs font-bold shrink-0 ${
+                    selectedCollegeCode === 'ALL'
+                      ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                      : 'bg-emerald-500/20 text-emerald-300'
+                  }`}>
                     {selectedCollegeCode}
                   </span>
                   <span className="truncate text-slate-100 font-medium">
@@ -565,7 +780,7 @@ export default function TgAllotmentExplorer() {
                         id="institution-search-input"
                         value={collegeSearchTerm}
                         onChange={(e) => setCollegeSearchTerm(e.target.value)}
-                        placeholder="Search college code or name..."
+                        placeholder="Search college code or name (e.g. CBIT, VNRV)..."
                         className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-8 pr-7 py-1.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500"
                       />
                       {collegeSearchTerm && (
@@ -580,7 +795,33 @@ export default function TgAllotmentExplorer() {
                     </div>
                   </div>
 
-                  <div className="max-h-56 overflow-y-auto divide-y divide-slate-800/40 text-xs">
+                  <div className="max-h-60 overflow-y-auto divide-y divide-slate-800/40 text-xs">
+                    {/* ALL COLLEGES OPTION (ALWAYS PINNED OR FIRST) */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedCollegeCode('ALL');
+                        setIsCollegeDropdownOpen(false);
+                        setCurrentPage(1);
+                      }}
+                      className={`w-full text-left px-3 py-2.5 flex items-center justify-between hover:bg-slate-800 transition-colors ${
+                        selectedCollegeCode === 'ALL' ? 'bg-rose-500/20 text-rose-300 font-bold' : 'text-slate-200'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 truncate pr-2">
+                        <span className="px-1.5 py-0.5 rounded font-mono text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40">
+                          ALL
+                        </span>
+                        <div className="truncate">
+                          <span className="font-bold text-rose-200 block truncate">All Colleges (Statewide — 151 Colleges)</span>
+                          <span className="text-[10px] text-slate-400 block truncate">Search or browse across all colleges in Telangana</span>
+                        </div>
+                      </div>
+                      <span className="text-[10px] text-rose-400 font-mono shrink-0 ml-1">
+                        71,646 seats
+                      </span>
+                    </button>
+
                     {filteredColleges.length === 0 ? (
                       <div className="p-3 text-center text-slate-400">
                         No colleges found matching "{collegeSearchTerm}"
@@ -595,7 +836,6 @@ export default function TgAllotmentExplorer() {
                             onClick={() => {
                               setSelectedCollegeCode(c.collegeCode);
                               setIsCollegeDropdownOpen(false);
-                              clearGlobalSearch();
                               setCurrentPage(1);
                             }}
                             className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-slate-800 transition-colors ${
@@ -630,27 +870,32 @@ export default function TgAllotmentExplorer() {
                   Select Branch / ఇంజనీరింగ్ బ్రాంచ్
                 </span>
                 <span className="text-[10px] sm:text-[11px] text-slate-400 font-mono">
-                  {availableBranches.length} Branches
+                  {availableBranches.length} Options
                 </span>
               </label>
 
               <button
                 type="button"
                 id="branch-dropdown-trigger"
-                disabled={availableBranches.length === 0}
                 onClick={() => {
                   setIsBranchDropdownOpen(!isBranchDropdownOpen);
                   setIsCollegeDropdownOpen(false);
                   setBranchSearchTerm('');
                 }}
-                className="w-full flex items-center justify-between bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs sm:text-sm rounded-xl px-3 py-2.5 focus:outline-none focus:border-indigo-500 transition-all text-left shadow-inner disabled:opacity-50"
+                className={`w-full flex items-center justify-between bg-slate-950 border text-slate-200 text-xs sm:text-sm rounded-xl px-3 py-2.5 focus:outline-none transition-all text-left shadow-inner ${
+                  selectedBranchCode === 'ALL'
+                    ? 'border-indigo-500/50 hover:border-indigo-400'
+                    : 'border-slate-800 hover:border-slate-700'
+                }`}
               >
                 <div className="flex items-center gap-2 truncate pr-2">
                   <span className="px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-mono text-xs font-bold shrink-0">
-                    {selectedBranchCode || 'None'}
+                    {selectedBranchCode || 'ALL'}
                   </span>
                   <span className="truncate text-slate-100 font-medium">
-                    {currentBundle ? (currentBundle.branchName || currentBundle.branchCode) : 'Select branch'}
+                    {selectedBranchCode === 'ALL'
+                      ? (selectedCollegeCode === 'ALL' ? 'All Branches (Statewide)' : 'All Branches (College-wide)')
+                      : (currentBundle?.branchName || selectedBranchCode)}
                   </span>
                 </div>
                 <ChevronDown className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${isBranchDropdownOpen ? 'rotate-180 text-indigo-400' : ''}`} />
@@ -683,7 +928,7 @@ export default function TgAllotmentExplorer() {
                     </div>
                   </div>
 
-                  <div className="max-h-56 overflow-y-auto divide-y divide-slate-800/40 text-xs">
+                  <div className="max-h-60 overflow-y-auto divide-y divide-slate-800/40 text-xs">
                     {filteredBranches.length === 0 ? (
                       <div className="p-3 text-center text-slate-400">
                         No branches found matching "{branchSearchTerm}"
@@ -698,7 +943,6 @@ export default function TgAllotmentExplorer() {
                             onClick={() => {
                               setSelectedBranchCode(b.code);
                               setIsBranchDropdownOpen(false);
-                              clearGlobalSearch();
                               setCurrentPage(1);
                             }}
                             className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-slate-800 transition-colors ${
@@ -714,7 +958,7 @@ export default function TgAllotmentExplorer() {
                               <span className="truncate">{b.name}</span>
                             </div>
                             <span className="text-[10px] text-slate-400 font-mono shrink-0 ml-1">
-                              {b.allottedCount} seats
+                              {b.allottedCount ? `${b.allottedCount.toLocaleString()} seats` : ''}
                             </span>
                           </button>
                         );
@@ -727,7 +971,7 @@ export default function TgAllotmentExplorer() {
 
           </div>
 
-          {/* 3. GLOBAL CROSS-COLLEGE & LOCAL CANDIDATE SEARCH BAR */}
+          {/* 3. SEARCH BAR WITH DUAL MODES: GLOBAL & LOCAL */}
           <div className="space-y-2 pt-1 border-t border-slate-800/70">
             <div className="flex flex-col sm:flex-row gap-2">
               <div className="relative flex-1">
@@ -738,26 +982,19 @@ export default function TgAllotmentExplorer() {
                   value={searchQuery}
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
-                    if (isGlobalSearchActive) {
-                      setIsGlobalSearchActive(false);
-                    }
-                    setCurrentPage(1);
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      handleExecuteGlobalSearch();
+                      executeGlobalSearch();
                     }
                   }}
-                  placeholder="Type Student Name, Hall Ticket, or Rank..."
+                  placeholder="Search Student Name (e.g. JAGAN), Hall Ticket, or TS EAPCET Rank (e.g. 42500)..."
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-8 py-2 text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-rose-500 placeholder-slate-500 shadow-inner"
                 />
                 {searchQuery && (
                   <button
                     type="button"
-                    onClick={() => {
-                      setSearchQuery('');
-                      clearGlobalSearch();
-                    }}
+                    onClick={clearSearch}
                     className="absolute right-2.5 top-2.5 text-slate-400 hover:text-white"
                   >
                     <X className="w-4 h-4" />
@@ -765,18 +1002,18 @@ export default function TgAllotmentExplorer() {
                 )}
               </div>
 
-              {/* Action Buttons: Global Search + Filter toggles */}
+              {/* Action Buttons */}
               <div className="flex gap-2 shrink-0">
                 <button
                   type="button"
                   id="btn-global-search"
-                  onClick={() => handleExecuteGlobalSearch()}
-                  disabled={isSearchingGlobal || !searchQuery.trim()}
-                  className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all ${
+                  onClick={() => executeGlobalSearch()}
+                  disabled={isSearchingGlobal || (!searchQuery.trim() && selectedCollegeCode !== 'ALL')}
+                  className={`flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-md ${
                     isGlobalSearchActive
-                      ? 'bg-rose-500 text-white shadow-md shadow-rose-500/30'
+                      ? 'bg-rose-500 text-white shadow-rose-500/30 ring-2 ring-rose-400/50'
                       : 'bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300'
-                  } disabled:opacity-40 cursor-pointer`}
+                  } disabled:opacity-40`}
                   title="Search across all 151 Telangana engineering colleges"
                 >
                   {isSearchingGlobal ? (
@@ -784,7 +1021,7 @@ export default function TgAllotmentExplorer() {
                   ) : (
                     <Globe2 className="w-3.5 h-3.5" />
                   )}
-                  <span>Search All Colleges</span>
+                  <span>{selectedCollegeCode === 'ALL' ? 'Search All Colleges' : 'Global Search'}</span>
                 </button>
 
                 <button
@@ -798,80 +1035,116 @@ export default function TgAllotmentExplorer() {
               </div>
             </div>
 
-            {/* Quick Filters Strip */}
-            {!isGlobalSearchActive && (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-xs">
-                {/* Gender */}
-                <select
-                  value={genderFilter}
-                  onChange={(e) => {
-                    setGenderFilter(e.target.value);
-                    setCurrentPage(1);
-                  }}
-                  className="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-300 text-xs focus:outline-none focus:border-emerald-500"
-                >
-                  <option value="ALL">All Genders</option>
-                  <option value="M">Boys (M)</option>
-                  <option value="F">Girls (F)</option>
-                </select>
+            {/* Quick Filter Strips */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-xs">
+              {/* Gender Filter */}
+              <select
+                value={genderFilter}
+                onChange={(e) => {
+                  setGenderFilter(e.target.value);
+                  setCurrentPage(1);
+                  if (isGlobalSearchActive || selectedCollegeCode === 'ALL') {
+                    executeGlobalSearch({ gender: e.target.value });
+                  }
+                }}
+                className="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-300 text-xs focus:outline-none focus:border-emerald-500"
+              >
+                <option value="ALL">All Genders</option>
+                <option value="M">Boys (M)</option>
+                <option value="F">Girls (F)</option>
+              </select>
 
-                {/* Caste */}
-                <select
-                  value={casteFilter}
-                  onChange={(e) => {
-                    setCasteFilter(e.target.value);
-                    setCurrentPage(1);
-                  }}
-                  className="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-300 text-xs focus:outline-none focus:border-emerald-500"
-                >
-                  <option value="ALL">All Castes</option>
-                  {availableCastes.map((c) => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
-                </select>
+              {/* Caste Filter */}
+              <select
+                value={casteFilter}
+                onChange={(e) => {
+                  setCasteFilter(e.target.value);
+                  setCurrentPage(1);
+                  if (isGlobalSearchActive || selectedCollegeCode === 'ALL') {
+                    executeGlobalSearch({ caste: e.target.value });
+                  }
+                }}
+                className="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-300 text-xs focus:outline-none focus:border-emerald-500"
+              >
+                <option value="ALL">All Castes</option>
+                {availableCastes.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
 
-                {/* Quota */}
-                <select
-                  value={seatCategoryFilter}
-                  onChange={(e) => {
-                    setSeatCategoryFilter(e.target.value);
-                    setCurrentPage(1);
-                  }}
-                  className="col-span-2 bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-300 text-xs focus:outline-none focus:border-emerald-500"
-                >
-                  <option value="ALL">All Seat Categories / Quotas</option>
-                  {availableSeatCategories.map((q) => (
-                    <option key={q} value={q}>{q}</option>
-                  ))}
-                </select>
-              </div>
-            )}
+              {/* Seat Category / Quota Filter */}
+              <select
+                value={seatCategoryFilter}
+                onChange={(e) => {
+                  setSeatCategoryFilter(e.target.value);
+                  setCurrentPage(1);
+                  if (isGlobalSearchActive || selectedCollegeCode === 'ALL') {
+                    executeGlobalSearch({ category: e.target.value });
+                  }
+                }}
+                className="col-span-2 bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-300 text-xs focus:outline-none focus:border-emerald-500"
+              >
+                <option value="ALL">All Seat Categories / Quotas</option>
+                {availableSeatCategories.map((q) => (
+                  <option key={q} value={q}>{q}</option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 
-        {/* Global Search Banner (when active) */}
+        {/* Global Search Banner / Summary Header */}
         {isGlobalSearchActive && (
-          <div className="bg-rose-500/10 border border-rose-500/30 rounded-xl p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5">
-            <div className="flex items-center gap-2">
-              <Globe2 className="w-4 h-4 text-rose-400 shrink-0" />
-              <div className="text-xs">
-                <span className="font-bold text-white">Global Student Tracker Active: </span>
-                <span className="text-rose-300">
-                  Found {globalSearchResults.length} student record{globalSearchResults.length === 1 ? '' : 's'} matching "{searchQuery}" across all 151 colleges.
+          <div className="bg-rose-500/10 border border-rose-500/30 rounded-xl p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 animate-in fade-in">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <Globe2 className="w-4 h-4 text-rose-400 shrink-0" />
+                <span className="font-bold text-white text-xs sm:text-sm">
+                  Global Search Active
                 </span>
+                <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[11px] font-mono font-bold">
+                  {globalSearchResults.length.toLocaleString()} matches
+                </span>
+                {appliedSearchQuery && (
+                  <span className="text-slate-300 text-xs">
+                    for "<span className="text-white font-semibold">{appliedSearchQuery}</span>"
+                  </span>
+                )}
+              </div>
+              <div className="text-[11px] text-slate-400 flex items-center gap-3 flex-wrap">
+                <span>Scope: <strong className="text-slate-200">{selectedCollegeCode === 'ALL' ? 'All 151 Colleges' : selectedCollegeCode}</strong></span>
+                <span>•</span>
+                <span>Branch: <strong className="text-slate-200">{selectedBranchCode === 'ALL' ? 'All Branches' : selectedBranchCode}</strong></span>
+                {globalSearchStats && (
+                  <>
+                    <span>•</span>
+                    <span>Colleges with matches: <strong className="text-emerald-400">{globalSearchStats.collegesCount}</strong></span>
+                    <span>•</span>
+                    <span>Rank Range: <strong className="text-emerald-400">#{globalSearchStats.minRank?.toLocaleString()} → #{globalSearchStats.maxRank?.toLocaleString()}</strong></span>
+                  </>
+                )}
               </div>
             </div>
+
             <button
               type="button"
-              onClick={clearGlobalSearch}
-              className="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-xs font-semibold shrink-0"
+              onClick={clearSearch}
+              className="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-xs font-semibold shrink-0 cursor-pointer border border-rose-500/40"
             >
-              Back to {selectedCollegeCode} Branch ✕
+              Reset Search ✕
             </button>
           </div>
         )}
 
-        {/* Error Notification */}
+        {/* Global Search Notice / Error */}
+        {globalSearchError && (
+          <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-amber-300 text-xs flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
+            <span>{globalSearchError}</span>
+          </div>
+        )}
+
+        {/* Error Notification for college file download */}
         {errorMessage && (
           <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 text-amber-200 flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
@@ -884,9 +1157,8 @@ export default function TgAllotmentExplorer() {
                     type="button"
                     onClick={() => {
                       setSelectedCollegeCode(c);
-                      clearGlobalSearch();
                     }}
-                    className="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 rounded-lg text-xs font-semibold"
+                    className="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 rounded-lg text-xs font-semibold cursor-pointer"
                   >
                     View {c}
                   </button>
@@ -896,196 +1168,385 @@ export default function TgAllotmentExplorer() {
           </div>
         )}
 
-        {/* 3. DIRECT CANDIDATE CARDS GRID (IMMEDIATE VISIBILITY) */}
-        {loading ? (
-          <div className="py-20 text-center space-y-3">
-            <div className="inline-block w-8 h-8 border-2 border-rose-500 border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-rose-400 font-mono text-xs sm:text-sm animate-pulse">
-              [{selectedCollegeCode}] అలాట్‌మెంట్ రికార్డులను లోడ్ చేస్తోంది...
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {/* Header & Pagination status */}
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-2 bg-slate-900/90 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-400">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span>
-                  Showing <span className="text-white font-bold">{activeDisplayList.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}</span> – <span className="text-white font-bold">{Math.min(currentPage * itemsPerPage, activeDisplayList.length)}</span> of <span className="text-white font-bold">{activeDisplayList.length}</span> students {isGlobalSearchActive ? '(All Colleges)' : `in [${selectedCollegeCode} - ${currentBundle?.branchCode}]`}
+        {/* ========================================================
+            CASE A: STATEWIDE OVERVIEW HUB
+            (When College = 'ALL' & Branch = 'ALL' & No search entered yet)
+           ======================================================== */}
+        {isStatewideOverviewActive && (
+          <div className="space-y-4 animate-in fade-in duration-200">
+            {/* Statewide Key Numbers */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
+              <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 sm:p-4 shadow-md">
+                <span className="text-[11px] text-slate-400 font-medium flex items-center gap-1">
+                  <Building2 className="w-3.5 h-3.5 text-emerald-400" />
+                  Engineering Colleges
                 </span>
-                {(genderFilter !== 'ALL' || casteFilter !== 'ALL' || seatCategoryFilter !== 'ALL' || searchQuery) && !isGlobalSearchActive && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setGenderFilter('ALL');
-                      setCasteFilter('ALL');
-                      setSeatCategoryFilter('ALL');
-                      setSearchQuery('');
-                      setCurrentPage(1);
-                    }}
-                    className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px]"
-                  >
-                    Clear Filter ✕
-                  </button>
-                )}
+                <div className="text-xl sm:text-2xl font-black text-white mt-1">
+                  {TG_EAPCET_GLOBAL_STATS?.totalColleges || 151} Colleges
+                </div>
+                <div className="text-[10px] text-slate-400 mt-0.5">Across Telangana State</div>
               </div>
 
-              {totalPages > 1 && (
-                <div className="flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    disabled={currentPage <= 1}
-                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                    className="p-1 rounded bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-200"
-                  >
-                    <ChevronLeft className="w-3.5 h-3.5" />
-                  </button>
-                  <span className="font-mono px-2 py-0.5 rounded bg-slate-950 text-slate-300 text-[11px]">
-                    Page {currentPage} / {totalPages}
-                  </span>
-                  <button
-                    type="button"
-                    disabled={currentPage >= totalPages}
-                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                    className="p-1 rounded bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-200"
-                  >
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
+              <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 sm:p-4 shadow-md">
+                <span className="text-[11px] text-slate-400 font-medium flex items-center gap-1">
+                  <Users className="w-3.5 h-3.5 text-cyan-400" />
+                  Total Allotted Students
+                </span>
+                <div className="text-xl sm:text-2xl font-black text-white mt-1">
+                  {TG_EAPCET_GLOBAL_STATS?.totalRecords ? TG_EAPCET_GLOBAL_STATS.totalRecords.toLocaleString() : '71,646'}
                 </div>
-              )}
+                <div className="text-[10px] text-emerald-400/80 mt-0.5">Final Phase Official Records</div>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 sm:p-4 shadow-md">
+                <span className="text-[11px] text-slate-400 font-medium flex items-center gap-1">
+                  <GitBranch className="w-3.5 h-3.5 text-indigo-400" />
+                  Engineering Branches
+                </span>
+                <div className="text-xl sm:text-2xl font-black text-indigo-400 mt-1">
+                  {TG_EAPCET_ALL_BRANCHES?.length || 37} Streams
+                </div>
+                <div className="text-[10px] text-slate-400 mt-0.5">CSE, CSM, ECE, CSD, etc.</div>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 sm:p-4 shadow-md">
+                <span className="text-[11px] text-slate-400 font-medium flex items-center gap-1">
+                  <Award className="w-3.5 h-3.5 text-amber-400" />
+                  State Rank Range
+                </span>
+                <div className="text-xl sm:text-2xl font-black text-amber-400 mt-1">
+                  #1 → #400,379
+                </div>
+                <div className="text-[10px] text-slate-400 mt-0.5">All Categories Combined</div>
+              </div>
             </div>
 
-            {/* Candidate List Cards */}
-            {activeDisplayList.length === 0 ? (
-              <div className="py-14 text-center text-slate-400 bg-slate-900 border border-slate-800 rounded-2xl space-y-2 p-4">
-                <Users className="w-8 h-8 mx-auto text-slate-600 mb-1" />
-                <p className="text-sm font-semibold text-white">No candidate records found</p>
-                <p className="text-xs text-slate-400">
-                  {isGlobalSearchActive 
-                    ? `No candidate matching "${searchQuery}" was found in any of the 151 Telangana engineering colleges.` 
-                    : `Try searching across all colleges using "Search All Colleges" or resetting branch filters.`}
-                </p>
-                {!isGlobalSearchActive && searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => handleExecuteGlobalSearch()}
-                    className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500 text-white text-xs font-bold shadow-md shadow-rose-500/20"
-                  >
-                    <Globe2 className="w-3.5 h-3.5" />
-                    Search "{searchQuery}" across all 151 Colleges
-                  </button>
-                )}
+            {/* Quick Search Demonstration Card */}
+            <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-rose-950/40 border border-rose-500/20 rounded-2xl p-4 sm:p-6 space-y-3 shadow-xl">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-rose-400" />
+                <h3 className="text-base sm:text-lg font-bold text-white">
+                  Statewide Candidate Search Engine
+                </h3>
               </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3">
-                {paginatedCandidates.map((c, idx) => (
-                  <div 
-                    key={`${c.hallTicket || ''}-${c.rank}-${idx}`} 
-                    className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-3.5 space-y-2 hover:border-slate-700 hover:bg-slate-900/90 transition-all shadow-sm"
+              <p className="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
+                You can instantly search any student among all <strong>71,646 candidate allotments</strong> across all 151 Telangana engineering colleges without picking a single college or branch first.
+              </p>
+
+              {/* Sample Queries Chips */}
+              <div className="pt-2">
+                <span className="text-[11px] text-slate-400 font-medium block mb-2">
+                  Try one of these sample queries or enter any Rank / Name in the search bar above:
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { label: 'Rank 42500', query: '42500' },
+                    { label: 'BHUKYA JAGAN', query: 'BHUKYA JAGAN' },
+                    { label: 'RAMINENI JAGAN MOHAN', query: 'RAMINENI JAGAN MOHAN' },
+                    { label: 'Rank 2887', query: '2887' },
+                    { label: 'Hall Ticket 2625T07028', query: '2625T07028' },
+                  ].map((chip) => (
+                    <button
+                      key={chip.label}
+                      type="button"
+                      onClick={() => {
+                        setSearchQuery(chip.query);
+                        executeGlobalSearch({ q: chip.query });
+                      }}
+                      className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 border border-slate-700 cursor-pointer transition-colors"
+                    >
+                      <Search className="w-3 h-3 text-rose-400" />
+                      <span>{chip.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Top Engineering Streams Grid */}
+            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3 shadow-lg">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                  <GitBranch className="w-4 h-4 text-indigo-400" />
+                  Explore Top Engineering Streams Across Telangana
+                </h3>
+                <span className="text-[11px] text-slate-400 font-mono">
+                  Click any branch to view candidates statewide
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
+                {TOP_POPULAR_BRANCHES.map((b) => (
+                  <button
+                    key={b.code}
+                    type="button"
+                    onClick={() => {
+                      setSelectedCollegeCode('ALL');
+                      setSelectedBranchCode(b.code);
+                      executeGlobalSearch({ college: 'ALL', branch: b.code });
+                    }}
+                    className="text-left bg-slate-950/80 hover:bg-slate-800/80 border border-slate-800 hover:border-indigo-500/50 rounded-xl p-3 space-y-1 transition-all group cursor-pointer"
                   >
-                    <div className="flex justify-between items-start gap-2">
-                      <div className="space-y-0.5 min-w-0 flex-1">
-                        <h4 className="text-xs sm:text-sm font-bold text-white tracking-tight truncate" title={c.name}>
-                          {c.name}
-                        </h4>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[11px] text-slate-400 font-mono">HT: {c.hallTicket}</span>
-                          <button
-                            type="button"
-                            onClick={() => handleCopyTicket(c.hallTicket)}
-                            title="Copy Hall Ticket"
-                            className="text-slate-500 hover:text-emerald-400 transition-colors"
-                          >
-                            {copiedTicket === c.hallTicket ? (
-                              <Check className="w-3 h-3 text-emerald-400" />
-                            ) : (
-                              <Copy className="w-3 h-3" />
-                            )}
-                          </button>
-                        </div>
-                      </div>
-                      <span className="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-lg text-xs font-mono font-bold shrink-0">
-                        #{c.rank?.toLocaleString()}
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono font-bold text-indigo-300 text-xs px-1.5 py-0.5 rounded bg-indigo-500/20 group-hover:bg-indigo-500/30">
+                        {b.code}
+                      </span>
+                      <span className="text-[11px] font-mono text-emerald-400 font-semibold">
+                        {b.count} seats
                       </span>
                     </div>
-
-                    {/* If Global Search Result: Show College & Branch with Quick Switch Action */}
-                    {isGlobalSearchActive && c.collegeCode && (
-                      <div className="pt-1 pb-0.5 border-t border-slate-800/60 flex items-center justify-between gap-1 text-[11px]">
-                        <div className="truncate text-slate-300">
-                          <span className="font-bold text-rose-300 font-mono mr-1">[{c.collegeCode}]</span>
-                          <span className="font-mono text-cyan-300">{c.branchCode}</span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => handleJumpToCollegeBranch(c.collegeCode, c.branchCode)}
-                          className="text-[10px] text-emerald-400 hover:underline flex items-center gap-0.5 shrink-0"
-                        >
-                          <span>Open College</span>
-                          <ExternalLink className="w-2.5 h-2.5" />
-                        </button>
-                      </div>
-                    )}
-
-                    <div className="flex items-center gap-1.5 pt-0.5 text-[10px] sm:text-[11px] flex-wrap">
-                      <span className={`px-1.5 py-0.2 rounded font-medium ${
-                        c.gender === 'M' ? 'bg-cyan-500/15 text-cyan-300' : 'bg-rose-500/15 text-rose-300'
-                      }`}>
-                        {c.gender === 'M' ? 'Boys (M)' : c.gender === 'F' ? 'Girls (F)' : c.gender}
-                      </span>
-                      <span className="px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 font-medium">
-                        {c.caste}
-                      </span>
-                      {c.region && (
-                        <span className="px-1.5 py-0.2 rounded bg-slate-800/80 text-slate-400">
-                          {c.region}
-                        </span>
-                      )}
-                      <span className="ml-auto px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-mono font-semibold text-[10px]">
-                        {c.seatCategory}
-                      </span>
+                    <div className="text-xs text-slate-300 font-medium truncate" title={b.name}>
+                      {b.name}
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
-            )}
+            </div>
 
-            {/* 4. PAGINATION CONTROLS */}
-            {totalPages > 1 && (
-              <div className="flex justify-center items-center gap-2 pt-2 pb-4">
-                <button
-                  type="button"
-                  disabled={currentPage <= 1}
-                  onClick={() => {
-                    setCurrentPage((p) => Math.max(1, p - 1));
-                    window.scrollTo({ top: 150, behavior: 'smooth' });
-                  }}
-                  className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 disabled:opacity-40 text-xs font-medium text-slate-200"
-                >
-                  Previous Page
-                </button>
-                <span className="text-xs text-slate-400 font-mono px-2">
-                  Page {currentPage} of {totalPages}
+            {/* Featured Engineering Colleges Grid */}
+            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3 shadow-lg">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                  <Building2 className="w-4 h-4 text-emerald-400" />
+                  Popular Engineering Colleges
+                </h3>
+                <span className="text-[11px] text-slate-400 font-mono">
+                  Quick Access
                 </span>
-                <button
-                  type="button"
-                  disabled={currentPage >= totalPages}
-                  onClick={() => {
-                    setCurrentPage((p) => Math.min(totalPages, p + 1));
-                    window.scrollTo({ top: 150, behavior: 'smooth' });
-                  }}
-                  className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 disabled:opacity-40 text-xs font-medium text-slate-200"
-                >
-                  Next Page
-                </button>
               </div>
-            )}
+
+              <div className="flex flex-wrap gap-2">
+                {FEATURED_COLLEGES.map((c) => (
+                  <button
+                    key={c.code}
+                    type="button"
+                    onClick={() => {
+                      setSelectedCollegeCode(c.code);
+                      setSelectedBranchCode('ALL');
+                      setIsGlobalSearchActive(false);
+                      setGlobalSearchResults([]);
+                    }}
+                    className="px-3 py-1.5 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 text-xs font-semibold text-slate-200 flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <span className="font-mono text-emerald-400 font-bold">{c.code}</span>
+                    <span className="text-slate-400 max-w-[140px] truncate hidden sm:inline">{c.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         )}
 
-        {/* 5. ANALYTICS & DISTRIBUTION VISUALS (POSITIONED AT BOTTOM) */}
-        {!loading && !isGlobalSearchActive && currentBundle && (
+        {/* ========================================================
+            CASE B: CANDIDATE RESULTS GRID
+            (When Global Search is active OR Specific College is chosen)
+           ======================================================== */}
+        {!isStatewideOverviewActive && (
+          <>
+            {loading || isSearchingGlobal ? (
+              <div className="py-20 text-center space-y-3">
+                <div className="inline-block w-8 h-8 border-2 border-rose-500 border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-rose-400 font-mono text-xs sm:text-sm animate-pulse">
+                  {isSearchingGlobal 
+                    ? 'Scanning 71,646 candidate records across all 151 colleges...' 
+                    : `Loading allotment records for [${selectedCollegeCode}]...`}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {/* Header & Pagination status */}
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-2 bg-slate-900/90 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-400">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span>
+                      Showing <span className="text-white font-bold">{activeDisplayList.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}</span> – <span className="text-white font-bold">{Math.min(currentPage * itemsPerPage, activeDisplayList.length)}</span> of <span className="text-white font-bold">{activeDisplayList.length.toLocaleString()}</span> students {isGlobalSearchActive ? '(All Colleges / Global Search)' : `in [${selectedCollegeCode} - ${selectedBranchCode}]`}
+                    </span>
+                    {(genderFilter !== 'ALL' || casteFilter !== 'ALL' || seatCategoryFilter !== 'ALL' || searchQuery) && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setGenderFilter('ALL');
+                          setCasteFilter('ALL');
+                          setSeatCategoryFilter('ALL');
+                          clearSearch();
+                        }}
+                        className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px] cursor-pointer"
+                      >
+                        Clear Filters ✕
+                      </button>
+                    )}
+                  </div>
+
+                  {totalPages > 1 && (
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        disabled={currentPage <= 1}
+                        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                        className="p-1 rounded bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-200 cursor-pointer"
+                      >
+                        <ChevronLeft className="w-3.5 h-3.5" />
+                      </button>
+                      <span className="font-mono px-2 py-0.5 rounded bg-slate-950 text-slate-300 text-[11px]">
+                        Page {currentPage} / {totalPages}
+                      </span>
+                      <button
+                        type="button"
+                        disabled={currentPage >= totalPages}
+                        onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                        className="p-1 rounded bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-200 cursor-pointer"
+                      >
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Candidate List Cards */}
+                {activeDisplayList.length === 0 ? (
+                  <div className="py-14 text-center text-slate-400 bg-slate-900 border border-slate-800 rounded-2xl space-y-2 p-4">
+                    <Users className="w-8 h-8 mx-auto text-slate-600 mb-1" />
+                    <p className="text-sm font-semibold text-white">No candidate records found</p>
+                    <p className="text-xs text-slate-400 max-w-md mx-auto">
+                      {isGlobalSearchActive 
+                        ? `No candidate matching "${searchQuery || appliedSearchQuery}" was found with the current filters across the 151 Telangana engineering colleges.` 
+                        : `No candidate matching your filters was found in [${selectedCollegeCode} - ${selectedBranchCode}]. Try searching across all colleges.`}
+                    </p>
+                    {!isGlobalSearchActive && searchQuery && (
+                      <button
+                        type="button"
+                        onClick={() => executeGlobalSearch()}
+                        className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500 text-white text-xs font-bold shadow-md shadow-rose-500/20 cursor-pointer"
+                      >
+                        <Globe2 className="w-3.5 h-3.5" />
+                        Search "{searchQuery}" across all 151 Colleges
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3">
+                    {paginatedCandidates.map((c, idx) => (
+                      <div 
+                        key={`${c.hallTicket || ''}-${c.rank}-${c.collegeCode || ''}-${idx}`} 
+                        className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-3.5 space-y-2 hover:border-slate-700 hover:bg-slate-900/90 transition-all shadow-sm"
+                      >
+                        {/* Header: Candidate Name & Rank */}
+                        <div className="flex justify-between items-start gap-2">
+                          <div className="space-y-0.5 min-w-0 flex-1">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <h4 className="text-xs sm:text-sm font-bold text-white tracking-tight truncate" title={c.name}>
+                                {c.name}
+                              </h4>
+                              {c.matchType && getMatchBadge(c.matchType)}
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-[11px] text-slate-400 font-mono">HT: {c.hallTicket}</span>
+                              <button
+                                type="button"
+                                onClick={() => handleCopyTicket(c.hallTicket)}
+                                title="Copy Hall Ticket"
+                                className="text-slate-500 hover:text-emerald-400 transition-colors cursor-pointer"
+                              >
+                                {copiedTicket === c.hallTicket ? (
+                                  <Check className="w-3 h-3 text-emerald-400" />
+                                ) : (
+                                  <Copy className="w-3 h-3" />
+                                )}
+                              </button>
+                            </div>
+                          </div>
+                          <span className="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-lg text-xs font-mono font-bold shrink-0">
+                            #{c.rank?.toLocaleString()}
+                          </span>
+                        </div>
+
+                        {/* College & Branch Meta Strip (Always clear & unambiguous) */}
+                        <div className="pt-1 pb-1 border-t border-slate-800/70 flex items-center justify-between gap-1 text-[11px]">
+                          <div className="truncate text-slate-300">
+                            <span className="font-bold text-rose-300 font-mono mr-1">[{c.collegeCode}]</span>
+                            <span className="text-slate-200 font-medium truncate mr-1.5">
+                              {c.collegeName || c.collegeCode}
+                            </span>
+                            <span className="font-mono text-indigo-300 font-semibold">({c.branchCode})</span>
+                          </div>
+
+                          {/* Quick Jump into this specific college & branch */}
+                          {(isGlobalSearchActive || selectedCollegeCode === 'ALL') && (
+                            <button
+                              type="button"
+                              onClick={() => handleJumpToCollegeBranch(c.collegeCode, c.branchCode)}
+                              className="text-[10px] text-emerald-400 hover:text-emerald-300 hover:underline flex items-center gap-0.5 shrink-0 cursor-pointer"
+                              title={`Open full ${c.collegeCode} allotment list`}
+                            >
+                              <span>Explore</span>
+                              <ExternalLink className="w-2.5 h-2.5" />
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Demographics & Seat Quota Details */}
+                        <div className="flex items-center gap-1.5 pt-0.5 text-[10px] sm:text-[11px] flex-wrap">
+                          <span className={`px-1.5 py-0.2 rounded font-medium ${
+                            c.gender === 'M' ? 'bg-cyan-500/15 text-cyan-300' : 'bg-rose-500/15 text-rose-300'
+                          }`}>
+                            {c.gender === 'M' ? 'Boys (M)' : c.gender === 'F' ? 'Girls (F)' : c.gender}
+                          </span>
+                          <span className="px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 font-medium">
+                            {c.caste || 'GEN'}
+                          </span>
+                          {c.region && (
+                            <span className="px-1.5 py-0.2 rounded bg-slate-800/80 text-slate-400">
+                              {c.region}
+                            </span>
+                          )}
+                          <span className="ml-auto px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-mono font-semibold text-[10px]">
+                            {c.seatCategory}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                  <div className="flex justify-center items-center gap-2 pt-2 pb-4">
+                    <button
+                      type="button"
+                      disabled={currentPage <= 1}
+                      onClick={() => {
+                        setCurrentPage((p) => Math.max(1, p - 1));
+                        window.scrollTo({ top: 150, behavior: 'smooth' });
+                      }}
+                      className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 disabled:opacity-40 text-xs font-medium text-slate-200 cursor-pointer"
+                    >
+                      Previous Page
+                    </button>
+                    <span className="text-xs text-slate-400 font-mono px-2">
+                      Page {currentPage} of {totalPages}
+                    </span>
+                    <button
+                      type="button"
+                      disabled={currentPage >= totalPages}
+                      onClick={() => {
+                        setCurrentPage((p) => Math.min(totalPages, p + 1));
+                        window.scrollTo({ top: 150, behavior: 'smooth' });
+                      }}
+                      className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 disabled:opacity-40 text-xs font-medium text-slate-200 cursor-pointer"
+                    >
+                      Next Page
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ========================================================
+            CASE C: ANALYTICS & CUTOFFS FOR SPECIFIC COLLEGE VIEW
+           ======================================================== */}
+        {!loading && !isGlobalSearchActive && selectedCollegeCode !== 'ALL' && currentBundle && (
           <div className="pt-4 border-t border-slate-800/80 space-y-4">
-            {/* Header toggle for bottom analytics */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <BarChart3 className="w-4 h-4 text-emerald-400" />
@@ -1096,7 +1557,7 @@ export default function TgAllotmentExplorer() {
               <button
                 type="button"
                 onClick={() => setIsAnalyticsExpanded(!isAnalyticsExpanded)}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 text-xs font-medium"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 text-xs font-medium cursor-pointer"
               >
                 <span>{isAnalyticsExpanded ? 'Hide Analytics' : 'Show Analytics'}</span>
                 {isAnalyticsExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -1129,10 +1590,10 @@ export default function TgAllotmentExplorer() {
                     <div className="text-[10px] text-rose-400/80 mt-0.5">Last Allotted Candidate</div>
                   </div>
                   <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 shadow-md">
-                    <span className="text-[11px] text-slate-400 font-medium">Stream / Total Branches</span>
-                    <div className="text-xl sm:text-2xl font-black text-white mt-0.5">{availableBranches.length}</div>
+                    <span className="text-[11px] text-slate-400 font-medium">Total Branches in College</span>
+                    <div className="text-xl sm:text-2xl font-black text-white mt-0.5">{availableBranches.length - 1}</div>
                     <div className="text-[10px] text-slate-400 mt-0.5 truncate">
-                      Code: {currentBundle.branchCode}
+                      Current: {currentBundle.branchCode}
                     </div>
                   </div>
                 </div>
@@ -1269,7 +1730,7 @@ export default function TgAllotmentExplorer() {
                     </div>
                   </div>
 
-                  {/* Caste / Community Spread (Render EVERY community dynamically) */}
+                  {/* Caste / Community Spread */}
                   <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-xl p-3.5 space-y-2.5 flex flex-col">
                     <div className="flex justify-between items-center text-xs font-semibold">
                       <span className="text-slate-300 flex items-center gap-1.5">
@@ -1281,7 +1742,6 @@ export default function TgAllotmentExplorer() {
                       </span>
                     </div>
 
-                    {/* Responsive Dual-Column / Scrollable Grid Container */}
                     <div className="max-h-56 overflow-y-auto pr-1.5 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
                       {analytics.casteDistribution.length === 0 ? (
                         <div className="text-center py-4 text-xs text-slate-500">

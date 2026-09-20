@@ -124,8 +124,8 @@ export const Header: React.FC<HeaderProps> = ({
       label: 'AI Gap Analyzer',
       shortLabel: 'Gap Analyzer',
       icon: Sparkles,
-      badge: "EXPO '26",
-      badgeColor: 'bg-emerald-500/25 text-emerald-300 border-emerald-500/40',
+      badge: 'AI Diagnostic',
+      badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
     },
     {
       id: 'tier2-academics',
@@ -250,12 +250,12 @@ export const Header: React.FC<HeaderProps> = ({
                 ? 'bg-emerald-500 text-slate-950 border-emerald-400 font-extrabold'
                 : 'bg-emerald-950/40 hover:bg-emerald-900/50 text-emerald-300 border-emerald-700/60 hover:border-emerald-500'
             }`}
-            title="AI Student Gap Analyzer (Expo '26 Edition)"
+            title="AI Student Gap Analyzer"
           >
             <Sparkles className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
             <span>AI Gap Analyzer</span>
-            <span className="text-[9px] px-1 py-0.2 rounded bg-emerald-500/25 border border-emerald-500/30 text-emerald-200 uppercase font-mono">
-              EXPO
+            <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/30 text-emerald-200 uppercase font-mono font-bold">
+              AI
             </span>
           </button>
 

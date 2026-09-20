@@ -93,11 +93,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       {
         id: 'tool-gap-analyzer',
         title: 'AI Student Gap Analyzer',
-        subtitle: 'Where am I right now, what am I missing & what should I do next? Expo 2026 Engine',
+        subtitle: 'Understand where you are, identify your skill gaps, and see what to work on next.',
         category: 'Core Tools',
-        badge: 'EXPO 2026',
+        badge: 'AI Diagnostic',
         icon: <Sparkles className="w-4 h-4 text-emerald-400" />,
-        keywords: ['gap', 'analyzer', 'skills', 'career', 'expo', 'roadmap', 'what next', 'simulator', 'placement gap', 'ai'],
+        keywords: ['gap', 'analyzer', 'skills', 'career', 'roadmap', 'what next', 'simulator', 'placement gap', 'ai'],
         action: () => onSelectTool('gap-analyzer'),
       },
       {
