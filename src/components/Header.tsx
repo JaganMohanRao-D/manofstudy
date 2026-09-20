@@ -197,13 +197,24 @@ export const Header: React.FC<HeaderProps> = ({
               loading="eager"
             />
           </div>
-          <div className="flex flex-col min-w-0">
-            <span className="text-sm sm:text-base md:text-lg font-black tracking-tight text-slate-900 dark:text-white uppercase font-mono drop-shadow-xs group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors whitespace-nowrap">
-              MAN OF STUDY
-            </span>
-            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium tracking-wide hidden sm:block truncate">
-              Engineering &amp; Academic Launchpad
-            </span>
+          <div className="flex flex-col min-w-0 leading-none">
+            <div className="flex items-baseline gap-1.5 sm:gap-2 whitespace-nowrap">
+              <span className="text-[10px] sm:text-[11px] font-extrabold tracking-[0.24em] text-slate-500 dark:text-slate-400 uppercase transition-colors">
+                MAN
+              </span>
+              <span className="text-[8px] sm:text-[9px] font-bold tracking-[0.16em] text-slate-400 dark:text-slate-500 uppercase">
+                OF
+              </span>
+              <span className="text-[17px] sm:text-[18px] md:text-[19px] font-black tracking-[-0.035em] uppercase bg-gradient-to-r from-slate-950 via-blue-600 to-emerald-500 dark:from-white dark:via-sky-300 dark:to-emerald-300 bg-clip-text text-transparent transition-all duration-200 group-hover:tracking-[-0.02em]">
+                STUDY
+              </span>
+            </div>
+            <div className="mt-1.5 hidden sm:flex items-center gap-1.5">
+              <span className="h-px w-4 bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full shrink-0" />
+              <span className="text-[9px] md:text-[10px] font-medium tracking-[0.055em] text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                Engineering &amp; Academic Launchpad
+              </span>
+            </div>
           </div>
         </a>
 
