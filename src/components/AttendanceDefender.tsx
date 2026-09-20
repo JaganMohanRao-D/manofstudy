@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { ShieldCheck, AlertTriangle, CheckCircle2, TrendingUp, Sparkles, Plus, Minus, RefreshCw } from 'lucide-react';
+import { ShieldCheck, AlertTriangle, CheckCircle2, TrendingUp, Sparkles, Plus, Minus, RefreshCw, SlidersHorizontal } from 'lucide-react';
 import { SpeedometerGauge } from './SpeedometerGauge';
 import { calculateAttendance } from '../utils/attendance';
 
@@ -43,24 +43,32 @@ export const AttendanceDefender: React.FC = () => {
     setMinRequiredPercent(75);
   };
 
+  const missedClasses = Math.max(0, result.totalConducted - result.totalAttended);
+  const safeFutureRate = Number(
+    ((result.totalAttended / (result.totalConducted + result.classesMissable)) * 100).toFixed(2)
+  );
+  const recoveredFutureRate = Number(
+    (((result.totalAttended + result.classesRequired) / (result.totalConducted + result.classesRequired)) * 100).toFixed(2)
+  );
+
   return (
     <div id="attendance-defender-tool" className="space-y-6">
       
-      {/* Tool Header Banner: Amber/Rose High-Stakes Ambient Aura */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-amber-950 via-rose-950 to-slate-900 text-white border border-amber-500/30 rounded-2xl p-5 sm:p-7 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        {/* Amber & Rose Glows */}
-        <div className="absolute -top-12 -right-12 w-64 h-64 rounded-full bg-amber-500/15 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-12 left-1/4 w-64 h-64 rounded-full bg-rose-500/15 blur-3xl pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(#f59e0b15_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
+      {/* 1. Header: Premium Restrained Dark Surface */}
+      <div className="relative overflow-hidden bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        {/* Subtle Ambient Glow */}
+        <div className="absolute top-0 right-0 w-80 h-full bg-gradient-to-l from-cyan-500/5 to-transparent pointer-events-none" />
+        <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-blue-500/5 rounded-full blur-2xl pointer-events-none" />
 
-        <div className="relative z-10 space-y-1">
+        <div className="relative z-10 space-y-1.5">
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30 backdrop-blur-xs">
-              <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-              HIGH-STAKES ATTENDANCE DEFENDER
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-bold tracking-wider uppercase bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+              <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+              ATTENDANCE DEFENDER
             </span>
+            <span className="text-xs text-slate-400 hidden sm:inline">• Academic Defense Suite</span>
           </div>
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white tracking-tight">
             Attendance Defender &amp; Bunk Forecaster
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
@@ -70,32 +78,35 @@ export const AttendanceDefender: React.FC = () => {
 
         <button
           onClick={handleReset}
-          className="relative z-10 self-start sm:self-center flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-slate-200 hover:text-white bg-slate-900/80 hover:bg-slate-800 border border-amber-500/30 transition-all duration-200 active:scale-95 cursor-pointer shadow-xs backdrop-blur-xs"
-          title="Reset to default values"
+          className="relative z-10 self-start sm:self-center flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-750 border border-slate-700 transition-all duration-150 active:scale-95 cursor-pointer shadow-2xs shrink-0"
+          title="Reset to default values (40 Conducted, 33 Attended, 75% Target)"
         >
-          <RefreshCw className="w-3.5 h-3.5 text-amber-400" />
-          <span>Reset</span>
+          <RefreshCw className="w-3.5 h-3.5 text-cyan-400" />
+          <span>Reset Defaults</span>
         </button>
       </div>
 
-      {/* Main Grid: Inputs on Left, Speedometer & Insights on Right */}
+      {/* 2. Main Grid: Class Parameters on Left, Attendance Overview on Right */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        {/* Left Column: Interactive Inputs */}
-        <div className="lg:col-span-5 space-y-5">
-          <div className="p-5 sm:p-6 rounded-2xl border bg-white dark:bg-slate-900/90 border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg space-y-5">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-              Class Parameters
-            </h3>
+        {/* Left Column (5 cols): Class Parameters Control Panel */}
+        <div className="lg:col-span-5 space-y-6">
+          <div className="p-5 sm:p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-sm space-y-5">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                <SlidersHorizontal className="w-4 h-4 text-cyan-400" />
+                Class Parameters
+              </h3>
+              <span className="text-[11px] text-slate-400 font-medium">Session Inputs</span>
+            </div>
 
             {/* Input 1: Total Classes Conducted */}
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label htmlFor="total-classes-input" className="text-xs sm:text-sm font-medium text-slate-700">
+                <label htmlFor="total-classes-input" className="text-xs sm:text-sm font-semibold text-slate-200">
                   Total Classes Conducted
                 </label>
-                <span className="text-xs font-semibold text-slate-900">
+                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-cyan-300 border border-slate-700">
                   {totalClasses} Classes
                 </span>
               </div>
@@ -107,21 +118,21 @@ export const AttendanceDefender: React.FC = () => {
                   max="500"
                   value={totalClasses === 0 ? '' : totalClasses}
                   onChange={(e) => handleTotalChange(Number(e.target.value))}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800/90 text-white font-mono text-sm font-semibold focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all placeholder:text-slate-500"
                   placeholder="e.g. 40"
                 />
                 <div className="absolute right-2 flex items-center gap-1">
                   <button
                     onClick={() => handleTotalChange(Math.max(1, totalClasses - 1))}
-                    className="p-1 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-700 cursor-pointer active:scale-90 transition-transform"
-                    title="Decrement"
+                    className="p-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white cursor-pointer active:scale-95 transition-transform"
+                    title="Decrement conducted"
                   >
                     <Minus className="w-3.5 h-3.5" />
                   </button>
                   <button
                     onClick={() => handleTotalChange(totalClasses + 1)}
-                    className="p-1 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-700 cursor-pointer active:scale-90 transition-transform"
-                    title="Increment"
+                    className="p-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white cursor-pointer active:scale-95 transition-transform"
+                    title="Increment conducted"
                   >
                     <Plus className="w-3.5 h-3.5" />
                   </button>
@@ -130,12 +141,12 @@ export const AttendanceDefender: React.FC = () => {
             </div>
 
             {/* Input 2: Classes Attended */}
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label htmlFor="attended-classes-input" className="text-xs sm:text-sm font-medium text-slate-700">
+                <label htmlFor="attended-classes-input" className="text-xs sm:text-sm font-semibold text-slate-200">
                   Classes Attended
                 </label>
-                <span className="text-xs font-semibold text-emerald-600">
+                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-emerald-950/40 text-emerald-400 border border-emerald-800/60">
                   {attendedClasses} Attended
                 </span>
               </div>
@@ -147,21 +158,21 @@ export const AttendanceDefender: React.FC = () => {
                   max={totalClasses}
                   value={attendedClasses}
                   onChange={(e) => handleAttendedChange(Number(e.target.value))}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800/90 text-white font-mono text-sm font-semibold focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all placeholder:text-slate-500"
                   placeholder="e.g. 33"
                 />
                 <div className="absolute right-2 flex items-center gap-1">
                   <button
                     onClick={() => handleAttendedChange(Math.max(0, attendedClasses - 1))}
-                    className="p-1 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-700 cursor-pointer active:scale-90 transition-transform"
-                    title="Decrement"
+                    className="p-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white cursor-pointer active:scale-95 transition-transform"
+                    title="Decrement attended"
                   >
                     <Minus className="w-3.5 h-3.5" />
                   </button>
                   <button
                     onClick={() => handleAttendedChange(Math.min(totalClasses, attendedClasses + 1))}
-                    className="p-1 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-700 cursor-pointer active:scale-90 transition-transform"
-                    title="Increment"
+                    className="p-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white cursor-pointer active:scale-95 transition-transform"
+                    title="Increment attended"
                   >
                     <Plus className="w-3.5 h-3.5" />
                   </button>
@@ -169,13 +180,13 @@ export const AttendanceDefender: React.FC = () => {
               </div>
             </div>
 
-            {/* Input 3: Min Required % */}
-            <div className="space-y-2.5 pt-2">
+            {/* Input 3: Target Required % */}
+            <div className="space-y-3 pt-1">
               <div className="flex items-center justify-between">
-                <label htmlFor="min-req-slider" className="text-xs sm:text-sm font-medium text-slate-700">
+                <label htmlFor="min-req-slider" className="text-xs sm:text-sm font-semibold text-slate-200">
                   Target Required Percentage
                 </label>
-                <span className="px-2 py-0.5 rounded text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-200">
+                <span className="px-2.5 py-0.5 rounded-md text-xs font-mono font-bold bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
                   {minRequiredPercent}% Required
                 </span>
               </div>
@@ -188,7 +199,7 @@ export const AttendanceDefender: React.FC = () => {
                 step="1"
                 value={minRequiredPercent}
                 onChange={(e) => setMinRequiredPercent(Number(e.target.value))}
-                className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-sky-500"
+                className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-500 border border-slate-700"
               />
 
               {/* Slider Preset Buttons */}
@@ -197,10 +208,10 @@ export const AttendanceDefender: React.FC = () => {
                   <button
                     key={pct}
                     onClick={() => setMinRequiredPercent(pct)}
-                    className={`flex-1 py-1.5 px-1 rounded-xl text-xs transition-all duration-200 ease-out active:scale-95 cursor-pointer ${
+                    className={`flex-1 py-1.5 px-1 rounded-xl text-xs font-semibold transition-all duration-150 cursor-pointer font-mono ${
                       minRequiredPercent === pct
-                        ? 'bg-sky-500 text-white font-semibold shadow-sm border border-sky-500'
-                        : 'bg-white text-slate-700 hover:bg-sky-50 hover:border-sky-300 hover:text-sky-700 border border-slate-200 font-medium'
+                        ? 'bg-cyan-500 text-slate-950 font-bold shadow-sm border border-cyan-400'
+                        : 'bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-750 border border-slate-700'
                     }`}
                   >
                     {pct}%
@@ -210,23 +221,23 @@ export const AttendanceDefender: React.FC = () => {
             </div>
 
             {/* Quick Next-Class Action Buttons */}
-            <div className="pt-3 border-t border-slate-200 space-y-2">
-              <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
+            <div className="pt-4 border-t border-slate-800 space-y-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
                 Simulate Next Session:
               </span>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2.5">
                 <button
                   onClick={handleAttendClass}
-                  className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-semibold transition-all duration-200 ease-out active:scale-95 cursor-pointer"
+                  className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition-all duration-150 active:scale-95 cursor-pointer shadow-2xs"
                 >
-                  <Plus className="w-3.5 h-3.5 text-emerald-600" />
+                  <Plus className="w-3.5 h-3.5 text-emerald-400" />
                   <span>Attended (+1)</span>
                 </button>
                 <button
                   onClick={handleBunkClass}
-                  className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold transition-all duration-200 ease-out active:scale-95 cursor-pointer"
+                  className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-bold transition-all duration-150 active:scale-95 cursor-pointer shadow-2xs"
                 >
-                  <Minus className="w-3.5 h-3.5 text-rose-600" />
+                  <Minus className="w-3.5 h-3.5 text-rose-400" />
                   <span>Missed (+0)</span>
                 </button>
               </div>
@@ -234,22 +245,23 @@ export const AttendanceDefender: React.FC = () => {
           </div>
         </div>
 
-        {/* Right Column: Speedometer Radial Card & Smart Insights */}
-        <div className="lg:col-span-7 space-y-5">
+        {/* Right Column (7 cols): Attendance Overview, Advisory, Projection */}
+        <div className="lg:col-span-7 space-y-6">
           
-          {/* Main Result Card with Speedometer */}
-          <div className="p-5 sm:p-6 rounded-2xl border bg-white dark:bg-slate-900/90 border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+          {/* Main Result Card with Speedometer & Breakdown */}
+          <div className="p-5 sm:p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-sm relative overflow-hidden">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Attendance Meter
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+                Attendance Overview
               </span>
               <span
-                className={`px-2.5 py-0.5 rounded-full text-xs font-semibold backdrop-blur-xs ${
+                className={`px-3 py-0.5 rounded-full text-xs font-bold tracking-wide uppercase ${
                   result.status === 'safe'
-                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800'
+                    ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
                     : result.status === 'warning'
-                    ? 'bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-800'
-                    : 'bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-950/50 dark:text-rose-300 dark:border-rose-800'
+                    ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
+                    : 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
                 }`}
               >
                 {result.status === 'safe' ? 'Safe Status' : result.status === 'warning' ? 'Edge Warning' : 'Deficit Shortage'}
@@ -264,39 +276,37 @@ export const AttendanceDefender: React.FC = () => {
             />
 
             {/* Quick Metrics Bar below Speedometer */}
-            <div className="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-slate-200 dark:border-slate-800 text-center">
-              <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                <div className="text-[11px] text-slate-500 font-medium">Conducted</div>
-                <div className="text-base font-bold text-slate-900 dark:text-white mt-0.5">{result.totalConducted}</div>
+            <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-slate-800 text-center">
+              <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700/80">
+                <div className="text-xs text-slate-400 font-medium">Conducted</div>
+                <div className="text-lg sm:text-xl font-bold font-mono text-white mt-0.5">{result.totalConducted}</div>
               </div>
-              <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                <div className="text-[11px] text-slate-500 font-medium">Attended</div>
-                <div className="text-base font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">{result.totalAttended}</div>
+              <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700/80">
+                <div className="text-xs text-slate-400 font-medium">Attended</div>
+                <div className="text-lg sm:text-xl font-bold font-mono text-emerald-400 mt-0.5">{result.totalAttended}</div>
               </div>
-              <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                <div className="text-[11px] text-slate-500 font-medium">Missed</div>
-                <div className="text-base font-bold text-rose-600 dark:text-rose-400 mt-0.5">
-                  {Math.max(0, result.totalConducted - result.totalAttended)}
-                </div>
+              <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700/80">
+                <div className="text-xs text-slate-400 font-medium">Missed</div>
+                <div className="text-lg sm:text-xl font-bold font-mono text-rose-400 mt-0.5">{missedClasses}</div>
               </div>
             </div>
           </div>
 
-          {/* Smart Insights Section */}
+          {/* Attendance Advisory */}
           <div
-            id="attendance-smart-insights"
-            className={`p-5 sm:p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
+            id="attendance-smart-advisory"
+            className={`p-5 sm:p-6 rounded-2xl border transition-all duration-200 ${
               result.isSafe
-                ? 'bg-amber-50/40 border-amber-200/80 dark:bg-amber-950/20 dark:border-amber-800/60 text-slate-800 dark:text-slate-100'
-                : 'bg-rose-50/50 border-rose-200/80 dark:bg-rose-950/20 dark:border-rose-800/60 text-slate-800 dark:text-slate-100'
+                ? 'bg-emerald-950/20 border-emerald-500/30 text-slate-200'
+                : 'bg-rose-950/20 border-rose-500/30 text-slate-200'
             }`}
           >
             <div className="flex items-start gap-3.5">
               <div
-                className={`p-2 rounded-xl shrink-0 ${
+                className={`p-2.5 rounded-xl shrink-0 ${
                   result.isSafe
-                    ? 'bg-sky-500 text-white'
-                    : 'bg-rose-500 text-white'
+                    ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                    : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
                 }`}
               >
                 {result.isSafe ? (
@@ -306,28 +316,35 @@ export const AttendanceDefender: React.FC = () => {
                 )}
               </div>
 
-              <div className="flex-1 space-y-1">
+              <div className="flex-1 space-y-1.5">
                 <div className="flex items-center gap-1.5">
-                  <Sparkles className={`w-4 h-4 ${result.isSafe ? 'text-sky-600' : 'text-rose-600'}`} />
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
-                    Attendance Advisory
+                  <Sparkles className={`w-4 h-4 ${result.isSafe ? 'text-emerald-400' : 'text-rose-400'}`} />
+                  <h4 className={`text-xs font-bold uppercase tracking-wider ${result.isSafe ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    ATTENDANCE ADVISORY
                   </h4>
                 </div>
 
-                <div className="text-sm font-normal leading-relaxed">
+                <div className="text-sm leading-relaxed text-slate-200">
                   {result.isSafe ? (
                     <div>
-                      <span className="font-bold text-sky-800 text-base block mb-0.5">
-                        You are in the safe zone. You can miss up to {result.classesMissable} {result.classesMissable === 1 ? 'class' : 'classes'}.
+                      <span className="font-bold text-white text-base block mb-1">
+                        You are in the safe zone. You can miss up to{' '}
+                        <span className="text-emerald-300 font-mono underline decoration-emerald-400/50">
+                          {result.classesMissable} {result.classesMissable === 1 ? 'class' : 'classes'}
+                        </span>.
                       </span>
-                      Your current rate is <strong>{result.currentPercent}%</strong> (target is {minRequiredPercent}%). Skipping {result.classesMissable} session{result.classesMissable === 1 ? '' : 's'} keeps your rate at {Number(((result.totalAttended / (result.totalConducted + result.classesMissable)) * 100).toFixed(2))}%.
+                      Your current rate is <strong className="text-white font-mono">{result.currentPercent}%</strong> (target is <span className="text-cyan-300 font-mono font-semibold">{minRequiredPercent}%</span>). Skipping {result.classesMissable} session{result.classesMissable === 1 ? '' : 's'} keeps your rate at <strong className="text-emerald-300 font-mono">{safeFutureRate}%</strong>.
                     </div>
                   ) : (
                     <div>
-                      <span className="font-bold text-rose-700 text-base block mb-0.5">
-                        Deficit Alert: Attend the next {result.classesRequired} consecutive {result.classesRequired === 1 ? 'class' : 'classes'} to reach {minRequiredPercent}%.
+                      <span className="font-bold text-white text-base block mb-1">
+                        Deficit Alert: Attend the next{' '}
+                        <span className="text-rose-300 font-mono underline decoration-rose-400/50">
+                          {result.classesRequired} consecutive {result.classesRequired === 1 ? 'class' : 'classes'}
+                        </span>{' '}
+                        to reach {minRequiredPercent}%.
                       </span>
-                      Your current rate is <strong>{result.currentPercent}%</strong>. Attending {result.classesRequired} future class{result.classesRequired === 1 ? '' : 'es'} consecutively will recover your attendance to {Number((((result.totalAttended + result.classesRequired) / (result.totalConducted + result.classesRequired)) * 100).toFixed(2))}%.
+                      Your current rate is <strong className="text-white font-mono">{result.currentPercent}%</strong>. Attending {result.classesRequired} future class{result.classesRequired === 1 ? '' : 'es'} consecutively will recover your attendance to <strong className="text-emerald-300 font-mono">{recoveredFutureRate}%</strong>.
                     </div>
                   )}
                 </div>
@@ -336,29 +353,29 @@ export const AttendanceDefender: React.FC = () => {
           </div>
 
           {/* Projection Matrix */}
-          <div className="p-4 sm:p-5 rounded-2xl border bg-white border-slate-200 space-y-3 shadow-sm">
+          <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3.5 shadow-sm">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
-                <TrendingUp className="w-3.5 h-3.5 text-sky-600" />
-                Projection Matrix
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                <TrendingUp className="w-4 h-4 text-cyan-400" />
+                Future Attendance Trajectory
               </span>
-              <span className="text-[11px] text-slate-500">Future attendance trajectory</span>
+              <span className="text-[11px] text-slate-400">Projection Matrix</span>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
               {result.bunkImpacts.slice(0, 2).map((item, idx) => (
                 <div
                   key={`bunk-${idx}`}
-                  className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-center space-y-0.5"
+                  className="p-3 rounded-xl bg-slate-800/80 border border-slate-700/80 text-center space-y-1"
                 >
-                  <div className="text-[11px] text-slate-500 font-medium">{item.scenario}</div>
+                  <div className="text-[11px] text-slate-400 font-medium truncate">{item.scenario}</div>
                   <div
-                    className={`text-sm font-bold ${
+                    className={`text-base sm:text-lg font-black font-mono ${
                       item.status === 'safe'
-                        ? 'text-emerald-600'
+                        ? 'text-emerald-400'
                         : item.status === 'warning'
-                        ? 'text-amber-600'
-                        : 'text-rose-600'
+                        ? 'text-amber-400'
+                        : 'text-rose-400'
                     }`}
                   >
                     {item.resultingPercent}%
@@ -369,16 +386,16 @@ export const AttendanceDefender: React.FC = () => {
               {result.attendanceImpacts.slice(1, 3).map((item, idx) => (
                 <div
                   key={`attend-${idx}`}
-                  className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-center space-y-0.5"
+                  className="p-3 rounded-xl bg-slate-800/80 border border-slate-700/80 text-center space-y-1"
                 >
-                  <div className="text-[11px] text-slate-500 font-medium">{item.scenario}</div>
+                  <div className="text-[11px] text-slate-400 font-medium truncate">{item.scenario}</div>
                   <div
-                    className={`text-sm font-bold ${
+                    className={`text-base sm:text-lg font-black font-mono ${
                       item.status === 'safe'
-                        ? 'text-sky-600'
+                        ? 'text-cyan-400'
                         : item.status === 'warning'
-                        ? 'text-amber-600'
-                        : 'text-rose-600'
+                        ? 'text-amber-400'
+                        : 'text-rose-400'
                     }`}
                   >
                     {item.resultingPercent}%
@@ -392,4 +409,5 @@ export const AttendanceDefender: React.FC = () => {
     </div>
   );
 };
+
 
