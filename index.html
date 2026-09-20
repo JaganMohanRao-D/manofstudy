@@ -1,8 +1,28 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('mos_theme') || localStorage.getItem('javisak_theme') || localStorage.getItem('studymacha_theme');
+          if (saved === 'light') {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.style.colorScheme = 'light';
+          } else {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.style.colorScheme = 'dark';
+          }
+        } catch (e) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
     <title>MAN OF STUDY — Your Complete Education & Study Companion for Pan-Indian Students</title>
     <meta name="title" content="MAN OF STUDY — Your Complete Education & Study Companion for Pan-Indian Students" />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
@@ -127,7 +147,7 @@
     <!-- Google Search Console Verification -->
     <meta name="google-site-verification" content="zvOQ8P_sQsBu5fB2BGItekEyHJJ7LMGYrlI4OLJDH5w" />
   </head>
-  <body class="bg-slate-950 text-slate-100 antialiased selection:bg-emerald-500/20 selection:text-emerald-300 overflow-x-hidden max-w-full">
+  <body class="bg-[#F5F7FB] dark:bg-[#060B16] text-[#172033] dark:text-[#F8FAFC] antialiased selection:bg-emerald-500/20 selection:text-emerald-600 dark:selection:text-emerald-300 overflow-x-hidden max-w-full min-h-screen transition-colors duration-150">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

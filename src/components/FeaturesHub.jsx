@@ -29,14 +29,14 @@ export const FLAGSHIP_FEATURES = [
     workspace: 'gap-analyzer',
     title: 'AI Student Gap Analyzer',
     badge: 'AI TOOL',
-    badgeStyle: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+    badgeStyle: 'bg-emerald-100 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-500/30',
     description: 'Understand where you are, identify your skill gaps, and see what to work on next.',
     actionText: 'Launch Gap Analysis',
     icon: Sparkles,
-    iconColor: 'text-emerald-400',
-    iconBg: 'bg-emerald-500/10 border-emerald-500/30',
-    borderColor: 'border-emerald-500/30 hover:border-emerald-500/60',
-    bgGradient: 'from-slate-900 via-slate-900 to-emerald-950/30',
+    iconColor: 'text-emerald-600 dark:text-emerald-400',
+    iconBg: 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-300 dark:border-emerald-500/30',
+    borderColor: 'border-emerald-200 dark:border-emerald-500/30 hover:border-emerald-400 dark:hover:border-emerald-500/60',
+    bgGradient: 'from-emerald-50/50 via-white to-white dark:from-slate-900 dark:via-slate-900 dark:to-emerald-950/30',
     highlights: [
       'Personalized skill diagnostics',
       'High-priority action items',
@@ -48,14 +48,14 @@ export const FLAGSHIP_FEATURES = [
     workspace: 'tg-predictor',
     title: 'TG EAPCET College Predictor',
     badge: 'ADMISSIONS',
-    badgeStyle: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+    badgeStyle: 'bg-cyan-100 dark:bg-cyan-500/15 text-cyan-800 dark:text-cyan-300 border-cyan-300 dark:border-cyan-500/30',
     description: 'Explore historical allotment data to find colleges matching your rank and preferences.',
     actionText: 'Predict College Chances',
     icon: Compass,
-    iconColor: 'text-cyan-400',
-    iconBg: 'bg-cyan-500/10 border-cyan-500/30',
-    borderColor: 'border-cyan-500/30 hover:border-cyan-500/60',
-    bgGradient: 'from-slate-900 via-slate-900 to-cyan-950/30',
+    iconColor: 'text-cyan-600 dark:text-cyan-400',
+    iconBg: 'bg-cyan-50 dark:bg-cyan-500/10 border-cyan-300 dark:border-cyan-500/30',
+    borderColor: 'border-cyan-200 dark:border-cyan-500/30 hover:border-cyan-400 dark:hover:border-cyan-500/60',
+    bgGradient: 'from-cyan-50/50 via-white to-white dark:from-slate-900 dark:via-slate-900 dark:to-cyan-950/30',
     highlights: [
       '151 Engineering colleges',
       '71,646 Allotment records',
@@ -260,25 +260,25 @@ export const FeaturesHub = ({
     <div className="space-y-6 sm:space-y-8">
       
       {/* 1. Section Header: Human-oriented, non-technical */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-800/80 pb-3">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200 dark:border-slate-800/80 pb-3">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-emerald-400" />
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
             <span>Student Tools &amp; Workspaces</span>
           </h2>
-          <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-0.5">
             Clear, outcome-focused tools built to solve practical college challenges.
           </p>
         </div>
-        <span className="text-xs font-mono text-slate-400 font-medium">
+        <span className="text-xs font-mono text-slate-500 dark:text-slate-400 font-medium">
           13 Student Tools
         </span>
       </div>
 
       {/* 2. Flagship Spotlight (AI Gap Analyzer & TG Predictor) */}
       <div className="space-y-3">
-        <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 uppercase tracking-wider px-1">
-          <span className="w-2 h-2 rounded-full bg-emerald-400" />
+        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-1">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400" />
           <span>Flagship Features</span>
         </div>
 
@@ -300,14 +300,14 @@ export const FeaturesHub = ({
                 }}
                 tabIndex={0}
                 role="button"
-                className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${flagship.bgGradient} border ${flagship.borderColor} p-5 sm:p-6 transition-all duration-200 cursor-pointer group shadow-lg hover:shadow-xl hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 ${
-                  isActive ? 'ring-2 ring-emerald-400 border-emerald-400' : ''
+                className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${flagship.bgGradient} border ${flagship.borderColor} p-5 sm:p-6 transition-all duration-200 cursor-pointer group shadow-sm dark:shadow-lg hover:shadow-md dark:hover:shadow-xl hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 ${
+                  isActive ? 'ring-2 ring-emerald-500 border-emerald-500' : ''
                 }`}
               >
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div className="flex items-center gap-3">
                     <div
-                      className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 shadow-sm ${flagship.iconBg}`}
+                      className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs ${flagship.iconBg}`}
                     >
                       <Icon className={`w-5 h-5 ${flagship.iconColor}`} />
                     </div>
@@ -317,7 +317,7 @@ export const FeaturesHub = ({
                           {flagship.badge}
                         </span>
                       </div>
-                      <h3 className="text-base sm:text-lg font-bold text-white mt-1 group-hover:text-emerald-300 transition-colors">
+                      <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors">
                         {flagship.title}
                       </h3>
                     </div>
@@ -325,27 +325,27 @@ export const FeaturesHub = ({
                 </div>
 
                 {/* Outcome-oriented description */}
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
                   {flagship.description}
                 </p>
 
                 {/* Highlights list */}
-                <div className="space-y-1.5 mb-5 text-xs text-slate-400">
+                <div className="space-y-1.5 mb-5 text-xs text-slate-600 dark:text-slate-400">
                   {flagship.highlights.map((h, i) => (
                     <div key={i} className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400 shrink-0" />
                       <span>{h}</span>
                     </div>
                   ))}
                 </div>
 
                 {/* Primary Action Button */}
-                <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
-                  <span className="text-xs font-bold text-emerald-400 group-hover:text-emerald-300 flex items-center gap-1.5 transition-colors">
+                <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between">
+                  <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300 flex items-center gap-1.5 transition-colors">
                     <span>{flagship.actionText}</span>
                     <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
                   </span>
-                  <span className="text-[11px] text-slate-400">
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400">
                     No login required
                   </span>
                 </div>
@@ -358,7 +358,7 @@ export const FeaturesHub = ({
       {/* 3. Category Filter Tabs */}
       <div className="space-y-3 pt-2">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-1">
+          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-1">
             Browse by Category
           </span>
         </div>
@@ -373,8 +373,8 @@ export const FeaturesHub = ({
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   isSelected
-                    ? 'bg-slate-800 text-white border border-slate-700 shadow-xs'
-                    : 'bg-slate-900/60 text-slate-400 hover:text-slate-200 hover:bg-slate-900 border border-slate-800/60'
+                    ? 'bg-slate-900 dark:bg-slate-800 text-white border border-slate-800 dark:border-slate-700 shadow-xs'
+                    : 'bg-white dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900 border border-slate-200 dark:border-slate-800/60'
                 }`}
               >
                 {cat.label}
@@ -403,13 +403,13 @@ export const FeaturesHub = ({
               }}
               tabIndex={0}
               role="button"
-              className={`flex items-start sm:items-center gap-3.5 p-3.5 rounded-xl bg-slate-900/75 border border-slate-800 hover:border-slate-700 hover:bg-slate-900 transition-all cursor-pointer group shadow-xs active:scale-[0.99] select-none focus:outline-none focus:ring-1 focus:ring-slate-700 ${
-                isActive ? 'ring-1 ring-emerald-500 border-emerald-500/80 bg-slate-900' : ''
+              className={`flex items-start sm:items-center gap-3.5 p-3.5 rounded-xl bg-white dark:bg-slate-900/75 border border-slate-200/90 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900 transition-all cursor-pointer group shadow-2xs dark:shadow-xs active:scale-[0.99] select-none focus:outline-none focus:ring-1 focus:ring-slate-400 dark:focus:ring-slate-700 ${
+                isActive ? 'ring-1 ring-emerald-500 border-emerald-500/80 bg-slate-50 dark:bg-slate-900' : ''
               }`}
             >
               {/* Left: Purposeful Icon (36px x 36px) */}
               <div
-                className={`w-9 h-9 min-w-9 min-h-9 rounded-lg border flex items-center justify-center shrink-0 mt-0.5 sm:mt-0 transition-transform group-hover:scale-105 shadow-xs ${item.iconBg}`}
+                className={`w-9 h-9 min-w-9 min-h-9 rounded-lg border flex items-center justify-center shrink-0 mt-0.5 sm:mt-0 transition-transform group-hover:scale-105 shadow-2xs ${item.iconBg}`}
               >
                 <Icon className="w-4 h-4" />
               </div>
@@ -417,20 +417,20 @@ export const FeaturesHub = ({
               {/* Center: Title & Outcome-oriented description */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-2">
-                  <h3 className="text-sm font-semibold text-slate-100 group-hover:text-emerald-300 transition-colors truncate">
+                  <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors truncate">
                     {item.title}
                   </h3>
-                  <span className="hidden sm:inline-block px-1.5 py-0.2 text-[9px] font-bold uppercase tracking-wider rounded bg-slate-800 text-slate-400 border border-slate-700/80 shrink-0">
+                  <span className="hidden sm:inline-block px-1.5 py-0.2 text-[9px] font-bold uppercase tracking-wider rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/80 shrink-0">
                     {item.badge}
                   </span>
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed line-clamp-2 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 mt-0.5">
                   {item.description}
                 </p>
               </div>
 
               {/* Right: Subtle navigation indicator */}
-              <div className="shrink-0 text-slate-500 group-hover:text-emerald-400 transition-colors">
+              <div className="shrink-0 text-slate-400 dark:text-slate-500 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
               </div>
             </div>
