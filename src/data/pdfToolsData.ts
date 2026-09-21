@@ -31,10 +31,11 @@ export const ALL_PDF_TOOLS: PdfToolDefinition[] = [
   {
     id: 'powerpoint-to-pdf',
     name: 'PowerPoint to PDF',
-    tagline: 'Convert presentation notes to landscape PDF',
+    tagline: 'Convert PowerPoint slides into a 16:9 PDF',
     category: 'convert',
-    acceptedFileTypes: '.txt,.ppt,.pptx',
-    description: 'Turn presentation text and slide notes into 16:9 landscape presentation PDF documents.',
+    badge: 'PPTX',
+    acceptedFileTypes: '.pptx,application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    description: 'Convert modern .pptx presentations to PDF locally in your browser, preserving slide text, positions, backgrounds, and embedded raster images where supported.',
   },
   {
     id: 'pdf-to-excel',

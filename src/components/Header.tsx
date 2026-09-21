@@ -4,6 +4,7 @@ import {
   Compass,
   GraduationCap,
   FileText,
+  Image as ImageIcon,
   Code2,
   Sparkles,
   Search,
@@ -46,6 +47,7 @@ interface NavModuleItem {
   badge?: string;
   badgeColor?: string;
   matchWorkspaces?: WorkspaceView[];
+  tabFallback?: ToolTab;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -151,6 +153,26 @@ export const Header: React.FC<HeaderProps> = ({
       badge: 'NEW',
       badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
     },
+    {
+      id: 'tier2-pdf-tools',
+      workspace: 'utilities',
+      label: 'PDF Tools',
+      shortLabel: 'PDF Tools',
+      tabFallback: 'pdf-tools',
+      icon: FileText,
+      badge: '30+',
+      badgeColor: 'bg-sky-500/20 text-sky-300 border-sky-500/30',
+    },
+    {
+      id: 'tier2-image-tools',
+      workspace: 'utilities',
+      label: 'Image Compressor',
+      shortLabel: 'Image Tools',
+      tabFallback: 'resizer',
+      icon: ImageIcon,
+      badge: '20KB',
+      badgeColor: 'bg-violet-500/20 text-violet-300 border-violet-500/30',
+    },
   ];
 
   const isModuleActive = (item: NavModuleItem) => {
@@ -197,13 +219,24 @@ export const Header: React.FC<HeaderProps> = ({
               loading="eager"
             />
           </div>
-          <div className="flex flex-col min-w-0">
-            <span className="text-sm sm:text-base md:text-lg font-black tracking-tight text-slate-900 dark:text-white uppercase font-mono drop-shadow-xs group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors whitespace-nowrap">
-              MAN OF STUDY
-            </span>
-            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium tracking-wide hidden sm:block truncate">
-              Engineering &amp; Academic Launchpad
-            </span>
+          <div className="flex flex-col min-w-0 leading-none">
+            <div className="flex items-baseline gap-1.5 sm:gap-2 whitespace-nowrap">
+              <span className="text-[10px] sm:text-[11px] font-extrabold tracking-[0.24em] text-slate-500 dark:text-slate-400 uppercase transition-colors">
+                MAN
+              </span>
+              <span className="text-[8px] sm:text-[9px] font-bold tracking-[0.16em] text-slate-400 dark:text-slate-500 uppercase">
+                OF
+              </span>
+              <span className="text-[17px] sm:text-[18px] md:text-[19px] font-black tracking-[-0.035em] uppercase bg-gradient-to-r from-slate-950 via-blue-600 to-emerald-500 dark:from-white dark:via-sky-300 dark:to-emerald-300 bg-clip-text text-transparent transition-all duration-200 group-hover:tracking-[-0.02em]">
+                STUDY
+              </span>
+            </div>
+            <div className="mt-1.5 hidden sm:flex items-center gap-1.5">
+              <span className="h-px w-4 bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full shrink-0" />
+              <span className="text-[9px] md:text-[10px] font-medium tracking-[0.055em] text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                Engineering &amp; Academic Launchpad
+              </span>
+            </div>
           </div>
         </a>
 
@@ -309,7 +342,7 @@ export const Header: React.FC<HeaderProps> = ({
                 key={item.id}
                 type="button"
                 id={item.id}
-                onClick={() => handleNavClick(item.workspace)}
+                onClick={() => handleNavClick(item.workspace, item.tabFallback)}
                 className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 cursor-pointer whitespace-nowrap select-none ${
                   active
                     ? 'bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-500/30 shadow-2xs font-bold'
