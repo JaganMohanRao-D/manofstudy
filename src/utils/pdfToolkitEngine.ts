@@ -680,62 +680,7 @@ export async function wordTextToPdf(
   };
 }
 
-// ============================================================================
-// 8. POWERPOINT TO PDF
-// ============================================================================
-export async function powerpointToPdf(
-  file: File,
-  onProgress?: (progress: number, msg: string) => void
-): Promise<{ blob: Blob; filename: string }> {
-  onProgress?.(20, 'Parsing presentation structure...');
-  const text = await file.text();
-  const slides = text.split(/---|\n\n\n/).filter((s) => s.trim().length > 0);
-
-  onProgress?.(60, 'Rendering 16:9 presentation slides...');
-  const doc = new jsPDF({
-    orientation: 'landscape',
-    unit: 'pt',
-    format: [960, 540],
-  });
-
-  const slideList = slides.length > 0 ? slides : [text || 'Presentation Slide'];
-
-  slideList.forEach((slideText, idx) => {
-    if (idx > 0) doc.addPage([960, 540], 'landscape');
-
-    // Background gradient effect
-    doc.setFillColor(241, 245, 249);
-    doc.rect(0, 0, 960, 540, 'F');
-
-    // Header bar
-    doc.setFillColor(30, 58, 138);
-    doc.rect(0, 0, 960, 60, 'F');
-
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(18);
-    doc.text(`Slide ${idx + 1}: ${file.name.replace(/\.[^/.]+$/, '')}`, 40, 38);
-
-    // Slide Body Card
-    doc.setFillColor(255, 255, 255);
-    doc.roundedRect(40, 85, 880, 420, 10, 10, 'F');
-    doc.setDrawColor(226, 232, 240);
-    doc.roundedRect(40, 85, 880, 420, 10, 10, 'S');
-
-    doc.setTextColor(30, 41, 59);
-    doc.setFontSize(14);
-
-    const lines = doc.splitTextToSize(slideText.trim(), 820);
-    doc.text(lines.slice(0, 20), 70, 130);
-  });
-
-  const blob = doc.output('blob');
-  return {
-    blob,
-    filename: `${file.name.replace(/\.[^/.]+$/, '')}_Presentation.pdf`,
-  };
-}
-
-// ============================================================================
+// ============================================================================\n// 8. POWERPOINT TO PDF (.PPTX)\n// ============================================================================\n\nfunction xmlTextContent(node: Element): string {\n  return Array.from(node.getElementsByTagNameNS('*', 't')).map((t) => t.textContent || '').join('');\n}\n\nfunction parsePptxRelationships(xml: string): Record<string, string> {\n  const parsed = new DOMParser().parseFromString(xml, 'application/xml');\n  const map: Record<string, string> = {};\n  Array.from(parsed.getElementsByTagNameNS('*', 'Relationship')).forEach((rel) => {\n    const id = rel.getAttribute('Id');\n    const target = rel.getAttribute('Target');\n    if (id && target) map[id] = target.replace(/^\.\//, '');\n  });\n  return map;\n}\n\nfunction resolvePptxTarget(slidePath: string, target: string): string {\n  const slideDir = slidePath.substring(0, slidePath.lastIndexOf('/') + 1);\n  const parts = (slideDir + target).split('/');\n  const out: string[] = [];\n  for (const part of parts) {\n    if (!part || part === '.') continue;\n    if (part === '..') out.pop(); else out.push(part);\n  }\n  return out.join('/');\n}\n\nfunction parseEmu(value: string | null, fallback: number): number {\n  const n = Number(value);\n  return Number.isFinite(n) ? n : fallback;\n}\n\nasync function pptxBlobToDataUrl(blob: Blob): Promise<string> {\n  return await new Promise((resolve, reject) => {\n    const reader = new FileReader();\n    reader.onload = () => resolve(String(reader.result));\n    reader.onerror = reject;\n    reader.readAsDataURL(blob);\n  });\n}\n\n/** Browser-local Open XML .pptx to PDF converter. Legacy binary .ppt is intentionally unsupported. */\nexport async function powerpointToPdf(\n  file: File,\n  onProgress?: (progress: number, msg: string) => void\n): Promise<{ blob: Blob; filename: string }> {\n  if (!file.name.toLowerCase().endsWith('.pptx')) {\n    throw new Error('Please upload a modern PowerPoint .pptx file. Legacy .ppt files are not supported by the browser-only converter.');\n  }\n\n  onProgress?.(10, 'Opening PowerPoint package locally...');\n  const buffer = await file.arrayBuffer();\n  const zip = await JSZip.loadAsync(buffer);\n  const presentationXml = await zip.file('ppt/presentation.xml')?.async('string');\n  if (!presentationXml) throw new Error('Invalid PowerPoint file: presentation.xml is missing.');\n\n  const presDoc = new DOMParser().parseFromString(presentationXml, 'application/xml');\n  const slideIds = Array.from(presDoc.getElementsByTagNameNS('*', 'sldId'));\n  const presRelsXml = await zip.file('ppt/_rels/presentation.xml.rels')?.async('string');\n  if (!presRelsXml) throw new Error('Invalid PowerPoint file: presentation relationships are missing.');\n  const presRels = parsePptxRelationships(presRelsXml);\n  const slidePaths = slideIds.map((id) => {\n    const relId = id.getAttribute('r:id') || id.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'id');\n    const target = relId ? presRels[relId] : '';\n    return target ? resolvePptxTarget('ppt/presentation.xml', target) : '';\n  }).filter(Boolean);\n  if (slidePaths.length === 0) throw new Error('No slides were found in this PowerPoint file.');\n\n  const slideWidth = 960;\n  const slideHeight = 540;\n  const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: [slideWidth, slideHeight], compress: true });\n\n  for (let index = 0; index < slidePaths.length; index++) {\n    const slidePath = slidePaths[index];\n    onProgress?.(Math.round(15 + (index / slidePaths.length) * 75), 'Rendering slide ' + (index + 1) + ' of ' + slidePaths.length + '...');\n    if (index > 0) doc.addPage([slideWidth, slideHeight], 'landscape');\n\n    const slideXml = await zip.file(slidePath)?.async('string');\n    if (!slideXml) continue;\n    const slideDoc = new DOMParser().parseFromString(slideXml, 'application/xml');\n    const relPath = slidePath.substring(0, slidePath.lastIndexOf('/')) + '/_rels/' + slidePath.substring(slidePath.lastIndexOf('/') + 1) + '.rels';\n    const relXml = await zip.file(relPath)?.async('string');\n    const slideRels = relXml ? parsePptxRelationships(relXml) : {};\n\n    doc.setFillColor(248, 250, 252);\n    doc.rect(0, 0, slideWidth, slideHeight, 'F');\n\n    const bg = slideDoc.getElementsByTagNameNS('*', 'bg')[0];\n    const srgb = bg?.getElementsByTagNameNS('*', 'srgbClr')[0]?.getAttribute('val');\n    if (srgb && /^[0-9a-fA-F]{6}$/.test(srgb)) {\n      doc.setFillColor(parseInt(srgb.slice(0, 2), 16), parseInt(srgb.slice(2, 4), 16), parseInt(srgb.slice(4, 6), 16));\n      doc.rect(0, 0, slideWidth, slideHeight, 'F');\n    }\n\n    const shapeTree = slideDoc.getElementsByTagNameNS('*', 'spTree')[0];\n    const shapes = shapeTree ? Array.from(shapeTree.children) : [];\n    for (const shape of shapes) {\n      const xfrm = shape.getElementsByTagNameNS('*', 'xfrm')[0];\n      if (!xfrm) continue;\n      const off = xfrm.getElementsByTagNameNS('*', 'off')[0];\n      const ext = xfrm.getElementsByTagNameNS('*', 'ext')[0];\n      const x = parseEmu(off?.getAttribute('x') ?? null, 0) / 12700;\n      const y = parseEmu(off?.getAttribute('y') ?? null, 0) / 12700;\n      const w = Math.max(1, parseEmu(ext?.getAttribute('cx') ?? null, 1) / 12700);\n      const h = Math.max(1, parseEmu(ext?.getAttribute('cy') ?? null, 1) / 12700);\n      const tag = shape.localName;\n\n      if (tag === 'pic') {\n        const blip = shape.getElementsByTagNameNS('*', 'blip')[0];\n        const relId = blip?.getAttribute('r:embed') || blip?.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'embed');\n        const target = relId ? slideRels[relId] : '';\n        const mediaPath = target ? resolvePptxTarget(slidePath, target) : '';\n        const media = mediaPath ? zip.file(mediaPath) : null;\n        if (media) {\n          try {\n            const imageBlob = await media.async('blob');\n            const dataUrl = await pptxBlobToDataUrl(imageBlob);\n            const format = (imageBlob.type || '').includes('png') || mediaPath.toLowerCase().endsWith('.png') ? 'PNG' : 'JPEG';\n            doc.addImage(dataUrl, format, x, y, w, h, undefined, 'FAST');\n          } catch (imageError) {\n            console.warn('Could not render PowerPoint image:', imageError);\n          }\n        }\n        continue;\n      }\n\n      if (tag !== 'sp') continue;\n      const textBodies = Array.from(shape.getElementsByTagNameNS('*', 'txBody'));\n      if (textBodies.length === 0) continue;\n      const text = textBodies.map(xmlTextContent).join(' ').replace(/\s+/g, ' ').trim();\n      if (!text) continue;\n\n      const runs = Array.from(shape.getElementsByTagNameNS('*', 'r'));\n      const firstRun = runs[0];\n      const runProps = firstRun?.getElementsByTagNameNS('*', 'rPr')[0];\n      const fontSize = Math.max(8, Math.min(42, (Number(runProps?.getAttribute('sz')) || 1800) / 100));\n      const isBold = runProps?.getAttribute('b') === '1';\n      const colorNode = runProps?.getElementsByTagNameNS('*', 'srgbClr')[0]?.getAttribute('val');\n      if (colorNode && /^[0-9a-fA-F]{6}$/.test(colorNode)) doc.setTextColor(parseInt(colorNode.slice(0, 2), 16), parseInt(colorNode.slice(2, 4), 16), parseInt(colorNode.slice(4, 6), 16));\n      else doc.setTextColor(30, 41, 59);\n      doc.setFont('helvetica', isBold ? 'bold' : 'normal');\n      doc.setFontSize(fontSize);\n      const lines = doc.splitTextToSize(text, Math.max(30, w - 8));\n      doc.text(lines, x + 4, y + Math.min(fontSize, h - 4), { maxWidth: Math.max(30, w - 8), lineHeightFactor: 1.2 });\n    }\n\n    doc.setFont('helvetica', 'normal');\n    doc.setFontSize(8);\n    doc.setTextColor(100, 116, 139);\n    doc.text('MAN OF STUDY • ' + (index + 1) + '/' + slidePaths.length, slideWidth - 120, slideHeight - 14);\n  }\n\n  onProgress?.(100, 'Converted ' + slidePaths.length + ' PowerPoint slides to PDF.');\n  return { blob: doc.output('blob'), filename: file.name.replace(/\.pptx$/i, '') + '.pdf' };\n}\n// ============================================================================
 // 9. EXCEL / CSV TO PDF
 // ============================================================================
 export async function excelToPdf(
