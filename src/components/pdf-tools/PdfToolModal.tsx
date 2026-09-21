@@ -154,6 +154,14 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
   const [metaSubject, setMetaSubject] = useState<string>('');
   const [metaKeywords, setMetaKeywords] = useState<string>('');
 
+  // PowerPoint to PDF options
+  const [pptxAspectRatio, setPptxAspectRatio] = useState<'auto' | '16:9' | '4:3' | 'a4'>('auto');
+  const [pptxPageRange, setPptxPageRange] = useState<string>('all');
+  const [pptxPreserveBg, setPptxPreserveBg] = useState<boolean>(true);
+  const [pptxPreserveImg, setPptxPreserveImg] = useState<boolean>(true);
+  const [pptxPreserveTbl, setPptxPreserveTbl] = useState<boolean>(true);
+  const [pptxSlideNums, setPptxSlideNums] = useState<boolean>(true);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const fileBInputRef = useRef<HTMLInputElement>(null);
 
@@ -455,14 +463,25 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
         }
 
         case 'powerpoint-to-pdf': {
-          const res = await powerpointToPdf(mainFile, (pct, msg) => {
-            setProgress((prev) => ({ ...prev, progressPercent: pct, statusMessage: msg }));
-          });
+          const res = await powerpointToPdf(
+            mainFile,
+            {
+              aspectRatio: pptxAspectRatio,
+              pageRange: pptxPageRange.trim() || undefined,
+              preserveBackgrounds: pptxPreserveBg,
+              preserveImages: pptxPreserveImg,
+              preserveTables: pptxPreserveTbl,
+              includeSlideNumbers: pptxSlideNums,
+            },
+            (pct, msg) => {
+              setProgress((prev) => ({ ...prev, progressPercent: pct, statusMessage: msg }));
+            }
+          );
           const downloadUrl = URL.createObjectURL(res.blob);
           setProgress({
             isProcessing: false,
             progressPercent: 100,
-            statusMessage: 'Converted presentation notes to landscape PDF!',
+            statusMessage: `Converted ${res.pageCount} presentation slides to PDF!`,
             downloadUrl,
             downloadFilename: res.filename,
           });
@@ -1204,6 +1223,93 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
                 <span>Maximum Shrink</span>
                 <span>Balanced</span>
                 <span>Best Clarity</span>
+              </div>
+            </div>
+          )}
+
+          {/* PowerPoint to PDF Controls */}
+          {tool.id === 'powerpoint-to-pdf' && (
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3.5 text-xs">
+              <div className="space-y-1.5">
+                <span className="font-semibold text-slate-800 block">Slide Aspect Ratio</span>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {[
+                    { id: 'auto', label: 'Preserve Native', desc: 'Exact Dimensions' },
+                    { id: '16:9', label: '16:9 HD', desc: 'Standard Widescreen' },
+                    { id: '4:3', label: '4:3 Standard', desc: 'Traditional Slide' },
+                    { id: 'a4', label: 'A4 Landscape', desc: 'Handout / Print' },
+                  ].map((opt) => (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onClick={() => setPptxAspectRatio(opt.id as any)}
+                      className={`p-2 rounded-lg border text-left transition-colors cursor-pointer ${
+                        pptxAspectRatio === opt.id
+                          ? 'border-pink-500 bg-pink-50 text-pink-900 font-bold'
+                          : 'border-slate-200 hover:border-slate-300 bg-white text-slate-700'
+                      }`}
+                    >
+                      <div className="text-[11px] font-bold">{opt.label}</div>
+                      <div className="text-[9px] text-slate-500 truncate">{opt.desc}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-semibold text-slate-800 block">Slide Range</label>
+                <input
+                  type="text"
+                  value={pptxPageRange}
+                  onChange={(e) => setPptxPageRange(e.target.value)}
+                  placeholder="all or e.g. 1-4, 6"
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-slate-900 font-mono text-xs focus:outline-pink-500"
+                />
+                <p className="text-[10px] text-slate-500">
+                  Type <code className="text-pink-600 font-mono">all</code> to convert all slides in author sequence, or specify custom slide numbers.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-slate-200">
+                <label className="flex items-center gap-1.5 cursor-pointer text-slate-700 text-[11px]">
+                  <input
+                    type="checkbox"
+                    checked={pptxPreserveBg}
+                    onChange={(e) => setPptxPreserveBg(e.target.checked)}
+                    className="rounded border-slate-300 text-pink-600 focus:ring-pink-500"
+                  />
+                  <span>Preserve Themes &amp; Backgrounds</span>
+                </label>
+
+                <label className="flex items-center gap-1.5 cursor-pointer text-slate-700 text-[11px]">
+                  <input
+                    type="checkbox"
+                    checked={pptxPreserveImg}
+                    onChange={(e) => setPptxPreserveImg(e.target.checked)}
+                    className="rounded border-slate-300 text-pink-600 focus:ring-pink-500"
+                  />
+                  <span>Preserve Embedded Images</span>
+                </label>
+
+                <label className="flex items-center gap-1.5 cursor-pointer text-slate-700 text-[11px]">
+                  <input
+                    type="checkbox"
+                    checked={pptxPreserveTbl}
+                    onChange={(e) => setPptxPreserveTbl(e.target.checked)}
+                    className="rounded border-slate-300 text-pink-600 focus:ring-pink-500"
+                  />
+                  <span>Preserve Table Structures</span>
+                </label>
+
+                <label className="flex items-center gap-1.5 cursor-pointer text-slate-700 text-[11px]">
+                  <input
+                    type="checkbox"
+                    checked={pptxSlideNums}
+                    onChange={(e) => setPptxSlideNums(e.target.checked)}
+                    className="rounded border-slate-300 text-pink-600 focus:ring-pink-500"
+                  />
+                  <span>Footer Slide Numbers</span>
+                </label>
               </div>
             </div>
           )}

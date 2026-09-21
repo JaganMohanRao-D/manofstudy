@@ -31,15 +31,16 @@ import {
 import { ALL_PDF_TOOLS } from '../data/pdfToolsData';
 import { PdfToolDefinition, PdfToolCategory } from '../types';
 import { PdfToolModal } from './pdf-tools/PdfToolModal';
+import { PowerPointToPdfStudio } from './pdf-tools/PowerPointToPdfStudio';
 import { PdfToolsForFree } from './PdfToolsForFree';
 
-export { PdfToolsForFree };
+export { PdfToolsForFree, PowerPointToPdfStudio };
 
 export const PdfPowerTools: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<PdfToolCategory>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeModalTool, setActiveModalTool] = useState<PdfToolDefinition | null>(null);
-  const [viewMode, setViewMode] = useState<'hub' | 'classic'>('hub');
+  const [viewMode, setViewMode] = useState<'hub' | 'classic' | 'pptx-studio'>('hub');
 
   // Map icons dynamically
   const getToolIcon = (toolId: string) => {
@@ -153,6 +154,12 @@ export const PdfPowerTools: React.FC = () => {
     );
   }
 
+  if (viewMode === 'pptx-studio') {
+    return (
+      <PowerPointToPdfStudio onBackToHub={() => setViewMode('hub')} />
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header Banner */}
@@ -181,7 +188,16 @@ export const PdfPowerTools: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-3 shrink-0 flex-wrap sm:flex-nowrap">
+            <button
+              type="button"
+              onClick={() => setViewMode('pptx-studio')}
+              className="px-3.5 py-2 text-xs font-semibold text-pink-700 bg-pink-50 hover:bg-pink-100 border border-pink-200 rounded-xl transition-colors cursor-pointer flex items-center gap-1.5"
+              title="Open PowerPoint to PDF Studio"
+            >
+              <Layers className="w-3.5 h-3.5 text-pink-600" />
+              <span>PPTX to PDF Studio</span>
+            </button>
             <button
               type="button"
               onClick={() => setViewMode('classic')}
@@ -204,6 +220,7 @@ export const PdfPowerTools: React.FC = () => {
             Exam Essentials:
           </span>
           {[
+            { id: 'powerpoint-to-pdf', label: 'PowerPoint (.pptx) to PDF (16:9 / 4:3)' },
             { id: 'extract-pages', label: 'Extract Admit Card / Marksheet' },
             { id: 'compress-pdf', label: 'Compress < 200 KB / 100 KB' },
             { id: 'merge-pdf', label: 'Merge Certificates' },
@@ -215,7 +232,13 @@ export const PdfPowerTools: React.FC = () => {
               <button
                 key={examTool.id}
                 type="button"
-                onClick={() => toolDef && setActiveModalTool(toolDef)}
+                onClick={() => {
+                  if (examTool.id === 'powerpoint-to-pdf') {
+                    setViewMode('pptx-studio');
+                  } else if (toolDef) {
+                    setActiveModalTool(toolDef);
+                  }
+                }}
                 className="px-2.5 py-1 rounded-lg text-xs font-medium bg-pink-50/70 hover:bg-pink-100/80 text-pink-800 border border-pink-200/70 transition-colors cursor-pointer flex items-center gap-1"
               >
                 <span>{examTool.label}</span>
@@ -295,7 +318,13 @@ export const PdfPowerTools: React.FC = () => {
               <button
                 key={tool.id}
                 type="button"
-                onClick={() => setActiveModalTool(tool)}
+                onClick={() => {
+                  if (tool.id === 'powerpoint-to-pdf') {
+                    setViewMode('pptx-studio');
+                  } else {
+                    setActiveModalTool(tool);
+                  }
+                }}
                 className="group p-4 bg-white hover:bg-pink-50/20 border border-slate-200 hover:border-pink-300 rounded-2xl text-left transition-all duration-150 shadow-xs hover:shadow-sm flex flex-col justify-between gap-3 cursor-pointer"
               >
                 <div className="space-y-2.5">

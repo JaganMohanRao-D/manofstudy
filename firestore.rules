@@ -1,0 +1,70 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Test collection for connection validation
+    match /test/{docId} {
+      allow read, write: if true;
+    }
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(authorUid) {
+      return isAuthenticated() && request.auth.uid == authorUid;
+    }
+
+    function isNotSpoofingAdmin() {
+      return !('isAdmin' in request.resource.data && request.resource.data.isAdmin == true)
+        && request.resource.data.authorName != 'Man of Study Admin';
+    }
+
+    // Campus Posts (Doubts & Dispatches)
+    match /campus_posts/{postId} {
+      // Browsing is public for all students
+      allow read: if true;
+
+      // Creation requires REAL Firebase Authentication
+      allow create: if isAuthenticated()
+        && request.resource.data.authorUid == request.auth.uid
+        && isNotSpoofingAdmin();
+
+      // Updates: Upvotes allowed for anyone/peers; Content edit restricted strictly to author
+      allow update: if (
+          // Upvoting (only upvotes counter changes)
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['upvotes'])
+        ) || (
+          // Author modifying own post
+          isOwner(resource.data.authorUid)
+          && request.resource.data.authorUid == resource.data.authorUid
+          && isNotSpoofingAdmin()
+        );
+
+      // Deletions strictly restricted to author
+      allow delete: if isOwner(resource.data.authorUid);
+
+      // Nested Replies & Solutions
+      match /replies/{replyId} {
+        allow read: if true;
+
+        // Solution posting requires REAL Firebase Authentication
+        allow create: if isAuthenticated()
+          && request.resource.data.authorUid == request.auth.uid
+          && isNotSpoofingAdmin();
+
+        // Solution updates: upvoting, or author edit
+        allow update: if (
+            request.resource.data.diff(resource.data).affectedKeys().hasOnly(['upvotes'])
+          ) || (
+            isOwner(resource.data.authorUid)
+            && request.resource.data.authorUid == resource.data.authorUid
+            && isNotSpoofingAdmin()
+          );
+
+        allow delete: if isOwner(resource.data.authorUid);
+      }
+    }
+  }
+}

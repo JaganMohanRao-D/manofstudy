@@ -1,0 +1,139 @@
+{
+  "entities": {
+    "CampusPost": {
+      "title": "CampusPost",
+      "description": "Student doubt or campus dispatch in MOS CampusConnect",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the post"
+        },
+        "authorUid": {
+          "type": "string",
+          "description": "Authenticated Firebase UID of the author"
+        },
+        "authorName": {
+          "type": "string",
+          "description": "Public author display name (Anonymous Student or Real Name)"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Authenticated Google display name"
+        },
+        "isAnonymous": {
+          "type": "boolean",
+          "description": "Whether the post author opted for public anonymity"
+        },
+        "title": {
+          "type": "string",
+          "description": "Title or summary of the doubt/dispatch"
+        },
+        "content": {
+          "type": "string",
+          "description": "Detailed text of the doubt or query"
+        },
+        "college": {
+          "type": "string",
+          "description": "College name of the author"
+        },
+        "branch": {
+          "type": "string",
+          "description": "Academic branch/major"
+        },
+        "type": {
+          "type": "string",
+          "description": "Category of post: doubt or dispatch",
+          "enum": ["doubt", "dispatch"]
+        },
+        "urgency": {
+          "type": "string",
+          "description": "Urgency level e.g. Casual, Mid Exams Near, Sem Exams Near"
+        },
+        "codeSnippet": {
+          "type": "string",
+          "description": "Optional code or math snippet"
+        },
+        "upvotes": {
+          "type": "number",
+          "description": "Total upvotes count"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp of creation"
+        }
+      },
+      "required": ["id", "authorUid", "authorName", "isAnonymous", "title", "content", "createdAt"]
+    },
+    "CampusReply": {
+      "title": "CampusReply",
+      "description": "Peer answer or solution to a CampusConnect doubt",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the reply"
+        },
+        "postId": {
+          "type": "string",
+          "description": "ID of parent doubt post"
+        },
+        "authorUid": {
+          "type": "string",
+          "description": "Authenticated Firebase UID of the peer"
+        },
+        "authorName": {
+          "type": "string",
+          "description": "Public author display name (Anonymous Student, Real Name, or Admin)"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Authenticated Google display name"
+        },
+        "isAnonymous": {
+          "type": "boolean",
+          "description": "Whether the solution author opted for public anonymity"
+        },
+        "content": {
+          "type": "string",
+          "description": "Explanation, answer or solution text"
+        },
+        "college": {
+          "type": "string",
+          "description": "College of the student"
+        },
+        "role": {
+          "type": "string",
+          "description": "Year or student status description"
+        },
+        "upvotes": {
+          "type": "number",
+          "description": "Upvotes on this solution"
+        },
+        "isVerifiedSolution": {
+          "type": "boolean",
+          "description": "Flag for verified solutions"
+        },
+        "isAdmin": {
+          "type": "boolean",
+          "description": "Flag for official admin announcement"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp of creation"
+        }
+      },
+      "required": ["id", "authorUid", "authorName", "isAnonymous", "content", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/campus_posts/{postId}": {
+      "schema": "CampusPost",
+      "description": "Collection of student doubt dispatches and questions"
+    },
+    "/campus_posts/{postId}/replies/{replyId}": {
+      "schema": "CampusReply",
+      "description": "Collection of peer solutions and comments"
+    }
+  }
+}

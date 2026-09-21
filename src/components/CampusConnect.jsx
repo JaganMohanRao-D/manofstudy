@@ -35,9 +35,21 @@ import {
   Heart,
   Mail,
   Image as ImageIcon,
+  LogOut,
+  LogIn,
+  UserCheck,
 } from 'lucide-react';
 
 import { initialCommunityPosts } from '../data/communityPosts';
+import { useAuth } from '../context/AuthContext';
+import {
+  auth,
+  db,
+  saveCampusPostToFirestore,
+  saveCampusReplyToFirestore,
+  upvotePostInFirestore,
+} from '../services/firebase';
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 export { initialCommunityPosts };
 
 const STORAGE_KEY = 'mos_forum_seed_v2';
@@ -108,6 +120,9 @@ export const CampusConnect = ({ onNavigateToTool }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBranchFilter, setSelectedBranchFilter] = useState('All');
 
+  // Auth Context for Verified Google Login
+  const { user, openAuthModal, signOut, pendingAction, clearPendingAction } = useAuth();
+
   // Modals & Bottom Sheets
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [createMode, setCreateMode] = useState('dispatch');
@@ -118,14 +133,14 @@ export const CampusConnect = ({ onNavigateToTool }) => {
   const [replyAuthorCollege, setReplyAuthorCollege] = useState('Telangana / AP College');
   const [shareSuccessId, setShareSuccessId] = useState(null);
 
-  // Form Fields for Create Modal
+  // Form Fields for Create Modal - Default to showing verified Google name publicly
   const [formTitle, setFormTitle] = useState('');
   const [formContent, setFormContent] = useState('');
   const [formBranch, setFormBranch] = useState('Computer Science (CSE)');
   const [formCollege, setFormCollege] = useState('');
   const [formAuthorName, setFormAuthorName] = useState('');
   const [formAuthorYear, setFormAuthorYear] = useState('3rd Year B.Tech');
-  const [formIsAnonymous, setFormIsAnonymous] = useState(true);
+  const [formIsAnonymous, setFormIsAnonymous] = useState(false);
   const [formUrgency, setFormUrgency] = useState('Casual');
   const [formCodeSnippet, setFormCodeSnippet] = useState('');
   const [formAuthorEmail, setFormAuthorEmail] = useState('');
@@ -134,6 +149,80 @@ export const CampusConnect = ({ onNavigateToTool }) => {
   const [formError, setFormError] = useState(null);
 
   const fileInputRef = useRef(null);
+
+  // Sync display name from authenticated Google user
+  useEffect(() => {
+    if (user?.displayName) {
+      setFormAuthorName(user.displayName);
+      setReplyAuthorName(user.displayName);
+    }
+  }, [user]);
+
+  // Auto-resume action after Google Sign-In succeeds
+  useEffect(() => {
+    if (user && pendingAction) {
+      if (pendingAction.type === 'ask-doubt') {
+        setCreateMode('doubt');
+        setIsCreateModalOpen(true);
+        clearPendingAction();
+      } else if (pendingAction.type === 'post-solution' && pendingAction.postId) {
+        const targetPost = posts.find((p) => p.id === pendingAction.postId);
+        if (targetPost) {
+          setActiveReplyPost(targetPost);
+        }
+        clearPendingAction();
+      }
+    }
+  }, [user, pendingAction, posts, clearPendingAction]);
+
+  // Real-time Firestore sync for campus posts
+  useEffect(() => {
+    try {
+      const q = query(collection(db, 'campus_posts'), orderBy('createdAt', 'desc'));
+      const unsubscribe = onSnapshot(
+        q,
+        (snapshot) => {
+          if (!snapshot.empty) {
+            const firestorePosts = snapshot.docs.map((d) => ({
+              ...d.data(),
+              id: d.id,
+              replies: d.data().replies || [],
+            }));
+
+            setPosts((prevPosts) => {
+              const firestoreIds = new Set(firestorePosts.map((p) => p.id));
+              const nonFirestore = prevPosts.filter((p) => !firestoreIds.has(p.id));
+              return [...firestorePosts, ...nonFirestore];
+            });
+          }
+        },
+        (err) => {
+          console.debug('[Firebase] Firestore onSnapshot note:', err.message);
+        }
+      );
+      return () => unsubscribe();
+    } catch (e) {
+      console.debug('[Firebase] Firestore snapshot listener note:', e);
+    }
+  }, []);
+
+  // Action initiation gates checking Firebase Auth
+  const handleInitiateAskDoubt = (mode = 'doubt') => {
+    if (!auth.currentUser) {
+      openAuthModal({ type: 'ask-doubt' });
+      return;
+    }
+    setCreateMode(mode);
+    setIsCreateModalOpen(true);
+  };
+
+  const handleInitiatePostSolution = (post) => {
+    if (!auth.currentUser) {
+      openAuthModal({ type: 'post-solution', postId: post.id });
+      return;
+    }
+    setActiveReplyPost(post);
+  };
 
   // Multi-attachment file selection handler
   const handleFilesSelected = (e) => {
@@ -237,7 +326,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
   }, [upvotedPostIds]);
 
   // Upvote Handler
-  const handleToggleUpvote = (postId) => {
+  const handleToggleUpvote = async (postId) => {
     const isUpvoted = !!upvotedPostIds[postId];
     setUpvotedPostIds((prev) => ({
       ...prev,
@@ -262,6 +351,12 @@ export const CampusConnect = ({ onNavigateToTool }) => {
         upvotes: isUpvoted ? Math.max(0, prev.upvotes - 1) : prev.upvotes + 1,
       } : null));
     }
+
+    try {
+      await upvotePostInFirestore(postId, !isUpvoted);
+    } catch (err) {
+      console.debug('[Firebase] Upvote synced locally:', err.message);
+    }
   };
 
   // Upvote a reply
@@ -282,27 +377,59 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     );
   };
 
-  // Add Reply
-  const handleAddReply = (e) => {
+  // Add Solution / Reply (Requires Real Firebase Google Auth)
+  const handleAddReply = async (e) => {
     e.preventDefault();
     if (!activeReplyPost || !replyInputText.trim()) return;
 
+    // Strict Firebase Auth verification
+    if (!auth.currentUser) {
+      openAuthModal({ type: 'post-solution', postId: activeReplyPost.id });
+      return;
+    }
+
+    const currentAuthUser = auth.currentUser;
+    const authorDisplayName = currentAuthUser.displayName || 'Student Peer';
+    const isAnon = replyAnonymous;
+    const publicAuthorName = isAnon ? 'Anonymous Student' : authorDisplayName;
+
+    // Anti-spoofing check for official admin name
+    if (!isAnon && publicAuthorName.toLowerCase().includes('man of study admin')) {
+      alert("The identity 'Man of Study Admin' is reserved for verified administrators.");
+      return;
+    }
+
     const replyContentText = replyInputText.trim();
-    const replyAuthorNameFormatted = replyAnonymous ? 'Anonymous Scholar' : (replyAuthorName.trim() || 'Student Peer');
-    const replyCollegeFormatted = replyAnonymous ? 'Telangana / AP College' : (replyAuthorCollege.trim() || 'Engineering College');
+    const replyCollegeFormatted = isAnon ? 'Campus Peer' : (replyAuthorCollege.trim() || 'Engineering College');
 
     const newReply = {
       id: `reply-${Date.now()}`,
-      authorName: replyAuthorNameFormatted,
-      role: replyAnonymous ? 'Anonymous Scholar' : '3rd Year Peer',
+      authorUid: currentAuthUser.uid,
+      authorName: publicAuthorName,
+      displayName: authorDisplayName,
+      role: isAnon ? 'Anonymous Scholar' : 'Verified Student Peer',
       authorCollege: replyCollegeFormatted,
       authorYear: 'B.Tech Student',
-      isAnonymous: replyAnonymous,
+      isAnonymous: isAnon,
+      isAdmin: false,
       content: replyContentText,
       createdAt: 'Just now',
       timestamp: 'Just now',
       upvotes: 1,
     };
+
+    // Save to Firestore subcollection
+    try {
+      await saveCampusReplyToFirestore(activeReplyPost.id, {
+        id: newReply.id,
+        content: newReply.content,
+        isAnonymous: isAnon,
+        college: newReply.authorCollege,
+        role: newReply.role,
+      });
+    } catch (err) {
+      console.warn('[Firebase] Saved to local state (Firestore note):', err.message);
+    }
 
     const updatedReplies = [newReply, ...activeReplyPost.replies];
     const updatedPost = { ...activeReplyPost, replies: updatedReplies };
@@ -363,10 +490,19 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     }
   };
 
-  // Handle Create Post Submit
+  // Handle Create Post / Doubt Submit (Requires Real Firebase Google Auth)
   const handleCreatePostSubmit = async (e) => {
     e.preventDefault();
     setFormError(null);
+
+    // Strict Firebase Auth verification - never trust only frontend state
+    if (!auth.currentUser) {
+      openAuthModal({ type: 'ask-doubt' });
+      setFormError('Authentication required: Please sign in with your Google account.');
+      return;
+    }
+
+    const currentAuthUser = auth.currentUser;
 
     if (!formTitle.trim()) {
       setFormError('Please enter a descriptive post title.');
@@ -378,6 +514,16 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     }
     if (!formContent.trim()) {
       setFormError('Please write your campus dispatch or query content.');
+      return;
+    }
+
+    const isAnon = formIsAnonymous;
+    const authorDisplayName = currentAuthUser.displayName || 'Verified Student';
+    const publicAuthorName = isAnon ? 'Anonymous Student' : authorDisplayName;
+
+    // Anti-spoofing check for official admin name
+    if (!isAnon && publicAuthorName.toLowerCase().includes('man of study admin')) {
+      setFormError("The identity 'Man of Study Admin' is reserved for verified administrators.");
       return;
     }
 
@@ -399,16 +545,16 @@ export const CampusConnect = ({ onNavigateToTool }) => {
 
     const newPost = {
       id: `post-${Date.now()}`,
+      authorUid: currentAuthUser.uid,
+      authorName: publicAuthorName,
+      displayName: authorDisplayName,
+      isAnonymous: isAnon,
       type: createMode,
       title: formTitle.trim(),
       content: formContent.trim(),
       branch: formBranch,
       college: formCollege.trim(),
-      authorName: formIsAnonymous ? 'Anonymous Scholar' : (formAuthorName.trim() || 'Verified Scholar'),
       authorYear: formAuthorYear,
-      isAnonymous: formIsAnonymous,
-      author_email: formAuthorEmail.trim() || undefined,
-      authorEmail: formAuthorEmail.trim() || undefined,
       createdAt: 'Just now',
       timestamp: 'Just now',
       urgency: createMode === 'doubt' ? formUrgency : 'Casual',
@@ -418,6 +564,24 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       upvotes: 1,
       replies: [],
     };
+
+    // Save to Firestore
+    try {
+      await saveCampusPostToFirestore({
+        id: newPost.id,
+        title: newPost.title,
+        content: newPost.content,
+        college: newPost.college,
+        branch: newPost.branch,
+        type: newPost.type,
+        urgency: newPost.urgency,
+        isAnonymous: isAnon,
+        codeSnippet: newPost.codeSnippet,
+        attachments: uploadedAttachments,
+      });
+    } catch (err) {
+      console.warn('[Firebase] Stored in local state (Firestore note):', err.message);
+    }
 
     setPosts([newPost, ...posts]);
     setUpvotedPostIds((prev) => ({ ...prev, [newPost.id]: true }));
@@ -574,16 +738,87 @@ export const CampusConnect = ({ onNavigateToTool }) => {
 
               <button
                 type="button"
-                onClick={() => {
-                  setCreateMode('dispatch');
-                  setIsCreateModalOpen(true);
-                }}
+                onClick={() => handleInitiateAskDoubt('doubt')}
                 className="hidden md:inline-flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] bg-pink-500 hover:bg-pink-600 text-white rounded-2xl text-xs font-semibold shadow-sm shadow-pink-300/50 transition-all active:scale-95 cursor-pointer whitespace-nowrap"
               >
                 <Plus className="w-4 h-4 stroke-[2.5]" />
-                <span>+ Post Query / Dispatch</span>
+                <span>Ask a Doubt</span>
               </button>
             </div>
+          </div>
+
+          {/* User Authentication Status Banner in CampusConnect Header */}
+          <div className="flex items-center justify-between flex-wrap gap-2.5 pt-3 border-t border-pink-200/70">
+            {user ? (
+              <div className="flex items-center justify-between w-full flex-wrap gap-2">
+                <div className="flex items-center gap-3">
+                  {user.photoURL ? (
+                    <img
+                      src={user.photoURL}
+                      alt={user.displayName || 'Google User'}
+                      referrerPolicy="no-referrer"
+                      className="w-8 h-8 rounded-full border-2 border-pink-400 object-cover shadow-xs"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-pink-500 text-white font-bold text-xs flex items-center justify-center border border-pink-300 shadow-xs">
+                      {(user.displayName || 'S').charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <div className="text-left">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-slate-900">
+                        Signed in as {user.displayName || 'Student'}
+                      </span>
+                      <span className="w-2 h-2 rounded-full bg-emerald-500" title="Google Verified & Active" />
+                    </div>
+                    <span className="text-[11px] text-slate-500 block">
+                      Google Verified • Choose to post with your name or anonymously
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleInitiateAskDoubt('doubt')}
+                    className="px-3.5 py-1.5 bg-pink-500 hover:bg-pink-600 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Ask a Doubt</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => signOut()}
+                    className="text-[11px] font-semibold text-slate-600 hover:text-rose-600 hover:bg-rose-50 px-3 py-1.5 rounded-xl border border-slate-200 hover:border-rose-200 transition-colors flex items-center gap-1 cursor-pointer"
+                    title="Sign out of CampusConnect"
+                  >
+                    <LogOut className="w-3 h-3" />
+                    <span>Sign out</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between w-full flex-wrap gap-2.5">
+                <div className="flex items-center gap-2 text-xs text-slate-600">
+                  <ShieldCheck className="w-4 h-4 text-pink-600 shrink-0" />
+                  <span>
+                    <strong className="text-slate-900 font-bold">Sign in with Google</strong> to ask doubts or post peer solutions.
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => openAuthModal()}
+                  className="px-4 py-2 bg-white hover:bg-pink-50 text-slate-800 border border-slate-300 hover:border-pink-300 rounded-xl text-xs font-bold flex items-center gap-2 shadow-xs transition-all active:scale-95 cursor-pointer"
+                >
+                  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                  </svg>
+                  <span>Sign in with Google</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -615,10 +850,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       <div className="max-w-4xl mx-auto px-3 sm:px-6 py-5 space-y-4">
         {/* Quick Post Box (Desktop / Tablet trigger) */}
         <div
-          onClick={() => {
-            setCreateMode('dispatch');
-            setIsCreateModalOpen(true);
-          }}
+          onClick={() => handleInitiateAskDoubt('doubt')}
           className="hidden sm:flex items-center justify-between p-4 bg-white/95 backdrop-blur-sm border border-pink-100 hover:border-pink-300 rounded-2xl cursor-pointer hover:bg-white transition-all shadow-sm shadow-pink-100/50 hover:shadow-md group"
         >
           <div className="flex items-center gap-3.5">
@@ -627,15 +859,15 @@ export const CampusConnect = ({ onNavigateToTool }) => {
             </div>
             <div>
               <p className="text-xs sm:text-sm font-bold text-slate-900">
-                Share a campus dispatch or post an academic doubt...
+                Have an academic doubt or query? Ask your peers &amp; seniors...
               </p>
               <p className="text-[11px] text-slate-500 mt-0.5">
-                Lab exam questions, placement drives, syllabus updates &amp; anonymous queries
+                Verified with Google Sign-In • Choose to display your name or post as Anonymous Student
               </p>
             </div>
           </div>
           <span className="text-xs font-bold text-pink-700 bg-pink-50 border border-pink-200 px-3.5 py-1.5 rounded-xl group-hover:bg-pink-100 transition-colors">
-            Post Now
+            Ask a Doubt
           </span>
         </div>
 
@@ -693,17 +925,27 @@ export const CampusConnect = ({ onNavigateToTool }) => {
 
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="text-xs sm:text-sm font-bold text-slate-900 truncate max-w-[140px] sm:max-w-none">
-                        {post.authorName}
-                      </span>
                       {post.isAnonymous ? (
-                        <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-mono border border-slate-200">
-                          Anonymous
-                        </span>
+                        <>
+                          <span className="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-1">
+                            <Lock className="w-3 h-3 text-slate-400" />
+                            Anonymous Student
+                          </span>
+                          <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-mono border border-slate-200">
+                            Anonymous Post
+                          </span>
+                        </>
                       ) : (
-                        <span className="text-[11px] text-slate-500 truncate">
-                          • {post.authorYear}
-                        </span>
+                        <>
+                          <span className="text-xs sm:text-sm font-bold text-slate-900 truncate max-w-[140px] sm:max-w-none">
+                            {post.authorName || 'Verified Scholar'}
+                          </span>
+                          {post.authorYear && (
+                            <span className="text-[11px] text-slate-500 truncate">
+                              • {post.authorYear}
+                            </span>
+                          )}
+                        </>
                       )}
                     </div>
 
@@ -831,8 +1073,8 @@ export const CampusConnect = ({ onNavigateToTool }) => {
 
               {/* Engagement Row (Sticky Thumb-Friendly Tap Targets) */}
               <div className="pt-3 border-t border-pink-100 flex items-center justify-between gap-1 text-xs">
-                {/* Left Controls: Upvotes & Answers */}
-                <div className="flex items-center gap-2">
+                {/* Left Controls: Upvotes, Answers & Post a Solution */}
+                <div className="flex items-center gap-2 flex-wrap">
                   <button
                     type="button"
                     onClick={() => handleToggleUpvote(post.id)}
@@ -855,12 +1097,22 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                     type="button"
                     onClick={() => setActiveReplyPost(post)}
                     className="min-h-[42px] px-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center gap-1.5 font-semibold transition-all active:scale-95 cursor-pointer shadow-xs"
-                    title="View & post replies"
+                    title="View solutions & replies"
                   >
                     <MessageSquare className="w-3.5 h-3.5 text-slate-600" />
                     <span>
                       {post.replies.length} {post.replies.length === 1 ? 'Answer' : 'Answers'}
                     </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleInitiatePostSolution(post)}
+                    className="min-h-[42px] px-3.5 rounded-xl bg-pink-500 hover:bg-pink-600 text-white flex items-center gap-1.5 font-bold text-xs transition-all active:scale-95 cursor-pointer shadow-xs"
+                    title="Post a verified or anonymous solution"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    <span>Post a Solution</span>
                   </button>
                 </div>
 
@@ -893,15 +1145,12 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       <div className="fixed bottom-5 right-5 z-40">
         <button
           type="button"
-          onClick={() => {
-            setCreateMode('doubt');
-            setIsCreateModalOpen(true);
-          }}
+          onClick={() => handleInitiateAskDoubt('doubt')}
           className="min-h-[52px] px-5 py-3 bg-pink-500 hover:bg-pink-600 text-white font-bold rounded-full shadow-lg shadow-pink-300 flex items-center gap-2 transition-all duration-200 active:scale-95 cursor-pointer border border-pink-300/40"
-          title="Create a new query or campus dispatch"
+          title="Ask an academic doubt or campus query"
         >
           <Plus className="w-5 h-5 stroke-[2.5]" />
-          <span className="text-xs sm:text-sm font-bold tracking-tight">+ Post Doubt / Dispatch</span>
+          <span className="text-xs sm:text-sm font-bold tracking-tight">Ask a Doubt</span>
         </button>
       </div>
 
@@ -1214,56 +1463,90 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                   </p>
                 </div>
 
-                {/* Identity & Privacy Toggle */}
-                <div className="p-3 bg-pink-50/60 border border-pink-200 rounded-2xl space-y-2">
+                {/* Posting Identity Option */}
+                <div className="p-3.5 bg-slate-50 border border-pink-200/80 rounded-2xl space-y-2.5">
                   <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <UserCheck className="w-4 h-4 text-pink-600" />
+                      <span className="text-xs font-bold text-slate-900">Posting identity</span>
+                    </div>
+                    <span className="text-[10px] font-medium text-slate-500">Google Verified</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                     <label
-                      htmlFor="post-anon-toggle"
-                      className="flex items-center gap-2 cursor-pointer select-none"
+                      className={`flex items-center gap-2.5 p-2.5 rounded-xl border cursor-pointer transition-all ${
+                        !formIsAnonymous
+                          ? 'bg-white border-pink-500 ring-2 ring-pink-100 font-semibold text-slate-900 shadow-xs'
+                          : 'bg-white/60 border-slate-200 text-slate-600 hover:bg-white'
+                      }`}
                     >
-                      {formIsAnonymous ? (
-                        <Lock className="w-4 h-4 text-pink-600" />
-                      ) : (
-                        <Unlock className="w-4 h-4 text-slate-500" />
-                      )}
-                      <div>
-                        <span className="font-bold text-slate-900">Post Anonymously</span>
-                        <p className="text-[10px] text-slate-500">
-                          Renders as &ldquo;Anonymous Scholar&rdquo; to eliminate embarrassment for shy students.
-                        </p>
+                      <input
+                        type="radio"
+                        name="doubt-identity-option"
+                        checked={!formIsAnonymous}
+                        onChange={() => setFormIsAnonymous(false)}
+                        className="w-4 h-4 accent-pink-600 cursor-pointer"
+                      />
+                      <div className="min-w-0">
+                        <span className="block truncate text-xs font-semibold">Show my name publicly</span>
+                        <span className="text-[10px] text-slate-500 truncate block">
+                          {user?.displayName || formAuthorName || 'Your Name'}
+                        </span>
                       </div>
                     </label>
-                    <input
-                      id="post-anon-toggle"
-                      type="checkbox"
-                      checked={formIsAnonymous}
-                      onChange={(e) => setFormIsAnonymous(e.target.checked)}
-                      className="w-4 h-4 accent-pink-500 cursor-pointer"
-                    />
+
+                    <label
+                      className={`flex items-center gap-2.5 p-2.5 rounded-xl border cursor-pointer transition-all ${
+                        formIsAnonymous
+                          ? 'bg-white border-pink-500 ring-2 ring-pink-100 font-semibold text-slate-900 shadow-xs'
+                          : 'bg-white/60 border-slate-200 text-slate-600 hover:bg-white'
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="doubt-identity-option"
+                        checked={formIsAnonymous}
+                        onChange={() => setFormIsAnonymous(true)}
+                        className="w-4 h-4 accent-pink-600 cursor-pointer"
+                      />
+                      <div className="min-w-0">
+                        <span className="block text-xs font-semibold">Post anonymously</span>
+                        <span className="text-[10px] text-slate-500 block">
+                          Displays as &ldquo;Anonymous Student&rdquo;
+                        </span>
+                      </div>
+                    </label>
                   </div>
 
                   {!formIsAnonymous && (
-                    <div className="grid grid-cols-2 gap-2 pt-2 border-t border-pink-200/80">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
                       <div>
+                        <label className="block text-[10px] font-bold text-slate-600 mb-1">Display Name</label>
                         <input
                           type="text"
                           value={formAuthorName}
                           onChange={(e) => setFormAuthorName(e.target.value)}
-                          placeholder="Your Name (e.g. Priya R.)"
-                          className="w-full min-h-[44px] bg-white border border-pink-200 rounded-xl px-3 py-1.5 text-slate-900 text-xs focus:outline-hidden focus:border-pink-500"
+                          placeholder="Your Name (from Google)"
+                          className="w-full min-h-[40px] bg-white border border-pink-200 rounded-xl px-3 py-1.5 text-slate-900 text-xs focus:outline-hidden focus:border-pink-500"
                         />
                       </div>
                       <div>
+                        <label className="block text-[10px] font-bold text-slate-600 mb-1">Academic Year</label>
                         <input
                           type="text"
                           value={formAuthorYear}
                           onChange={(e) => setFormAuthorYear(e.target.value)}
                           placeholder="Year (e.g. 3rd Year B.Tech)"
-                          className="w-full min-h-[44px] bg-white border border-pink-200 rounded-xl px-3 py-1.5 text-slate-900 text-xs focus:outline-hidden focus:border-pink-500"
+                          className="w-full min-h-[40px] bg-white border border-pink-200 rounded-xl px-3 py-1.5 text-slate-900 text-xs focus:outline-hidden focus:border-pink-500"
                         />
                       </div>
                     </div>
                   )}
+
+                  <p className="text-[10px] text-slate-500 leading-normal">
+                    Your Google email is never shown publicly. Posting anonymously keeps your question private from peers while remaining securely verified internally.
+                  </p>
                 </div>
 
                 {/* Action Submit Button */}
@@ -1445,42 +1728,85 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                 )}
               </div>
 
-              {/* Sticky Bottom Reply Input */}
-              <form
-                onSubmit={handleAddReply}
-                className="pt-3 border-t border-pink-100 space-y-2 shrink-0 bg-white"
-              >
-                <div className="flex items-center justify-between text-[11px] text-slate-500 px-1">
-                  <label className="flex items-center gap-1.5 cursor-pointer select-none">
-                    <input
-                      type="checkbox"
-                      checked={replyAnonymous}
-                      onChange={(e) => setReplyAnonymous(e.target.checked)}
-                      className="w-3.5 h-3.5 accent-pink-500 cursor-pointer"
-                    />
-                    <span>Reply Anonymously</span>
-                  </label>
-                  <span>Markdown formatting supported</span>
-                </div>
+              {/* Sticky Bottom Reply Input or Auth Gate */}
+              {user ? (
+                <form
+                  onSubmit={handleAddReply}
+                  className="pt-3 border-t border-pink-100 space-y-2.5 shrink-0 bg-white"
+                >
+                  <div className="p-2.5 bg-slate-50 border border-pink-200/70 rounded-xl space-y-1.5">
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="font-bold text-slate-800 flex items-center gap-1">
+                        <UserCheck className="w-3.5 h-3.5 text-pink-600" />
+                        Posting identity
+                      </span>
+                      <span className="text-[10px] text-slate-500">Google Verified</span>
+                    </div>
 
-                <div className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    value={replyInputText}
-                    onChange={(e) => setReplyInputText(e.target.value)}
-                    placeholder="Write a clear answer or verified tip..."
-                    className="flex-1 min-h-[44px] bg-pink-50/40 border border-pink-200 focus:border-pink-500 focus:bg-white rounded-2xl px-3.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-hidden shadow-xs transition-all"
-                  />
+                    <div className="flex items-center gap-4 text-xs">
+                      <label className="flex items-center gap-1.5 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="reply-identity-option"
+                          checked={!replyAnonymous}
+                          onChange={() => setReplyAnonymous(false)}
+                          className="w-3.5 h-3.5 accent-pink-600 cursor-pointer"
+                        />
+                        <span className="text-slate-800 font-medium">
+                          Show my name ({user.displayName || 'Me'})
+                        </span>
+                      </label>
+
+                      <label className="flex items-center gap-1.5 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="reply-identity-option"
+                          checked={replyAnonymous}
+                          onChange={() => setReplyAnonymous(true)}
+                          className="w-3.5 h-3.5 accent-pink-600 cursor-pointer"
+                        />
+                        <span className="text-slate-700">
+                          Post anonymously (&ldquo;Anonymous Student&rdquo;)
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={replyInputText}
+                      onChange={(e) => setReplyInputText(e.target.value)}
+                      placeholder="Write a clear solution or verified peer tip..."
+                      className="flex-1 min-h-[44px] bg-pink-50/40 border border-pink-200 focus:border-pink-500 focus:bg-white rounded-2xl px-3.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-hidden shadow-xs transition-all"
+                    />
+                    <button
+                      type="submit"
+                      disabled={!replyInputText.trim()}
+                      className="min-h-[44px] px-4 bg-pink-500 hover:bg-pink-600 disabled:opacity-40 text-white rounded-2xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer shrink-0 shadow-sm shadow-pink-300/50"
+                    >
+                      <Send className="w-4 h-4" />
+                      <span>Post Solution</span>
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <div className="pt-3 border-t border-pink-100 p-3 bg-pink-50/50 rounded-2xl flex items-center justify-between flex-wrap gap-2 text-xs">
+                  <div className="flex items-center gap-2 text-slate-700">
+                    <ShieldCheck className="w-4 h-4 text-pink-600 shrink-0" />
+                    <span>
+                      Sign in with your Google account to post a solution.
+                    </span>
+                  </div>
                   <button
-                    type="submit"
-                    disabled={!replyInputText.trim()}
-                    className="min-h-[44px] min-w-[44px] px-4 bg-pink-500 hover:bg-pink-600 disabled:opacity-40 text-white rounded-2xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer shrink-0 shadow-sm shadow-pink-300/50"
+                    type="button"
+                    onClick={() => openAuthModal({ type: 'post-solution', postId: activeReplyPost.id })}
+                    className="px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white font-bold rounded-xl flex items-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer"
                   >
-                    <Send className="w-4 h-4" />
-                    <span className="hidden sm:inline">Submit</span>
+                    <span>Sign in to Answer</span>
                   </button>
                 </div>
-              </form>
+              )}
             </motion.div>
           </div>
         )}

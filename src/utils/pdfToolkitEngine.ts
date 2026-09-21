@@ -845,6 +845,24 @@ export async function wordTextToPdf(
 // 8. POWERPOINT TO PDF (.PPTX)
 // ============================================================================
 
+export interface PowerpointToPdfOptions {
+  aspectRatio?: 'auto' | '16:9' | '4:3' | 'a4';
+  pageRange?: string; // e.g. "all", "1-5", "1, 3, 5"
+  preserveBackgrounds?: boolean;
+  preserveImages?: boolean;
+  preserveTables?: boolean;
+  includeSlideNumbers?: boolean;
+  customFooterText?: string;
+}
+
+export interface PptxInspectionResult {
+  slideCount: number;
+  nativeWidthPt: number;
+  nativeHeightPt: number;
+  aspectRatioLabel: string;
+  slideTitles: string[];
+}
+
 function xmlTextContent(node: Element): string {
   return Array.from(node.getElementsByTagNameNS('*', 't')).map((t) => t.textContent || '').join('');
 }
@@ -873,7 +891,7 @@ function resolvePptxTarget(slidePath: string, target: string): string {
 
 function parseEmu(value: string | null, fallback: number): number {
   const n = Number(value);
-  return Number.isFinite(n) ? n : fallback;
+  return Number.isFinite(n) && n > 0 ? n : fallback;
 }
 
 async function pptxBlobToDataUrl(blob: Blob): Promise<string> {
@@ -885,119 +903,436 @@ async function pptxBlobToDataUrl(blob: Blob): Promise<string> {
   });
 }
 
-/** Browser-local Open XML .pptx to PDF converter. Legacy binary .ppt is intentionally unsupported. */
-export async function powerpointToPdf(
-  file: File,
-  onProgress?: (progress: number, msg: string) => void
-): Promise<{ blob: Blob; filename: string }> {
+/**
+ * Inspects a modern .pptx file in the browser to extract slide count,
+ * dimensions, aspect ratio, and preview slide titles without full conversion.
+ */
+export async function inspectPptx(file: File): Promise<PptxInspectionResult> {
   if (!file.name.toLowerCase().endsWith('.pptx')) {
-    throw new Error('Please upload a modern PowerPoint .pptx file. Legacy .ppt files are not supported by the browser-only converter.');
+    throw new Error('Please upload a modern PowerPoint (.pptx) file. Legacy binary .ppt is not supported.');
   }
 
-  onProgress?.(10, 'Opening PowerPoint package locally...');
+  const buffer = await file.arrayBuffer();
+  const zip = await JSZip.loadAsync(buffer);
+  const presentationXml = await zip.file('ppt/presentation.xml')?.async('string');
+  if (!presentationXml) throw new Error('Invalid PowerPoint file: presentation.xml is missing from the package.');
+
+  const presDoc = new DOMParser().parseFromString(presentationXml, 'application/xml');
+  
+  // Extract slide dimensions (EMUs: 1 pt = 12700 EMUs)
+  const sldSz = presDoc.getElementsByTagNameNS('*', 'sldSz')[0];
+  const emuWidth = parseEmu(sldSz?.getAttribute('cx') ?? null, 12192000); // default 16:9
+  const emuHeight = parseEmu(sldSz?.getAttribute('cy') ?? null, 6858000);
+  const nativeWidthPt = Math.max(200, Math.round(emuWidth / 12700));
+  const nativeHeightPt = Math.max(200, Math.round(emuHeight / 12700));
+
+  // Determine human-readable aspect ratio label
+  const ratio = nativeWidthPt / nativeHeightPt;
+  let aspectRatioLabel = `${nativeWidthPt} × ${nativeHeightPt} pt`;
+  if (Math.abs(ratio - (16 / 9)) < 0.05) {
+    aspectRatioLabel = '16:9 Widescreen (HD)';
+  } else if (Math.abs(ratio - (4 / 3)) < 0.05) {
+    aspectRatioLabel = '4:3 Standard';
+  } else if (Math.abs(ratio - (16 / 10)) < 0.05) {
+    aspectRatioLabel = '16:10 Widescreen';
+  } else if (ratio < 0.95) {
+    aspectRatioLabel = 'Portrait Slide Deck';
+  }
+
+  // Extract slide order
+  const slideIds = Array.from(presDoc.getElementsByTagNameNS('*', 'sldId'));
+  const presRelsXml = await zip.file('ppt/_rels/presentation.xml.rels')?.async('string');
+  const presRels = presRelsXml ? parsePptxRelationships(presRelsXml) : {};
+
+  let slidePaths: string[] = slideIds.map((id) => {
+    const relId = id.getAttribute('r:id') || id.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'id');
+    const target = relId ? presRels[relId] : '';
+    return target ? resolvePptxTarget('ppt/presentation.xml', target) : '';
+  }).filter(Boolean);
+
+  // Fallback: search zip entries for slides in numeric order if presentation.xml.rels was incomplete
+  if (slidePaths.length === 0) {
+    slidePaths = Object.keys(zip.files)
+      .filter((name) => /^ppt\/slides\/slide\d+\.xml$/i.test(name))
+      .sort((a, b) => {
+        const numA = parseInt(a.match(/\d+/)?.[0] || '0', 10);
+        const numB = parseInt(b.match(/\d+/)?.[0] || '0', 10);
+        return numA - numB;
+      });
+  }
+
+  // Extract titles for preview (first 10 slides)
+  const slideTitles: string[] = [];
+  const previewCount = Math.min(slidePaths.length, 10);
+  for (let i = 0; i < previewCount; i++) {
+    try {
+      const xml = await zip.file(slidePaths[i])?.async('string');
+      if (xml) {
+        const doc = new DOMParser().parseFromString(xml, 'application/xml');
+        const textElements = Array.from(doc.getElementsByTagNameNS('*', 'txBody'));
+        let foundTitle = '';
+        for (const tb of textElements) {
+          const t = xmlTextContent(tb).replace(/\s+/g, ' ').trim();
+          if (t && t.length > 1) {
+            foundTitle = t.length > 50 ? t.substring(0, 47) + '...' : t;
+            break;
+          }
+        }
+        slideTitles.push(foundTitle || `Slide ${i + 1}`);
+      } else {
+        slideTitles.push(`Slide ${i + 1}`);
+      }
+    } catch {
+      slideTitles.push(`Slide ${i + 1}`);
+    }
+  }
+
+  return {
+    slideCount: slidePaths.length,
+    nativeWidthPt,
+    nativeHeightPt,
+    aspectRatioLabel,
+    slideTitles,
+  };
+}
+
+/**
+ * Browser-local Open XML .pptx to PDF converter.
+ * Preserves slide order, aspect ratio, backgrounds, shape text, pictures, and tables.
+ */
+export async function powerpointToPdf(
+  file: File,
+  options?: PowerpointToPdfOptions | ((progress: number, msg: string) => void),
+  progressCallback?: (progress: number, msg: string) => void
+): Promise<{ blob: Blob; filename: string; pageCount: number }> {
+  // Support both overloaded signatures: (file, onProgress) and (file, options, onProgress)
+  const opts: PowerpointToPdfOptions = typeof options === 'function' ? {} : (options || {});
+  const onProgress = typeof options === 'function' ? options : progressCallback;
+
+  if (!file.name.toLowerCase().endsWith('.pptx')) {
+    throw new Error('Please upload a modern PowerPoint (.pptx) file. Legacy .ppt files can be opened and saved as .pptx before converting.');
+  }
+
+  onProgress?.(8, 'Opening PowerPoint package locally...');
   const buffer = await file.arrayBuffer();
   const zip = await JSZip.loadAsync(buffer);
   const presentationXml = await zip.file('ppt/presentation.xml')?.async('string');
   if (!presentationXml) throw new Error('Invalid PowerPoint file: presentation.xml is missing.');
 
   const presDoc = new DOMParser().parseFromString(presentationXml, 'application/xml');
+
+  // 1. Precise Aspect Ratio Detection
+  const sldSz = presDoc.getElementsByTagNameNS('*', 'sldSz')[0];
+  const emuWidth = parseEmu(sldSz?.getAttribute('cx') ?? null, 12192000); // 960 pt
+  const emuHeight = parseEmu(sldSz?.getAttribute('cy') ?? null, 6858000); // 540 pt
+  const nativeWidthPt = Math.max(200, Math.round(emuWidth / 12700));
+  const nativeHeightPt = Math.max(200, Math.round(emuHeight / 12700));
+
+  let targetWidth = nativeWidthPt;
+  let targetHeight = nativeHeightPt;
+
+  if (opts.aspectRatio === '16:9') {
+    targetWidth = 960;
+    targetHeight = 540;
+  } else if (opts.aspectRatio === '4:3') {
+    targetWidth = 720;
+    targetHeight = 540;
+  } else if (opts.aspectRatio === 'a4') {
+    targetWidth = 842;
+    targetHeight = 595;
+  }
+
+  const scaleX = targetWidth / nativeWidthPt;
+  const scaleY = targetHeight / nativeHeightPt;
+
+  // 2. Authoritative Slide Sequence Ordering
   const slideIds = Array.from(presDoc.getElementsByTagNameNS('*', 'sldId'));
   const presRelsXml = await zip.file('ppt/_rels/presentation.xml.rels')?.async('string');
-  if (!presRelsXml) throw new Error('Invalid PowerPoint file: presentation relationships are missing.');
-  const presRels = parsePptxRelationships(presRelsXml);
-  const slidePaths = slideIds.map((id) => {
+  const presRels = presRelsXml ? parsePptxRelationships(presRelsXml) : {};
+
+  let slidePaths = slideIds.map((id) => {
     const relId = id.getAttribute('r:id') || id.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'id');
     const target = relId ? presRels[relId] : '';
     return target ? resolvePptxTarget('ppt/presentation.xml', target) : '';
   }).filter(Boolean);
-  if (slidePaths.length === 0) throw new Error('No slides were found in this PowerPoint file.');
 
-  const slideWidth = 960;
-  const slideHeight = 540;
-  const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: [slideWidth, slideHeight], compress: true });
+  // Fallback: scan zip entries for slides in numeric order
+  if (slidePaths.length === 0) {
+    slidePaths = Object.keys(zip.files)
+      .filter((name) => /^ppt\/slides\/slide\d+\.xml$/i.test(name))
+      .sort((a, b) => {
+        const numA = parseInt(a.match(/\d+/)?.[0] || '0', 10);
+        const numB = parseInt(b.match(/\d+/)?.[0] || '0', 10);
+        return numA - numB;
+      });
+  }
 
-  for (let index = 0; index < slidePaths.length; index++) {
-    const slidePath = slidePaths[index];
-    onProgress?.(Math.round(15 + (index / slidePaths.length) * 75), 'Rendering slide ' + (index + 1) + ' of ' + slidePaths.length + '...');
-    if (index > 0) doc.addPage([slideWidth, slideHeight], 'landscape');
+  if (slidePaths.length === 0) {
+    throw new Error('No slides were detected in this PowerPoint presentation package.');
+  }
+
+  // 3. Optional Slide Range Selection
+  let activeSlideIndices: number[] = slidePaths.map((_, i) => i);
+  if (opts.pageRange && opts.pageRange.trim().toLowerCase() !== 'all') {
+    const parsedIndices = parsePageRange(opts.pageRange, slidePaths.length);
+    if (parsedIndices.length > 0) {
+      activeSlideIndices = parsedIndices;
+    }
+  }
+
+  const orientation = targetWidth >= targetHeight ? 'landscape' : 'portrait';
+  const doc = new jsPDF({
+    orientation,
+    unit: 'pt',
+    format: [targetWidth, targetHeight],
+    compress: true,
+  });
+
+  const totalToRender = activeSlideIndices.length;
+
+  for (let idx = 0; idx < totalToRender; idx++) {
+    const originalSlideIndex = activeSlideIndices[idx];
+    const slidePath = slidePaths[originalSlideIndex];
+    const slideDisplayNumber = idx + 1;
+
+    const progressPct = Math.round(15 + (idx / totalToRender) * 80);
+    onProgress?.(progressPct, `Rendering slide ${slideDisplayNumber} of ${totalToRender} (Slide ${originalSlideIndex + 1})...`);
+
+    // Give browser UI breathing room on large decks
+    if (idx % 3 === 0) {
+      await new Promise((r) => setTimeout(r, 0));
+    }
+
+    if (idx > 0) {
+      doc.addPage([targetWidth, targetHeight], orientation);
+    }
 
     const slideXml = await zip.file(slidePath)?.async('string');
     if (!slideXml) continue;
     const slideDoc = new DOMParser().parseFromString(slideXml, 'application/xml');
+
+    // Slide relationship mapping (for images, media, layouts)
     const relPath = slidePath.substring(0, slidePath.lastIndexOf('/')) + '/_rels/' + slidePath.substring(slidePath.lastIndexOf('/') + 1) + '.rels';
     const relXml = await zip.file(relPath)?.async('string');
     const slideRels = relXml ? parsePptxRelationships(relXml) : {};
 
-    doc.setFillColor(248, 250, 252);
-    doc.rect(0, 0, slideWidth, slideHeight, 'F');
+    // 4. Background Preservation
+    doc.setFillColor(255, 255, 255);
+    doc.rect(0, 0, targetWidth, targetHeight, 'F');
 
-    const bg = slideDoc.getElementsByTagNameNS('*', 'bg')[0];
-    const srgb = bg?.getElementsByTagNameNS('*', 'srgbClr')[0]?.getAttribute('val');
-    if (srgb && /^[0-9a-fA-F]{6}$/.test(srgb)) {
-      doc.setFillColor(parseInt(srgb.slice(0, 2), 16), parseInt(srgb.slice(2, 4), 16), parseInt(srgb.slice(4, 6), 16));
-      doc.rect(0, 0, slideWidth, slideHeight, 'F');
+    if (opts.preserveBackgrounds !== false) {
+      const bg = slideDoc.getElementsByTagNameNS('*', 'bg')[0];
+      const srgb = bg?.getElementsByTagNameNS('*', 'srgbClr')[0]?.getAttribute('val');
+      if (srgb && /^[0-9a-fA-F]{6}$/.test(srgb)) {
+        doc.setFillColor(
+          parseInt(srgb.slice(0, 2), 16),
+          parseInt(srgb.slice(2, 4), 16),
+          parseInt(srgb.slice(4, 6), 16)
+        );
+        doc.rect(0, 0, targetWidth, targetHeight, 'F');
+      } else {
+        // Subtle soft canvas tone
+        doc.setFillColor(250, 250, 250);
+        doc.rect(0, 0, targetWidth, targetHeight, 'F');
+      }
     }
 
+    // 5. Render Shapes, Images, Text & Tables
     const shapeTree = slideDoc.getElementsByTagNameNS('*', 'spTree')[0];
     const shapes = shapeTree ? Array.from(shapeTree.children) : [];
+
     for (const shape of shapes) {
-      const xfrm = shape.getElementsByTagNameNS('*', 'xfrm')[0];
-      if (!xfrm) continue;
-      const off = xfrm.getElementsByTagNameNS('*', 'off')[0];
-      const ext = xfrm.getElementsByTagNameNS('*', 'ext')[0];
-      const x = parseEmu(off?.getAttribute('x') ?? null, 0) / 12700;
-      const y = parseEmu(off?.getAttribute('y') ?? null, 0) / 12700;
-      const w = Math.max(1, parseEmu(ext?.getAttribute('cx') ?? null, 1) / 12700);
-      const h = Math.max(1, parseEmu(ext?.getAttribute('cy') ?? null, 1) / 12700);
       const tag = shape.localName;
 
+      // Extract Transform (xfrm)
+      const xfrm = shape.getElementsByTagNameNS('*', 'xfrm')[0];
+      const off = xfrm?.getElementsByTagNameNS('*', 'off')[0];
+      const ext = xfrm?.getElementsByTagNameNS('*', 'ext')[0];
+
+      const rawX = parseEmu(off?.getAttribute('x') ?? null, 0) / 12700;
+      const rawY = parseEmu(off?.getAttribute('y') ?? null, 0) / 12700;
+      const rawW = Math.max(1, parseEmu(ext?.getAttribute('cx') ?? null, 1) / 12700);
+      const rawH = Math.max(1, parseEmu(ext?.getAttribute('cy') ?? null, 1) / 12700);
+
+      const x = rawX * scaleX;
+      const y = rawY * scaleY;
+      const w = rawW * scaleX;
+      const h = rawH * scaleY;
+
+      // A. Embedded Pictures
       if (tag === 'pic') {
-        const blip = shape.getElementsByTagNameNS('*', 'blip')[0];
-        const relId = blip?.getAttribute('r:embed') || blip?.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'embed');
-        const target = relId ? slideRels[relId] : '';
-        const mediaPath = target ? resolvePptxTarget(slidePath, target) : '';
-        const media = mediaPath ? zip.file(mediaPath) : null;
-        if (media) {
-          try {
-            const imageBlob = await media.async('blob');
-            const dataUrl = await pptxBlobToDataUrl(imageBlob);
-            const format = (imageBlob.type || '').includes('png') || mediaPath.toLowerCase().endsWith('.png') ? 'PNG' : 'JPEG';
-            doc.addImage(dataUrl, format, x, y, w, h, undefined, 'FAST');
-          } catch (imageError) {
-            console.warn('Could not render PowerPoint image:', imageError);
+        if (opts.preserveImages !== false) {
+          const blip = shape.getElementsByTagNameNS('*', 'blip')[0];
+          const relId = blip?.getAttribute('r:embed') || blip?.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'embed');
+          const target = relId ? slideRels[relId] : '';
+          const mediaPath = target ? resolvePptxTarget(slidePath, target) : '';
+          const media = mediaPath ? zip.file(mediaPath) : null;
+          if (media) {
+            try {
+              const imageBlob = await media.async('blob');
+              const dataUrl = await pptxBlobToDataUrl(imageBlob);
+              const format = (imageBlob.type || '').includes('png') || mediaPath.toLowerCase().endsWith('.png') ? 'PNG' : 'JPEG';
+              doc.addImage(dataUrl, format, x, y, w, h, undefined, 'FAST');
+            } catch (imgErr) {
+              console.warn('Could not render slide image:', imgErr);
+            }
           }
         }
         continue;
       }
 
-      if (tag !== 'sp') continue;
-      const textBodies = Array.from(shape.getElementsByTagNameNS('*', 'txBody'));
-      if (textBodies.length === 0) continue;
-      const text = textBodies.map(xmlTextContent).join(' ').replace(/\s+/g, ' ').trim();
-      if (!text) continue;
+      // B. Graphic Frames (e.g. Tables)
+      if (tag === 'graphicFrame') {
+        if (opts.preserveTables !== false) {
+          const tbl = shape.getElementsByTagNameNS('*', 'tbl')[0];
+          if (tbl) {
+            const rows = Array.from(tbl.getElementsByTagNameNS('*', 'tr'));
+            if (rows.length > 0) {
+              const rowHeight = h / rows.length;
+              rows.forEach((row, rIdx) => {
+                const cells = Array.from(row.getElementsByTagNameNS('*', 'tc'));
+                const colWidth = w / (cells.length || 1);
+                cells.forEach((cell, cIdx) => {
+                  const cellX = x + cIdx * colWidth;
+                  const cellY = y + rIdx * rowHeight;
 
-      const runs = Array.from(shape.getElementsByTagNameNS('*', 'r'));
-      const firstRun = runs[0];
-      const runProps = firstRun?.getElementsByTagNameNS('*', 'rPr')[0];
-      const fontSize = Math.max(8, Math.min(42, (Number(runProps?.getAttribute('sz')) || 1800) / 100));
-      const isBold = runProps?.getAttribute('b') === '1';
-      const colorNode = runProps?.getElementsByTagNameNS('*', 'srgbClr')[0]?.getAttribute('val');
-      if (colorNode && /^[0-9a-fA-F]{6}$/.test(colorNode)) doc.setTextColor(parseInt(colorNode.slice(0, 2), 16), parseInt(colorNode.slice(2, 4), 16), parseInt(colorNode.slice(4, 6), 16));
-      else doc.setTextColor(30, 41, 59);
-      doc.setFont('helvetica', isBold ? 'bold' : 'normal');
-      doc.setFontSize(fontSize);
-      const lines = doc.splitTextToSize(text, Math.max(30, w - 8));
-      doc.text(lines, x + 4, y + Math.min(fontSize, h - 4), { maxWidth: Math.max(30, w - 8), lineHeightFactor: 1.2 });
+                  // Cell border and background
+                  doc.setDrawColor(203, 213, 225);
+                  doc.setLineWidth(0.5);
+                  if (rIdx === 0) {
+                    doc.setFillColor(241, 245, 249);
+                    doc.rect(cellX, cellY, colWidth, rowHeight, 'FD');
+                  } else {
+                    doc.rect(cellX, cellY, colWidth, rowHeight, 'S');
+                  }
+
+                  const cellText = xmlTextContent(cell).replace(/\s+/g, ' ').trim();
+                  if (cellText) {
+                    doc.setFont('helvetica', rIdx === 0 ? 'bold' : 'normal');
+                    doc.setFontSize(Math.max(7, Math.min(11, rowHeight * 0.4)));
+                    doc.setTextColor(30, 41, 59);
+                    const split = doc.splitTextToSize(cellText, Math.max(20, colWidth - 6));
+                    doc.text(split, cellX + 3, cellY + Math.min(12, rowHeight * 0.55));
+                  }
+                });
+              });
+            }
+          }
+        }
+        continue;
+      }
+
+      // C. Standard Shapes & Text Bodies
+      if (tag === 'sp') {
+        // Check for shape background fill
+        const spPr = shape.getElementsByTagNameNS('*', 'spPr')[0];
+        const solidFill = spPr?.getElementsByTagNameNS('*', 'solidFill')[0];
+        const srgbClr = solidFill?.getElementsByTagNameNS('*', 'srgbClr')[0]?.getAttribute('val');
+        if (srgbClr && /^[0-9a-fA-F]{6}$/.test(srgbClr)) {
+          doc.setFillColor(
+            parseInt(srgbClr.slice(0, 2), 16),
+            parseInt(srgbClr.slice(2, 4), 16),
+            parseInt(srgbClr.slice(4, 6), 16)
+          );
+          doc.rect(x, y, w, h, 'F');
+        }
+
+        const textBodies = Array.from(shape.getElementsByTagNameNS('*', 'txBody'));
+        if (textBodies.length === 0) continue;
+
+        let currentY = y + 14;
+        const paragraphs = Array.from(textBodies[0].getElementsByTagNameNS('*', 'p'));
+
+        for (const p of paragraphs) {
+          const pPr = p.getElementsByTagNameNS('*', 'pPr')[0];
+          const algn = pPr?.getAttribute('algn'); // 'ctr', 'r', 'just', 'l'
+
+          const runs = Array.from(p.getElementsByTagNameNS('*', 'r'));
+          if (runs.length === 0) {
+            // Check plain text
+            const plain = xmlTextContent(p).replace(/\s+/g, ' ').trim();
+            if (!plain) continue;
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(14 * scaleY);
+            doc.setTextColor(30, 41, 59);
+            const lines = doc.splitTextToSize(plain, Math.max(30, w - 8));
+            doc.text(lines, x + 4, currentY, { maxWidth: Math.max(30, w - 8) });
+            currentY += lines.length * (14 * scaleY * 1.25);
+            continue;
+          }
+
+          // Render paragraph with run formatting
+          const pText = runs.map((r) => xmlTextContent(r)).join(' ').replace(/\s+/g, ' ').trim();
+          if (!pText) continue;
+
+          const firstRun = runs[0];
+          const rPr = firstRun?.getElementsByTagNameNS('*', 'rPr')[0];
+          const rawSz = Number(rPr?.getAttribute('sz')) || 1800; // in 1/100 pt
+          const fontSize = Math.max(8, Math.min(48, (rawSz / 100) * Math.min(scaleX, scaleY)));
+          const isBold = rPr?.getAttribute('b') === '1';
+          const isItalic = rPr?.getAttribute('i') === '1';
+          const colorVal = rPr?.getElementsByTagNameNS('*', 'srgbClr')[0]?.getAttribute('val');
+
+          if (colorVal && /^[0-9a-fA-F]{6}$/.test(colorVal)) {
+            doc.setTextColor(
+              parseInt(colorVal.slice(0, 2), 16),
+              parseInt(colorVal.slice(2, 4), 16),
+              parseInt(colorVal.slice(4, 6), 16)
+            );
+          } else {
+            doc.setTextColor(30, 41, 59);
+          }
+
+          let fontStyle = 'normal';
+          if (isBold && isItalic) fontStyle = 'bolditalic';
+          else if (isBold) fontStyle = 'bold';
+          else if (isItalic) fontStyle = 'italic';
+
+          doc.setFont('helvetica', fontStyle);
+          doc.setFontSize(fontSize);
+
+          const maxTextW = Math.max(30, w - 8);
+          const lines = doc.splitTextToSize(pText, maxTextW);
+
+          let textX = x + 4;
+          let alignOpt: 'left' | 'center' | 'right' = 'left';
+          if (algn === 'ctr') {
+            textX = x + w / 2;
+            alignOpt = 'center';
+          } else if (algn === 'r') {
+            textX = x + w - 4;
+            alignOpt = 'right';
+          }
+
+          doc.text(lines, textX, currentY, {
+            align: alignOpt,
+            maxWidth: maxTextW,
+            lineHeightFactor: 1.25,
+          });
+
+          currentY += lines.length * (fontSize * 1.25) + 4;
+          if (currentY > y + h) break; // avoid spillover past shape bounding box
+        }
+      }
     }
 
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8);
-    doc.setTextColor(100, 116, 139);
-    doc.text('MAN OF STUDY • ' + (index + 1) + '/' + slidePaths.length, slideWidth - 120, slideHeight - 14);
+    // 6. Professional Slide Number & Branding Footer
+    if (opts.includeSlideNumbers !== false) {
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(148, 163, 184);
+      const footerBrand = opts.customFooterText || 'MAN OF STUDY • Presentation';
+      doc.text(footerBrand, 24, targetHeight - 14);
+      doc.text(`Slide ${slideDisplayNumber} of ${totalToRender}`, targetWidth - 24, targetHeight - 14, { align: 'right' });
+    }
   }
 
-  onProgress?.(100, 'Converted ' + slidePaths.length + ' PowerPoint slides to PDF.');
-  return { blob: doc.output('blob'), filename: file.name.replace(/\.pptx$/i, '') + '.pdf' };
+  onProgress?.(100, `Successfully converted ${totalToRender} PowerPoint slides to PDF!`);
+  return {
+    blob: doc.output('blob'),
+    filename: file.name.replace(/\.pptx$/i, '') + '.pdf',
+    pageCount: totalToRender,
+  };
 }
 
 // ============================================================================

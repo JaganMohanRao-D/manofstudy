@@ -23,6 +23,20 @@ export const initialCommunityPosts = [
     upvotes: 78,
     replies: [
       {
+        id: 'reply-admin-seed-welcome',
+        authorName: 'Man of Study Admin',
+        role: 'Community Moderator',
+        authorCollege: 'MAN OF STUDY Academic Network',
+        authorYear: 'Staff',
+        isAnonymous: false,
+        isAdmin: true,
+        content: `Welcome to MOS CampusConnect! 🎓 If you have a doubt, ask it here — and if you know the solution to someone else's question, share what you know. Let's build a helpful student community together. — Man of Study Admin`,
+        createdAt: 'Official Community Guide',
+        timestamp: 'Official Community Guide',
+        upvotes: 142,
+        isVerifiedSolution: true,
+      },
+      {
         id: 'reply-1-1',
         authorName: 'Sanjay Reddy',
         role: 'Final Year Senior (Placed @ Salesforce, JNTUH)',
