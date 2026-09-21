@@ -4,6 +4,7 @@ import {
   Compass,
   GraduationCap,
   FileText,
+  Image as ImageIcon,
   Code2,
   Sparkles,
   Search,
