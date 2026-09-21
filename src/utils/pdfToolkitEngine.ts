@@ -6,6 +6,7 @@ import { configurePdfWorker, getPdfJsWorkerUrl } from './pdfWorkerConfig';
 import { buildPptxFromSlides } from './pptxBuilder';
 import * as XLSX from 'xlsx';
 import autoTable from 'jspdf-autotable';
+import mammoth from 'mammoth';
 
 // Configure reliable, CORS-friendly PDF.js worker in browser
 if (typeof window !== 'undefined') {
@@ -242,6 +243,34 @@ export async function mergePdfs(
   return { blob, size: blob.size, pageCount: mergedPdf.getPageCount() };
 }
 
+// Helper to parse page range strings e.g. "1-3, 5" into 0-indexed page indices
+export function parsePageRange(rangeStr: string, totalPages: number): number[] {
+  const selectedIndices = new Set<number>();
+  const parts = (rangeStr || '1').split(',');
+  for (const part of parts) {
+    const trimmed = part.trim();
+    if (!trimmed) continue;
+    if (trimmed.includes('-')) {
+      const [startStr, endStr] = trimmed.split('-');
+      const start = parseInt(startStr.trim(), 10);
+      const end = parseInt(endStr.trim(), 10);
+      if (!isNaN(start) && !isNaN(end)) {
+        const min = Math.max(1, Math.min(start, end));
+        const max = Math.min(totalPages, Math.max(start, end));
+        for (let p = min; p <= max; p++) {
+          selectedIndices.add(p - 1);
+        }
+      }
+    } else {
+      const pageNum = parseInt(trimmed, 10);
+      if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= totalPages) {
+        selectedIndices.add(pageNum - 1);
+      }
+    }
+  }
+  return Array.from(selectedIndices).sort((a, b) => a - b);
+}
+
 // ============================================================================
 // 2. SPLIT PDF (Range or Zip all)
 // ============================================================================
@@ -284,33 +313,7 @@ export async function splitPdf(
   } else {
     // Parse range e.g. "1-3, 5"
     onProgress?.(30, 'Extracting selected page range...');
-    const rangeStr = options.rangeString || '1';
-    const selectedIndices = new Set<number>();
-
-    const parts = rangeStr.split(',');
-    for (const part of parts) {
-      const trimmed = part.trim();
-      if (!trimmed) continue;
-      if (trimmed.includes('-')) {
-        const [startStr, endStr] = trimmed.split('-');
-        const start = parseInt(startStr.trim(), 10);
-        const end = parseInt(endStr.trim(), 10);
-        if (!isNaN(start) && !isNaN(end)) {
-          const min = Math.max(1, Math.min(start, end));
-          const max = Math.min(totalPages, Math.max(start, end));
-          for (let p = min; p <= max; p++) {
-            selectedIndices.add(p - 1);
-          }
-        }
-      } else {
-        const pageNum = parseInt(trimmed, 10);
-        if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= totalPages) {
-          selectedIndices.add(pageNum - 1);
-        }
-      }
-    }
-
-    const indicesToCopy = Array.from(selectedIndices).sort((a, b) => a - b);
+    const indicesToCopy = parsePageRange(options.rangeString || '1', totalPages);
     if (indicesToCopy.length === 0) {
       throw new Error(`Invalid page range. Please select pages between 1 and ${totalPages}.`);
     }
@@ -420,14 +423,102 @@ export async function compressPdf(
 export async function pdfToWord(
   file: File,
   onProgress?: (progress: number, msg: string) => void
-): Promise<{ blob: Blob; filename: string }> {
+): Promise<{ blob: Blob; filename: string; secondaryBlob?: Blob; secondaryFilename?: string }> {
   onProgress?.(15, 'Extracting document text & structures...');
   const buffer = await file.arrayBuffer();
   const { pageTexts, pageCount } = await extractTextFromPdf(buffer, onProgress);
 
-  onProgress?.(85, 'Formatting Word document structure...');
+  onProgress?.(70, 'Building genuine Microsoft Word (.docx) OpenXML package...');
   const cleanTitle = file.name.replace(/\.pdf$/i, '');
 
+  const structuredPages = pageTexts.map((text, idx) => {
+    const paragraphs = text
+      .split(/\n\n+/)
+      .map((p) => p.trim())
+      .filter(Boolean);
+    return {
+      pageNumber: idx + 1,
+      paragraphs: paragraphs.length > 0 ? paragraphs : ['(No selectable text extracted on this page)'],
+    };
+  });
+
+  // Build true OpenXML .docx
+  const zip = new JSZip();
+  zip.file(
+    '[Content_Types].xml',
+    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
+      '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">\n' +
+      '  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>\n' +
+      '  <Default Extension="xml" ContentType="application/xml"/>\n' +
+      '  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>\n' +
+      '</Types>'
+  );
+
+  zip.file(
+    '_rels/.rels',
+    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
+      '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">\n' +
+      '  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>\n' +
+      '</Relationships>'
+  );
+
+  const escapeXml = (unsafe: string) =>
+    unsafe
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+
+  let docXml =
+    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
+    '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">\n' +
+    '  <w:body>\n' +
+    '    <w:p>\n' +
+    '      <w:pPr><w:jc w:val="center"/><w:pBdr><w:bottom w:val="single" w:sz="12" w:space="4" w:color="0284C7"/></w:pBdr></w:pPr>\n' +
+    `      <w:r><w:rPr><w:b/><w:sz w:val="36"/><w:color w:val="0F172A"/></w:rPr><w:t>${escapeXml(
+      cleanTitle
+    )}</w:t></w:r>\n` +
+    '    </w:p>\n';
+
+  structuredPages.forEach((page, pIdx) => {
+    docXml +=
+      '    <w:p>\n' +
+      '      <w:pPr><w:spacing w:before="120" w:after="80"/><w:pBdr><w:bottom w:val="single" w:sz="4" w:space="2" w:color="CBD5E1"/></w:pBdr></w:pPr>\n' +
+      `      <w:r><w:rPr><w:b/><w:sz w:val="18"/><w:color w:val="0284C7"/></w:rPr><w:t>PAGE ${page.pageNumber} OF ${pageCount}</w:t></w:r>\n` +
+      '    </w:p>\n';
+
+    page.paragraphs.forEach((p) => {
+      docXml +=
+        '    <w:p>\n' +
+        '      <w:pPr><w:spacing w:after="140"/><w:jc w:val="both"/></w:pPr>\n' +
+        `      <w:r><w:rPr><w:sz w:val="22"/><w:color w:val="1E293B"/></w:rPr><w:t xml:space="preserve">${escapeXml(
+          p
+        )}</w:t></w:r>\n` +
+        '    </w:p>\n';
+    });
+
+    if (pIdx < structuredPages.length - 1) {
+      docXml += '    <w:p><w:r><w:br w:type="page"/></w:r></w:p>\n';
+    }
+  });
+
+  docXml +=
+    '    <w:sectPr>\n' +
+    '      <w:pgSz w:w="11906" w:h="16838"/>\n' +
+    '      <w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440"/>\n' +
+    '    </w:sectPr>\n' +
+    '  </w:body>\n' +
+    '</w:document>';
+
+  zip.file('word/document.xml', docXml);
+
+  const docxBlob = await zip.generateAsync({
+    type: 'blob',
+    mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  });
+
+  // Also create backward-compatible .doc format
   const docHtml = `
     <html xmlns:o='urn:schemas-microsoft-com:office:office' 
           xmlns:w='urn:schemas-microsoft-com:office:word' 
@@ -435,103 +526,42 @@ export async function pdfToWord(
       <head>
         <meta charset="utf-8">
         <title>${cleanTitle}</title>
-        <!--[if gte mso 9]>
-        <xml>
-          <w:WordDocument>
-            <w:View>Print</w:View>
-            <w:Zoom>100</w:Zoom>
-            <w:DoNotOptimizeForBrowser/>
-          </w:WordDocument>
-        </xml>
-        <![endif]-->
         <style>
-          @page {
-            size: A4 portrait;
-            margin: 1.0in 1.0in 1.0in 1.0in;
-            mso-header-margin: 0.5in;
-            mso-footer-margin: 0.5in;
-          }
-          body {
-            font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
-            font-size: 11pt;
-            line-height: 1.6;
-            color: #1e293b;
-            background-color: #ffffff;
-            margin: 0;
-            padding: 30pt;
-          }
-          h1.doc-title {
-            font-size: 20pt;
-            font-weight: bold;
-            color: #0f172a;
-            border-bottom: 2pt solid #0284c7;
-            padding-bottom: 8pt;
-            margin-bottom: 20pt;
-          }
-          .page-header {
-            font-size: 9.5pt;
-            font-weight: 600;
-            color: #0284c7;
-            text-transform: uppercase;
-            letter-spacing: 0.5pt;
-            margin-bottom: 12pt;
-            padding-bottom: 4pt;
-            border-bottom: 0.75pt solid #cbd5e1;
-          }
-          .page-content {
-            margin-bottom: 20pt;
-          }
-          .page-content p {
-            margin-top: 0;
-            margin-bottom: 10pt;
-            text-align: justify;
-          }
-          .page-break {
-            page-break-after: always;
-            mso-break-type: section-break;
-            border-top: 1pt dashed #cbd5e1;
-            margin: 30pt 0;
-          }
+          @page { size: A4 portrait; margin: 1.0in; }
+          body { font-family: 'Calibri', Arial, sans-serif; font-size: 11pt; line-height: 1.6; color: #1e293b; padding: 20pt; }
+          h1.doc-title { font-size: 20pt; font-weight: bold; color: #0f172a; border-bottom: 2pt solid #0284c7; padding-bottom: 8pt; margin-bottom: 20pt; }
+          .page-header { font-size: 9.5pt; font-weight: 600; color: #0284c7; text-transform: uppercase; margin-bottom: 10pt; border-bottom: 0.75pt solid #cbd5e1; }
+          .page-content p { margin-bottom: 10pt; text-align: justify; }
+          .page-break { page-break-after: always; border-top: 1pt dashed #cbd5e1; margin: 25pt 0; }
         </style>
       </head>
       <body>
         <h1 class="doc-title">${cleanTitle}</h1>
-        ${pageTexts
-          .map((text, idx) => {
-            const paragraphs = text
-              .split(/\n\n+/)
-              .map((p) => p.trim())
-              .filter(Boolean);
-
-            const contentHtml =
-              paragraphs.length > 0
-                ? paragraphs
-                    .map((p) => `<p>${p.replace(/\n/g, '<br/>')}</p>`)
-                    .join('')
-                : '<p><em>(No selectable text extracted on this page)</em></p>';
-
-            return `
-              <div class="page-container">
-                <div class="page-header">Page ${idx + 1} of ${pageCount}</div>
-                <div class="page-content">
-                  ${contentHtml}
-                </div>
-              </div>
-              ${idx < pageCount - 1 ? '<div class="page-break"></div>' : ''}
-            `;
-          })
+        ${structuredPages
+          .map(
+            (page, idx) => `
+          <div class="page-container">
+            <div class="page-header">Page ${page.pageNumber} of ${pageCount}</div>
+            <div class="page-content">
+              ${page.paragraphs.map((p) => `<p>${escapeXml(p)}</p>`).join('')}
+            </div>
+          </div>
+          ${idx < pageCount - 1 ? '<div class="page-break"></div>' : ''}
+        `
+          )
           .join('')}
       </body>
     </html>
   `;
 
-  const blob = new Blob([docHtml], {
-    type: 'application/msword;charset=utf-8',
-  });
+  const docBlob = new Blob([docHtml], { type: 'application/msword;charset=utf-8' });
 
+  onProgress?.(100, 'Word document package created successfully!');
   return {
-    blob,
-    filename: `${cleanTitle}_Converted.doc`,
+    blob: docxBlob,
+    filename: `${cleanTitle}_Converted.docx`,
+    secondaryBlob: docBlob,
+    secondaryFilename: `${cleanTitle}_Converted.doc`,
   };
 }
 
@@ -636,51 +666,341 @@ export async function wordTextToPdf(
   file: File,
   onProgress?: (progress: number, msg: string) => void
 ): Promise<{ blob: Blob; filename: string }> {
-  onProgress?.(20, 'Reading text document content...');
-  const text = await file.text();
+  const isDocx = file.name.toLowerCase().endsWith('.docx');
+  const cleanTitle = file.name.replace(/\.[^/.]+$/, '');
+  onProgress?.(15, isDocx ? 'Reading Word OpenXML document...' : 'Reading text content...');
 
-  onProgress?.(60, 'Compiling formatted PDF layout...');
   const doc = new jsPDF({
     orientation: 'portrait',
     unit: 'pt',
     format: 'a4',
   });
 
-  doc.setFont('Helvetica', 'normal');
-  doc.setFontSize(11);
-
-  // Title header
-  doc.setFontSize(16);
-  doc.setTextColor(15, 23, 42);
-  doc.text(file.name.replace(/\.[^/.]+$/, ''), 40, 50);
-
-  doc.setDrawColor(226, 232, 240);
-  doc.line(40, 60, 555, 60);
-
-  doc.setFontSize(10);
-  doc.setTextColor(51, 65, 85);
-
-  const lines = doc.splitTextToSize(text, 515);
-  let y = 85;
+  const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
+  const marginX = 40;
+  const contentWidth = pageWidth - marginX * 2;
+  let y = 50;
 
-  for (let i = 0; i < lines.length; i++) {
-    if (y > pageHeight - 50) {
+  const checkPage = (requiredSpace: number) => {
+    if (y + requiredSpace > pageHeight - 50) {
       doc.addPage();
       y = 50;
     }
-    doc.text(lines[i], 40, y);
-    y += 15;
+  };
+
+  if (isDocx) {
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      onProgress?.(35, 'Parsing Word headings, paragraphs & formatting...');
+      const mammothResult = await mammoth.convertToHtml({ arrayBuffer });
+      const html = mammothResult.value;
+
+      if (html && html.trim().length > 0) {
+        const parser = new DOMParser();
+        const docDom = parser.parseFromString(`<div>${html}</div>`, 'text/html');
+        const elements = Array.from(docDom.body.children);
+
+        // Header Title
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(18);
+        doc.setTextColor(15, 23, 42);
+        doc.text(cleanTitle, marginX, y);
+        y += 24;
+
+        doc.setDrawColor(226, 232, 240);
+        doc.setLineWidth(1);
+        doc.line(marginX, y, pageWidth - marginX, y);
+        y += 20;
+
+        for (let i = 0; i < elements.length; i++) {
+          const el = elements[i];
+          const tag = el.tagName.toLowerCase();
+          const text = el.textContent?.trim() || '';
+          if (!text) continue;
+
+          onProgress?.(
+            Math.round(40 + (i / Math.max(1, elements.length)) * 50),
+            `Rendering element ${i + 1} of ${elements.length}...`
+          );
+
+          if (tag === 'h1') {
+            checkPage(32);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(15);
+            doc.setTextColor(15, 23, 42);
+            const lines = doc.splitTextToSize(text, contentWidth);
+            doc.text(lines, marginX, y);
+            y += lines.length * 18 + 8;
+          } else if (tag === 'h2') {
+            checkPage(26);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(13);
+            doc.setTextColor(30, 41, 59);
+            const lines = doc.splitTextToSize(text, contentWidth);
+            doc.text(lines, marginX, y);
+            y += lines.length * 16 + 6;
+          } else if (tag === 'h3') {
+            checkPage(22);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(11.5);
+            doc.setTextColor(51, 65, 85);
+            const lines = doc.splitTextToSize(text, contentWidth);
+            doc.text(lines, marginX, y);
+            y += lines.length * 15 + 4;
+          } else if (tag === 'ul' || tag === 'ol') {
+            const listItems = Array.from(el.querySelectorAll('li'));
+            for (let liIdx = 0; liIdx < listItems.length; liIdx++) {
+              const liText = listItems[liIdx].textContent?.trim() || '';
+              if (!liText) continue;
+              checkPage(18);
+              doc.setFont('helvetica', 'normal');
+              doc.setFontSize(10);
+              doc.setTextColor(51, 65, 85);
+              const bullet = tag === 'ol' ? `${liIdx + 1}. ` : '• ';
+              doc.text(bullet, marginX + 8, y);
+              const lines = doc.splitTextToSize(liText, contentWidth - 24);
+              doc.text(lines, marginX + 22, y);
+              y += lines.length * 14 + 3;
+            }
+            y += 4;
+          } else if (tag === 'table') {
+            const rows = Array.from(el.querySelectorAll('tr'));
+            if (rows.length > 0) {
+              const tableBody = rows.map((tr) =>
+                Array.from(tr.querySelectorAll('td, th')).map((cell) => cell.textContent?.trim() || '')
+              );
+              // @ts-ignore
+              autoTable(doc, {
+                startY: y,
+                margin: { left: marginX, right: marginX },
+                body: tableBody,
+                theme: 'grid',
+                styles: { fontSize: 9, cellPadding: 4, textColor: [30, 41, 59] },
+                headStyles: { fillColor: [241, 245, 249], textColor: [15, 23, 42], fontStyle: 'bold' },
+              });
+              // @ts-ignore
+              y = (doc.lastAutoTable ? doc.lastAutoTable.finalY : y + 60) + 14;
+            }
+          } else {
+            checkPage(18);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(10);
+            doc.setTextColor(51, 65, 85);
+            const lines = doc.splitTextToSize(text, contentWidth);
+            doc.text(lines, marginX, y);
+            y += lines.length * 14 + 6;
+          }
+        }
+
+        onProgress?.(100, 'Word document converted to PDF successfully!');
+        return {
+          blob: doc.output('blob'),
+          filename: `${cleanTitle}.pdf`,
+        };
+      }
+    } catch (docxErr) {
+      console.warn('Mammoth docx parse fallback:', docxErr);
+    }
   }
 
-  const blob = doc.output('blob');
+  // Fallback / plain text handling
+  onProgress?.(50, 'Compiling formatted PDF layout...');
+  let text = '';
+  try {
+    text = await file.text();
+  } catch (e) {
+    text = '';
+  }
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.setTextColor(15, 23, 42);
+  doc.text(cleanTitle, marginX, y);
+  y += 20;
+
+  doc.setDrawColor(226, 232, 240);
+  doc.line(marginX, y, pageWidth - marginX, y);
+  y += 20;
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.setTextColor(51, 65, 85);
+
+  const lines = doc.splitTextToSize(text || 'Document converted.', contentWidth);
+  for (let i = 0; i < lines.length; i++) {
+    checkPage(15);
+    doc.text(lines[i], marginX, y);
+    y += 14;
+  }
+
+  onProgress?.(100, 'Compiled text into PDF successfully!');
   return {
-    blob,
-    filename: `${file.name.replace(/\.[^/.]+$/, '')}.pdf`,
+    blob: doc.output('blob'),
+    filename: `${cleanTitle}.pdf`,
   };
 }
 
-// ============================================================================\n// 8. POWERPOINT TO PDF (.PPTX)\n// ============================================================================\n\nfunction xmlTextContent(node: Element): string {\n  return Array.from(node.getElementsByTagNameNS('*', 't')).map((t) => t.textContent || '').join('');\n}\n\nfunction parsePptxRelationships(xml: string): Record<string, string> {\n  const parsed = new DOMParser().parseFromString(xml, 'application/xml');\n  const map: Record<string, string> = {};\n  Array.from(parsed.getElementsByTagNameNS('*', 'Relationship')).forEach((rel) => {\n    const id = rel.getAttribute('Id');\n    const target = rel.getAttribute('Target');\n    if (id && target) map[id] = target.replace(/^\.\//, '');\n  });\n  return map;\n}\n\nfunction resolvePptxTarget(slidePath: string, target: string): string {\n  const slideDir = slidePath.substring(0, slidePath.lastIndexOf('/') + 1);\n  const parts = (slideDir + target).split('/');\n  const out: string[] = [];\n  for (const part of parts) {\n    if (!part || part === '.') continue;\n    if (part === '..') out.pop(); else out.push(part);\n  }\n  return out.join('/');\n}\n\nfunction parseEmu(value: string | null, fallback: number): number {\n  const n = Number(value);\n  return Number.isFinite(n) ? n : fallback;\n}\n\nasync function pptxBlobToDataUrl(blob: Blob): Promise<string> {\n  return await new Promise((resolve, reject) => {\n    const reader = new FileReader();\n    reader.onload = () => resolve(String(reader.result));\n    reader.onerror = reject;\n    reader.readAsDataURL(blob);\n  });\n}\n\n/** Browser-local Open XML .pptx to PDF converter. Legacy binary .ppt is intentionally unsupported. */\nexport async function powerpointToPdf(\n  file: File,\n  onProgress?: (progress: number, msg: string) => void\n): Promise<{ blob: Blob; filename: string }> {\n  if (!file.name.toLowerCase().endsWith('.pptx')) {\n    throw new Error('Please upload a modern PowerPoint .pptx file. Legacy .ppt files are not supported by the browser-only converter.');\n  }\n\n  onProgress?.(10, 'Opening PowerPoint package locally...');\n  const buffer = await file.arrayBuffer();\n  const zip = await JSZip.loadAsync(buffer);\n  const presentationXml = await zip.file('ppt/presentation.xml')?.async('string');\n  if (!presentationXml) throw new Error('Invalid PowerPoint file: presentation.xml is missing.');\n\n  const presDoc = new DOMParser().parseFromString(presentationXml, 'application/xml');\n  const slideIds = Array.from(presDoc.getElementsByTagNameNS('*', 'sldId'));\n  const presRelsXml = await zip.file('ppt/_rels/presentation.xml.rels')?.async('string');\n  if (!presRelsXml) throw new Error('Invalid PowerPoint file: presentation relationships are missing.');\n  const presRels = parsePptxRelationships(presRelsXml);\n  const slidePaths = slideIds.map((id) => {\n    const relId = id.getAttribute('r:id') || id.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'id');\n    const target = relId ? presRels[relId] : '';\n    return target ? resolvePptxTarget('ppt/presentation.xml', target) : '';\n  }).filter(Boolean);\n  if (slidePaths.length === 0) throw new Error('No slides were found in this PowerPoint file.');\n\n  const slideWidth = 960;\n  const slideHeight = 540;\n  const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: [slideWidth, slideHeight], compress: true });\n\n  for (let index = 0; index < slidePaths.length; index++) {\n    const slidePath = slidePaths[index];\n    onProgress?.(Math.round(15 + (index / slidePaths.length) * 75), 'Rendering slide ' + (index + 1) + ' of ' + slidePaths.length + '...');\n    if (index > 0) doc.addPage([slideWidth, slideHeight], 'landscape');\n\n    const slideXml = await zip.file(slidePath)?.async('string');\n    if (!slideXml) continue;\n    const slideDoc = new DOMParser().parseFromString(slideXml, 'application/xml');\n    const relPath = slidePath.substring(0, slidePath.lastIndexOf('/')) + '/_rels/' + slidePath.substring(slidePath.lastIndexOf('/') + 1) + '.rels';\n    const relXml = await zip.file(relPath)?.async('string');\n    const slideRels = relXml ? parsePptxRelationships(relXml) : {};\n\n    doc.setFillColor(248, 250, 252);\n    doc.rect(0, 0, slideWidth, slideHeight, 'F');\n\n    const bg = slideDoc.getElementsByTagNameNS('*', 'bg')[0];\n    const srgb = bg?.getElementsByTagNameNS('*', 'srgbClr')[0]?.getAttribute('val');\n    if (srgb && /^[0-9a-fA-F]{6}$/.test(srgb)) {\n      doc.setFillColor(parseInt(srgb.slice(0, 2), 16), parseInt(srgb.slice(2, 4), 16), parseInt(srgb.slice(4, 6), 16));\n      doc.rect(0, 0, slideWidth, slideHeight, 'F');\n    }\n\n    const shapeTree = slideDoc.getElementsByTagNameNS('*', 'spTree')[0];\n    const shapes = shapeTree ? Array.from(shapeTree.children) : [];\n    for (const shape of shapes) {\n      const xfrm = shape.getElementsByTagNameNS('*', 'xfrm')[0];\n      if (!xfrm) continue;\n      const off = xfrm.getElementsByTagNameNS('*', 'off')[0];\n      const ext = xfrm.getElementsByTagNameNS('*', 'ext')[0];\n      const x = parseEmu(off?.getAttribute('x') ?? null, 0) / 12700;\n      const y = parseEmu(off?.getAttribute('y') ?? null, 0) / 12700;\n      const w = Math.max(1, parseEmu(ext?.getAttribute('cx') ?? null, 1) / 12700);\n      const h = Math.max(1, parseEmu(ext?.getAttribute('cy') ?? null, 1) / 12700);\n      const tag = shape.localName;\n\n      if (tag === 'pic') {\n        const blip = shape.getElementsByTagNameNS('*', 'blip')[0];\n        const relId = blip?.getAttribute('r:embed') || blip?.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'embed');\n        const target = relId ? slideRels[relId] : '';\n        const mediaPath = target ? resolvePptxTarget(slidePath, target) : '';\n        const media = mediaPath ? zip.file(mediaPath) : null;\n        if (media) {\n          try {\n            const imageBlob = await media.async('blob');\n            const dataUrl = await pptxBlobToDataUrl(imageBlob);\n            const format = (imageBlob.type || '').includes('png') || mediaPath.toLowerCase().endsWith('.png') ? 'PNG' : 'JPEG';\n            doc.addImage(dataUrl, format, x, y, w, h, undefined, 'FAST');\n          } catch (imageError) {\n            console.warn('Could not render PowerPoint image:', imageError);\n          }\n        }\n        continue;\n      }\n\n      if (tag !== 'sp') continue;\n      const textBodies = Array.from(shape.getElementsByTagNameNS('*', 'txBody'));\n      if (textBodies.length === 0) continue;\n      const text = textBodies.map(xmlTextContent).join(' ').replace(/\s+/g, ' ').trim();\n      if (!text) continue;\n\n      const runs = Array.from(shape.getElementsByTagNameNS('*', 'r'));\n      const firstRun = runs[0];\n      const runProps = firstRun?.getElementsByTagNameNS('*', 'rPr')[0];\n      const fontSize = Math.max(8, Math.min(42, (Number(runProps?.getAttribute('sz')) || 1800) / 100));\n      const isBold = runProps?.getAttribute('b') === '1';\n      const colorNode = runProps?.getElementsByTagNameNS('*', 'srgbClr')[0]?.getAttribute('val');\n      if (colorNode && /^[0-9a-fA-F]{6}$/.test(colorNode)) doc.setTextColor(parseInt(colorNode.slice(0, 2), 16), parseInt(colorNode.slice(2, 4), 16), parseInt(colorNode.slice(4, 6), 16));\n      else doc.setTextColor(30, 41, 59);\n      doc.setFont('helvetica', isBold ? 'bold' : 'normal');\n      doc.setFontSize(fontSize);\n      const lines = doc.splitTextToSize(text, Math.max(30, w - 8));\n      doc.text(lines, x + 4, y + Math.min(fontSize, h - 4), { maxWidth: Math.max(30, w - 8), lineHeightFactor: 1.2 });\n    }\n\n    doc.setFont('helvetica', 'normal');\n    doc.setFontSize(8);\n    doc.setTextColor(100, 116, 139);\n    doc.text('MAN OF STUDY • ' + (index + 1) + '/' + slidePaths.length, slideWidth - 120, slideHeight - 14);\n  }\n\n  onProgress?.(100, 'Converted ' + slidePaths.length + ' PowerPoint slides to PDF.');\n  return { blob: doc.output('blob'), filename: file.name.replace(/\.pptx$/i, '') + '.pdf' };\n}\n// ============================================================================
+// ============================================================================
+// 8. POWERPOINT TO PDF (.PPTX)
+// ============================================================================
+
+function xmlTextContent(node: Element): string {
+  return Array.from(node.getElementsByTagNameNS('*', 't')).map((t) => t.textContent || '').join('');
+}
+
+function parsePptxRelationships(xml: string): Record<string, string> {
+  const parsed = new DOMParser().parseFromString(xml, 'application/xml');
+  const map: Record<string, string> = {};
+  Array.from(parsed.getElementsByTagNameNS('*', 'Relationship')).forEach((rel) => {
+    const id = rel.getAttribute('Id');
+    const target = rel.getAttribute('Target');
+    if (id && target) map[id] = target.replace(/^\.\//, '');
+  });
+  return map;
+}
+
+function resolvePptxTarget(slidePath: string, target: string): string {
+  const slideDir = slidePath.substring(0, slidePath.lastIndexOf('/') + 1);
+  const parts = (slideDir + target).split('/');
+  const out: string[] = [];
+  for (const part of parts) {
+    if (!part || part === '.') continue;
+    if (part === '..') out.pop(); else out.push(part);
+  }
+  return out.join('/');
+}
+
+function parseEmu(value: string | null, fallback: number): number {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+async function pptxBlobToDataUrl(blob: Blob): Promise<string> {
+  return await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+/** Browser-local Open XML .pptx to PDF converter. Legacy binary .ppt is intentionally unsupported. */
+export async function powerpointToPdf(
+  file: File,
+  onProgress?: (progress: number, msg: string) => void
+): Promise<{ blob: Blob; filename: string }> {
+  if (!file.name.toLowerCase().endsWith('.pptx')) {
+    throw new Error('Please upload a modern PowerPoint .pptx file. Legacy .ppt files are not supported by the browser-only converter.');
+  }
+
+  onProgress?.(10, 'Opening PowerPoint package locally...');
+  const buffer = await file.arrayBuffer();
+  const zip = await JSZip.loadAsync(buffer);
+  const presentationXml = await zip.file('ppt/presentation.xml')?.async('string');
+  if (!presentationXml) throw new Error('Invalid PowerPoint file: presentation.xml is missing.');
+
+  const presDoc = new DOMParser().parseFromString(presentationXml, 'application/xml');
+  const slideIds = Array.from(presDoc.getElementsByTagNameNS('*', 'sldId'));
+  const presRelsXml = await zip.file('ppt/_rels/presentation.xml.rels')?.async('string');
+  if (!presRelsXml) throw new Error('Invalid PowerPoint file: presentation relationships are missing.');
+  const presRels = parsePptxRelationships(presRelsXml);
+  const slidePaths = slideIds.map((id) => {
+    const relId = id.getAttribute('r:id') || id.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'id');
+    const target = relId ? presRels[relId] : '';
+    return target ? resolvePptxTarget('ppt/presentation.xml', target) : '';
+  }).filter(Boolean);
+  if (slidePaths.length === 0) throw new Error('No slides were found in this PowerPoint file.');
+
+  const slideWidth = 960;
+  const slideHeight = 540;
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: [slideWidth, slideHeight], compress: true });
+
+  for (let index = 0; index < slidePaths.length; index++) {
+    const slidePath = slidePaths[index];
+    onProgress?.(Math.round(15 + (index / slidePaths.length) * 75), 'Rendering slide ' + (index + 1) + ' of ' + slidePaths.length + '...');
+    if (index > 0) doc.addPage([slideWidth, slideHeight], 'landscape');
+
+    const slideXml = await zip.file(slidePath)?.async('string');
+    if (!slideXml) continue;
+    const slideDoc = new DOMParser().parseFromString(slideXml, 'application/xml');
+    const relPath = slidePath.substring(0, slidePath.lastIndexOf('/')) + '/_rels/' + slidePath.substring(slidePath.lastIndexOf('/') + 1) + '.rels';
+    const relXml = await zip.file(relPath)?.async('string');
+    const slideRels = relXml ? parsePptxRelationships(relXml) : {};
+
+    doc.setFillColor(248, 250, 252);
+    doc.rect(0, 0, slideWidth, slideHeight, 'F');
+
+    const bg = slideDoc.getElementsByTagNameNS('*', 'bg')[0];
+    const srgb = bg?.getElementsByTagNameNS('*', 'srgbClr')[0]?.getAttribute('val');
+    if (srgb && /^[0-9a-fA-F]{6}$/.test(srgb)) {
+      doc.setFillColor(parseInt(srgb.slice(0, 2), 16), parseInt(srgb.slice(2, 4), 16), parseInt(srgb.slice(4, 6), 16));
+      doc.rect(0, 0, slideWidth, slideHeight, 'F');
+    }
+
+    const shapeTree = slideDoc.getElementsByTagNameNS('*', 'spTree')[0];
+    const shapes = shapeTree ? Array.from(shapeTree.children) : [];
+    for (const shape of shapes) {
+      const xfrm = shape.getElementsByTagNameNS('*', 'xfrm')[0];
+      if (!xfrm) continue;
+      const off = xfrm.getElementsByTagNameNS('*', 'off')[0];
+      const ext = xfrm.getElementsByTagNameNS('*', 'ext')[0];
+      const x = parseEmu(off?.getAttribute('x') ?? null, 0) / 12700;
+      const y = parseEmu(off?.getAttribute('y') ?? null, 0) / 12700;
+      const w = Math.max(1, parseEmu(ext?.getAttribute('cx') ?? null, 1) / 12700);
+      const h = Math.max(1, parseEmu(ext?.getAttribute('cy') ?? null, 1) / 12700);
+      const tag = shape.localName;
+
+      if (tag === 'pic') {
+        const blip = shape.getElementsByTagNameNS('*', 'blip')[0];
+        const relId = blip?.getAttribute('r:embed') || blip?.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'embed');
+        const target = relId ? slideRels[relId] : '';
+        const mediaPath = target ? resolvePptxTarget(slidePath, target) : '';
+        const media = mediaPath ? zip.file(mediaPath) : null;
+        if (media) {
+          try {
+            const imageBlob = await media.async('blob');
+            const dataUrl = await pptxBlobToDataUrl(imageBlob);
+            const format = (imageBlob.type || '').includes('png') || mediaPath.toLowerCase().endsWith('.png') ? 'PNG' : 'JPEG';
+            doc.addImage(dataUrl, format, x, y, w, h, undefined, 'FAST');
+          } catch (imageError) {
+            console.warn('Could not render PowerPoint image:', imageError);
+          }
+        }
+        continue;
+      }
+
+      if (tag !== 'sp') continue;
+      const textBodies = Array.from(shape.getElementsByTagNameNS('*', 'txBody'));
+      if (textBodies.length === 0) continue;
+      const text = textBodies.map(xmlTextContent).join(' ').replace(/\s+/g, ' ').trim();
+      if (!text) continue;
+
+      const runs = Array.from(shape.getElementsByTagNameNS('*', 'r'));
+      const firstRun = runs[0];
+      const runProps = firstRun?.getElementsByTagNameNS('*', 'rPr')[0];
+      const fontSize = Math.max(8, Math.min(42, (Number(runProps?.getAttribute('sz')) || 1800) / 100));
+      const isBold = runProps?.getAttribute('b') === '1';
+      const colorNode = runProps?.getElementsByTagNameNS('*', 'srgbClr')[0]?.getAttribute('val');
+      if (colorNode && /^[0-9a-fA-F]{6}$/.test(colorNode)) doc.setTextColor(parseInt(colorNode.slice(0, 2), 16), parseInt(colorNode.slice(2, 4), 16), parseInt(colorNode.slice(4, 6), 16));
+      else doc.setTextColor(30, 41, 59);
+      doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+      doc.setFontSize(fontSize);
+      const lines = doc.splitTextToSize(text, Math.max(30, w - 8));
+      doc.text(lines, x + 4, y + Math.min(fontSize, h - 4), { maxWidth: Math.max(30, w - 8), lineHeightFactor: 1.2 });
+    }
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(100, 116, 139);
+    doc.text('MAN OF STUDY • ' + (index + 1) + '/' + slidePaths.length, slideWidth - 120, slideHeight - 14);
+  }
+
+  onProgress?.(100, 'Converted ' + slidePaths.length + ' PowerPoint slides to PDF.');
+  return { blob: doc.output('blob'), filename: file.name.replace(/\.pptx$/i, '') + '.pdf' };
+}
+
+// ============================================================================
 // 9. EXCEL / CSV TO PDF
 // ============================================================================
 export async function excelToPdf(
@@ -1799,3 +2119,90 @@ export async function exportPdfToMarkdown(
     filename: `${file.name.replace(/\.pdf$/i, '')}.md`,
   };
 }
+
+// ============================================================================
+// 31. PDF TO TEXT (Direct text extraction)
+// ============================================================================
+export async function pdfToText(
+  file: File,
+  onProgress?: (progress: number, msg: string) => void
+): Promise<{ text: string; blob: Blob; filename: string }> {
+  onProgress?.(20, 'Reading PDF text layer via PDF.js...');
+  const buffer = await file.arrayBuffer();
+  const { fullText } = await extractTextFromPdf(buffer, onProgress);
+  onProgress?.(90, 'Generating plain text file...');
+  const blob = new Blob([fullText], { type: 'text/plain;charset=utf-8' });
+  return {
+    text: fullText,
+    blob,
+    filename: `${file.name.replace(/\.pdf$/i, '')}_extracted.txt`,
+  };
+}
+
+// ============================================================================
+// 32. EXTRACT PAGES (Extract specific pages into standalone PDF)
+// ============================================================================
+export async function extractPagesPdf(
+  file: File,
+  pageRangeStr: string,
+  onProgress?: (progress: number, msg: string) => void
+): Promise<{ blob: Blob; filename: string; pageCount: number }> {
+  onProgress?.(20, 'Loading source PDF...');
+  const buffer = await file.arrayBuffer();
+  const pdfDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+  const totalPages = pdfDoc.getPageCount();
+
+  const indices = parsePageRange(pageRangeStr, totalPages);
+  if (indices.length === 0) {
+    throw new Error(`Invalid page range. The document has ${totalPages} pages.`);
+  }
+
+  onProgress?.(60, `Extracting ${indices.length} selected pages...`);
+  const newDoc = await PDFDocument.create();
+  const copiedPages = await newDoc.copyPages(pdfDoc, indices);
+  copiedPages.forEach((p) => newDoc.addPage(p));
+
+  onProgress?.(90, 'Compiling extracted PDF...');
+  const pdfBytes = await newDoc.save();
+  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+  return {
+    blob,
+    filename: `${file.name.replace(/\.pdf$/i, '')}_extracted.pdf`,
+    pageCount: indices.length,
+  };
+}
+
+// ============================================================================
+// 33. PDF METADATA EDITOR (Read & Update Document Properties)
+// ============================================================================
+export async function editPdfMetadata(
+  file: File,
+  metadata: {
+    title?: string;
+    author?: string;
+    subject?: string;
+    keywords?: string[];
+    creator?: string;
+  },
+  onProgress?: (progress: number, msg: string) => void
+): Promise<{ blob: Blob; filename: string }> {
+  onProgress?.(20, 'Reading PDF metadata streams...');
+  const buffer = await file.arrayBuffer();
+  const pdfDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+
+  onProgress?.(60, 'Applying updated metadata tags...');
+  if (metadata.title !== undefined) pdfDoc.setTitle(metadata.title);
+  if (metadata.author !== undefined) pdfDoc.setAuthor(metadata.author);
+  if (metadata.subject !== undefined) pdfDoc.setSubject(metadata.subject);
+  if (metadata.keywords !== undefined) pdfDoc.setKeywords(metadata.keywords);
+  if (metadata.creator !== undefined) pdfDoc.setCreator(metadata.creator);
+
+  onProgress?.(90, 'Compiling updated PDF...');
+  const pdfBytes = await pdfDoc.save();
+  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+  return {
+    blob,
+    filename: `${file.name.replace(/\.pdf$/i, '')}_metadata.pdf`,
+  };
+}
+

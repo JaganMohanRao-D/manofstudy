@@ -31,6 +31,30 @@ export async function compressAndResizeImage(
     // 3.5cm x 1.5cm standard exam signature (280x120 px)
     baseWidth = 280;
     baseHeight = 120;
+  } else if (config.dimensionPreset === 'ssc_photo') {
+    // SSC Photo (3.5cm x 4.5cm / 200x230 px)
+    baseWidth = 200;
+    baseHeight = 230;
+  } else if (config.dimensionPreset === 'ssc_signature') {
+    // SSC Signature (4.0cm x 2.0cm / 140x60 px)
+    baseWidth = 140;
+    baseHeight = 60;
+  } else if (config.dimensionPreset === 'gate_photo') {
+    // GATE Photo (3.5cm x 4.5cm / 240x320 px)
+    baseWidth = 240;
+    baseHeight = 320;
+  } else if (config.dimensionPreset === 'gate_signature') {
+    // GATE Signature (160x560 px or 280x80 px standard)
+    baseWidth = 280;
+    baseHeight = 80;
+  } else if (config.dimensionPreset === 'upsc_photo') {
+    // UPSC Photo (350x350 px min)
+    baseWidth = 350;
+    baseHeight = 350;
+  } else if (config.dimensionPreset === 'upsc_signature') {
+    // UPSC Signature (350x150 px)
+    baseWidth = 350;
+    baseHeight = 150;
   } else if (config.dimensionPreset === 'ssc_gate') {
     // Standard SSC / GATE / UPSC exam photo (200x230 px)
     baseWidth = 200;

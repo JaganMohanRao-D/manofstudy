@@ -61,6 +61,9 @@ import {
   generatePdfFormFields,
   summarizePdf,
   exportPdfToMarkdown,
+  extractPagesPdf,
+  pdfToText,
+  editPdfMetadata,
 } from '../../utils/pdfToolkitEngine';
 import { formatPdfErrorMessage } from '../../utils/pdfErrorHelper';
 
@@ -141,6 +144,15 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
     pageCountB: number;
     wordCountDiff: number;
   } | null>(null);
+
+  // Extract Pages, Text & Metadata states
+  const [extractPageRange, setExtractPageRange] = useState<string>('1-3');
+  const [extractedText, setExtractedText] = useState<string>('');
+  const [copiedText, setCopiedText] = useState<boolean>(false);
+  const [metaTitle, setMetaTitle] = useState<string>('');
+  const [metaAuthor, setMetaAuthor] = useState<string>('');
+  const [metaSubject, setMetaSubject] = useState<string>('');
+  const [metaKeywords, setMetaKeywords] = useState<string>('');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const fileBInputRef = useRef<HTMLInputElement>(null);
@@ -325,10 +337,69 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
             setProgress((prev) => ({ ...prev, progressPercent: pct, statusMessage: msg }));
           });
           const downloadUrl = URL.createObjectURL(res.blob);
+          const secondaryDownloadUrl = res.secondaryBlob ? URL.createObjectURL(res.secondaryBlob) : undefined;
           setProgress({
             isProcessing: false,
             progressPercent: 100,
-            statusMessage: 'Converted PDF text layer into editable Word document!',
+            statusMessage: 'Converted PDF text layer into editable Microsoft Word (.docx) document!',
+            downloadUrl,
+            downloadFilename: res.filename,
+            secondaryDownloadUrl,
+            secondaryFilename: res.secondaryFilename,
+          });
+          break;
+        }
+
+        case 'extract-pages': {
+          const res = await extractPagesPdf(mainFile, extractPageRange || '1', (pct, msg) => {
+            setProgress((prev) => ({ ...prev, progressPercent: pct, statusMessage: msg }));
+          });
+          const downloadUrl = URL.createObjectURL(res.blob);
+          setProgress({
+            isProcessing: false,
+            progressPercent: 100,
+            statusMessage: `Extracted ${res.pageCount} page(s) into standalone PDF!`,
+            downloadUrl,
+            downloadFilename: res.filename,
+          });
+          break;
+        }
+
+        case 'pdf-to-text': {
+          const res = await pdfToText(mainFile, (pct, msg) => {
+            setProgress((prev) => ({ ...prev, progressPercent: pct, statusMessage: msg }));
+          });
+          setExtractedText(res.text);
+          const downloadUrl = URL.createObjectURL(res.blob);
+          setProgress({
+            isProcessing: false,
+            progressPercent: 100,
+            statusMessage: 'Extracted raw text layer from PDF document!',
+            downloadUrl,
+            downloadFilename: res.filename,
+          });
+          break;
+        }
+
+        case 'pdf-metadata': {
+          const keywordsArr = metaKeywords.split(',').map((k) => k.trim()).filter(Boolean);
+          const res = await editPdfMetadata(
+            mainFile,
+            {
+              title: metaTitle || undefined,
+              author: metaAuthor || undefined,
+              subject: metaSubject || undefined,
+              keywords: keywordsArr.length > 0 ? keywordsArr : undefined,
+            },
+            (pct, msg) => {
+              setProgress((prev) => ({ ...prev, progressPercent: pct, statusMessage: msg }));
+            }
+          );
+          const downloadUrl = URL.createObjectURL(res.blob);
+          setProgress({
+            isProcessing: false,
+            progressPercent: 100,
+            statusMessage: 'Updated metadata tags and compiled clean PDF!',
             downloadUrl,
             downloadFilename: res.filename,
           });
@@ -1012,6 +1083,102 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
                   />
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Extract Pages Controls */}
+          {tool.id === 'extract-pages' && (
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3 text-xs">
+              <span className="font-semibold text-slate-800 block">Pages to Extract</span>
+              <div className="space-y-1">
+                <label className="text-slate-600 block">Specify page numbers or comma-separated ranges</label>
+                <input
+                  type="text"
+                  value={extractPageRange}
+                  onChange={(e) => setExtractPageRange(e.target.value)}
+                  placeholder="e.g. 1-3, 5"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono"
+                />
+                <p className="text-[11px] text-slate-500 pt-1">
+                  Example: <code className="text-blue-600 font-mono">1, 3, 5-8</code> exports pages 1, 3, 5, 6, 7, and 8 into a unified PDF.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* PDF Metadata Editor Controls */}
+          {tool.id === 'pdf-metadata' && (
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3 text-xs">
+              <span className="font-semibold text-slate-800 block">Document Metadata Properties</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-slate-600 block mb-1">Document Title</label>
+                  <input
+                    type="text"
+                    value={metaTitle}
+                    onChange={(e) => setMetaTitle(e.target.value)}
+                    placeholder="e.g. Operating Systems Lab Manual"
+                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-600 block mb-1">Author Name / Roll No.</label>
+                  <input
+                    type="text"
+                    value={metaAuthor}
+                    onChange={(e) => setMetaAuthor(e.target.value)}
+                    placeholder="e.g. Rahul Sharma (21B91A0501)"
+                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-600 block mb-1">Subject / Department</label>
+                  <input
+                    type="text"
+                    value={metaSubject}
+                    onChange={(e) => setMetaSubject(e.target.value)}
+                    placeholder="e.g. Computer Science & Engineering"
+                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-600 block mb-1">Keywords (comma-separated)</label>
+                  <input
+                    type="text"
+                    value={metaKeywords}
+                    onChange={(e) => setMetaKeywords(e.target.value)}
+                    placeholder="e.g. OS, lab, semester 5, final"
+                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* PDF to Text Extracted Preview */}
+          {tool.id === 'pdf-to-text' && extractedText && (
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2 text-xs">
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-slate-800">Extracted Text Preview</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(extractedText);
+                    setCopiedText(true);
+                    setTimeout(() => setCopiedText(false), 2000);
+                  }}
+                  className="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  {copiedText ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copiedText ? 'Copied!' : 'Copy to Clipboard'}
+                </button>
+              </div>
+              <textarea
+                readOnly
+                value={extractedText}
+                rows={6}
+                className="w-full p-2.5 bg-white border border-slate-200 rounded-lg font-mono text-[11px] text-slate-700 focus:outline-none resize-y"
+              />
             </div>
           )}
 
