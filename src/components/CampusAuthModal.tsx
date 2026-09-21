@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { ShieldCheck, X, AlertCircle, Loader2, Sparkles, UserCheck } from 'lucide-react';
+import { ShieldCheck, X, AlertCircle, Loader2, Sparkles, UserCheck, ExternalLink } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export const CampusAuthModal: React.FC = () => {
-  const { isAuthModalOpen, closeAuthModal, signInWithGoogle, pendingAction } = useAuth();
+  const { isAuthModalOpen, closeAuthModal, signInWithGoogle, pendingAction, authError } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -18,11 +18,22 @@ export const CampusAuthModal: React.FC = () => {
         // Auth succeeded; modal will close and the caller effect will trigger the pending action
       }
     } catch (err: any) {
-      setErrorMessage(err.message || 'Google sign-in failed. Please try again.');
+      const msg = err?.message || '';
+      const isCancellation =
+        msg.toLowerCase().includes('cancel') ||
+        msg.toLowerCase().includes('closed-by-user') ||
+        err?.code === 'auth/popup-closed-by-user' ||
+        err?.code === 'auth/cancelled-popup-request';
+
+      if (!isCancellation) {
+        setErrorMessage(msg || 'Google sign-in could not be completed. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  const activeError = errorMessage || authError;
 
   const actionLabel =
     pendingAction?.type === 'ask-doubt'
@@ -79,10 +90,25 @@ export const CampusAuthModal: React.FC = () => {
 
         {/* Body & Google Action Button */}
         <div className="px-6 pb-6 sm:px-7 sm:pb-7 space-y-4">
-          {errorMessage && (
-            <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-start gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-              <span>{errorMessage}</span>
+          {activeError && (
+            <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
+              <div className="space-y-1">
+                <span>{activeError}</span>
+                {window.self !== window.top && (
+                  <div className="pt-1">
+                    <a
+                      href={window.location.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-pink-600 hover:underline"
+                    >
+                      <span>Open app in new tab</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
@@ -95,7 +121,7 @@ export const CampusAuthModal: React.FC = () => {
             {isSubmitting ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin text-pink-600" />
-                <span>Authenticating with Google...</span>
+                <span>Opening Google Sign-In...</span>
               </>
             ) : (
               <>

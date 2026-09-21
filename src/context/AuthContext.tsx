@@ -77,12 +77,28 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setAuthError(null);
     try {
       const loggedUser = await signInWithGoogleAccount();
-      setUser(loggedUser);
-      setIsAuthModalOpen(false);
-      return loggedUser;
+      if (loggedUser) {
+        setUser(loggedUser);
+        setIsAuthModalOpen(false);
+        return loggedUser;
+      }
+      // User closed or cancelled the popup peacefully
+      return null;
     } catch (err: any) {
-      console.error('[AuthContext] Sign in error:', err);
-      setAuthError(err.message || 'Google authentication failed.');
+      const errorMsg = err?.message || 'Google authentication failed.';
+      const isCancellation =
+        errorMsg.toLowerCase().includes('cancel') ||
+        errorMsg.toLowerCase().includes('closed-by-user') ||
+        err?.code === 'auth/popup-closed-by-user' ||
+        err?.code === 'auth/cancelled-popup-request';
+
+      if (isCancellation) {
+        console.info('[AuthContext] Sign-in cancelled by user.');
+        setAuthError(null);
+      } else {
+        console.warn('[AuthContext] Sign in notice:', errorMsg);
+        setAuthError(errorMsg);
+      }
       return null;
     }
   }, []);
@@ -93,7 +109,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setUser(null);
       setPendingAction(null);
     } catch (err: any) {
-      console.error('[AuthContext] Sign out error:', err);
+      console.warn('[AuthContext] Sign out notice:', err?.message || err);
     }
   }, []);
 

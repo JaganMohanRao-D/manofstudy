@@ -65,29 +65,42 @@ export async function checkRedirectAuth(): Promise<User | null> {
     if (result && result.user) {
       return result.user;
     }
-  } catch (err) {
-    console.error('[Firebase] Redirect result error:', err);
+  } catch (err: any) {
+    console.debug('[Firebase] Redirect result check completed:', err?.message || err);
   }
   return null;
 }
 
-// 5. Sign In With Google (Popup with fallback)
-export async function signInWithGoogleAccount(): Promise<User> {
+// 5. Sign In With Google (Popup with graceful cancellation & block handling)
+export async function signInWithGoogleAccount(): Promise<User | null> {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     return result.user;
   } catch (error: any) {
-    // If popup was blocked or mobile, fallback to redirect if suitable
-    if (error.code === 'auth/popup-blocked') {
-      console.warn('[Firebase] Popup blocked, attempting redirect sign-in...');
-      await signInWithRedirect(auth, googleProvider);
-      throw new Error('Redirecting to Google Sign-In...');
+    // Gracefully handle normal user actions like closing the popup window
+    if (
+      error?.code === 'auth/popup-closed-by-user' ||
+      error?.code === 'auth/cancelled-popup-request' ||
+      error?.message?.includes('closed-by-user') ||
+      error?.message?.includes('cancelled')
+    ) {
+      console.info('[Firebase] Sign-in popup was closed or cancelled by user.');
+      return null;
     }
-    if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
-      throw new Error('Sign-in cancelled by user.');
+
+    // If popup was blocked (e.g. by browser or iframe settings)
+    if (error?.code === 'auth/popup-blocked') {
+      console.warn('[Firebase] Popup blocked by browser settings.');
+      throw new Error('Sign-in popup was blocked by your browser. Please allow popups for this site or open the app in a new tab.');
     }
-    console.error('[Firebase] Google sign-in failed:', error);
-    throw new Error(error.message || 'Failed to authenticate with Google.');
+
+    if (error?.code === 'auth/unauthorized-domain') {
+      console.warn('[Firebase] Unauthorized domain:', error?.message);
+      throw new Error('This domain is not authorized for Google Sign-In in Firebase. Please add this domain in Firebase Console under Auth > Settings > Authorized Domains.');
+    }
+
+    console.warn('[Firebase] Google sign-in status:', error?.message || error);
+    throw new Error(error?.message || 'Failed to authenticate with Google.');
   }
 }
 
