@@ -7,6 +7,9 @@ import {
   subscribeToAuthState,
   testConnection,
   checkRedirectAuth,
+  syncUserProfile,
+  updateNotificationPreference,
+  UserProfile,
 } from '../services/firebase';
 
 export interface PendingCampusAction {
@@ -16,6 +19,7 @@ export interface PendingCampusAction {
 
 interface AuthContextType {
   user: User | null;
+  userProfile: UserProfile | null;
   loading: boolean;
   isAuthModalOpen: boolean;
   authError: string | null;
@@ -25,16 +29,32 @@ interface AuthContextType {
   signInWithGoogle: () => Promise<User | null>;
   signOut: () => Promise<void>;
   clearPendingAction: () => void;
+  updateEmailNotificationPreference: (enabled: boolean) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const [pendingAction, setPendingAction] = useState<PendingCampusAction | null>(null);
+
+  // Sync profile helper
+  const handleUserSync = useCallback(async (firebaseUser: User | null) => {
+    if (firebaseUser) {
+      try {
+        const profile = await syncUserProfile(firebaseUser);
+        setUserProfile(profile);
+      } catch (e) {
+        console.warn('[AuthContext] syncUserProfile error:', e);
+      }
+    } else {
+      setUserProfile(null);
+    }
+  }, []);
 
   useEffect(() => {
     // Initial validation of Firestore connection
@@ -44,6 +64,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     checkRedirectAuth().then((redirectedUser) => {
       if (redirectedUser) {
         setUser(redirectedUser);
+        handleUserSync(redirectedUser);
       }
     });
 
@@ -51,10 +72,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const unsubscribe = subscribeToAuthState((firebaseUser) => {
       setUser(firebaseUser);
       setLoading(false);
+      handleUserSync(firebaseUser);
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [handleUserSync]);
 
   const openAuthModal = useCallback((action?: PendingCampusAction) => {
     if (action) {
@@ -79,10 +101,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const loggedUser = await signInWithGoogleAccount();
       if (loggedUser) {
         setUser(loggedUser);
+        await handleUserSync(loggedUser);
         setIsAuthModalOpen(false);
         return loggedUser;
       }
-      // User closed or cancelled the popup peacefully
       return null;
     } catch (err: any) {
       const errorMsg = err?.message || 'Google authentication failed.';
@@ -101,12 +123,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       return null;
     }
-  }, []);
+  }, [handleUserSync]);
+
+  const updateEmailNotificationPreference = useCallback(
+    async (enabled: boolean) => {
+      if (!user) return;
+      try {
+        await updateNotificationPreference(user.uid, enabled);
+        setUserProfile((prev) => (prev ? { ...prev, emailNotificationsEnabled: enabled } : null));
+      } catch (err) {
+        console.warn('[AuthContext] updateNotificationPreference error:', err);
+        throw err;
+      }
+    },
+    [user]
+  );
 
   const signOut = useCallback(async () => {
     try {
       await signOutGoogleAccount();
       setUser(null);
+      setUserProfile(null);
       setPendingAction(null);
     } catch (err: any) {
       console.warn('[AuthContext] Sign out notice:', err?.message || err);
@@ -117,6 +154,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     <AuthContext.Provider
       value={{
         user,
+        userProfile,
         loading,
         isAuthModalOpen,
         authError,
@@ -126,6 +164,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         signInWithGoogle,
         signOut,
         clearPendingAction,
+        updateEmailNotificationPreference,
       }}
     >
       {children}

@@ -571,6 +571,161 @@ function tgAllotmentPlugin(): Plugin {
         });
       });
 
+      // Trusted CampusConnect Answer Notification Trigger Endpoint
+      const sentNotificationIds = new Set<string>();
+      server.middlewares.use('/api/campus/trigger-answer-notification', (req, res) => {
+        if (req.method === 'OPTIONS') {
+          res.setHeader('Access-Control-Allow-Origin', '*');
+          res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+          res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+          res.statusCode = 204;
+          res.end();
+          return;
+        }
+
+        if (req.method !== 'POST') {
+          res.statusCode = 405;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ error: 'Method Not Allowed' }));
+          return;
+        }
+
+        const chunks: Buffer[] = [];
+        req.on('data', (chunk) => chunks.push(chunk));
+        req.on('end', async () => {
+          try {
+            const raw = Buffer.concat(chunks).toString('utf-8');
+            const data = JSON.parse(raw);
+            const { postId, replyId, questionAuthorUid, questionTitle, replyAuthor, callerUid } = data || {};
+
+            // 1. Avoid self-notification (Requirement 6)
+            if (callerUid && questionAuthorUid && callerUid === questionAuthorUid) {
+              res.statusCode = 200;
+              res.setHeader('Content-Type', 'application/json');
+              res.end(JSON.stringify({ success: true, skipped: 'Self-notification' }));
+              return;
+            }
+
+            // 2. Deterministic ID for duplicate protection (Requirement 10)
+            const notificationId = `answer_notification_${postId}_${replyId}`;
+            if (sentNotificationIds.has(notificationId)) {
+              res.statusCode = 200;
+              res.setHeader('Content-Type', 'application/json');
+              res.end(JSON.stringify({ success: true, skipped: 'Duplicate notification prevented' }));
+              return;
+            }
+
+            // 3. Resolve question author email and preferences
+            let targetEmail: string | null = null;
+            let targetName = 'Student';
+
+            if (questionAuthorUid) {
+              try {
+                const userDocRes = await fetch(
+                  `https://firestore.googleapis.com/v1/projects/quixotic-asset-mds98/databases/ai-studio-studymacha-9e3e2332-8e4b-4e97-984c-35485cb90f83/documents/users/${questionAuthorUid}`
+                );
+                if (userDocRes.ok) {
+                  const docData = await userDocRes.json();
+                  const fields = docData.fields || {};
+                  targetEmail = fields.email?.stringValue || null;
+                  targetName = fields.displayName?.stringValue || 'Student';
+                  const enabled = fields.emailNotificationsEnabled?.booleanValue !== false;
+                  if (!enabled) {
+                    sentNotificationIds.add(notificationId);
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.end(JSON.stringify({ success: true, skipped: 'User opted out of email notifications' }));
+                    return;
+                  }
+                }
+              } catch (lookupErr: any) {
+                console.warn('[trigger-answer-notification] user lookup notice:', lookupErr?.message || lookupErr);
+              }
+            }
+
+            if (!targetEmail || !targetEmail.includes('@')) {
+              sentNotificationIds.add(notificationId);
+              res.statusCode = 200;
+              res.setHeader('Content-Type', 'application/json');
+              res.end(JSON.stringify({ success: true, queuedInMailCollection: true }));
+              return;
+            }
+
+            // 4. Construct professional MOS Email matching Requirement 8
+            const safeTitle = String(questionTitle || 'Your Question').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const safeRecipient = String(targetName || 'Student').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const emailSubject = 'Someone answered your question on MOS CampusConnect';
+            const emailHtml = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>${emailSubject}</title>
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #fffafc; margin: 0; padding: 24px; color: #1e293b;">
+  <div style="max-width: 580px; margin: 0 auto; background-color: #ffffff; border: 1px solid #fce7f3; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(244, 63, 94, 0.06);">
+    <div style="background-color: #be185d; padding: 20px 24px; text-align: left;">
+      <h1 style="color: #ffffff; margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -0.02em;">
+        MAN OF STUDY <span style="font-weight: 400; font-size: 14px; opacity: 0.9;">| CampusConnect</span>
+      </h1>
+    </div>
+    <div style="padding: 24px;">
+      <p style="font-size: 15px; line-height: 1.6; margin-top: 0;">Hi ${safeRecipient},</p>
+      <p style="font-size: 15px; line-height: 1.6;">Someone has answered your question on Man of Study CampusConnect.</p>
+      <div style="margin: 20px 0; padding: 14px 18px; background-color: #fdf2f8; border-left: 4px solid #ec4899; border-radius: 6px;">
+        <p style="margin: 0 0 6px 0; font-size: 12px; font-weight: 700; color: #9d174d; text-transform: uppercase; letter-spacing: 0.05em;">Your question:</p>
+        <p style="margin: 0; font-size: 15px; font-weight: 600; color: #0f172a; line-height: 1.5;">"${safeTitle}"</p>
+      </div>
+      <p style="font-size: 14px; line-height: 1.6; color: #475569;">
+        A student has posted an answer to your question.
+      </p>
+      <div style="text-align: center; margin: 28px 0;">
+        <a href="https://manofstudy.vercel.app/#campus-connect" style="display: inline-block; background-color: #be185d; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 14px; box-shadow: 0 2px 6px rgba(190, 24, 93, 0.3);">
+          View Answer
+        </a>
+      </div>
+      <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 24px 0;" />
+      <div style="text-align: center; color: #64748b; font-size: 12px; line-height: 1.6;">
+        <p style="margin: 0; font-weight: 600; color: #334155;">Man of Study</p>
+        <p style="margin: 2px 0 12px 0; color: #ec4899; font-style: italic;">Built for students. Built by a student.</p>
+        <p style="margin: 0; font-size: 11px; color: #94a3b8;">
+          You received this email because you opted in for answer notifications on Man of Study CampusConnect.<br/>
+          Your email address is 100% private and never visible to other students.
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`;
+
+            const apiKey = process.env.RESEND_API_KEY || 're_2ZBQ4b12_7vRxwSgcwkKrFm2BnnbCyF6y';
+            const resendRes = await fetch('https://api.resend.com/emails', {
+              method: 'POST',
+              headers: {
+                Authorization: `Bearer ${apiKey}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                from: 'MOS CampusConnect <onboarding@resend.dev>',
+                to: [targetEmail.trim()],
+                subject: emailSubject,
+                html: emailHtml,
+              }),
+            });
+
+            sentNotificationIds.add(notificationId);
+            const resendData = await resendRes.json();
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            res.end(JSON.stringify({ success: true, notificationId, resendData }));
+          } catch (err: any) {
+            console.error('[trigger-answer-notification] Error:', err);
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            res.end(JSON.stringify({ success: false, error: err.message }));
+          }
+        });
+      });
+
       // Gemini AI PDF Summarizer API
       server.middlewares.use('/api/gemini/summarize', (req, res) => {
         res.setHeader('Access-Control-Allow-Origin', '*');

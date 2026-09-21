@@ -124,6 +124,70 @@
         }
       },
       "required": ["id", "authorUid", "authorName", "isAnonymous", "content", "createdAt"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated student user account profile and notification preferences",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID"
+        },
+        "email": {
+          "type": "string",
+          "description": "Verified Google email address"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Google display name"
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "Optional Google avatar URL"
+        },
+        "emailNotificationsEnabled": {
+          "type": "boolean",
+          "description": "Whether the user wishes to receive email alerts when someone answers their doubt"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of last update"
+        }
+      },
+      "required": ["uid", "email", "emailNotificationsEnabled", "updatedAt"]
+    },
+    "MailNotification": {
+      "title": "MailNotification",
+      "description": "Email notification document for Firebase Trigger Email extension and backend dispatcher",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Deterministic notification ID: answer_notification_{postId}_{replyId}"
+        },
+        "to": {
+          "type": "string",
+          "description": "Recipient email address of the question owner"
+        },
+        "toUids": {
+          "type": "string",
+          "description": "Firebase UID of recipient question owner"
+        },
+        "postId": {
+          "type": "string",
+          "description": "ID of the answered question"
+        },
+        "replyId": {
+          "type": "string",
+          "description": "ID of the answer"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp of creation"
+        }
+      },
+      "required": ["to", "postId", "replyId", "createdAt"]
     }
   },
   "firestore": {
@@ -134,6 +198,14 @@
     "/campus_posts/{postId}/replies/{replyId}": {
       "schema": "CampusReply",
       "description": "Collection of peer solutions and comments"
+    },
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Private user profile and email notification preference document"
+    },
+    "/mail/{notificationId}": {
+      "schema": "MailNotification",
+      "description": "Transactional mail queue for Firebase Trigger Email extension"
     }
   }
 }

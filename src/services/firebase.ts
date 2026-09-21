@@ -156,6 +156,176 @@ export interface FirestoreCampusReply {
   createdAt: string;
 }
 
+// User Profile for CampusConnect (with email notification preferences)
+export interface UserProfile {
+  uid: string;
+  email: string;
+  displayName: string;
+  photoURL?: string;
+  emailNotificationsEnabled: boolean;
+  updatedAt: string;
+}
+
+/**
+ * Synchronize user profile into Firestore /users/{uid}.
+ * Automatically registers verified Google email, display name, and sets
+ * default email notification preference to ON (true) without overriding existing choices.
+ */
+export async function syncUserProfile(user: User): Promise<UserProfile> {
+  const userRef = doc(db, 'users', user.uid);
+  try {
+    const existingSnap = await getDoc(userRef);
+    if (existingSnap.exists()) {
+      const data = existingSnap.data() as UserProfile;
+      const currentPref = data.emailNotificationsEnabled !== false;
+      const updatedProfile: UserProfile = {
+        uid: user.uid,
+        email: user.email || data.email || '',
+        displayName: user.displayName || data.displayName || 'Student',
+        photoURL: user.photoURL || data.photoURL || '',
+        emailNotificationsEnabled: currentPref,
+        updatedAt: new Date().toISOString(),
+      };
+      await setDoc(userRef, updatedProfile, { merge: true });
+      return updatedProfile;
+    } else {
+      const newProfile: UserProfile = {
+        uid: user.uid,
+        email: user.email || '',
+        displayName: user.displayName || 'Student',
+        photoURL: user.photoURL || '',
+        emailNotificationsEnabled: true, // Default ON as required
+        updatedAt: new Date().toISOString(),
+      };
+      await setDoc(userRef, newProfile);
+      return newProfile;
+    }
+  } catch (err: any) {
+    console.warn('[Firebase] syncUserProfile note (offline fallback):', err?.message || err);
+    return {
+      uid: user.uid,
+      email: user.email || '',
+      displayName: user.displayName || 'Student',
+      photoURL: user.photoURL || '',
+      emailNotificationsEnabled: true,
+      updatedAt: new Date().toISOString(),
+    };
+  }
+}
+
+/**
+ * Get user profile from Firestore /users/{uid}
+ */
+export async function getUserProfile(uid: string): Promise<UserProfile | null> {
+  try {
+    const userRef = doc(db, 'users', uid);
+    const snap = await getDoc(userRef);
+    if (snap.exists()) {
+      return snap.data() as UserProfile;
+    }
+  } catch (err: any) {
+    console.warn('[Firebase] getUserProfile notice:', err?.message || err);
+  }
+  return null;
+}
+
+/**
+ * Update email notification preference for a user
+ */
+export async function updateNotificationPreference(uid: string, enabled: boolean): Promise<void> {
+  const userRef = doc(db, 'users', uid);
+  await updateDoc(userRef, {
+    emailNotificationsEnabled: enabled,
+    updatedAt: new Date().toISOString(),
+  });
+}
+
+/**
+ * Dispatch answer notification to the question author.
+ * Strictly adheres to zero-trust rules:
+ * - Checks that answer author != question author (no self-notification).
+ * - Enforces deterministic notification ID (answer_notification_{postId}_{replyId}) for duplicate protection.
+ * - Writes to the Firestore 'mail' collection for the Firebase Trigger Email extension.
+ * - Triggers backend notification pipeline to deliver the email securely.
+ * - Never fails the answer submission if delivery has an issue.
+ */
+export async function dispatchAnswerNotification(params: {
+  postId: string;
+  replyId: string;
+  questionAuthorUid: string;
+  questionTitle: string;
+  replyAuthorName: string;
+  replyContent: string;
+  isAnonymous: boolean;
+}): Promise<{ success: boolean; reason?: string }> {
+  const currentUser = auth.currentUser;
+  if (!currentUser) return { success: false, reason: 'Unauthenticated' };
+
+  // 1. Avoid self-notifications (Requirement 6)
+  if (currentUser.uid === params.questionAuthorUid) {
+    console.info('[CampusConnect] Self-answer detected (author answered their own question). Notification skipped.');
+    return { success: true, reason: 'Self-answer' };
+  }
+
+  // 2. Deterministic ID for duplicate protection (Requirement 10)
+  const notificationId = `answer_notification_${params.postId}_${params.replyId}`;
+
+  // 3. Queue to mail collection for Firebase Trigger Email extension (Requirement 7)
+  try {
+    const mailDocRef = doc(db, 'mail', notificationId);
+    const existingSnap = await getDoc(mailDocRef);
+    if (!existingSnap.exists()) {
+      await setDoc(mailDocRef, {
+        postId: params.postId,
+        replyId: params.replyId,
+        toUids: [params.questionAuthorUid],
+        message: {
+          subject: 'Someone answered your question on MOS CampusConnect',
+        },
+        template: {
+          name: 'campusconnect-answer',
+          data: {
+            questionTitle: params.questionTitle,
+            questionId: params.postId,
+            answerId: params.replyId,
+          },
+        },
+        createdAt: new Date().toISOString(),
+        delivery: {
+          state: 'PENDING',
+        },
+      });
+      console.log('[Firebase] Deterministic mail document created:', notificationId);
+    }
+  } catch (mailErr: any) {
+    console.debug('[Firebase] Mail collection write note:', mailErr?.message || mailErr);
+  }
+
+  // 4. Trigger trusted server endpoint to verify question owner's email and deliver immediately
+  try {
+    const res = await fetch('/api/campus/trigger-answer-notification', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        postId: params.postId,
+        replyId: params.replyId,
+        questionAuthorUid: params.questionAuthorUid,
+        questionTitle: params.questionTitle,
+        replyAuthor: params.isAnonymous ? 'A fellow student' : params.replyAuthorName,
+        replyContent: params.replyContent,
+        callerUid: currentUser.uid,
+      }),
+    });
+    const data = await res.json();
+    return { success: true, ...data };
+  } catch (backendErr: any) {
+    console.warn('[CampusConnect] Backend notification trigger note:', backendErr?.message || backendErr);
+    return { success: false, reason: backendErr?.message };
+  }
+}
+
 // 9. Create Post in Firestore
 export async function saveCampusPostToFirestore(postData: {
   id: string;

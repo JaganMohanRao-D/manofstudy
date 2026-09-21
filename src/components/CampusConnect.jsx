@@ -48,6 +48,7 @@ import {
   saveCampusPostToFirestore,
   saveCampusReplyToFirestore,
   upvotePostInFirestore,
+  dispatchAnswerNotification,
 } from '../services/firebase';
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 export { initialCommunityPosts };
@@ -121,7 +122,27 @@ export const CampusConnect = ({ onNavigateToTool }) => {
   const [selectedBranchFilter, setSelectedBranchFilter] = useState('All');
 
   // Auth Context for Verified Google Login
-  const { user, openAuthModal, signOut, pendingAction, clearPendingAction } = useAuth();
+  const {
+    user,
+    userProfile,
+    updateEmailNotificationPreference,
+    openAuthModal,
+    signOut,
+    pendingAction,
+    clearPendingAction,
+  } = useAuth();
+  const [isSavingNotificationPref, setIsSavingNotificationPref] = useState(false);
+
+  const handleToggleNotificationPref = async (checked) => {
+    setIsSavingNotificationPref(true);
+    try {
+      await updateEmailNotificationPreference(checked);
+    } catch (err) {
+      console.warn('Failed to update notification preference:', err);
+    } finally {
+      setIsSavingNotificationPref(false);
+    }
+  };
 
   // Modals & Bottom Sheets
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -439,23 +460,19 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       prev.map((p) => (p.id === activeReplyPost.id ? updatedPost : p))
     );
 
-    // Trigger automated email alert if post author provided a notification email
-    const recipientEmail = activeReplyPost.author_email || activeReplyPost.authorEmail;
-    if (recipientEmail && typeof recipientEmail === 'string' && recipientEmail.includes('@')) {
-      fetch('/api/send-reply-alert', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          toEmail: recipientEmail.trim(),
-          questionTitle: activeReplyPost.title,
-          replyAuthor: newReply.authorName || 'A fellow student',
-          replyContent: newReply.content,
-          college: activeReplyPost.college || 'Campus',
-        }),
+    // Trigger automated email notification to question author via trusted backend trigger & Firebase mail pipeline
+    // Strictly zero-trust: uses authorUid, enforces duplicate protection, suppresses self-notifications
+    if (activeReplyPost.authorUid) {
+      dispatchAnswerNotification({
+        postId: activeReplyPost.id,
+        replyId: newReply.id,
+        questionAuthorUid: activeReplyPost.authorUid,
+        questionTitle: activeReplyPost.title,
+        replyAuthorName: newReply.authorName,
+        replyContent: newReply.content,
+        isAnonymous: isAnon,
       }).catch((err) => {
-        console.warn('[CampusConnect] Email notification alert error:', err);
+        console.warn('[CampusConnect] Email notification trigger note:', err);
       });
     }
 
@@ -774,6 +791,22 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                     <span className="text-[11px] text-slate-500 block">
                       Google Verified • Choose to post with your name or anonymously
                     </span>
+                    {/* Notification Preference Setting (Requirement 9 & 12) */}
+                    <div className="mt-1 flex items-center gap-1.5 flex-wrap">
+                      <label className="inline-flex items-center gap-1.5 text-[11px] text-slate-700 font-medium cursor-pointer select-none bg-pink-50/80 hover:bg-pink-100/80 px-2 py-0.5 rounded-md border border-pink-200/80 transition-colors">
+                        <input
+                          type="checkbox"
+                          checked={userProfile?.emailNotificationsEnabled !== false}
+                          onChange={(e) => handleToggleNotificationPref(e.target.checked)}
+                          className="w-3.5 h-3.5 text-pink-600 rounded border-pink-300 focus:ring-pink-400 cursor-pointer"
+                        />
+                        <Mail className="w-3 h-3 text-pink-600 shrink-0" />
+                        <span>Notify me by email when someone answers my question</span>
+                      </label>
+                      {isSavingNotificationPref && (
+                        <span className="text-[10px] text-pink-600 font-semibold animate-pulse">Saving...</span>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -1354,32 +1387,31 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                   </div>
                 )}
 
-                {/* Optional Email Input in "Ask Peer Doubt" Modal */}
+                {/* Email Notification Setting in "Ask Peer Doubt" Modal (Requirement 2, 9 & 12) */}
                 {createMode === 'doubt' && (
                   <div className="p-3 bg-pink-50/50 border border-pink-200 rounded-2xl space-y-1.5 shadow-2xs">
                     <div className="flex items-center justify-between">
-                      <label
-                        htmlFor="doubt-notification-email"
-                        className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-800"
-                      >
+                      <span className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-800">
                         <Mail className="w-3.5 h-3.5 text-pink-600" />
-                        <span>Notification Email</span>
-                        <span className="text-[10px] text-slate-400 font-normal lowercase tracking-normal">(optional)</span>
-                      </label>
+                        <span>Answer Email Notification</span>
+                      </span>
                       <span className="text-[10px] text-pink-700 font-semibold bg-white px-2 py-0.5 rounded-full border border-pink-200 shadow-2xs">
-                        🔒 100% Private
+                        🔒 100% Private & Verified
                       </span>
                     </div>
-                    <input
-                      id="doubt-notification-email"
-                      type="email"
-                      value={formAuthorEmail}
-                      onChange={(e) => setFormAuthorEmail(e.target.value)}
-                      placeholder="Enter your email (e.g. name@gmail.com)"
-                      className="w-full min-h-[44px] bg-white border border-pink-200 focus:border-pink-500 rounded-xl px-3.5 py-2 text-slate-900 text-xs sm:text-sm placeholder-slate-400 focus:outline-hidden transition-all shadow-2xs"
-                    />
-                    <p className="text-[11px] text-slate-600 leading-normal">
-                      We will alert you instantly when a peer or senior answers your query. 100% private.
+                    <label className="flex items-center gap-2 text-xs text-slate-800 cursor-pointer select-none py-1">
+                      <input
+                        type="checkbox"
+                        checked={userProfile?.emailNotificationsEnabled !== false}
+                        onChange={(e) => handleToggleNotificationPref(e.target.checked)}
+                        className="w-4 h-4 text-pink-600 rounded border-pink-300 focus:ring-pink-400 cursor-pointer"
+                      />
+                      <span className="font-medium">
+                        Notify me when someone answers my question
+                      </span>
+                    </label>
+                    <p className="text-[11px] text-slate-500 leading-normal">
+                      Notification will be sent automatically to your verified Google account. Your email is never shown publicly to students.
                     </p>
                   </div>
                 )}

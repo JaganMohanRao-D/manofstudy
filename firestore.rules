@@ -66,5 +66,23 @@ service cloud.firestore {
         allow delete: if isOwner(resource.data.authorUid);
       }
     }
+
+    // User Profiles (Private account & notification preferences)
+    // Mathematical zero-trust: Only the authenticated account owner can view or edit their profile
+    match /users/{userId} {
+      allow read, write: if isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Mail Collection (For Firebase Trigger Email extension)
+    // Crucial anti-abuse: Disallow direct client creation to prevent arbitrary spam.
+    // Read is only permitted for the recipient question owner.
+    match /mail/{notificationId} {
+      allow read: if isAuthenticated() && (
+        ('toUids' in resource.data && request.auth.uid in resource.data.toUids) ||
+        ('recipientUid' in resource.data && request.auth.uid == resource.data.recipientUid)
+      );
+      // Writes are strictly restricted to trusted backend server / Cloud Functions
+      allow write: if false;
+    }
   }
 }
