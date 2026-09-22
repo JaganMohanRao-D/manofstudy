@@ -150,12 +150,69 @@
           "type": "boolean",
           "description": "Whether the user wishes to receive email alerts when someone answers their doubt"
         },
+        "solutionsCount": {
+          "type": "number",
+          "description": "Number of helpful solutions submitted by this student"
+        },
+        "totalReports": {
+          "type": "number",
+          "description": "Total community violation reports accumulated by this user"
+        },
+        "isBanned": {
+          "type": "boolean",
+          "description": "Flag indicating if the user account is suspended due to violations"
+        },
         "updatedAt": {
           "type": "string",
           "description": "ISO timestamp of last update"
         }
       },
       "required": ["uid", "email", "emailNotificationsEnabled", "updatedAt"]
+    },
+    "Report": {
+      "title": "Report",
+      "description": "Community moderation flag for inappropriate post or reply",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique report ID"
+        },
+        "targetType": {
+          "type": "string",
+          "description": "Type of target: post or reply",
+          "enum": ["post", "reply"]
+        },
+        "targetId": {
+          "type": "string",
+          "description": "ID of post or reply reported"
+        },
+        "postId": {
+          "type": "string",
+          "description": "Associated post ID"
+        },
+        "authorUid": {
+          "type": "string",
+          "description": "UID of the content author being reported"
+        },
+        "reason": {
+          "type": "string",
+          "description": "Violation category"
+        },
+        "reporterUid": {
+          "type": "string",
+          "description": "UID of the user filing the report"
+        },
+        "reporterEmail": {
+          "type": "string",
+          "description": "Email of reporter"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp of report"
+        }
+      },
+      "required": ["targetType", "targetId", "reason", "reporterUid"]
     },
     "MailNotification": {
       "title": "MailNotification",
@@ -250,6 +307,18 @@
     "/notifications/{notificationId}": {
       "schema": "CampusNotification",
       "description": "In-app notifications for question answers"
+    },
+    "/posts/{postId}": {
+      "schema": "CampusPost",
+      "description": "Primary posts collection for doubts and questions"
+    },
+    "/posts/{postId}/replies/{replyId}": {
+      "schema": "CampusReply",
+      "description": "Subcollection of replies and solutions"
+    },
+    "/reports/{reportId}": {
+      "schema": "Report",
+      "description": "Community abuse and guideline violation reports"
     }
   }
 }

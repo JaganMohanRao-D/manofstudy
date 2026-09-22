@@ -40,6 +40,11 @@ import {
   LogIn,
   UserCheck,
   Loader2,
+  Flag,
+  Trophy,
+  Award,
+  Terminal,
+  AlertTriangle,
 } from 'lucide-react';
 
 import { initialCommunityPosts } from '../data/communityPosts';
@@ -55,6 +60,7 @@ import {
   saveCampusReplyToFirestore,
   upvotePostInFirestore,
   dispatchAnswerNotification,
+  incrementUserSolutionsCount,
 } from '../services/firebase';
 import {
   collection,
@@ -72,6 +78,9 @@ import {
   triggerResendEmailAlert,
   dispatchAnswerNotificationFlow,
 } from '../services/campusNotifications';
+import { RichContentRenderer } from './campus/RichContentRenderer';
+import { ProblemSolverBadge } from './campus/ProblemSolverBadge';
+import { ReportModal } from './campus/ReportModal';
 export { initialCommunityPosts };
 
 const STORAGE_KEY = 'mos_forum_seed_v2';
@@ -402,6 +411,120 @@ export const CampusConnect = ({ onNavigateToTool }) => {
   const [replyAuthorName, setReplyAuthorName] = useState('Student Peer');
   const [replyAuthorCollege, setReplyAuthorCollege] = useState('Telangana / AP College');
   const [shareSuccessId, setShareSuccessId] = useState(null);
+  const [isSubmittingReply, setIsSubmittingReply] = useState(false);
+  const [reportTarget, setReportTarget] = useState(null);
+
+  // Compute solutions count for reputation badges
+  const userSolutionsCounts = useMemo(() => {
+    const counts = {};
+    posts.forEach((p) => {
+      (p.replies || []).forEach((r) => {
+        if (r.authorUid && !r.isAnonymous) {
+          counts[r.authorUid] = (counts[r.authorUid] || 0) + 1;
+        }
+      });
+    });
+    if (user?.uid) {
+      const profileCount = userProfile?.solutionsCount || 0;
+      counts[user.uid] = Math.max(counts[user.uid] || 0, profileCount);
+    }
+    return counts;
+  }, [posts, user?.uid, userProfile?.solutionsCount]);
+
+  const handleOpenReport = (target) => {
+    if (!auth.currentUser) {
+      openAuthModal({ type: 'report' });
+      showToast('Please sign in with Google to report content.', 'info', 'Sign in Required');
+      return;
+    }
+    setReportTarget(target);
+  };
+
+  const handleReportSuccess = (target, isHidden, userBanned) => {
+    if (isHidden) {
+      if (target.type === 'post') {
+        setPosts((prev) =>
+          prev.map((p) => (p.id === target.id ? { ...p, isHidden: true, reportCount: (p.reportCount || 0) + 1 } : p))
+        );
+        if (activeReplyPost && activeReplyPost.id === target.id) {
+          setActiveReplyPost(null);
+        }
+      } else {
+        setPosts((prev) =>
+          prev.map((p) => {
+            if (p.id === target.postId) {
+              return {
+                ...p,
+                replies: (p.replies || []).map((r) =>
+                  r.id === target.id ? { ...r, isHidden: true, reportCount: (r.reportCount || 0) + 1 } : r
+                ),
+              };
+            }
+            return p;
+          })
+        );
+        if (activeReplyPost && activeReplyPost.id === target.postId) {
+          setActiveReplyPost((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  replies: (prev.replies || []).map((r) =>
+                    r.id === target.id ? { ...r, isHidden: true, reportCount: (r.reportCount || 0) + 1 } : r
+                  ),
+                }
+              : null
+          );
+        }
+      }
+      showToast('Content flagged with 3+ reports and has been automatically hidden.', 'info', 'Content Moderated');
+    } else {
+      if (target.type === 'post') {
+        setPosts((prev) =>
+          prev.map((p) => (p.id === target.id ? { ...p, reportCount: (p.reportCount || 0) + 1 } : p))
+        );
+      } else {
+        setPosts((prev) =>
+          prev.map((p) => {
+            if (p.id === target.postId) {
+              return {
+                ...p,
+                replies: (p.replies || []).map((r) =>
+                  r.id === target.id ? { ...r, reportCount: (r.reportCount || 0) + 1 } : r
+                ),
+              };
+            }
+            return p;
+          })
+        );
+      }
+      showToast('Report submitted. Thank you for protecting our community guidelines.', 'success', 'Report Received');
+    }
+
+    if (userBanned) {
+      showToast('Author has accumulated 5 violation reports and their account has been suspended.', 'error', 'Account Suspended');
+    }
+  };
+
+  const handleInsertCodeSnippetInReply = () => {
+    setReplyInputText((prev) => {
+      const template = "\n```typescript\n// Paste code or terminal output here\n```\n";
+      return prev ? `${prev}${template}` : "```typescript\n// Paste code or terminal output here\n```\n";
+    });
+  };
+
+  const handleInsertDriveLinkInReply = () => {
+    setReplyInputText((prev) => {
+      const template = " https://drive.google.com/open?id=your-file-id ";
+      return prev ? `${prev}${template}` : "https://drive.google.com/open?id=your-file-id ";
+    });
+  };
+
+  const handleInsertGitHubLinkInReply = () => {
+    setReplyInputText((prev) => {
+      const template = " https://github.com/your-username/your-repo ";
+      return prev ? `${prev}${template}` : "https://github.com/your-username/your-repo ";
+    });
+  };
 
   // Form Fields for Create Modal - Default to showing verified Google name publicly
   const [formTitle, setFormTitle] = useState('');
@@ -650,13 +773,21 @@ export const CampusConnect = ({ onNavigateToTool }) => {
   // Add Solution / Reply (Requires Real Firebase Google Auth)
   const handleAddReply = async (e) => {
     e.preventDefault();
-    if (!activeReplyPost || !replyInputText.trim()) return;
+    if (!activeReplyPost || !replyInputText.trim() || isSubmittingReply) return;
+
+    // Check account suspension
+    if (userProfile?.isBanned) {
+      showToast('Your account has been suspended due to community guideline violations.', 'error', 'Account Suspended');
+      return;
+    }
 
     // Strict Firebase Auth verification
     if (!auth.currentUser) {
       openAuthModal({ type: 'post-solution', postId: activeReplyPost.id });
       return;
     }
+
+    setIsSubmittingReply(true);
 
     const currentAuthUser = auth.currentUser;
     const authorDisplayName = currentAuthUser.displayName || 'Student Peer';
@@ -665,7 +796,8 @@ export const CampusConnect = ({ onNavigateToTool }) => {
 
     // Anti-spoofing check for official admin name
     if (!isAnon && publicAuthorName.toLowerCase().includes('man of study admin')) {
-      alert("The identity 'Man of Study Admin' is reserved for verified administrators.");
+      showToast("The identity 'Man of Study Admin' is reserved for verified administrators.", 'error', 'Identity Reserved');
+      setIsSubmittingReply(false);
       return;
     }
 
@@ -686,22 +818,12 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       createdAt: 'Just now',
       timestamp: 'Just now',
       upvotes: 1,
+      reportCount: 0,
+      isHidden: false,
     };
 
-    // Save to Firestore subcollection
-    try {
-      await saveCampusReplyToFirestore(activeReplyPost.id, {
-        id: newReply.id,
-        content: newReply.content,
-        isAnonymous: isAnon,
-        college: newReply.authorCollege,
-        role: newReply.role,
-      });
-    } catch (err) {
-      console.warn('[Firebase] Saved to local state (Firestore note):', err.message);
-    }
-
-    const updatedReplies = [newReply, ...activeReplyPost.replies];
+    // 1. Immediately update local state so user sees solution instantly without waiting
+    const updatedReplies = [newReply, ...(activeReplyPost.replies || [])];
     const updatedPost = { ...activeReplyPost, replies: updatedReplies };
 
     setActiveReplyPost(updatedPost);
@@ -709,61 +831,85 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       prev.map((p) => (p.id === activeReplyPost.id ? updatedPost : p))
     );
 
-    // 2. TWO-WAY NOTIFICATION SYSTEM: In-App Notification Center + Automated Resend Email
-    // Resolve recipient email and name
-    let recipientEmail = activeReplyPost.authorEmail || activeReplyPost.authorEmailAddress || null;
-    let recipientName = activeReplyPost.authorName || activeReplyPost.displayName || 'Student';
-
-    // If authorEmail is not directly present on the post, look up the user in Firestore /users/{authorUid}
-    if (!recipientEmail && activeReplyPost.authorUid) {
-      try {
-        const authorUserDoc = await getDoc(doc(db, 'users', activeReplyPost.authorUid));
-        if (authorUserDoc.exists()) {
-          const userData = authorUserDoc.data();
-          recipientEmail = userData.email || null;
-          if (userData.displayName) recipientName = userData.displayName;
-        }
-      } catch (lookupErr) {
-        console.debug('[CampusConnect] Author email lookup note:', lookupErr);
-      }
-    }
-
-    const currentStudentEmail = currentAuthUser.email;
-    const isSelfReply =
-      recipientEmail &&
-      currentStudentEmail &&
-      recipientEmail.toLowerCase() === currentStudentEmail.toLowerCase();
-
-    // Only dispatch when recipient email exists and user is not answering their own question
-    if (recipientEmail && !isSelfReply) {
-      dispatchAnswerNotificationFlow({
-        recipientEmail: recipientEmail,
-        recipientName: recipientName,
-        senderName: isAnon ? 'A Fellow Student' : authorDisplayName,
-        questionId: activeReplyPost.id,
-        questionTitle: activeReplyPost.title,
-        answerText: replyContentText,
-      }).catch((notifErr) => {
-        console.warn('[CampusConnect] Notification dispatch note:', notifErr);
-      });
-    }
-
-    // Zero-trust mail queue trigger as secondary fallback
-    if (activeReplyPost.authorUid && activeReplyPost.authorUid !== currentAuthUser.uid) {
-      dispatchAnswerNotification({
-        postId: activeReplyPost.id,
-        replyId: newReply.id,
-        questionAuthorUid: activeReplyPost.authorUid,
-        questionTitle: activeReplyPost.title,
-        replyAuthorName: newReply.authorName,
-        replyContent: newReply.content,
-        isAnonymous: isAnon,
-      }).catch((err) => {
-        console.warn('[CampusConnect] Email notification trigger note:', err);
-      });
-    }
-
+    // 2. Clear input immediately so input box is ready
     setReplyInputText('');
+
+    try {
+      // 3. Save to Firestore subcollections and update solutions count
+      await saveCampusReplyToFirestore(activeReplyPost.id, {
+        id: newReply.id,
+        content: newReply.content,
+        isAnonymous: isAnon,
+        college: newReply.authorCollege,
+        role: newReply.role,
+      });
+
+      // Increment user's verified solution reputation count
+      if (currentAuthUser.uid) {
+        incrementUserSolutionsCount(currentAuthUser.uid).catch((cntErr) => {
+          console.debug('[CampusConnect] Reputation count sync note:', cntErr);
+        });
+      }
+
+      showToast('Solution posted successfully! Your peer was notified.', 'success', 'Solution Published');
+
+      // 4. TWO-WAY NOTIFICATION SYSTEM: In-App Notification Center + Automated Resend Email
+      let recipientEmail = activeReplyPost.authorEmail || activeReplyPost.authorEmailAddress || null;
+      let recipientName = activeReplyPost.authorName || activeReplyPost.displayName || 'Student';
+
+      if (!recipientEmail && activeReplyPost.authorUid) {
+        try {
+          const authorUserDoc = await getDoc(doc(db, 'users', activeReplyPost.authorUid));
+          if (authorUserDoc.exists()) {
+            const userData = authorUserDoc.data();
+            recipientEmail = userData.email || null;
+            if (userData.displayName) recipientName = userData.displayName;
+          }
+        } catch (lookupErr) {
+          console.debug('[CampusConnect] Author email lookup note:', lookupErr);
+        }
+      }
+
+      const currentStudentEmail = currentAuthUser.email;
+      const isSelfReply =
+        recipientEmail &&
+        currentStudentEmail &&
+        recipientEmail.toLowerCase() === currentStudentEmail.toLowerCase();
+
+      // Dispatch answer notification flow
+      if (recipientEmail && !isSelfReply) {
+        dispatchAnswerNotificationFlow({
+          recipientEmail: recipientEmail,
+          recipientName: recipientName,
+          senderName: isAnon ? 'A Fellow Student' : authorDisplayName,
+          questionId: activeReplyPost.id,
+          questionTitle: activeReplyPost.title,
+          answerText: replyContentText,
+        }).catch((notifErr) => {
+          console.warn('[CampusConnect] Notification dispatch note:', notifErr);
+        });
+      }
+
+      // Zero-trust mail queue trigger as secondary fallback
+      if (activeReplyPost.authorUid && activeReplyPost.authorUid !== currentAuthUser.uid) {
+        dispatchAnswerNotification({
+          postId: activeReplyPost.id,
+          replyId: newReply.id,
+          questionAuthorUid: activeReplyPost.authorUid,
+          questionTitle: activeReplyPost.title,
+          replyAuthorName: newReply.authorName,
+          replyContent: newReply.content,
+          isAnonymous: isAnon,
+        }).catch((err) => {
+          console.warn('[CampusConnect] Email notification trigger note:', err);
+        });
+      }
+    } catch (err) {
+      console.warn('[Firebase] saveCampusReply notice:', err?.message || err);
+      showToast(err?.message || 'Could not sync solution to cloud database right now, but saved to your local session.', 'info', 'Notice');
+    } finally {
+      setIsSubmittingReply(false);
+    }
   };
 
   // Web Share API or Clipboard Fallback
@@ -917,6 +1063,9 @@ export const CampusConnect = ({ onNavigateToTool }) => {
   // Filtered Posts Computation
   const filteredPosts = useMemo(() => {
     return posts.filter((post) => {
+      // Moderation: Auto-hide posts that have 3+ reports or are marked hidden
+      if (post.isHidden || (post.reportCount && post.reportCount >= 3)) return false;
+
       // Category Chip Filter
       if (activeFilter === 'dispatches' && post.type !== 'dispatch') return false;
       if (activeFilter === 'doubts' && post.type !== 'doubt') return false;
@@ -1383,6 +1532,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                           <span className="text-xs sm:text-sm font-bold text-slate-900 truncate max-w-[140px] sm:max-w-none">
                             {post.authorName || 'Verified Scholar'}
                           </span>
+                          <ProblemSolverBadge solutionsCount={post.authorUid ? userSolutionsCounts[post.authorUid] : 0} />
                           {post.authorYear && (
                             <span className="text-[11px] text-slate-500 truncate">
                               • {post.authorYear}
@@ -1402,7 +1552,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                   </div>
                 </div>
 
-                {/* Badges: Type & Urgency */}
+                {/* Badges: Type, Urgency, & Report Flag */}
                 <div className="flex items-center gap-1.5 shrink-0 flex-wrap justify-end">
                   {post.type === 'dispatch' ? (
                     <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-pink-100 text-pink-700 border border-pink-200">
@@ -1431,6 +1581,25 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                       {post.urgency}
                     </span>
                   )}
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleOpenReport({
+                        type: 'post',
+                        id: post.id,
+                        postId: post.id,
+                        authorUid: post.authorUid,
+                        authorName: post.authorName,
+                        titleSnippet: post.title,
+                      })
+                    }
+                    className="min-h-[28px] px-2 py-0.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 flex items-center gap-1 text-[11px] font-medium transition-colors cursor-pointer"
+                    title="Report post"
+                  >
+                    <Flag className="w-3 h-3" />
+                    <span className="hidden sm:inline">Report</span>
+                  </button>
                 </div>
               </div>
 
@@ -1446,9 +1615,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                 <h2 className="text-base sm:text-lg font-bold text-slate-950 tracking-tight leading-snug break-words">
                   {post.title}
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-800 leading-relaxed break-words whitespace-pre-line">
-                  {post.content}
-                </p>
+                <RichContentRenderer content={post.content} className="text-xs sm:text-sm" />
               </div>
 
               {/* Optional Code Snippet */}
@@ -2105,11 +2272,11 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                 <div className="flex items-center justify-between pt-1">
                   <h4 className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
                     <MessageSquare className="w-3.5 h-3.5 text-pink-600" />
-                    <span>Peer Solutions ({activeReplyPost.replies.length})</span>
+                    <span>Peer Solutions ({activeReplyPost.replies.filter((r) => !r.isHidden && (!r.reportCount || r.reportCount < 3)).length})</span>
                   </h4>
                 </div>
 
-                {activeReplyPost.replies.length === 0 ? (
+                {activeReplyPost.replies.filter((r) => !r.isHidden && (!r.reportCount || r.reportCount < 3)).length === 0 ? (
                   <div className="text-center py-8 text-xs text-slate-500 space-y-1 bg-pink-50/30 rounded-2xl border border-pink-100 p-4">
                     <p>No answers posted yet.</p>
                     <p className="text-pink-700 font-medium">
@@ -2117,56 +2284,77 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                     </p>
                   </div>
                 ) : (
-                  activeReplyPost.replies.map((reply) => (
-                    <div
-                      key={reply.id}
-                      className={`p-3.5 rounded-2xl border text-xs space-y-2 shadow-xs ${
-                        reply.isVerifiedSolution
-                          ? 'bg-emerald-50/70 border-emerald-200'
-                          : 'bg-white border-pink-100'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between flex-wrap gap-1.5">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-bold text-slate-900">
-                            {reply.authorName}
-                          </span>
-                          {reply.role ? (
-                            <span className="text-[10px] font-semibold text-pink-700 bg-pink-100/80 px-2 py-0.5 rounded-full border border-pink-200">
-                              {reply.role}
+                  activeReplyPost.replies
+                    .filter((r) => !r.isHidden && (!r.reportCount || r.reportCount < 3))
+                    .map((reply) => (
+                      <div
+                        key={reply.id}
+                        className={`p-3.5 rounded-2xl border text-xs space-y-2 shadow-xs ${
+                          reply.isVerifiedSolution
+                            ? 'bg-emerald-50/70 border-emerald-200'
+                            : 'bg-white border-pink-100'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between flex-wrap gap-1.5">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-bold text-slate-900">
+                              {reply.authorName}
                             </span>
-                          ) : reply.authorCollege ? (
-                            <span className="text-[10px] text-slate-500">
-                              • {reply.authorCollege}
-                            </span>
-                          ) : null}
+                            <ProblemSolverBadge solutionsCount={reply.authorUid ? userSolutionsCounts[reply.authorUid] : 0} />
+                            {reply.role ? (
+                              <span className="text-[10px] font-semibold text-pink-700 bg-pink-100/80 px-2 py-0.5 rounded-full border border-pink-200">
+                                {reply.role}
+                              </span>
+                            ) : reply.authorCollege ? (
+                              <span className="text-[10px] text-slate-500">
+                                • {reply.authorCollege}
+                              </span>
+                            ) : null}
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            {reply.isVerifiedSolution && (
+                              <span className="inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                                Verified Solution
+                              </span>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleOpenReport({
+                                  type: 'reply',
+                                  id: reply.id,
+                                  postId: activeReplyPost.id,
+                                  authorUid: reply.authorUid,
+                                  authorName: reply.authorName,
+                                  titleSnippet: reply.content?.substring(0, 60),
+                                })
+                              }
+                              className="p-1 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 text-[10px] flex items-center gap-1 transition-colors cursor-pointer"
+                              title="Report solution"
+                            >
+                              <Flag className="w-3 h-3" />
+                              <span>Report</span>
+                            </button>
+                          </div>
                         </div>
 
-                        {reply.isVerifiedSolution && (
-                          <span className="inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
-                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                            Verified Solution
-                          </span>
-                        )}
-                      </div>
+                        <RichContentRenderer content={reply.content} />
 
-                      <p className="text-slate-800 leading-relaxed whitespace-pre-line break-words">
-                        {reply.content}
-                      </p>
-
-                      <div className="flex items-center justify-between pt-1 text-[11px] text-slate-500">
-                        <span>{reply.createdAt || reply.timestamp}</span>
-                        <button
-                          type="button"
-                          onClick={() => handleReplyUpvote(reply.id)}
-                          className="min-h-[38px] px-3 py-1 rounded-xl bg-pink-50 hover:bg-pink-100 text-pink-700 border border-pink-200 flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 font-medium shadow-xs"
-                        >
-                          <ThumbsUp className="w-3 h-3 text-pink-600" />
-                          <span>{reply.upvotes} Helpful</span>
-                        </button>
+                        <div className="flex items-center justify-between pt-1 text-[11px] text-slate-500">
+                          <span>{reply.createdAt || reply.timestamp}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleReplyUpvote(reply.id)}
+                            className="min-h-[36px] px-3 py-1 rounded-xl bg-pink-50 hover:bg-pink-100 text-pink-700 border border-pink-200 flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 font-medium shadow-xs"
+                          >
+                            <ThumbsUp className="w-3 h-3 text-pink-600" />
+                            <span>{reply.upvotes} Helpful</span>
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  ))
+                    ))
                 )}
               </div>
 
@@ -2214,22 +2402,68 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="text"
+                  {/* Rich Solution Formatting Toolbar */}
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mr-1">Insert:</span>
+                    <button
+                      type="button"
+                      onClick={handleInsertCodeSnippetInReply}
+                      className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-mono flex items-center gap-1 transition-colors border border-slate-200 cursor-pointer"
+                      title="Insert code snippet formatting"
+                    >
+                      <Code className="w-3 h-3 text-pink-600" />
+                      <span>Code (```)</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleInsertDriveLinkInReply}
+                      className="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-[11px] font-sans flex items-center gap-1 transition-colors border border-blue-200 cursor-pointer"
+                      title="Insert Google Drive link placeholder"
+                    >
+                      <FileText className="w-3 h-3 text-blue-600" />
+                      <span>Drive Link</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleInsertGitHubLinkInReply}
+                      className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-[11px] font-sans flex items-center gap-1 transition-colors border border-slate-200 cursor-pointer"
+                      title="Insert GitHub repo link placeholder"
+                    >
+                      <Share2 className="w-3 h-3 text-slate-700" />
+                      <span>GitHub</span>
+                    </button>
+                  </div>
+
+                  <div className="space-y-2">
+                    <textarea
+                      rows={3}
                       value={replyInputText}
                       onChange={(e) => setReplyInputText(e.target.value)}
-                      placeholder="Write a clear solution or verified peer tip..."
-                      className="flex-1 min-h-[44px] bg-pink-50/40 border border-pink-200 focus:border-pink-500 focus:bg-white rounded-2xl px-3.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-hidden shadow-xs transition-all"
+                      placeholder="Write a clear solution, code explanation, or verified peer advice. Supports ```code``` and links..."
+                      className="w-full bg-pink-50/40 border border-pink-200 focus:border-pink-500 focus:bg-white rounded-2xl p-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-hidden shadow-xs transition-all resize-y min-h-[72px]"
                     />
-                    <button
-                      type="submit"
-                      disabled={!replyInputText.trim()}
-                      className="min-h-[44px] px-4 bg-pink-500 hover:bg-pink-600 disabled:opacity-40 text-white rounded-2xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer shrink-0 shadow-sm shadow-pink-300/50"
-                    >
-                      <Send className="w-4 h-4" />
-                      <span>Post Solution</span>
-                    </button>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] text-slate-400">
+                        Tip: Wrap code in ```language ... ``` for syntax highlighting.
+                      </span>
+                      <button
+                        type="submit"
+                        disabled={!replyInputText.trim() || isSubmittingReply}
+                        className="min-h-[42px] px-5 bg-pink-500 hover:bg-pink-600 disabled:opacity-40 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer shrink-0 shadow-sm shadow-pink-300/50"
+                      >
+                        {isSubmittingReply ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            <span>Posting...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Send className="w-3.5 h-3.5" />
+                            <span>Post Solution</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </form>
               ) : (
@@ -2264,6 +2498,15 @@ export const CampusConnect = ({ onNavigateToTool }) => {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Community Moderation Report Modal */}
+      <ReportModal
+        isOpen={!!reportTarget}
+        onClose={() => setReportTarget(null)}
+        target={reportTarget}
+        onSuccess={handleReportSuccess}
+      />
+
       {/* Toast Alert Notification Banner */}
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 animate-in slide-in-from-bottom-3 duration-300 max-w-sm w-full px-4 sm:px-0">

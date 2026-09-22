@@ -170,13 +170,18 @@ export interface FirestoreCampusReply {
   createdAt: string;
 }
 
-// User Profile for CampusConnect (with email notification preferences)
+// User Profile for CampusConnect (with email notification preferences & reputation)
 export interface UserProfile {
   uid: string;
   email: string;
   displayName: string;
   photoURL?: string;
   emailNotificationsEnabled: boolean;
+  solutionsCount?: number;
+  totalReports?: number;
+  isBanned?: boolean;
+  bannedAt?: string;
+  bannedReason?: string;
   updatedAt: string;
 }
 
@@ -198,6 +203,9 @@ export async function syncUserProfile(user: User): Promise<UserProfile> {
         displayName: user.displayName || data.displayName || 'Student',
         photoURL: user.photoURL || data.photoURL || '',
         emailNotificationsEnabled: currentPref,
+        solutionsCount: typeof data.solutionsCount === 'number' ? data.solutionsCount : 0,
+        totalReports: typeof data.totalReports === 'number' ? data.totalReports : 0,
+        isBanned: data.isBanned === true,
         updatedAt: new Date().toISOString(),
       };
       await setDoc(userRef, updatedProfile, { merge: true });
@@ -209,6 +217,9 @@ export async function syncUserProfile(user: User): Promise<UserProfile> {
         displayName: user.displayName || 'Student',
         photoURL: user.photoURL || '',
         emailNotificationsEnabled: true, // Default ON as required
+        solutionsCount: 0,
+        totalReports: 0,
+        isBanned: false,
         updatedAt: new Date().toISOString(),
       };
       await setDoc(userRef, newProfile);
@@ -222,6 +233,9 @@ export async function syncUserProfile(user: User): Promise<UserProfile> {
       displayName: user.displayName || 'Student',
       photoURL: user.photoURL || '',
       emailNotificationsEnabled: true,
+      solutionsCount: 0,
+      totalReports: 0,
+      isBanned: false,
       updatedAt: new Date().toISOString(),
     };
   }
@@ -431,9 +445,172 @@ export async function saveCampusReplyToFirestore(
     createdAt: new Date().toISOString(),
   };
 
-  const replyRef = doc(db, 'campus_posts', postId, 'replies', replyDoc.id);
-  await setDoc(replyRef, replyDoc);
+  // Write to both posts/{postId}/replies and campus_posts/{postId}/replies for full compatibility
+  const replyRef1 = doc(db, 'posts', postId, 'replies', replyDoc.id);
+  const replyRef2 = doc(db, 'campus_posts', postId, 'replies', replyDoc.id);
+
+  await Promise.allSettled([
+    setDoc(replyRef1, replyDoc),
+    setDoc(replyRef2, replyDoc),
+  ]);
+
+  // Increment user's solutionsCount (Requirement 1.6 & 3)
+  try {
+    await incrementUserSolutionsCount(currentUser.uid);
+  } catch (countErr) {
+    console.debug('[Firebase] Solution count increment note:', countErr);
+  }
+
   return replyDoc;
+}
+
+/**
+ * Increment a user's solved answers counter in users/{userId}/solutionsCount
+ */
+export async function incrementUserSolutionsCount(userId: string): Promise<number> {
+  try {
+    const userRef = doc(db, 'users', userId);
+    await setDoc(
+      userRef,
+      {
+        solutionsCount: increment(1),
+        updatedAt: new Date().toISOString(),
+      },
+      { merge: true }
+    );
+    const snap = await getDoc(userRef);
+    if (snap.exists()) {
+      return (snap.data().solutionsCount as number) || 1;
+    }
+    return 1;
+  } catch (err: any) {
+    console.warn('[Firebase] incrementUserSolutionsCount note:', err?.message || err);
+    return 1;
+  }
+}
+
+/**
+ * Community Safety: Report a question or solution with auto-moderation threshold
+ */
+export interface CommunityReport {
+  id: string;
+  targetType: 'post' | 'reply';
+  targetId: string;
+  postId: string;
+  authorUid?: string;
+  reason: string;
+  details?: string;
+  reporterUid: string;
+  reporterEmail?: string;
+  createdAt: string;
+}
+
+export async function submitCommunityReport(params: {
+  targetType: 'post' | 'reply';
+  targetId: string;
+  postId: string;
+  authorUid?: string;
+  reason: string;
+  details?: string;
+}): Promise<{ isHidden: boolean; userBanned: boolean }> {
+  const currentUser = auth.currentUser;
+  if (!currentUser) throw new Error('Authentication required to submit a community report.');
+
+  const reportId = `rep_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+  const reportDoc: CommunityReport = {
+    id: reportId,
+    targetType: params.targetType,
+    targetId: params.targetId,
+    postId: params.postId,
+    authorUid: params.authorUid,
+    reason: params.reason,
+    details: params.details || '',
+    reporterUid: currentUser.uid,
+    reporterEmail: currentUser.email || '',
+    createdAt: new Date().toISOString(),
+  };
+
+  // 1. Store in reports collection
+  const reportRef = doc(db, 'reports', reportId);
+  await setDoc(reportRef, reportDoc);
+
+  let isHidden = false;
+  let userBanned = false;
+
+  // 2. Increment reportCount on the target post or reply, auto-hide if >= 3
+  try {
+    if (params.targetType === 'post') {
+      const pRef = doc(db, 'posts', params.targetId);
+      const cpRef = doc(db, 'campus_posts', params.targetId);
+      await Promise.allSettled([
+        setDoc(pRef, { reportCount: increment(1) }, { merge: true }),
+        setDoc(cpRef, { reportCount: increment(1) }, { merge: true }),
+      ]);
+      const snap = await getDoc(cpRef);
+      const curReports = snap.exists() ? ((snap.data().reportCount as number) || 1) : 1;
+      if (curReports >= 3) {
+        isHidden = true;
+        await Promise.allSettled([
+          setDoc(pRef, { isHidden: true }, { merge: true }),
+          setDoc(cpRef, { isHidden: true }, { merge: true }),
+        ]);
+      }
+    } else {
+      const rRef = doc(db, 'posts', params.postId, 'replies', params.targetId);
+      const crRef = doc(db, 'campus_posts', params.postId, 'replies', params.targetId);
+      await Promise.allSettled([
+        setDoc(rRef, { reportCount: increment(1) }, { merge: true }),
+        setDoc(crRef, { reportCount: increment(1) }, { merge: true }),
+      ]);
+      const snap = await getDoc(crRef);
+      const curReports = snap.exists() ? ((snap.data().reportCount as number) || 1) : 1;
+      if (curReports >= 3) {
+        isHidden = true;
+        await Promise.allSettled([
+          setDoc(rRef, { isHidden: true }, { merge: true }),
+          setDoc(crRef, { isHidden: true }, { merge: true }),
+        ]);
+      }
+    }
+  } catch (repErr) {
+    console.debug('[Firebase] Target report increment note:', repErr);
+  }
+
+  // 3. Increment totalReports on author profile & auto-ban if >= 5
+  if (params.authorUid) {
+    try {
+      const authorRef = doc(db, 'users', params.authorUid);
+      await setDoc(
+        authorRef,
+        {
+          totalReports: increment(1),
+          updatedAt: new Date().toISOString(),
+        },
+        { merge: true }
+      );
+
+      const authorSnap = await getDoc(authorRef);
+      if (authorSnap.exists()) {
+        const totalReports = (authorSnap.data().totalReports as number) || 0;
+        if (totalReports >= 5) {
+          userBanned = true;
+          await setDoc(
+            authorRef,
+            {
+              isBanned: true,
+              bannedAt: new Date().toISOString(),
+              bannedReason: 'Account suspended due to 5 community violation reports',
+            },
+            { merge: true }
+          );
+        }
+      }
+    } catch (authorErr) {
+      console.debug('[Firebase] Author report count increment note:', authorErr);
+    }
+  }
+
+  return { isHidden, userBanned };
 }
 
 // 11. Upvote a Post in Firestore
