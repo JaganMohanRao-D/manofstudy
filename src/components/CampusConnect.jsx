@@ -489,6 +489,14 @@ export const CampusConnect = ({ onNavigateToTool }) => {
   const [isSubmittingReply, setIsSubmittingReply] = useState(false);
   const [reportTarget, setReportTarget] = useState(null);
 
+  const safeActiveReplies = useMemo(
+    () =>
+      Array.isArray(activeReplyPost?.replies)
+        ? activeReplyPost.replies.map(normalizeCampusReply).filter(Boolean)
+        : [],
+    [activeReplyPost?.replies]
+  );
+
   // Compute solutions count for reputation badges
   const userSolutionsCounts = useMemo(() => {
     const counts = {};
@@ -2271,7 +2279,10 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       </AnimatePresence>
 
       {/* 6. Mobile Bottom Sheet / Drawer for Threaded Replies */}
-      <CampusConnectReplyErrorBoundary onClose={() => setActiveReplyPost(null)}>
+      <CampusConnectReplyErrorBoundary
+        resetKey={activeReplyPost?.id || 'reply-thread'}
+        onClose={() => setActiveReplyPost(null)}
+      >
         <AnimatePresence>
         {activeReplyPost && (
           <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/40 backdrop-blur-xs">
@@ -2355,11 +2366,11 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                 <div className="flex items-center justify-between pt-1">
                   <h4 className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
                     <MessageSquare className="w-3.5 h-3.5 text-pink-600" />
-                    <span>Peer Solutions ({(Array.isArray(activeReplyPost.replies) ? activeReplyPost.replies : []).filter((r) => !r.isHidden && (!r.reportCount || r.reportCount < 3)).length})</span>
+                    <span>Peer Solutions ({safeActiveReplies.filter((r) => !r.isHidden && (!r.reportCount || r.reportCount < 3)).length})</span>
                   </h4>
                 </div>
 
-                {(Array.isArray(activeReplyPost.replies) ? activeReplyPost.replies : []).filter((r) => !r.isHidden && (!r.reportCount || r.reportCount < 3)).length === 0 ? (
+                {safeActiveReplies.filter((r) => !r.isHidden && (!r.reportCount || r.reportCount < 3)).length === 0 ? (
                   <div className="text-center py-8 text-xs text-slate-500 space-y-1 bg-pink-50/30 rounded-2xl border border-pink-100 p-4">
                     <p>No answers posted yet.</p>
                     <p className="text-pink-700 font-medium">
@@ -2367,7 +2378,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                     </p>
                   </div>
                 ) : (
-                  activeReplyPost.replies
+                  safeActiveReplies
                     .filter((r) => !r.isHidden && (!r.reportCount || r.reportCount < 3))
                     .map((reply) => (
                       <div
