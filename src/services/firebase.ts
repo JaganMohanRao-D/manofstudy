@@ -24,10 +24,19 @@ import {
   increment,
   Firestore,
 } from 'firebase/firestore';
-import firebaseConfig from '../../firebase-applet-config.json';
+// Official dedicated Firebase credentials for Man of Study
+export const firebaseConfig = {
+  apiKey: "AIzaSyAi1z2yWqdDXzeip3TUC37huvsChqK8Lqo",
+  authDomain: "manofstudy-live.firebaseapp.com",
+  projectId: "manofstudy-live",
+  storageBucket: "manofstudy-live.firebasestorage.app",
+  messagingSenderId: "9699503499",
+  appId: "1:9699503499:web:2798a930e61a310c75538e",
+  measurementId: "G-CBFMX3VKF4"
+};
 
-// 1. Initialize Firebase App
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+// 1. Initialize Firebase safely without duplicate initialization
+export const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 
 // 2. Auth & Provider
 export const auth = getAuth(app);
@@ -37,10 +46,8 @@ googleProvider.setCustomParameters({
 });
 
 // 3. Firestore Database
-export const db: Firestore =
-  firebaseConfig.firestoreDatabaseId && firebaseConfig.firestoreDatabaseId !== '(default)'
-    ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
-    : getFirestore(app);
+export const db: Firestore = getFirestore(app);
+export { signInWithPopup, signOut };
 
 // 4. Validate Firestore Connection on App Start
 export async function testConnection(): Promise<boolean> {
@@ -95,8 +102,14 @@ export async function signInWithGoogleAccount(): Promise<User | null> {
     }
 
     if (error?.code === 'auth/unauthorized-domain') {
-      console.warn('[Firebase] Unauthorized domain:', error?.message);
-      throw new Error('This domain is not authorized for Google Sign-In in Firebase. Please add this domain in Firebase Console under Auth > Settings > Authorized Domains.');
+      const currentHost = typeof window !== 'undefined' && window.location?.hostname ? window.location.hostname : '';
+      console.warn('[Firebase] Unauthorized domain:', currentHost || error?.message);
+      const domainErr = new Error(
+        `This domain (${currentHost || 'unknown'}) is not authorized for Google Sign-In in Firebase. Please add this domain in Firebase Console under Authentication > Settings > Authorized Domains.`
+      );
+      (domainErr as any).code = 'auth/unauthorized-domain';
+      (domainErr as any).domain = currentHost;
+      throw domainErr;
     }
 
     console.warn('[Firebase] Google sign-in status:', error?.message || error);
@@ -119,6 +132,7 @@ export interface FirestoreCampusPost {
   id: string;
   authorUid: string;
   authorName: string;
+  authorEmail?: string;
   displayName: string;
   isAnonymous: boolean;
   title: string;
@@ -356,7 +370,8 @@ export async function saveCampusPostToFirestore(postData: {
   const postDoc: FirestoreCampusPost = {
     id: postData.id,
     authorUid: currentUser.uid,
-    authorName: publicAuthorName,
+    authorName: currentUser.displayName || publicAuthorName,
+    authorEmail: currentUser.email || '',
     displayName: actualGoogleName,
     isAnonymous: postData.isAnonymous,
     title: postData.title,

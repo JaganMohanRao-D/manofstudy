@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { ShieldCheck, X, AlertCircle, Loader2, Sparkles, UserCheck, ExternalLink } from 'lucide-react';
+import { ShieldCheck, X, AlertCircle, Loader2, Sparkles, UserCheck, ExternalLink, Copy, Check } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export const CampusAuthModal: React.FC = () => {
   const { isAuthModalOpen, closeAuthModal, signInWithGoogle, pendingAction, authError } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [copiedDomain, setCopiedDomain] = useState(false);
 
   if (!isAuthModalOpen) return null;
 
@@ -33,7 +34,18 @@ export const CampusAuthModal: React.FC = () => {
     }
   };
 
-  const activeError = errorMessage || authError;
+  const rawError = errorMessage || authError;
+  const isUnauthorizedDomain =
+    rawError?.startsWith('UNAUTHORIZED_DOMAIN:') ||
+    rawError?.toLowerCase().includes('unauthorized-domain') ||
+    rawError?.toLowerCase().includes('authorized domains') ||
+    rawError?.toLowerCase().includes('not authorized for google sign-in');
+
+  const detectedDomain = isUnauthorizedDomain
+    ? (rawError?.startsWith('UNAUTHORIZED_DOMAIN:')
+        ? rawError.replace('UNAUTHORIZED_DOMAIN:', '')
+        : (typeof window !== 'undefined' ? window.location.hostname : ''))
+    : null;
 
   const actionLabel =
     pendingAction?.type === 'ask-doubt'
@@ -90,18 +102,69 @@ export const CampusAuthModal: React.FC = () => {
 
         {/* Body & Google Action Button */}
         <div className="px-6 pb-6 sm:px-7 sm:pb-7 space-y-4">
-          {activeError && (
-            <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
-              <div className="space-y-1">
-                <span>{activeError}</span>
+          {rawError && (
+            isUnauthorizedDomain ? (
+              <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 text-xs space-y-2.5">
+                <div className="flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
+                  <div className="space-y-1">
+                    <p className="font-bold text-amber-900 text-xs">Domain Authorization Required</p>
+                    <p className="text-[11px] text-amber-800 leading-relaxed">
+                      Google Sign-In is blocked by Firebase because this site domain is not yet on the authorized list.
+                    </p>
+                  </div>
+                </div>
+
+                {detectedDomain && (
+                  <div className="bg-white/90 p-2.5 rounded-lg border border-amber-200/80 space-y-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                        Domain to add in Firebase:
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard?.writeText(detectedDomain);
+                          setCopiedDomain(true);
+                          setTimeout(() => setCopiedDomain(false), 2000);
+                        }}
+                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-amber-100 hover:bg-amber-200 text-amber-900 transition-colors cursor-pointer"
+                      >
+                        {copiedDomain ? (
+                          <>
+                            <Check className="w-3 h-3 text-emerald-600" />
+                            <span>Copied</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3 h-3" />
+                            <span>Copy</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                    <code className="block text-[11px] font-mono text-slate-900 break-all select-all bg-slate-50 px-2 py-1 rounded border border-slate-200">
+                      {detectedDomain}
+                    </code>
+                  </div>
+                )}
+
+                <div className="text-[11px] text-amber-900/90 space-y-1">
+                  <p className="font-semibold text-amber-900">How to authorize in Firebase Console:</p>
+                  <ol className="list-decimal list-inside space-y-0.5 text-slate-700 pl-0.5 text-[11px]">
+                    <li>Open Firebase Console &gt; <span className="font-medium text-slate-800">Authentication</span></li>
+                    <li>Go to <span className="font-medium text-slate-800">Settings &gt; Authorized domains</span></li>
+                    <li>Click <span className="font-medium text-slate-800">&quot;Add domain&quot;</span> and paste the domain above</li>
+                  </ol>
+                </div>
+
                 {window.self !== window.top && (
-                  <div className="pt-1">
+                  <div className="pt-1 border-t border-amber-200/60">
                     <a
                       href={window.location.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-pink-600 hover:underline"
+                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-pink-700 hover:underline"
                     >
                       <span>Open app in new tab</span>
                       <ExternalLink className="w-3 h-3" />
@@ -109,7 +172,27 @@ export const CampusAuthModal: React.FC = () => {
                   </div>
                 )}
               </div>
-            </div>
+            ) : (
+              <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
+                <div className="space-y-1">
+                  <span>{rawError}</span>
+                  {window.self !== window.top && (
+                    <div className="pt-1">
+                      <a
+                        href={window.location.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-pink-600 hover:underline"
+                      >
+                        <span>Open app in new tab</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
           )}
 
           <button

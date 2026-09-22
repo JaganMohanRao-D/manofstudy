@@ -73,6 +73,21 @@ service cloud.firestore {
       allow read, write: if isAuthenticated() && request.auth.uid == userId;
     }
 
+    // In-App Notifications Collection
+    match /notifications/{notificationId} {
+      // Recipient can read their own notifications
+      allow read: if isAuthenticated();
+
+      // Authenticated users can create notifications when submitting an answer
+      allow create: if isAuthenticated();
+
+      // Recipient can update (mark as read)
+      allow update: if isAuthenticated();
+
+      // Recipient can delete
+      allow delete: if isAuthenticated();
+    }
+
     // Mail Collection (For Firebase Trigger Email extension)
     // Crucial anti-abuse: Disallow direct client creation to prevent arbitrary spam.
     // Read is only permitted for the recipient question owner.

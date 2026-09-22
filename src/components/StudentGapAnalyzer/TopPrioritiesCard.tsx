@@ -5,6 +5,7 @@ import { Flame, Target, ChevronDown, ChevronUp, ArrowRight, BookOpen, Terminal, 
 interface TopPrioritiesCardProps {
   priorities: TopPriorityItem[];
   nextActions: string[];
+  branchId?: string;
   onNavigateToRoadmaps?: () => void;
   onNavigateToProjects?: () => void;
   onNavigateToDsa?: () => void;
@@ -14,13 +15,17 @@ interface TopPrioritiesCardProps {
 export const TopPrioritiesCard: React.FC<TopPrioritiesCardProps> = ({
   priorities,
   nextActions,
+  branchId,
   onNavigateToRoadmaps,
+  onNavigateToProjects,
   onNavigateToDsa,
   onNavigateToVault,
 }) => {
   const [expandedWhy, setExpandedWhy] = useState<Record<number, boolean>>({
     1: true, // open first priority by default
   });
+
+  const isSoftwareBranch = !branchId || ['cse', 'it', 'aiml', 'data_science', 'cybersecurity'].includes(branchId);
 
   const toggleWhy = (rank: number) => {
     setExpandedWhy((prev) => ({ ...prev, [rank]: !prev[rank] }));
@@ -163,7 +168,7 @@ export const TopPrioritiesCard: React.FC<TopPrioritiesCardProps> = ({
         {/* Quick Launchpad to MOS Tools */}
         <div className="pt-2 flex flex-wrap items-center gap-2 text-xs">
           <span className="text-slate-500 dark:text-slate-400 font-medium">Quick Resources on MOS:</span>
-          {onNavigateToDsa && (
+          {isSoftwareBranch && onNavigateToDsa && (
             <button
               type="button"
               onClick={onNavigateToDsa}
@@ -171,6 +176,16 @@ export const TopPrioritiesCard: React.FC<TopPrioritiesCardProps> = ({
             >
               <Code2 className="w-3.5 h-3.5 text-purple-500" />
               <span>DSA Placement Tracker (450 Sheet)</span>
+            </button>
+          )}
+          {onNavigateToProjects && (
+            <button
+              type="button"
+              onClick={onNavigateToProjects}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-indigo-400 hover:text-indigo-600 transition-colors cursor-pointer"
+            >
+              <Target className="w-3.5 h-3.5 text-indigo-500" />
+              <span>Engineering Projects Hub</span>
             </button>
           )}
           {onNavigateToVault && (

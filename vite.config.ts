@@ -571,6 +571,67 @@ function tgAllotmentPlugin(): Plugin {
         });
       });
 
+      // Dedicated Resend Email Notification endpoint for CampusConnect
+      server.middlewares.use('/api/campus/send-resend-notification', (req, res) => {
+        if (req.method === 'OPTIONS') {
+          res.setHeader('Access-Control-Allow-Origin', '*');
+          res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+          res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+          res.statusCode = 204;
+          res.end();
+          return;
+        }
+
+        if (req.method !== 'POST') {
+          res.statusCode = 405;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ error: 'Method Not Allowed' }));
+          return;
+        }
+
+        const chunks: Buffer[] = [];
+        req.on('data', (chunk) => chunks.push(chunk));
+        req.on('end', async () => {
+          try {
+            const raw = Buffer.concat(chunks).toString('utf-8');
+            const data = JSON.parse(raw);
+            const { to, subject, html } = data || {};
+
+            if (!to || !to.includes('@')) {
+              res.statusCode = 400;
+              res.setHeader('Content-Type', 'application/json');
+              res.end(JSON.stringify({ error: 'Valid recipient email required' }));
+              return;
+            }
+
+            const apiKey = process.env.RESEND_API_KEY || 're_2ZBQ4b12_7vRxwSgcwkKrFm2BnnbCyF6y';
+            const resendRes = await fetch('https://api.resend.com/emails', {
+              method: 'POST',
+              headers: {
+                Authorization: `Bearer ${apiKey}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                from: 'MAN OF STUDY <onboarding@resend.dev>',
+                to: [to.trim()],
+                subject: subject || '[MAN OF STUDY] New Reply on CampusConnect',
+                html: html || '<p>You have a new reply on MOS CampusConnect.</p>',
+              }),
+            });
+
+            const resendData = await resendRes.json();
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            res.end(JSON.stringify({ success: true, resendData }));
+          } catch (err: any) {
+            console.error('[send-resend-notification] Handler error:', err);
+            res.statusCode = 500;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({ error: err?.message || 'Internal Server Error' }));
+          }
+        });
+      });
+
       // Trusted CampusConnect Answer Notification Trigger Endpoint
       const sentNotificationIds = new Set<string>();
       server.middlewares.use('/api/campus/trigger-answer-notification', (req, res) => {
@@ -622,7 +683,7 @@ function tgAllotmentPlugin(): Plugin {
             if (questionAuthorUid) {
               try {
                 const userDocRes = await fetch(
-                  `https://firestore.googleapis.com/v1/projects/quixotic-asset-mds98/databases/ai-studio-studymacha-9e3e2332-8e4b-4e97-984c-35485cb90f83/documents/users/${questionAuthorUid}`
+                  `https://firestore.googleapis.com/v1/projects/manofstudy-live/databases/(default)/documents/users/${questionAuthorUid}`
                 );
                 if (userDocRes.ok) {
                   const docData = await userDocRes.json();

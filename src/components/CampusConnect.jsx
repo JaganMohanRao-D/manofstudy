@@ -34,23 +34,44 @@ import {
   Compass,
   Heart,
   Mail,
+  Bell,
   Image as ImageIcon,
   LogOut,
   LogIn,
   UserCheck,
+  Loader2,
 } from 'lucide-react';
 
 import { initialCommunityPosts } from '../data/communityPosts';
 import { useAuth } from '../context/AuthContext';
 import {
   auth,
+  googleProvider,
+  signInWithPopup,
+  signOut as firebaseSignOut,
   db,
+  syncUserProfile,
   saveCampusPostToFirestore,
   saveCampusReplyToFirestore,
   upvotePostInFirestore,
   dispatchAnswerNotification,
 } from '../services/firebase';
-import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
+import {
+  collection,
+  onSnapshot,
+  query,
+  orderBy,
+  where,
+  addDoc,
+  doc,
+  updateDoc,
+  serverTimestamp,
+  getDoc,
+} from 'firebase/firestore';
+import {
+  triggerResendEmailAlert,
+  dispatchAnswerNotificationFlow,
+} from '../services/campusNotifications';
 export { initialCommunityPosts };
 
 const STORAGE_KEY = 'mos_forum_seed_v2';
@@ -132,6 +153,101 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     clearPendingAction,
   } = useAuth();
   const [isSavingNotificationPref, setIsSavingNotificationPref] = useState(false);
+  const [isSigningIn, setIsSigningIn] = useState(false);
+  const [toast, setToast] = useState(null); // { message: string, type: 'success' | 'info' | 'error', title?: string }
+
+  const showToast = (message, type = 'info', title = null, duration = 4500) => {
+    setToast({ message, type, title });
+    setTimeout(() => {
+      setToast((cur) => (cur?.message === message ? null : cur));
+    }, duration);
+  };
+
+  // Google Sign-In with popup, capturing displayName, email, photoURL, and storing profile state
+  const handleGoogleSignIn = async (pendingOpt = null) => {
+    setIsSigningIn(true);
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      if (result && result.user) {
+        const loggedUser = result.user;
+        const displayName = loggedUser.displayName || 'Student Peer';
+        const email = loggedUser.email || '';
+        const photoURL = loggedUser.photoURL || '';
+
+        // Properly store & sync student profile in Firestore
+        try {
+          await syncUserProfile(loggedUser);
+        } catch (syncErr) {
+          console.warn('[CampusConnect] Profile sync notice:', syncErr);
+        }
+
+        setFormAuthorName(displayName);
+        setReplyAuthorName(displayName);
+
+        showToast(
+          `Welcome, ${displayName}! You are signed in with Google and can now post doubts and verified peer answers.`,
+          'success',
+          'Signed in with Google'
+        );
+
+        // Auto-resume pending action if any
+        const act = pendingOpt || pendingAction;
+        if (act?.type === 'ask-doubt') {
+          setCreateMode('doubt');
+          setIsCreateModalOpen(true);
+          clearPendingAction?.();
+        } else if (act?.type === 'post-solution' && act.postId) {
+          const targetPost = posts.find((p) => p.id === act.postId);
+          if (targetPost) {
+            setActiveReplyPost(targetPost);
+          }
+          clearPendingAction?.();
+        }
+        return loggedUser;
+      }
+    } catch (error) {
+      // Gracefully handle popup cancellation or closure without scary errors
+      if (
+        error?.code === 'auth/popup-closed-by-user' ||
+        error?.code === 'auth/cancelled-popup-request' ||
+        error?.message?.includes('closed-by-user') ||
+        error?.message?.includes('cancelled')
+      ) {
+        showToast('Sign-in cancelled. You can sign in anytime when you want to ask a doubt or post a reply.', 'info', 'Sign-in Cancelled');
+        return null;
+      }
+
+      // Handle network errors gracefully
+      if (error?.code === 'auth/network-request-failed' || error?.message?.toLowerCase().includes('network')) {
+        showToast('Network issue connecting to Google Sign-In. Please check your internet connection and try again.', 'error', 'Network Connection Error');
+        return null;
+      }
+
+      // Handle popup blocked
+      if (error?.code === 'auth/popup-blocked') {
+        showToast('Sign-in popup was blocked by your browser. Please allow popups or open the app in a new tab.', 'info', 'Popup Blocked');
+        return null;
+      }
+
+      // Handle unauthorized domain
+      if (error?.code === 'auth/unauthorized-domain') {
+        const currentHost = typeof window !== 'undefined' ? window.location.hostname : '';
+        showToast(
+          `Domain ${currentHost || 'current domain'} is not yet authorized in Firebase Console under Authentication > Settings > Authorized Domains.`,
+          'error',
+          'Domain Authorization Required',
+          7000
+        );
+        return null;
+      }
+
+      console.warn('[CampusConnect] Google sign-in status:', error?.message || error);
+      showToast('Could not complete Google Sign-In right now. Please try again.', 'info', 'Notice');
+      return null;
+    } finally {
+      setIsSigningIn(false);
+    }
+  };
 
   const handleToggleNotificationPref = async (checked) => {
     setIsSavingNotificationPref(true);
@@ -142,6 +258,139 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     } finally {
       setIsSavingNotificationPref(false);
     }
+  };
+
+  // In-App Real-Time Notification Center State
+  const [notifications, setNotifications] = useState([]);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const notificationDropdownRef = useRef(null);
+
+  // Close notifications dropdown when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (
+        notificationDropdownRef.current &&
+        !notificationDropdownRef.current.contains(e.target)
+      ) {
+        setIsNotificationsOpen(false);
+      }
+    };
+    if (isNotificationsOpen) {
+      document.addEventListener('mousedown', handleOutsideClick);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [isNotificationsOpen]);
+
+  // Real-time Firestore sync for student's notifications: where("recipientEmail", "==", currentUser.email)
+  useEffect(() => {
+    const studentEmail = user?.email || auth.currentUser?.email;
+    if (!studentEmail) {
+      setNotifications([]);
+      return;
+    }
+
+    try {
+      const notifQuery = query(
+        collection(db, 'notifications'),
+        where('recipientEmail', '==', studentEmail)
+      );
+
+      const unsubscribe = onSnapshot(
+        notifQuery,
+        (snapshot) => {
+          const items = snapshot.docs.map((d) => ({
+            id: d.id,
+            ...d.data(),
+          }));
+
+          // Sort in descending order by createdAt in memory (reliable, index-free)
+          items.sort((a, b) => {
+            const getMillis = (val) => {
+              if (!val) return 0;
+              if (typeof val.toMillis === 'function') return val.toMillis();
+              if (val.seconds) return val.seconds * 1000;
+              return new Date(val).getTime() || 0;
+            };
+            return getMillis(b.createdAt) - getMillis(a.createdAt);
+          });
+
+          setNotifications(items);
+        },
+        (err) => {
+          console.warn('[CampusConnect] Notifications onSnapshot note:', err.message);
+        }
+      );
+
+      return () => unsubscribe();
+    } catch (e) {
+      console.warn('[CampusConnect] Notifications setup note:', e);
+    }
+  }, [user?.email]);
+
+  const unreadNotificationsCount = useMemo(() => {
+    return notifications.filter((n) => !n.isRead).length;
+  }, [notifications]);
+
+  const handleMarkAllNotificationsRead = async () => {
+    const unread = notifications.filter((n) => !n.isRead);
+    for (const notif of unread) {
+      try {
+        await updateDoc(doc(db, 'notifications', notif.id), { isRead: true });
+      } catch (err) {
+        console.warn('Error marking notification read:', err);
+      }
+    }
+  };
+
+  const handleNotificationClick = async (notif) => {
+    // 1. Mark as read in Firestore
+    if (!notif.isRead && notif.id) {
+      try {
+        await updateDoc(doc(db, 'notifications', notif.id), { isRead: true });
+      } catch (err) {
+        console.warn('Error marking notification read:', err);
+      }
+    }
+
+    setIsNotificationsOpen(false);
+
+    // 2. Locate post and auto-scroll to it
+    const targetPost = posts.find((p) => p.id === notif.questionId);
+    if (targetPost) {
+      setActiveReplyPost(targetPost);
+    }
+    setTimeout(() => {
+      const el = document.getElementById(notif.questionId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('ring-2', 'ring-pink-400');
+        setTimeout(() => el.classList.remove('ring-2', 'ring-pink-400'), 3000);
+      }
+    }, 200);
+  };
+
+  const formatNotificationTime = (timestamp) => {
+    if (!timestamp) return 'Just now';
+    let date;
+    if (typeof timestamp.toDate === 'function') {
+      date = timestamp.toDate();
+    } else if (timestamp.seconds) {
+      date = new Date(timestamp.seconds * 1000);
+    } else {
+      date = new Date(timestamp);
+    }
+    const now = Date.now();
+    const diffSec = Math.max(0, Math.floor((now - date.getTime()) / 1000));
+    if (diffSec < 60) return 'Just now';
+    const diffMin = Math.floor(diffSec / 60);
+    if (diffMin < 60) return `${diffMin}m ago`;
+    const diffHr = Math.floor(diffMin / 60);
+    if (diffHr < 24) return `${diffHr}h ago`;
+    const diffDays = Math.floor(diffHr / 24);
+    if (diffDays === 1) return 'Yesterday';
+    return `${diffDays}d ago`;
   };
 
   // Modals & Bottom Sheets
@@ -460,9 +709,47 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       prev.map((p) => (p.id === activeReplyPost.id ? updatedPost : p))
     );
 
-    // Trigger automated email notification to question author via trusted backend trigger & Firebase mail pipeline
-    // Strictly zero-trust: uses authorUid, enforces duplicate protection, suppresses self-notifications
-    if (activeReplyPost.authorUid) {
+    // 2. TWO-WAY NOTIFICATION SYSTEM: In-App Notification Center + Automated Resend Email
+    // Resolve recipient email and name
+    let recipientEmail = activeReplyPost.authorEmail || activeReplyPost.authorEmailAddress || null;
+    let recipientName = activeReplyPost.authorName || activeReplyPost.displayName || 'Student';
+
+    // If authorEmail is not directly present on the post, look up the user in Firestore /users/{authorUid}
+    if (!recipientEmail && activeReplyPost.authorUid) {
+      try {
+        const authorUserDoc = await getDoc(doc(db, 'users', activeReplyPost.authorUid));
+        if (authorUserDoc.exists()) {
+          const userData = authorUserDoc.data();
+          recipientEmail = userData.email || null;
+          if (userData.displayName) recipientName = userData.displayName;
+        }
+      } catch (lookupErr) {
+        console.debug('[CampusConnect] Author email lookup note:', lookupErr);
+      }
+    }
+
+    const currentStudentEmail = currentAuthUser.email;
+    const isSelfReply =
+      recipientEmail &&
+      currentStudentEmail &&
+      recipientEmail.toLowerCase() === currentStudentEmail.toLowerCase();
+
+    // Only dispatch when recipient email exists and user is not answering their own question
+    if (recipientEmail && !isSelfReply) {
+      dispatchAnswerNotificationFlow({
+        recipientEmail: recipientEmail,
+        recipientName: recipientName,
+        senderName: isAnon ? 'A Fellow Student' : authorDisplayName,
+        questionId: activeReplyPost.id,
+        questionTitle: activeReplyPost.title,
+        answerText: replyContentText,
+      }).catch((notifErr) => {
+        console.warn('[CampusConnect] Notification dispatch note:', notifErr);
+      });
+    }
+
+    // Zero-trust mail queue trigger as secondary fallback
+    if (activeReplyPost.authorUid && activeReplyPost.authorUid !== currentAuthUser.uid) {
       dispatchAnswerNotification({
         postId: activeReplyPost.id,
         replyId: newReply.id,
@@ -563,7 +850,8 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     const newPost = {
       id: `post-${Date.now()}`,
       authorUid: currentAuthUser.uid,
-      authorName: publicAuthorName,
+      authorName: currentAuthUser.displayName || publicAuthorName,
+      authorEmail: currentAuthUser.email || '',
       displayName: authorDisplayName,
       isAnonymous: isAnon,
       type: createMode,
@@ -810,6 +1098,118 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
+                  {/* Real-time In-App Notification Center Bell */}
+                  <div className="relative" ref={notificationDropdownRef}>
+                    <button
+                      type="button"
+                      id="campus-notifications-bell-btn"
+                      onClick={() => setIsNotificationsOpen((prev) => !prev)}
+                      className={`relative p-2 rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center min-h-[36px] min-w-[36px] ${
+                        isNotificationsOpen
+                          ? 'bg-pink-100 border-pink-400 text-pink-700'
+                          : 'bg-white border-pink-200 hover:bg-pink-50 text-slate-700 hover:text-pink-600'
+                      }`}
+                      title="Discussion Notifications & Alerts"
+                      aria-label="Discussion Notifications & Alerts"
+                    >
+                      <Bell className="w-4 h-4" />
+                      {unreadNotificationsCount > 0 && (
+                        <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-pink-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-xs animate-pulse">
+                          {unreadNotificationsCount > 9 ? '9+' : unreadNotificationsCount}
+                        </span>
+                      )}
+                    </button>
+
+                    {/* Sleek Notifications Dropdown Modal */}
+                    {isNotificationsOpen && (
+                      <div
+                        id="campus-notifications-dropdown"
+                        className="absolute right-0 mt-2 w-80 sm:w-96 bg-white border border-pink-200 rounded-2xl shadow-xl z-50 overflow-hidden text-left animate-in fade-in zoom-in-95 duration-150"
+                      >
+                        {/* Dropdown Header */}
+                        <div className="p-3.5 bg-gradient-to-r from-pink-50 to-rose-50 border-b border-pink-100 flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Bell className="w-4 h-4 text-pink-600" />
+                            <span className="text-xs font-bold text-slate-900">Notifications</span>
+                            {unreadNotificationsCount > 0 ? (
+                              <span className="px-1.5 py-0.5 rounded-full text-[10px] font-extrabold bg-pink-500 text-white">
+                                {unreadNotificationsCount} new
+                              </span>
+                            ) : (
+                              <span className="px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-pink-100 text-pink-700">
+                                Caught up
+                              </span>
+                            )}
+                          </div>
+                          {unreadNotificationsCount > 0 && (
+                            <button
+                              type="button"
+                              onClick={handleMarkAllNotificationsRead}
+                              className="text-[11px] font-semibold text-pink-600 hover:text-pink-800 hover:underline cursor-pointer"
+                            >
+                              Mark all as read
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Notifications List */}
+                        <div className="max-h-80 overflow-y-auto divide-y divide-pink-50">
+                          {notifications.length === 0 ? (
+                            <div className="p-6 text-center text-slate-500">
+                              <CheckCircle2 className="w-7 h-7 text-pink-400 mx-auto mb-2 opacity-80" />
+                              <p className="font-semibold text-slate-800 text-xs">No new alerts</p>
+                              <p className="text-[11px] text-slate-500 mt-0.5">Your discussions are all caught up!</p>
+                            </div>
+                          ) : (
+                            notifications.map((notif) => (
+                              <button
+                                key={notif.id}
+                                type="button"
+                                onClick={() => handleNotificationClick(notif)}
+                                className={`w-full p-3 text-left transition-colors cursor-pointer flex gap-3 items-start ${
+                                  !notif.isRead
+                                    ? 'bg-pink-50/50 hover:bg-pink-100/60'
+                                    : 'hover:bg-slate-50'
+                                }`}
+                              >
+                                <div className="w-8 h-8 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center shrink-0 mt-0.5 border border-pink-200">
+                                  <MessageSquare className="w-4 h-4" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center justify-between gap-1">
+                                    <p className="text-xs text-slate-900 leading-snug line-clamp-2">
+                                      <span className="font-bold text-slate-950">{notif.senderName}</span> answered:
+                                      <span className="font-semibold text-pink-800 ml-1">"{notif.questionTitle}"</span>
+                                    </p>
+                                    {!notif.isRead && (
+                                      <span className="w-2 h-2 rounded-full bg-pink-600 shrink-0" title="Unread alert" />
+                                    )}
+                                  </div>
+                                  {notif.replySnippet && (
+                                    <p className="text-[11px] text-slate-600 mt-1 line-clamp-2 bg-white/80 p-1.5 rounded-lg border border-pink-100 font-sans">
+                                      "{notif.replySnippet}"
+                                    </p>
+                                  )}
+                                  <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-slate-400">
+                                    <Clock className="w-3 h-3 text-slate-400" />
+                                    <span>{formatNotificationTime(notif.createdAt)}</span>
+                                    <span className="text-pink-400">•</span>
+                                    <span className="text-pink-600 font-medium">Tap to view</span>
+                                  </div>
+                                </div>
+                              </button>
+                            ))
+                          )}
+                        </div>
+
+                        {/* Dropdown Footer */}
+                        <div className="p-2 text-center text-[10px] text-slate-500 bg-pink-50/40 border-t border-pink-100">
+                          Click any alert to jump directly to the answer discussion.
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
                   <button
                     type="button"
                     onClick={() => handleInitiateAskDoubt('doubt')}
@@ -839,16 +1239,26 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                 </div>
                 <button
                   type="button"
-                  onClick={() => openAuthModal()}
-                  className="px-4 py-2 bg-white hover:bg-pink-50 text-slate-800 border border-slate-300 hover:border-pink-300 rounded-xl text-xs font-bold flex items-center gap-2 shadow-xs transition-all active:scale-95 cursor-pointer"
+                  onClick={() => handleGoogleSignIn()}
+                  disabled={isSigningIn}
+                  className="px-4 py-2 bg-white hover:bg-pink-50 text-slate-800 border border-slate-300 hover:border-pink-300 rounded-xl text-xs font-bold flex items-center gap-2 shadow-xs transition-all active:scale-95 cursor-pointer disabled:opacity-60"
                 >
-                  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
-                  </svg>
-                  <span>Sign in with Google</span>
+                  {isSigningIn ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin text-pink-600 shrink-0" />
+                      <span>Signing in...</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                      </svg>
+                      <span>Continue with Google</span>
+                    </>
+                  )}
                 </button>
               </div>
             )}
@@ -1832,10 +2242,21 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                   </div>
                   <button
                     type="button"
-                    onClick={() => openAuthModal({ type: 'post-solution', postId: activeReplyPost.id })}
-                    className="px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white font-bold rounded-xl flex items-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer"
+                    onClick={() => handleGoogleSignIn({ type: 'post-solution', postId: activeReplyPost.id })}
+                    disabled={isSigningIn}
+                    className="px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white font-bold rounded-xl flex items-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer disabled:opacity-60"
                   >
-                    <span>Sign in to Answer</span>
+                    {isSigningIn ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>Connecting...</span>
+                      </>
+                    ) : (
+                      <>
+                        <LogIn className="w-3.5 h-3.5" />
+                        <span>Continue with Google</span>
+                      </>
+                    )}
                   </button>
                 </div>
               )}
@@ -1843,6 +2264,44 @@ export const CampusConnect = ({ onNavigateToTool }) => {
           </div>
         )}
       </AnimatePresence>
+      {/* Toast Alert Notification Banner */}
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-50 animate-in slide-in-from-bottom-3 duration-300 max-w-sm w-full px-4 sm:px-0">
+          <div
+            className={`p-4 rounded-2xl shadow-xl border flex items-start gap-3 backdrop-blur-md transition-all ${
+              toast.type === 'success'
+                ? 'bg-white/95 border-emerald-200 text-slate-800 shadow-pink-100/50'
+                : toast.type === 'error'
+                ? 'bg-rose-50/95 border-rose-200 text-rose-950 shadow-rose-100/50'
+                : 'bg-white/95 border-pink-200 text-slate-800 shadow-pink-100/50'
+            }`}
+          >
+            {toast.type === 'success' && (
+              <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+            )}
+            {toast.type === 'error' && (
+              <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+            )}
+            {toast.type === 'info' && (
+              <Sparkles className="w-5 h-5 text-pink-500 shrink-0 mt-0.5" />
+            )}
+            <div className="flex-1 text-xs">
+              <p className="font-bold text-slate-900">
+                {toast.title || (toast.type === 'success' ? 'CampusConnect' : 'Notice')}
+              </p>
+              <p className="mt-0.5 text-slate-600 leading-relaxed">{toast.message}</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setToast(null)}
+              className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors"
+              aria-label="Dismiss notice"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

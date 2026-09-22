@@ -117,6 +117,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (isCancellation) {
         console.info('[AuthContext] Sign-in cancelled by user.');
         setAuthError(null);
+      } else if (
+        err?.code === 'auth/unauthorized-domain' ||
+        errorMsg.toLowerCase().includes('unauthorized-domain') ||
+        errorMsg.toLowerCase().includes('authorized domains') ||
+        errorMsg.toLowerCase().includes('not authorized')
+      ) {
+        const currentHost =
+          err?.domain ||
+          (typeof window !== 'undefined' && window.location?.hostname ? window.location.hostname : '');
+        console.warn('[AuthContext] Unauthorized domain detected:', currentHost);
+        setAuthError(`UNAUTHORIZED_DOMAIN:${currentHost}`);
       } else {
         console.warn('[AuthContext] Sign in notice:', errorMsg);
         setAuthError(errorMsg);
