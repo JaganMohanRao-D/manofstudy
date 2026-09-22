@@ -165,6 +165,49 @@ const normalizeCampusPost = (post) => {
 const normalizeCampusPosts = (items) =>
   Array.isArray(items) ? items.map(normalizeCampusPost).filter(Boolean) : [];
 
+export class CampusConnectGlobalErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, info) {
+    console.error('[CampusConnect] Global Boundary caught error:', error, info?.componentStack);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="w-full min-h-screen bg-pink-50/50 flex items-center justify-center p-4">
+          <div className="bg-white border border-pink-200 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-center space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-pink-100 text-pink-600 flex items-center justify-center mx-auto text-xl font-bold">
+              🎓
+            </div>
+            <h2 className="text-lg font-bold text-slate-900">CampusConnect Safe Mode</h2>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              A rendering issue was intercepted to prevent a blank screen. Your feed and session remain intact.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                this.setState({ hasError: false, error: null });
+              }}
+              className="px-5 py-2.5 bg-pink-500 hover:bg-pink-600 text-white font-semibold text-xs rounded-xl shadow-md transition-all active:scale-95 cursor-pointer"
+            >
+              Resume CampusConnect
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export const CampusConnect = ({ onNavigateToTool }) => {
   // State: Posts and User Interactions
   const [posts, setPosts] = useState(() => {
@@ -480,6 +523,10 @@ export const CampusConnect = ({ onNavigateToTool }) => {
   // Modals & Bottom Sheets
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [createMode, setCreateMode] = useState('dispatch');
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [isSolutionModalOpen, setIsSolutionModalOpen] = useState(false);
+  const [solutionText, setSolutionText] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const [activeReplyPost, setActiveReplyPost] = useState(null);
   const [replyInputText, setReplyInputText] = useState('');
   const [replyAnonymous, setReplyAnonymous] = useState(false);
@@ -694,11 +741,10 @@ export const CampusConnect = ({ onNavigateToTool }) => {
   };
 
   const handleInitiatePostSolution = (post) => {
-    if (!auth.currentUser) {
-      openAuthModal({ type: 'post-solution', postId: post.id });
-      return;
-    }
-    setActiveReplyPost(post ? normalizeCampusPost(post) : null);
+    if (!post) return;
+    const safePost = normalizeCampusPost(post) || post;
+    setSelectedPost(safePost);
+    setIsSolutionModalOpen(true);
   };
 
   // Multi-attachment file selection handler
@@ -855,10 +901,26 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     );
   };
 
-  // Add Solution / Reply (Requires Real Firebase Google Auth)
-  const handleAddReply = async (e) => {
-    e.preventDefault();
-    if (!activeReplyPost || !replyInputText.trim() || isSubmittingReply) return;
+  // Add Solution / Reply (Supports both (postId, solutionText) and (e) form submission)
+  const handleAddReply = async (arg1, arg2) => {
+    let targetPostId = null;
+    let textToPost = '';
+
+    if (typeof arg1 === 'string' && typeof arg2 === 'string') {
+      targetPostId = arg1;
+      textToPost = arg2.trim();
+    } else if (arg1 && typeof arg1?.preventDefault === 'function') {
+      arg1.preventDefault();
+      textToPost = replyInputText.trim();
+    } else {
+      textToPost = (solutionText || replyInputText).trim();
+    }
+
+    const currentTargetPost = targetPostId
+      ? posts.find((p) => p.id === targetPostId) || selectedPost || activeReplyPost
+      : selectedPost || activeReplyPost;
+
+    if (!currentTargetPost || !textToPost || isSubmittingReply) return;
 
     // Check account suspension
     if (userProfile?.isBanned) {
@@ -868,7 +930,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
 
     // Strict Firebase Auth verification
     if (!auth.currentUser) {
-      openAuthModal({ type: 'post-solution', postId: activeReplyPost.id });
+      openAuthModal({ type: 'post-solution', postId: currentTargetPost.id });
       return;
     }
 
@@ -886,8 +948,8 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       return;
     }
 
-    const replyContentText = replyInputText.trim();
-    const replyCollegeFormatted = isAnon ? 'Campus Peer' : (replyAuthorCollege.trim() || 'Engineering College');
+    const replyContentText = textToPost;
+    const replyCollegeFormatted = isAnon ? 'Campus Peer' : (replyAuthorCollege?.trim() || 'Engineering College');
 
     const newReply = {
       id: `reply-${Date.now()}`,
@@ -900,6 +962,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       isAnonymous: isAnon,
       isAdmin: false,
       content: replyContentText,
+      text: replyContentText,
       createdAt: 'Just now',
       timestamp: 'Just now',
       upvotes: 1,
@@ -908,20 +971,25 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     };
 
     // 1. Immediately update local state so user sees solution instantly without waiting
-    const updatedReplies = [newReply, ...(activeReplyPost.replies || [])];
-    const updatedPost = { ...activeReplyPost, replies: updatedReplies };
+    const safeReplies = Array.isArray(currentTargetPost.replies) ? currentTargetPost.replies : [];
+    const updatedReplies = [newReply, ...safeReplies];
+    const updatedPost = { ...currentTargetPost, replies: updatedReplies };
 
-    setActiveReplyPost(updatedPost);
+    setSelectedPost(updatedPost);
+    if (activeReplyPost?.id === currentTargetPost.id) {
+      setActiveReplyPost(updatedPost);
+    }
     setPosts((prev) =>
-      prev.map((p) => (p.id === activeReplyPost.id ? updatedPost : p))
+      prev.map((p) => (p.id === currentTargetPost.id ? updatedPost : p))
     );
 
-    // 2. Clear input immediately so input box is ready
+    // 2. Clear inputs immediately so input box is ready
     setReplyInputText('');
+    setSolutionText('');
 
     try {
       // 3. Save to Firestore subcollections and update solutions count
-      await saveCampusReplyToFirestore(activeReplyPost.id, {
+      await saveCampusReplyToFirestore(currentTargetPost.id, {
         id: newReply.id,
         content: newReply.content,
         isAnonymous: isAnon,
@@ -939,12 +1007,12 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       showToast('Solution posted successfully! Your peer was notified.', 'success', 'Solution Published');
 
       // 4. TWO-WAY NOTIFICATION SYSTEM: In-App Notification Center + Automated Resend Email
-      let recipientEmail = activeReplyPost.authorEmail || activeReplyPost.authorEmailAddress || null;
-      let recipientName = activeReplyPost.authorName || activeReplyPost.displayName || 'Student';
+      let recipientEmail = currentTargetPost.authorEmail || currentTargetPost.authorEmailAddress || null;
+      let recipientName = currentTargetPost.authorName || currentTargetPost.displayName || 'Student';
 
-      if (!recipientEmail && activeReplyPost.authorUid) {
+      if (!recipientEmail && currentTargetPost.authorUid) {
         try {
-          const authorUserDoc = await getDoc(doc(db, 'users', activeReplyPost.authorUid));
+          const authorUserDoc = await getDoc(doc(db, 'users', currentTargetPost.authorUid));
           if (authorUserDoc.exists()) {
             const userData = authorUserDoc.data();
             recipientEmail = userData.email || null;
@@ -971,8 +1039,8 @@ export const CampusConnect = ({ onNavigateToTool }) => {
           recipientEmail: recipientEmail,
           recipientName: recipientName,
           senderName: isAnon ? 'A Fellow Student' : authorDisplayName,
-          questionId: activeReplyPost.id,
-          questionTitle: activeReplyPost.title,
+          questionId: currentTargetPost.id,
+          questionTitle: currentTargetPost.title,
           answerText: replyContentText,
           emailNotificationsEnabled: userProfile?.emailNotificationsEnabled === true,
         }).catch((notifErr) => {
@@ -981,12 +1049,12 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       }
 
       // Zero-trust mail queue trigger as secondary fallback
-      if (activeReplyPost.authorUid && activeReplyPost.authorUid !== currentAuthUser.uid) {
+      if (currentTargetPost.authorUid && currentTargetPost.authorUid !== currentAuthUser.uid) {
         dispatchAnswerNotification({
-          postId: activeReplyPost.id,
+          postId: currentTargetPost.id,
           replyId: newReply.id,
-          questionAuthorUid: activeReplyPost.authorUid,
-          questionTitle: activeReplyPost.title,
+          questionAuthorUid: currentTargetPost.authorUid,
+          questionTitle: currentTargetPost.title,
           replyAuthorName: newReply.authorName,
           replyContent: newReply.content,
           isAnonymous: isAnon,
@@ -1214,10 +1282,11 @@ export const CampusConnect = ({ onNavigateToTool }) => {
   }, [posts, activeFilter, selectedBranchFilter, searchQuery]);
 
   return (
-    <div
-      id="campus-connect"
-      className="w-full max-w-full overflow-x-hidden bg-gradient-to-b from-pink-50 via-rose-50/60 to-white text-slate-900 min-h-screen pb-24 md:pb-16 break-words"
-    >
+    <CampusConnectGlobalErrorBoundary>
+      <div
+        id="campus-connect"
+        className="w-full max-w-full overflow-x-hidden bg-gradient-to-b from-pink-50 via-rose-50/60 to-white text-slate-900 min-h-screen pb-24 md:pb-16 break-words"
+      >
       {/* 1. Header Banner & Identity */}
       <div className="relative border-b border-pink-200/80 bg-gradient-to-b from-pink-100/70 via-rose-50/50 to-white px-3 sm:px-6 py-6 sm:py-8">
         <div className="max-w-4xl mx-auto space-y-3.5">
@@ -1807,12 +1876,16 @@ export const CampusConnect = ({ onNavigateToTool }) => {
 
                   <button
                     type="button"
-                    onClick={() => handleInitiatePostSolution(post)}
-                    className="min-h-[42px] px-3.5 rounded-xl bg-pink-500 hover:bg-pink-600 text-white flex items-center gap-1.5 font-bold text-xs transition-all active:scale-95 cursor-pointer shadow-xs"
-                    title="Post a verified or anonymous solution"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (!post) return;
+                      setSelectedPost(post);
+                      setIsSolutionModalOpen(true);
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-pink-600 bg-pink-50 hover:bg-pink-100 rounded-lg transition-colors cursor-pointer"
                   >
-                    <Send className="w-3.5 h-3.5" />
-                    <span>Post a Solution</span>
+                    <span>✍️</span> Post a Solution
                   </button>
                 </div>
 
@@ -2594,6 +2667,96 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       </AnimatePresence>
       </CampusConnectReplyErrorBoundary>
 
+      {/* Ultra-Safe Solution Modal Rendering (Zero-Crash Fallbacks) */}
+      {isSolutionModalOpen && selectedPost && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-pink-100 max-h-[90vh] overflow-y-auto">
+            {/* Header */}
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <span className="text-xs font-medium text-pink-600 bg-pink-50 px-2 py-0.5 rounded-full">
+                  {selectedPost?.college || 'Student Network'}
+                </span>
+                <h3 className="font-bold text-gray-900 text-base mt-2">
+                  {selectedPost?.title || 'Academic Query'}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsSolutionModalOpen(false)}
+                className="text-gray-400 hover:text-gray-700 text-lg font-bold p-1 cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Existing Replies List (Safe Mapping) */}
+            <div className="space-y-3 mb-4">
+              <h4 className="text-xs font-bold text-gray-700 uppercase tracking-wider">
+                Solutions &amp; Peer Insights ({(selectedPost?.replies || []).length})
+              </h4>
+              {(selectedPost?.replies || []).length === 0 ? (
+                <p className="text-xs text-gray-400 italic">No solutions posted yet. Be the first to help!</p>
+              ) : (
+                (selectedPost?.replies || []).map((reply, idx) => (
+                  <div key={idx} className="p-3 bg-gray-50 rounded-xl border border-gray-100 text-xs">
+                    <div className="flex justify-between font-semibold text-gray-700 mb-1">
+                      <span>{reply?.authorName || 'Student'}</span>
+                      <span className="text-gray-400 font-normal">{reply?.createdAt || 'Just now'}</span>
+                    </div>
+                    <p className="text-gray-600 whitespace-pre-wrap">{reply?.text || reply?.content}</p>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Submission Form */}
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                if (!solutionText.trim()) return;
+                setSubmitting(true);
+                try {
+                  await handleAddReply(selectedPost.id, solutionText);
+                  setSolutionText('');
+                  setIsSolutionModalOpen(false);
+                } catch (err) {
+                  console.error(err);
+                  alert("Could not post solution. Please check network.");
+                } finally {
+                  setSubmitting(false);
+                }
+              }}
+            >
+              <textarea
+                value={solutionText}
+                onChange={(e) => setSolutionText(e.target.value)}
+                placeholder="Write your explanation, code snippet, or share Google Drive resource links..."
+                rows={4}
+                className="w-full text-xs p-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 outline-none"
+                required
+              />
+              <div className="flex justify-end gap-2 mt-3">
+                <button
+                  type="button"
+                  onClick={() => setIsSolutionModalOpen(false)}
+                  className="px-4 py-2 text-xs font-semibold text-gray-500 hover:bg-gray-100 rounded-lg cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="px-4 py-2 text-xs font-semibold text-white bg-pink-600 hover:bg-pink-700 rounded-lg disabled:opacity-50 cursor-pointer"
+                >
+                  {submitting ? 'Posting...' : 'Submit Solution'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Community Moderation Report Modal */}
       <ReportModal
         isOpen={!!reportTarget}
@@ -2640,7 +2803,8 @@ export const CampusConnect = ({ onNavigateToTool }) => {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </CampusConnectGlobalErrorBoundary>
   );
 };
 
