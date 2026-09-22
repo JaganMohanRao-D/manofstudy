@@ -122,6 +122,17 @@ const BRANCH_OPTIONS = [
 
 const INITIAL_SEED_POSTS = initialCommunityPosts;
 
+// Keep every post/reply render-safe, including legacy localStorage and older Firestore documents.
+const normalizeCampusPost = (post) => ({
+  ...post,
+  replies: Array.isArray(post?.replies) ? post.replies : [],
+  attachments: Array.isArray(post?.attachments) ? post.attachments : [],
+  upvotes: Number.isFinite(post?.upvotes) ? post.upvotes : 0,
+});
+
+const normalizeCampusPosts = (items) =>
+  Array.isArray(items) ? items.map(normalizeCampusPost).filter(Boolean) : [];
+
 export const CampusConnect = ({ onNavigateToTool }) => {
   // State: Posts and User Interactions
   const [posts, setPosts] = useState(() => {
@@ -129,12 +140,12 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) return normalizeCampusPosts(parsed);
       }
     } catch {
       // ignore
     }
-    return initialCommunityPosts;
+    return normalizeCampusPosts(initialCommunityPosts);
   });
 
   const [upvotedPostIds, setUpvotedPostIds] = useState(() => {
@@ -208,7 +219,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
         } else if (act?.type === 'post-solution' && act.postId) {
           const targetPost = posts.find((p) => p.id === act.postId);
           if (targetPost) {
-            setActiveReplyPost(targetPost);
+            setActiveReplyPost(targetPost ? normalizeCampusPost(targetPost) : null);
           }
           clearPendingAction?.();
         }
@@ -368,7 +379,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     // 2. Locate post and auto-scroll to it
     const targetPost = posts.find((p) => p.id === notif.questionId);
     if (targetPost) {
-      setActiveReplyPost(targetPost);
+      setActiveReplyPost(targetPost ? normalizeCampusPost(targetPost) : null);
     }
     setTimeout(() => {
       const el = document.getElementById(notif.questionId);
@@ -561,7 +572,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       } else if (pendingAction.type === 'post-solution' && pendingAction.postId) {
         const targetPost = posts.find((p) => p.id === pendingAction.postId);
         if (targetPost) {
-          setActiveReplyPost(targetPost);
+          setActiveReplyPost(targetPost ? normalizeCampusPost(targetPost) : null);
         }
         clearPendingAction();
       }
@@ -579,7 +590,8 @@ export const CampusConnect = ({ onNavigateToTool }) => {
             const firestorePosts = snapshot.docs.map((d) => ({
               ...d.data(),
               id: d.id,
-              replies: d.data().replies || [],
+              replies: Array.isArray(d.data().replies) ? d.data().replies : [],
+              attachments: Array.isArray(d.data().attachments) ? d.data().attachments : [],
             }));
 
             setPosts((prevPosts) => {
@@ -614,7 +626,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       openAuthModal({ type: 'post-solution', postId: post.id });
       return;
     }
-    setActiveReplyPost(post);
+    setActiveReplyPost(post ? normalizeCampusPost(post) : null);
   };
 
   // Multi-attachment file selection handler
@@ -755,7 +767,8 @@ export const CampusConnect = ({ onNavigateToTool }) => {
   // Upvote a reply
   const handleReplyUpvote = (replyId) => {
     if (!activeReplyPost) return;
-    const updatedReplies = activeReplyPost.replies.map((r) => {
+    const safeReplies = Array.isArray(activeReplyPost.replies) ? activeReplyPost.replies : [];
+    const updatedReplies = safeReplies.map((r) => {
       if (r.id === replyId) {
         return { ...r, upvotes: r.upvotes + 1 };
       }
@@ -877,7 +890,11 @@ export const CampusConnect = ({ onNavigateToTool }) => {
         recipientEmail.toLowerCase() === currentStudentEmail.toLowerCase();
 
       // Dispatch answer notification flow
-      if (recipientEmail && !isSelfReply) {
+      if (
+        recipientEmail &&
+        !isSelfReply &&
+        userProfile?.emailNotificationsEnabled !== false
+      ) {
         dispatchAnswerNotificationFlow({
           recipientEmail: recipientEmail,
           recipientName: recipientName,
@@ -1233,7 +1250,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                       <label className="inline-flex items-center gap-1.5 text-[11px] text-slate-700 font-medium cursor-pointer select-none bg-pink-50/80 hover:bg-pink-100/80 px-2 py-0.5 rounded-md border border-pink-200/80 transition-colors">
                         <input
                           type="checkbox"
-                          checked={userProfile?.emailNotificationsEnabled !== false}
+                          checked={userProfile ? userProfile.emailNotificationsEnabled !== false : true}
                           onChange={(e) => handleToggleNotificationPref(e.target.checked)}
                           className="w-3.5 h-3.5 text-pink-600 rounded border-pink-300 focus:ring-pink-400 cursor-pointer"
                         />
@@ -2272,11 +2289,11 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                 <div className="flex items-center justify-between pt-1">
                   <h4 className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
                     <MessageSquare className="w-3.5 h-3.5 text-pink-600" />
-                    <span>Peer Solutions ({activeReplyPost.replies.filter((r) => !r.isHidden && (!r.reportCount || r.reportCount < 3)).length})</span>
+                    <span>Peer Solutions ({(Array.isArray(activeReplyPost.replies) ? activeReplyPost.replies : []).filter((r) => !r.isHidden && (!r.reportCount || r.reportCount < 3)).length})</span>
                   </h4>
                 </div>
 
-                {activeReplyPost.replies.filter((r) => !r.isHidden && (!r.reportCount || r.reportCount < 3)).length === 0 ? (
+                {(Array.isArray(activeReplyPost.replies) ? activeReplyPost.replies : []).filter((r) => !r.isHidden && (!r.reportCount || r.reportCount < 3)).length === 0 ? (
                   <div className="text-center py-8 text-xs text-slate-500 space-y-1 bg-pink-50/30 rounded-2xl border border-pink-100 p-4">
                     <p>No answers posted yet.</p>
                     <p className="text-pink-700 font-medium">
