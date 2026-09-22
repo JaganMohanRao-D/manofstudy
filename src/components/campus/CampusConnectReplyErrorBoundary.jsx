@@ -14,6 +14,12 @@ export class CampusConnectReplyErrorBoundary extends React.Component {
     console.error('[CampusConnect] Reply thread render error:', error, info?.componentStack);
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.resetKey !== this.props.resetKey && this.state.hasError) {
+      this.setState({ hasError: false });
+    }
+  }
+
   render() {
     if (this.state.hasError) {
       const onClose = this.props.onClose;
