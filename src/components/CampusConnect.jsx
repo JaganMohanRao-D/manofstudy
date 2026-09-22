@@ -902,6 +902,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
           questionId: activeReplyPost.id,
           questionTitle: activeReplyPost.title,
           answerText: replyContentText,
+          emailNotificationsEnabled: userProfile?.emailNotificationsEnabled === true,
         }).catch((notifErr) => {
           console.warn('[CampusConnect] Notification dispatch note:', notifErr);
         });
