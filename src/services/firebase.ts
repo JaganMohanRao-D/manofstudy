@@ -295,10 +295,24 @@ export async function dispatchAnswerNotification(params: {
     return { success: true, reason: 'Self-answer' };
   }
 
-  // 2. Deterministic ID for duplicate protection (Requirement 10)
+  // 2. Respect the question owner's saved email preference before creating any email job.
+  // In-app notifications are handled separately by CampusConnect.
+  try {
+    const recipientProfile = await getDoc(doc(db, 'users', params.questionAuthorUid));
+    if (recipientProfile.exists() && recipientProfile.data().emailNotificationsEnabled !== true) {
+      console.info('[CampusConnect] Email notifications disabled for question owner; email job skipped.');
+      return { success: true, reason: 'Email notifications disabled' };
+    }
+  } catch (prefErr) {
+    // Fail closed: if the preference cannot be verified, do not send an email.
+    console.warn('[CampusConnect] Could not verify email preference; email skipped:', prefErr);
+    return { success: false, reason: 'Could not verify email preference' };
+  }
+
+  // 3. Deterministic ID for duplicate protection (Requirement 10)
   const notificationId = `answer_notification_${params.postId}_${params.replyId}`;
 
-  // 3. Queue to mail collection for Firebase Trigger Email extension (Requirement 7)
+  // 4. Queue to mail collection for Firebase Trigger Email extension (Requirement 7)
   try {
     const mailDocRef = doc(db, 'mail', notificationId);
     const existingSnap = await getDoc(mailDocRef);
@@ -329,7 +343,7 @@ export async function dispatchAnswerNotification(params: {
     console.debug('[Firebase] Mail collection write note:', mailErr?.message || mailErr);
   }
 
-  // 4. Trigger trusted server endpoint to verify question owner's email and deliver immediately
+  // 5. Trigger trusted server endpoint to verify question owner's email and deliver immediately
   try {
     const res = await fetch('/api/campus/trigger-answer-notification', {
       method: 'POST',
