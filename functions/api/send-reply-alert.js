@@ -50,8 +50,15 @@ export async function onRequestPost({ request, env }) {
       );
     }
 
-    // Fallback to configured Resend API token if not passed in Cloudflare env bindings
-    const apiKey = env?.RESEND_API_KEY || 're_2ZBQ4b12_7vRxwSgcwkKrFm2BnnbCyF6y';
+    // Resend credentials must come from the server-side Cloudflare environment.
+    // Never keep a fallback API key in source control.
+    const apiKey = env?.RESEND_API_KEY;
+    if (!apiKey) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Email service is not configured on the server.' }),
+        { status: 503, headers: corsHeaders }
+      );
+    }
 
     const safeTitle = String(questionTitle).replace(/</g, '&lt;').replace(/>/g, '&gt;');
     const safeAuthor = String(replyAuthor).replace(/</g, '&lt;').replace(/>/g, '&gt;');
