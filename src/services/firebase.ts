@@ -262,10 +262,14 @@ export async function getUserProfile(uid: string): Promise<UserProfile | null> {
  */
 export async function updateNotificationPreference(uid: string, enabled: boolean): Promise<void> {
   const userRef = doc(db, 'users', uid);
-  await updateDoc(userRef, {
-    emailNotificationsEnabled: enabled,
-    updatedAt: new Date().toISOString(),
-  });
+  await setDoc(
+    userRef,
+    {
+      emailNotificationsEnabled: enabled,
+      updatedAt: new Date().toISOString(),
+    },
+    { merge: true }
+  );
 }
 
 /**
