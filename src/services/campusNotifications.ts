@@ -32,48 +32,28 @@ export async function triggerResendEmailAlert(params: {
     return { success: false, result: 'No valid recipient email' };
   }
 
-  const subject = `[MAN OF STUDY] Someone replied to your question: "${params.questionTitle.slice(0, 40)}..."`;
-  const html = `<h3>Hello ${params.recipientName || 'Student'},</h3><p><b>${params.senderName || 'A Fellow Student'}</b> just shared an insight on your question: <i>"${params.questionTitle}"</i></p><p style="padding:12px;background:#FFF0F5;border-left:4px solid #EC4899;">"${params.answerText.slice(0, 150)}..."</p><p><a href="https://manofstudy.pages.dev/#campus-connect" style="background:#EC4899;color:white;padding:8px 16px;text-decoration:none;border-radius:8px;">View Reply on MOS CampusConnect</a></p>`;
-
-  // 1. Try serverless backend route first to prevent browser CORS blocks
   try {
-    const res = await fetch('/api/campus/send-resend-notification', {
+    const res = await fetch('/api/send-reply-alert', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        to: params.recipientEmail,
-        subject,
-        html,
+        toEmail: params.recipientEmail,
+        recipientName: params.recipientName,
+        questionTitle: params.questionTitle,
+        replyAuthor: params.senderName,
+        replyContent: params.answerText,
       }),
     });
-    if (res.ok) {
-      const data = await res.json();
-      return { success: true, result: data };
-    }
-  } catch (err) {
-    console.debug('[Resend] Backend endpoint note, falling back to direct fetch:', err);
-  }
 
-  // 2. Direct client fetch fallback using Bearer token
-  try {
-    const directRes = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer re_2ZBQ4b12_7vRxwSgcwkKrFm2BnnbCyF6y',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: 'onboarding@resend.dev',
-        to: [params.recipientEmail],
-        subject,
-        html,
-      }),
-    });
-    const data = await directRes.json();
-    return { success: true, result: data };
-  } catch (directErr: any) {
-    console.warn('[Resend] Direct email delivery notice:', directErr?.message || directErr);
-    return { success: false, result: directErr?.message };
+    let data = null;
+    try { data = await res.json(); } catch { data = null; }
+    if (!res.ok) {
+      return { success: false, result: data?.error || `Email endpoint returned ${res.status}` };
+    }
+    return { success: data?.success !== false, result: data };
+  } catch (err: any) {
+    console.warn('[CampusConnect] Secure email endpoint note:', err?.message || err);
+    return { success: false, result: err?.message || 'Email delivery unavailable' };
   }
 }
 
@@ -87,10 +67,13 @@ export async function dispatchAnswerNotificationFlow(params: {
   questionId: string;
   questionTitle: string;
   answerText: string;
+  emailNotificationsEnabled?: boolean;
 }): Promise<void> {
   if (!params.recipientEmail || !params.recipientEmail.includes('@')) {
     return;
   }
+
+  const shouldSendEmail = params.emailNotificationsEnabled === true;
 
   // a. Create Firestore Notification
   try {
@@ -107,7 +90,9 @@ export async function dispatchAnswerNotificationFlow(params: {
     console.warn('[CampusConnect] In-app notification creation note:', notifErr?.message || notifErr);
   }
 
-  // b. Trigger Resend Email Alert
+  // b. Trigger Resend Email Alert only when the question owner explicitly has email notifications enabled.
+  if (!shouldSendEmail) return;
+
   try {
     await triggerResendEmailAlert({
       recipientEmail: params.recipientEmail,
