@@ -2592,6 +2592,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
           </div>
         )}
       </AnimatePresence>
+      </CampusConnectReplyErrorBoundary>
 
       {/* Community Moderation Report Modal */}
       <ReportModal
