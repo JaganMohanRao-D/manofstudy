@@ -81,6 +81,7 @@ import {
 import { RichContentRenderer } from './campus/RichContentRenderer';
 import { ProblemSolverBadge } from './campus/ProblemSolverBadge';
 import { ReportModal } from './campus/ReportModal';
+import { CampusConnectReplyErrorBoundary } from './campus/CampusConnectReplyErrorBoundary';
 export { initialCommunityPosts };
 
 const STORAGE_KEY = 'mos_forum_seed_v2';
@@ -123,12 +124,43 @@ const BRANCH_OPTIONS = [
 const INITIAL_SEED_POSTS = initialCommunityPosts;
 
 // Keep every post/reply render-safe, including legacy localStorage and older Firestore documents.
-const normalizeCampusPost = (post) => ({
-  ...post,
-  replies: Array.isArray(post?.replies) ? post.replies : [],
-  attachments: Array.isArray(post?.attachments) ? post.attachments : [],
-  upvotes: Number.isFinite(post?.upvotes) ? post.upvotes : 0,
-});
+const normalizeCampusReply = (reply, index = 0) => {
+  if (!reply || typeof reply !== 'object') return null;
+  return {
+    ...reply,
+    id: reply.id || `legacy-reply-${index}`,
+    authorName: typeof reply.authorName === 'string' && reply.authorName.trim()
+      ? reply.authorName
+      : 'Student Peer',
+    role: typeof reply.role === 'string' ? reply.role : '',
+    authorCollege: typeof reply.authorCollege === 'string' ? reply.authorCollege : '',
+    authorYear: typeof reply.authorYear === 'string' ? reply.authorYear : '',
+    content: typeof reply.content === 'string' ? reply.content : String(reply.content ?? ''),
+    createdAt: reply.createdAt || reply.timestamp || 'Just now',
+    timestamp: reply.timestamp || reply.createdAt || 'Just now',
+    upvotes: Number.isFinite(reply.upvotes) ? reply.upvotes : 0,
+    reportCount: Number.isFinite(reply.reportCount) ? reply.reportCount : 0,
+    isHidden: reply.isHidden === true,
+    isAnonymous: reply.isAnonymous === true,
+    isVerifiedSolution: reply.isVerifiedSolution === true,
+    isAdmin: reply.isAdmin === true,
+  };
+};
+
+const normalizeCampusPost = (post) => {
+  if (!post || typeof post !== 'object') return null;
+  const rawReplies = Array.isArray(post.replies) ? post.replies : [];
+  const rawAttachments = Array.isArray(post.attachments) ? post.attachments : [];
+  return {
+    ...post,
+    id: post.id || `legacy-post-${Date.now()}`,
+    title: typeof post.title === 'string' ? post.title : 'CampusConnect Discussion',
+    content: typeof post.content === 'string' ? post.content : String(post.content ?? ''),
+    replies: rawReplies.map(normalizeCampusReply).filter(Boolean),
+    attachments: rawAttachments.filter((att) => att && typeof att === 'object'),
+    upvotes: Number.isFinite(post.upvotes) ? post.upvotes : 0,
+  };
+};
 
 const normalizeCampusPosts = (items) =>
   Array.isArray(items) ? items.map(normalizeCampusPost).filter(Boolean) : [];
@@ -173,6 +205,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     clearPendingAction,
   } = useAuth();
   const [isSavingNotificationPref, setIsSavingNotificationPref] = useState(false);
+  const [notificationPreference, setNotificationPreference] = useState(true);
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [toast, setToast] = useState(null); // { message: string, type: 'success' | 'info' | 'error', title?: string }
 
@@ -269,13 +302,44 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     }
   };
 
+  useEffect(() => {
+    if (!user) {
+      setNotificationPreference(true);
+      return;
+    }
+    setNotificationPreference(userProfile?.emailNotificationsEnabled === true);
+  }, [user, userProfile?.emailNotificationsEnabled]);
+
   const handleToggleNotificationPref = async (checked) => {
+    const previous = notificationPreference;
+    setNotificationPreference(checked);
     setIsSavingNotificationPref(true);
+
+    let timeoutId;
     try {
-      await updateEmailNotificationPreference(checked);
+      const savePromise = updateEmailNotificationPreference(checked);
+      const timeoutPromise = new Promise((_, reject) => {
+        timeoutId = setTimeout(() => reject(new Error('Preference save timed out')), 8000);
+      });
+      await Promise.race([savePromise, timeoutPromise]);
+
+      showToast(
+        checked
+          ? 'Email alerts are now enabled for answers to your questions.'
+          : 'Email alerts are now turned off. You will still receive in-app notifications.',
+        'success',
+        'Notification Preference Saved'
+      );
     } catch (err) {
-      console.warn('Failed to update notification preference:', err);
+      console.warn('[CampusConnect] Failed to update notification preference:', err);
+      setNotificationPreference(previous);
+      showToast(
+        'We could not save that preference right now. Your previous setting has been restored.',
+        'error',
+        'Preference Not Saved'
+      );
     } finally {
+      if (timeoutId) clearTimeout(timeoutId);
       setIsSavingNotificationPref(false);
     }
   };
@@ -1251,7 +1315,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                       <label className="inline-flex items-center gap-1.5 text-[11px] text-slate-700 font-medium cursor-pointer select-none bg-pink-50/80 hover:bg-pink-100/80 px-2 py-0.5 rounded-md border border-pink-200/80 transition-colors">
                         <input
                           type="checkbox"
-                          checked={userProfile ? userProfile.emailNotificationsEnabled !== false : true}
+                          checked={notificationPreference}
                           onChange={(e) => handleToggleNotificationPref(e.target.checked)}
                           className="w-3.5 h-3.5 text-pink-600 rounded border-pink-300 focus:ring-pink-400 cursor-pointer"
                         />
@@ -1723,13 +1787,13 @@ export const CampusConnect = ({ onNavigateToTool }) => {
 
                   <button
                     type="button"
-                    onClick={() => setActiveReplyPost(post)}
+                    onClick={() => setActiveReplyPost(normalizeCampusPost(post))}
                     className="min-h-[42px] px-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center gap-1.5 font-semibold transition-all active:scale-95 cursor-pointer shadow-xs"
                     title="View solutions & replies"
                   >
                     <MessageSquare className="w-3.5 h-3.5 text-slate-600" />
                     <span>
-                      {post.replies.length} {post.replies.length === 1 ? 'Answer' : 'Answers'}
+                      {(Array.isArray(post.replies) ? post.replies : []).length} {(Array.isArray(post.replies) ? post.replies : []).length === 1 ? 'Answer' : 'Answers'}
                     </span>
                   </button>
 
@@ -1997,7 +2061,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                     <label className="flex items-center gap-2 text-xs text-slate-800 cursor-pointer select-none py-1">
                       <input
                         type="checkbox"
-                        checked={userProfile?.emailNotificationsEnabled !== false}
+                        checked={notificationPreference}
                         onChange={(e) => handleToggleNotificationPref(e.target.checked)}
                         className="w-4 h-4 text-pink-600 rounded border-pink-300 focus:ring-pink-400 cursor-pointer"
                       />
@@ -2207,7 +2271,8 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       </AnimatePresence>
 
       {/* 6. Mobile Bottom Sheet / Drawer for Threaded Replies */}
-      <AnimatePresence>
+      <CampusConnectReplyErrorBoundary onClose={() => setActiveReplyPost(null)}>
+        <AnimatePresence>
         {activeReplyPost && (
           <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/40 backdrop-blur-xs">
             <motion.div
