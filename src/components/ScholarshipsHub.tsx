@@ -36,6 +36,9 @@ export interface IndianScholarship {
   amount: string;
   deadline: string;
   apply_link: string;
+  status?: string;
+  source_note?: string;
+  last_verified?: string;
 }
 
 export function isExclusivelyForGirls(s: IndianScholarship): boolean {
@@ -456,6 +459,18 @@ export const ScholarshipsHub: React.FC = () => {
       isMounted = false;
     };
   }, []);
+
+  // Current 2026 directory is loaded from the public JSON so the content can be refreshed without rebuilding the UI.
+  // The JSON contains explicit award amounts, current status, verification notes and source links.
+  const openCount = useMemo(() => scholarships.filter((s) => (s.status || '').toLowerCase().includes('open')).length, [scholarships]);
+  const governmentCount = useMemo(() => scholarships.filter((s) => {
+    const c = s.category.toLowerCase();
+    return c.includes('government') || c.includes('state government');
+  }).length, [scholarships]);
+  const engineeringCount = useMemo(() => scholarships.filter((s) => {
+    const text = (s.title + ' ' + s.target + ' ' + s.eligibility).toLowerCase();
+    return /engineer|b\.tech|technical|professional|diploma|cse|computer science/.test(text);
+  }).length, [scholarships]);
 
   // Top flagship opportunities for showcase carousel
   const flagshipScholarships = useMemo(() => {
