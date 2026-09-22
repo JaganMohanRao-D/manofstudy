@@ -168,9 +168,22 @@ export const ScholarshipDetailsModal: React.FC<ScholarshipDetailsModalProps> = (
             </div>
             <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-semibold bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-xl self-start sm:self-center">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>Direct Bank DBT Transfer</span>
+              <span>{/government|state government/i.test(scholarship.category) ? 'Government scheme' : 'Programme award'}</span>
             </div>
           </div>
+
+          {scholarship.source_note && (
+            <div className="bg-cyan-950/20 rounded-2xl p-4 border border-cyan-400/15 space-y-1.5">
+              <div className="flex items-center gap-2 text-xs font-bold text-cyan-300 uppercase tracking-wider">
+                <ShieldCheck className="w-4 h-4" />
+                <span>Source & verification</span>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed">{scholarship.source_note}</p>
+              {scholarship.last_verified && (
+                <p className="text-[10px] text-slate-500">Directory verification date: {scholarship.last_verified}</p>
+              )}
+            </div>
+          )}
 
           {/* Target Audience & Eligible Courses */}
           <div className="bg-slate-800/60 rounded-2xl p-4 border border-slate-800 space-y-1.5">
