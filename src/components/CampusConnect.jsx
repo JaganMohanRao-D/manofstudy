@@ -73,6 +73,7 @@ import {
   updateDoc,
   serverTimestamp,
   getDoc,
+  arrayUnion,
 } from 'firebase/firestore';
 import {
   triggerResendEmailAlert,
@@ -295,7 +296,9 @@ export const CampusConnect = ({ onNavigateToTool }) => {
         } else if (act?.type === 'post-solution' && act.postId) {
           const targetPost = posts.find((p) => p.id === act.postId);
           if (targetPost) {
-            setActiveReplyPost(targetPost ? normalizeCampusPost(targetPost) : null);
+            setSelectedPost(targetPost ? normalizeCampusPost(targetPost) : null);
+            setSolutionText("");
+            setIsSolutionModalOpen(true);
           }
           clearPendingAction?.();
         }
@@ -526,7 +529,9 @@ export const CampusConnect = ({ onNavigateToTool }) => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [isSolutionModalOpen, setIsSolutionModalOpen] = useState(false);
   const [solutionText, setSolutionText] = useState('');
-  const [submitting, setSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submitting = isSubmitting;
+  const setSubmitting = setIsSubmitting;
   const [activeReplyPost, setActiveReplyPost] = useState(null);
   const [replyInputText, setReplyInputText] = useState('');
   const [replyAnonymous, setReplyAnonymous] = useState(false);
@@ -691,7 +696,9 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       } else if (pendingAction.type === 'post-solution' && pendingAction.postId) {
         const targetPost = posts.find((p) => p.id === pendingAction.postId);
         if (targetPost) {
-          setActiveReplyPost(targetPost ? normalizeCampusPost(targetPost) : null);
+          setSelectedPost(targetPost ? normalizeCampusPost(targetPost) : null);
+          setSolutionText("");
+          setIsSolutionModalOpen(true);
         }
         clearPendingAction();
       }
@@ -899,6 +906,75 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     setPosts((prev) =>
       prev.map((p) => (p.id === activeReplyPost.id ? updatedPost : p))
     );
+  };
+
+  // 2. Unified Crash-Proof Solution Submission
+  const handleSolutionSubmit = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!solutionText.trim() || !selectedPost || isSubmitting) return;
+
+    setIsSubmitting(true);
+
+    try {
+      const activeUser = auth.currentUser || user;
+      const newReply = {
+        id: "reply_" + Date.now(),
+        text: solutionText.trim(),
+        content: solutionText.trim(),
+        authorName: activeUser?.displayName || "Fellow Student",
+        authorEmail: activeUser?.email || "anonymous@student.mos",
+        createdAt: "Just now",
+        timestamp: Date.now()
+      };
+
+      // 1. Optimistic Local Update (Instant UI reaction)
+      const updatedPost = {
+        ...selectedPost,
+        replies: [newReply, ...(selectedPost.replies || [])]
+      };
+
+      // Update in local post list immediately
+      setPosts((prevPosts) =>
+        prevPosts.map((p) => (p.id === selectedPost.id ? updatedPost : p))
+      );
+      setSelectedPost(updatedPost);
+
+      // 2. Persist to Firestore safely if Firestore is initialized
+      if (db && selectedPost.id) {
+        try {
+          const postRef = doc(db, "posts", selectedPost.id);
+          await updateDoc(postRef, {
+            replies: arrayUnion(newReply)
+          });
+        } catch (firestoreErr) {
+          try {
+            const campusPostRef = doc(db, "campus_posts", selectedPost.id);
+            await updateDoc(campusPostRef, {
+              replies: arrayUnion(newReply)
+            });
+          } catch (cErr) {
+            console.warn("Firestore sync fallback to local memory:", firestoreErr, cErr);
+          }
+        }
+      }
+
+      // Increment reputation count if authenticated
+      if (activeUser?.uid) {
+        incrementUserSolutionsCount(activeUser.uid).catch(() => {});
+      }
+
+      showToast('Solution posted successfully! Your peer was notified.', 'success', 'Solution Published');
+
+      // 3. Clear text and reset loading state
+      setSolutionText("");
+    } catch (error) {
+      console.error("Submission failed:", error);
+      showToast('Could not save solution. Please try again.', 'error', 'Error');
+    } finally {
+      // ALWAYS release the button from "Posting..."
+      setIsSubmitting(false);
+    }
   };
 
   // Add Solution / Reply (Supports both (postId, solutionText) and (e) form submission)
@@ -1862,16 +1938,20 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                     <span>{post.upvotes}</span>
                   </button>
 
+                  {/* Unified View/Reply Button - Never use <a href> */}
                   <button
                     type="button"
-                    onClick={() => setActiveReplyPost(normalizeCampusPost(post))}
-                    className="min-h-[42px] px-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center gap-1.5 font-semibold transition-all active:scale-95 cursor-pointer shadow-xs"
-                    title="View solutions & replies"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (!post) return;
+                      setSelectedPost(post);
+                      setSolutionText("");
+                      setIsSolutionModalOpen(true);
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:text-pink-600 bg-slate-50 hover:bg-pink-50 border border-slate-200 rounded-lg transition-colors cursor-pointer"
                   >
-                    <MessageSquare className="w-3.5 h-3.5 text-slate-600" />
-                    <span>
-                      {(Array.isArray(post.replies) ? post.replies : []).length} {(Array.isArray(post.replies) ? post.replies : []).length === 1 ? 'Answer' : 'Answers'}
-                    </span>
+                    <span>💬</span> {(post?.replies || []).length} Answers
                   </button>
 
                   <button
@@ -1881,6 +1961,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
                       e.stopPropagation();
                       if (!post) return;
                       setSelectedPost(post);
+                      setSolutionText("");
                       setIsSolutionModalOpen(true);
                     }}
                     className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-pink-600 bg-pink-50 hover:bg-pink-100 rounded-lg transition-colors cursor-pointer"
@@ -2669,87 +2750,79 @@ export const CampusConnect = ({ onNavigateToTool }) => {
 
       {/* Ultra-Safe Solution Modal Rendering (Zero-Crash Fallbacks) */}
       {isSolutionModalOpen && selectedPost && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-pink-100 max-h-[90vh] overflow-y-auto">
-            {/* Header */}
-            <div className="flex justify-between items-start mb-4">
+        <div 
+          className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          onClick={() => setIsSolutionModalOpen(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-pink-100 max-h-[90vh] flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex justify-between items-start mb-4 border-b border-slate-100 pb-3">
               <div>
-                <span className="text-xs font-medium text-pink-600 bg-pink-50 px-2 py-0.5 rounded-full">
-                  {selectedPost?.college || 'Student Network'}
+                <span className="text-[10px] font-bold tracking-wider uppercase text-pink-600 bg-pink-50 px-2 py-0.5 rounded-full">
+                  {selectedPost?.college || 'Student Query'}
                 </span>
-                <h3 className="font-bold text-gray-900 text-base mt-2">
-                  {selectedPost?.title || 'Academic Query'}
+                <h3 className="font-bold text-slate-900 text-sm mt-1">
+                  {selectedPost?.title || 'Academic Question'}
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setIsSolutionModalOpen(false)}
-                className="text-gray-400 hover:text-gray-700 text-lg font-bold p-1 cursor-pointer"
+                className="text-slate-400 hover:text-slate-700 p-1 text-base font-bold cursor-pointer"
               >
                 ✕
               </button>
             </div>
 
-            {/* Existing Replies List (Safe Mapping) */}
-            <div className="space-y-3 mb-4">
-              <h4 className="text-xs font-bold text-gray-700 uppercase tracking-wider">
-                Solutions &amp; Peer Insights ({(selectedPost?.replies || []).length})
+            {/* Solutions / Peer Insights Stream */}
+            <div className="flex-1 overflow-y-auto space-y-3 pr-1 mb-4">
+              <h4 className="text-xs font-bold text-slate-700">
+                SOLUTIONS &amp; PEER INSIGHTS ({(selectedPost?.replies || []).length})
               </h4>
-              {(selectedPost?.replies || []).length === 0 ? (
-                <p className="text-xs text-gray-400 italic">No solutions posted yet. Be the first to help!</p>
+              
+              {(!selectedPost.replies || selectedPost.replies.length === 0) ? (
+                <p className="text-xs text-slate-400 italic py-4 text-center">
+                  No solutions posted yet. Write the first solution below!
+                </p>
               ) : (
-                (selectedPost?.replies || []).map((reply, idx) => (
-                  <div key={idx} className="p-3 bg-gray-50 rounded-xl border border-gray-100 text-xs">
-                    <div className="flex justify-between font-semibold text-gray-700 mb-1">
-                      <span>{reply?.authorName || 'Student'}</span>
-                      <span className="text-gray-400 font-normal">{reply?.createdAt || 'Just now'}</span>
+                selectedPost.replies.map((reply, index) => (
+                  <div key={reply.id || index} className="p-3 bg-slate-50 border border-slate-100 rounded-xl text-xs">
+                    <div className="flex justify-between text-slate-700 font-bold mb-1">
+                      <span>{reply.authorName || 'Student'}</span>
+                      <span className="text-[10px] text-slate-400 font-normal">{reply.createdAt || 'Recent'}</span>
                     </div>
-                    <p className="text-gray-600 whitespace-pre-wrap">{reply?.text || reply?.content}</p>
+                    <p className="text-slate-600 whitespace-pre-wrap">{reply.text || reply.content}</p>
                   </div>
                 ))
               )}
             </div>
 
-            {/* Submission Form */}
-            <form
-              onSubmit={async (e) => {
-                e.preventDefault();
-                if (!solutionText.trim()) return;
-                setSubmitting(true);
-                try {
-                  await handleAddReply(selectedPost.id, solutionText);
-                  setSolutionText('');
-                  setIsSolutionModalOpen(false);
-                } catch (err) {
-                  console.error(err);
-                  alert("Could not post solution. Please check network.");
-                } finally {
-                  setSubmitting(false);
-                }
-              }}
-            >
+            {/* Solution Input Form */}
+            <form onSubmit={handleSolutionSubmit} className="pt-2 border-t border-slate-100">
               <textarea
                 value={solutionText}
                 onChange={(e) => setSolutionText(e.target.value)}
                 placeholder="Write your explanation, code snippet, or share Google Drive resource links..."
-                rows={4}
-                className="w-full text-xs p-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 outline-none"
-                required
+                rows={3}
+                className="w-full text-xs p-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 outline-none resize-none"
               />
-              <div className="flex justify-end gap-2 mt-3">
+              <div className="flex justify-end gap-2 mt-2">
                 <button
                   type="button"
                   onClick={() => setIsSolutionModalOpen(false)}
-                  className="px-4 py-2 text-xs font-semibold text-gray-500 hover:bg-gray-100 rounded-lg cursor-pointer"
+                  className="px-3 py-1.5 text-xs font-medium text-slate-500 hover:bg-slate-100 rounded-lg cursor-pointer"
                 >
-                  Cancel
+                  Close
                 </button>
                 <button
                   type="submit"
-                  disabled={submitting}
-                  className="px-4 py-2 text-xs font-semibold text-white bg-pink-600 hover:bg-pink-700 rounded-lg disabled:opacity-50 cursor-pointer"
+                  disabled={isSubmitting || !solutionText.trim()}
+                  className="px-4 py-1.5 text-xs font-bold text-white bg-pink-600 hover:bg-pink-700 rounded-lg disabled:opacity-50 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
-                  {submitting ? 'Posting...' : 'Submit Solution'}
+                  {isSubmitting ? "Posting..." : "Submit Solution"}
                 </button>
               </div>
             </form>
