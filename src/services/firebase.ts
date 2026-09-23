@@ -526,7 +526,7 @@ export async function submitCommunityReport(params: {
   const currentUser = auth.currentUser;
   if (!currentUser) throw new Error('Authentication required to submit a community report.');
 
-  const reportId = `rep_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+  const reportId = `rep_${params.targetType}_${params.postId}_${params.targetId}_${currentUser.uid}`;
   const reportDoc: CommunityReport = {
     id: reportId,
     targetType: params.targetType,
@@ -547,78 +547,12 @@ export async function submitCommunityReport(params: {
   let isHidden = false;
   let userBanned = false;
 
-  // 2. Increment reportCount on the target post or reply, auto-hide if >= 3
-  try {
-    if (params.targetType === 'post') {
-      const pRef = doc(db, 'posts', params.targetId);
-      const cpRef = doc(db, 'campus_posts', params.targetId);
-      await Promise.allSettled([
-        setDoc(pRef, { reportCount: increment(1) }, { merge: true }),
-        setDoc(cpRef, { reportCount: increment(1) }, { merge: true }),
-      ]);
-      const snap = await getDoc(cpRef);
-      const curReports = snap.exists() ? ((snap.data().reportCount as number) || 1) : 1;
-      if (curReports >= 3) {
-        isHidden = true;
-        await Promise.allSettled([
-          setDoc(pRef, { isHidden: true }, { merge: true }),
-          setDoc(cpRef, { isHidden: true }, { merge: true }),
-        ]);
-      }
-    } else {
-      const rRef = doc(db, 'posts', params.postId, 'replies', params.targetId);
-      const crRef = doc(db, 'campus_posts', params.postId, 'replies', params.targetId);
-      await Promise.allSettled([
-        setDoc(rRef, { reportCount: increment(1) }, { merge: true }),
-        setDoc(crRef, { reportCount: increment(1) }, { merge: true }),
-      ]);
-      const snap = await getDoc(crRef);
-      const curReports = snap.exists() ? ((snap.data().reportCount as number) || 1) : 1;
-      if (curReports >= 3) {
-        isHidden = true;
-        await Promise.allSettled([
-          setDoc(rRef, { isHidden: true }, { merge: true }),
-          setDoc(crRef, { isHidden: true }, { merge: true }),
-        ]);
-      }
-    }
-  } catch (repErr) {
-    console.debug('[Firebase] Target report increment note:', repErr);
-  }
+  // Moderation is handled server-side by the Firestore report trigger.
+  // This client only records the report, preventing users from spoofing
+  // report counts or moderation state.
 
-  // 3. Increment totalReports on author profile & auto-ban if >= 5
-  if (params.authorUid) {
-    try {
-      const authorRef = doc(db, 'users', params.authorUid);
-      await setDoc(
-        authorRef,
-        {
-          totalReports: increment(1),
-          updatedAt: new Date().toISOString(),
-        },
-        { merge: true }
-      );
-
-      const authorSnap = await getDoc(authorRef);
-      if (authorSnap.exists()) {
-        const totalReports = (authorSnap.data().totalReports as number) || 0;
-        if (totalReports >= 5) {
-          userBanned = true;
-          await setDoc(
-            authorRef,
-            {
-              isBanned: true,
-              bannedAt: new Date().toISOString(),
-              bannedReason: 'Account suspended due to 5 community violation reports',
-            },
-            { merge: true }
-          );
-        }
-      }
-    } catch (authorErr) {
-      console.debug('[Firebase] Author report count increment note:', authorErr);
-    }
-  }
+  const isHidden = false;
+  const userBanned = false;
 
   return { isHidden, userBanned };
 }
