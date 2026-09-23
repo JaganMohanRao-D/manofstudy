@@ -842,35 +842,30 @@ export const CampusConnect = ({ onNavigateToTool }) => {
 
   // Upvote Handler
   const handleToggleUpvote = async (postId) => {
-    const isUpvoted = !!upvotedPostIds[postId];
-    setUpvotedPostIds((prev) => ({
-      ...prev,
-      [postId]: !isUpvoted,
-    }));
-
-    setPosts((prev) =>
-      prev.map((p) => {
-        if (p.id === postId) {
-          return {
-            ...p,
-            upvotes: isUpvoted ? Math.max(0, p.upvotes - 1) : p.upvotes + 1,
-          };
-        }
-        return p;
-      })
-    );
-
-    if (activeReplyPost && activeReplyPost.id === postId) {
-      setActiveReplyPost((prev) => (prev ? {
-        ...prev,
-        upvotes: isUpvoted ? Math.max(0, prev.upvotes - 1) : prev.upvotes + 1,
-      } : null));
+    if (!auth.currentUser) {
+      openAuthModal({ type: 'post-solution', postId });
+      return;
     }
 
+    const isUpvoted = !!upvotedPostIds[postId];
+    const previousPosts = posts;
+    const nextVoted = !isUpvoted;
+
+    setUpvotedPostIds((prev) => ({ ...prev, [postId]: nextVoted }));
+    setPosts((prev) =>
+      prev.map((p) =>
+        p.id === postId
+          ? { ...p, upvotes: Math.max(0, (Number(p.upvotes) || 0) + (nextVoted ? 1 : -1)) }
+          : p
+      )
+    );
+
     try {
-      await upvotePostInFirestore(postId, !isUpvoted);
+      await upvotePostInFirestore(postId, nextVoted ? 1 : -1);
     } catch (err) {
-      console.debug('[Firebase] Upvote synced locally:', err.message);
+      setUpvotedPostIds((prev) => ({ ...prev, [postId]: isUpvoted }));
+      setPosts(previousPosts);
+      showToast('Could not save your vote right now.', 'error', 'Vote Not Saved');
     }
   };
 
