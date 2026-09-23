@@ -316,7 +316,7 @@ exports.processCampusCommunityReport = onDocumentCreated(
 
       return {
         isHidden,
-        authorUid: authorUid || current.authorUid || null,
+        authorUid: current.authorUid || null,
         reportCount,
       };
     });
