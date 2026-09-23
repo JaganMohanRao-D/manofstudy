@@ -75,7 +75,6 @@ import {
   arrayUnion,
 } from 'firebase/firestore';
 import {
-  triggerResendEmailAlert,
   dispatchAnswerNotificationFlow,
 } from '../services/campusNotifications';
 import { RichContentRenderer } from './campus/RichContentRenderer';
@@ -711,7 +710,12 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       const unsubscribe = onSnapshot(
         q,
         (snapshot) => {
-          if (!snapshot.empty) {
+          if (snapshot.empty) {
+            setPosts([]);
+            return;
+          }
+
+          {
             const firestorePosts = snapshot.docs.map((d) => ({
               ...d.data(),
               id: d.id,
@@ -719,11 +723,9 @@ export const CampusConnect = ({ onNavigateToTool }) => {
               attachments: Array.isArray(d.data().attachments) ? d.data().attachments : [],
             }));
 
-            setPosts((prevPosts) => {
-              const firestoreIds = new Set(firestorePosts.map((p) => p.id));
-              const nonFirestore = prevPosts.filter((p) => !firestoreIds.has(p.id));
-              return [...firestorePosts, ...nonFirestore];
-            });
+            // Firestore is the canonical community feed. Never merge stale
+            // localStorage posts back into the live feed.
+            setPosts(normalizeCampusPosts(firestorePosts));
           }
         },
         (err) => {
@@ -905,75 +907,6 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     setPosts((prev) =>
       prev.map((p) => (p.id === activeReplyPost.id ? updatedPost : p))
     );
-  };
-
-  // 2. Unified Crash-Proof Solution Submission
-  const handleSolutionSubmit = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!solutionText.trim() || !selectedPost || isSubmitting) return;
-
-    setIsSubmitting(true);
-
-    try {
-      const activeUser = auth.currentUser || user;
-      const newReply = {
-        id: "reply_" + Date.now(),
-        text: solutionText.trim(),
-        content: solutionText.trim(),
-        authorName: activeUser?.displayName || "Fellow Student",
-        authorEmail: activeUser?.email || "anonymous@student.mos",
-        createdAt: "Just now",
-        timestamp: Date.now()
-      };
-
-      // 1. Optimistic Local Update (Instant UI reaction)
-      const updatedPost = {
-        ...selectedPost,
-        replies: [newReply, ...(selectedPost.replies || [])]
-      };
-
-      // Update in local post list immediately
-      setPosts((prevPosts) =>
-        prevPosts.map((p) => (p.id === selectedPost.id ? updatedPost : p))
-      );
-      setSelectedPost(updatedPost);
-
-      // 2. Persist to Firestore safely if Firestore is initialized
-      if (db && selectedPost.id) {
-        try {
-          const postRef = doc(db, "posts", selectedPost.id);
-          await updateDoc(postRef, {
-            replies: arrayUnion(newReply)
-          });
-        } catch (firestoreErr) {
-          try {
-            const campusPostRef = doc(db, "campus_posts", selectedPost.id);
-            await updateDoc(campusPostRef, {
-              replies: arrayUnion(newReply)
-            });
-          } catch (cErr) {
-            console.warn("Firestore sync fallback to local memory:", firestoreErr, cErr);
-          }
-        }
-      }
-
-      // Increment reputation count if authenticated
-      if (activeUser?.uid) {
-        incrementUserSolutionsCount(activeUser.uid).catch(() => {});
-      }
-
-      showToast('Solution posted successfully! Your peer was notified.', 'success', 'Solution Published');
-
-      // 3. Clear text and reset loading state
-      setSolutionText("");
-    } catch (error) {
-      console.error("Submission failed:", error);
-      showToast('Could not save solution. Please try again.', 'error', 'Error');
-    } finally {
-      // ALWAYS release the button from "Posting..."
-      setIsSubmitting(false);
-    }
   };
 
   // Completely reliable close mechanism for Solution / Answers modal
