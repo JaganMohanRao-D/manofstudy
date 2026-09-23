@@ -839,15 +839,6 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     });
   };
 
-  // Persist to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
-    } catch {
-      // localStorage quota
-    }
-  }, [posts]);
-
   useEffect(() => {
     try {
       localStorage.setItem(UPVOTES_KEY, JSON.stringify(upvotedPostIds));
@@ -1049,20 +1040,17 @@ export const CampusConnect = ({ onNavigateToTool }) => {
         currentStudentEmail &&
         recipientEmail.toLowerCase() === currentStudentEmail.toLowerCase();
 
-      // Dispatch answer notification flow
-      if (
-        recipientEmail &&
-        !isSelfReply &&
-        userProfile?.emailNotificationsEnabled !== false
-      ) {
+      // In-app notifications are independent of email preference.
+      // The server-side Firestore trigger owns email delivery.
+      if (recipientEmail && !isSelfReply) {
         dispatchAnswerNotificationFlow({
-          recipientEmail: recipientEmail,
-          recipientName: recipientName,
+          recipientEmail,
+          recipientName,
           senderName: isAnon ? 'A Fellow Student' : authorDisplayName,
           questionId: currentTargetPost.id,
           questionTitle: currentTargetPost.title,
           answerText: replyContentText,
-          emailNotificationsEnabled: userProfile?.emailNotificationsEnabled === true,
+          emailNotificationsEnabled: false,
         }).catch((notifErr) => {
           console.warn('[CampusConnect] Notification dispatch note:', notifErr);
         });
@@ -1070,7 +1058,19 @@ export const CampusConnect = ({ onNavigateToTool }) => {
 
     } catch (err) {
       console.warn('[Firebase] saveCampusReply notice:', err?.message || err);
-      showToast(err?.message || 'Could not sync solution to cloud database right now, but saved to your local session.', 'info', 'Notice');
+      setPosts((prev) =>
+        prev.map((p) => (p.id === currentTargetPost.id ? currentTargetPost : p))
+      );
+      setSelectedPost(normalizeCampusPost(currentTargetPost));
+      if (activeReplyPost?.id === currentTargetPost.id) {
+        setActiveReplyPost(normalizeCampusPost(currentTargetPost));
+      }
+      setReplyInputText(replyContentText);
+      showToast(
+        'Your solution could not be saved to the community database. Nothing was published.',
+        'error',
+        'Solution Not Published'
+      );
     } finally {
       setIsSubmittingReply(false);
     }
