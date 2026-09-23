@@ -294,82 +294,48 @@ export async function dispatchAnswerNotification(params: {
   const currentUser = auth.currentUser;
   if (!currentUser) return { success: false, reason: 'Unauthenticated' };
 
-  // 1. Avoid self-notifications (Requirement 6)
   if (currentUser.uid === params.questionAuthorUid) {
-    console.info('[CampusConnect] Self-answer detected (author answered their own question). Notification skipped.');
     return { success: true, reason: 'Self-answer' };
   }
 
-  // 2. Respect the question owner's saved email preference before creating any email job.
-  // In-app notifications are handled separately by CampusConnect.
+  // Email delivery is handled by the dedicated CampusConnect notification flow.
+  // Do not write to /mail from the browser and do not call the old Vite-only
+  // /api/campus/* endpoint; both caused production-only failures.
   try {
-    const recipientProfile = await getDoc(doc(db, 'users', params.questionAuthorUid));
-    if (recipientProfile.exists() && recipientProfile.data().emailNotificationsEnabled !== true) {
-      console.info('[CampusConnect] Email notifications disabled for question owner; email job skipped.');
+    const recipientSnap = await getDoc(doc(db, 'users', params.questionAuthorUid));
+    if (!recipientSnap.exists()) {
+      return { success: false, reason: 'Recipient profile not found' };
+    }
+
+    const recipient = recipientSnap.data() as Partial<UserProfile>;
+    if (recipient.emailNotificationsEnabled !== true) {
       return { success: true, reason: 'Email notifications disabled' };
     }
-  } catch (prefErr) {
-    // Fail closed: if the preference cannot be verified, do not send an email.
-    console.warn('[CampusConnect] Could not verify email preference; email skipped:', prefErr);
-    return { success: false, reason: 'Could not verify email preference' };
-  }
 
-  // 3. Deterministic ID for duplicate protection (Requirement 10)
-  const notificationId = `answer_notification_${params.postId}_${params.replyId}`;
-
-  // 4. Queue to mail collection for Firebase Trigger Email extension (Requirement 7)
-  try {
-    const mailDocRef = doc(db, 'mail', notificationId);
-    const existingSnap = await getDoc(mailDocRef);
-    if (!existingSnap.exists()) {
-      await setDoc(mailDocRef, {
-        postId: params.postId,
-        replyId: params.replyId,
-        toUids: [params.questionAuthorUid],
-        message: {
-          subject: 'Someone answered your question on MOS CampusConnect',
-        },
-        template: {
-          name: 'campusconnect-answer',
-          data: {
-            questionTitle: params.questionTitle,
-            questionId: params.postId,
-            answerId: params.replyId,
-          },
-        },
-        createdAt: new Date().toISOString(),
-        delivery: {
-          state: 'PENDING',
-        },
-      });
-      console.log('[Firebase] Deterministic mail document created:', notificationId);
+    if (!recipient.email) {
+      return { success: false, reason: 'Recipient email not found' };
     }
-  } catch (mailErr: any) {
-    console.debug('[Firebase] Mail collection write note:', mailErr?.message || mailErr);
-  }
 
-  // 5. Trigger trusted server endpoint to verify question owner's email and deliver immediately
-  try {
-    const res = await fetch('/api/campus/trigger-answer-notification', {
+    const response = await fetch('/api/send-reply-alert', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        postId: params.postId,
-        replyId: params.replyId,
-        questionAuthorUid: params.questionAuthorUid,
+        toEmail: recipient.email,
         questionTitle: params.questionTitle,
         replyAuthor: params.isAnonymous ? 'A fellow student' : params.replyAuthorName,
         replyContent: params.replyContent,
-        callerUid: currentUser.uid,
       }),
     });
-    const data = await res.json();
-    return { success: true, ...data };
-  } catch (backendErr: any) {
-    console.warn('[CampusConnect] Backend notification trigger note:', backendErr?.message || backendErr);
-    return { success: false, reason: backendErr?.message };
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      return { success: false, reason: data?.error || `Email endpoint returned ${response.status}` };
+    }
+
+    return { success: data?.success !== false, reason: data?.error };
+  } catch (err: any) {
+    console.warn('[CampusConnect] Email notification note:', err?.message || err);
+    return { success: false, reason: err?.message || 'Email delivery unavailable' };
   }
 }
 
