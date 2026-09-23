@@ -458,29 +458,10 @@ export async function saveCampusReplyToFirestore(
     createdAt: new Date().toISOString(),
   };
 
-  // Canonical source of truth: keep replies on the parent campus_posts document
-  // so the existing real-time campus_posts listener can deliver new answers to every user.
-  // The subcollection is retained for backwards compatibility with older records.
-  const campusPostRef = doc(db, 'campus_posts', postId);
+  // Authoritative write: one reply document per answer. A trusted
+  // Cloud Function mirrors it into the parent feed and handles email.
   const campusReplyRef = doc(db, 'campus_posts', postId, 'replies', replyDoc.id);
-  const legacyReplyRef = doc(db, 'posts', postId, 'replies', replyDoc.id);
-
-  // A reply is not considered successfully saved unless the canonical parent update succeeds.
-  // This prevents the old "local success but nothing appears for other users" failure mode.
-  await setDoc(
-    campusPostRef,
-    {
-      replies: arrayUnion(replyDoc),
-      updatedAt: new Date().toISOString(),
-    },
-    { merge: true }
-  );
-
-  // Keep the dedicated subcollection copies as a compatibility/history layer.
-  await Promise.allSettled([
-    setDoc(campusReplyRef, replyDoc),
-    setDoc(legacyReplyRef, replyDoc),
-  ]);
+  await setDoc(campusReplyRef, replyDoc);
 
   // Increment user's solutionsCount (Requirement 1.6 & 3)
   try {
