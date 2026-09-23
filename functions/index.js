@@ -207,3 +207,74 @@ exports.notifyQuestionOwnerOnAnswer = onDocumentCreated(
     return { success: true, notificationId };
   }
 );
+
+
+/**
+ * Maintain aggregate post upvote count from per-user vote documents.
+ */
+exports.syncCampusPostUpvote = onDocumentCreated(
+  {
+    document: "campus_posts/{postId}/upvotes/{userId}",
+    region: "asia-southeast1",
+  },
+  async (event) => {
+    const { postId } = event.params;
+    await db.collection("campus_posts").doc(postId).set(
+      { upvotes: FieldValue.increment(1) },
+      { merge: true }
+    );
+  }
+);
+
+exports.removeCampusPostUpvote = onDocumentDeleted(
+  {
+    document: "campus_posts/{postId}/upvotes/{userId}",
+    region: "asia-southeast1",
+  },
+  async (event) => {
+    const { postId } = event.params;
+    await db.collection("campus_posts").doc(postId).set(
+      { upvotes: FieldValue.increment(-1) },
+      { merge: true }
+    );
+  }
+);
+
+/**
+ * Maintain aggregate reply upvote count inside the parent feed.
+ * The parent replies array is updated server-side so clients cannot rewrite
+ * another student's answer while voting.
+ */
+async function syncCampusReplyUpvote(event, delta) {
+  const { postId, replyId } = event.params;
+  const postRef = db.collection("campus_posts").doc(postId);
+
+  await db.runTransaction(async (tx) => {
+    const snap = await tx.get(postRef);
+    if (!snap.exists) return;
+    const data = snap.data() || {};
+    const replies = Array.isArray(data.replies) ? data.replies : [];
+    const nextReplies = replies.map((reply) => {
+      if (!reply || reply.id !== replyId) return reply;
+      const current = Number.isFinite(reply.upvotes) ? reply.upvotes : 0;
+      return { ...reply, upvotes: Math.max(0, current + delta) };
+    });
+    tx.update(postRef, { replies: nextReplies, updatedAt: FieldValue.serverTimestamp() });
+  });
+}
+
+exports.syncCampusReplyUpvote = onDocumentCreated(
+  {
+    document: "campus_posts/{postId}/replies/{replyId}/upvotes/{userId}",
+    region: "asia-southeast1",
+  },
+  (event) => syncCampusReplyUpvote(event, 1)
+);
+
+exports.removeCampusReplyUpvote = onDocumentDeleted(
+  {
+    document: "campus_posts/{postId}/replies/{replyId}/upvotes/{userId}",
+    region: "asia-southeast1",
+  },
+  (event) => syncCampusReplyUpvote(event, -1)
+);
