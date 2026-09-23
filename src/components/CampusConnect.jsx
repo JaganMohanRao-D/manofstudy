@@ -59,6 +59,7 @@ import {
   saveCampusPostToFirestore,
   saveCampusReplyToFirestore,
   upvotePostInFirestore,
+  upvoteReplyInFirestore,
   incrementUserSolutionsCount,
   uploadCampusAttachment,
 } from '../services/firebase';
@@ -874,22 +875,32 @@ export const CampusConnect = ({ onNavigateToTool }) => {
   };
 
   // Upvote a reply
-  const handleReplyUpvote = (replyId) => {
-    if (!activeReplyPost) return;
-    const safeReplies = Array.isArray(activeReplyPost.replies) ? activeReplyPost.replies : [];
-    const updatedReplies = safeReplies.map((r) => {
-      if (r.id === replyId) {
-        return { ...r, upvotes: r.upvotes + 1 };
-      }
-      return r;
-    });
+  const handleReplyUpvote = async (replyId) => {
+    if (!activeReplyPost || !auth.currentUser) {
+      if (!auth.currentUser) openAuthModal({ type: 'post-solution', postId: activeReplyPost?.id });
+      return;
+    }
 
+    // This UI currently exposes a single "Helpful" action. Persist one vote
+    // per authenticated user; the backend trigger maintains the aggregate.
+    const safeReplies = Array.isArray(activeReplyPost.replies) ? activeReplyPost.replies : [];
+    const targetReply = safeReplies.find((r) => r.id === replyId);
+    if (!targetReply) return;
+
+    const updatedReplies = safeReplies.map((r) =>
+      r.id === replyId ? { ...r, upvotes: (Number(r.upvotes) || 0) + 1 } : r
+    );
     const updatedPost = { ...activeReplyPost, replies: updatedReplies };
     setActiveReplyPost(updatedPost);
+    setPosts((prev) => prev.map((p) => (p.id === activeReplyPost.id ? updatedPost : p)));
 
-    setPosts((prev) =>
-      prev.map((p) => (p.id === activeReplyPost.id ? updatedPost : p))
-    );
+    try {
+      await upvoteReplyInFirestore(activeReplyPost.id, replyId, 1);
+    } catch (err) {
+      setActiveReplyPost(activeReplyPost);
+      setPosts((prev) => prev.map((p) => (p.id === activeReplyPost.id ? activeReplyPost : p)));
+      showToast('Could not save your helpful vote right now.', 'error', 'Vote Not Saved');
+    }
   };
 
   // Completely reliable close mechanism for Solution / Answers modal
