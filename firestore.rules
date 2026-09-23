@@ -12,55 +12,65 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    // Primary Posts Collection
+    // Legacy Posts Collection (read-only compatibility for old records)
     match /posts/{postId} {
       allow read: if true;
-      allow create: if request.auth != null;
-      allow update: if request.auth != null;
-      allow delete: if request.auth != null;
-
+      allow create, update, delete: if false;
       match /replies/{replyId} {
         allow read: if true;
-        allow create: if request.auth != null;
-        allow update: if request.auth != null;
-        allow delete: if request.auth != null;
+        allow create, update, delete: if false;
       }
     }
 
     // Campus Posts (Doubt dispatches & questions)
     match /campus_posts/{postId} {
       allow read: if true;
-      allow create: if request.auth != null;
-      allow update: if request.auth != null;
-      allow delete: if request.auth != null;
+      allow create: if isAuthenticated()
+        && request.resource.data.authorUid == request.auth.uid;
+      allow update: if isAuthenticated()
+        && request.resource.data.authorUid == resource.data.authorUid;
+      allow delete: if isAuthenticated()
+        && resource.data.authorUid == request.auth.uid;
 
       match /replies/{replyId} {
         allow read: if true;
-        allow create: if request.auth != null;
-        allow update: if request.auth != null;
-        allow delete: if request.auth != null;
+        allow create: if isAuthenticated()
+          && request.resource.data.authorUid == request.auth.uid;
+        allow update: if isAuthenticated()
+          && request.resource.data.authorUid == resource.data.authorUid;
+        allow delete: if isAuthenticated()
+          && resource.data.authorUid == request.auth.uid;
       }
     }
 
     // User Profiles & Problem Solver Reputation
     match /users/{userId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow create, update: if isAuthenticated() && request.auth.uid == userId;
+      allow delete: if false;
     }
 
     // Community Reports & Auto-Moderation
     match /reports/{reportId} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null;
-      allow update: if request.auth != null;
+      allow read: if isAuthenticated() && (
+        resource.data.reporterUid == request.auth.uid ||
+        resource.data.authorUid == request.auth.uid
+      );
+      allow create: if isAuthenticated()
+        && request.resource.data.reporterUid == request.auth.uid;
+      allow update, delete: if false;
     }
 
     // In-App Notifications Collection
     match /notifications/{notificationId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update: if isAuthenticated();
-      allow delete: if isAuthenticated();
+      allow read: if isAuthenticated()
+        && resource.data.recipientEmail == request.auth.token.email;
+      allow create: if isAuthenticated()
+        && request.resource.data.recipientEmail == request.auth.token.email;
+      allow update: if isAuthenticated()
+        && resource.data.recipientEmail == request.auth.token.email;
+      allow delete: if isAuthenticated()
+        && resource.data.recipientEmail == request.auth.token.email;
     }
 
     // Mail Collection (For Firebase Trigger Email extension)
