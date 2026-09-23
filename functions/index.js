@@ -26,6 +26,18 @@ exports.notifyQuestionOwnerOnAnswer = onDocumentCreated(
 
     const replyData = replySnapshot.data();
     const { postId, replyId } = event.params;
+
+    // Keep the public parent feed synchronized from the authoritative reply
+    // subcollection. Admin SDK bypasses client rules, so clients cannot spoof
+    // another user's replies by editing the parent array directly.
+    const questionRef = db.collection("campus_posts").doc(postId);
+    await questionRef.set(
+      {
+        replies: FieldValue.arrayUnion(replyData),
+        updatedAt: FieldValue.serverTimestamp(),
+      },
+      { merge: true }
+    );
     const answerAuthorUid = replyData.authorUid;
     const isAnonymous = Boolean(replyData.isAnonymous);
     const replyAuthorName = isAnonymous
@@ -35,7 +47,6 @@ exports.notifyQuestionOwnerOnAnswer = onDocumentCreated(
     console.log(`[NotifyTrigger] New answer received: ${replyId} on post: ${postId}`);
 
     // 1. Fetch parent question
-    const questionRef = db.collection("campus_posts").doc(postId);
     const questionDoc = await questionRef.get();
 
     if (!questionDoc.exists) {
