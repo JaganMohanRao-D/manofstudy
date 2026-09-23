@@ -22,6 +22,7 @@ import {
   query,
   orderBy,
   updateDoc,
+  deleteDoc,
   increment,
   arrayUnion,
   Firestore,
@@ -624,13 +625,33 @@ export async function submitCommunityReport(params: {
 
 // 11. Upvote a Post in Firestore
 export async function upvotePostInFirestore(postId: string, incrementValue: number = 1): Promise<void> {
-  try {
-    const postRef = doc(db, 'campus_posts', postId);
-    await updateDoc(postRef, {
-      upvotes: increment(incrementValue),
+  const currentUser = auth.currentUser;
+  if (!currentUser) throw new Error('Authentication required to vote.');
+  const voteRef = doc(db, 'campus_posts', postId, 'upvotes', currentUser.uid);
+  if (incrementValue > 0) {
+    await setDoc(voteRef, {
+      uid: currentUser.uid,
+      createdAt: new Date().toISOString(),
     });
-  } catch (err) {
-    // If post is not in Firestore (e.g. a seed post), local state still manages it
-    console.debug('[Firebase] Firestore upvote notice:', err);
+  } else {
+    await deleteDoc(voteRef);
+  }
+}
+
+export async function upvoteReplyInFirestore(
+  postId: string,
+  replyId: string,
+  incrementValue: number = 1
+): Promise<void> {
+  const currentUser = auth.currentUser;
+  if (!currentUser) throw new Error('Authentication required to vote.');
+  const voteRef = doc(db, 'campus_posts', postId, 'replies', replyId, 'upvotes', currentUser.uid);
+  if (incrementValue > 0) {
+    await setDoc(voteRef, {
+      uid: currentUser.uid,
+      createdAt: new Date().toISOString(),
+    });
+  } else {
+    await deleteDoc(voteRef);
   }
 }
