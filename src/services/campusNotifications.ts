@@ -2,8 +2,6 @@ import {
   collection,
   addDoc,
   serverTimestamp,
-  doc,
-  updateDoc,
 } from 'firebase/firestore';
 import { db } from './firebase';
 
@@ -39,4 +37,17 @@ export async function dispatchAnswerNotificationFlow(params: {
   // Email delivery is intentionally not performed from the browser.
   // The Firestore-triggered backend function owns email delivery and checks
   // the user's stored preference before creating a mail document.
+  try {
+    await addDoc(collection(db, 'notifications'), {
+      recipientEmail: params.recipientEmail,
+      senderName: params.senderName || 'A Fellow Student',
+      questionId: params.questionId,
+      questionTitle: params.questionTitle,
+      replySnippet: String(params.answerText || '').slice(0, 80),
+      createdAt: serverTimestamp(),
+      isRead: false,
+    });
+  } catch (err: any) {
+    console.warn('[CampusConnect] In-app notification creation note:', err?.message || err);
+  }
 }
