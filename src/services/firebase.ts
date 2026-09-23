@@ -50,7 +50,25 @@ googleProvider.setCustomParameters({
 
 // 3. Firestore Database
 export const db: Firestore = getFirestore(app);
-export const storage = getStorage(app);
+
+// Helper to safely initialize storage without crashing module initialization
+export function getCampusStorage() {
+  try {
+    return getStorage(app);
+  } catch (err) {
+    console.warn('[Firebase] Firebase Storage service is not available:', err);
+    return null;
+  }
+}
+
+// Fallback-safe storage export
+let safeStorageInstance: ReturnType<typeof getStorage> | null = null;
+try {
+  safeStorageInstance = getStorage(app);
+} catch (err) {
+  console.warn('[Firebase] Storage initialization deferred or unavailable:', err);
+}
+export const storage = safeStorageInstance;
 export { signInWithPopup, signOut };
 
 // 4. Validate Firestore Connection on App Start
@@ -355,18 +373,36 @@ export async function uploadCampusAttachment(
   const currentUser = auth.currentUser;
   if (!currentUser) throw new Error('Authentication required to upload an attachment.');
   if (!(file instanceof File)) throw new Error('Invalid attachment.');
-  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 120) || 'attachment';
-  const path = `campusconnect/${currentUser.uid}/${postId}/${attachmentId}-${safeName}`;
-  const target = storageRef(storage, path);
-  await uploadBytes(target, file, {
-    contentType: file.type || 'application/octet-stream',
-    customMetadata: {
-      ownerUid: currentUser.uid,
-      postId,
-      attachmentId,
-    },
+
+  const storageInstance = getCampusStorage() || storage;
+  if (storageInstance) {
+    try {
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 120) || 'attachment';
+      const path = `campusconnect/${currentUser.uid}/${postId}/${attachmentId}-${safeName}`;
+      const target = storageRef(storageInstance, path);
+      await uploadBytes(target, file, {
+        contentType: file.type || 'application/octet-stream',
+        customMetadata: {
+          ownerUid: currentUser.uid,
+          postId,
+          attachmentId,
+        },
+      });
+      const downloadUrl = await getDownloadURL(target);
+      return { url: downloadUrl, path };
+    } catch (storageErr) {
+      console.warn('[CampusConnect] Firebase Storage upload failed, falling back to data URL:', storageErr);
+    }
+  }
+
+  // Graceful fallback: convert to data URL so attachment is preserved and viewable
+  const dataUrl = await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error('Failed to read attachment file'));
+    reader.readAsDataURL(file);
   });
-  return { url: await getDownloadURL(target), path };
+  return { url: dataUrl, path: `inline/${postId}/${attachmentId}` };
 }
 
 export async function saveCampusPostToFirestore(postData: {
@@ -544,13 +580,9 @@ export async function submitCommunityReport(params: {
   const reportRef = doc(db, 'reports', reportId);
   await setDoc(reportRef, reportDoc);
 
-  let isHidden = false;
-  let userBanned = false;
-
   // Moderation is handled server-side by the Firestore report trigger.
   // This client only records the report, preventing users from spoofing
   // report counts or moderation state.
-
   const isHidden = false;
   const userBanned = false;
 
