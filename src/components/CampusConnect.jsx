@@ -60,6 +60,7 @@ import {
   saveCampusReplyToFirestore,
   upvotePostInFirestore,
   incrementUserSolutionsCount,
+  uploadCampusAttachment,
 } from '../services/firebase';
 import {
   collection,
@@ -1174,6 +1175,33 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     // Firestore is the source of truth for CampusConnect. Do not publish a
     // local-only question as if it were public; other users cannot see it.
     try {
+      setIsUploadingFile(formAttachments.length > 0);
+      const persistedAttachments = await Promise.all(
+        formAttachments.map(async (attachment) => {
+          if (!attachment?.file) {
+            return {
+              id: attachment?.id,
+              name: attachment?.name || 'Attachment',
+              size: attachment?.size || '',
+              type: attachment?.type || 'file',
+              url: attachment?.url || '',
+            };
+          }
+          const uploaded = await uploadCampusAttachment(
+            attachment.file,
+            newPost.id,
+            attachment.id
+          );
+          return {
+            id: attachment.id,
+            name: attachment.name,
+            size: attachment.size,
+            type: attachment.type,
+            url: uploaded.url,
+          };
+        })
+      );
+
       await saveCampusPostToFirestore({
         id: newPost.id,
         title: newPost.title,
@@ -1184,7 +1212,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
         urgency: newPost.urgency,
         isAnonymous: isAnon,
         codeSnippet: newPost.codeSnippet,
-        attachments: uploadedAttachments,
+        attachments: persistedAttachments,
       });
     } catch (err) {
       console.error('[CampusConnect] Question was not published to Firestore:', err);
