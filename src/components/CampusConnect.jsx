@@ -59,7 +59,6 @@ import {
   saveCampusPostToFirestore,
   saveCampusReplyToFirestore,
   upvotePostInFirestore,
-  dispatchAnswerNotification,
   incrementUserSolutionsCount,
 } from '../services/firebase';
 import {
@@ -1136,20 +1135,6 @@ export const CampusConnect = ({ onNavigateToTool }) => {
         });
       }
 
-      // Zero-trust mail queue trigger as secondary fallback
-      if (currentTargetPost.authorUid && currentTargetPost.authorUid !== currentAuthUser.uid) {
-        dispatchAnswerNotification({
-          postId: currentTargetPost.id,
-          replyId: newReply.id,
-          questionAuthorUid: currentTargetPost.authorUid,
-          questionTitle: currentTargetPost.title,
-          replyAuthorName: newReply.authorName,
-          replyContent: newReply.content,
-          isAnonymous: isAnon,
-        }).catch((err) => {
-          console.warn('[CampusConnect] Email notification trigger note:', err);
-        });
-      }
     } catch (err) {
       console.warn('[Firebase] saveCampusReply notice:', err?.message || err);
       showToast(err?.message || 'Could not sync solution to cloud database right now, but saved to your local session.', 'info', 'Notice');
@@ -1262,7 +1247,8 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       replies: [],
     };
 
-    // Save to Firestore
+    // Firestore is the source of truth for CampusConnect. Do not publish a
+    // local-only question as if it were public; other users cannot see it.
     try {
       await saveCampusPostToFirestore({
         id: newPost.id,
@@ -1277,10 +1263,14 @@ export const CampusConnect = ({ onNavigateToTool }) => {
         attachments: uploadedAttachments,
       });
     } catch (err) {
-      console.warn('[Firebase] Stored in local state (Firestore note):', err.message);
+      console.error('[CampusConnect] Question was not published to Firestore:', err);
+      setFormError({
+        message: err?.message || 'Could not publish this question to CampusConnect. Please check your connection and try again.',
+      });
+      return;
     }
 
-    setPosts([newPost, ...posts]);
+    setPosts((prevPosts) => [newPost, ...prevPosts]);
     setUpvotedPostIds((prev) => ({ ...prev, [newPost.id]: true }));
 
     // Reset Form & Close Modal
