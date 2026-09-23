@@ -22,6 +22,7 @@ import {
   orderBy,
   updateDoc,
   increment,
+  arrayUnion,
   Firestore,
 } from 'firebase/firestore';
 // Official dedicated Firebase credentials for Man of Study
@@ -463,13 +464,28 @@ export async function saveCampusReplyToFirestore(
     createdAt: new Date().toISOString(),
   };
 
-  // Write to both posts/{postId}/replies and campus_posts/{postId}/replies for full compatibility
-  const replyRef1 = doc(db, 'posts', postId, 'replies', replyDoc.id);
-  const replyRef2 = doc(db, 'campus_posts', postId, 'replies', replyDoc.id);
+  // Canonical source of truth: keep replies on the parent campus_posts document
+  // so the existing real-time campus_posts listener can deliver new answers to every user.
+  // The subcollection is retained for backwards compatibility with older records.
+  const campusPostRef = doc(db, 'campus_posts', postId);
+  const campusReplyRef = doc(db, 'campus_posts', postId, 'replies', replyDoc.id);
+  const legacyReplyRef = doc(db, 'posts', postId, 'replies', replyDoc.id);
 
+  // A reply is not considered successfully saved unless the canonical parent update succeeds.
+  // This prevents the old "local success but nothing appears for other users" failure mode.
+  await setDoc(
+    campusPostRef,
+    {
+      replies: arrayUnion(replyDoc),
+      updatedAt: new Date().toISOString(),
+    },
+    { merge: true }
+  );
+
+  // Keep the dedicated subcollection copies as a compatibility/history layer.
   await Promise.allSettled([
-    setDoc(replyRef1, replyDoc),
-    setDoc(replyRef2, replyDoc),
+    setDoc(campusReplyRef, replyDoc),
+    setDoc(legacyReplyRef, replyDoc),
   ]);
 
   // Increment user's solutionsCount (Requirement 1.6 & 3)
