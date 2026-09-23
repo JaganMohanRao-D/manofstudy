@@ -278,3 +278,100 @@ exports.removeCampusReplyUpvote = onDocumentDeleted(
   },
   (event) => syncCampusReplyUpvote(event, -1)
 );
+
+
+/**
+ * Trusted community moderation pipeline.
+ * A client can create a report, but only this backend function can change
+ * moderation counters, hide content, or suspend an account.
+ */
+exports.processCampusCommunityReport = onDocumentCreated(
+  {
+    document: "reports/{reportId}",
+    region: "asia-southeast1",
+  },
+  async (event) => {
+    const report = event.data?.data();
+    if (!report) return null;
+
+    const { targetType, targetId, postId, authorUid } = report;
+    const reporterUid = report.reporterUid;
+    if (!reporterUid || !targetType || !targetId || !postId) return null;
+
+    const targetRef = targetType === "post"
+      ? db.collection("campus_posts").doc(targetId)
+      : db.collection("campus_posts").doc(postId).collection("replies").doc(targetId);
+
+    const result = await db.runTransaction(async (tx) => {
+      const targetSnap = await tx.get(targetRef);
+      if (!targetSnap.exists) return { isHidden: false, authorUid: authorUid || null, reportCount: 0 };
+
+      const current = targetSnap.data() || {};
+      const reportCount = Math.max(0, Number(current.reportCount) || 0) + 1;
+      const isHidden = reportCount >= 3;
+      tx.update(targetRef, {
+        reportCount,
+        ...(isHidden ? { isHidden: true } : {}),
+      });
+
+      return {
+        isHidden,
+        authorUid: authorUid || current.authorUid || null,
+        reportCount,
+      };
+    });
+
+    // Keep the parent feed's embedded reply in sync when a reply is moderated.
+    if (targetType === "reply") {
+      const parentRef = db.collection("campus_posts").doc(postId);
+      await db.runTransaction(async (tx) => {
+        const snap = await tx.get(parentRef);
+        if (!snap.exists) return;
+        const data = snap.data() || {};
+        const replies = Array.isArray(data.replies) ? data.replies : [];
+        const nextReplies = replies.map((reply) =>
+          reply && reply.id === targetId
+            ? {
+                ...reply,
+                reportCount: result.reportCount,
+                ...(result.isHidden ? { isHidden: true } : {}),
+              }
+            : reply
+        );
+        tx.update(parentRef, {
+          replies: nextReplies,
+          updatedAt: FieldValue.serverTimestamp(),
+        });
+      });
+    }
+
+    if (result.authorUid) {
+      const authorRef = db.collection("users").doc(result.authorUid);
+      const authorSnap = await authorRef.get();
+      const existingReports = authorSnap.exists()
+        ? (Number(authorSnap.data().totalReports) || 0)
+        : 0;
+      const totalReports = existingReports + 1;
+      await authorRef.set(
+        {
+          totalReports,
+          ...(totalReports >= 5
+            ? {
+                isBanned: true,
+                bannedAt: FieldValue.serverTimestamp(),
+                bannedReason: "Account suspended due to repeated community reports",
+              }
+            : {}),
+          updatedAt: FieldValue.serverTimestamp(),
+        },
+        { merge: true }
+      );
+    }
+
+    return {
+      success: true,
+      isHidden: result.isHidden,
+      reportCount: result.reportCount,
+    };
+  }
+);
