@@ -1,4 +1,5 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {
   getAuth,
   GoogleAuthProvider,
@@ -48,6 +49,7 @@ googleProvider.setCustomParameters({
 
 // 3. Firestore Database
 export const db: Firestore = getFirestore(app);
+export const storage = getStorage(app);
 export { signInWithPopup, signOut };
 
 // 4. Validate Firestore Connection on App Start
@@ -340,6 +342,32 @@ export async function dispatchAnswerNotification(params: {
 }
 
 // 9. Create Post in Firestore
+/**
+ * Upload a CampusConnect attachment to Firebase Storage and return a durable URL.
+ * Files never enter Firestore directly; only metadata + the download URL are stored.
+ */
+export async function uploadCampusAttachment(
+  file: File,
+  postId: string,
+  attachmentId: string
+): Promise<{ url: string; path: string }> {
+  const currentUser = auth.currentUser;
+  if (!currentUser) throw new Error('Authentication required to upload an attachment.');
+  if (!(file instanceof File)) throw new Error('Invalid attachment.');
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 120) || 'attachment';
+  const path = `campusconnect/${currentUser.uid}/${postId}/${attachmentId}-${safeName}`;
+  const target = storageRef(storage, path);
+  await uploadBytes(target, file, {
+    contentType: file.type || 'application/octet-stream',
+    customMetadata: {
+      ownerUid: currentUser.uid,
+      postId,
+      attachmentId,
+    },
+  });
+  return { url: await getDownloadURL(target), path };
+}
+
 export async function saveCampusPostToFirestore(postData: {
   id: string;
   title: string;
