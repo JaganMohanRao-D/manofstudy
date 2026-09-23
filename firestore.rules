@@ -41,6 +41,20 @@ service cloud.firestore {
         allow delete: if isAuthenticated()
           && resource.data.authorUid == request.auth.uid;
       }
+
+      match /upvotes/{userId} {
+        allow read: if isAuthenticated();
+        allow create: if isAuthenticated() && userId == request.auth.uid;
+        allow delete: if isAuthenticated() && userId == request.auth.uid;
+        allow update: if false;
+      }
+
+      match /replies/{replyId}/upvotes/{userId} {
+        allow read: if isAuthenticated();
+        allow create: if isAuthenticated() && userId == request.auth.uid;
+        allow delete: if isAuthenticated() && userId == request.auth.uid;
+        allow update: if false;
+      }
     }
 
     // User Profiles & Problem Solver Reputation
