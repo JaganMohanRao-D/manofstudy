@@ -52,7 +52,7 @@ export const StudentFaq: React.FC<StudentFaqProps> = ({ onSelectTab, onOpenLegal
       icon: User,
       question: 'Who created MAN OF STUDY, and what is the core mission behind the platform?',
       answer:
-        'MAN OF STUDY was conceived, architected, and engineered by Dunna Jagan Mohan Rao (creator of PlantMokk AI) with a dedicated mission to empower fellow engineering scholars nationwide. Having directly navigated the realities of university curricula, information asymmetry in campus placements, and fragmented scholarship notifications, the creator built MAN OF STUDY as a free, privacy-first companion. Our purpose is to democratize high-grade curriculum blueprints, career roadmaps, and client-side academic utilities, enabling every student to thrive and succeed in life regardless of institutional tier.',
+        'MAN OF STUDY was conceived, architected, and engineered by JAGAN MOHAN RAO DUNNA with a dedicated mission to empower fellow engineering scholars nationwide. Having directly navigated the realities of university curricula, information asymmetry in campus placements, and fragmented scholarship notifications, the creator built MAN OF STUDY as a free, privacy-first companion. Our purpose is to democratize high-grade curriculum blueprints, career roadmaps, and client-side academic utilities, enabling every student to thrive and succeed in life regardless of institutional tier.',
       actionText: 'Contact Developer Desk',
       actionTarget: { type: 'email' },
     },

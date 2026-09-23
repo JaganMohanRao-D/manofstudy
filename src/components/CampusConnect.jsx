@@ -977,6 +977,18 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     }
   };
 
+  // Completely reliable close mechanism for Solution / Answers modal
+  const handleCloseModal = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setIsSolutionModalOpen(false);
+    setSelectedPost(null);
+    setSolutionText("");
+    setIsSubmitting(false);
+  };
+
   // Add Solution / Reply (Supports both (postId, solutionText) and (e) form submission)
   const handleAddReply = async (arg1, arg2) => {
     let targetPostId = null;
@@ -2752,7 +2764,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       {isSolutionModalOpen && selectedPost && (
         <div 
           className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-          onClick={() => setIsSolutionModalOpen(false)}
+          onClick={handleCloseModal}
         >
           <div 
             className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-pink-100 max-h-[90vh] flex flex-col"
@@ -2770,7 +2782,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
               </div>
               <button
                 type="button"
-                onClick={() => setIsSolutionModalOpen(false)}
+                onClick={handleCloseModal}
                 className="text-slate-400 hover:text-slate-700 p-1 text-base font-bold cursor-pointer"
               >
                 ✕
@@ -2812,7 +2824,7 @@ export const CampusConnect = ({ onNavigateToTool }) => {
               <div className="flex justify-end gap-2 mt-2">
                 <button
                   type="button"
-                  onClick={() => setIsSolutionModalOpen(false)}
+                  onClick={handleCloseModal}
                   className="px-3 py-1.5 text-xs font-medium text-slate-500 hover:bg-slate-100 rounded-lg cursor-pointer"
                 >
                   Close

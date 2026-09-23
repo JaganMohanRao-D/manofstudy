@@ -109,8 +109,18 @@ export const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
               Platform Operator
             </span>
             <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-              MAN OF STUDY is engineered and curated by Dunna Jagan Mohan Rao (creator of PlantMokk AI). Your suggestions directly influence upcoming feature releases and academic tools.
+              MAN OF STUDY is engineered and curated by <strong>JAGAN MOHAN RAO DUNNA</strong>. Your suggestions directly influence upcoming feature releases and academic tools.
             </p>
+            <div className="pt-1">
+              <a
+                href="https://www.linkedin.com/in/jagan-mohan-rao-dunna-546b72423"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0A66C2] hover:underline"
+              >
+                <span>Connect with Founder on LinkedIn →</span>
+              </a>
+            </div>
           </div>
         </div>
 

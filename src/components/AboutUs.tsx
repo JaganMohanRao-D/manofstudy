@@ -37,7 +37,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-3xl leading-relaxed">
-            Built from the ground up by <strong>Dunna Jagan Mohan Rao</strong> (creator of PlantMokk AI), MAN OF STUDY is an open, client-side academic and career launchpad created to empower students across Andhra Pradesh, Telangana, and Pan-India to bridge the gap between tier-3 engineering classrooms and high-growth global technology careers.
+            Built from the ground up by <strong>JAGAN MOHAN RAO DUNNA</strong>, MAN OF STUDY is an open, client-side academic and career launchpad created to empower students across Andhra Pradesh, Telangana, and Pan-India to bridge the gap between tier-3 engineering classrooms and high-growth global technology careers.
           </p>
         </div>
       </div>
@@ -64,8 +64,45 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
             </li>
           </ul>
           <p>
-            MAN OF STUDY was created by Dunna Jagan Mohan Rao to eliminate this chaos. We set out to build a clean, blazing-fast, and 100% private platform where students can calculate bunks with mathematical certainty, analyze live EAPCET vacancies, access 24+ semester-by-semester degree roadmaps, and convert exam documents without uploading a single byte to a server.
+            MAN OF STUDY was created by <strong>JAGAN MOHAN RAO DUNNA</strong> to eliminate this chaos. We set out to build a clean, blazing-fast, and 100% private platform where students can calculate bunks with mathematical certainty, analyze live EAPCET vacancies, access 24+ semester-by-semester degree roadmaps, and convert exam documents without uploading a single byte to a server.
           </p>
+        </section>
+
+        {/* Founder & Leadership Section */}
+        <section className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold tracking-wider uppercase text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md border border-blue-200 dark:border-blue-900/50">
+                Founder &amp; Lead Architect
+              </span>
+            </div>
+            <h3 className="text-base font-black text-slate-900 dark:text-white">
+              JAGAN MOHAN RAO DUNNA
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400">
+              Dedicated to empowering engineering scholars across India with zero-compromise, client-side academic tools.
+            </p>
+            <div className="pt-1 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+              <Mail className="w-3.5 h-3.5 text-slate-400" />
+              <a href={`mailto:${supportEmail}`} className="hover:text-blue-600 dark:hover:text-blue-400 font-medium underline underline-offset-2">
+                {supportEmail}
+              </a>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <a
+              href="https://www.linkedin.com/in/jagan-mohan-rao-dunna-546b72423"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-white bg-[#0A66C2] hover:bg-[#084e96] rounded-lg transition-colors shadow-xs"
+            >
+              <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+              </svg>
+              <span>Connect on LinkedIn</span>
+            </a>
+          </div>
         </section>
 
         {/* Our 4 Guiding Commitments */}
