@@ -72,7 +72,6 @@ import {
   updateDoc,
   serverTimestamp,
   getDoc,
-  arrayUnion,
 } from 'firebase/firestore';
 import {
   dispatchAnswerNotificationFlow,
@@ -838,14 +837,6 @@ export const CampusConnect = ({ onNavigateToTool }) => {
       return prev.filter((a) => a.id !== attachmentId);
     });
   };
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(UPVOTES_KEY, JSON.stringify(upvotedPostIds));
-    } catch {
-      // ignore
-    }
-  }, [upvotedPostIds]);
 
   // Upvote Handler
   const handleToggleUpvote = async (postId) => {
