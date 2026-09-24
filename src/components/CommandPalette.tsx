@@ -111,6 +111,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         action: () => onSelectTool('campus-connect'),
       },
       {
+        id: 'tool-tg-top-colleges',
+        title: 'Top B.Tech Colleges in Telangana',
+        subtitle: 'Branch-specific OC allotment analysis with optional district filtering',
+        category: 'Core Tools',
+        badge: 'Data Analysis',
+        icon: <Trophy className="w-4 h-4 text-sky-500" />,
+        keywords: ['top colleges', 'telangana colleges', 'oc rank', 'median rank', 'district', 'eapcet', 'tg'],
+        action: () => onSelectTool('tg-top-colleges' as ToolTab),
+      },
+      {
         id: 'tool-tg-predictor',
         title: 'TG EAPCET College Predictor',
         subtitle: 'Check admission chances across 151 colleges using 71,646 official 2026 allotment cutoffs',
