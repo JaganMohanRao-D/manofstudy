@@ -44,6 +44,25 @@ export const FLAGSHIP_FEATURES = [
     ]
   },
   {
+    id: 'ws-tg-top-colleges',
+    workspace: 'tg-top-colleges',
+    title: 'Top B.Tech Colleges in Telangana',
+    badge: 'DATA ANALYSIS',
+    badgeStyle: 'bg-sky-100 dark:bg-sky-500/15 text-sky-800 dark:text-sky-300 border-sky-300 dark:border-sky-500/30',
+    description: 'Explore branch-specific Telangana EAPCET 2026 OC allotment analysis by district.',
+    actionText: 'Explore College Analysis',
+    icon: Award,
+    iconColor: 'text-sky-600 dark:text-sky-400',
+    iconBg: 'bg-sky-50 dark:bg-sky-500/10 border-sky-300 dark:border-sky-500/30',
+    borderColor: 'border-sky-200 dark:border-sky-500/30 hover:border-sky-400 dark:hover:border-sky-500/60',
+    bgGradient: 'from-sky-50/50 via-white to-white dark:from-slate-900 dark:via-slate-900 dark:to-sky-950/30',
+    highlights: [
+      'Choose a branch before comparing colleges',
+      'OC-only median, highest and lowest observed ranks',
+      'Optional district-wise analysis'
+    ]
+  },
+  {
     id: 'ws-tg-predictor',
     workspace: 'tg-predictor',
     title: 'TG EAPCET College Predictor',
