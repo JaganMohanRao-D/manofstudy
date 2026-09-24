@@ -3,6 +3,7 @@ export type WorkspaceView =
   | 'eapcet'
   | 'tg-allotments'
   | 'tg-predictor'
+  | 'tg-top-colleges'
   | 'roadmaps'
   | 'scholarships'
   | 'utilities'
