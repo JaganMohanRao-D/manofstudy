@@ -86,6 +86,7 @@ function CollegeCard({
 }: {
   row: TgTopCollegeRow;
   onOpen: () => void;
+  key?: string;
 }) {
   return (
     <motion.article

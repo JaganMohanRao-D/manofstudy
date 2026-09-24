@@ -23,6 +23,7 @@ import {
   Lock,
   Unlock,
   Stamp,
+  Trophy,
   FileDown,
   ChevronRight,
   MessageSquare,

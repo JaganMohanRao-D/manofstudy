@@ -1,7 +1,44 @@
-import React, { useMemo, useState } from 'react';
-import { ArrowLeft, ArrowRight, Check, Compass, GraduationCap, Lightbulb, RotateCcw, Target, Wrench, BarChart2, Layers, Award, ShieldCheck, Sparkles } from 'lucide-react';
-import { BRANCHES, CAREERS, CareerDirection, DIRECTION_LABELS, getBranch, ENTREPRENEUR_QUESTIONS, ENTREPRENEUR_SKILLS } from '../../data/gapAnalyzerData';
-import { calculateCareerGap, GapAnalysisResult, SkillLevel, StudentProfile, LEVEL, label } from '../../utils/gapAnalyzer';
+import React, { useMemo, useState, useEffect } from 'react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  Compass,
+  GraduationCap,
+  RotateCcw,
+  Target,
+  Sparkles,
+  Printer,
+  ChevronRight,
+  BookOpen,
+  Briefcase,
+  Clock,
+  Layers,
+  Award,
+  AlertTriangle,
+  FolderGit2,
+  FileText,
+  Search,
+  CheckCircle2,
+  HelpCircle,
+  TrendingUp,
+} from 'lucide-react';
+import {
+  ALL_BRANCHES,
+  ACADEMIC_STAGES,
+  ALL_CAREERS,
+  AcademicStage,
+  PERSONAL_QUESTIONS,
+  getCareersForBranch,
+  selectAdaptiveQuestions,
+  AdaptiveQuestion,
+  CareerOption,
+} from '../../data/gapAnalyzerData';
+import {
+  calculateCareerGap,
+  GapAnalysisResult,
+  StudentProfile,
+} from '../../utils/gapAnalyzer';
 import { VisualGapComparison } from './VisualGapComparison';
 import { TopPrioritiesCard } from './TopPrioritiesCard';
 import { WhatIfSimulator } from './WhatIfSimulator';
@@ -13,843 +50,1187 @@ interface Props {
   onNavigateToVault?: () => void;
 }
 
-const levels: { value: SkillLevel; label: string; desc: string; weight: number }[] = [
-  { value: 'none', label: 'None (0)', desc: 'Not learned / No experience', weight: 0 },
-  { value: 'beginner', label: 'Beginner (1)', desc: 'Theory & syntax only', weight: 1 },
-  { value: 'basic', label: 'Basic (2)', desc: 'Can follow guided tutorials', weight: 2 },
-  { value: 'intermediate', label: 'Intermediate (3)', desc: 'Built mini-projects independently', weight: 3 },
-  { value: 'advanced', label: 'Advanced (4)', desc: 'Production-ready / Deep mastery', weight: 4 },
-];
-
 export const StudentGapAnalyzer: React.FC<Props> = ({
   onNavigateToRoadmaps,
   onNavigateToProjects,
   onNavigateToDsa,
   onNavigateToVault,
 }) => {
-  const [step, setStep] = useState(1);
-  const [result, setResult] = useState<GapAnalysisResult | null>(null);
+  // Step 1: Branch & Academic Stage
+  // Step 2: Target Career
+  // Step 3: Personal Profile (6 universal questions)
+  // Step 4: Main Assessment (Adaptive 12–18 questions, 1-at-a-time)
+  // Step 5: Final Comprehensive Report
+  const [step, setStep] = useState<number>(1);
+
+  // Active student profile state
   const [profile, setProfile] = useState<StudentProfile>({
-    year: '1st Year',
     branch: 'cse',
-    cgpa: '',
-    direction: 'not-sure',
-    careerGoalId: undefined,
-    skills: {},
-    customSkills: [],
-    projectsCount: 0,
-    internshipsCount: 0,
-    hackathonsCount: 0,
-    certificationsCount: 0,
-    githubExperience: 'none',
-    openSourceExperience: 'none',
+    academicStage: '1st Year – Sem 2',
+    targetCareerId: 'software-engineer',
+    personalAnswers: {
+      confidence: 'confident',
+      time_weekly: 'balanced',
+      project_experience: 'tutorials',
+      internship_experience: 'none',
+      independent_learning: 'courses',
+      explaining_work: 'prompted',
+    },
+    competencyAnswers: {},
   });
 
-  const branch = getBranch(profile.branch);
-  const careers = useMemo(() => CAREERS.filter((c) => c.branchId === profile.branch), [profile.branch]);
-  const selectedCareer = careers.find((c) => c.id === profile.careerGoalId);
+  // Search filter states for dropdowns
+  const [branchSearch, setBranchSearch] = useState('');
+  const [careerSearch, setCareerSearch] = useState('');
+  const [showAllCareersModal, setShowAllCareersModal] = useState(false);
 
-  const chooseBranch = (id: string) => setProfile((p) => ({ ...p, branch: id, careerGoalId: undefined, skills: {} }));
-  const chooseDirection = (direction: CareerDirection) => setProfile((p) => ({ ...p, direction, careerGoalId: undefined, skills: {} }));
+  // Assessment Question index in Step 4
+  const [activeQuestionIdx, setActiveQuestionIdx] = useState<number>(0);
 
-  const reset = () => {
-    setStep(1);
-    setResult(null);
-    setProfile({
-      year: '1st Year',
-      branch: 'cse',
-      cgpa: '',
-      direction: 'not-sure',
-      careerGoalId: undefined,
-      skills: {},
-      customSkills: [],
-      projectsCount: 0,
-      internshipsCount: 0,
-      hackathonsCount: 0,
-      certificationsCount: 0,
-      githubExperience: 'none',
-      openSourceExperience: 'none',
-    });
+  // Final calculated result
+  const [result, setResult] = useState<GapAnalysisResult | null>(null);
+
+  // Active tab in final report
+  const [activeReportTab, setActiveReportTab] = useState<
+    'priorities' | 'matrix' | 'transition' | 'projects' | 'milestones' | 'whatif'
+  >('priorities');
+
+  // AI Mentor Brief state
+  const [aiMentorNote, setAiMentorNote] = useState<string | null>(null);
+  const [isAiLoading, setIsAiLoading] = useState<boolean>(false);
+
+  // Filtered branches
+  const filteredBranches = useMemo(() => {
+    if (!branchSearch.trim()) return ALL_BRANCHES;
+    const q = branchSearch.toLowerCase();
+    return ALL_BRANCHES.filter(
+      (b) => b.name.toLowerCase().includes(q) || b.description.toLowerCase().includes(q)
+    );
+  }, [branchSearch]);
+
+  // Branch-specific careers
+  const branchCareers = useMemo(() => {
+    return getCareersForBranch(profile.branch);
+  }, [profile.branch]);
+
+  // Filtered careers
+  const filteredCareers = useMemo(() => {
+    const pool = showAllCareersModal ? ALL_CAREERS : branchCareers;
+    if (!careerSearch.trim()) return pool;
+    const q = careerSearch.toLowerCase();
+    return pool.filter(
+      (c) =>
+        c.title.toLowerCase().includes(q) ||
+        c.category.toLowerCase().includes(q) ||
+        c.description.toLowerCase().includes(q)
+    );
+  }, [careerSearch, branchCareers, showAllCareersModal]);
+
+  // Adaptive questions for Step 4
+  const adaptiveQuestions: AdaptiveQuestion[] = useMemo(() => {
+    return selectAdaptiveQuestions(profile.branch, profile.targetCareerId, profile.academicStage);
+  }, [profile.branch, profile.targetCareerId, profile.academicStage]);
+
+  // Current active question
+  const currentQuestion = adaptiveQuestions[activeQuestionIdx] || adaptiveQuestions[0];
+
+  // Selected branch & career objects
+  const selectedBranchObj = useMemo(
+    () => ALL_BRANCHES.find((b) => b.id === profile.branch) || ALL_BRANCHES[0],
+    [profile.branch]
+  );
+  const selectedCareerObj = useMemo(
+    () => ALL_CAREERS.find((c) => c.id === profile.targetCareerId) || ALL_CAREERS[0],
+    [profile.targetCareerId]
+  );
+
+  // When branch changes, ensure targetCareerId is valid for the new branch
+  const handleSelectBranch = (branchId: string) => {
+    const validCareers = getCareersForBranch(branchId);
+    const hasCurrent = validCareers.some((c) => c.id === profile.targetCareerId);
+    setProfile((prev) => ({
+      ...prev,
+      branch: branchId,
+      targetCareerId: hasCurrent ? prev.targetCareerId : validCareers[0]?.id || 'software-engineer',
+      competencyAnswers: {}, // reset answers for fresh assessment
+    }));
   };
 
-  const analyze = () => {
-    setResult(calculateCareerGap(profile));
-    setStep(6);
+  // Keyboard navigation for Step 4 (options 1 to 5)
+  useEffect(() => {
+    if (step !== 4 || !currentQuestion) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // 1 to 5 numeric keys
+      const num = parseInt(e.key, 10);
+      if (!isNaN(num) && num >= 1 && num <= currentQuestion.options.length) {
+        const option = currentQuestion.options[num - 1];
+        if (option) {
+          handleSelectOption(option.numericWeight);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [step, activeQuestionIdx, currentQuestion]);
+
+  // Record an answer in Step 4
+  const handleSelectOption = (numericWeight: number) => {
+    if (!currentQuestion) return;
+
+    setProfile((prev) => ({
+      ...prev,
+      competencyAnswers: {
+        ...prev.competencyAnswers,
+        [currentQuestion.competencyId]: numericWeight,
+        [currentQuestion.id]: numericWeight,
+      },
+    }));
+
+    // Auto-advance to next question after small visual confirmation
+    setTimeout(() => {
+      if (activeQuestionIdx < adaptiveQuestions.length - 1) {
+        setActiveQuestionIdx((prev) => prev + 1);
+      } else {
+        // Completed all questions -> calculate and move to Step 5
+        finishAssessment();
+      }
+    }, 180);
+  };
+
+  // Finish assessment & trigger AI brief
+  const finishAssessment = () => {
+    const analysis = calculateCareerGap(profile);
+    setResult(analysis);
+    setStep(5);
+    setActiveReportTab('priorities');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Fetch AI Placement Advisor note
+    setIsAiLoading(true);
+    fetch('/api/gemini/gap-analysis', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        studentProfile: profile,
+        gapAnalysisResult: analysis,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.mentorNote) {
+          setAiMentorNote(data.mentorNote);
+        }
+      })
+      .catch((err) => {
+        console.warn('AI Advisor call fallback:', err);
+      })
+      .finally(() => {
+        setIsAiLoading(false);
+      });
+  };
+
+  // Reset entire assessment
+  const handleReset = () => {
+    setStep(1);
+    setActiveQuestionIdx(0);
+    setResult(null);
+    setAiMentorNote(null);
+    setProfile({
+      branch: 'cse',
+      academicStage: '1st Year – Sem 2',
+      targetCareerId: 'software-engineer',
+      personalAnswers: {
+        confidence: 'confident',
+        time_weekly: 'balanced',
+        project_experience: 'tutorials',
+        internship_experience: 'none',
+        independent_learning: 'courses',
+        explaining_work: 'prompted',
+      },
+      competencyAnswers: {},
+    });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const canNext = () => {
-    if (step === 1) return !!profile.year && !!profile.branch;
-    if (step === 2) return !!profile.direction;
-    if (step === 3) return profile.direction === 'entrepreneur' || profile.direction === 'not-sure' || !!profile.careerGoalId;
-    return true;
+  // Print report
+  const handlePrint = () => {
+    window.print();
   };
 
-  // Resolve questions for Step 4
-  const step4Items = useMemo(() => {
-    if (profile.direction === 'entrepreneur') {
-      return ENTREPRENEUR_SKILLS.map((s) => {
-        const q = ENTREPRENEUR_QUESTIONS.find((item) => item.skillId === s.id);
-        return {
-          id: s.id,
-          name: s.name,
-          description: s.description,
-          question: q?.question,
-        };
-      });
-    }
-
-    if (selectedCareer) {
-      return selectedCareer.skills.map((req) => {
-        const skill = branch.domainSkills.find((s) => s.id === req.skillId);
-        const q = selectedCareer.questions?.find((item) => item.skillId === req.skillId);
-        return {
-          id: req.skillId,
-          name: skill?.name || req.skillId,
-          description: skill?.description || req.why,
-          question: q?.question,
-          targetLevel: req.target,
-        };
-      });
-    }
-
-    // Default branch skills
-    return branch.domainSkills.slice(0, 6).map((s) => ({
-      id: s.id,
-      name: s.name,
-      description: s.description,
-      question: undefined,
-      targetLevel: 'intermediate' as SkillLevel,
-    }));
-  }, [profile.direction, selectedCareer, branch]);
-
-  const targetProjectsHint = profile.year === '1st Year' ? 1 : profile.year === '2nd Year' ? 2 : 3;
-
-  if (result) {
-    return (
-      <Results
-        result={result}
-        profile={profile}
-        branch={branch}
-        careers={careers}
-        reset={reset}
-        onNavigateToRoadmaps={onNavigateToRoadmaps}
-        onNavigateToProjects={onNavigateToProjects}
-        onNavigateToDsa={onNavigateToDsa}
-        onNavigateToVault={onNavigateToVault}
-      />
-    );
-  }
-
   return (
-    <div className="w-full max-w-5xl mx-auto px-3 sm:px-6 py-6 space-y-6">
-      {/* Header Banner */}
-      <section className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 sm:p-8 shadow-xs">
-        <div className="flex items-center gap-2">
-          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
-            AI Student Gap Analyzer
-          </span>
-          <span className="text-xs text-slate-500 dark:text-slate-400">
-            • Empirical 0–4 Weighted Assessment
-          </span>
-        </div>
-        <h1 className="mt-2 text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-          Find your real engineering skill gaps — grounded in your branch.
-        </h1>
-        <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-300">
-          Evaluates your profile against strict industry role benchmarks using a transparent formula:
-          <span className="font-semibold text-slate-800 dark:text-slate-200"> Skills (max 70%) + Projects (max 20%) + Experience (max 10%)</span>.
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {['Branch-Specific Benchmarks', '0–4 Numeric Skill Weights', 'Transparent 70-20-10 Formula', 'Verifiable Project Proof'].map((x) => (
-            <span key={x} className="rounded-full bg-slate-100 dark:bg-slate-800 px-3 py-1 text-xs font-semibold text-slate-600 dark:text-slate-300">
-              {x}
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8 font-sans">
+      {/* HEADER SECTION */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
+        <div>
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-extrabold uppercase tracking-wider bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+              AI Student Gap Analyzer
             </span>
-          ))}
-        </div>
-      </section>
-
-      {/* Stepper Header */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-bold">
-        {['Branch & Year', 'Direction', 'Target Career', 'Skills Assessment', 'Portfolio & Experience'].map((x, i) => (
-          <div
-            key={x}
-            className={`flex items-center gap-2 shrink-0 py-1.5 px-3 rounded-xl transition-all ${
-              step === i + 1
-                ? 'bg-emerald-500 text-white shadow-xs'
-                : step > i + 1
-                ? 'text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40'
-                : 'text-slate-400 bg-slate-100 dark:bg-slate-800/60'
-            }`}
-          >
-            <span className="w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-black bg-white/20">
-              {step > i + 1 ? '✓' : i + 1}
+            <span className="text-xs text-slate-500 dark:text-slate-400">
+              Telangana &amp; Pan-India B.Tech Standards
             </span>
-            <span>{x}</span>
           </div>
-        ))}
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+            Branch-Aware Competency &amp; Placement Diagnostic
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
+            Empirical skills audit tailored to your branch, academic year, and target career.
+            Identify exact capability gaps, verifiable project requirements, and action milestones.
+          </p>
+        </div>
+
+        {step > 1 && (
+          <button
+            type="button"
+            onClick={handleReset}
+            className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-2xs hover:bg-slate-50 transition-colors cursor-pointer self-start sm:self-auto"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Retake Assessment</span>
+          </button>
+        )}
       </div>
 
-      {/* Step 1: Branch & Year */}
+      {/* STEP PROGRESS BAR */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between text-xs font-semibold text-slate-600 dark:text-slate-400">
+          <span className="flex items-center gap-1.5">
+            <span className="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px] font-bold">
+              {step}
+            </span>
+            <span>
+              {step === 1 && 'Step 1: Branch & Academic Stage'}
+              {step === 2 && 'Step 2: Target Career Pathway'}
+              {step === 3 && 'Step 3: Personal Engineering Profile'}
+              {step === 4 && `Step 4: Adaptive Skill Assessment (${activeQuestionIdx + 1}/${adaptiveQuestions.length})`}
+              {step === 5 && 'Step 5: AI Student Gap Analysis Report'}
+            </span>
+          </span>
+          <span className="text-slate-400 dark:text-slate-500">
+            {step === 5 ? '100% Complete' : `${Math.round(((step - 1) / 4) * 100)}%`}
+          </span>
+        </div>
+        <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-gradient-to-r from-indigo-500 to-indigo-600 transition-all duration-300 rounded-full"
+            style={{
+              width:
+                step === 1
+                  ? '20%'
+                  : step === 2
+                  ? '40%'
+                  : step === 3
+                  ? '60%'
+                  : step === 4
+                  ? `${60 + Math.round(((activeQuestionIdx + 1) / adaptiveQuestions.length) * 35)}%`
+                  : '100%',
+            }}
+          />
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* STEP 1: BRANCH & ACADEMIC STAGE */}
+      {/* ========================================================================= */}
       {step === 1 && (
-        <Panel icon={<GraduationCap />} title="1. Select your Engineering Branch & Current Year">
-          <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
-            Skill requirements are tailored specifically to your branch — whether Core (Mechanical, Civil, Chemical, ECE, EEE) or Tech (CSE, IT, AIML, DS, Cybersecurity).
-          </p>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {BRANCHES.map((b) => (
-              <Choice
-                key={b.id}
-                selected={profile.branch === b.id}
-                onClick={() => chooseBranch(b.id)}
-                title={b.name}
-                description={b.description}
-              />
-            ))}
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-7 shadow-xs space-y-6">
+          <div>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <GraduationCap className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <span>Select Your Engineering Branch &amp; Semester Stage</span>
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              Assessment expectations adapt dynamically to your academic year and specialization domain.
+            </p>
           </div>
-          <div className="mt-6 border-t border-slate-100 dark:border-slate-800 pt-5">
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-              Current Academic Year
+
+          {/* 1. Branch Selector */}
+          <div className="space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                1. Engineering Branch (26 Options Available)
+              </label>
+              <div className="relative w-full sm:w-64">
+                <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  type="text"
+                  value={branchSearch}
+                  onChange={(e) => setBranchSearch(e.target.value)}
+                  placeholder="Filter branch..."
+                  className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 max-h-72 overflow-y-auto pr-1">
+              {filteredBranches.map((b) => {
+                const isSelected = profile.branch === b.id;
+                return (
+                  <button
+                    key={b.id}
+                    type="button"
+                    onClick={() => handleSelectBranch(b.id)}
+                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                      isSelected
+                        ? 'border-indigo-600 bg-indigo-50/80 dark:bg-indigo-950/40 text-indigo-900 dark:text-indigo-100 shadow-xs ring-1 ring-indigo-500'
+                        : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between gap-1">
+                        <span className="font-extrabold text-sm">{b.name}</span>
+                        {isSelected && <Check className="w-4 h-4 text-indigo-600 shrink-0" />}
+                      </div>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-1">
+                        {b.description}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 2. Academic Stage Selector */}
+          <div className="space-y-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block">
+              2. Academic Stage / Current Semester
             </label>
-            <div className="mt-2 grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {(['1st Year', '2nd Year', '3rd Year', '4th Year'] as const).map((y) => (
+            <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-5 gap-2">
+              {ACADEMIC_STAGES.map((stage) => {
+                const isSelected = profile.academicStage === stage;
+                return (
+                  <button
+                    key={stage}
+                    type="button"
+                    onClick={() => setProfile((prev) => ({ ...prev, academicStage: stage }))}
+                    className={`px-3 py-2.5 rounded-xl border text-center text-xs font-bold transition-all cursor-pointer ${
+                      isSelected
+                        ? 'border-indigo-600 bg-indigo-600 text-white shadow-xs'
+                        : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:border-slate-300'
+                    }`}
+                  >
+                    {stage}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              * Stage calibrates the benchmark: early semesters evaluate core syntax and problem solving; late semesters evaluate production architecture and interview readiness.
+            </p>
+          </div>
+
+          {/* Navigation */}
+          <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+            <div className="text-xs text-slate-500">
+              Selected: <strong className="text-slate-800 dark:text-slate-200">{selectedBranchObj.name}</strong> • <strong className="text-indigo-600 dark:text-indigo-400">{profile.academicStage}</strong>
+            </div>
+            <button
+              type="button"
+              onClick={() => setStep(2)}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
+            >
+              <span>Continue to Target Career</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* STEP 2: TARGET CAREER */}
+      {/* ========================================================================= */}
+      {step === 2 && (
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-7 shadow-xs space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <Target className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                <span>Choose Your Target Career for {selectedBranchObj.name}</span>
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                The career options below are curated specifically for {selectedBranchObj.name} graduates.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setShowAllCareersModal(!showAllCareersModal)}
+              className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 cursor-pointer self-start sm:self-auto"
+            >
+              <Compass className="w-3.5 h-3.5" />
+              <span>{showAllCareersModal ? 'Show Branch-Native Roles' : 'Explore Cross-Branch Careers'}</span>
+            </button>
+          </div>
+
+          {/* Search bar */}
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              value={careerSearch}
+              onChange={(e) => setCareerSearch(e.target.value)}
+              placeholder="Search career role (e.g., Software Engineer, Embedded, CAD, Structural, Data Analyst)..."
+              className="w-full pl-8 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            />
+          </div>
+
+          {/* Career Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-96 overflow-y-auto pr-1">
+            {filteredCareers.map((c) => {
+              const isSelected = profile.targetCareerId === c.id;
+              const isCrossBranch =
+                (selectedBranchObj.category === 'mechanical_aero' ||
+                  selectedBranchObj.category === 'civil_infra' ||
+                  selectedBranchObj.category === 'chemical_bio' ||
+                  selectedBranchObj.category === 'agri_food') &&
+                (c.domain === 'software' || c.domain === 'data' || c.domain === 'cyber');
+
+              return (
                 <button
-                  key={y}
+                  key={c.id}
                   type="button"
-                  onClick={() => setProfile((p) => ({ ...p, year: y }))}
-                  className={`rounded-xl border py-3 text-sm font-bold transition-all ${
-                    profile.year === y
-                      ? 'bg-emerald-500 border-emerald-500 text-white shadow-xs'
-                      : 'border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-emerald-300'
+                  onClick={() => setProfile((prev) => ({ ...prev, targetCareerId: c.id }))}
+                  className={`p-4 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                    isSelected
+                      ? 'border-indigo-600 bg-indigo-50/80 dark:bg-indigo-950/40 text-indigo-950 dark:text-indigo-100 ring-1 ring-indigo-500 shadow-xs'
+                      : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 hover:border-slate-300'
                   }`}
                 >
-                  {y}
-                </button>
-              ))}
-            </div>
-          </div>
-        </Panel>
-      )}
-
-      {/* Step 2: Direction */}
-      {step === 2 && (
-        <Panel icon={<Compass />} title="2. What career direction interests you?">
-          <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
-            Select the general pathway you are targeting after graduation.
-          </p>
-          <div className="grid sm:grid-cols-2 gap-3">
-            {(Object.entries(DIRECTION_LABELS) as [CareerDirection, string][]).map(([id, name]) => (
-              <Choice
-                key={id}
-                selected={profile.direction === id}
-                onClick={() => chooseDirection(id)}
-                title={name}
-                description={
-                  id === 'entrepreneur'
-                    ? 'Problem validation, customer interviews, MVPs and business execution — coding not strictly required.'
-                    : id === 'not-sure'
-                    ? 'Explore branch-connected career options without forcing a single narrow specialty.'
-                    : 'Target specialized engineering and technical roles in industry.'
-                }
-              />
-            ))}
-          </div>
-        </Panel>
-      )}
-
-      {/* Step 3: Career Goal */}
-      {step === 3 && (
-        <Panel
-          icon={<Target />}
-          title={profile.direction === 'not-sure' ? '3. Explore branch career paths' : '3. Choose your target career role'}
-        >
-          {profile.direction === 'entrepreneur' ? (
-            <div className="rounded-2xl border border-emerald-300 dark:border-emerald-800 bg-emerald-50/60 dark:bg-emerald-950/20 p-5 space-y-2">
-              <p className="font-bold text-slate-900 dark:text-white">Startup / Entrepreneurship Track</p>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
-                Your assessment will focus on problem discovery, customer interviews, business models, and lean MVP prototyping tailored to {branch.name}.
-              </p>
-            </div>
-          ) : (
-            <>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
-                {profile.direction === 'not-sure'
-                  ? `Select a career profile in ${branch.name} you would like to test your readiness against:`
-                  : `Select the target role in ${branch.name} to compare your current skill levels against industry expectations:`}
-              </p>
-              <div className="grid sm:grid-cols-2 gap-3">
-                {careers.map((c) => (
-                  <Choice
-                    key={c.id}
-                    selected={profile.careerGoalId === c.id}
-                    onClick={() => setProfile((p) => ({ ...p, careerGoalId: c.id }))}
-                    title={c.title}
-                    description={c.shortDescription}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-        </Panel>
-      )}
-
-      {/* Step 4: Skills Assessment (Strict 0-4 weights) */}
-      {step === 4 && (
-        <Panel icon={<Wrench />} title="4. Empirical Skill Self-Assessment (0–4 Scale)">
-          <div className="rounded-xl bg-slate-50 dark:bg-slate-800/60 p-3.5 mb-5 border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-            <span className="font-bold text-slate-800 dark:text-slate-100">Scoring Guidelines: </span>
-            <span>Rate honestly based on practical ability. </span>
-            <span className="font-medium">None (0)</span>: Not learned; <span className="font-medium">Beginner (1)</span>: Theory only; <span className="font-medium">Basic (2)</span>: Guided tutorials; <span className="font-medium">Intermediate (3)</span>: Built mini-projects; <span className="font-medium">Advanced (4)</span>: Independent mastery.
-          </div>
-
-          <div className="space-y-4">
-            {step4Items.map((item) => {
-              const currentVal: SkillLevel = profile.skills[item.id] || 'none';
-              return (
-                <div
-                  key={item.id}
-                  className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 sm:p-5 shadow-xs transition-all hover:border-slate-300 dark:hover:border-slate-700"
-                >
-                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                    <div className="space-y-1.5 flex-1">
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-bold text-slate-900 dark:text-white text-base">
-                          {item.name}
-                        </h3>
-                        {item.targetLevel && (
-                          <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-900/40">
-                            Target: {item.targetLevel.toUpperCase()} ({LEVEL[item.targetLevel]}/4)
-                          </span>
-                        )}
-                      </div>
-                      {item.question ? (
-                        <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
-                          {item.question}
-                        </p>
-                      ) : (
-                        <p className="text-xs text-slate-500 dark:text-slate-400">
-                          {item.description}
-                        </p>
+                  <div>
+                    <div className="flex items-center justify-between gap-1 mb-1">
+                      <span className="font-extrabold text-sm">{c.title}</span>
+                      {isSelected && <Check className="w-4 h-4 text-indigo-600 shrink-0" />}
+                    </div>
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
+                        {c.category}
+                      </span>
+                      {isCrossBranch && (
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300">
+                          Branch Transition
+                        </span>
                       )}
                     </div>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                      {c.description}
+                    </p>
+                  </div>
 
-                    {/* Level selector buttons on larger screens, select on mobile */}
-                    <div className="shrink-0">
-                      <div className="sm:hidden">
-                        <select
-                          value={currentVal}
-                          onChange={(e) =>
-                            setProfile((p) => ({
-                              ...p,
-                              skills: { ...p.skills, [item.id]: e.target.value as SkillLevel },
-                            }))
-                          }
-                          className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm font-semibold text-slate-800 dark:text-white"
-                        >
-                          {levels.map((o) => (
-                            <option key={o.value} value={o.value}>
-                              {o.label} — {o.desc}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+                  <div className="pt-2 mt-2 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap gap-1">
+                    {c.typicalTools.slice(0, 3).map((t, idx) => (
+                      <span
+                        key={idx}
+                        className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
 
-                      <div className="hidden sm:flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-xl">
-                        {levels.map((lvl) => {
-                          const isSelected = currentVal === lvl.value;
-                          return (
-                            <button
-                              key={lvl.value}
-                              type="button"
-                              onClick={() =>
-                                setProfile((p) => ({
-                                  ...p,
-                                  skills: { ...p.skills, [item.id]: lvl.value },
-                                }))
-                              }
-                              title={lvl.desc}
-                              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                                isSelected
-                                  ? 'bg-emerald-500 text-white shadow-xs'
-                                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/50'
-                              }`}
-                            >
-                              {lvl.weight} • {lvl.value.charAt(0).toUpperCase() + lvl.value.slice(1)}
-                            </button>
-                          );
-                        })}
-                      </div>
+          {/* Navigation */}
+          <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+            <button
+              type="button"
+              onClick={() => setStep(1)}
+              className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Branch</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setStep(3)}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
+            >
+              <span>Continue to Profile Questions</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* STEP 3: PERSONAL PROFILE (6 UNIVERSAL QUESTIONS) */}
+      {/* ========================================================================= */}
+      {step === 3 && (
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-7 shadow-xs space-y-6">
+          <div>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <Briefcase className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <span>Personal Engineering Profile (6 Quick Questions)</span>
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              Select the option that best reflects your current practical circumstances.
+            </p>
+          </div>
+
+          <div className="space-y-6">
+            {PERSONAL_QUESTIONS.map((pq, qIdx) => {
+              const currentVal = profile.personalAnswers?.[pq.id as keyof typeof profile.personalAnswers];
+
+              return (
+                <div key={pq.id} className="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 space-y-3">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="w-5 h-5 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold text-xs flex items-center justify-center">
+                        {qIdx + 1}
+                      </span>
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">
+                        {pq.label}
+                      </h4>
                     </div>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 ml-7 mt-0.5">
+                      {pq.description}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 ml-7">
+                    {pq.options.map((opt) => {
+                      const isSelected = currentVal === opt.value;
+                      return (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          onClick={() => {
+                            setProfile((prev) => ({
+                              ...prev,
+                              personalAnswers: {
+                                ...prev.personalAnswers,
+                                [pq.id]: opt.value,
+                              },
+                            }));
+                          }}
+                          className={`p-3 rounded-lg border text-left text-xs font-semibold transition-all cursor-pointer flex items-center justify-between ${
+                            isSelected
+                              ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-900 dark:text-indigo-200 ring-1 ring-indigo-500'
+                              : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300'
+                          }`}
+                        >
+                          <span>{opt.label}</span>
+                          {isSelected && <Check className="w-4 h-4 text-indigo-600 shrink-0" />}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               );
             })}
           </div>
-        </Panel>
-      )}
 
-      {/* Step 5: Portfolio Context (Projects, Internships, Hackathons) */}
-      {step === 5 && (
-        <Panel icon={<GraduationCap />} title="5. Portfolio & Practical Experience">
-          <div className="rounded-xl bg-slate-50 dark:bg-slate-800/60 p-4 border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300 space-y-1">
-            <p className="font-bold text-slate-900 dark:text-white">
-              Formula Weighting:
-            </p>
-            <p>
-              • <span className="font-semibold text-emerald-600 dark:text-emerald-400">Projects (max 20%):</span> For a {profile.year} student, target is {targetProjectsHint} practical project(s).
-            </p>
-            <p>
-              • <span className="font-semibold text-sky-600 dark:text-sky-400">Internships & Hackathons (max 10%):</span> 5% per verifiable internship or hackathon (capped at 10%).
-            </p>
-          </div>
-
-          <div className="mt-5 grid sm:grid-cols-3 gap-4">
-            <label className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 bg-white dark:bg-slate-900 block space-y-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 block">
-                Projects Built
-              </span>
-              <input
-                type="number"
-                min="0"
-                max="50"
-                value={profile.projectsCount}
-                onChange={(e) =>
-                  setProfile((p) => ({ ...p, projectsCount: Math.max(0, Number(e.target.value)) }))
-                }
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3.5 py-2.5 text-base font-bold text-slate-900 dark:text-white"
-              />
-              <span className="text-[11px] text-slate-500 dark:text-slate-400 block">
-                Target for {profile.year}: {targetProjectsHint}+
-              </span>
-            </label>
-
-            <label className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 bg-white dark:bg-slate-900 block space-y-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 block">
-                Internships
-              </span>
-              <input
-                type="number"
-                min="0"
-                max="20"
-                value={profile.internshipsCount}
-                onChange={(e) =>
-                  setProfile((p) => ({ ...p, internshipsCount: Math.max(0, Number(e.target.value)) }))
-                }
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3.5 py-2.5 text-base font-bold text-slate-900 dark:text-white"
-              />
-              <span className="text-[11px] text-slate-500 dark:text-slate-400 block">
-                Completed or ongoing
-              </span>
-            </label>
-
-            <label className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 bg-white dark:bg-slate-900 block space-y-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 block">
-                Hackathons / Contests
-              </span>
-              <input
-                type="number"
-                min="0"
-                max="30"
-                value={profile.hackathonsCount}
-                onChange={(e) =>
-                  setProfile((p) => ({ ...p, hackathonsCount: Math.max(0, Number(e.target.value)) }))
-                }
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3.5 py-2.5 text-base font-bold text-slate-900 dark:text-white"
-              />
-              <span className="text-[11px] text-slate-500 dark:text-slate-400 block">
-                Campus or regional competitions
-              </span>
-            </label>
-          </div>
-        </Panel>
-      )}
-
-      {/* Navigation Buttons */}
-      <div className="flex items-center justify-between gap-3 pt-2">
-        <button
-          type="button"
-          disabled={step === 1}
-          onClick={() => setStep((s) => Math.max(1, s - 1))}
-          className="inline-flex items-center gap-2 rounded-xl border border-slate-300 dark:border-slate-700 px-5 py-2.5 text-sm font-bold text-slate-700 dark:text-slate-200 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-800"
-        >
-          <ArrowLeft className="w-4 h-4" /> Back
-        </button>
-
-        {step < 5 ? (
-          <button
-            type="button"
-            disabled={!canNext()}
-            onClick={() => setStep((s) => s + 1)}
-            className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 px-6 py-2.5 text-sm font-bold text-white shadow-xs disabled:opacity-40 transition-colors"
-          >
-            Continue <ArrowRight className="w-4 h-4" />
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={analyze}
-            className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 px-7 py-3 text-sm font-bold text-white shadow-md transition-colors"
-          >
-            <Check className="w-4 h-4" /> Calculate Readiness & Gaps
-          </button>
-        )}
-      </div>
-    </div>
-  );
-};
-
-/* ---------------- RESULTS VIEW ---------------- */
-
-function Results({
-  result,
-  profile,
-  branch,
-  careers,
-  reset,
-  onNavigateToRoadmaps,
-  onNavigateToProjects,
-  onNavigateToDsa,
-  onNavigateToVault,
-}: {
-  result: GapAnalysisResult;
-  profile: StudentProfile;
-  branch: ReturnType<typeof getBranch>;
-  careers: typeof CAREERS;
-  reset: () => void;
-  onNavigateToRoadmaps?: () => void;
-  onNavigateToProjects?: () => void;
-  onNavigateToDsa?: () => void;
-  onNavigateToVault?: () => void;
-}) {
-  const readinessTier =
-    result.matchScore >= 80
-      ? { label: 'Interview Ready', color: 'text-emerald-600 bg-emerald-50 border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-400' }
-      : result.matchScore >= 60
-      ? { label: 'Solid Foundation', color: 'text-teal-600 bg-teal-50 border-teal-200 dark:bg-teal-950/40 dark:border-teal-800 dark:text-teal-400' }
-      : result.matchScore >= 40
-      ? { label: 'Emerging Competence', color: 'text-amber-600 bg-amber-50 border-amber-200 dark:bg-amber-950/40 dark:border-amber-800 dark:text-amber-400' }
-      : { label: 'Early Explorer', color: 'text-rose-600 bg-rose-50 border-rose-200 dark:bg-rose-950/40 dark:border-rose-800 dark:text-rose-400' };
-
-  return (
-    <div className="w-full max-w-6xl mx-auto px-3 sm:px-6 py-6 space-y-6">
-      {/* 1. Header Banner with Readiness Tier */}
-      <section className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 sm:p-8 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
-                AI Gap Analysis Report
-              </span>
-              <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${readinessTier.color}`}>
-                {readinessTier.label}
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-              {result.careerTitle}
-            </h1>
-            <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">
-              {result.branchName} • {profile.year} • {DIRECTION_LABELS[result.direction]}
-            </p>
-            <p className="max-w-3xl text-xs sm:text-sm leading-6 text-slate-500 dark:text-slate-400">
-              {result.careerDescription}
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={reset}
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer self-start sm:self-auto shrink-0 transition-colors"
-          >
-            <RotateCcw className="w-4 h-4" /> Start New Assessment
-          </button>
-        </div>
-      </section>
-
-      {/* 2. Transparent 70-20-10 Scorecard Component */}
-      <section className="rounded-2xl border border-emerald-200/80 dark:border-emerald-900/60 bg-gradient-to-br from-white via-emerald-50/20 to-teal-50/20 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 p-5 sm:p-7 shadow-xs space-y-6">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-emerald-100 dark:border-slate-800 pb-6">
-          <div className="space-y-1">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-              Industry Readiness Index
-            </span>
-            <div className="flex items-baseline gap-3">
-              <span className="text-5xl sm:text-6xl font-black text-slate-900 dark:text-white">
-                {result.matchScore}%
-              </span>
-              <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">
-                / 100% Target
-              </span>
-            </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Calculated using the strict weighted formula: Skills (70%) + Projects (20%) + Experience (10%).
-            </p>
-          </div>
-
-          {/* 3 Pillar Summary Cards */}
-          <div className="grid grid-cols-3 gap-3 w-full lg:w-auto">
-            <div className="rounded-2xl bg-white dark:bg-slate-800/80 border border-emerald-100 dark:border-emerald-900/40 p-3.5 text-center shadow-xs">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-                Skills
-              </p>
-              <p className="mt-1 text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
-                {result.skillsScore}%
-              </p>
-              <p className="text-[10px] text-slate-400">Max 70%</p>
-            </div>
-
-            <div className="rounded-2xl bg-white dark:bg-slate-800/80 border border-sky-100 dark:border-sky-900/40 p-3.5 text-center shadow-xs">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400">
-                Projects
-              </p>
-              <p className="mt-1 text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
-                {result.projectScore}%
-              </p>
-              <p className="text-[10px] text-slate-400">Max 20%</p>
-            </div>
-
-            <div className="rounded-2xl bg-white dark:bg-slate-800/80 border border-indigo-100 dark:border-indigo-900/40 p-3.5 text-center shadow-xs">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-                Experience
-              </p>
-              <p className="mt-1 text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
-                {result.expScore}%
-              </p>
-              <p className="text-[10px] text-slate-400">Max 10%</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Visual Multi-Segment Bar */}
-        <div className="space-y-2">
-          <div className="flex justify-between text-xs font-semibold text-slate-600 dark:text-slate-300">
-            <span>Score Composition</span>
-            <span>Total: {result.matchScore} / 100</span>
-          </div>
-          <div className="h-4 w-full rounded-full bg-slate-200 dark:bg-slate-800 flex overflow-hidden p-0.5">
-            <div
-              style={{ width: `${result.skillsScore}%` }}
-              className="h-full bg-emerald-500 rounded-l-full"
-              title={`Skills Score: ${result.skillsScore}%`}
-            />
-            <div
-              style={{ width: `${result.projectScore}%` }}
-              className="h-full bg-sky-500"
-              title={`Projects Score: ${result.projectScore}%`}
-            />
-            <div
-              style={{ width: `${result.expScore}%` }}
-              className="h-full bg-indigo-500 rounded-r-full"
-              title={`Experience Score: ${result.expScore}%`}
-            />
-          </div>
-          <div className="flex flex-wrap items-center gap-4 text-[11px] text-slate-500 dark:text-slate-400 pt-1">
-            <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Core Skills ({result.skillsScore}%)
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-sky-500" /> Practical Projects ({result.projectScore}%)
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" /> Experience / Hackathons ({result.expScore}%)
-            </span>
-          </div>
-        </div>
-
-        {/* Metric Quick Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-          <div className="rounded-xl bg-slate-50 dark:bg-slate-800/60 p-3">
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">Assessed Skills</p>
-            <p className="text-lg font-black text-slate-900 dark:text-white">{result.skillsAssessed}</p>
-          </div>
-          <div className="rounded-xl bg-slate-50 dark:bg-slate-800/60 p-3">
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">At / Above Target</p>
-            <p className="text-lg font-black text-emerald-600 dark:text-emerald-400">
-              {result.skillsAtTarget}
-            </p>
-          </div>
-          <div className="rounded-xl bg-slate-50 dark:bg-slate-800/60 p-3">
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">Target Coverage</p>
-            <p className="text-lg font-black text-slate-900 dark:text-white">
-              {result.skillCoveragePercent}%
-            </p>
-          </div>
-          <div className="rounded-xl bg-slate-50 dark:bg-slate-800/60 p-3">
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">Remaining Gap</p>
-            <p className="text-lg font-black text-rose-600 dark:text-rose-400">
-              {result.skillGapPercent}%
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. Interactive Visual Gap Comparison (Bars & Radar Chart) */}
-      <VisualGapComparison comparisons={result.comparisons} />
-
-      {/* 4. Top Priorities & Direct Action Items */}
-      <TopPrioritiesCard
-        priorities={result.topPriorities}
-        nextActions={result.nextActions}
-        branchId={profile.branch}
-        onNavigateToRoadmaps={onNavigateToRoadmaps}
-        onNavigateToProjects={onNavigateToProjects}
-        onNavigateToDsa={onNavigateToDsa}
-        onNavigateToVault={onNavigateToVault}
-      />
-
-      {/* 5. What-If Scenario Simulator */}
-      <WhatIfSimulator originalProfile={profile} />
-
-      {/* 6. Strengths, Build Further & Priority Gaps */}
-      <div className="grid lg:grid-cols-3 gap-4">
-        <ResultCard
-          title="Current Strengths"
-          items={result.strengths.map((x) => x.title)}
-          empty="No clear strengths reached the role target yet."
-          tone="green"
-        />
-        <ResultCard
-          title="Build Further"
-          items={result.needsImprovement.map((x) => x.title)}
-          empty="No skills in this category."
-          tone="amber"
-        />
-        <ResultCard
-          title="Priority Gaps"
-          items={result.majorGaps.map((x) => x.title)}
-          empty="No major gaps identified from your answers."
-          tone="red"
-        />
-      </div>
-
-      {/* 7. Practical Verifiable Project Roadmap */}
-      <section className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 sm:p-6 shadow-xs">
-        <div className="flex items-center gap-2 mb-3">
-          <Award className="w-5 h-5 text-emerald-500" />
-          <h2 className="text-lg font-extrabold text-slate-900 dark:text-white">
-            Practical Project Proof Roadmap
-          </h2>
-        </div>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
-          Building these concrete deliverables bridges your portfolio gap and proves your capability to interviewers.
-        </p>
-        <div className="space-y-3">
-          {result.roadmap.map((r) => (
-            <div
-              key={r.stageNumber}
-              className="flex gap-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 p-4 items-start"
+          {/* Navigation */}
+          <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+            <button
+              type="button"
+              onClick={() => setStep(2)}
+              className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 cursor-pointer"
             >
-              <span className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-sm font-black shrink-0">
-                0{r.stageNumber}
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Career</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setActiveQuestionIdx(0);
+                setStep(4);
+              }}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
+            >
+              <span>Begin Adaptive Skill Assessment</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* STEP 4: MAIN ADAPTIVE ASSESSMENT (ONE QUESTION AT A TIME) */}
+      {/* ========================================================================= */}
+      {step === 4 && currentQuestion && (
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-8 shadow-xs space-y-6">
+          {/* Question Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 text-xs font-extrabold uppercase tracking-wider border border-indigo-200 dark:border-indigo-800">
+                {currentQuestion.category.toUpperCase()} COMPETENCY
               </span>
-              <div className="space-y-1">
-                <p className="font-bold text-slate-900 dark:text-white text-sm">
-                  {r.title}
-                </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Deliverable: <span className="font-semibold text-slate-700 dark:text-slate-200">{r.deliverable}</span> • Estimated: {r.estimatedTime}
-                </p>
+              <span className="text-xs text-slate-400">
+                • {currentQuestion.competencyName}
+              </span>
+            </div>
+
+            <div className="text-xs font-bold text-slate-500 dark:text-slate-400">
+              Question {activeQuestionIdx + 1} of {adaptiveQuestions.length}
+            </div>
+          </div>
+
+          {/* Question Prompt */}
+          <div className="space-y-2">
+            <h3 className="text-base sm:text-xl font-bold text-slate-900 dark:text-slate-100 leading-snug">
+              {currentQuestion.prompt}
+            </h3>
+            {currentQuestion.helperText && (
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                💡 {currentQuestion.helperText}
+              </p>
+            )}
+          </div>
+
+          {/* Options (Practical ability levels) */}
+          <div className="space-y-3">
+            {currentQuestion.options.map((opt, oIdx) => {
+              const currentRecorded =
+                profile.competencyAnswers[currentQuestion.competencyId] ??
+                profile.competencyAnswers[currentQuestion.id];
+              const isSelected = currentRecorded === opt.numericWeight;
+
+              return (
+                <button
+                  key={oIdx}
+                  type="button"
+                  onClick={() => handleSelectOption(opt.numericWeight)}
+                  className={`w-full p-4 rounded-xl border text-left transition-all cursor-pointer flex items-start justify-between gap-3 group ${
+                    isSelected
+                      ? 'border-indigo-600 bg-indigo-50/80 dark:bg-indigo-950/40 text-indigo-950 dark:text-indigo-100 ring-1 ring-indigo-500 shadow-xs'
+                      : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-950 group-hover:text-indigo-700">
+                      {oIdx + 1}
+                    </span>
+                    <div className="space-y-1">
+                      <p className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 leading-snug">
+                        {opt.label}
+                      </p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                        {opt.explanation}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="shrink-0 mt-1">
+                    {isSelected ? (
+                      <span className="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center">
+                        <Check className="w-3.5 h-3.5" />
+                      </span>
+                    ) : (
+                      <span className="w-5 h-5 rounded-full border border-slate-300 dark:border-slate-600" />
+                    )}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Stepper Navigation */}
+          <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+            <button
+              type="button"
+              disabled={activeQuestionIdx === 0}
+              onClick={() => setActiveQuestionIdx((prev) => Math.max(0, prev - 1))}
+              className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Previous Question</span>
+            </button>
+
+            <span className="text-[11px] text-slate-400 hidden sm:inline">
+              Tip: Press keyboard keys <kbd className="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 border rounded text-[10px]">1</kbd> - <kbd className="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 border rounded text-[10px]">{currentQuestion.options.length}</kbd> to select
+            </span>
+
+            {activeQuestionIdx < adaptiveQuestions.length - 1 ? (
+              <button
+                type="button"
+                onClick={() => setActiveQuestionIdx((prev) => prev + 1)}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-bold text-xs shadow-xs hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                <span>Next Question</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={finishAssessment}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
+              >
+                <span>Generate Diagnostic Report</span>
+                <CheckCircle2 className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* STEP 5: FINAL COMPREHENSIVE REPORT */}
+      {/* ========================================================================= */}
+      {step === 5 && result && (
+        <div className="space-y-6">
+          {/* 1. REPORT HERO HEADER */}
+          <div className="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-md relative overflow-hidden space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+              <div className="space-y-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-400/30">
+                    AI STUDENT GAP ANALYSIS
+                  </span>
+                  <span className="text-xs text-slate-300">
+                    Empirical Diagnostic
+                  </span>
+                  {result.isCareerTransition && (
+                    <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30">
+                      Cross-Branch Career Transition
+                    </span>
+                  )}
+                </div>
+
+                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                  {result.careerTitle}
+                </h2>
+                <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm text-slate-300">
+                  <span>Branch: <strong className="text-white">{result.branchName}</strong></span>
+                  <span>•</span>
+                  <span>Academic Stage: <strong className="text-white">{result.academicStage}</strong></span>
+                  <span>•</span>
+                  <span>Track: <strong className="text-indigo-300">{result.careerTagline}</strong></span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 self-start sm:self-auto">
+                <button
+                  type="button"
+                  onClick={handlePrint}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold backdrop-blur-xs transition-colors cursor-pointer border border-white/10"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                  <span>Print Report</span>
+                </button>
               </div>
             </div>
-          ))}
+
+            {/* Career Readiness Snapshot (Transparent, qualitative - NO fake percentage) */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse" />
+                  <div>
+                    <span className="text-xs uppercase font-extrabold tracking-wider text-indigo-300 block">
+                      Career Readiness Snapshot
+                    </span>
+                    <h3 className="text-lg font-extrabold text-white">
+                      {result.readinessSnapshot.statusLabel}
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 text-xs">
+                  <div className="text-right">
+                    <span className="text-slate-300 block text-[11px]">Strong Foundations</span>
+                    <strong className="text-emerald-400 font-extrabold text-sm">{result.readinessSnapshot.strengthsCount} Verified</strong>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-slate-300 block text-[11px]">Priority Gaps</span>
+                    <strong className="text-rose-400 font-extrabold text-sm">{result.readinessSnapshot.gapsCount} To Close</strong>
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                {result.readinessSnapshot.summary}
+              </p>
+
+              <div className="flex flex-wrap items-center gap-3 pt-2 text-xs text-slate-300">
+                <span className="flex items-center gap-1.5">
+                  <FolderGit2 className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>{result.readinessSnapshot.proofStatus}</span>
+                </span>
+                <span>•</span>
+                <span className="flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>{result.readinessSnapshot.timeCommitmentAdvice}</span>
+                </span>
+              </div>
+            </div>
+
+            {/* AI Placement Advisor Brief */}
+            <div className="p-4 rounded-xl bg-indigo-900/40 border border-indigo-500/30 text-xs space-y-1.5">
+              <div className="flex items-center gap-2 font-bold text-indigo-200">
+                <Sparkles className="w-4 h-4 text-indigo-400" />
+                <span>AI Technical Placement Mentor Brief:</span>
+                {isAiLoading && <span className="text-[10px] text-indigo-300 animate-pulse">(Generating personalized insights...)</span>}
+              </div>
+              <p className="text-indigo-100 leading-relaxed">
+                {aiMentorNote || `As a ${result.academicStage} student in ${result.branchName} targeting ${result.careerTitle}, your foundations are forming cleanly. Focus your immediate effort on closing your #1 priority gap: ${result.priorityGaps[0]?.skillName || 'core algorithms'} with hands-on practice, and you will establish verifiable placement readiness ahead of schedule.`}
+              </p>
+            </div>
+          </div>
+
+          {/* 2. REPORT NAVIGATION TABS */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-slate-200 dark:border-slate-800">
+            <button
+              type="button"
+              onClick={() => setActiveReportTab('priorities')}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1.5 ${
+                activeReportTab === 'priorities'
+                  ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 bg-slate-100 dark:bg-slate-800'
+              }`}
+            >
+              <span>🔥 Priority Gaps ({result.priorityGaps.length})</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveReportTab('matrix')}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1.5 ${
+                activeReportTab === 'matrix'
+                  ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 bg-slate-100 dark:bg-slate-800'
+              }`}
+            >
+              <span>📊 Competency Visual Matrix</span>
+            </button>
+
+            {result.isCareerTransition && (
+              <button
+                type="button"
+                onClick={() => setActiveReportTab('transition')}
+                className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1.5 ${
+                  activeReportTab === 'transition'
+                    ? 'bg-amber-600 text-white shadow-xs'
+                    : 'text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900'
+                }`}
+              >
+                <span>⚡ Career Transition Analysis</span>
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={() => setActiveReportTab('projects')}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1.5 ${
+                activeReportTab === 'projects'
+                  ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 bg-slate-100 dark:bg-slate-800'
+              }`}
+            >
+              <span>🛠️ Recommended Projects ({result.recommendedProjects.length})</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveReportTab('milestones')}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1.5 ${
+                activeReportTab === 'milestones'
+                  ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 bg-slate-100 dark:bg-slate-800'
+              }`}
+            >
+              <span>🗓️ Action Milestones (7/30/90 Days)</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveReportTab('whatif')}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1.5 ${
+                activeReportTab === 'whatif'
+                  ? 'bg-purple-600 text-white shadow-xs'
+                  : 'text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900'
+              }`}
+            >
+              <span>✨ What-If? Simulator</span>
+            </button>
+          </div>
+
+          {/* 3. TAB CONTENT */}
+          {/* TAB 1: PRIORITY GAPS */}
+          {activeReportTab === 'priorities' && (
+            <div className="space-y-6">
+              <TopPrioritiesCard
+                priorities={result.priorityGaps}
+                nextActions={result.actionMilestones.next7Days}
+                branchId={result.branchId}
+                onNavigateToRoadmaps={onNavigateToRoadmaps}
+                onNavigateToProjects={onNavigateToProjects}
+                onNavigateToDsa={onNavigateToDsa}
+                onNavigateToVault={onNavigateToVault}
+              />
+
+              {/* Categorized Gaps Diagnostics */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Academic Core Gaps */}
+                <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-2">
+                  <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                    <BookOpen className="w-4 h-4 text-indigo-500" />
+                    <span>Academic &amp; Core Theoretical Gaps</span>
+                  </h4>
+                  <ul className="text-xs text-slate-600 dark:text-slate-400 space-y-1.5 list-disc list-inside">
+                    {result.categorizedGaps.academicCoreGaps.length > 0 ? (
+                      result.categorizedGaps.academicCoreGaps.map((g, idx) => <li key={idx}>{g}</li>)
+                    ) : (
+                      <li className="text-emerald-600 font-semibold">Core academic subjects meet stage expectations.</li>
+                    )}
+                  </ul>
+                </div>
+
+                {/* Project & Portfolio Gaps */}
+                <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-2">
+                  <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                    <FolderGit2 className="w-4 h-4 text-purple-500" />
+                    <span>Project &amp; Verifiable Proof Gaps</span>
+                  </h4>
+                  <ul className="text-xs text-slate-600 dark:text-slate-400 space-y-1.5 list-disc list-inside">
+                    {result.categorizedGaps.projectGaps.length > 0 ? (
+                      result.categorizedGaps.projectGaps.map((g, idx) => <li key={idx}>{g}</li>)
+                    ) : (
+                      <li className="text-emerald-600 font-semibold">Project proof meets current stage expectations.</li>
+                    )}
+                    {result.categorizedGaps.portfolioGaps.map((g, idx) => (
+                      <li key={`p-${idx}`}>{g}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 2: COMPETENCY VISUAL MATRIX */}
+          {activeReportTab === 'matrix' && (
+            <div className="space-y-6">
+              <VisualGapComparison
+                comparisons={result.comparisons}
+                careerTitle={result.careerTitle}
+              />
+            </div>
+          )}
+
+          {/* TAB 3: CAREER TRANSITION ANALYSIS */}
+          {activeReportTab === 'transition' && result.transitionDetails && (
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-7 shadow-xs space-y-6">
+              <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
+                <span className="p-2 rounded-xl bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300">
+                  <TrendingUp className="w-5 h-5" />
+                </span>
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+                    Cross-Branch Career Transition Blueprint
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Transitioning from {result.transitionDetails.fromBranch} into {result.transitionDetails.toCareer}.
+                  </p>
+                </div>
+              </div>
+
+              {/* Strategic Advice */}
+              <div className="p-4 rounded-xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/50 text-xs sm:text-sm text-amber-950 dark:text-amber-200 leading-relaxed">
+                <p className="font-bold mb-1">🧭 Strategic Transition Roadmap:</p>
+                {result.transitionDetails.strategicAdvice}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Transferable Strengths */}
+                <div className="p-4 rounded-xl border border-emerald-200 dark:border-emerald-900/50 bg-emerald-50/40 dark:bg-emerald-950/20 space-y-2">
+                  <h4 className="text-xs font-extrabold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <span>Your Transferable Engineering Strengths</span>
+                  </h4>
+                  <ul className="text-xs text-emerald-950 dark:text-emerald-200 space-y-1.5 list-disc list-inside">
+                    {result.transitionDetails.transferableStrengths.map((s, idx) => (
+                      <li key={idx}>{s}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Bridge Gaps */}
+                <div className="p-4 rounded-xl border border-rose-200 dark:border-rose-900/50 bg-rose-50/40 dark:bg-rose-950/20 space-y-2">
+                  <h4 className="text-xs font-extrabold uppercase tracking-wider text-rose-800 dark:text-rose-300 flex items-center gap-1.5">
+                    <AlertTriangle className="w-4 h-4 text-rose-600" />
+                    <span>Bridge Gaps to Overcome ATS Filter Bias</span>
+                  </h4>
+                  <ul className="text-xs text-rose-950 dark:text-rose-200 space-y-1.5 list-disc list-inside">
+                    {result.transitionDetails.bridgeGaps.map((g, idx) => (
+                      <li key={idx}>{g}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 4: RECOMMENDED PROJECTS */}
+          {activeReportTab === 'projects' && (
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-7 shadow-xs space-y-6">
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                  <FolderGit2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                  <span>Tailored Concrete Project Specs ({result.recommendedProjects.length})</span>
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Recruiters ignore tutorial to-do apps. Build these verified projects to provide empirical proof of mastery.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {result.recommendedProjects.map((p) => (
+                  <div
+                    key={p.id}
+                    className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 space-y-3 flex flex-col justify-between"
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300">
+                          {p.category}
+                        </span>
+                        <span className="text-[10px] text-slate-500 font-semibold">
+                          {p.stageSuitability}
+                        </span>
+                      </div>
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">
+                        {p.title}
+                      </h4>
+                      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                        {p.shortSummary}
+                      </p>
+                    </div>
+
+                    <div className="space-y-2.5 pt-2 border-t border-slate-200/60 dark:border-slate-700/60 text-xs">
+                      <div>
+                        <span className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                          Key Tech / Tools:
+                        </span>
+                        <div className="flex flex-wrap gap-1">
+                          {p.tools.map((t, idx) => (
+                            <span
+                              key={idx}
+                              className="text-[10px] px-2 py-0.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300"
+                            >
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/50">
+                        <span className="font-bold text-emerald-800 dark:text-emerald-300 block text-[11px]">
+                          Deliverable Proof for Resume/GitHub:
+                        </span>
+                        <p className="text-[11px] text-emerald-950 dark:text-emerald-200 mt-0.5">
+                          {p.deliverableProof}
+                        </p>
+                      </div>
+
+                      <div className="text-[11px] text-slate-500 dark:text-slate-400 italic">
+                        💡 {p.whyThisMatters}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 5: ACTION MILESTONES */}
+          {activeReportTab === 'milestones' && (
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-7 shadow-xs space-y-6">
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                  <Clock className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                  <span>Structured Milestone Action Plan</span>
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Break down placement readiness into manageable 7, 30, and 90-day execution blocks.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* 7 Days */}
+                <div className="p-4 rounded-xl border border-emerald-200 dark:border-emerald-900/50 bg-emerald-50/40 dark:bg-emerald-950/20 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-800 dark:text-emerald-300">
+                      ⚡ Next 7 Days
+                    </span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-200/60 dark:bg-emerald-900 text-emerald-900 dark:text-emerald-200">
+                      Immediate Quick Wins
+                    </span>
+                  </div>
+                  <ul className="text-xs text-emerald-950 dark:text-emerald-200 space-y-2 list-disc list-inside">
+                    {result.actionMilestones.next7Days.map((a, idx) => (
+                      <li key={idx} className="leading-snug">{a}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* 30 Days */}
+                <div className="p-4 rounded-xl border border-indigo-200 dark:border-indigo-900/50 bg-indigo-50/40 dark:bg-indigo-950/20 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-extrabold uppercase tracking-wider text-indigo-800 dark:text-indigo-300">
+                      🎯 Next 30 Days
+                    </span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-200/60 dark:bg-indigo-900 text-indigo-900 dark:text-indigo-200">
+                      Core Foundations
+                    </span>
+                  </div>
+                  <ul className="text-xs text-indigo-950 dark:text-indigo-200 space-y-2 list-disc list-inside">
+                    {result.actionMilestones.next30Days.map((a, idx) => (
+                      <li key={idx} className="leading-snug">{a}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* 90 Days */}
+                <div className="p-4 rounded-xl border border-purple-200 dark:border-purple-900/50 bg-purple-50/40 dark:bg-purple-950/20 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-extrabold uppercase tracking-wider text-purple-800 dark:text-purple-300">
+                      🏆 Next 90 Days
+                    </span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-200/60 dark:bg-purple-900 text-purple-900 dark:text-purple-200">
+                      Shipped Deliverable
+                    </span>
+                  </div>
+                  <ul className="text-xs text-purple-950 dark:text-purple-200 space-y-2 list-disc list-inside">
+                    {result.actionMilestones.next90Days.map((a, idx) => (
+                      <li key={idx} className="leading-snug">{a}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Semester Holistic Goal */}
+              <div className="p-4 rounded-xl bg-slate-900 text-white text-xs sm:text-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <span className="text-indigo-300 font-extrabold uppercase text-[10px] block">
+                    Semester Capstone Target:
+                  </span>
+                  <p className="font-bold text-slate-100 mt-0.5">
+                    {result.actionMilestones.semesterGoal}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={onNavigateToRoadmaps}
+                  className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shrink-0 transition-colors cursor-pointer"
+                >
+                  Explore Full Curriculum
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 6: WHAT-IF SIMULATOR */}
+          {activeReportTab === 'whatif' && (
+            <WhatIfSimulator originalProfile={profile} />
+          )}
         </div>
-      </section>
-
-      {/* 8. Disclaimer & Actions */}
-      <div className="rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50/70 dark:bg-amber-950/20 p-4 text-xs leading-5 text-amber-900 dark:text-amber-200">
-        <strong>Academic Notice: </strong> {result.disclaimer}
-      </div>
-
-      {onNavigateToRoadmaps && (
-        <button
-          type="button"
-          onClick={onNavigateToRoadmaps}
-          className="w-full rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 py-3.5 font-bold shadow-md cursor-pointer transition-colors"
-        >
-          Explore Man of Study Engineering Roadmaps
-        </button>
       )}
     </div>
   );
-}
-
-/* ---------------- HELPER COMPONENTS ---------------- */
-
-function Panel({
-  icon,
-  title,
-  children,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 sm:p-7 shadow-xs">
-      <div className="flex items-center gap-2 mb-5 text-slate-900 dark:text-white">
-        {React.cloneElement(icon as React.ReactElement, { className: 'w-5 h-5 text-emerald-500' })}
-        <h2 className="text-lg sm:text-xl font-extrabold">{title}</h2>
-      </div>
-      {children}
-    </section>
-  );
-}
-
-const Choice: React.FC<{
-  selected: boolean;
-  onClick: () => void;
-  title: string;
-  description: string;
-}> = ({ selected, onClick, title, description }) => {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`text-left rounded-2xl border p-4 transition-all cursor-pointer ${
-        selected
-          ? 'border-emerald-500 bg-emerald-50/60 dark:bg-emerald-950/20 ring-2 ring-emerald-500/15'
-          : 'border-slate-200 dark:border-slate-800 hover:border-emerald-400 bg-white dark:bg-slate-900'
-      }`}
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="font-bold text-slate-900 dark:text-white text-sm">{title}</p>
-          <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">{description}</p>
-        </div>
-        {selected && <Check className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />}
-      </div>
-    </button>
-  );
 };
 
-function ResultCard({
-  title,
-  items,
-  empty,
-  tone,
-}: {
-  title: string;
-  items: string[];
-  empty: string;
-  tone: 'green' | 'amber' | 'red';
-}) {
-  const cls = tone === 'green' ? 'text-emerald-600 dark:text-emerald-400' : tone === 'amber' ? 'text-amber-600 dark:text-amber-400' : 'text-rose-600 dark:text-rose-400';
-  return (
-    <section className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs">
-      <h2 className={`font-extrabold text-base ${cls}`}>{title}</h2>
-      {items.length ? (
-        <ul className="mt-3 space-y-2">
-          {items.slice(0, 5).map((x) => (
-            <li key={x} className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
-              <span className="text-slate-400 dark:text-slate-500 mt-1">•</span>
-              <span>{x}</span>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="mt-3 text-xs sm:text-sm text-slate-500 dark:text-slate-400">{empty}</p>
-      )}
-    </section>
-  );
-}
-
 export default StudentGapAnalyzer;
-

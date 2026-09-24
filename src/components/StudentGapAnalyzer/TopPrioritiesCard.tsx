@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TopPriorityItem } from '../../utils/gapAnalyzer';
-import { Flame, Target, ChevronDown, ChevronUp, ArrowRight, BookOpen, Terminal, Code2 } from 'lucide-react';
+import { Flame, Target, ChevronDown, ChevronUp, ArrowRight, BookOpen, Terminal, Code2, ShieldAlert, CheckCircle2, Award } from 'lucide-react';
 
 interface TopPrioritiesCardProps {
   priorities: TopPriorityItem[];
@@ -21,19 +21,19 @@ export const TopPrioritiesCard: React.FC<TopPrioritiesCardProps> = ({
   onNavigateToDsa,
   onNavigateToVault,
 }) => {
-  const [expandedWhy, setExpandedWhy] = useState<Record<number, boolean>>({
+  const [expandedDetails, setExpandedDetails] = useState<Record<number, boolean>>({
     1: true, // open first priority by default
   });
 
-  const isSoftwareBranch = !branchId || ['cse', 'it', 'aiml', 'data_science', 'cybersecurity'].includes(branchId);
+  const isSoftwareBranch = !branchId || ['cse', 'cse_ai', 'cse_aiml', 'cse_ds', 'cse_cyber', 'cse_iot', 'it', 'aids'].includes(branchId);
 
-  const toggleWhy = (rank: number) => {
-    setExpandedWhy((prev) => ({ ...prev, [rank]: !prev[rank] }));
+  const toggleDetails = (rank: number) => {
+    setExpandedDetails((prev) => ({ ...prev, [rank]: !prev[rank] }));
   };
 
   return (
     <div className="space-y-6">
-      {/* 1. TOP 3 PRIORITIES */}
+      {/* 1. TOP PRIORITIES BREAKDOWN */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xs space-y-4">
         <div className="border-b border-slate-100 dark:border-slate-800/80 pb-3">
           <div className="flex items-center gap-2">
@@ -42,39 +42,39 @@ export const TopPrioritiesCard: React.FC<TopPrioritiesCardProps> = ({
             </span>
             <div>
               <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                <span>🔥 TOP 3 PRIORITIES</span>
+                <span>🔥 TOP PRIORITY GAPS</span>
                 <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-300 border border-rose-200 dark:border-rose-900">
                   Highest Return on Effort
                 </span>
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Targeting these three gaps first delivers maximum improvement to your candidate profile.
+                Targeting these specific deficiencies first delivers the most immediate surge in your candidate competitiveness.
               </p>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-3.5">
+        <div className="grid grid-cols-1 gap-4">
           {priorities.map((item) => {
-            const isExpanded = !!expandedWhy[item.rank];
+            const isExpanded = !!expandedDetails[item.rank];
 
             return (
               <div
                 key={item.rank}
-                className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/30 hover:border-slate-300 dark:hover:border-slate-700 transition-all space-y-3"
+                className="p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/30 hover:border-slate-300 dark:hover:border-slate-700 transition-all space-y-3.5"
               >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <span className="w-7 h-7 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-extrabold text-xs flex items-center justify-center shrink-0 shadow-xs">
+                    <span className="w-8 h-8 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-extrabold text-xs flex items-center justify-center shrink-0 shadow-xs">
                       #{item.rank}
                     </span>
                     <div>
                       <h4 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100">
                         {item.skillName}
                       </h4>
-                      <div className="flex items-center gap-2 mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                      <div className="flex flex-wrap items-center gap-2 mt-0.5 text-xs text-slate-500 dark:text-slate-400">
                         <span>Current: <strong className="text-slate-700 dark:text-slate-200">{item.currentLevelLabel}</strong></span>
-                        <span>→</span>
+                        <span className="text-slate-400">→</span>
                         <span>Target: <strong className="text-indigo-600 dark:text-indigo-400">{item.targetLevelLabel}</strong></span>
                       </div>
                     </div>
@@ -82,32 +82,60 @@ export const TopPrioritiesCard: React.FC<TopPrioritiesCardProps> = ({
 
                   <button
                     type="button"
-                    onClick={() => toggleWhy(item.rank)}
-                    className="self-start sm:self-auto flex items-center gap-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 cursor-pointer px-2 py-1 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-950/40 transition-colors"
+                    onClick={() => toggleDetails(item.rank)}
+                    className="self-start sm:self-auto flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 cursor-pointer px-2.5 py-1 rounded-lg bg-indigo-50/80 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors"
                   >
-                    <span>{isExpanded ? 'Hide Why' : 'Why This Matters?'}</span>
+                    <span>{isExpanded ? 'Collapse Details' : 'Deep Dive Breakdown'}</span>
                     {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                   </button>
                 </div>
 
-                {/* Suggested Next Step Banner */}
-                <div className="p-3 rounded-lg bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 flex items-start gap-2.5">
+                {/* Quick Action Summary */}
+                <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 flex items-start gap-2.5 shadow-2xs">
                   <ArrowRight className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                   <div className="text-xs">
                     <span className="font-bold text-slate-800 dark:text-slate-200">Recommended Next Step: </span>
-                    <span className="text-slate-600 dark:text-slate-300">{item.suggestedNextStep}</span>
+                    <span className="text-slate-600 dark:text-slate-300">{item.whatToDo || item.suggestedNextStep}</span>
                   </div>
                 </div>
 
-                {/* Expandable "Why?" Rationale */}
+                {/* Expanded What / Why / Target / Proof Breakdown */}
                 {isExpanded && (
-                  <div className="p-3 rounded-lg bg-indigo-50/60 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/50 text-xs space-y-1.5 animate-in fade-in duration-150">
-                    <span className="font-bold text-indigo-900 dark:text-indigo-300 flex items-center gap-1.5">
-                      💡 Why this is a priority for your career goal:
-                    </span>
-                    <p className="text-indigo-950 dark:text-indigo-200 leading-relaxed">
-                      "{item.whyItMatters}"
-                    </p>
+                  <div className="pt-2 border-t border-slate-200/60 dark:border-slate-800 space-y-3 animate-in fade-in duration-150">
+                    <div className="grid sm:grid-cols-2 gap-3 text-xs">
+                      {/* What is Missing */}
+                      <div className="p-3 rounded-xl bg-rose-50/50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/40 space-y-1">
+                        <span className="font-bold text-rose-800 dark:text-rose-300 flex items-center gap-1">
+                          <ShieldAlert className="w-3.5 h-3.5" />
+                          <span>What is Missing:</span>
+                        </span>
+                        <p className="text-rose-950 dark:text-rose-200 leading-relaxed">
+                          {item.whatIsMissing || 'Practical application outside guided tutorials.'}
+                        </p>
+                      </div>
+
+                      {/* Why It Matters */}
+                      <div className="p-3 rounded-xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/40 space-y-1">
+                        <span className="font-bold text-indigo-800 dark:text-indigo-300 flex items-center gap-1">
+                          <span>💡</span>
+                          <span>Why It Matters:</span>
+                        </span>
+                        <p className="text-indigo-950 dark:text-indigo-200 leading-relaxed">
+                          {item.whyItMatters}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* How to Prove the Skill */}
+                    <div className="p-3 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/40 text-xs space-y-1">
+                      <span className="font-bold text-emerald-800 dark:text-emerald-300 flex items-center gap-1">
+                        <Award className="w-3.5 h-3.5" />
+                        <span>How to Prove This Skill to Recruiters (Verifiable Proof):</span>
+                      </span>
+                      <p className="text-emerald-950 dark:text-emerald-200 leading-relaxed font-medium">
+                        {item.howToProve || 'Include verifiable public proof (GitHub repo, live deployment, CAD drawings, or simulation models).'}
+                      </p>
+                    </div>
                   </div>
                 )}
               </div>
@@ -213,3 +241,4 @@ export const TopPrioritiesCard: React.FC<TopPrioritiesCardProps> = ({
     </div>
   );
 };
+export default TopPrioritiesCard;

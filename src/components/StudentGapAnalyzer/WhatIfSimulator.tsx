@@ -23,8 +23,8 @@ export const WhatIfSimulator: React.FC<WhatIfSimulatorProps> = ({ originalProfil
 
   const simulation = simulateWhatIf(originalProfile, {
     skills: skillOverrides,
-    projectsCount: originalProfile.projectsCount + extraProjects,
-    internshipsCount: originalProfile.internshipsCount + extraInternships,
+    projectExperience: extraProjects > 0 ? 'deployed' : originalProfile.personalAnswers?.project_experience,
+    internshipExperience: extraInternships > 0 ? 'industry' : originalProfile.personalAnswers?.internship_experience,
   });
 
   const resetSimulation = () => {

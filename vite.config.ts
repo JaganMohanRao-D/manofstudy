@@ -923,9 +923,14 @@ Format the output cleanly in Markdown:
         const handleGapPayload = async (data: any) => {
           try {
             const { studentProfile, gapAnalysisResult } = data || {};
-            const strengthsText = gapAnalysisResult?.strengths?.map((s: any) => s.title).slice(0, 3).join(', ') || 'your verified foundations';
-            const topPriority = gapAnalysisResult?.topPriorities?.[0]?.skillName || 'core problem solving';
-            const nextAction = gapAnalysisResult?.nextActions?.[0] || 'solving fundamental problems';
+            const branchName = gapAnalysisResult?.branchName || studentProfile?.branch || 'Engineering';
+            const stage = gapAnalysisResult?.academicStage || studentProfile?.academicStage || studentProfile?.year || '1st Year';
+            const careerTitle = gapAnalysisResult?.careerTitle || 'Software Engineer';
+            const statusLabel = gapAnalysisResult?.readinessSnapshot?.statusLabel || 'Active Foundation Building';
+            const isTransition = !!gapAnalysisResult?.isCareerTransition;
+            const topPriority = gapAnalysisResult?.priorityGaps?.[0]?.skillName || gapAnalysisResult?.topPriorities?.[0]?.skillName || 'Core Problem Solving';
+            const topPriorityNextStep = gapAnalysisResult?.priorityGaps?.[0]?.suggestedNextStep || 'Daily hands-on practice';
+            const weeklyTime = studentProfile?.personalAnswers?.time_weekly || 'balanced';
 
             const apiKey = process.env.GEMINI_API_KEY;
             if (!apiKey) {
@@ -933,7 +938,7 @@ Format the output cleanly in Markdown:
               res.setHeader('Content-Type', 'application/json; charset=utf-8');
               res.end(JSON.stringify({
                 success: true,
-                mentorNote: `Your established proficiency in ${strengthsText} gives you a solid competitive edge for a ${studentProfile?.year || 'current'} student. Dedicate 45 minutes daily to ${topPriority} by ${nextAction}, and you will see your placement readiness surge before your next semester.`
+                mentorNote: `As a ${stage} student in ${branchName} targeting ${careerTitle}, your current status is "${statusLabel}". Focus your immediate effort on ${topPriority} by ${topPriorityNextStep}. Dedicating consistent time each week will compound into verifiable placement readiness before next semester.`
               }));
               return;
             }
@@ -941,22 +946,24 @@ Format the output cleanly in Markdown:
             const { GoogleGenAI } = await import('@google/genai');
             const ai = new GoogleGenAI({ apiKey });
 
-            const prompt = `You are a friendly, pragmatic Senior Placement Advisor & Tech Career Mentor for Indian engineering students on Man of Study.
-Student Profile:
-Year: ${studentProfile?.year || '1st Year'}, Branch: ${studentProfile?.branch || 'CSE'}, CGPA: ${studentProfile?.cgpa || '8.0'}
-Target Career: ${gapAnalysisResult?.careerTitle || 'Software Developer'}
-Match Score: ${gapAnalysisResult?.matchScore || 50}%
-Identified Strengths: ${strengthsText}
-Top 3 Priorities: ${gapAnalysisResult?.topPriorities?.map((p: any) => p.skillName).join(', ') || 'DSA, SQL, OOP'}
-Immediate Next Actions: ${gapAnalysisResult?.nextActions?.join(', ') || 'Learn arrays, solve 5 problems'}
+            const prompt = `You are an encouraging, realistic Senior Technical Career Advisor for Indian engineering students on the Man of Study portal.
+The student completed an empirical skill assessment:
+- Branch: ${branchName}
+- Academic Stage: ${stage}
+- Target Career: ${careerTitle}
+- Current Qualitative Status: ${statusLabel}
+- Is Cross-Branch Career Transition: ${isTransition ? 'Yes (Transitioning into a different domain)' : 'No (Branch-aligned career)'}
+- #1 Priority Gap to Close: ${topPriority}
+- Recommended Next Step: ${topPriorityNextStep}
+- Realistic Study Time Commitment: ${weeklyTime}
 
-Write a 3-sentence executive mentor brief (under 75 words) speaking directly to the student in second person ("You"):
-1. Acknowledge their genuine current strengths and the edge it provides.
-2. Give clear, calm direction on tackling their #1 priority without panic.
-3. Give an encouraging, realistic closing goal for this semester.`;
+Write a concise, empowering 3-sentence executive mentor brief (under 80 words) speaking directly to the student ("You"):
+1. Acknowledge where they stand for their specific academic stage (${stage}) in ${branchName}, highlighting their potential.
+2. Provide laser-focused, practical advice on addressing ${topPriority} without overwhelm.
+3. ${isTransition ? 'Give encouraging advice on proving capability via verifiable projects to overcome branch bias.' : 'Give an actionable milestone goal to achieve by the end of this semester.'}`;
 
             let mentorNote = '';
-            const candidateModels = ['gemini-3.6-flash', 'gemini-3.1-flash-lite', 'gemini-3.8-flash'];
+            const candidateModels = ['gemini-3.8-flash', 'gemini-3.1-flash-lite'];
             for (const model of candidateModels) {
               try {
                 const result = await ai.models.generateContent({
@@ -973,7 +980,7 @@ Write a 3-sentence executive mentor brief (under 75 words) speaking directly to 
             }
 
             if (!mentorNote) {
-              mentorNote = `Your established proficiency in ${strengthsText} gives you a solid competitive edge for a ${studentProfile?.year || 'current'} student. Dedicate 45 minutes daily to ${topPriority} by ${nextAction}, and you will see your placement readiness surge before your next semester.`;
+              mentorNote = `As a ${stage} student in ${branchName} targeting ${careerTitle}, your current status is "${statusLabel}". Focus your immediate effort on ${topPriority} by ${topPriorityNextStep}. Dedicating consistent time each week will compound into verifiable placement readiness before next semester.`;
             }
 
             res.statusCode = 200;
