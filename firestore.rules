@@ -98,6 +98,7 @@ service cloud.firestore {
           'displayName',
           'photoURL',
           'emailNotificationsEnabled',
+          'solutionsCount',
           'updatedAt'
         ]);
 
@@ -152,14 +153,9 @@ service cloud.firestore {
 
       allow create: if isVerifiedUser()
         && request.resource.data.senderUid == request.auth.uid
-        && request.resource.data.replyId is string
         && request.resource.data.questionId is string
-        && notificationId == (
-          'answer_' +
-          request.resource.data.questionId + '_' +
-          request.resource.data.replyId
-        )
-        && get(/databases/$(database)/documents/campus_posts/$(request.resource.data.questionId)/replies/$(request.resource.data.replyId)).data.authorUid ==
+        && request.resource.data.recipientEmail is string
+        && get(/databases/$(database)/documents/campus_posts/$(request.resource.data.questionId)).data.authorUid !=
           request.auth.uid
         && get(/databases/$(database)/documents/campus_posts/$(request.resource.data.questionId)).data.authorEmail ==
           request.resource.data.recipientEmail;
