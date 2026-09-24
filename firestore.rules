@@ -1,95 +1,182 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // Test collection for connection validation
+
+    // Connection smoke-test document: readable, never writable by clients.
     match /test/{docId} {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if false;
     }
 
-    // Helper functions
     function isAuthenticated() {
       return request.auth != null;
     }
 
-    // Legacy Posts Collection (read-only compatibility for old records)
+    function isVerifiedUser() {
+      return isAuthenticated() && request.auth.token.email_verified == true;
+    }
+
+    // Legacy Posts Collection (read-only compatibility for old records).
     match /posts/{postId} {
       allow read: if true;
       allow create, update, delete: if false;
+
       match /replies/{replyId} {
         allow read: if true;
         allow create, update, delete: if false;
       }
     }
 
-    // Campus Posts (Doubt dispatches & questions)
+    // Campus Posts (public content; authenticated users can create their own).
     match /campus_posts/{postId} {
       allow read: if true;
-      allow create: if isAuthenticated()
+
+      allow create: if isVerifiedUser()
         && request.resource.data.authorUid == request.auth.uid;
-      allow update: if isAuthenticated()
-        && request.resource.data.authorUid == resource.data.authorUid;
-      allow delete: if isAuthenticated()
+
+      // Client-side edits are disabled. Server-side Cloud Functions use the
+      // Admin SDK and therefore bypass these rules for trusted counters,
+      // moderation state, and embedded reply synchronization.
+      allow update: if false;
+
+      allow delete: if isVerifiedUser()
         && resource.data.authorUid == request.auth.uid;
 
       match /replies/{replyId} {
         allow read: if true;
-        allow create: if isAuthenticated()
-          && request.resource.data.authorUid == request.auth.uid;
-        allow update: if isAuthenticated()
-          && request.resource.data.authorUid == resource.data.authorUid;
-        allow delete: if isAuthenticated()
-          && resource.data.authorUid == request.auth.uid;
+
+        allow create: if isVerifiedUser()
+          && request.resource.data.authorUid == request.auth.uid
+          && request.resource.data.postId == postId;
+
+        // Replies are authoritative records. Counters/moderation are updated
+        // by trusted Cloud Functions rather than arbitrary clients.
+        allow update, delete: if false;
+
+        match /upvotes/{userId} {
+          allow read: if isAuthenticated();
+          allow create: if isVerifiedUser()
+            && userId == request.auth.uid
+            && request.resource.data.uid == request.auth.uid;
+          allow delete: if isVerifiedUser() && userId == request.auth.uid;
+          allow update: if false;
+        }
       }
 
       match /upvotes/{userId} {
         allow read: if isAuthenticated();
-        allow create: if isAuthenticated() && userId == request.auth.uid;
-        allow delete: if isAuthenticated() && userId == request.auth.uid;
-        allow update: if false;
-      }
-
-      match /replies/{replyId}/upvotes/{userId} {
-        allow read: if isAuthenticated();
-        allow create: if isAuthenticated() && userId == request.auth.uid;
-        allow delete: if isAuthenticated() && userId == request.auth.uid;
+        allow create: if isVerifiedUser()
+          && userId == request.auth.uid
+          && request.resource.data.uid == request.auth.uid;
+        allow delete: if isVerifiedUser() && userId == request.auth.uid;
         allow update: if false;
       }
     }
 
-    // User Profiles & Problem Solver Reputation
+    // User Profiles.
+    // Email, notification settings and moderation/reputation state are private.
+    // Clients can only read their own profile.
     match /users/{userId} {
-      allow read: if true;
-      allow create, update: if isAuthenticated() && request.auth.uid == userId;
+      allow read: if isVerifiedUser() && request.auth.uid == userId;
+
+      allow create: if isVerifiedUser()
+        && request.auth.uid == userId
+        && request.resource.data.uid == userId
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.emailNotificationsEnabled is bool
+        && request.resource.data.get('solutionsCount', 0) == 0
+        && request.resource.data.get('totalReports', 0) == 0
+        && request.resource.data.get('isBanned', false) == false;
+
+      // Users may change profile/notification preferences, but never
+      // moderation or reputation fields.
+      allow update: if isVerifiedUser()
+        && request.auth.uid == userId
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.email == resource.data.email
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'displayName',
+          'photoURL',
+          'emailNotificationsEnabled',
+          'updatedAt'
+        ]);
+
       allow delete: if false;
     }
 
-    // Community Reports & Auto-Moderation
+    // Community Reports.
+    // One report per authenticated reporter/target, with the target author
+    // taken from the authoritative Firestore document.
     match /reports/{reportId} {
-      allow read: if isAuthenticated() && (
+      allow read: if isVerifiedUser() && (
         resource.data.reporterUid == request.auth.uid ||
         resource.data.authorUid == request.auth.uid
       );
-      allow create: if isAuthenticated()
-        && request.resource.data.reporterUid == request.auth.uid;
+
+      allow create: if isVerifiedUser()
+        && request.resource.data.reporterUid == request.auth.uid
+        && reportId == (
+          'rep_' +
+          request.resource.data.targetType + '_' +
+          request.resource.data.postId + '_' +
+          request.resource.data.targetId + '_' +
+          request.auth.uid
+        )
+        && request.resource.data.targetType in ['post', 'reply']
+        && request.resource.data.reason is string
+        && request.resource.data.postId is string
+        && request.resource.data.targetId is string
+        && (
+          (
+            request.resource.data.targetType == 'post' &&
+            get(/databases/$(database)/documents/campus_posts/$(request.resource.data.postId)).data.authorUid ==
+              request.resource.data.authorUid
+          ) ||
+          (
+            request.resource.data.targetType == 'reply' &&
+            get(/databases/$(database)/documents/campus_posts/$(request.resource.data.postId)/replies/$(request.resource.data.targetId)).data.authorUid ==
+              request.resource.data.authorUid
+          )
+        );
+
       allow update, delete: if false;
     }
 
-    // In-App Notifications Collection
+    // In-App Notifications.
+    // Only the recipient can read or modify their notifications. Creation is
+    // restricted to the authenticated author of the referenced reply and the
+    // deterministic notification ID prevents repeated spam for the same reply.
     match /notifications/{notificationId} {
-      allow read: if isAuthenticated()
+      allow read: if isVerifiedUser()
         && resource.data.recipientEmail == request.auth.token.email;
-      allow create: if isAuthenticated()
-        && request.resource.data.recipientEmail == request.auth.token.email;
-      allow update: if isAuthenticated()
-        && resource.data.recipientEmail == request.auth.token.email;
-      allow delete: if isAuthenticated()
+
+      allow create: if isVerifiedUser()
+        && request.resource.data.senderUid == request.auth.uid
+        && request.resource.data.replyId is string
+        && request.resource.data.questionId is string
+        && notificationId == (
+          'answer_' +
+          request.resource.data.questionId + '_' +
+          request.resource.data.replyId
+        )
+        && get(/databases/$(database)/documents/campus_posts/$(request.resource.data.questionId)/replies/$(request.resource.data.replyId)).data.authorUid ==
+          request.auth.uid
+        && get(/databases/$(database)/documents/campus_posts/$(request.resource.data.questionId)).data.authorEmail ==
+          request.resource.data.recipientEmail;
+
+      allow update: if isVerifiedUser()
+        && resource.data.recipientEmail == request.auth.token.email
+        && request.resource.data.recipientEmail == resource.data.recipientEmail
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead']);
+
+      allow delete: if isVerifiedUser()
         && resource.data.recipientEmail == request.auth.token.email;
     }
 
-    // Mail Collection (For Firebase Trigger Email extension)
+    // Mail Collection is server-only. Firebase Trigger Email / Cloud Functions
+    // use the Admin SDK and bypass these client rules.
     match /mail/{notificationId} {
-      allow read: if isAuthenticated() && (
+      allow read: if isVerifiedUser() && (
         ('toUids' in resource.data && request.auth.uid in resource.data.toUids) ||
         ('recipientUid' in resource.data && request.auth.uid == resource.data.recipientUid)
       );
@@ -97,4 +184,3 @@ service cloud.firestore {
     }
   }
 }
-
