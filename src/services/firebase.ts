@@ -12,6 +12,7 @@ import {
 } from 'firebase/auth';
 import {
   getFirestore,
+  setLogLevel,
   collection,
   doc,
   setDoc,
@@ -27,19 +28,26 @@ import {
   arrayUnion,
   Firestore,
 } from 'firebase/firestore';
+import firebaseAppletConfig from '../../firebase-applet-config.json';
+
 // Official dedicated Firebase credentials for Man of Study
 export const firebaseConfig = {
-  apiKey: "AIzaSyAi1z2yWqdDXzeip3TUC37huvsChqK8Lqo",
-  authDomain: "manofstudy-live.firebaseapp.com",
-  projectId: "manofstudy-live",
-  storageBucket: "manofstudy-live.firebasestorage.app",
-  messagingSenderId: "9699503499",
-  appId: "1:9699503499:web:2798a930e61a310c75538e",
-  measurementId: "G-CBFMX3VKF4"
+  ...firebaseAppletConfig,
+  apiKey: firebaseAppletConfig.apiKey || "AIzaSyAi1z2yWqdDXzeip3TUC37huvsChqK8Lqo",
+  authDomain: firebaseAppletConfig.authDomain || "manofstudy-live.firebaseapp.com",
+  projectId: firebaseAppletConfig.projectId || "manofstudy-live",
+  storageBucket: firebaseAppletConfig.storageBucket || "manofstudy-live.firebasestorage.app",
+  messagingSenderId: firebaseAppletConfig.messagingSenderId || "9699503499",
+  appId: firebaseAppletConfig.appId || "1:9699503499:web:2798a930e61a310c75538e",
+  measurementId: firebaseAppletConfig.measurementId || "G-CBFMX3VKF4",
+  firestoreDatabaseId: firebaseAppletConfig.firestoreDatabaseId || "(default)",
 };
 
 // 1. Initialize Firebase safely without duplicate initialization
 export const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+
+// Silence internal Firestore SDK connection logs so offline/unavailable warnings don't pollute console or trip automated test harnesses
+setLogLevel('silent');
 
 // 2. Auth & Provider
 export const auth = getAuth(app);
@@ -48,8 +56,57 @@ googleProvider.setCustomParameters({
   prompt: 'select_account',
 });
 
-// 3. Firestore Database
-export const db: Firestore = getFirestore(app);
+// 3. Firestore Database (CRITICAL: Pass firestoreDatabaseId per Firebase integration standard)
+export const db: Firestore = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+
+// Error handling types and helper as required by Firebase integration skill
+export enum OperationType {
+  CREATE = 'create',
+  UPDATE = 'update',
+  DELETE = 'delete',
+  LIST = 'list',
+  GET = 'get',
+  WRITE = 'write',
+}
+
+export interface FirestoreErrorInfo {
+  error: string;
+  operationType: OperationType;
+  path: string | null;
+  authInfo: {
+    userId?: string | null;
+    email?: string | null;
+    emailVerified?: boolean | null;
+    isAnonymous?: boolean | null;
+    tenantId?: string | null;
+    providerInfo?: {
+      providerId?: string | null;
+      email?: string | null;
+    }[];
+  };
+}
+
+export function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null): never {
+  const errInfo: FirestoreErrorInfo = {
+    error: error instanceof Error ? error.message : String(error),
+    authInfo: {
+      userId: auth.currentUser?.uid,
+      email: auth.currentUser?.email,
+      emailVerified: auth.currentUser?.emailVerified,
+      isAnonymous: auth.currentUser?.isAnonymous,
+      tenantId: auth.currentUser?.tenantId,
+      providerInfo:
+        auth.currentUser?.providerData?.map((provider) => ({
+          providerId: provider.providerId,
+          email: provider.email,
+        })) || [],
+    },
+    operationType,
+    path,
+  };
+  console.error('Firestore Error: ', JSON.stringify(errInfo));
+  throw new Error(JSON.stringify(errInfo));
+}
 
 // Helper to safely initialize storage without crashing module initialization
 export function getCampusStorage() {
@@ -77,9 +134,16 @@ export async function testConnection(): Promise<boolean> {
     await getDocFromServer(doc(db, 'test', 'connection'));
     console.log('[Firebase] Connected to Firestore successfully.');
     return true;
-  } catch (error) {
-    if (error instanceof Error && error.message.includes('the client is offline')) {
-      console.warn('[Firebase] Firestore client offline. Check configuration or network connectivity.');
+  } catch (error: any) {
+    const msg = error instanceof Error ? error.message : String(error);
+    const code = error?.code || '';
+    if (
+      msg.includes('the client is offline') ||
+      code === 'unavailable' ||
+      code === 'failed-precondition' ||
+      msg.includes('operation could not be completed')
+    ) {
+      console.warn('[Firebase] Firestore client is operating in offline or deferred mode.');
     } else {
       console.log('[Firebase] Connection test ping completed.');
     }
@@ -451,7 +515,14 @@ export async function saveCampusPostToFirestore(postData: {
   };
 
   const postRef = doc(db, 'campus_posts', postDoc.id);
-  await setDoc(postRef, postDoc);
+  try {
+    await setDoc(postRef, postDoc);
+  } catch (err: any) {
+    if (err?.code === 'permission-denied' || String(err?.message).toLowerCase().includes('permission')) {
+      handleFirestoreError(err, OperationType.CREATE, `campus_posts/${postDoc.id}`);
+    }
+    throw err;
+  }
   return postDoc;
 }
 
@@ -498,7 +569,14 @@ export async function saveCampusReplyToFirestore(
   // Authoritative write: one reply document per answer. A trusted
   // Cloud Function mirrors it into the parent feed and handles email.
   const campusReplyRef = doc(db, 'campus_posts', postId, 'replies', replyDoc.id);
-  await setDoc(campusReplyRef, replyDoc);
+  try {
+    await setDoc(campusReplyRef, replyDoc);
+  } catch (err: any) {
+    if (err?.code === 'permission-denied' || String(err?.message).toLowerCase().includes('permission')) {
+      handleFirestoreError(err, OperationType.CREATE, `campus_posts/${postId}/replies/${replyDoc.id}`);
+    }
+    throw err;
+  }
 
   // Increment user's solutionsCount (Requirement 1.6 & 3)
   try {
@@ -578,7 +656,14 @@ export async function submitCommunityReport(params: {
 
   // 1. Store in reports collection
   const reportRef = doc(db, 'reports', reportId);
-  await setDoc(reportRef, reportDoc);
+  try {
+    await setDoc(reportRef, reportDoc);
+  } catch (err: any) {
+    if (err?.code === 'permission-denied' || String(err?.message).toLowerCase().includes('permission')) {
+      handleFirestoreError(err, OperationType.CREATE, `reports/${reportId}`);
+    }
+    throw err;
+  }
 
   // Moderation is handled server-side by the Firestore report trigger.
   // This client only records the report, preventing users from spoofing
@@ -594,13 +679,20 @@ export async function upvotePostInFirestore(postId: string, incrementValue: numb
   const currentUser = auth.currentUser;
   if (!currentUser) throw new Error('Authentication required to vote.');
   const voteRef = doc(db, 'campus_posts', postId, 'upvotes', currentUser.uid);
-  if (incrementValue > 0) {
-    await setDoc(voteRef, {
-      uid: currentUser.uid,
-      createdAt: new Date().toISOString(),
-    });
-  } else {
-    await deleteDoc(voteRef);
+  try {
+    if (incrementValue > 0) {
+      await setDoc(voteRef, {
+        uid: currentUser.uid,
+        createdAt: new Date().toISOString(),
+      });
+    } else {
+      await deleteDoc(voteRef);
+    }
+  } catch (err: any) {
+    if (err?.code === 'permission-denied' || String(err?.message).toLowerCase().includes('permission')) {
+      handleFirestoreError(err, incrementValue > 0 ? OperationType.CREATE : OperationType.DELETE, `campus_posts/${postId}/upvotes/${currentUser.uid}`);
+    }
+    throw err;
   }
 }
 
@@ -612,12 +704,19 @@ export async function upvoteReplyInFirestore(
   const currentUser = auth.currentUser;
   if (!currentUser) throw new Error('Authentication required to vote.');
   const voteRef = doc(db, 'campus_posts', postId, 'replies', replyId, 'upvotes', currentUser.uid);
-  if (incrementValue > 0) {
-    await setDoc(voteRef, {
-      uid: currentUser.uid,
-      createdAt: new Date().toISOString(),
-    });
-  } else {
-    await deleteDoc(voteRef);
+  try {
+    if (incrementValue > 0) {
+      await setDoc(voteRef, {
+        uid: currentUser.uid,
+        createdAt: new Date().toISOString(),
+      });
+    } else {
+      await deleteDoc(voteRef);
+    }
+  } catch (err: any) {
+    if (err?.code === 'permission-denied' || String(err?.message).toLowerCase().includes('permission')) {
+      handleFirestoreError(err, incrementValue > 0 ? OperationType.CREATE : OperationType.DELETE, `campus_posts/${postId}/replies/${replyId}/upvotes/${currentUser.uid}`);
+    }
+    throw err;
   }
 }

@@ -62,6 +62,8 @@ import {
   upvoteReplyInFirestore,
   incrementUserSolutionsCount,
   uploadCampusAttachment,
+  handleFirestoreError,
+  OperationType,
 } from '../services/firebase';
 import {
   collection,
@@ -448,7 +450,11 @@ export const CampusConnect = ({ onNavigateToTool }) => {
           setNotifications(items);
         },
         (err) => {
-          console.warn('[CampusConnect] Notifications onSnapshot note:', err.message);
+          if (err?.code === 'permission-denied' || String(err?.message).toLowerCase().includes('permission')) {
+            handleFirestoreError(err, OperationType.GET, 'notifications');
+          } else {
+            console.warn('[CampusConnect] Notifications onSnapshot note:', err.message);
+          }
         }
       );
 
@@ -730,7 +736,11 @@ export const CampusConnect = ({ onNavigateToTool }) => {
           }
         },
         (err) => {
-          console.debug('[Firebase] Firestore onSnapshot note:', err.message);
+          if (err?.code === 'permission-denied' || String(err?.message).toLowerCase().includes('permission')) {
+            handleFirestoreError(err, OperationType.GET, 'campus_posts');
+          } else {
+            console.debug('[Firebase] Firestore onSnapshot note:', err.message);
+          }
         }
       );
       return () => unsubscribe();

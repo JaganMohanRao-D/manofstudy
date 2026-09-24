@@ -89,6 +89,17 @@ export const FLAGSHIP_FEATURES = [
  */
 export const WORKSPACES = [
   {
+    id: 'ws-tg-top-colleges',
+    workspace: 'tg-top-colleges',
+    category: 'admissions',
+    title: 'Top B.Tech Colleges in Telangana',
+    badge: 'RANKINGS',
+    description: 'Branch-wise college rankings calculated strictly using valid OC-category allotment ranks across Telangana.',
+    actionText: 'View Top Colleges',
+    icon: Award,
+    iconBg: 'bg-amber-500/10 border-amber-500/30 text-amber-400',
+  },
+  {
     id: 'ws-tg-allotments',
     workspace: 'tg-allotments',
     category: 'admissions',

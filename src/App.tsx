@@ -186,6 +186,14 @@ export const TOOLS_CONFIG: ToolMeta[] = [
     badge: 'AI Tool',
   },
   {
+    id: 'tg-top-colleges',
+    name: 'Top B.Tech Colleges in Telangana',
+    shortName: 'Top Colleges',
+    category: 'counselling',
+    description: 'Data-driven college rankings based on valid OC allotment ranks for every engineering branch.',
+    badge: 'OC Rankings',
+  },
+  {
     id: 'tg-predictor',
     name: 'TG EAPCET College Predictor',
     shortName: 'TG Predictor',
@@ -347,7 +355,6 @@ export default function App() {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '').toLowerCase();
       if (
-        hash === 'tg-top-colleges' ||
         hash === 'tg-predictor' ||
         hash === 'tg-college-predictor' ||
         hash === 'college-predictor' ||
@@ -355,6 +362,14 @@ export default function App() {
         hash === 'buffer-radar'
       ) {
         setActiveWorkspace('tg-predictor');
+      } else if (
+        hash === 'tg-top-colleges' ||
+        hash === 'top-colleges' ||
+        hash === 'telangana-top-colleges' ||
+        hash === 'rankings' ||
+        hash === 'top-btech'
+      ) {
+        setActiveWorkspace('tg-top-colleges');
       } else if (
         hash === 'tg-allotments' ||
         hash === 'tg-allotment' ||
@@ -474,10 +489,10 @@ export default function App() {
 
   const handleSelectToolFromPalette = (tab: ToolTab) => {
     setIsCommandPaletteOpen(false);
-    if (tab === 'tg-top-colleges') {
-      handleSelectWorkspace('tg-top-colleges');
-    } else if (tab === 'gap-analyzer') {
+    if (tab === 'gap-analyzer') {
       handleSelectWorkspace('gap-analyzer');
+    } else if (tab === 'tg-top-colleges') {
+      handleSelectWorkspace('tg-top-colleges');
     } else if (tab === 'tg-predictor') {
       handleSelectWorkspace('tg-predictor');
     } else if (tab === 'campus-connect') {
@@ -545,8 +560,8 @@ export default function App() {
         };
       case 'tg-top-colleges':
         return {
-          title: 'Top B.Tech Colleges in Telangana — OC Rank Analysis',
-          icon: <Award className="w-4 h-4 text-sky-500" />,
+          title: 'Top B.Tech Colleges in Telangana (Observed OC Ranks)',
+          icon: <Award className="w-4 h-4 text-amber-500" />,
         };
       case 'tg-predictor':
         return {
@@ -801,7 +816,16 @@ export default function App() {
                   />
                 )}
 
-                {activeWorkspace === 'tg-top-colleges' && <TgTopColleges />}
+                {activeWorkspace === 'tg-top-colleges' && (
+                  <TgTopColleges
+                    onSelectCollegeBranch={(collegeCode: string, branchCode?: string) => {
+                      if (collegeCode) setTargetAllotmentCollege(collegeCode);
+                      if (branchCode) setTargetAllotmentBranch(branchCode);
+                      setActiveWorkspace('tg-allotments');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                  />
+                )}
 
                 {activeWorkspace === 'tg-predictor' && (
                   <TgCollegePredictor

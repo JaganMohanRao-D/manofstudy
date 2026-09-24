@@ -441,6 +441,107 @@ const searchIndexObj = {
 const searchIndexFile = path.join(dir, 'search_index.json');
 fs.writeFileSync(searchIndexFile, JSON.stringify(searchIndexObj), 'utf8');
 
+// Build Top B.Tech Colleges OC ranking index
+console.log('Generating Top B.Tech Colleges OC ranking index...');
+const collegeDistrictMap = new Map();
+manifest.forEach(c => collegeDistrictMap.set(c.collegeCode, c.district || 'Telangana'));
+
+function calcRankStats(ranks) {
+  if (!ranks || ranks.length === 0) return null;
+  const sorted = ranks.slice().sort((a, b) => a - b);
+  const len = sorted.length;
+  const m = Math.floor(len / 2);
+  const median = len % 2 !== 0 ? sorted[m] : (sorted[m - 1] + sorted[m]) / 2;
+  return {
+    highestRank: sorted[0],
+    lowestRank: sorted[len - 1],
+    medianRank: median,
+    validAllotments: len
+  };
+}
+
+const topCollegesList = [];
+const branchStatewideOcRanks = new Map();
+
+for (const file of files) {
+  try {
+    const d = JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
+    const cCode = (d.collegeCode || file.replace('.json', '')).trim();
+    const cName = (d.collegeName || cCode).trim();
+    const district = collegeDistrictMap.get(cCode) || 'Telangana';
+
+    const branchesMap = {};
+    const collegeAllCasteOc = [];
+    const collegeAllQuotaOc = [];
+
+    for (const b of (d.branches || [])) {
+      const bCode = (b.branchCode || '').trim();
+      if (!bCode) continue;
+
+      const recs = b.records || [];
+      const casteOc = [];
+      const quotaOc = [];
+
+      for (const r of recs) {
+        const rank = r.rank;
+        if (typeof rank !== 'number' || isNaN(rank) || rank <= 0) continue;
+
+        if (r.caste === 'OC') {
+          casteOc.push(rank);
+          collegeAllCasteOc.push(rank);
+
+          if (!branchStatewideOcRanks.has(bCode)) {
+            branchStatewideOcRanks.set(bCode, []);
+          }
+          branchStatewideOcRanks.get(bCode).push(rank);
+        }
+
+        const seatCat = (r.seatCategory || '').toUpperCase();
+        if (seatCat.startsWith('OC')) {
+          quotaOc.push(rank);
+          collegeAllQuotaOc.push(rank);
+        }
+      }
+
+      branchesMap[bCode] = {
+        branchCode: bCode,
+        branchName: b.branchName || bCode,
+        totalBranchAllotted: recs.length,
+        casteOc: calcRankStats(casteOc),
+        quotaOc: calcRankStats(quotaOc)
+      };
+    }
+
+    topCollegesList.push({
+      collegeCode: cCode,
+      collegeName: cName,
+      district,
+      branches: branchesMap,
+      allBranchesCasteOc: calcRankStats(collegeAllCasteOc),
+      allBranchesQuotaOc: calcRankStats(collegeAllQuotaOc)
+    });
+  } catch (err) {
+    console.error('Error generating OC stats for file:', file, err);
+  }
+}
+
+const branchStatewideSummaries = {};
+for (const [bCode, ranks] of branchStatewideOcRanks.entries()) {
+  branchStatewideSummaries[bCode] = calcRankStats(ranks);
+}
+
+const topCollegesIndexData = {
+  generatedAt: new Date().toISOString(),
+  methodology: "College comparisons in this section are calculated using valid OC-category allotment ranks from the available Telangana EAPCET 2026 dataset.",
+  totalColleges: topCollegesList.length,
+  branchSummaries: branchStatewideSummaries,
+  colleges: topCollegesList
+};
+
+const topCollegesFile = path.join(dir, 'top_colleges_index.json');
+fs.writeFileSync(topCollegesFile, JSON.stringify(topCollegesIndexData), 'utf8');
+console.log(`Successfully generated top colleges OC ranking index at ${topCollegesFile}`);
+
 // Strip predictorBranches from manifest.ts to keep the manifest file concise
 const manifestClean = manifest.map(({ predictorBranches, ...rest }) => rest);
 

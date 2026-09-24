@@ -37,6 +37,7 @@ import {
   TG_EAPCET_GLOBAL_STATS 
 } from '../data/tgEapcetCollegeManifest';
 import TgOverallRankInsights from './TgOverallRankInsights';
+import TgTopColleges from './TgTopColleges';
 import { searchAllotmentsClientSide, preloadSearchIndex } from '../utils/allotmentClientSearch';
 
 // Top engineering colleges for quick access
@@ -70,17 +71,23 @@ const TOP_POPULAR_BRANCHES = [
   { code: "MEC", name: "Mechanical Engineering", count: "2,143" }
 ];
 
-export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initialBranchCode = 'ALL' } = {}) {
+export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initialBranchCode = 'ALL', initialTab = 'explorer' } = {}) {
   // Navigation & Dropdown Selection State
   // 'ALL' represents All Colleges / All Branches
   const [selectedCollegeCode, setSelectedCollegeCode] = useState(initialCollegeCode || 'ALL');
   const [selectedBranchCode, setSelectedBranchCode] = useState(initialBranchCode || 'ALL');
-  const [activeExplorerTab, setActiveExplorerTab] = useState('explorer'); // 'explorer' | 'insights'
+  const [activeExplorerTab, setActiveExplorerTab] = useState(initialTab || 'explorer'); // 'explorer' | 'top-colleges' | 'insights'
   const [collegeData, setCollegeData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
   // Sync with incoming props if changed externally
+  useEffect(() => {
+    if (initialTab && initialTab !== activeExplorerTab) {
+      setActiveExplorerTab(initialTab);
+    }
+  }, [initialTab]);
+
   useEffect(() => {
     if (initialCollegeCode !== undefined && initialCollegeCode !== selectedCollegeCode) {
       setSelectedCollegeCode(initialCollegeCode);
@@ -776,12 +783,12 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
 
         {/* Primary View Switcher */}
         <div className="flex justify-center pt-1">
-          <div className="inline-flex p-1 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl">
+          <div className="inline-flex flex-wrap justify-center p-1 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl gap-1">
             <button
               type="button"
               id="tab-allotment-explorer"
               onClick={() => setActiveExplorerTab('explorer')}
-              className={`px-3.5 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
+              className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
                 activeExplorerTab === 'explorer'
                   ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -793,9 +800,26 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
             
             <button
               type="button"
+              id="tab-top-colleges"
+              onClick={() => setActiveExplorerTab('top-colleges')}
+              className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                activeExplorerTab === 'top-colleges'
+                  ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+              }`}
+            >
+              <Award className="w-4 h-4" />
+              <span>Top B.Tech Colleges</span>
+              <span className="px-1.5 py-0.5 rounded-full text-[10px] font-mono font-extrabold bg-amber-500/20 text-amber-950 dark:text-amber-300 border border-amber-500/40">
+                OC Ranks
+              </span>
+            </button>
+
+            <button
+              type="button"
               id="tab-overall-rank-insights"
               onClick={() => setActiveExplorerTab('insights')}
-              className={`px-3.5 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
+              className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
                 activeExplorerTab === 'insights'
                   ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/20'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -810,7 +834,11 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
           </div>
         </div>
 
-        {activeExplorerTab === 'insights' ? (
+        {activeExplorerTab === 'top-colleges' ? (
+          <div className="space-y-6 animate-in fade-in duration-200">
+            <TgTopColleges onSelectCollegeBranch={handleJumpToCollegeBranch} />
+          </div>
+        ) : activeExplorerTab === 'insights' ? (
           <div className="space-y-6 animate-in fade-in duration-200">
             <TgOverallRankInsights />
           </div>

@@ -70,11 +70,11 @@ export interface TgOverallInsightsData {
 }
 
 export const TG_EAPCET_GLOBAL_STATS: TgAllotmentGlobalStats = {
-  "totalColleges": 151,
+  "totalColleges": 152,
   "totalRecords": 71646,
   "overallMinRank": 1,
   "overallMaxRank": 400379,
-  "generatedAt": "2026-09-20T10:49:10.591Z"
+  "generatedAt": "2026-09-24T12:17:32.966Z"
 };
 
 export const TG_EAPCET_ALL_BRANCHES: TgBranchGlobalItem[] = [
@@ -379,9 +379,9 @@ export const TG_EAPCET_ALL_BRANCHES: TgBranchGlobalItem[] = [
 export const TG_EAPCET_CATEGORY_INSIGHTS: TgOverallInsightsData = {
   "datasetStats": {
     "totalRecords": 71646,
-    "totalColleges": 151,
+    "totalColleges": 152,
     "totalBranches": 37,
-    "generatedAt": "2026-09-20T10:49:10.900Z"
+    "generatedAt": "2026-09-24T12:17:33.297Z"
   },
   "byAllottedQuota": [
     {
@@ -3778,6 +3778,18 @@ export const TG_EAPCET_COLLEGE_MANIFEST: TgCollegeManifestItem[] = [
         "totalAllotted": 18
       }
     ]
+  },
+  {
+    "collegeCode": "INSIGHTS",
+    "collegeName": "category insights",
+    "district": "Hyderabad / Ranga Reddy / Medchal",
+    "filename": "category_insights.json",
+    "file": "/TG_EAPCET_2026_ALLOTMENT/category_insights.json",
+    "branchCount": 0,
+    "recordCount": 0,
+    "minRank": 0,
+    "maxRank": 0,
+    "branches": []
   },
   {
     "collegeCode": "ISLC",

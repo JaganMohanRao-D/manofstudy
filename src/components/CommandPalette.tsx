@@ -131,6 +131,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         action: () => onSelectTool('tg-predictor'),
       },
       {
+        id: 'tool-tg-top-colleges',
+        title: 'Top B.Tech Colleges in Telangana',
+        subtitle: 'Data-driven rankings based on valid OC allotment ranks for every engineering branch',
+        category: 'Core Tools',
+        badge: 'OC Rankings',
+        icon: <Award className="w-4 h-4 text-amber-500" />,
+        keywords: ['top colleges', 'ranking', 'best engineering colleges', 'top btech', 'telangana top colleges', 'oc rank', 'median rank', 'cse colleges', 'cbit', 'vnr', 'jnth'],
+        action: () => onSelectTool('tg-top-colleges'),
+      },
+      {
         id: 'tool-tg-allotments',
         title: 'TG EAPCET 2026 Final Phase Allotments & Cutoffs',
         subtitle: 'Official candidate allotments, cutoff ranks & admission stats',
