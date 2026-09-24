@@ -504,8 +504,23 @@ function tgAllotmentPlugin(): Plugin {
         }
 
         const chunks: Buffer[] = [];
-        req.on('data', chunk => chunks.push(chunk));
+        let totalSize = 0;
+        const MAX_PAYLOAD_BYTES = 2 * 1024 * 1024; // 2MB limit
+
+        req.on('data', chunk => {
+          totalSize += chunk.length;
+          if (totalSize > MAX_PAYLOAD_BYTES) {
+            req.destroy();
+            res.statusCode = 413;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({ success: false, error: 'Payload too large' }));
+            return;
+          }
+          chunks.push(chunk);
+        });
+
         req.on('end', async () => {
+          if (res.writableEnded) return;
           try {
             const raw = Buffer.concat(chunks).toString('utf-8');
             const data = JSON.parse(raw);
@@ -518,7 +533,13 @@ function tgAllotmentPlugin(): Plugin {
               return;
             }
 
-            const apiKey = process.env.RESEND_API_KEY || 're_2ZBQ4b12_7vRxwSgcwkKrFm2BnnbCyF6y';
+            const apiKey = process.env.RESEND_API_KEY;
+            if (!apiKey) {
+              res.statusCode = 503;
+              res.setHeader('Content-Type', 'application/json');
+              res.end(JSON.stringify({ success: false, error: 'Email service is not configured on the server.' }));
+              return;
+            }
 
             const safeTitle = String(questionTitle || 'Your Question').replace(/</g, '&lt;').replace(/>/g, '&gt;');
             const safeAuthor = String(replyAuthor || 'A fellow student').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -571,65 +592,11 @@ function tgAllotmentPlugin(): Plugin {
         });
       });
 
-      // Dedicated Resend Email Notification endpoint for CampusConnect
-      server.middlewares.use('/api/campus/send-resend-notification', (req, res) => {
-        if (req.method === 'OPTIONS') {
-          res.setHeader('Access-Control-Allow-Origin', '*');
-          res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-          res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-          res.statusCode = 204;
-          res.end();
-          return;
-        }
-
-        if (req.method !== 'POST') {
-          res.statusCode = 405;
-          res.setHeader('Content-Type', 'application/json');
-          res.end(JSON.stringify({ error: 'Method Not Allowed' }));
-          return;
-        }
-
-        const chunks: Buffer[] = [];
-        req.on('data', (chunk) => chunks.push(chunk));
-        req.on('end', async () => {
-          try {
-            const raw = Buffer.concat(chunks).toString('utf-8');
-            const data = JSON.parse(raw);
-            const { to, subject, html } = data || {};
-
-            if (!to || !to.includes('@')) {
-              res.statusCode = 400;
-              res.setHeader('Content-Type', 'application/json');
-              res.end(JSON.stringify({ error: 'Valid recipient email required' }));
-              return;
-            }
-
-            const apiKey = process.env.RESEND_API_KEY || 're_2ZBQ4b12_7vRxwSgcwkKrFm2BnnbCyF6y';
-            const resendRes = await fetch('https://api.resend.com/emails', {
-              method: 'POST',
-              headers: {
-                Authorization: `Bearer ${apiKey}`,
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                from: 'MAN OF STUDY <onboarding@resend.dev>',
-                to: [to.trim()],
-                subject: subject || '[MAN OF STUDY] New Reply on CampusConnect',
-                html: html || '<p>You have a new reply on MOS CampusConnect.</p>',
-              }),
-            });
-
-            const resendData = await resendRes.json();
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json; charset=utf-8');
-            res.end(JSON.stringify({ success: true, resendData }));
-          } catch (err: any) {
-            console.error('[send-resend-notification] Handler error:', err);
-            res.statusCode = 500;
-            res.setHeader('Content-Type', 'application/json');
-            res.end(JSON.stringify({ error: err?.message || 'Internal Server Error' }));
-          }
-        });
+      // Disabled unauthenticated open email relay endpoint
+      server.middlewares.use('/api/campus/send-resend-notification', (_req, res) => {
+        res.statusCode = 403;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ error: 'Direct relay disabled for security. Use server-side notification trigger.' }));
       });
 
       // Trusted CampusConnect Answer Notification Trigger Endpoint
@@ -652,8 +619,23 @@ function tgAllotmentPlugin(): Plugin {
         }
 
         const chunks: Buffer[] = [];
-        req.on('data', (chunk) => chunks.push(chunk));
+        let totalSize = 0;
+        const MAX_TRIGGER_BYTES = 2 * 1024 * 1024; // 2MB limit
+
+        req.on('data', (chunk) => {
+          totalSize += chunk.length;
+          if (totalSize > MAX_TRIGGER_BYTES) {
+            req.destroy();
+            res.statusCode = 413;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({ success: false, error: 'Payload too large' }));
+            return;
+          }
+          chunks.push(chunk);
+        });
+
         req.on('end', async () => {
+          if (res.writableEnded) return;
           try {
             const raw = Buffer.concat(chunks).toString('utf-8');
             const data = JSON.parse(raw);
@@ -758,7 +740,14 @@ function tgAllotmentPlugin(): Plugin {
 </body>
 </html>`;
 
-            const apiKey = process.env.RESEND_API_KEY || 're_2ZBQ4b12_7vRxwSgcwkKrFm2BnnbCyF6y';
+            const apiKey = process.env.RESEND_API_KEY;
+            if (!apiKey) {
+              sentNotificationIds.add(notificationId);
+              res.statusCode = 200;
+              res.setHeader('Content-Type', 'application/json; charset=utf-8');
+              res.end(JSON.stringify({ success: true, notificationId, notice: 'RESEND_API_KEY not configured on server; delivery handled by Cloud Function trigger.' }));
+              return;
+            }
             const resendRes = await fetch('https://api.resend.com/emails', {
               method: 'POST',
               headers: {
@@ -887,8 +876,22 @@ Format the output cleanly in Markdown:
         }
 
         const chunks: Buffer[] = [];
-        req.on('data', chunk => chunks.push(chunk));
+        let totalSize = 0;
+        const MAX_AI_BYTES = 5 * 1024 * 1024; // 5MB limit
+
+        req.on('data', chunk => {
+          totalSize += chunk.length;
+          if (totalSize > MAX_AI_BYTES) {
+            req.destroy();
+            res.statusCode = 413;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({ error: 'Payload exceeds 5MB limit' }));
+            return;
+          }
+          chunks.push(chunk);
+        });
         req.on('end', () => {
+          if (res.writableEnded) return;
           try {
             const raw = Buffer.concat(chunks).toString('utf-8');
             const data = JSON.parse(raw);
@@ -1003,8 +1006,22 @@ Write a concise, empowering 3-sentence executive mentor brief (under 80 words) s
         }
 
         const chunks: Buffer[] = [];
-        req.on('data', chunk => chunks.push(chunk));
+        let totalGapSize = 0;
+        const MAX_GAP_BYTES = 2 * 1024 * 1024; // 2MB limit
+
+        req.on('data', chunk => {
+          totalGapSize += chunk.length;
+          if (totalGapSize > MAX_GAP_BYTES) {
+            req.destroy();
+            res.statusCode = 413;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({ error: 'Payload exceeds 2MB limit' }));
+            return;
+          }
+          chunks.push(chunk);
+        });
         req.on('end', () => {
+          if (res.writableEnded) return;
           try {
             const raw = Buffer.concat(chunks).toString('utf-8');
             const data = JSON.parse(raw);

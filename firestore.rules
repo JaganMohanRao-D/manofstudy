@@ -1,182 +1,133 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
 
-    // Connection smoke-test document: readable, never writable by clients.
+    // Test collection for connection validation (read-only)
     match /test/{docId} {
       allow read: if true;
       allow write: if false;
     }
 
-    function isAuthenticated() {
-      return request.auth != null;
-    }
-
-    function isVerifiedUser() {
-      return isAuthenticated() && request.auth.token.email_verified == true;
-    }
-
-    // Legacy Posts Collection (read-only compatibility for old records).
+    // Legacy Posts Collection (read-only compatibility for old records)
     match /posts/{postId} {
       allow read: if true;
       allow create, update, delete: if false;
-
       match /replies/{replyId} {
         allow read: if true;
         allow create, update, delete: if false;
       }
     }
 
-    // Campus Posts (public content; authenticated users can create their own).
+    // Campus Posts (Doubt dispatches & questions)
     match /campus_posts/{postId} {
       allow read: if true;
-
-      allow create: if isVerifiedUser()
-        && request.resource.data.authorUid == request.auth.uid;
-
-      // Client-side edits are disabled. Server-side Cloud Functions use the
-      // Admin SDK and therefore bypass these rules for trusted counters,
-      // moderation state, and embedded reply synchronization.
-      allow update: if false;
-
-      allow delete: if isVerifiedUser()
+      allow create: if isAuthenticated()
+        && request.resource.data.authorUid == request.auth.uid
+        && (!('reportCount' in request.resource.data) || request.resource.data.reportCount == 0)
+        && (!('isHidden' in request.resource.data) || request.resource.data.isHidden == false);
+      allow update: if isAuthenticated()
+        && resource.data.authorUid == request.auth.uid
+        && request.resource.data.authorUid == resource.data.authorUid
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['reportCount', 'isHidden', 'isBanned']);
+      allow delete: if isAuthenticated()
         && resource.data.authorUid == request.auth.uid;
 
       match /replies/{replyId} {
         allow read: if true;
-
-        allow create: if isVerifiedUser()
+        allow create: if isAuthenticated()
           && request.resource.data.authorUid == request.auth.uid
-          && request.resource.data.postId == postId;
-
-        // Replies are authoritative records. Counters/moderation are updated
-        // by trusted Cloud Functions rather than arbitrary clients.
-        allow update, delete: if false;
-
-        match /upvotes/{userId} {
-          allow read: if isAuthenticated();
-          allow create: if isVerifiedUser()
-            && userId == request.auth.uid
-            && request.resource.data.uid == request.auth.uid;
-          allow delete: if isVerifiedUser() && userId == request.auth.uid;
-          allow update: if false;
-        }
+          && (!('reportCount' in request.resource.data) || request.resource.data.reportCount == 0)
+          && (!('isHidden' in request.resource.data) || request.resource.data.isHidden == false);
+        allow update: if isAuthenticated()
+          && resource.data.authorUid == request.auth.uid
+          && request.resource.data.authorUid == resource.data.authorUid
+          && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['reportCount', 'isHidden', 'isAdmin', 'isVerifiedSolution']);
+        allow delete: if isAuthenticated()
+          && resource.data.authorUid == request.auth.uid;
       }
 
       match /upvotes/{userId} {
         allow read: if isAuthenticated();
-        allow create: if isVerifiedUser()
-          && userId == request.auth.uid
-          && request.resource.data.uid == request.auth.uid;
-        allow delete: if isVerifiedUser() && userId == request.auth.uid;
+        allow create: if isAuthenticated() && userId == request.auth.uid;
+        allow delete: if isAuthenticated() && userId == request.auth.uid;
+        allow update: if false;
+      }
+
+      match /replies/{replyId}/upvotes/{userId} {
+        allow read: if isAuthenticated();
+        allow create: if isAuthenticated() && userId == request.auth.uid;
+        allow delete: if isAuthenticated() && userId == request.auth.uid;
         allow update: if false;
       }
     }
 
-    // User Profiles.
-    // Email, notification settings and moderation/reputation state are private.
-    // Clients can only read their own profile.
+    // User Profiles & Problem Solver Reputation
+    // Strictly confidential: Only the authenticated user can read their own profile document.
+    // Moderation, administration, and ban fields cannot be altered by clients.
     match /users/{userId} {
-      allow read: if isVerifiedUser() && request.auth.uid == userId;
-
-      allow create: if isVerifiedUser()
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow create: if isAuthenticated()
         && request.auth.uid == userId
         && request.resource.data.uid == userId
-        && request.resource.data.email == request.auth.token.email
-        && request.resource.data.emailNotificationsEnabled is bool
-        && request.resource.data.get('solutionsCount', 0) == 0
-        && request.resource.data.get('totalReports', 0) == 0
-        && request.resource.data.get('isBanned', false) == false;
-
-      // Users may change profile/notification preferences, but never
-      // moderation or reputation fields.
-      allow update: if isVerifiedUser()
+        && (!('isAdmin' in request.resource.data) || request.resource.data.isAdmin == false)
+        && (!('isModerator' in request.resource.data) || request.resource.data.isModerator == false)
+        && (!('isBanned' in request.resource.data) || request.resource.data.isBanned == false)
+        && (!('role' in request.resource.data) || request.resource.data.role in ['student', 'user'])
+        && (!('totalReports' in request.resource.data) || request.resource.data.totalReports == 0)
+        && (!('solutionsCount' in request.resource.data) || request.resource.data.solutionsCount <= 1);
+      allow update: if isAuthenticated()
         && request.auth.uid == userId
         && request.resource.data.uid == resource.data.uid
-        && request.resource.data.email == resource.data.email
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
-          'displayName',
-          'photoURL',
-          'emailNotificationsEnabled',
-          'solutionsCount',
-          'updatedAt'
-        ]);
-
+        && (!('email' in resource.data) || request.resource.data.email == resource.data.email)
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['isAdmin', 'isModerator', 'isBanned', 'bannedReason', 'totalReports', 'role'])
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['solutionsCount'])
+            || request.resource.data.solutionsCount <= resource.data.solutionsCount + 1);
       allow delete: if false;
     }
 
-    // Community Reports.
-    // One report per authenticated reporter/target, with the target author
-    // taken from the authoritative Firestore document.
+    // Community Reports & Auto-Moderation
+    // Only the reporter can view their submitted report; the reported author cannot see who reported them.
     match /reports/{reportId} {
-      allow read: if isVerifiedUser() && (
-        resource.data.reporterUid == request.auth.uid ||
-        resource.data.authorUid == request.auth.uid
-      );
-
-      allow create: if isVerifiedUser()
+      allow read: if isAuthenticated() && resource.data.reporterUid == request.auth.uid;
+      allow create: if isAuthenticated()
         && request.resource.data.reporterUid == request.auth.uid
-        && reportId == (
-          'rep_' +
-          request.resource.data.targetType + '_' +
-          request.resource.data.postId + '_' +
-          request.resource.data.targetId + '_' +
-          request.auth.uid
-        )
         && request.resource.data.targetType in ['post', 'reply']
-        && request.resource.data.reason is string
-        && request.resource.data.postId is string
         && request.resource.data.targetId is string
-        && (
-          (
-            request.resource.data.targetType == 'post' &&
-            get(/databases/$(database)/documents/campus_posts/$(request.resource.data.postId)).data.authorUid ==
-              request.resource.data.authorUid
-          ) ||
-          (
-            request.resource.data.targetType == 'reply' &&
-            get(/databases/$(database)/documents/campus_posts/$(request.resource.data.postId)/replies/$(request.resource.data.targetId)).data.authorUid ==
-              request.resource.data.authorUid
-          )
-        );
-
+        && request.resource.data.postId is string;
       allow update, delete: if false;
     }
 
-    // In-App Notifications.
-    // Only the recipient can read or modify their notifications. Creation is
-    // restricted to the authenticated author of the referenced reply and the
-    // deterministic notification ID prevents repeated spam for the same reply.
+    // In-App Notifications Collection
+    // Only the intended recipient can read, update, or clear their notifications.
     match /notifications/{notificationId} {
-      allow read: if isVerifiedUser()
-        && resource.data.recipientEmail == request.auth.token.email;
-
-      allow create: if isVerifiedUser()
-        && request.resource.data.senderUid == request.auth.uid
-        && request.resource.data.questionId is string
-        && request.resource.data.recipientEmail is string
-        && get(/databases/$(database)/documents/campus_posts/$(request.resource.data.questionId)).data.authorUid !=
-          request.auth.uid
-        && get(/databases/$(database)/documents/campus_posts/$(request.resource.data.questionId)).data.authorEmail ==
-          request.resource.data.recipientEmail;
-
-      allow update: if isVerifiedUser()
-        && resource.data.recipientEmail == request.auth.token.email
-        && request.resource.data.recipientEmail == resource.data.recipientEmail
+      allow read, delete: if isAuthenticated()
+        && (resource.data.recipientEmail == request.auth.token.email || resource.data.recipientUid == request.auth.uid);
+      allow create: if isAuthenticated()
+        && request.resource.data.keys().hasAll(['recipientEmail', 'questionId'])
+        && request.resource.data.isRead == false;
+      allow update: if isAuthenticated()
+        && (resource.data.recipientEmail == request.auth.token.email || resource.data.recipientUid == request.auth.uid)
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead']);
-
-      allow delete: if isVerifiedUser()
-        && resource.data.recipientEmail == request.auth.token.email;
     }
 
-    // Mail Collection is server-only. Firebase Trigger Email / Cloud Functions
-    // use the Admin SDK and bypass these client rules.
+    // Mail Collection (For Firebase Trigger Email extension)
+    // Client writes are strictly forbidden. Only backend Cloud Functions (Admin SDK) can write transactional emails.
     match /mail/{notificationId} {
-      allow read: if isVerifiedUser() && (
+      allow read: if isAuthenticated() && (
         ('toUids' in resource.data && request.auth.uid in resource.data.toUids) ||
         ('recipientUid' in resource.data && request.auth.uid == resource.data.recipientUid)
       );
       allow write: if false;
+    }
+
+    // Deny all other unmatched paths by default
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

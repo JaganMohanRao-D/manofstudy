@@ -1836,10 +1836,14 @@ export async function htmlToPdf(
     format: 'a4',
   });
 
-  // Strip HTML tags for simple high-fidelity text fallback or parse DOM
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = htmlContent;
-  const cleanText = tempDiv.textContent || tempDiv.innerText || htmlContent;
+  // Strip HTML tags safely using DOMParser (prevents inline script execution)
+  let cleanText = htmlContent;
+  try {
+    const docParsed = new DOMParser().parseFromString(htmlContent, 'text/html');
+    cleanText = docParsed.body.textContent || htmlContent;
+  } catch {
+    cleanText = htmlContent.replace(/<[^>]*>?/gm, '');
+  }
 
   doc.setFontSize(16);
   doc.setTextColor(15, 23, 42);

@@ -2032,33 +2032,34 @@ export const PdfToolsForFree = () => {
                             </h4>
                           );
                         }
+                        const renderInlineBold = (text) => {
+                          if (!text) return null;
+                          const parts = text.split(/(\*\*.*?\*\*)/g);
+                          return parts.map((part, pIdx) => {
+                            if (part.startsWith('**') && part.endsWith('**')) {
+                              return (
+                                <strong key={pIdx} className="font-bold text-slate-900">
+                                  {part.slice(2, -2)}
+                                </strong>
+                              );
+                            }
+                            return part;
+                          });
+                        };
+
                         if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
                           const content = trimmed.substring(2);
                           return (
                             <div key={idx} className="flex items-start gap-2 text-xs text-slate-800 pl-1">
                               <span className="text-pink-600 font-bold shrink-0 mt-0.5">•</span>
-                              <span
-                                dangerouslySetInnerHTML={{
-                                  __html: content.replace(
-                                    /\*\*(.*?)\*\*/g,
-                                    '<strong class="font-bold text-slate-900">$1</strong>'
-                                  ),
-                                }}
-                              />
+                              <span>{renderInlineBold(content)}</span>
                             </div>
                           );
                         }
                         return (
-                          <p
-                            key={idx}
-                            className="text-xs text-slate-800"
-                            dangerouslySetInnerHTML={{
-                              __html: trimmed.replace(
-                                /\*\*(.*?)\*\*/g,
-                                '<strong class="font-bold text-slate-900">$1</strong>'
-                              ),
-                            }}
-                          />
+                          <p key={idx} className="text-xs text-slate-800">
+                            {renderInlineBold(trimmed)}
+                          </p>
                         );
                       })}
                     </div>

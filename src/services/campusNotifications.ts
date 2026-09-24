@@ -7,7 +7,8 @@ import { db } from './firebase';
 
 export interface CampusNotification {
   id: string;
-  recipientEmail: string;       // Email of the student who posted the question
+  recipientEmail?: string;      // Email of the student who posted the question
+  recipientUid?: string;        // UID of the student who posted the question
   senderName: string;           // Name of the user who answered
   questionId: string;           // ID of the post
   questionTitle: string;        // Title of the question
@@ -19,35 +20,41 @@ export interface CampusNotification {
 /**
  * Create the in-app answer notification.
  * Email delivery is handled server-side by the Firestore trigger so a reply
- * cannot accidentally generate two emails.
+ * cannot accidentally leak private email addresses or generate spam.
  */
 export async function dispatchAnswerNotificationFlow(params: {
-  recipientEmail: string;
-  recipientName: string;
+  recipientEmail?: string;
+  recipientUid?: string;
+  recipientName?: string;
   senderName: string;
   questionId: string;
   questionTitle: string;
   answerText: string;
   emailNotificationsEnabled?: boolean;
 }): Promise<void> {
-  if (!params.recipientEmail || !params.recipientEmail.includes('@')) {
+  if (!params.recipientEmail && !params.recipientUid) {
     return;
   }
 
-  // Email delivery is intentionally not performed from the browser.
-  // The Firestore-triggered backend function owns email delivery and checks
-  // the user's stored preference before creating a mail document.
   try {
-    await addDoc(collection(db, 'notifications'), {
-      recipientEmail: params.recipientEmail,
+    const payload: Record<string, any> = {
       senderName: params.senderName || 'A Fellow Student',
       questionId: params.questionId,
       questionTitle: params.questionTitle,
       replySnippet: String(params.answerText || '').slice(0, 80),
       createdAt: serverTimestamp(),
       isRead: false,
-    });
+    };
+
+    if (params.recipientUid) {
+      payload.recipientUid = params.recipientUid;
+    }
+    if (params.recipientEmail) {
+      payload.recipientEmail = params.recipientEmail;
+    }
+
+    await addDoc(collection(db, 'notifications'), payload);
   } catch (err: any) {
-    console.warn('[CampusConnect] In-app notification creation note:', err?.message || err);
+    console.debug('[CampusConnect] In-app notification creation note:', err?.message || err);
   }
 }

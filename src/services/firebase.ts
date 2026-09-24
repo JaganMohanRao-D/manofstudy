@@ -438,14 +438,29 @@ export async function uploadCampusAttachment(
   if (!currentUser) throw new Error('Authentication required to upload an attachment.');
   if (!(file instanceof File)) throw new Error('Invalid attachment.');
 
+  // Security validation: Limit file size to 25MB
+  const MAX_FILE_SIZE = 25 * 1024 * 1024;
+  if (file.size > MAX_FILE_SIZE) {
+    throw new Error('Attachment exceeds the 25MB maximum size limit.');
+  }
+
+  // Whitelist accepted document and image types (prevent HTML, SVG, scripts)
+  const allowedMimeTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
+  const allowedExtensions = ['.pdf', '.jpg', '.jpeg', '.png', '.webp'];
+  const ext = '.' + (file.name.split('.').pop() || '').toLowerCase();
+
+  if (!allowedMimeTypes.includes(file.type) && !allowedExtensions.includes(ext)) {
+    throw new Error('Unsupported file type. Only PDF and image documents (JPEG, PNG, WebP) are permitted.');
+  }
+
   const storageInstance = getCampusStorage() || storage;
   if (storageInstance) {
     try {
-      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 120) || 'attachment';
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').replace(/^\.+/, '').slice(0, 100) || 'attachment';
       const path = `campusconnect/${currentUser.uid}/${postId}/${attachmentId}-${safeName}`;
       const target = storageRef(storageInstance, path);
       await uploadBytes(target, file, {
-        contentType: file.type || 'application/octet-stream',
+        contentType: file.type || 'application/pdf',
         customMetadata: {
           ownerUid: currentUser.uid,
           postId,
@@ -488,20 +503,21 @@ export async function saveCampusPostToFirestore(postData: {
 
   // Determine public author name based on user choice
   const actualGoogleName = currentUser.displayName || 'Verified Student';
-  const publicAuthorName = postData.isAnonymous ? 'Anonymous Student' : actualGoogleName;
+  const isAnon = Boolean(postData.isAnonymous);
+  const publicAuthorName = isAnon ? 'Anonymous Student' : actualGoogleName;
+  const publicDisplayName = isAnon ? 'Anonymous Student' : actualGoogleName;
 
   // Strict anti-spoofing check
-  if (publicAuthorName.toLowerCase().includes('man of study admin')) {
+  if (!isAnon && publicAuthorName.toLowerCase().includes('man of study admin')) {
     throw new Error('Reserved identity: You cannot use the admin name.');
   }
 
   const postDoc: FirestoreCampusPost = {
     id: postData.id,
     authorUid: currentUser.uid,
-    authorName: currentUser.displayName || publicAuthorName,
-    authorEmail: currentUser.email || '',
-    displayName: actualGoogleName,
-    isAnonymous: postData.isAnonymous,
+    authorName: publicAuthorName,
+    displayName: publicDisplayName,
+    isAnonymous: isAnon,
     title: postData.title,
     content: postData.content,
     college: postData.college,
@@ -543,10 +559,12 @@ export async function saveCampusReplyToFirestore(
   }
 
   const actualGoogleName = currentUser.displayName || 'Student Peer';
-  const publicAuthorName = replyData.isAnonymous ? 'Anonymous Student' : actualGoogleName;
+  const isAnon = Boolean(replyData.isAnonymous);
+  const publicAuthorName = isAnon ? 'Anonymous Student' : actualGoogleName;
+  const publicDisplayName = isAnon ? 'Anonymous Student' : actualGoogleName;
 
   // Anti-spoofing check
-  if (publicAuthorName.toLowerCase().includes('man of study admin')) {
+  if (!isAnon && publicAuthorName.toLowerCase().includes('man of study admin')) {
     throw new Error('Reserved identity: You cannot use the admin name.');
   }
 
@@ -555,11 +573,11 @@ export async function saveCampusReplyToFirestore(
     postId,
     authorUid: currentUser.uid,
     authorName: publicAuthorName,
-    displayName: actualGoogleName,
-    isAnonymous: replyData.isAnonymous,
+    displayName: publicDisplayName,
+    isAnonymous: isAnon,
     content: replyData.content,
     college: replyData.college || 'Engineering College',
-    role: replyData.isAnonymous ? 'Anonymous Scholar' : (replyData.role || 'Student Peer'),
+    role: isAnon ? 'Anonymous Scholar' : (replyData.role || 'Student Peer'),
     upvotes: 1,
     isVerifiedSolution: false,
     isAdmin: false,

@@ -1025,42 +1025,19 @@ export const CampusConnect = ({ onNavigateToTool }) => {
 
       showToast('Solution posted successfully! Your peer was notified.', 'success', 'Solution Published');
 
-      // 4. TWO-WAY NOTIFICATION SYSTEM: In-App Notification Center + Automated Resend Email
-      let recipientEmail = currentTargetPost.authorEmail || currentTargetPost.authorEmailAddress || null;
-      let recipientName = currentTargetPost.authorName || currentTargetPost.displayName || 'Student';
-
-      if (!recipientEmail && currentTargetPost.authorUid) {
-        try {
-          const authorUserDoc = await getDoc(doc(db, 'users', currentTargetPost.authorUid));
-          if (authorUserDoc.exists()) {
-            const userData = authorUserDoc.data();
-            recipientEmail = userData.email || null;
-            if (userData.displayName) recipientName = userData.displayName;
-          }
-        } catch (lookupErr) {
-          console.debug('[CampusConnect] Author email lookup note:', lookupErr);
-        }
-      }
-
-      const currentStudentEmail = currentAuthUser.email;
-      const isSelfReply =
-        recipientEmail &&
-        currentStudentEmail &&
-        recipientEmail.toLowerCase() === currentStudentEmail.toLowerCase();
-
-      // In-app notifications are independent of email preference.
-      // The server-side Firestore trigger owns email delivery.
-      if (recipientEmail && !isSelfReply) {
+      // 4. IN-APP NOTIFICATION:
+      // The server-side Cloud Function securely owns email delivery and user lookup,
+      // keeping student email addresses completely private from peer clients.
+      if (currentTargetPost.authorUid && currentTargetPost.authorUid !== currentAuthUser.uid) {
         dispatchAnswerNotificationFlow({
-          recipientEmail,
-          recipientName,
+          recipientUid: currentTargetPost.authorUid,
+          recipientName: currentTargetPost.authorName || 'Student',
           senderName: isAnon ? 'A Fellow Student' : authorDisplayName,
           questionId: currentTargetPost.id,
           questionTitle: currentTargetPost.title,
           answerText: replyContentText,
-          emailNotificationsEnabled: false,
         }).catch((notifErr) => {
-          console.warn('[CampusConnect] Notification dispatch note:', notifErr);
+          console.debug('[CampusConnect] Notification notice:', notifErr);
         });
       }
 
@@ -1168,9 +1145,8 @@ export const CampusConnect = ({ onNavigateToTool }) => {
     const newPost = {
       id: `post-${Date.now()}`,
       authorUid: currentAuthUser.uid,
-      authorName: currentAuthUser.displayName || publicAuthorName,
-      authorEmail: currentAuthUser.email || '',
-      displayName: authorDisplayName,
+      authorName: publicAuthorName,
+      displayName: publicAuthorName,
       isAnonymous: isAnon,
       type: createMode,
       title: formTitle.trim(),
