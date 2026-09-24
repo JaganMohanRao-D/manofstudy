@@ -56,6 +56,11 @@ const TgAllotmentExplorer = lazy(() =>
     default: m.TgAllotmentExplorer || m.default,
   }))
 );
+const TgTopColleges = lazy(() =>
+  import('./components/TgTopColleges').then((m: any) => ({
+    default: m.TgTopColleges || m.default,
+  }))
+);
 const TgCollegePredictor = lazy(() =>
   import('./components/TgCollegePredictor').then((m: any) => ({
     default: m.TgCollegePredictor || m.default,
@@ -342,6 +347,7 @@ export default function App() {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '').toLowerCase();
       if (
+        hash === 'tg-top-colleges' ||
         hash === 'tg-predictor' ||
         hash === 'tg-college-predictor' ||
         hash === 'college-predictor' ||
@@ -468,7 +474,9 @@ export default function App() {
 
   const handleSelectToolFromPalette = (tab: ToolTab) => {
     setIsCommandPaletteOpen(false);
-    if (tab === 'gap-analyzer') {
+    if (tab === 'tg-top-colleges') {
+      handleSelectWorkspace('tg-top-colleges');
+    } else if (tab === 'gap-analyzer') {
       handleSelectWorkspace('gap-analyzer');
     } else if (tab === 'tg-predictor') {
       handleSelectWorkspace('tg-predictor');
@@ -534,6 +542,11 @@ export default function App() {
         return {
           title: 'TG EAPCET 2026 Final Phase Allotment & Cutoff Radar',
           icon: <Award className="w-4 h-4 text-indigo-500" />,
+        };
+      case 'tg-top-colleges':
+        return {
+          title: 'Top B.Tech Colleges in Telangana — OC Rank Analysis',
+          icon: <Award className="w-4 h-4 text-sky-500" />,
         };
       case 'tg-predictor':
         return {
@@ -787,6 +800,8 @@ export default function App() {
                     initialBranchCode={targetAllotmentBranch}
                   />
                 )}
+
+                {activeWorkspace === 'tg-top-colleges' && <TgTopColleges />}
 
                 {activeWorkspace === 'tg-predictor' && (
                   <TgCollegePredictor
