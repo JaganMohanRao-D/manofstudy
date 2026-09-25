@@ -27,11 +27,11 @@ import {
   ShieldAlert,
   Users,
 } from 'lucide-react';
-import { ToolTab, ToolMeta, WorkspaceView } from './types';
+import { ToolTab, ToolMeta, WorkspaceView, LegalModalType } from './types';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { Footer } from './components/Footer';
-import type { LegalModalType } from './components/LegalModals';
+import { LegalModals } from './components/LegalModals';
 import type { EapcetPhaseTab } from './components/ApEapcetRadar';
 
 // Dynamic code splitting / Lazy loading for heavy sub-pages, modals, and tools
@@ -154,11 +154,6 @@ const StudentTestimonials = lazy(() =>
 const SupportModal = lazy(() =>
   import('./components/SupportModal').then((m: any) => ({
     default: m.SupportModal || m.default,
-  }))
-);
-const LegalModals = lazy(() =>
-  import('./components/LegalModals').then((m: any) => ({
-    default: m.LegalModals || m.default,
   }))
 );
 const CommandPalette = lazy(() =>
@@ -989,13 +984,11 @@ export default function App() {
 
       {/* 6. Legal & Contact Modal */}
       {legalModal && (
-        <Suspense fallback={null}>
-          <LegalModals
-            type={legalModal}
-            onClose={() => setLegalModal(null)}
-            onSwitchType={(type) => setLegalModal(type)}
-          />
-        </Suspense>
+        <LegalModals
+          type={legalModal}
+          onClose={() => setLegalModal(null)}
+          onSwitchType={(type) => setLegalModal(type)}
+        />
       )}
 
       {/* Support & Keep MAN OF STUDY Free Modal */}

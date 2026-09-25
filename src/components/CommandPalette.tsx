@@ -37,9 +37,8 @@ import {
   Users,
   BookOpen,
 } from 'lucide-react';
-import { ToolTab } from '../types';
+import { ToolTab, LegalModalType } from '../types';
 import { ENGINEERING_ROADMAPS } from '../data/engineeringRoadmapsData';
-import { LegalModalType } from './LegalModals';
 
 export interface CommandPaletteProps {
   isOpen: boolean;

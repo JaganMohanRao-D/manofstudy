@@ -22,8 +22,7 @@ import {
   Award,
   Users,
 } from 'lucide-react';
-import { ToolTab, WorkspaceView } from '../types';
-import { LegalModalType } from './LegalModals';
+import { ToolTab, WorkspaceView, LegalModalType } from '../types';
 import { NavigationDrawer } from './NavigationDrawer';
 import { useTheme } from '../context/ThemeContext';
 

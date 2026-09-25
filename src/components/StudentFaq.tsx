@@ -17,8 +17,7 @@ import {
   Mail,
   Zap,
 } from 'lucide-react';
-import { ToolTab } from '../types';
-import { LegalModalType } from './LegalModals';
+import { ToolTab, LegalModalType } from '../types';
 
 export interface StudentFaqProps {
   onSelectTab?: (tab: ToolTab) => void;

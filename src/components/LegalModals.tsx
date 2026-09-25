@@ -11,8 +11,9 @@ import { AboutUs } from './AboutUs';
 import { ContactUs } from './ContactUs';
 import { PrivacyPolicy } from './PrivacyPolicy';
 import { Disclaimer } from './Disclaimer';
+import type { LegalModalType } from '../types';
 
-export type LegalModalType = 'about' | 'contact' | 'privacy' | 'terms' | 'disclaimer';
+export type { LegalModalType } from '../types';
 
 interface LegalModalsProps {
   type: LegalModalType | null;

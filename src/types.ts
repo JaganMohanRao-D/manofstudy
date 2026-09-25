@@ -52,6 +52,8 @@ export type ToolTab =
 
 export type ToolCategory = 'academic' | 'document' | 'writing' | 'counselling' | 'scholarship';
 
+export type LegalModalType = 'about' | 'contact' | 'privacy' | 'terms' | 'disclaimer';
+
 export interface SemesterPlan {
   semNumber: number;
   title: string;
