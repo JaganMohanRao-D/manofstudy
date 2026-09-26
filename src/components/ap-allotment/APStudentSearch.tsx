@@ -14,8 +14,7 @@ import {
   Building2,
   GitBranch,
 } from 'lucide-react';
-import { searchAllotments as search2025Allotments, SearchResult } from '../../services/apEapcet2025AllotmentService';
-import { search2026 as search2026Allotments, AllotmentYear } from '../../services/apEapcetAllotmentService';
+import { searchAllotments, AllotmentYear } from '../../services/apEapcetAllotmentService';
 
 interface APStudentSearchProps {
   onExploreCollegeBranch?: (collegeCode: string, branchCode?: string) => void;
@@ -67,37 +66,21 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
     const maxRank = maxRankInput.trim() ? parseInt(maxRankInput.replace(/[^0-9]/g, ''), 10) : null;
 
     try {
-      if (year === '2026') {
-        const records = await search2026Allotments({
-          nameQuery: searchMode === 'name' ? nameInput : undefined,
-          rank: searchMode === 'rank' && exactRank ? exactRank : undefined,
-          collegeCode: 'ALL',
-          branchCode: 'ALL',
-          phase: phaseFilter !== 'ALL' ? phaseFilter : undefined,
-          category: categoryFilter !== 'ALL' ? categoryFilter : undefined,
-          limit: 1000,
-        });
-        const filtered = records.filter((r:any) => genderFilter === 'ALL' || r.gender === genderFilter)
-          .filter((r:any) => regionFilter === 'ALL' || r.region === regionFilter)
-          .filter((r:any) => !minRank || r.rank >= minRank)
-          .filter((r:any) => !maxRank || r.rank <= maxRank);
-        setSearchResults(filtered);
-        setTotalMatches(filtered.length);
-      } else {
-        const result: SearchResult = await search2025Allotments({
-          nameQuery: searchMode === 'name' ? nameInput : undefined,
-          exactRank: searchMode === 'rank' ? exactRank : undefined,
-          minRank: searchMode === 'rank' ? minRank : undefined,
-          maxRank: searchMode === 'rank' ? maxRank : undefined,
-          category: categoryFilter !== 'ALL' ? categoryFilter : undefined,
-          gender: genderFilter !== 'ALL' ? genderFilter : undefined,
-          region: regionFilter !== 'ALL' ? regionFilter : undefined,
-          phase: phaseFilter !== 'ALL' ? phaseFilter : undefined,
-          limit: 1000,
-        });
-        setSearchResults(result.records);
-        setTotalMatches(result.totalMatches);
-      }
+      const records = await searchAllotments(year, {
+        nameQuery: searchMode === 'name' ? nameInput : undefined,
+        exactRank: searchMode === 'rank' ? exactRank ?? undefined : undefined,
+        minRank: searchMode === 'rank' ? minRank ?? undefined : undefined,
+        maxRank: searchMode === 'rank' ? maxRank ?? undefined : undefined,
+        collegeCode,
+        branchCode,
+        phase: phaseFilter !== 'ALL' ? phaseFilter : undefined,
+        category: categoryFilter !== 'ALL' ? categoryFilter : undefined,
+        gender: genderFilter !== 'ALL' ? genderFilter : undefined,
+        region: regionFilter !== 'ALL' ? regionFilter : undefined,
+        limit: 1000,
+      });
+      setSearchResults(records);
+      setTotalMatches(records.length);
       setHasSearched(true);
     } catch (err) {
       console.warn('Search failed:', err);
@@ -191,7 +174,7 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
           </div>
 
           <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
-            Dataset: AP EAPCET ${year} allotments
+            Dataset: AP EAPCET {year} allotments
           </span>
         </div>
 
