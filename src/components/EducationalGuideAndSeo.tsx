@@ -157,3 +157,5 @@ export const EducationalGuideAndSeo: React.FC = () => {
     </div>
   );
 };
+
+export default EducationalGuideAndSeo;

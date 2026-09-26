@@ -5,7 +5,6 @@ export type WorkspaceView =
   | 'tg-allotments'
   | 'tg-top-colleges'
   | 'tg-predictor'
-  | 'tg-top-colleges'
   | 'roadmaps'
   | 'scholarships'
   | 'utilities'
@@ -26,8 +25,8 @@ export type WorkspaceView =
   | 'gap-analyzer';
 
 export type ToolTab = 
-  | 'eapcet-radar'
   | 'ap-allotments'
+  | 'eapcet-radar'
   | 'tg-allotments'
   | 'tg-top-colleges'
   | 'tg-predictor'

@@ -1,0 +1,4695 @@
+{
+  "version": "2025.1",
+  "generated_at": "2026-09-26T02:56:46.520Z",
+  "stats": {
+    "totalColleges": 255,
+    "collegesWithData": 70,
+    "totalBranches": 460,
+    "totalRecords": 37637,
+    "categories": [
+      "BC_A",
+      "BC_B",
+      "BC_C",
+      "BC_D",
+      "BC_E",
+      "OC",
+      "SC_I",
+      "SC_II",
+      "SC_III",
+      "ST"
+    ],
+    "allottedCategories": [
+      "BC_A_CAP_GEN_UR",
+      "BC_A_CAP_GEN_UR(6)",
+      "BC_A_CAP_GIRLS_UR",
+      "BC_A_CAP_GIRLS_UR(6)",
+      "BC_A_CAP_GIRLS_UR(8)",
+      "BC_A_GEN_AU",
+      "BC_A_GEN_SVU",
+      "BC_A_GEN_UR",
+      "BC_A_GIRLS_AU",
+      "BC_A_GIRLS_SVU",
+      "BC_A_GIRLS_UR",
+      "BC_A_NCC_GEN_AU",
+      "BC_A_NCC_GEN_SVU",
+      "BC_A_NCC_GIRLS_AU",
+      "BC_A_NCC_GIRLS_SVU",
+      "BC_A_PWD_GEN_AU",
+      "BC_A_PWD_GEN_SVU",
+      "BC_A_PWD_GEN_UR",
+      "BC_A_PWD_GIRLS_AU",
+      "BC_A_PWD_GIRLS_SVU",
+      "BC_A_SCG_GEN_SVU",
+      "BC_A_SCG_GEN_UR",
+      "BC_A_SCG_GIRLS_AU",
+      "BC_A_SCG_GIRLS_SVU",
+      "BC_B_CAP_GEN_UR",
+      "BC_B_CAP_GEN_UR(6)",
+      "BC_B_CAP_GIRLS_UR",
+      "BC_B_CAP_GIRLS_UR(6)",
+      "BC_B_GEN_AU",
+      "BC_B_GEN_SVU",
+      "BC_B_GEN_UR",
+      "BC_B_GIRLS_AU",
+      "BC_B_GIRLS_SVU",
+      "BC_B_GIRLS_UR",
+      "BC_B_NCC_GEN_AU",
+      "BC_B_NCC_GEN_SVU",
+      "BC_B_NCC_GIRLS_AU",
+      "BC_B_NCC_GIRLS_SVU",
+      "BC_B_PWD_GEN_AU",
+      "BC_B_PWD_GEN_SVU",
+      "BC_B_PWD_GIRLS_AU",
+      "BC_B_PWD_GIRLS_SVU",
+      "BC_B_SCG_GEN_AU",
+      "BC_B_SCG_GEN_SVU",
+      "BC_B_SCG_GEN_UR",
+      "BC_B_SCG_GIRLS_AU",
+      "BC_B_SCG_GIRLS_SVU",
+      "BC_C_CAP_GEN_UR",
+      "BC_C_CAP_GIRLS_UR",
+      "BC_C_GEN_AU",
+      "BC_C_GEN_SVU",
+      "BC_C_GEN_UR",
+      "BC_C_GIRLS_AU",
+      "BC_C_GIRLS_SVU",
+      "BC_C_GIRLS_UR",
+      "BC_C_NCC_GEN_AU",
+      "BC_C_NCC_GEN_SVU",
+      "BC_C_NCC_GIRLS_UR",
+      "BC_C_PWD_GEN_AU",
+      "BC_C_PWD_GEN_SVU",
+      "BC_C_PWD_GIRLS_AU",
+      "BC_C_PWD_GIRLS_SVU",
+      "BC_D_CAP_GEN_UR",
+      "BC_D_CAP_GEN_UR(4)",
+      "BC_D_CAP_GEN_UR(6)",
+      "BC_D_CAP_GEN_UR(8)",
+      "BC_D_CAP_GIRLS_UR",
+      "BC_D_CAP_GIRLS_UR(6)",
+      "BC_D_GEN_AU",
+      "BC_D_GEN_SVU",
+      "BC_D_GEN_UR",
+      "BC_D_GIRLS_AU",
+      "BC_D_GIRLS_SVU",
+      "BC_D_GIRLS_UR",
+      "BC_D_NCC_GEN_AU",
+      "BC_D_NCC_GEN_SVU",
+      "BC_D_NCC_GIRLS_AU",
+      "BC_D_NCC_GIRLS_SVU",
+      "BC_D_PWD_GEN_AU",
+      "BC_D_PWD_GEN_SVU",
+      "BC_D_PWD_GEN_UR",
+      "BC_D_PWD_GIRLS_AU",
+      "BC_D_PWD_GIRLS_SVU",
+      "BC_D_PWD_GIRLS_UR",
+      "BC_D_SCG_GEN_AU",
+      "BC_D_SCG_GEN_SVU",
+      "BC_D_SCG_GIRLS_AU",
+      "BC_D_SCG_GIRLS_SVU",
+      "BC_E_CAP_GEN_UR",
+      "BC_E_CAP_GIRLS_UR",
+      "BC_E_CAP_GIRLS_UR(6)",
+      "BC_E_CAP_GIRLS_UR(8)",
+      "BC_E_GEN_AU",
+      "BC_E_GEN_SVU",
+      "BC_E_GEN_UR",
+      "BC_E_GIRLS_AU",
+      "BC_E_GIRLS_SVU",
+      "BC_E_GIRLS_UR",
+      "BC_E_NCC_GEN_AU",
+      "BC_E_NCC_GEN_SVU",
+      "BC_E_NCC_GIRLS_AU",
+      "BC_E_NCC_GIRLS_SVU",
+      "BC_E_PWD_GEN_AU",
+      "BC_E_PWD_GEN_SVU",
+      "BC_E_PWD_GIRLS_AU",
+      "BC_E_PWD_GIRLS_SVU",
+      "BC_E_PWD_GIRLS_UR",
+      "BC_E_SCG_GEN_AU",
+      "BC_E_SCG_GEN_SVU",
+      "BC_E_SCG_GIRLS_AU",
+      "CHR_GIRLS_AU",
+      "CHR_GIRLS_UR",
+      "EWS_GEN_AU",
+      "EWS_GEN_SVU",
+      "EWS_GEN_UR",
+      "EWS_GIRLS_AU",
+      "EWS_GIRLS_SVU",
+      "EWS_GIRLS_UR",
+      "EWS_PWD_GEN_AU",
+      "EWS_PWD_GEN_SVU",
+      "EWS_PWD_GEN_UR",
+      "EWS_PWD_GIRLS_AU",
+      "EWS_PWD_GIRLS_SVU",
+      "EWS_PWD_GIRLS_UR",
+      "OC_CAP_GEN_UR",
+      "OC_CAP_GEN_UR(3)",
+      "OC_CAP_GEN_UR(4)",
+      "OC_CAP_GEN_UR(6)",
+      "OC_CAP_GEN_UR(8)",
+      "OC_CAP_GIRLS_UR",
+      "OC_CAP_GIRLS_UR(2)",
+      "OC_CAP_GIRLS_UR(4)",
+      "OC_CAP_GIRLS_UR(6)",
+      "OC_CAP_GIRLS_UR(8)",
+      "OC_GEN_AU",
+      "OC_GEN_SVU",
+      "OC_GEN_UR",
+      "OC_GIRLS_AU",
+      "OC_GIRLS_SVU",
+      "OC_GIRLS_UR",
+      "OC_NCC_GEN_AU",
+      "OC_NCC_GEN_SVU",
+      "OC_NCC_GEN_UR",
+      "OC_NCC_GIRLS_AU",
+      "OC_NCC_GIRLS_SVU",
+      "OC_NCC_GIRLS_UR",
+      "OC_PWD_GEN_AU",
+      "OC_PWD_GEN_SVU",
+      "OC_PWD_GEN_UR",
+      "OC_PWD_GIRLS_AU",
+      "OC_PWD_GIRLS_SVU",
+      "OC_PWD_GIRLS_UR",
+      "OC_SCG_GEN_AU",
+      "OC_SCG_GEN_AU(0)",
+      "OC_SCG_GEN_SVU",
+      "OC_SCG_GEN_SVU(0)",
+      "OC_SCG_GEN_UR",
+      "OC_SCG_GIRLS_AU",
+      "OC_SCG_GIRLS_AU(0)",
+      "OC_SCG_GIRLS_SVU",
+      "OC_SCG_GIRLS_SVU(0)",
+      "OC_SCG_GIRLS_UR",
+      "SC_III_CAP_GEN_UR",
+      "SC_III_CAP_GEN_UR(6)",
+      "SC_III_CAP_GEN_UR(8)",
+      "SC_III_CAP_GIRLS_UR",
+      "SC_III_CAP_GIRLS_UR(8)",
+      "SC_III_GEN_AU",
+      "SC_III_GEN_SVU",
+      "SC_III_GEN_UR",
+      "SC_III_GIRLS_AU",
+      "SC_III_GIRLS_SVU",
+      "SC_III_GIRLS_UR",
+      "SC_III_NCC_GEN_AU",
+      "SC_III_NCC_GEN_SVU",
+      "SC_III_NCC_GIRLS_AU",
+      "SC_III_NCC_GIRLS_SVU",
+      "SC_III_PWD_GEN_AU",
+      "SC_III_PWD_GEN_SVU",
+      "SC_III_PWD_GIRLS_AU",
+      "SC_III_PWD_GIRLS_SVU",
+      "SC_III_PWD_GIRLS_UR",
+      "SC_III_SCG_GEN_AU",
+      "SC_III_SCG_GIRLS_SVU",
+      "SC_II_CAP_GEN_UR",
+      "SC_II_CAP_GEN_UR(6)",
+      "SC_II_CAP_GIRLS_UR",
+      "SC_II_GEN_AU",
+      "SC_II_GEN_SVU",
+      "SC_II_GEN_UR",
+      "SC_II_GIRLS_AU",
+      "SC_II_GIRLS_SVU",
+      "SC_II_GIRLS_UR",
+      "SC_II_NCC_GEN_AU",
+      "SC_II_NCC_GEN_SVU",
+      "SC_II_NCC_GIRLS_AU",
+      "SC_II_NCC_GIRLS_SVU",
+      "SC_II_PWD_GEN_AU",
+      "SC_II_PWD_GEN_SVU",
+      "SC_II_PWD_GEN_UR",
+      "SC_II_PWD_GIRLS_AU",
+      "SC_II_PWD_GIRLS_SVU",
+      "SC_II_SCG_GEN_AU",
+      "SC_II_SCG_GEN_UR(0)",
+      "SC_II_SCG_GIRLS_AU",
+      "SC_II_SCG_GIRLS_SVU",
+      "SC_I_CAP_GEN_UR",
+      "SC_I_CAP_GIRLS_UR",
+      "SC_I_GEN_AU",
+      "SC_I_GEN_SVU",
+      "SC_I_GEN_UR",
+      "SC_I_GIRLS_AU",
+      "SC_I_GIRLS_SVU",
+      "SC_I_GIRLS_UR",
+      "SC_I_NCC_GEN_AU",
+      "SC_I_NCC_GEN_SVU",
+      "SC_I_NCC_GIRLS_AU",
+      "SC_I_PWD_GEN_AU",
+      "SC_I_PWD_GEN_SVU",
+      "SC_I_PWD_GIRLS_AU",
+      "SC_I_PWD_GIRLS_SVU",
+      "SC_I_PWD_GIRLS_UR",
+      "SC_I_SCG_GEN_AU",
+      "SC_I_SCG_GEN_SVU",
+      "SC_I_SCG_GIRLS_AU",
+      "ST_CAP_GEN_UR",
+      "ST_CAP_GEN_UR(8)",
+      "ST_CAP_GIRLS_UR",
+      "ST_GEN_AU",
+      "ST_GEN_SVU",
+      "ST_GEN_UR",
+      "ST_GIRLS_AU",
+      "ST_GIRLS_SVU",
+      "ST_GIRLS_UR",
+      "ST_NCC_GEN_AU",
+      "ST_NCC_GEN_SVU",
+      "ST_NCC_GIRLS_AU",
+      "ST_NCC_GIRLS_SVU",
+      "ST_PWD_GEN_AU",
+      "ST_PWD_GEN_SVU",
+      "ST_PWD_GEN_UR",
+      "ST_PWD_GIRLS_AU",
+      "ST_PWD_GIRLS_SVU",
+      "ST_PWD_GIRLS_UR",
+      "ST_SCG_GEN_AU",
+      "ST_SCG_GEN_SVU",
+      "ST_SCG_GIRLS_AU",
+      "ST_SCG_GIRLS_SVU"
+    ],
+    "regions": [
+      "AU",
+      "NL",
+      "SVU"
+    ],
+    "phases": [
+      1,
+      2
+    ],
+    "minRank": 398,
+    "maxRank": 180156
+  },
+  "colleges": [
+    {
+      "college_code": "AUEWSF",
+      "college_name": "A U COLLEGE OF ENGG FOR WOMEN-SELF FINANCE",
+      "file": "AUEWSF.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "AUCESF",
+      "college_name": "A U COLLEGE OF ENGG-SELF FINANCE VISAKHAPATNAM",
+      "file": "AUCESF.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "AUCE",
+      "college_name": "A U COLLEGE OF ENGG. VISAKHAPATNAM",
+      "file": "AUCE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "AMRN",
+      "college_name": "A.M.REDDY MEMORIAL COLL. OF ENGINEERING",
+      "file": "AMRN.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "GLIM",
+      "college_name": "A1 GLOBAL INST OF ENGG TECHNOLOGY",
+      "file": "GLIM.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ABRK",
+      "college_name": "ABR COLLEGE OF ENGG AND TECHNOLOGY",
+      "file": "ABRK.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ANMB",
+      "college_name": "ACHARYA COLLEGE OF ENGINEERING",
+      "file": "ANMB.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ACEE",
+      "college_name": "ADARSH COLLEGE OF ENGINEERING",
+      "file": "ACEE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ANURSF",
+      "college_name": "ADI KAVI NANNAYA UNIVERSITY COLLEGE OF ENGG.-SELF FINANCE",
+      "file": "ANURSF.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ACEM",
+      "college_name": "ADITYA COLLEGE OF ENGINEERING",
+      "file": "ACEM.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ADIT",
+      "college_name": "ADITYA INSTITUTE OF TECHNOLOGY AND MGMT",
+      "file": "ADIT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ADTPPU",
+      "college_name": "ADITYA UNIVERSITY",
+      "file": "ADTPPU.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ANRG",
+      "college_name": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY",
+      "file": "ANRG.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ACEV",
+      "college_name": "ALWAR COLLEGE OF ENGINEERING",
+      "file": "ACEV.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ASIP",
+      "college_name": "AMRITA SAI INST. OF SCIENCE AND TECHNOLOGY",
+      "file": "ASIP.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ALTS",
+      "college_name": "ANANTHA LAKSHMI INST OF TECHNOLOGY AND SCI",
+      "file": "ALTS.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "AECN",
+      "college_name": "ANDHRA ENGINEERING COLLEGE",
+      "file": "AECN.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ALIT",
+      "college_name": "ANDHRA LOYOLA INSTT OF ENGG AND TECHNOLOGY",
+      "file": "ALIT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ANIL",
+      "college_name": "ANIL NEERUKONDA INSTITUTE OF TECHNOLOGY AND SCI",
+      "file": "ANIL.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "AITK",
+      "college_name": "ANNAMACHARYA INST OF TECH AND SCI",
+      "file": "AITK.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "AITT",
+      "college_name": "ANNAMACHARYA INST OF TECHNOLOGYAND SCIENCES",
+      "file": "AITT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "AITSPU",
+      "college_name": "ANNAMACHARYA UNIVERSITY",
+      "file": "AITSPU.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "APUCPU",
+      "college_name": "APOLLO UNIVERSITY",
+      "file": "APUCPU.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ASKW",
+      "college_name": "ASHOKA WOMEN'S ENGINEERING COLLEGE",
+      "file": "ASKW.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ASKWOC",
+      "college_name": "ASHOKA WOMEN'S ENGINEERING COLLEGE-OFF CAMPUS",
+      "file": "ASKWOC.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ASET",
+      "college_name": "AUDISANKARA COLLEGE OF ENGG AND TECHNOLOGY",
+      "file": "ASET.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "AVEV",
+      "college_name": "AVANTHI INST. OF ENGINEERING AND TECHNOLOGY",
+      "file": "AVEV.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "AVEN",
+      "college_name": "AVANTHI INSTITUTE OF ENGG. AND TECHNOLOGY",
+      "file": "AVEN.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ARTB",
+      "college_name": "AVANTHIS RESEARCH AND TECHNOLOGICAL ACADEMY",
+      "file": "ARTB.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ASTC",
+      "college_name": "AVANTHIS ST THERESSA INSTITUTE OF ENGG AND TECHNOLOGY",
+      "file": "ASTC.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "BVCE",
+      "college_name": "B V CHALAMAIAH ENGINEERING COLLEGE",
+      "file": "BVCE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "BABA",
+      "college_name": "BABA INST OF TECH AND SCIENCES",
+      "file": "BABA.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "BECB",
+      "college_name": "BAPATLA ENGINEERING COLLEGE",
+      "file": "BECB.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "BWEC",
+      "college_name": "BAPATLA WOMENS ENGG COLLEGE",
+      "file": "BWEC.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "BCET",
+      "college_name": "BEHARA COLLEGE OF ENGINEERING AND TECHNOLOGY",
+      "file": "BCET.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "BESTPU",
+      "college_name": "BHARATIYA ENGG SCI. &TECH INNOVATION UNIVERSITY",
+      "file": "BESTPU.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "BITS",
+      "college_name": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE",
+      "file": "BITS.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "BEMA",
+      "college_name": "BHEEMA INST OF TECHNOLOGY AND SCI",
+      "file": "BEMA.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "BVRM",
+      "college_name": "BHIMAVARAM INST. OF ENGG. AND TECHNOLOGY",
+      "file": "BVRM.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "BVTS",
+      "college_name": "BONAM VENKATA CHALAMAIAH INST. OF TECH AND SCI.",
+      "file": "BVTS.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "BRNK",
+      "college_name": "BRINDAVAN INST OF TECHNOLOGY AND SCI",
+      "file": "BRNK.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "BVCR",
+      "college_name": "BVC COLLEGE OF ENGINEERING",
+      "file": "BVCR.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "BVSR",
+      "college_name": "BVSR ENGINEERING COLLEGE",
+      "file": "BVSR.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "CENUPU",
+      "college_name": "CENTURION UNIVERSITY OF TECHNOLOGY & MANAGEMENT",
+      "file": "CENUPU.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "CHDL",
+      "college_name": "CHADALAWADA RAMANAMMA ENGG. COLLEGE",
+      "file": "CHDL.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "CBIT",
+      "college_name": "CHAITANYA BHARATHI INSTITUTE OF TECHNOLOGY",
+      "file": "CBIT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "CEVP",
+      "college_name": "CHAITANYA ENGINEERING COLLEGE",
+      "file": "CEVP.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "CHKN",
+      "college_name": "CHAITANYA INST. OF SCI. AND TECHNOLOGY",
+      "file": "CHKN.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "CIET",
+      "college_name": "CHALAPATHI INST OF ENGG AND TECHNOLOGY",
+      "file": "CIET.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "CITY",
+      "college_name": "CHALAPATHI INST OF TECHNOLOGY",
+      "file": "CITY.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "CECC",
+      "college_name": "CHIRALA ENGINEERING COLLEGE",
+      "file": "CECC.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "CRIT",
+      "college_name": "CHIRANJEEVI REDDY INST OF ENGG AND TECHNOLOGY FOR WOMEN",
+      "file": "CRIT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "CAMS",
+      "college_name": "COLLEGE OF AGRICULTURAL ENGINEERING",
+      "file": "CAMS.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "BRAUSF",
+      "college_name": "COLLEGE OF ENGINEERING BR AMBEDKAR UNIV SELF FINANCE",
+      "file": "BRAUSF.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "CFSP",
+      "college_name": "COLLEGE OF FOOD SCIENCE AND TECHNOLOGY",
+      "file": "CFSP.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "DIET",
+      "college_name": "DADI INSTT. OF ENGINEERING AND TECHNOLOGY",
+      "file": "DIET.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "DSIT",
+      "college_name": "DAMISETTY BALA SURESH INST OF TECHNOLOGY",
+      "file": "DSIT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "DHAN",
+      "college_name": "DHANEKULA INST OF ENGG TECHNOLOGY",
+      "file": "DHAN.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "DNRE",
+      "college_name": "DNR COLLEGE OF ENGG AND TECH",
+      "file": "DNRE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "DLBC",
+      "college_name": "DR L BULLAYYA COLL EGE OF ENGINEERING",
+      "file": "DLBC.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "PREC",
+      "college_name": "DR PAUL RAJS ENGINEERING COLLEGE",
+      "file": "PREC.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "SGIT",
+      "college_name": "DR SAMUEL GEORGE INSTITUTE OF ENGG. AND TECHNOLOGY",
+      "file": "SGIT.json",
+      "has_data": true,
+      "record_count": 315,
+      "branches": [
+        {
+          "branch_code": "AIM",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING",
+          "record_count": 45
+        },
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 9
+        },
+        {
+          "branch_code": "CAI",
+          "branch_name": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE )",
+          "record_count": 45
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 129
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 23
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 5
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 54
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 5
+        }
+      ]
+    },
+    {
+      "college_code": "CABP",
+      "college_name": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING",
+      "file": "CABP.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "CFSB",
+      "college_name": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY",
+      "file": "CFSB.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "KVSR",
+      "college_name": "DR.K.V.SUBBA REDDY INST. OF TECHNOLOGY",
+      "file": "KVSR.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "YSRA",
+      "college_name": "DR.YSR ARCHITECTURE AND FINE ARTS UNIVERSITY",
+      "file": "YSRA.json",
+      "has_data": true,
+      "record_count": 11,
+      "branches": [
+        {
+          "branch_code": "DTD",
+          "branch_name": "DIGITAL TECHNIQUES FOR DESIGN AND PLANNING",
+          "record_count": 2
+        },
+        {
+          "branch_code": "FSP",
+          "branch_name": "FACILITIES AND SERVICES PLANNING",
+          "record_count": 1
+        },
+        {
+          "branch_code": "GDT",
+          "branch_name": "GAME DESIGN TECHNOLOGY",
+          "record_count": 6
+        },
+        {
+          "branch_code": "PLG",
+          "branch_name": "PLANNING",
+          "record_count": 2
+        }
+      ]
+    },
+    {
+      "college_code": "ANCUSF",
+      "college_name": "DR.YSR COLLEGE OF ENGINEERING & TECHNOLOGY-SELF FINANCE",
+      "file": "ANCUSF.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "DRAVSF",
+      "college_name": "DRAVIDIAN UNIVERSITY COLLEGE OF ENGG & TECH -SELF FINANACE",
+      "file": "DRAVSF.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "MICT",
+      "college_name": "DVR AND DR.HS MIC COLLEGE OF TECHNOLOGY",
+      "file": "MICT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ELRU",
+      "college_name": "ELURU COLLEGE OF ENGG AND TECHNOLOGY",
+      "file": "ELRU.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ESWR",
+      "college_name": "ESWAR COLLEGE OF ENGINEERING",
+      "file": "ESWR.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "GMRI",
+      "college_name": "G M R INSTITUTE OF TECHNOLOGY",
+      "file": "GMRI.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "GPRE",
+      "college_name": "G PULLA REDDY ENGINEERING. COLLEGE",
+      "file": "GPRE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "GVPT",
+      "college_name": "G V P COLLEGE FOR DEGREE AND PG COURSES",
+      "file": "GVPT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "GVRS",
+      "college_name": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY",
+      "file": "GVRS.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "PCEK",
+      "college_name": "G.PULLAIAH COLL. OF ENGG. AND TECHNOLOGY",
+      "file": "PCEK.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "GATE",
+      "college_name": "GATES INSTITUTE OF TECHNOLOGY",
+      "file": "GATE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "GVPW",
+      "college_name": "GAYATHRI VIDYA PARISHAD COLL OF ENGG FOR WOMEN",
+      "file": "GVPW.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "GVPE",
+      "college_name": "GAYATHRI VIDYA PARISHAD COLL. OF ENGINEERING",
+      "file": "GVPE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "GTNN",
+      "college_name": "GEETHANJALI INST OF SCIENCE AND TECHNOLOGY",
+      "file": "GTNN.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "GIET",
+      "college_name": "GIET ENGINEERING COLLEGE",
+      "file": "GIET.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "GGURPU",
+      "college_name": "GODAVARI GLOBAL UNIVERSITY",
+      "file": "GGURPU.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "GGIB",
+      "college_name": "GOKUL GROUP OF INSTITUTIONS",
+      "file": "GGIB.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "GKCS",
+      "college_name": "GOKULA KRISHNA COLLEGE OF ENGINEERING",
+      "file": "GKCS.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "GVIC",
+      "college_name": "GOLDEN VALLEY INTEGRATED CAMPUS",
+      "file": "GVIC.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "GITS",
+      "college_name": "GONNA INST OF INFO TECHNOLOGY SCIENCES",
+      "file": "GITS.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "GTMW",
+      "college_name": "GOUTHAMI INST OF TECHNOLOGY MGMT FOR WOMEN",
+      "file": "GTMW.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "HITE",
+      "college_name": "HELAPURI INST OF TECH AND SCIENCE",
+      "file": "HITE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "HIND",
+      "college_name": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY",
+      "file": "HIND.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "IDEL",
+      "college_name": "IDEAL INSTITUTE OF TECHNOLOGY",
+      "file": "IDEL.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "IITM",
+      "college_name": "INDIRA INST OF TECHNOLOGY SCI",
+      "file": "IITM.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ISTSOC",
+      "college_name": "INTERNATIONAL SCHOOL OF TECH AND SCI -OFF CAMPUS",
+      "file": "ISTSOC.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "ISTS",
+      "college_name": "INTERNATIONAL SCHOOL OF TECH AND SCI FOR WOMEN",
+      "file": "ISTS.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "JNTP",
+      "college_name": "JNTUA COLLEGE OF ENGG PULIVENDULA",
+      "file": "JNTP.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "JNTA",
+      "college_name": "JNTUA COLLEGE OF ENGG. ANANTAPURAMU",
+      "file": "JNTA.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "JNTASF",
+      "college_name": "JNTUA COLLEGE OF ENGG. ANANTAPURAMU - SELF FINANACE",
+      "file": "JNTASF.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "JNTASS",
+      "college_name": "JNTUA COLLEGE OF ENGG. ANANTAPURAMU - SELF SUPPORTING",
+      "file": "JNTASS.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "JNTC",
+      "college_name": "JNTUA COLLEGE OF ENGINEERING. KALIKIRI",
+      "file": "JNTC.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "JNTSKSF",
+      "college_name": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE",
+      "file": "JNTSKSF.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "JNTV",
+      "college_name": "JNTUGV COLLEGE OF ENGINEERING VIZIANAGARAM",
+      "file": "JNTV.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "JNTVSF",
+      "college_name": "JNTUGV COLLEGE OF ENGINEERING VIZIANAGARAM - SELF FINANACE",
+      "file": "JNTVSF.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "JNTK",
+      "college_name": "JNTUK COLLEGE OF ENGG. KAKINADA",
+      "file": "JNTK.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "JNTKSF",
+      "college_name": "JNTUK COLLEGE OF ENGG. KAKINADA-SELF FINANCE",
+      "file": "JNTKSF.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "JNTKSS",
+      "college_name": "JNTUK COLLEGE OF ENGG. KAKINADA-SELF SUPPORTING",
+      "file": "JNTKSS.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "JNTN",
+      "college_name": "JNTUK COLLEGE OF ENGINEERING NARSARAOPETA",
+      "file": "JNTN.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "KSRM",
+      "college_name": "K S R M COLLEGE OF ENGINEERING",
+      "file": "KSRM.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "KIEW",
+      "college_name": "KAKINADA INST OF ENGG AND TECHNOLOGY FOR WOMEN",
+      "file": "KIEW.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "KIEK",
+      "college_name": "KAKINADA INSTITUTE OF ENGG. AND TECHNOLOGY",
+      "file": "KIEK.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "KIET",
+      "college_name": "KAKINADA INSTITUTE OF ENGG. AND TECHNOLOGY",
+      "file": "KIET.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "KTSP",
+      "college_name": "KAKINADA INSTITUTE OF TECHNOLOGY AND SCIENCE",
+      "file": "KTSP.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "KISR",
+      "college_name": "KAKINADA INSTITUTE OF TECHNOLOGY SCIENCES",
+      "file": "KISR.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "KHIT",
+      "college_name": "KALLAM HARANADH REDDY INST OF TECH",
+      "file": "KHIT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "KLMW",
+      "college_name": "KANDULA LAKSHUMMA MEMORIAL COLLEGE OF ENGG FOR WOMEN",
+      "file": "KLMW.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "KORM",
+      "college_name": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG.",
+      "file": "KORM.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "KITG",
+      "college_name": "KITS AKSHAR INSTITUTE OF TECHNOLOGY",
+      "file": "KITG.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "KITS",
+      "college_name": "KKR AND KSR INST OF TECHNOLOGY AND SCI",
+      "file": "KITS.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "KMMT",
+      "college_name": "KMM INST OF TECHNOLOGY AND SCIENCE",
+      "file": "KMMT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "KCIT",
+      "college_name": "KRISHNA CHAITANYA INST OF TECHNOLOGY AND SCIENCES",
+      "file": "KCIT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "KRUESF",
+      "college_name": "KRISHNA UNIVERSITY COLLEGE OF ENGG AND TECHNOLOGY-SELF FINANCE",
+      "file": "KRUESF.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "KUPM",
+      "college_name": "KUPPAM ENGINEERING COLLEGE",
+      "file": "KUPM.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "LBCE",
+      "college_name": "LAKIREDDY BALIREDDY COLLEGE OF ENGINEERING",
+      "file": "LBCE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "LIET",
+      "college_name": "LENDI INST OF ENGG AND TECHNOLOGY",
+      "file": "LIET.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "LENO",
+      "college_name": "LENORA COLLEGE OF ENGINEERING",
+      "file": "LENO.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "LIMT",
+      "college_name": "LINGAYAS INST OF MGMT AND TECHNOLOGY",
+      "file": "LIMT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "LOYL",
+      "college_name": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT",
+      "file": "LOYL.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "MAMW",
+      "college_name": "M A M WOMEN'S ENGINEERING COLLEGE",
+      "file": "MAMW.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "MVRG",
+      "college_name": "M V G R COLLEGE OF ENGINEERNG",
+      "file": "MVRG.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "MVRS",
+      "college_name": "M.V.R.COLL OF ENGINEERING AND TECHNOLOGY",
+      "file": "MVRS.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "MLEW",
+      "college_name": "MALINENI LAKSHMAIAH WOMENS ENGG. COLLEGE",
+      "file": "MLEW.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "MSEW",
+      "college_name": "MALINENI SUSEELAMMA WOMENS ENGG COLLEGE",
+      "file": "MSEW.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "MIET",
+      "college_name": "MANDAVA INSTITUTE OF ENGG AND TECHNOLOGY",
+      "file": "MIET.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "MRCL",
+      "college_name": "MIRACLE EDNL SOC GROUP OF INSTNS",
+      "file": "MRCL.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "MJRT",
+      "college_name": "MJR COLLEGE OF ENGG AND TECHNOLOGY",
+      "file": "MJRT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "MBUTPU",
+      "college_name": "MOHAN BABU UNIVERSITY",
+      "file": "MBUTPU.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "MTIE",
+      "college_name": "MOTHER THERESA INST OF ENGG AND TECH",
+      "file": "MTIE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "NSRE",
+      "college_name": "N S RAJU INSTITUTE OF ENGG AND TECHNOLOGY",
+      "file": "NSRE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "NSRT",
+      "college_name": "NADIMPALLI SATYANARAYANA RAJU INSTITUTE OF TECHNOLOGY",
+      "file": "NSRT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "NARN",
+      "college_name": "NARAYANA ENGINEERING COLLEGE",
+      "file": "NARN.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "NRNG",
+      "college_name": "NARAYANA ENGINEERING COLLEGE",
+      "file": "NRNG.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "NIST",
+      "college_name": "NARAYANADRI INST OF SCI TECHNOLOGY",
+      "file": "NIST.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "NSPE",
+      "college_name": "NARSARAOPETA ENGINEERING COLLEGE",
+      "file": "NSPE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "NBKR",
+      "college_name": "NBKR INSTITUTE OF SCI. AND TECHNOLOGY",
+      "file": "NBKR.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "NEWT",
+      "college_name": "NEWTON INSTITUTE OF ENGINEERING",
+      "file": "NEWT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "NEWS",
+      "college_name": "NEWTONS INST OF SCI AND TECH",
+      "file": "NEWS.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "NMRE",
+      "college_name": "NIMRA COLLEGE OF ENGG AND TECHNOLOGY",
+      "file": "NMRE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "NRIA",
+      "college_name": "NRI INSTITUTE OF TECHNOLOGY",
+      "file": "NRIA.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "NRIT",
+      "college_name": "NRI INSTT OF TECHNOLOGY",
+      "file": "NRIT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "VITK",
+      "college_name": "P B R VISVODAYA INSTITUTE OF TECHNOLOGY AND SCI.",
+      "file": "VITK.json",
+      "has_data": true,
+      "record_count": 936,
+      "branches": [
+        {
+          "branch_code": "AIM",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING",
+          "record_count": 249
+        },
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 5
+        },
+        {
+          "branch_code": "CAI",
+          "branch_name": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE )",
+          "record_count": 280
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 266
+        },
+        {
+          "branch_code": "CSO",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (IOT)",
+          "record_count": 3
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 25
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 99
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 9
+        }
+      ]
+    },
+    {
+      "college_code": "PVKK",
+      "college_name": "P.V.K.K. INSTITUTE OF TECHNOLOGY",
+      "file": "PVKK.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "PVKKOC",
+      "college_name": "P.V.K.K. INSTITUTE OF TECHNOLOGY-OFF CAMPUS",
+      "file": "PVKKOC.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "PACE",
+      "college_name": "PACE INSTITUTE OF TECHNOLOGY AND SCIENCES",
+      "file": "PACE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "PPDV",
+      "college_name": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH",
+      "file": "PPDV.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "PSCV",
+      "college_name": "POTTI SRIRAMULU COLLEGE OF ENGG AND TECHNOLOGY",
+      "file": "PSCV.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "PRAG",
+      "college_name": "PRAGATI ENGINEERING COLLEGE",
+      "file": "PRAG.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "PKSK",
+      "college_name": "PRAKASAM ENGINEERING COLLEGE",
+      "file": "PKSK.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "PPSV",
+      "college_name": "PRASAD V POTLURI SIDDHARTHA INSTT OF TECHNOLOGY",
+      "file": "PPSV.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "PRIK",
+      "college_name": "PRIYADARSHINI COLL OF ENGG. AND TECHNOLOGY",
+      "file": "PRIK.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "PIIT",
+      "college_name": "PRIYADARSHINI INST OF TECH AND MGMT",
+      "file": "PIIT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "PINN",
+      "college_name": "PRIYADARSHINI INST OF TECHNOLOGY",
+      "file": "PINN.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "PITW",
+      "college_name": "PRIYADARSHINI INST. OF TECH AND SCIENCES FOR WOMEN",
+      "file": "PITW.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "PITT",
+      "college_name": "PRIYADARSHINI INST. OF TECHNOLOGY AND SCIENCES",
+      "file": "PITT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "PYDE",
+      "college_name": "PYDAH COLL OF ENGINEERING",
+      "file": "PYDE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "QISE",
+      "college_name": "QIS COLLEGE OF ENGG. AND TECHNOLOGY",
+      "file": "QISE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "RVIT",
+      "college_name": "R V INSTITUTE OF TECHNOLOGY",
+      "file": "RVIT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "RVJC",
+      "college_name": "R V R AND J C COLLEGE OF ENGINEERING",
+      "file": "RVJC.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "RKCE",
+      "college_name": "R.K.COLLEGE OF ENGINEERING",
+      "file": "RKCE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "RAGU",
+      "college_name": "RAGHU ENGINEERING COLLEGE",
+      "file": "RAGU.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "RIET",
+      "college_name": "RAJAMAHENDRI INST OF ENGG AND TECHNOLOGY",
+      "file": "RIET.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "RGIT",
+      "college_name": "RAJIV GANDHI MEMORIAL COLLEGE OF ENGG. AND TECH.",
+      "file": "RGIT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "RACE",
+      "college_name": "RAMACHANDRA COLLEGE OF ENGINEERING",
+      "file": "RACE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "RSRN",
+      "college_name": "RAMIREDDY SUBBA RAMIREDDY ENGG COLLEGE",
+      "file": "RSRN.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "RAVW",
+      "college_name": "RAVINDRA COLLEGE OF ENGG FOR WOMEN",
+      "file": "RAVW.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "RUCESF",
+      "college_name": "RAYALASEEMA UNIVERSITY COLLEGE OF ENGG-SELF FINANCE",
+      "file": "RUCESF.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "RPRA",
+      "college_name": "RISE KRISHNA SAI PRAKASAM GROUP OF INSTITUTIONS",
+      "file": "RPRA.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "SRKI",
+      "college_name": "S R K INST. OF TECHNOLOGY",
+      "file": "SRKI.json",
+      "has_data": true,
+      "record_count": 666,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 8
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 144
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 95
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 143
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 18
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 95
+        },
+        {
+          "branch_code": "EVT",
+          "branch_name": "ELECTRONICS ENGINEERING (VLSI DESIGN AND TECHNOLOGY)",
+          "record_count": 44
+        },
+        {
+          "branch_code": "INF",
+          "branch_name": "INFORMATION TECHNOLOGY",
+          "record_count": 96
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 23
+        }
+      ]
+    },
+    {
+      "college_code": "SRKR",
+      "college_name": "S R K R ENGINEERING COLLEGE",
+      "file": "SRKR.json",
+      "has_data": true,
+      "record_count": 1482,
+      "branches": [
+        {
+          "branch_code": "AID",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+          "record_count": 192
+        },
+        {
+          "branch_code": "AIM",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING",
+          "record_count": 191
+        },
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 95
+        },
+        {
+          "branch_code": "CSB",
+          "branch_name": "COMPUTER SCIENCE AND BUSINESS SYSTEMS",
+          "record_count": 48
+        },
+        {
+          "branch_code": "CSG",
+          "branch_name": "COMPUTER SCIENCE AND DESIGN",
+          "record_count": 48
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 239
+        },
+        {
+          "branch_code": "CIT",
+          "branch_name": "COMPUTER SCIENCE AND INFORMATION TECHNOLOGY",
+          "record_count": 96
+        },
+        {
+          "branch_code": "CIC",
+          "branch_name": "CSE (IOT & CYBER SECURITY WITH BLOCK CHAIN TECH)",
+          "record_count": 47
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 96
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 191
+        },
+        {
+          "branch_code": "INF",
+          "branch_name": "INFORMATION TECHNOLOGY",
+          "record_count": 143
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 96
+        }
+      ]
+    },
+    {
+      "college_code": "SRMUPU",
+      "college_name": "S R M UNIVERSITY AP",
+      "file": "SRMUPU.json",
+      "has_data": true,
+      "record_count": 504,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 9
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 439
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 9
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 38
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 9
+        }
+      ]
+    },
+    {
+      "college_code": "SVUCSS",
+      "college_name": "S V U COLLEGE OF ENGG. -SELF SUPPORTING-TIRUPATHI",
+      "file": "SVUCSS.json",
+      "has_data": true,
+      "record_count": 131,
+      "branches": [
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 131
+        }
+      ]
+    },
+    {
+      "college_code": "SVUC",
+      "college_name": "S V U COLLEGE OF ENGG. TIRUPATHI",
+      "file": "SVUC.json",
+      "has_data": true,
+      "record_count": 394,
+      "branches": [
+        {
+          "branch_code": "CHE",
+          "branch_name": "CHEMICAL ENGINEERING",
+          "record_count": 66
+        },
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 65
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 65
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 66
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 66
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 66
+        }
+      ]
+    },
+    {
+      "college_code": "SVEP",
+      "college_name": "S.V COLLEGE OF ENGINEERING",
+      "file": "SVEP.json",
+      "has_data": true,
+      "record_count": 70,
+      "branches": [
+        {
+          "branch_code": "AID",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+          "record_count": 12
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 50
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 8
+        }
+      ]
+    },
+    {
+      "college_code": "SRIP",
+      "college_name": "SAI RAJESWARI INSTITUTE OF TECHNOLOGY",
+      "file": "SRIP.json",
+      "has_data": true,
+      "record_count": 278,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 3
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 121
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 96
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 4
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 54
+        }
+      ]
+    },
+    {
+      "college_code": "SAVE",
+      "college_name": "SANKETHIKA VIDYA PARISHAD ENGINEERING COLLEGE",
+      "file": "SAVE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "SSSE",
+      "college_name": "SANSKRITHI SCHOOL OF ENGINEERING",
+      "file": "SSSE.json",
+      "has_data": true,
+      "record_count": 254,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 14
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 143
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 37
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 48
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 12
+        }
+      ]
+    },
+    {
+      "college_code": "SREC",
+      "college_name": "SANTHIRAM ENGINEERING COLLEGE",
+      "file": "SREC.json",
+      "has_data": true,
+      "record_count": 669,
+      "branches": [
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 239
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 143
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 143
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 144
+        }
+      ]
+    },
+    {
+      "college_code": "SASI",
+      "college_name": "SASI INSTITUTE OF TECHNOLOGY AND ENGINEERING",
+      "file": "SASI.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "SGVP",
+      "college_name": "SATYA INST OF TECHNOLOGY AND MGMT",
+      "file": "SGVP.json",
+      "has_data": true,
+      "record_count": 292,
+      "branches": [
+        {
+          "branch_code": "AID",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+          "record_count": 47
+        },
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 15
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 136
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 27
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 42
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 25
+        }
+      ]
+    },
+    {
+      "college_code": "SPMUSF",
+      "college_name": "SCHOOL OF ENGG. TECH. SPMVV - SELF FINANCE",
+      "file": "SPMUSF.json",
+      "has_data": true,
+      "record_count": 345,
+      "branches": [
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 131
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 64
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 131
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 19
+        }
+      ]
+    },
+    {
+      "college_code": "JNKFSF",
+      "college_name": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE",
+      "file": "JNKFSF.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "GDLV",
+      "college_name": "SESHADRI RAO GUDLAVALLERU ENGINEERING COLLEGE",
+      "file": "GDLV.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "VISW",
+      "college_name": "SHRI VISHNU ENGG. COLLEGE FOR WOMEN",
+      "file": "VISW.json",
+      "has_data": true,
+      "record_count": 765,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 48
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 143
+        },
+        {
+          "branch_code": "CSC",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY)",
+          "record_count": 48
+        },
+        {
+          "branch_code": "CAD",
+          "branch_name": "CSE (ARTIFICIAL INTELLIGENCE & DATA SCEINCE)",
+          "record_count": 95
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 96
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 48
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 96
+        },
+        {
+          "branch_code": "INF",
+          "branch_name": "INFORMATION TECHNOLOGY",
+          "record_count": 143
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 48
+        }
+      ]
+    },
+    {
+      "college_code": "SEAT",
+      "college_name": "SIDDARTHA EDNL ACADEMY GRP OF INSTNS",
+      "file": "SEAT.json",
+      "has_data": true,
+      "record_count": 341,
+      "branches": [
+        {
+          "branch_code": "CAI",
+          "branch_name": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE )",
+          "record_count": 46
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 143
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 21
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 72
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 7
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 51
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 1
+        }
+      ]
+    },
+    {
+      "college_code": "SDTN",
+      "college_name": "SIDDHARTH INSTITUTE OF ENGG. AND TECHNOLOGY",
+      "file": "SDTN.json",
+      "has_data": true,
+      "record_count": 2061,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 22
+        },
+        {
+          "branch_code": "CAI",
+          "branch_name": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE )",
+          "record_count": 96
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 622
+        },
+        {
+          "branch_code": "CIT",
+          "branch_name": "COMPUTER SCIENCE AND INFORMATION TECHNOLOGY",
+          "record_count": 48
+        },
+        {
+          "branch_code": "CCC",
+          "branch_name": "CSE - CLOUD COMPUTING",
+          "record_count": 95
+        },
+        {
+          "branch_code": "CAD",
+          "branch_name": "CSE (ARTIFICIAL INTELLIGENCE & DATA SCEINCE)",
+          "record_count": 239
+        },
+        {
+          "branch_code": "CIC",
+          "branch_name": "CSE (IOT & CYBER SECURITY WITH BLOCK CHAIN TECH)",
+          "record_count": 48
+        },
+        {
+          "branch_code": "CIA",
+          "branch_name": "CSE WITH SPL IN IOT & AUTOMATION",
+          "record_count": 48
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 286
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 62
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 478
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 17
+        }
+      ]
+    },
+    {
+      "college_code": "SIMH",
+      "college_name": "SIMHADRI EDNL SOC GRP OF INSTNS",
+      "file": "SIMH.json",
+      "has_data": true,
+      "record_count": 36,
+      "branches": [
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 27
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 2
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 4
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 3
+        }
+      ]
+    },
+    {
+      "college_code": "CRRE",
+      "college_name": "SIR C R R COLLEGE OF ENGINEERING",
+      "file": "CRRE.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "CVRT",
+      "college_name": "SIR C.V RAMAN INST OF TECHNOLOGY SCIENCES",
+      "file": "CVRT.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "VETS",
+      "college_name": "SR VENKATESWARA COLL OF ENGINEERING",
+      "file": "VETS.json",
+      "has_data": true,
+      "record_count": 140,
+      "branches": [
+        {
+          "branch_code": "AIM",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING",
+          "record_count": 13
+        },
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 1
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 95
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 6
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 4
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 15
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 6
+        }
+      ]
+    },
+    {
+      "college_code": "SRET",
+      "college_name": "SREE RAMA ENGINEERING COLLEGE",
+      "file": "SRET.json",
+      "has_data": true,
+      "record_count": 726,
+      "branches": [
+        {
+          "branch_code": "AID",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+          "record_count": 95
+        },
+        {
+          "branch_code": "AIM",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING",
+          "record_count": 96
+        },
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 5
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 335
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 8
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 181
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 6
+        }
+      ]
+    },
+    {
+      "college_code": "VHNI",
+      "college_name": "SREE VAHINI INSTT OF SCIENCE AND TECHNOLOGY",
+      "file": "VHNI.json",
+      "has_data": true,
+      "record_count": 303,
+      "branches": [
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 143
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 47
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 48
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 4
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 60
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 1
+        }
+      ]
+    },
+    {
+      "college_code": "SVCN",
+      "college_name": "SREE VENKATESWARA COLL OF ENGG",
+      "file": "SVCN.json",
+      "has_data": true,
+      "record_count": 1062,
+      "branches": [
+        {
+          "branch_code": "AID",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+          "record_count": 195
+        },
+        {
+          "branch_code": "CAI",
+          "branch_name": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE )",
+          "record_count": 143
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 372
+        },
+        {
+          "branch_code": "CSC",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY)",
+          "record_count": 25
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 231
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 96
+        }
+      ]
+    },
+    {
+      "college_code": "SATS",
+      "college_name": "SRI ANNAMACHARYA INSTITUTE OF TECHNOLOGY AND SCIENCE",
+      "file": "SATS.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "DJRC",
+      "college_name": "SRI CHAITANYA -DJR COLL OF ENGG AND TECH",
+      "file": "DJRC.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "SHEC",
+      "college_name": "SRI HARSHINI COLLEGE OF ENGINEERING AND TECHNOLOGY FOR WOMEN",
+      "file": "SHEC.json",
+      "has_data": true,
+      "record_count": 92,
+      "branches": [
+        {
+          "branch_code": "CAI",
+          "branch_name": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE )",
+          "record_count": 16
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 17
+        },
+        {
+          "branch_code": "CAD",
+          "branch_name": "CSE (ARTIFICIAL INTELLIGENCE & DATA SCEINCE)",
+          "record_count": 18
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 31
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 10
+        }
+      ]
+    },
+    {
+      "college_code": "SKUASF",
+      "college_name": "SRI KRISHNADEVARAYA UNIV.COLL.OF ENG.- SELF FINANCE",
+      "file": "SKUASF.json",
+      "has_data": true,
+      "record_count": 472,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 18
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 132
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 66
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 66
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 39
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 132
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 19
+        }
+      ]
+    },
+    {
+      "college_code": "MPLG",
+      "college_name": "SRI MITTAPALLI COLLEGE OF ENGINEERING",
+      "file": "MPLG.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "SNIT",
+      "college_name": "SRI NALANDA INSTITUTE OF ENGINEERING AND TECHNOLOGY",
+      "file": "SNIT.json",
+      "has_data": true,
+      "record_count": 7,
+      "branches": [
+        {
+          "branch_code": "AID",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+          "record_count": 1
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 4
+        },
+        {
+          "branch_code": "CS",
+          "branch_name": "CYBER SECURITY",
+          "record_count": 1
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 1
+        }
+      ]
+    },
+    {
+      "college_code": "SRSR",
+      "college_name": "SRI SAI INSTITUTE OF TECHNOLOGY. AND SCI.",
+      "file": "SRSR.json",
+      "has_data": true,
+      "record_count": 191,
+      "branches": [
+        {
+          "branch_code": "AID",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+          "record_count": 24
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 153
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 11
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 3
+        }
+      ]
+    },
+    {
+      "college_code": "SIEN",
+      "college_name": "SRI SARATHI INSTITUTE OF ENGG. AND TECHNOLOGY",
+      "file": "SIEN.json",
+      "has_data": true,
+      "record_count": 66,
+      "branches": [
+        {
+          "branch_code": "AID",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+          "record_count": 10
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 43
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 1
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 11
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 1
+        }
+      ]
+    },
+    {
+      "college_code": "SSCE",
+      "college_name": "SRI SIVANI COLLEGE OF ENGINEERING",
+      "file": "SSCE.json",
+      "has_data": true,
+      "record_count": 309,
+      "branches": [
+        {
+          "branch_code": "AIM",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING",
+          "record_count": 44
+        },
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 25
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 133
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 28
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 44
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 35
+        }
+      ]
+    },
+    {
+      "college_code": "VSVT",
+      "college_name": "SRI VASAVI ENGINEERING COLLEGE",
+      "file": "VSVT.json",
+      "has_data": true,
+      "record_count": 1051,
+      "branches": [
+        {
+          "branch_code": "AIM",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING",
+          "record_count": 143
+        },
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 48
+        },
+        {
+          "branch_code": "CAI",
+          "branch_name": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE )",
+          "record_count": 144
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 239
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 47
+        },
+        {
+          "branch_code": "CST",
+          "branch_name": "COMPUTER SCIENCE AND TECHNOLOGY",
+          "record_count": 47
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 72
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 191
+        },
+        {
+          "branch_code": "ECT",
+          "branch_name": "ELECTRONICS AND COMMUNICATION TECHNOLOGY",
+          "record_count": 48
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 72
+        }
+      ]
+    },
+    {
+      "college_code": "SVET",
+      "college_name": "SRI VASAVI INSTT OF ENGINEERING AND TECHNOLOGY",
+      "file": "SVET.json",
+      "has_data": true,
+      "record_count": 292,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 3
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 188
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 47
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 52
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 2
+        }
+      ]
+    },
+    {
+      "college_code": "SVPP",
+      "college_name": "SRI VENKATESA PERUMAL COLLEGE OF ENGG. AND TECH",
+      "file": "SVPP.json",
+      "has_data": true,
+      "record_count": 598,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 4
+        },
+        {
+          "branch_code": "CAI",
+          "branch_name": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE )",
+          "record_count": 110
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 257
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 18
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 122
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 13
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 69
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 5
+        }
+      ]
+    },
+    {
+      "college_code": "SVCE",
+      "college_name": "SRI VENKATESWARA COLL OF ENGINEERING - MAIN CAMPUS",
+      "file": "SVCE.json",
+      "has_data": true,
+      "record_count": 1625,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 48
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 335
+        },
+        {
+          "branch_code": "CSC",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY)",
+          "record_count": 96
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 95
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 239
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 191
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 382
+        },
+        {
+          "branch_code": "INF",
+          "branch_name": "INFORMATION TECHNOLOGY",
+          "record_count": 144
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 95
+        }
+      ]
+    },
+    {
+      "college_code": "SVCT",
+      "college_name": "SRI VENKATESWARA COLLEGE OF ENGG. AND TECHNOLOGY",
+      "file": "SVCT.json",
+      "has_data": true,
+      "record_count": 1331,
+      "branches": [
+        {
+          "branch_code": "AI",
+          "branch_name": "ARTIFICIAL INTELLIGENCE",
+          "record_count": 48
+        },
+        {
+          "branch_code": "AID",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+          "record_count": 95
+        },
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 15
+        },
+        {
+          "branch_code": "CAI",
+          "branch_name": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE )",
+          "record_count": 191
+        },
+        {
+          "branch_code": "CSB",
+          "branch_name": "COMPUTER SCIENCE AND BUSINESS SYSTEMS",
+          "record_count": 12
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 287
+        },
+        {
+          "branch_code": "CSC",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY)",
+          "record_count": 47
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 143
+        },
+        {
+          "branch_code": "CSO",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (IOT)",
+          "record_count": 15
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 239
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 9
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 190
+        },
+        {
+          "branch_code": "INF",
+          "branch_name": "INFORMATION TECHNOLOGY",
+          "record_count": 31
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 9
+        }
+      ]
+    },
+    {
+      "college_code": "SVCEOC",
+      "college_name": "SRI VENKATESWARA COLLEGE OF ENGINEERING-OFF CAMPUS",
+      "file": "SVCEOC.json",
+      "has_data": true,
+      "record_count": 100,
+      "branches": [
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 63
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 27
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 10
+        }
+      ]
+    },
+    {
+      "college_code": "SVIT",
+      "college_name": "SRI VENKATESWARA INST OF TECHNOLOGY",
+      "file": "SVIT.json",
+      "has_data": true,
+      "record_count": 245,
+      "branches": [
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 159
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 57
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 1
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 27
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 1
+        }
+      ]
+    },
+    {
+      "college_code": "SVIK",
+      "college_name": "SRI VENKATESWARA INST. OF SCIENCE AND TECHNOLOGY",
+      "file": "SVIK.json",
+      "has_data": true,
+      "record_count": 18,
+      "branches": [
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 14
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 2
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 2
+        }
+      ]
+    },
+    {
+      "college_code": "SRIN",
+      "college_name": "SRINIVASA INST OF ENGG AND TECHNOLOGY",
+      "file": "SRIN.json",
+      "has_data": true,
+      "record_count": 464,
+      "branches": [
+        {
+          "branch_code": "AIM",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING",
+          "record_count": 191
+        },
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 3
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 191
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 5
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 68
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 6
+        }
+      ]
+    },
+    {
+      "college_code": "SRTS",
+      "college_name": "SRINIVASA INST OF TECHNOLOGY AND SCIENCE",
+      "file": "SRTS.json",
+      "has_data": true,
+      "record_count": 131,
+      "branches": [
+        {
+          "branch_code": "AIM",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING",
+          "record_count": 42
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 63
+        },
+        {
+          "branch_code": "CAD",
+          "branch_name": "CSE (ARTIFICIAL INTELLIGENCE & DATA SCEINCE)",
+          "record_count": 7
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 2
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 17
+        }
+      ]
+    },
+    {
+      "college_code": "SSCC",
+      "college_name": "SRINIVASA INSTITUTE OF TECHNOLOGY AND MANG STUDIES",
+      "file": "SSCC.json",
+      "has_data": true,
+      "record_count": 381,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 3
+        },
+        {
+          "branch_code": "CAI",
+          "branch_name": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE )",
+          "record_count": 86
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 144
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 29
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 74
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 4
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 37
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 4
+        }
+      ]
+    },
+    {
+      "college_code": "SRIT",
+      "college_name": "SRINIVASA RAMANUJAN INST OF TECHNOLOGY",
+      "file": "SRIT.json",
+      "has_data": true,
+      "record_count": 831,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 32
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 287
+        },
+        {
+          "branch_code": "CAD",
+          "branch_name": "CSE (ARTIFICIAL INTELLIGENCE & DATA SCEINCE)",
+          "record_count": 143
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 143
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 48
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 143
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 35
+        }
+      ]
+    },
+    {
+      "college_code": "ANSN",
+      "college_name": "ST. ANNS COLLEGE OF ENGG. AND TECHNOLOGY",
+      "file": "ANSN.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "JONY",
+      "college_name": "ST. JOHNS COLLEGE OF ENGG. AND TECHNOLOGY",
+      "file": "JONY.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "SMGG",
+      "college_name": "ST.MARYS GROUP OF INSTITUTIONS GUNTUR FOR WOMEN",
+      "file": "SMGG.json",
+      "has_data": true,
+      "record_count": 283,
+      "branches": [
+        {
+          "branch_code": "AID",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+          "record_count": 72
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 95
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 100
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 16
+        }
+      ]
+    },
+    {
+      "college_code": "STMW",
+      "college_name": "ST.MARYS WOMENS ENGINEERING COLLEGE",
+      "file": "STMW.json",
+      "has_data": true,
+      "record_count": 336,
+      "branches": [
+        {
+          "branch_code": "AID",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+          "record_count": 126
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 84
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 84
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 42
+        }
+      ]
+    },
+    {
+      "college_code": "ASVR",
+      "college_name": "SVR ENGINEERING COLLEGE",
+      "file": "ASVR.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "CVST",
+      "college_name": "SVVU COLLEGE OF DAIRY TECHNOLOGY",
+      "file": "CVST.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "SWRN",
+      "college_name": "SWARNANDHRA COLL. OF ENGG AND TECHNOLOGY",
+      "file": "SWRN.json",
+      "has_data": true,
+      "record_count": 1386,
+      "branches": [
+        {
+          "branch_code": "AID",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+          "record_count": 48
+        },
+        {
+          "branch_code": "AIM",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING",
+          "record_count": 144
+        },
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 47
+        },
+        {
+          "branch_code": "CSEB",
+          "branch_name": "COMPUTER SCIENCE AND ENGG & BUSINESS SYSTEMS",
+          "record_count": 47
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 478
+        },
+        {
+          "branch_code": "CSC",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY)",
+          "record_count": 48
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 96
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 48
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 239
+        },
+        {
+          "branch_code": "INF",
+          "branch_name": "INFORMATION TECHNOLOGY",
+          "record_count": 96
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 47
+        },
+        {
+          "branch_code": "RBT",
+          "branch_name": "ROBOTICS",
+          "record_count": 48
+        }
+      ]
+    },
+    {
+      "college_code": "TECH",
+      "college_name": "TADIPATRI ENGG COLLEGE",
+      "file": "TECH.json",
+      "has_data": true,
+      "record_count": 207,
+      "branches": [
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 132
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 6
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 67
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 2
+        }
+      ]
+    },
+    {
+      "college_code": "TMLN",
+      "college_name": "TIRUMALA ENGINEERING COLLEGE",
+      "file": "TMLN.json",
+      "has_data": true,
+      "record_count": 868,
+      "branches": [
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 478
+        },
+        {
+          "branch_code": "CAD",
+          "branch_name": "CSE (ARTIFICIAL INTELLIGENCE & DATA SCEINCE)",
+          "record_count": 47
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 239
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 80
+        },
+        {
+          "branch_code": "INF",
+          "branch_name": "INFORMATION TECHNOLOGY",
+          "record_count": 24
+        }
+      ]
+    },
+    {
+      "college_code": "UNIV",
+      "college_name": "UNIVERSAL COLLEGE OF ENGG AND TECHNOLOGY",
+      "file": "UNIV.json",
+      "has_data": true,
+      "record_count": 139,
+      "branches": [
+        {
+          "branch_code": "AIM",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING",
+          "record_count": 57
+        },
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 4
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 47
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 9
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 20
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 2
+        }
+      ]
+    },
+    {
+      "college_code": "URCE",
+      "college_name": "USHA RAMA COLL OF ENGG AND TECHNOLOGY",
+      "file": "URCE.json",
+      "has_data": true,
+      "record_count": 459,
+      "branches": [
+        {
+          "branch_code": "AID",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+          "record_count": 48
+        },
+        {
+          "branch_code": "AIM",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING",
+          "record_count": 48
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 191
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 3
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 113
+        },
+        {
+          "branch_code": "INF",
+          "branch_name": "INFORMATION TECHNOLOGY",
+          "record_count": 48
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 8
+        }
+      ]
+    },
+    {
+      "college_code": "VVITPU",
+      "college_name": "V V I T - UNIVERSITY",
+      "file": "VVITPU.json",
+      "has_data": true,
+      "record_count": 1016,
+      "branches": [
+        {
+          "branch_code": "CAI",
+          "branch_name": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE )",
+          "record_count": 49
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 251
+        },
+        {
+          "branch_code": "CAD",
+          "branch_name": "CSE (ARTIFICIAL INTELLIGENCE & DATA SCEINCE)",
+          "record_count": 111
+        },
+        {
+          "branch_code": "CIC",
+          "branch_name": "CSE (IOT & CYBER SECURITY WITH BLOCK CHAIN TECH)",
+          "record_count": 41
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 543
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 21
+        }
+      ]
+    },
+    {
+      "college_code": "VSMR",
+      "college_name": "V.S.M COLLEGE OF ENGINEERING",
+      "file": "VSMR.json",
+      "has_data": true,
+      "record_count": 489,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 5
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 239
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 38
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 144
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 2
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 52
+        },
+        {
+          "branch_code": "INF",
+          "branch_name": "INFORMATION TECHNOLOGY",
+          "record_count": 2
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 7
+        }
+      ]
+    },
+    {
+      "college_code": "VVITU",
+      "college_name": "VASIREDDY VENKATADRI INST. OF TECHNOLOGY",
+      "file": "VVITU.json",
+      "has_data": true,
+      "record_count": 1212,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 84
+        },
+        {
+          "branch_code": "CAI",
+          "branch_name": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE )",
+          "record_count": 125
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 334
+        },
+        {
+          "branch_code": "CIC",
+          "branch_name": "CSE (IOT & CYBER SECURITY WITH BLOCK CHAIN TECH)",
+          "record_count": 84
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 251
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 126
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 125
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 83
+        }
+      ]
+    },
+    {
+      "college_code": "VNRC",
+      "college_name": "VELAGA NAGESWARA RAO COLL OF ENGINEERING",
+      "file": "VNRC.json",
+      "has_data": true,
+      "record_count": 10,
+      "branches": [
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 5
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 3
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 1
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 1
+        }
+      ]
+    },
+    {
+      "college_code": "VEMU",
+      "college_name": "VEMU INSTITUTE OF TECHNOLOGY",
+      "file": "VEMU.json",
+      "has_data": true,
+      "record_count": 925,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 26
+        },
+        {
+          "branch_code": "CAI",
+          "branch_name": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE )",
+          "record_count": 144
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 286
+        },
+        {
+          "branch_code": "CIT",
+          "branch_name": "COMPUTER SCIENCE AND INFORMATION TECHNOLOGY",
+          "record_count": 48
+        },
+        {
+          "branch_code": "CAD",
+          "branch_name": "CSE (ARTIFICIAL INTELLIGENCE & DATA SCEINCE)",
+          "record_count": 48
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 143
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 48
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 144
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 38
+        }
+      ]
+    },
+    {
+      "college_code": "VIVP",
+      "college_name": "VIGNANS INSTITUTE OF INFORMATION TECHNOLOGY",
+      "file": "VIVP.json",
+      "has_data": true,
+      "record_count": 1912,
+      "branches": [
+        {
+          "branch_code": "AID",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+          "record_count": 191
+        },
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 96
+        },
+        {
+          "branch_code": "CAI",
+          "branch_name": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE )",
+          "record_count": 191
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 430
+        },
+        {
+          "branch_code": "CSC",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY)",
+          "record_count": 143
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 144
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 95
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 287
+        },
+        {
+          "branch_code": "ECM",
+          "branch_name": "ELECTRONICS AND COMPUTER ENGINEERING",
+          "record_count": 48
+        },
+        {
+          "branch_code": "INF",
+          "branch_name": "INFORMATION TECHNOLOGY",
+          "record_count": 144
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 143
+        }
+      ]
+    },
+    {
+      "college_code": "VIEW",
+      "college_name": "VIGNANS INSTT OF ENGINEERING FOR WOMEN",
+      "file": "VIEW.json",
+      "has_data": true,
+      "record_count": 1025,
+      "branches": [
+        {
+          "branch_code": "CAI",
+          "branch_name": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE )",
+          "record_count": 143
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 287
+        },
+        {
+          "branch_code": "CSC",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY)",
+          "record_count": 47
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 96
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 96
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 95
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 191
+        },
+        {
+          "branch_code": "INF",
+          "branch_name": "INFORMATION TECHNOLOGY",
+          "record_count": 48
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 22
+        }
+      ]
+    },
+    {
+      "college_code": "VLIT",
+      "college_name": "VIGNANS LARA INST. OF TECHNOLOGY AND SCI",
+      "file": "VLIT.json",
+      "has_data": true,
+      "record_count": 1362,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 47
+        },
+        {
+          "branch_code": "CAI",
+          "branch_name": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE )",
+          "record_count": 143
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 335
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 96
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 144
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 96
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 334
+        },
+        {
+          "branch_code": "INF",
+          "branch_name": "INFORMATION TECHNOLOGY",
+          "record_count": 96
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 71
+        }
+      ]
+    },
+    {
+      "college_code": "VNIW",
+      "college_name": "VIGNANS NIRULA INST OF TECH. AND SCI FOR WOMEN",
+      "file": "VNIW.json",
+      "has_data": true,
+      "record_count": 783,
+      "branches": [
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 239
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 143
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 143
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 19
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 95
+        },
+        {
+          "branch_code": "INF",
+          "branch_name": "INFORMATION TECHNOLOGY",
+          "record_count": 144
+        }
+      ]
+    },
+    {
+      "college_code": "VITW",
+      "college_name": "VIJAYA INST. OF TECHNOLOGY FOR WOMEN",
+      "file": "VITW.json",
+      "has_data": true,
+      "record_count": 219,
+      "branches": [
+        {
+          "branch_code": "AIM",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING",
+          "record_count": 66
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 111
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 22
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 19
+        },
+        {
+          "branch_code": "INF",
+          "branch_name": "INFORMATION TECHNOLOGY",
+          "record_count": 1
+        }
+      ]
+    },
+    {
+      "college_code": "VJAM",
+      "college_name": "VIJAYAM INSTITUTE OF TECHNOLOGY",
+      "file": "VJAM.json",
+      "has_data": true,
+      "record_count": 194,
+      "branches": [
+        {
+          "branch_code": "AID",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+          "record_count": 82
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 85
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 2
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 25
+        }
+      ]
+    },
+    {
+      "college_code": "VCTN",
+      "college_name": "VIKAS COLLEGE OF ENGINEERING AND TECHNOLOGY",
+      "file": "VCTN.json",
+      "has_data": true,
+      "record_count": 319,
+      "branches": [
+        {
+          "branch_code": "AGR",
+          "branch_name": "AGRICULTURAL ENGINEERING",
+          "record_count": 1
+        },
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 3
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 150
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 17
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 105
+        },
+        {
+          "branch_code": "CS",
+          "branch_name": "CYBER SECURITY",
+          "record_count": 12
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 1
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 26
+        },
+        {
+          "branch_code": "IOT",
+          "branch_name": "INTERNET OF THINGS (IOT)",
+          "record_count": 2
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 2
+        }
+      ]
+    },
+    {
+      "college_code": "VGTN",
+      "college_name": "VIKAS GROUP OF INSTITUTIONS",
+      "file": "VGTN.json",
+      "has_data": true,
+      "record_count": 216,
+      "branches": [
+        {
+          "branch_code": "AGR",
+          "branch_name": "AGRICULTURAL ENGINEERING",
+          "record_count": 1
+        },
+        {
+          "branch_code": "AID",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+          "record_count": 16
+        },
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 4
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 77
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 8
+        },
+        {
+          "branch_code": "CIC",
+          "branch_name": "CSE (IOT & CYBER SECURITY WITH BLOCK CHAIN TECH)",
+          "record_count": 15
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 70
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 2
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 18
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 5
+        }
+      ]
+    },
+    {
+      "college_code": "VSPT",
+      "college_name": "VISAKHA INST OF ENGG AND TECHNOLOGY",
+      "file": "VSPT.json",
+      "has_data": true,
+      "record_count": 447,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 17
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 179
+        },
+        {
+          "branch_code": "CSC",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY)",
+          "record_count": 42
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 42
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 43
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 11
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 88
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 25
+        }
+      ]
+    },
+    {
+      "college_code": "VITB",
+      "college_name": "VISHNU GRP OF INSTNS - VISHNU INST OF TECHNOLOGY",
+      "file": "VITB.json",
+      "has_data": true,
+      "record_count": 908,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 48
+        },
+        {
+          "branch_code": "CSB",
+          "branch_name": "COMPUTER SCIENCE AND BUSINESS SYSTEMS",
+          "record_count": 48
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 191
+        },
+        {
+          "branch_code": "CAD",
+          "branch_name": "CSE (ARTIFICIAL INTELLIGENCE & DATA SCEINCE)",
+          "record_count": 96
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 95
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 48
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 143
+        },
+        {
+          "branch_code": "INF",
+          "branch_name": "INFORMATION TECHNOLOGY",
+          "record_count": 191
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 48
+        }
+      ]
+    },
+    {
+      "college_code": "VISM",
+      "college_name": "VISWAM ENGINEERING COLLEGE",
+      "file": "VISM.json",
+      "has_data": true,
+      "record_count": 628,
+      "branches": [
+        {
+          "branch_code": "AID",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+          "record_count": 96
+        },
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 5
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 191
+        },
+        {
+          "branch_code": "CST",
+          "branch_name": "COMPUTER SCIENCE AND TECHNOLOGY",
+          "record_count": 48
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 96
+        },
+        {
+          "branch_code": "CS",
+          "branch_name": "CYBER SECURITY",
+          "record_count": 47
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 6
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 131
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 8
+        }
+      ]
+    },
+    {
+      "college_code": "VITAPU",
+      "college_name": "VIT-AP UNIVERSITY",
+      "file": "VITAPU.json",
+      "has_data": true,
+      "record_count": 1175,
+      "branches": [
+        {
+          "branch_code": "CSW",
+          "branch_name": "COMPUTER ENGINEERING(SOFTWARE ENGINEERING)",
+          "record_count": 21
+        },
+        {
+          "branch_code": "CSB",
+          "branch_name": "COMPUTER SCIENCE AND BUSINESS SYSTEMS",
+          "record_count": 42
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 540
+        },
+        {
+          "branch_code": "CSC",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY)",
+          "record_count": 42
+        },
+        {
+          "branch_code": "CBC",
+          "branch_name": "CSE- BLOCK CHAIN",
+          "record_count": 21
+        },
+        {
+          "branch_code": "CDA",
+          "branch_name": "CSE- DATA ANALYTICS",
+          "record_count": 63
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 313
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 42
+        },
+        {
+          "branch_code": "ECV",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING - VLSI DESIGN",
+          "record_count": 21
+        },
+        {
+          "branch_code": "ECES",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING -EMBEDDED SYSTEMS",
+          "record_count": 20
+        },
+        {
+          "branch_code": "MAD",
+          "branch_name": "MECHANICAL AUTOMOTIVE DESIGN",
+          "record_count": 11
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 21
+        },
+        {
+          "branch_code": "MRB",
+          "branch_name": "MECHANICAL ENGINEERING (ROBOTICS)",
+          "record_count": 18
+        }
+      ]
+    },
+    {
+      "college_code": "VITAPUMT",
+      "college_name": "VIT-AP UNIVERSITY-5 YEAR INTEGRATED MTECH",
+      "file": "VITAPUMT.json",
+      "has_data": true,
+      "record_count": 259,
+      "branches": [
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 129
+        },
+        {
+          "branch_code": "SWE",
+          "branch_name": "SOFTWARE ENGINEERING",
+          "record_count": 130
+        }
+      ]
+    },
+    {
+      "college_code": "VVGV",
+      "college_name": "VKR VNB AND AGK ENGINEERING COLLEGE",
+      "file": "VVGV.json",
+      "has_data": true,
+      "record_count": 144,
+      "branches": [
+        {
+          "branch_code": "AID",
+          "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+          "record_count": 29
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 60
+        },
+        {
+          "branch_code": "CSM",
+          "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+          "record_count": 41
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 12
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 2
+        }
+      ]
+    },
+    {
+      "college_code": "CCVY",
+      "college_name": "VRS AND YRN COLLEGE OF ENGG. AND TECHNOLOGY",
+      "file": "CCVY.json",
+      "has_data": false,
+      "record_count": 0,
+      "branches": []
+    },
+    {
+      "college_code": "WSTM",
+      "college_name": "WELLFARE INST OF SCIENCE TECH AND MGMT",
+      "file": "WSTM.json",
+      "has_data": true,
+      "record_count": 159,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 16
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 48
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 21
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 41
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 33
+        }
+      ]
+    },
+    {
+      "college_code": "WISE",
+      "college_name": "WEST GODAVARI INSTT OF SCIENCE AND ENGINEERING",
+      "file": "WISE.json",
+      "has_data": true,
+      "record_count": 165,
+      "branches": [
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 95
+        },
+        {
+          "branch_code": "CSD",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+          "record_count": 38
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 28
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 4
+        }
+      ]
+    },
+    {
+      "college_code": "YGVU",
+      "college_name": "YGVU YSR ENGINEERING COLLEGE",
+      "file": "YGVU.json",
+      "has_data": true,
+      "record_count": 260,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 31
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 66
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 61
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 66
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 29
+        },
+        {
+          "branch_code": "MMT",
+          "branch_name": "METALLURGY AND MATERIAL TECHNOLOGY",
+          "record_count": 7
+        }
+      ]
+    },
+    {
+      "college_code": "SVHE",
+      "college_name": "YJR DMS COLLEGE OF ENGINEERING",
+      "file": "SVHE.json",
+      "has_data": true,
+      "record_count": 147,
+      "branches": [
+        {
+          "branch_code": "CIV",
+          "branch_name": "CIVIL ENGINEERING",
+          "record_count": 2
+        },
+        {
+          "branch_code": "CSE",
+          "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+          "record_count": 72
+        },
+        {
+          "branch_code": "CAD",
+          "branch_name": "CSE (ARTIFICIAL INTELLIGENCE & DATA SCEINCE)",
+          "record_count": 47
+        },
+        {
+          "branch_code": "EEE",
+          "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+          "record_count": 1
+        },
+        {
+          "branch_code": "ECE",
+          "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+          "record_count": 22
+        },
+        {
+          "branch_code": "MEC",
+          "branch_name": "MECHANICAL ENGINEERING",
+          "record_count": 3
+        }
+      ]
+    }
+  ]
+}

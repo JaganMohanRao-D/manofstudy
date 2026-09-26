@@ -32,6 +32,7 @@ import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { Footer } from './components/Footer';
 import { LegalModals } from './components/LegalModals';
+import { EducationalGuideAndSeo } from './components/EducationalGuideAndSeo';
 import type { EapcetPhaseTab } from './components/ApEapcetRadar';
 
 // Dynamic code splitting / Lazy loading for heavy sub-pages, modals, and tools
@@ -139,11 +140,6 @@ const CampusConnect = lazy(() =>
 const StudentGapAnalyzer = lazy(() =>
   import('./components/StudentGapAnalyzer/StudentGapAnalyzer').then((m: any) => ({
     default: m.StudentGapAnalyzer || m.default,
-  }))
-);
-const EducationalGuideAndSeo = lazy(() =>
-  import('./components/EducationalGuideAndSeo').then((m: any) => ({
-    default: m.EducationalGuideAndSeo || m.default,
   }))
 );
 const StudentFaq = lazy(() =>

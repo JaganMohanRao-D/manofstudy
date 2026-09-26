@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   Search,
+  Building2,
   Compass,
   FileText,
   Award,
@@ -141,6 +142,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         action: () => onSelectTool('tg-top-colleges'),
       },
       {
+        id: 'tool-ap-allotments',
+        title: 'AP EAPCET 2025 College-Wise Allotment Explorer',
+        subtitle: 'Explore college allotments, student ranks and category-wise admission insights',
+        category: 'Core Tools',
+        badge: 'AP 2025',
+        icon: <Building2 className="w-4 h-4 text-emerald-500" />,
+        keywords: ['ap', 'ap eapcet', 'apeapcet', 'andhra pradesh', 'allotment', 'allotments', '2025', 'student search', 'ranks', 'svce', 'adit', 'gayatri', 'siddhartha', 'cutoff'],
+        action: () => onSelectTool('ap-allotments' as ToolTab),
+      },
+      {
         id: 'tool-tg-allotments',
         title: 'TG EAPCET 2026 Final Phase Allotments & Cutoffs',
         subtitle: 'Official candidate allotments, cutoff ranks & admission stats',
@@ -149,16 +160,6 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         icon: <Award className="w-4 h-4 text-rose-500" />,
         keywords: ['tg', 'tgeapcet', 'tg eapcet', 'telangana', 'allotment', 'cutoff', 'ranks', '2026', 'counseling', 'jntuh', 'ou'],
         action: () => onSelectTool('tg-allotments'),
-      },
-      {
-        id: 'tool-ap-allotments-2025',
-        title: 'AP EAPCET 2025 Allotment Explorer',
-        subtitle: 'Search allotments by student name or rank and explore all 255 college files',
-        category: 'Core Tools',
-        badge: 'AP 2025',
-        icon: <Award className="w-4 h-4 text-indigo-500" />,
-        keywords: ['ap eapcet', 'ap eapcet 2025', 'ap allotments', 'allotment explorer', 'rank search', 'student name', 'college allotment', 'andhra pradesh'],
-        action: () => onSelectTool('ap-allotments'),
       },
       {
         id: 'tool-eapcet-radar',
