@@ -1,0 +1,206 @@
+{
+  "college_name": "CHIRALA ENGINEERING COLLEGE",
+  "college_code": "CECC",
+  "branches": [
+    {
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "records": [
+        {
+          "rank": "130491.0",
+          "cand_name": "RAYANI LAKSHMI RAGHAVENDRA",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "CHIRALA ENGINEERING COLLEGE (CECC)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "139981.0",
+          "cand_name": "KARANAM THANISHKA",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "CHIRALA ENGINEERING COLLEGE (CECC)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "143482.0",
+          "cand_name": "CHINTALA ANKITHA PRAISE",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 2,
+          "college": "CHIRALA ENGINEERING COLLEGE (CECC)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "148607.0",
+          "cand_name": "CHIRAKALA PAVAN KUMAR",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "CHIRALA ENGINEERING COLLEGE (CECC)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "148987.0",
+          "cand_name": "TALLURI BLESSY",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "CHIRALA ENGINEERING COLLEGE (CECC)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "164704.0",
+          "cand_name": "YARAMALA PRASANNA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "CHIRALA ENGINEERING COLLEGE (CECC)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "170079.0",
+          "cand_name": "GOVATHOTI CHETHAN KUMAR",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_UR",
+          "phase": 1,
+          "college": "CHIRALA ENGINEERING COLLEGE (CECC)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "171081.0",
+          "cand_name": "DASARI AAKASH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 2,
+          "college": "CHIRALA ENGINEERING COLLEGE (CECC)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "172622.0",
+          "cand_name": "LUKKA BALA MANOHAR",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "CHIRALA ENGINEERING COLLEGE (CECC)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "174624.0",
+          "cand_name": "JAJJARI SWARUPA RANI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "CHIRALA ENGINEERING COLLEGE (CECC)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "176129.0",
+          "cand_name": "PERLI SHALEM RAJU",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 2,
+          "college": "CHIRALA ENGINEERING COLLEGE (CECC)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "179857.0",
+          "cand_name": "NAGIPOGU ASHOK",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_UR",
+          "phase": 2,
+          "college": "CHIRALA ENGINEERING COLLEGE (CECC)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "180050.0",
+          "cand_name": "PUTTA RONYSUHAS",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_UR",
+          "phase": 2,
+          "college": "CHIRALA ENGINEERING COLLEGE (CECC)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSD",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+      "records": [
+        {
+          "rank": "119570.0",
+          "cand_name": "BALIJA ABHIRAM",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 2,
+          "college": "CHIRALA ENGINEERING COLLEGE (CECC)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSM",
+      "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+      "records": [
+        {
+          "rank": "112701.0",
+          "cand_name": "YENUMULA SRIKANTH",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "CHIRALA ENGINEERING COLLEGE (CECC)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        }
+      ]
+    },
+    {
+      "branch_code": "ECE",
+      "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+      "records": [
+        {
+          "rank": "169449.0",
+          "cand_name": "DAGGUMALLI DANIYELU RAJU",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "CHIRALA ENGINEERING COLLEGE (CECC)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        }
+      ]
+    }
+  ]
+}

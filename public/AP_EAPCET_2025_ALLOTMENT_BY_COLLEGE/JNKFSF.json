@@ -1,0 +1,375 @@
+{
+  "college_name": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE",
+  "college_code": "JNKFSF",
+  "branches": [
+    {
+      "branch_code": "FDE",
+      "branch_name": "FOOD ENGINEERING",
+      "records": [
+        {
+          "rank": "27393.0",
+          "cand_name": "DAMISETTI NAGA VIJAYA LAKSHMI NIDHI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "36114.0",
+          "cand_name": "KONATHALA THANMAI SNEHA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "37367.0",
+          "cand_name": "KOPPISETTI NAVYASRI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GIRLS_AU",
+          "phase": 2,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "38692.0",
+          "cand_name": "SAHITHI TUMMALA",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "43138.0",
+          "cand_name": "CHITTALA AMRUTHA LAKSHMI SRI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "46963.0",
+          "cand_name": "GARLAPATI RAKESH",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "57307.1",
+          "cand_name": "MUMMIDI TEJASWI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "62085.0",
+          "cand_name": "BARRE GRASHMINI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "65362.0",
+          "cand_name": "NARALA LALITHA",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "71933.0",
+          "cand_name": "POLUKONDA SOWJANYA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_UR",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "77858.0",
+          "cand_name": "MEDISETTI VEERA BHAVANI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GIRLS_UR",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "78182.0",
+          "cand_name": "SIDDAPUREDDY SITA RAGHAVA",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "79337.0",
+          "cand_name": "VARRE VENKATA RAMA KALYAN",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_UR",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "80245.0",
+          "cand_name": "PEETHA HARISH",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_CAP_GEN_UR",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "87512.0",
+          "cand_name": "POLANATI VENKATA VISHNU KISHORE NAIDU",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 2,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "89488.0",
+          "cand_name": "BOLLU SRIVALLI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GIRLS_AU",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "90485.0",
+          "cand_name": "CHINNARI VENKATA MANIKANTA",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_AU",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "92198.1",
+          "cand_name": "TALLURI BALA TRIPURA SUNDARI",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GIRLS_AU",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "95353.0",
+          "cand_name": "PAPPALA NEERAJA",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GEN_AU",
+          "phase": 2,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "104884.0",
+          "cand_name": "DEGALA RADHIKA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GIRLS_AU",
+          "phase": 2,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "106790.0",
+          "cand_name": "MUDADLA SRAVYA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_AU",
+          "phase": 2,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "111654.0",
+          "cand_name": "YEDLA SANJAY RAHUL",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "120146.0",
+          "cand_name": "BONU DIVYA TEJA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_AU",
+          "phase": 2,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "120655.0",
+          "cand_name": "RAYUDU GEETHIKA",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_AU",
+          "phase": 2,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "126342.0",
+          "cand_name": "NARALA SRAVANTHI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GIRLS_AU",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "130526.0",
+          "cand_name": "CHAPPIDI MEGHA SANJANA",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GIRLS_AU",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "137155.0",
+          "cand_name": "PEDADA PRIYANKA",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GIRLS_AU",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "143762.0",
+          "cand_name": "PILLI GRASHYA VARSHINI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_AU",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "152178.0",
+          "cand_name": "TATI AKSHITHA",
+          "gender": "F",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "ST_GEN_AU",
+          "phase": 2,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "167940.0",
+          "cand_name": "SURAMPUDI VIJAYA LAKSHMI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_AU",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "169969.0",
+          "cand_name": "CHADALAVADA RISHITHA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GIRLS_UR",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "173386.0",
+          "cand_name": "KOLLIMARLA  NAVEEN",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_E_GEN_AU",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        },
+        {
+          "rank": "179462.0",
+          "cand_name": "SAVARAPU SUBHASH",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 1,
+          "college": "SCHOOL OF FOOD TECHNOLOGY JNTUK KAKINADA-SELF FINANCE (JNKFSF)",
+          "branch": "FOOD ENGINEERING (FDE)"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,232 @@
+{
+  "college_name": "SVVU COLLEGE OF DAIRY TECHNOLOGY",
+  "college_code": "CVST",
+  "branches": [
+    {
+      "branch_code": "BDT",
+      "branch_name": "DAIRY TECHNOLOGY",
+      "records": [
+        {
+          "rank": "23543.0",
+          "cand_name": "MALLU DRAKSHAYANI",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 1,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        },
+        {
+          "rank": "40468.1",
+          "cand_name": "PULLA GAYATHRI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        },
+        {
+          "rank": "56318.0",
+          "cand_name": "SIMHADRI GOWTHAM",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        },
+        {
+          "rank": "61272.0",
+          "cand_name": "BYNABOINA MADHU",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        },
+        {
+          "rank": "85241.0",
+          "cand_name": "MADDAM ANKA RAO",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        },
+        {
+          "rank": "101225.0",
+          "cand_name": "BASIBOINA VENKATA  PRAVALLIKA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        },
+        {
+          "rank": "124377.0",
+          "cand_name": "BURE KANAKA VARAHA KRISHNA",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_UR",
+          "phase": 2,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        },
+        {
+          "rank": "133862.0",
+          "cand_name": "SUPRIYA B",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "BC_E_GEN_SVU",
+          "phase": 2,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        },
+        {
+          "rank": "135472.0",
+          "cand_name": "MASAPOGU VINAY KUMAR",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "SC_II_PWD_GIRLS_AU",
+          "phase": 2,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        },
+        {
+          "rank": "136129.0",
+          "cand_name": "AREKAL AMOSE",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_AU",
+          "phase": 1,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        },
+        {
+          "rank": "136455.0",
+          "cand_name": "VAKA MANIDEEP",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GIRLS_UR",
+          "phase": 1,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        },
+        {
+          "rank": "139013.0",
+          "cand_name": "KONA SRIDHAR",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_AU",
+          "phase": 1,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        },
+        {
+          "rank": "149055.0",
+          "cand_name": "KINNERA BALAJI",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "BC_B_GIRLS_SVU",
+          "phase": 2,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        },
+        {
+          "rank": "149965.0",
+          "cand_name": "CHINTHA RAM CHARAN THEJA",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "BC_B_GIRLS_AU",
+          "phase": 1,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        },
+        {
+          "rank": "151015.0",
+          "cand_name": "MOYYI CHANDHANA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 1,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        },
+        {
+          "rank": "162307.0",
+          "cand_name": "KOKKILIGADDA BRAHMANI",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GIRLS_AU",
+          "phase": 2,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        },
+        {
+          "rank": "164939.0",
+          "cand_name": "MITHAIGIRI MOHAMMAD ATHAULLA",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "BC_E_GEN_SVU",
+          "phase": 1,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        },
+        {
+          "rank": "167643.0",
+          "cand_name": "BUKKE SATHISH NAICK",
+          "gender": "M",
+          "category": "ST",
+          "region": "SVU",
+          "alloted_category": "ST_GEN_UR",
+          "phase": 2,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        },
+        {
+          "rank": "175527.0",
+          "cand_name": "YADAMARI DEEPIKA LAKSHMI",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "EWS_GEN_SVU",
+          "phase": 1,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        },
+        {
+          "rank": "179793.0",
+          "cand_name": "CHERUKURU MAHALAKSHMI",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "SC_II_GIRLS_SVU",
+          "phase": 2,
+          "college": "SVVU COLLEGE OF DAIRY TECHNOLOGY (CVST)",
+          "branch": "DAIRY TECHNOLOGY (BDT)"
+        }
+      ]
+    }
+  ]
+}

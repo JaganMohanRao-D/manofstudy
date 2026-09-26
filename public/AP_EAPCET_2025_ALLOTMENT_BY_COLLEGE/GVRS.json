@@ -1,0 +1,702 @@
+{
+  "college_name": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY",
+  "college_code": "GVRS",
+  "branches": [
+    {
+      "branch_code": "AID",
+      "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+      "records": [
+        {
+          "rank": "26848.0",
+          "cand_name": "GOGINENI VENKATA SRI MAHALAKSHMI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "84060.0",
+          "cand_name": "ADITI KUMARI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "94376.0",
+          "cand_name": "KOKKU JASWANTH ESWAR KUMAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "139017.0",
+          "cand_name": "MELAM VENKATA SAI",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "158909.0",
+          "cand_name": "DARAPANENI HARISH",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "BC_A_GEN_UR",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "171217.0",
+          "cand_name": "GAGANDEEP TALAKAYALA",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "176865.0",
+          "cand_name": "BAIREDDY SANJEEVA REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "records": [
+        {
+          "rank": "29936.0",
+          "cand_name": "DUGGINENI MANOHAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "56953.0",
+          "cand_name": "KODAMATI YERRA REDDY",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "88252.0",
+          "cand_name": "MARADANA JASWANTH",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "94302.0",
+          "cand_name": "DANGETI ESWARA PRASAD",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "96079.0",
+          "cand_name": "KOMMAVARAPU DEVARAJU KUMAR",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "105121.0",
+          "cand_name": "KONDA KAVITHA",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "123410.0",
+          "cand_name": "GUNAPATI SRINADH KUMAR REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "BC_E_CAP_GEN_UR",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "126589.0",
+          "cand_name": "KOMMURI SRI BALA NAGA DURGA PRASAD",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "126987.0",
+          "cand_name": "MYPATI SUBRAHMANYAM",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "BC_A_GEN_UR",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "130189.0",
+          "cand_name": "NANDURI VAMSI",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_UR",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "130971.0",
+          "cand_name": "TANGIRALA DIVYA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "132127.0",
+          "cand_name": "MANJULA SREEJA",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "135223.0",
+          "cand_name": "JOGINEEDI KIRAN KUMAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GIRLS_UR",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "135460.0",
+          "cand_name": "RAMASWAMY VAMSI RAM",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "139292.0",
+          "cand_name": "MANNAVA JOSEPH YASWANTH RAJ",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_UR",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "139426.0",
+          "cand_name": "JUTTUKA DEEPIKA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_UR",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "143098.0",
+          "cand_name": "PILLA JAYA SEKHAR",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "144421.0",
+          "cand_name": "JONNA DHARMA TEJA",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_UR",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "144573.0",
+          "cand_name": "KOLLURU VEERA GOPAL",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GEN_AU",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "160340.0",
+          "cand_name": "MADDIKUNTA VENKATA SIVANJANEYULU",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_AU",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "163338.0",
+          "cand_name": "SHAIK ANSARI",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "AU",
+          "alloted_category": "BC_E_GEN_UR",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "164279.0",
+          "cand_name": "MOPARTHI AVINASH KUMAR",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "164471.0",
+          "cand_name": "DAGGUPATI AJAY KUMAR",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "167279.0",
+          "cand_name": "RONGALI MANIKANTA",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_UR",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "169938.0",
+          "cand_name": "BONIGE SAI KUMAR",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_PWD_GEN_AU",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "169981.0",
+          "cand_name": "CHILAKA ANANDA BABU",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "170716.0",
+          "cand_name": "YANAMALA CHINNI",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "170859.0",
+          "cand_name": "VIPPARTHI ROSHITHA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "176272.0",
+          "cand_name": "MADDIKUNTA GANESH",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_AU",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "178693.0",
+          "cand_name": "THAMMIDALA KISHORE",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSM",
+      "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+      "records": [
+        {
+          "rank": "40002.0",
+          "cand_name": "NADAGOUNI DAKSHITHA",
+          "gender": "F",
+          "category": "OC",
+          "region": "NL",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "40134.0",
+          "cand_name": "BONDA SAI ABHISHEK",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "46840.0",
+          "cand_name": "MUVVALA NAMRATHA",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "77521.0",
+          "cand_name": "KONAKONDLA PRANITH SAI",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "SVU",
+          "alloted_category": "BC_B_GIRLS_UR",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "130860.0",
+          "cand_name": "DASARAJU SRIVASTA VINEESH",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "134217.0",
+          "cand_name": "BONDILI SIVA NAGA LAKSHMI BAI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "139997.0",
+          "cand_name": "LEVAKU MOHAN KALYAN KUMAR REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "BC_D_GIRLS_UR",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "144942.0",
+          "cand_name": "MANNEM CHARAN TEJA",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "ST_GEN_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "155469.0",
+          "cand_name": "YAGNAM AMRUTA SINDHURA REDDY",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "156893.0",
+          "cand_name": "CHINTAMALLA NAVEEN",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "163434.0",
+          "cand_name": "KOTHI SATHISH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "164442.0",
+          "cand_name": "KADIMI PRAVALLIKA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_UR",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        }
+      ]
+    },
+    {
+      "branch_code": "EEE",
+      "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+      "records": [
+        {
+          "rank": "170210.0",
+          "cand_name": "ANNAMREDDY HARI SHANKAR",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "ELECTRICAL AND ELECTRONICS ENGINEERING (EEE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "ECE",
+      "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+      "records": [
+        {
+          "rank": "67007.0",
+          "cand_name": "PUDI DEVAKI NANDA VARA PRASADA NAIDU",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "69041.0",
+          "cand_name": "NADAKUDITI SANJANA",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "115034.0",
+          "cand_name": "SHAIK SHUKUR",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "117704.0",
+          "cand_name": "ANDALA HANSHIKA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "136019.0",
+          "cand_name": "SUREBOYINA VENKATA SIVA RANGA SAI",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_UR",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "148284.0",
+          "cand_name": "BHUGADA ADITHYA",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "164222.0",
+          "cand_name": "PANTHAGANI NANDA  KISHORE",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GIRLS_UR",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "169353.0",
+          "cand_name": "BETHAPUDI ELISH BABU",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "MEC",
+      "branch_name": "MECHANICAL ENGINEERING",
+      "records": [
+        {
+          "rank": "120765.0",
+          "cand_name": "MUSIDIPALLI RAMAKRISHNA",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        },
+        {
+          "rank": "172721.0",
+          "cand_name": "JATHAVATH HARI NAYAK",
+          "gender": "M",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "G V R AND S COLLEGE OF ENGG. AND TECHNOLOGY (GVRS)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        }
+      ]
+    }
+  ]
+}

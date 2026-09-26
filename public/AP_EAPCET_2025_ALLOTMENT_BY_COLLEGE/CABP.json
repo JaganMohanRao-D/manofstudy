@@ -1,0 +1,243 @@
+{
+  "college_name": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING",
+  "college_code": "CABP",
+  "branches": [
+    {
+      "branch_code": "AGR",
+      "branch_name": "AGRICULTURAL ENGINEERING",
+      "records": [
+        {
+          "rank": "31313.0",
+          "cand_name": "KANDI GOPICHAND",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "45931.0",
+          "cand_name": "INDETI PARDHA SARADHI",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "49988.0",
+          "cand_name": "LAGA GURU MURTHI",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "62338.0",
+          "cand_name": "ADIGARLA KARTHIK  KUMAR  RAJ",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "63320.0",
+          "cand_name": "DEVARAKONDA SANJANA",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "65185.0",
+          "cand_name": "BUDALA SUNDARA PRABHA",
+          "gender": "F",
+          "category": "BC_C",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GIRLS_AU",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "67087.0",
+          "cand_name": "TALLURI SIRISHA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "67890.0",
+          "cand_name": "BODDU MOHAN  DEMUDUBABU",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_AU",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "70569.0",
+          "cand_name": "MANCHI PAVAN KUMAR",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_AU",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "70994.0",
+          "cand_name": "KANAPARTI CHAITRA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_CAP_GEN_UR",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "72563.0",
+          "cand_name": "LANKAPALLI PRIYANKA",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GIRLS_AU",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "94812.0",
+          "cand_name": "KANAPARTHI SAHITHI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GIRLS_AU",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "104329.0",
+          "cand_name": "KAMPA KISHORE",
+          "gender": "M",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "ST_GEN_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "106239.0",
+          "cand_name": "VARABOINA DEVAKI SAHU",
+          "gender": "F",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "ST_GEN_UR",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "109000.0",
+          "cand_name": "BOYINA PAVANI",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_UR",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "110930.0",
+          "cand_name": "BHEEMALA SANDEEP KUMAR",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "110947.0",
+          "cand_name": "PUTREVU KRISHNA YASASWY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "112248.0",
+          "cand_name": "GOTTAPU DINESH",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_UR",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "119657.0",
+          "cand_name": "JAKKA MADHU SHALINI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GIRLS_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "130797.0",
+          "cand_name": "SHAIK IRFAN",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "AU",
+          "alloted_category": "BC_E_GIRLS_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "131894.0",
+          "cand_name": "MARRAPU BHAVYA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF AGRICULTURAL ENGINEERING (CABP)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        }
+      ]
+    }
+  ]
+}

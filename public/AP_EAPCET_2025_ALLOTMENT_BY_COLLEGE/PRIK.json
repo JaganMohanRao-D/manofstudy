@@ -1,0 +1,62 @@
+{
+  "college_name": "PRIYADARSHINI COLL OF ENGG. AND TECHNOLOGY",
+  "college_code": "PRIK",
+  "branches": [
+    {
+      "branch_code": "AIM",
+      "branch_name": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING",
+      "records": [
+        {
+          "rank": "119564.0",
+          "cand_name": "BANDIKATTU HARSHINI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "SVU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 2,
+          "college": "PRIYADARSHINI COLL OF ENGG. AND TECHNOLOGY (PRIK)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "172493.0",
+          "cand_name": "KANCHUPATI AKASH",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "PRIYADARSHINI COLL OF ENGG. AND TECHNOLOGY (PRIK)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "records": [
+        {
+          "rank": "121601.0",
+          "cand_name": "RENATI ESHAHITHA",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "PRIYADARSHINI COLL OF ENGG. AND TECHNOLOGY (PRIK)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "170677.0",
+          "cand_name": "PASALA SAI KUMAR",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "PRIYADARSHINI COLL OF ENGG. AND TECHNOLOGY (PRIK)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        }
+      ]
+    }
+  ]
+}

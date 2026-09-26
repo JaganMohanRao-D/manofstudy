@@ -1,0 +1,427 @@
+{
+  "college_name": "HELAPURI INST OF TECH AND SCIENCE",
+  "college_code": "HITE",
+  "branches": [
+    {
+      "branch_code": "CIV",
+      "branch_name": "CIVIL ENGINEERING",
+      "records": [
+        {
+          "rank": "141960.0",
+          "cand_name": "KARAM DURGAMMA",
+          "gender": "F",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 1,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "CIVIL ENGINEERING (CIV)"
+        },
+        {
+          "rank": "176343.0",
+          "cand_name": "KALAGA NAVEEN KUMAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "CIVIL ENGINEERING (CIV)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "records": [
+        {
+          "rank": "111422.0",
+          "cand_name": "GUNAPATI SUDEEPA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GIRLS_UR",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "123972.0",
+          "cand_name": "BANKURU KRUPA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "135197.0",
+          "cand_name": "RAYUDU BHAGAVATHI SATYAKUMAR",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "136848.0",
+          "cand_name": "THAMIRCHI YAMINI",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "141560.0",
+          "cand_name": "GUMMADI SANNUTHA LAKSHMI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "145085.0",
+          "cand_name": "KOLAKALURI ASHOK",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "146160.0",
+          "cand_name": "SANKURU VINESH REDDY",
+          "gender": "M",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "148809.0",
+          "cand_name": "ABBADASARI AHALYA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GIRLS_AU",
+          "phase": 1,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "149068.0",
+          "cand_name": "PALLI NAVYA BHARGAVI",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "150935.0",
+          "cand_name": "MANCHILI NAVYA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GIRLS_AU",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "151913.0",
+          "cand_name": "PALIVALA RANJITH KUMAR",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "153085.0",
+          "cand_name": "NUTHULAPATI KAVYA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "155659.0",
+          "cand_name": "GOTTUMUKKALA LAKSHMI SAILAJA",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "162979.0",
+          "cand_name": "GORLI DURGA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "168610.0",
+          "cand_name": "CHILAKA  SEKHAR",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 1,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "168935.0",
+          "cand_name": "KATI HANUMANTHU KUMAR",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_UR",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "170529.0",
+          "cand_name": "MATA RAJ KUMAR",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 1,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "171362.0",
+          "cand_name": "ELLA NAVEEN REDDY",
+          "gender": "M",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "ST_GEN_AU",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "176436.0",
+          "cand_name": "BODAPATI VIVEK",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "179783.0",
+          "cand_name": "MANDA SUMANTH",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 1,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSM",
+      "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+      "records": [
+        {
+          "rank": "80069.0",
+          "cand_name": "THOTA HARATHI",
+          "gender": "F",
+          "category": "ST",
+          "region": "SVU",
+          "alloted_category": "OC_CAP_GIRLS_UR",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "122244.0",
+          "cand_name": "POGOTI SUNEETHA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 1,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "141757.0",
+          "cand_name": "MANDHA GNANASAI",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "159807.0",
+          "cand_name": "RAVUTU JAYA MANI KANTA",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "161827.0",
+          "cand_name": "JAAMI LOKESWARI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GIRLS_AU",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "164255.0",
+          "cand_name": "DEVISRIPRASAD NAGIRI",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "179191.0",
+          "cand_name": "DUBBAKU SIRIVALLI",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GIRLS_AU",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        }
+      ]
+    },
+    {
+      "branch_code": "EEE",
+      "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+      "records": [
+        {
+          "rank": "107947.0",
+          "cand_name": "MADDUKURI ROHITH SAI",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "ELECTRICAL AND ELECTRONICS ENGINEERING (EEE)"
+        },
+        {
+          "rank": "155499.0",
+          "cand_name": "MADHYAHNAPU CHINMAYI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "ELECTRICAL AND ELECTRONICS ENGINEERING (EEE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "ECE",
+      "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+      "records": [
+        {
+          "rank": "126367.0",
+          "cand_name": "GODAVARTHI JOSHI",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "179928.0",
+          "cand_name": "KANIKELLA AMRUTHA RAJA SRI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "180147.0",
+          "cand_name": "PODILA ABHI",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "MEC",
+      "branch_name": "MECHANICAL ENGINEERING",
+      "records": [
+        {
+          "rank": "92070.0",
+          "cand_name": "BALUSU LEELA SAI RAGHAVENDRA",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 2,
+          "college": "HELAPURI INST OF TECH AND SCIENCE (HITE)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        }
+      ]
+    }
+  ]
+}

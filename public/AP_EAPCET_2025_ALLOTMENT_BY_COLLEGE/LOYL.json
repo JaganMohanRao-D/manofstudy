@@ -1,0 +1,1104 @@
+{
+  "college_name": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT",
+  "college_code": "LOYL",
+  "branches": [
+    {
+      "branch_code": "CIV",
+      "branch_name": "CIVIL ENGINEERING",
+      "records": [
+        {
+          "rank": "170981.0",
+          "cand_name": "PANGI RAMESH",
+          "gender": "M",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GIRLS_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CIVIL ENGINEERING (CIV)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "records": [
+        {
+          "rank": "25992.0",
+          "cand_name": "GALAM NAGAMANI",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "27852.0",
+          "cand_name": "MAANEM LAKSHMI VASU DEVA AKHIL",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "32961.0",
+          "cand_name": "GANAPARTHI MANVITHA",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_CAP_GIRLS_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "36774.0",
+          "cand_name": "UDUMULA VAISHNAVI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "46567.0",
+          "cand_name": "TADAELA SADVEEKA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "47833.0",
+          "cand_name": "DASARI PRAVEEN",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "BC_D_GEN_UR",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "56668.0",
+          "cand_name": "KOLIMI ASIF BASHA",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "BC_E_GIRLS_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "57021.0",
+          "cand_name": "GANNI POOJA",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "58040.0",
+          "cand_name": "RAMAVATH CHANDRA SEKHAR NAIK",
+          "gender": "M",
+          "category": "ST",
+          "region": "SVU",
+          "alloted_category": "ST_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "61013.0",
+          "cand_name": "POLIBOINA SIVA NAGA PAVAN",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "66471.0",
+          "cand_name": "YANAMALA THARUN KUMAR REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "BC_A_GIRLS_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "79653.0",
+          "cand_name": "KALAPATI CHAITHANYA",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_II_GIRLS_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "93961.0",
+          "cand_name": "KOLLI TEJASWINI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "97126.0",
+          "cand_name": "BANDI AKSHAYA",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "99481.0",
+          "cand_name": "ANDUGULA PARTHA SARATHY",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "111376.0",
+          "cand_name": "BONALA ANIL SUKUMAR",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "114467.0",
+          "cand_name": "CHIMALA VAMSI KUMAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "ST_NCC_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "115338.0",
+          "cand_name": "JANGALA SANDHYA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GIRLS_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "117546.0",
+          "cand_name": "GUNDA NAGA VENKATA SAI KAUSHAL",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "117591.0",
+          "cand_name": "JERRIPOTHU KUMARBABU",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "119370.0",
+          "cand_name": "DARLA NAVADEEP",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "120010.0",
+          "cand_name": "CHAPANI VARSHINI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_SCG_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "121026.0",
+          "cand_name": "DOLA PRABHAS",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "122175.0",
+          "cand_name": "SURLA JNANA PRADEEP",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "NL",
+          "alloted_category": "BC_D_GIRLS_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "127045.0",
+          "cand_name": "BUGGANA MADHU SUDHAN REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "SC_I_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "128585.0",
+          "cand_name": "MADDUKURI KISHORE RAJU",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "137925.0",
+          "cand_name": "PANDANABOYINA SRINADH",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "139450.0",
+          "cand_name": "JONTHALA VIJAY BABU",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "140224.0",
+          "cand_name": "ARE DURGA PRATHAP",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "140247.0",
+          "cand_name": "NELAPATI SEKHAR",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "141273.0",
+          "cand_name": "SUNKARA VENKATA SAI",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "145305.0",
+          "cand_name": "CHILAKA AVINASH",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "145699.0",
+          "cand_name": "MUDRABOINA VASANTHA RAO",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "152766.0",
+          "cand_name": "SONGA NAGA JYOTHI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "154139.0",
+          "cand_name": "TAMMISETTY VENKATA JAYA VARDHAN",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "BC_A_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "157710.0",
+          "cand_name": "BANAVATHU GEETHANJALI DEVI BAI",
+          "gender": "F",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "ST_GIRLS_UR",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "158455.0",
+          "cand_name": "RAMAVATHU SRINIVASA NAYAK",
+          "gender": "M",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "ST_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "165042.0",
+          "cand_name": "SHAIK MASHEER MEERA",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "AU",
+          "alloted_category": "BC_E_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "168380.0",
+          "cand_name": "MEDA SHASSHANK",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "168608.0",
+          "cand_name": "NUTHALAPATI CHINNI BABU",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "171304.0",
+          "cand_name": "KOMMU KAVITHA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GIRLS_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "177092.0",
+          "cand_name": "VARAPAKULA PRAVEEN KUMAR",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "177769.0",
+          "cand_name": "KUCHIPUDI DEVARDHAN",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "177839.0",
+          "cand_name": "GOGULA NIKHIL REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "179420.0",
+          "cand_name": "U CHANDU",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "BC_C_GEN_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "179955.0",
+          "cand_name": "DASARI JAYA SREE KARTHIKEYA",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSD",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+      "records": [
+        {
+          "rank": "65128.0",
+          "cand_name": "MADDI PADMA HARIKA",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "93682.0",
+          "cand_name": "VALLALA SIRISHA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "143681.0",
+          "cand_name": "SHAIK  BUSHRA SADIYA",
+          "gender": "F",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "OC_PWD_GIRLS_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "144690.0",
+          "cand_name": "SIRISALA DAVID DINESH",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "154589.0",
+          "cand_name": "GANAPA BHANU PRAKASH VENKATA SAI",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_SCG_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "176518.0",
+          "cand_name": "SIDDELLA MARY SUJATHA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "179272.0",
+          "cand_name": "GANUPALLI YESU BABU",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSM",
+      "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+      "records": [
+        {
+          "rank": "63770.0",
+          "cand_name": "VANTERU SREEKANTH",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "73574.0",
+          "cand_name": "SHAIK KALAMUL SHARIF",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "81046.0",
+          "cand_name": "KOLLURU KAVITHA",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "86589.0",
+          "cand_name": "PARIMI SANJANA",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "87668.0",
+          "cand_name": "SHAIK SWALIHA",
+          "gender": "F",
+          "category": "BC_E",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "101243.0",
+          "cand_name": "AMARTHALURI SARANTEJA",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "110231.0",
+          "cand_name": "THOTA NAGA CHARAN TEJA",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "113166.0",
+          "cand_name": "BUDAMGUNTLA SRAVANTHI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "115665.0",
+          "cand_name": "JANNU SRAVYA",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GIRLS_UR",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "119128.0",
+          "cand_name": "PEESAPATI SAILAJA",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GIRLS_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "119887.0",
+          "cand_name": "SHAIK AMEERUNNISA BEGAM",
+          "gender": "F",
+          "category": "BC_E",
+          "region": "AU",
+          "alloted_category": "BC_E_GIRLS_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "123759.0",
+          "cand_name": "SYED ASIF",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "AU",
+          "alloted_category": "BC_E_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "127495.0",
+          "cand_name": "JANGA LAKSHYA REDDY",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "ST_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "134702.0",
+          "cand_name": "MUTHYALA SOWMYA",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GIRLS_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "138535.0",
+          "cand_name": "REBBALAPALLI KAVITHA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GIRLS_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "141957.0",
+          "cand_name": "CHEVURI ESWAR",
+          "gender": "M",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "ST_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "152374.0",
+          "cand_name": "KUMBA SIRISHA",
+          "gender": "F",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "ST_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "166705.0",
+          "cand_name": "MARRIPUDI ANURAG TEJA",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "168964.0",
+          "cand_name": "NELATURI PAVITHRA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GIRLS_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "170253.0",
+          "cand_name": "MUPPARAPU ESWAR",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_UR",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "172317.0",
+          "cand_name": "ALA GAYATRI",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "176973.0",
+          "cand_name": "SD MASHIRUDDIN",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "177546.0",
+          "cand_name": "MUPPALLA MOHANA SIVA RAMA KRISHNA",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "179108.0",
+          "cand_name": "CHILAKA SUSEELA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GIRLS_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        }
+      ]
+    },
+    {
+      "branch_code": "EEE",
+      "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+      "records": [
+        {
+          "rank": "178873.0",
+          "cand_name": "BONDALAPATI SANKAR",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "ELECTRICAL AND ELECTRONICS ENGINEERING (EEE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "ECE",
+      "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+      "records": [
+        {
+          "rank": "42097.0",
+          "cand_name": "CHANDANAPALLI JASWANTH",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "85124.0",
+          "cand_name": "MALLELA SHALINI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "86977.0",
+          "cand_name": "BIRLANGI VAMSIKRISHNA",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "89913.0",
+          "cand_name": "PEDDIREDDY KIRAN MANIKANTA",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "98001.0",
+          "cand_name": "GAJJALA HEMANTH KUMAR",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "103542.0",
+          "cand_name": "GORAVA TULASI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "SVU",
+          "alloted_category": "BC_B_GIRLS_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "117138.0",
+          "cand_name": "MANDA SPANDANA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "117738.0",
+          "cand_name": "SHAIK HASEENA PARVEEN",
+          "gender": "F",
+          "category": "BC_E",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GIRLS_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "123963.0",
+          "cand_name": "VADLAMUDI SATISH",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "128489.0",
+          "cand_name": "BURUSU KARTHIK",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "BC_A_GEN_UR",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "138669.0",
+          "cand_name": "SHAIK KANDIPATI NAGUL BASHA",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "151424.0",
+          "cand_name": "SUNKISALA ABHISHEK",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "157304.0",
+          "cand_name": "S MANASA",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "SVU",
+          "alloted_category": "BC_B_GIRLS_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "170499.0",
+          "cand_name": "YARRAM SAKHYATHA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "175405.0",
+          "cand_name": "ANNAM SRINIVASA RAO",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "177633.0",
+          "cand_name": "PARISA NIKHIL",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 1,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "MEC",
+      "branch_name": "MECHANICAL ENGINEERING",
+      "records": [
+        {
+          "rank": "78608.0",
+          "cand_name": "RONAGALA DHARMA RAJU",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "LOYOLA INSTITUTE OF TECHNOLOGY AND MGMT (LOYL)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        }
+      ]
+    }
+  ]
+}

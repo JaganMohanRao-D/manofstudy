@@ -1,0 +1,23 @@
+{
+  "college_name": "NARAYANADRI INST OF SCI TECHNOLOGY",
+  "college_code": "NIST",
+  "branches": [
+    {
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "records": [
+        {
+          "rank": "109233.0",
+          "cand_name": "KAKKALA  JOGENDRA CHANDU",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "NL",
+          "alloted_category": "OC_PWD_GEN_SVU",
+          "phase": 2,
+          "college": "NARAYANADRI INST OF SCI TECHNOLOGY (NIST)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        }
+      ]
+    }
+  ]
+}
