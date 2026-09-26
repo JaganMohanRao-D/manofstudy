@@ -1,0 +1,31 @@
+{
+  "college_name": "CHENNUPATI INDO-AMERICAN SCHOOL OF PHARMACY",
+  "college_code": "IASP",
+  "records": [
+    {
+      "allot_category": "oc_gen_ur",
+      "applicant_name": "SHAIK IMRAN",
+      "branch_code": "PHM",
+      "branch_name": "B.PHARMACY (M.P.C)",
+      "community": "BC_E",
+      "course_type": "PHA",
+      "district": "GUNTUR",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 45000,
+      "first_name_blurred": "SHAIK",
+      "gender": "M",
+      "id": 31152,
+      "inst_code": "IASP",
+      "inst_name": "CHENNUPATI INDO-AMERICAN SCHOOL OF PHARMACY",
+      "last_name_visible": "IMRAN",
+      "left_over_seats": 0,
+      "phase": "Second",
+      "rank": 77002,
+      "region": "AU",
+      "roll_no": "960565010338",
+      "roll_no_blurred": "0338",
+      "roll_no_prefix": "96056501",
+      "total_seats": 1
+    }
+  ]
+}

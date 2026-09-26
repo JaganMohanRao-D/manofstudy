@@ -1,0 +1,31 @@
+{
+  "college_name": "VIKAS INST. OF PHARM.SCI.",
+  "college_code": "VKSR",
+  "records": [
+    {
+      "allot_category": "oc_gen_ur",
+      "applicant_name": "GUNDU SRI YOGENDRA MOULI",
+      "branch_code": "PHM",
+      "branch_name": "B.PHARMACY (M.P.C)",
+      "community": "OC",
+      "course_type": "PHA",
+      "district": "EAST GODAVARI",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 50100,
+      "first_name_blurred": "GUNDU",
+      "gender": "M",
+      "id": 95762,
+      "inst_code": "VKSR",
+      "inst_name": "VIKAS INST. OF PHARM.SCI.",
+      "last_name_visible": "SRI YOGENDRA MOULI",
+      "left_over_seats": 0,
+      "phase": "Second",
+      "rank": 126530,
+      "region": "AU",
+      "roll_no": "960663020106",
+      "roll_no_blurred": "0106",
+      "roll_no_prefix": "96066302",
+      "total_seats": 1
+    }
+  ]
+}

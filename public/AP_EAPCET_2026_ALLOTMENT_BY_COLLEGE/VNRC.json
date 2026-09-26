@@ -1,0 +1,31 @@
+{
+  "college_name": "VELAGA NAGESWARA RAO COLL OF ENGINEERING",
+  "college_code": "VNRC",
+  "records": [
+    {
+      "allot_category": "oc_girls_au",
+      "applicant_name": "POTNURU VINUTHNA",
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "community": "BC_D",
+      "course_type": "ENG",
+      "district": "GUNTUR",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 47000,
+      "first_name_blurred": "POTNURU",
+      "gender": "F",
+      "id": 97889,
+      "inst_code": "VNRC",
+      "inst_name": "VELAGA NAGESWARA RAO COLL OF ENGINEERING",
+      "last_name_visible": "VINUTHNA",
+      "left_over_seats": 95,
+      "phase": "First",
+      "rank": 95302,
+      "region": "AU",
+      "roll_no": "960689030120",
+      "roll_no_blurred": "0120",
+      "roll_no_prefix": "96068903",
+      "total_seats": 96
+    }
+  ]
+}

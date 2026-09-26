@@ -1,0 +1,31 @@
+{
+  "college_name": "VISWA BHARATHI COLLEGE OF PHARMACEUTICAL SCI.S",
+  "college_code": "VBCP",
+  "records": [
+    {
+      "allot_category": "oc_girls_au",
+      "applicant_name": "CHEVALA NAGA DURGA",
+      "branch_code": "PHD",
+      "branch_name": "DOCTOR OF PHARMACY (M.P.C)",
+      "community": "SC_III",
+      "course_type": "PHA",
+      "district": "GUNTUR",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 45000,
+      "first_name_blurred": "CHEVALA",
+      "gender": "F",
+      "id": 86159,
+      "inst_code": "VBCP",
+      "inst_name": "VISWA BHARATHI COLLEGE OF PHARMACEUTICAL SCI.S",
+      "last_name_visible": "NAGA DURGA",
+      "left_over_seats": 0,
+      "phase": "Second",
+      "rank": 164879,
+      "region": "AU",
+      "roll_no": "960965100167",
+      "roll_no_blurred": "0167",
+      "roll_no_prefix": "96096510",
+      "total_seats": 1
+    }
+  ]
+}

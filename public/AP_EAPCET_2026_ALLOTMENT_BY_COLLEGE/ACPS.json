@@ -1,0 +1,31 @@
+{
+  "college_name": "ADITYA COLLEGE OF PHARMACY",
+  "college_code": "ACPS",
+  "records": [
+    {
+      "allot_category": "oc_gen_ur",
+      "applicant_name": "POLISETTY VENKATA NAGA SAI TEJA",
+      "branch_code": "PHM",
+      "branch_name": "B.PHARMACY (M.P.C)",
+      "community": "OC",
+      "course_type": "PHA",
+      "district": "EAST GODAVARI",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 62400,
+      "first_name_blurred": "POLISETTY",
+      "gender": "M",
+      "id": 567,
+      "inst_code": "ACPS",
+      "inst_name": "ADITYA COLLEGE OF PHARMACY",
+      "last_name_visible": "VENKATA NAGA SAI TEJA",
+      "left_over_seats": 3,
+      "phase": "Second",
+      "rank": 87501,
+      "region": "AU",
+      "roll_no": "960365110022",
+      "roll_no_blurred": "0022",
+      "roll_no_prefix": "96036511",
+      "total_seats": 4
+    }
+  ]
+}

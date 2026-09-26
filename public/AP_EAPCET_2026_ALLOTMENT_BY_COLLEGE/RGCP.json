@@ -1,0 +1,31 @@
+{
+  "college_name": "RAJIV GANDHI COLLEGE OF PHARMACY",
+  "college_code": "RGCP",
+  "records": [
+    {
+      "allot_category": "oc_girls_ur",
+      "applicant_name": "NARKIMELLI SHREYA",
+      "branch_code": "PHM",
+      "branch_name": "B.PHARMACY (M.P.C)",
+      "community": "SC_II",
+      "course_type": "PHA",
+      "district": "EAST GODAVARI",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 45000,
+      "first_name_blurred": "NARKIMELLI",
+      "gender": "F",
+      "id": 63753,
+      "inst_code": "RGCP",
+      "inst_name": "RAJIV GANDHI COLLEGE OF PHARMACY",
+      "last_name_visible": "SHREYA",
+      "left_over_seats": 0,
+      "phase": "Second",
+      "rank": 164717,
+      "region": "AU",
+      "roll_no": "960196010054",
+      "roll_no_blurred": "0054",
+      "roll_no_prefix": "96019601",
+      "total_seats": 1
+    }
+  ]
+}

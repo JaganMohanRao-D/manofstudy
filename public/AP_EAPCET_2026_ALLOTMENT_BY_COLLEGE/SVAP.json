@@ -1,0 +1,31 @@
+{
+  "college_name": "SRI VASAVI COLLEGE OF PHARMACY",
+  "college_code": "SVAP",
+  "records": [
+    {
+      "allot_category": "oc_girls_ur",
+      "applicant_name": "KANDUKURI PALLAVI",
+      "branch_code": "PHM",
+      "branch_name": "B.PHARMACY (M.P.C)",
+      "community": "BC_B",
+      "course_type": "PHA",
+      "district": "PRAKASAM",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 45000,
+      "first_name_blurred": "KANDUKURI",
+      "gender": "F",
+      "id": 79265,
+      "inst_code": "SVAP",
+      "inst_name": "SRI VASAVI COLLEGE OF PHARMACY",
+      "last_name_visible": "PALLAVI",
+      "left_over_seats": 0,
+      "phase": "Second",
+      "rank": 125743,
+      "region": "AU",
+      "roll_no": "960287060097",
+      "roll_no_blurred": "0097",
+      "roll_no_prefix": "96028706",
+      "total_seats": 1
+    }
+  ]
+}

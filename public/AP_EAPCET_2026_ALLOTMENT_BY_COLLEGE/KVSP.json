@@ -1,0 +1,31 @@
+{
+  "college_name": "DR.K V SUBBA REDDY INST OF PHARMACY",
+  "college_code": "KVSP",
+  "records": [
+    {
+      "allot_category": "oc_girls_svu",
+      "applicant_name": "DESAM VINEELA",
+      "branch_code": "PHD",
+      "branch_name": "DOCTOR OF PHARMACY (M.P.C)",
+      "community": "OC",
+      "course_type": "PHA",
+      "district": "KURNOOL",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 65000,
+      "first_name_blurred": "DESAM",
+      "gender": "F",
+      "id": 40429,
+      "inst_code": "KVSP",
+      "inst_name": "DR.K V SUBBA REDDY INST OF PHARMACY",
+      "last_name_visible": "VINEELA",
+      "left_over_seats": 0,
+      "phase": "Second",
+      "rank": 75508,
+      "region": "SVU",
+      "roll_no": "960377040526",
+      "roll_no_blurred": "0526",
+      "roll_no_prefix": "96037704",
+      "total_seats": 1
+    }
+  ]
+}

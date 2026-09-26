@@ -1,0 +1,31 @@
+{
+  "college_name": "A.K.R.G. COLLEGE OF PHARMACY",
+  "college_code": "AKRP",
+  "records": [
+    {
+      "allot_category": "oc_gen_ur",
+      "applicant_name": "TATINA VENKATARAMANA",
+      "branch_code": "PHM",
+      "branch_name": "B.PHARMACY (M.P.C)",
+      "community": "OC",
+      "course_type": "PHA",
+      "district": "WEST GODAVARI",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 45000,
+      "first_name_blurred": "TATINA",
+      "gender": "M",
+      "id": 7146,
+      "inst_code": "AKRP",
+      "inst_name": "A.K.R.G. COLLEGE OF PHARMACY",
+      "last_name_visible": "VENKATARAMANA",
+      "left_over_seats": 0,
+      "phase": "Second",
+      "rank": 123294,
+      "region": "AU",
+      "roll_no": "960675030223",
+      "roll_no_blurred": "0223",
+      "roll_no_prefix": "96067503",
+      "total_seats": 1
+    }
+  ]
+}

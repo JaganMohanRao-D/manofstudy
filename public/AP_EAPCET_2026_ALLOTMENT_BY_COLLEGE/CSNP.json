@@ -1,0 +1,31 @@
+{
+  "college_name": "DR.C.S.N.INSTITUTE OF PHARMACY",
+  "college_code": "CSNP",
+  "records": [
+    {
+      "allot_category": "oc_gen_ur",
+      "applicant_name": "MUSKUDI SUMANTH",
+      "branch_code": "PHM",
+      "branch_name": "B.PHARMACY (M.P.C)",
+      "community": "SC_II",
+      "course_type": "PHA",
+      "district": "WEST GODAVARI",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 45000,
+      "first_name_blurred": "MUSKUDI",
+      "gender": "M",
+      "id": 23369,
+      "inst_code": "CSNP",
+      "inst_name": "DR.C.S.N.INSTITUTE OF PHARMACY",
+      "last_name_visible": "SUMANTH",
+      "left_over_seats": 0,
+      "phase": "Second",
+      "rank": 172266,
+      "region": "AU",
+      "roll_no": "960994020001",
+      "roll_no_blurred": "0001",
+      "roll_no_prefix": "96099402",
+      "total_seats": 1
+    }
+  ]
+}

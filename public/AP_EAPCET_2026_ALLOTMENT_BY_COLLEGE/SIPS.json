@@ -1,0 +1,31 @@
+{
+  "college_name": "NALANDA INST OF PHARM.SCI.",
+  "college_code": "SIPS",
+  "records": [
+    {
+      "allot_category": "oc_gen_ur",
+      "applicant_name": "MAGANTI ASHOK",
+      "branch_code": "PHM",
+      "branch_name": "B.PHARMACY (M.P.C)",
+      "community": "BC_D",
+      "course_type": "PHA",
+      "district": "GUNTUR",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 58100,
+      "first_name_blurred": "MAGANTI",
+      "gender": "M",
+      "id": 71747,
+      "inst_code": "SIPS",
+      "inst_name": "NALANDA INST OF PHARM.SCI.",
+      "last_name_visible": "ASHOK",
+      "left_over_seats": 0,
+      "phase": "Second",
+      "rank": 111775,
+      "region": "AU",
+      "roll_no": "960465030040",
+      "roll_no_blurred": "0040",
+      "roll_no_prefix": "96046503",
+      "total_seats": 1
+    }
+  ]
+}

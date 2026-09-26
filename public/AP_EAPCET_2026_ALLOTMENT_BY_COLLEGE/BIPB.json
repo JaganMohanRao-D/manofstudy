@@ -1,0 +1,31 @@
+{
+  "college_name": "BHASKARA INST. OF PHARMACY",
+  "college_code": "BIPB",
+  "records": [
+    {
+      "allot_category": "oc_girls_au",
+      "applicant_name": "ARIKA DEEPIKA",
+      "branch_code": "PHM",
+      "branch_name": "B.PHARMACY (M.P.C)",
+      "community": "ST",
+      "course_type": "PHA",
+      "district": "VIZIANAGARAM",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 45000,
+      "first_name_blurred": "ARIKA",
+      "gender": "F",
+      "id": 17367,
+      "inst_code": "BIPB",
+      "inst_name": "BHASKARA INST. OF PHARMACY",
+      "last_name_visible": "DEEPIKA",
+      "left_over_seats": 0,
+      "phase": "Second",
+      "rank": 22369,
+      "region": "AU",
+      "roll_no": "960193030425",
+      "roll_no_blurred": "0425",
+      "roll_no_prefix": "96019303",
+      "total_seats": 1
+    }
+  ]
+}

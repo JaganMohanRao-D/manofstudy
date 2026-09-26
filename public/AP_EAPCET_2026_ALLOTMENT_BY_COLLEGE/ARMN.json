@@ -1,0 +1,31 @@
+{
+  "college_name": "A M REDDY MEMORIAL COLL. OF PHARMACY",
+  "college_code": "ARMN",
+  "records": [
+    {
+      "allot_category": "oc_girls_ur",
+      "applicant_name": "MOHAMMED SOBIYA SAMEEN",
+      "branch_code": "PHM",
+      "branch_name": "B.PHARMACY (M.P.C)",
+      "community": "BC_E",
+      "course_type": "PHA",
+      "district": "GUNTUR",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 46300,
+      "first_name_blurred": "MOHAMMED",
+      "gender": "F",
+      "id": 11572,
+      "inst_code": "ARMN",
+      "inst_name": "A M REDDY MEMORIAL COLL. OF PHARMACY",
+      "last_name_visible": "SOBIYA SAMEEN",
+      "left_over_seats": 0,
+      "phase": "Second",
+      "rank": 124089,
+      "region": "AU",
+      "roll_no": "960666020071",
+      "roll_no_blurred": "0071",
+      "roll_no_prefix": "96066602",
+      "total_seats": 1
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "college_name": "SRI MITTAPALLI PHARMACY COLLEGE",
+  "college_code": "MPPC",
+  "records": [
+    {
+      "allot_category": "oc_gen_ur",
+      "applicant_name": "KOTHAPALLI PRAKASH",
+      "branch_code": "PHM",
+      "branch_name": "B.PHARMACY (M.P.C)",
+      "community": "SC_II",
+      "course_type": "PHA",
+      "district": "GUNTUR",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 45000,
+      "first_name_blurred": "KOTHAPALLI",
+      "gender": "M",
+      "id": 46230,
+      "inst_code": "MPPC",
+      "inst_name": "SRI MITTAPALLI PHARMACY COLLEGE",
+      "last_name_visible": "PRAKASH",
+      "left_over_seats": 0,
+      "phase": "Second",
+      "rank": 136201,
+      "region": "AU",
+      "roll_no": "960565010215",
+      "roll_no_blurred": "0215",
+      "roll_no_prefix": "96056501",
+      "total_seats": 1
+    }
+  ]
+}

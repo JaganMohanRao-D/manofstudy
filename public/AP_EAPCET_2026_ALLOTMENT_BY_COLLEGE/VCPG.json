@@ -1,0 +1,31 @@
+{
+  "college_name": "VAGDEVI COLLEGE OF PHARMACY",
+  "college_code": "VCPG",
+  "records": [
+    {
+      "allot_category": "oc_girls_ur",
+      "applicant_name": "GOLI VELANGINI",
+      "branch_code": "PHM",
+      "branch_name": "B.PHARMACY (M.P.C)",
+      "community": "BC_B",
+      "course_type": "PHA",
+      "district": "GUNTUR",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 45000,
+      "first_name_blurred": "GOLI",
+      "gender": "F",
+      "id": 86160,
+      "inst_code": "VCPG",
+      "inst_name": "VAGDEVI COLLEGE OF PHARMACY",
+      "last_name_visible": "VELANGINI",
+      "left_over_seats": 0,
+      "phase": "Second",
+      "rank": 72736,
+      "region": "AU",
+      "roll_no": "960765140163",
+      "roll_no_blurred": "0163",
+      "roll_no_prefix": "96076514",
+      "total_seats": 1
+    }
+  ]
+}

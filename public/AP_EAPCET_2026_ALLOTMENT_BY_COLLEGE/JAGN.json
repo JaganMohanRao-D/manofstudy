@@ -1,0 +1,31 @@
+{
+  "college_name": "JAGANS COLLEGE OF PHARMACY",
+  "college_code": "JAGN",
+  "records": [
+    {
+      "allot_category": "oc_girls_ur",
+      "applicant_name": "PULI VANI",
+      "branch_code": "PHM",
+      "branch_name": "B.PHARMACY (M.P.C)",
+      "community": "ST",
+      "course_type": "PHA",
+      "district": "NELLORE",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 45000,
+      "first_name_blurred": "PULI",
+      "gender": "F",
+      "id": 32344,
+      "inst_code": "JAGN",
+      "inst_name": "JAGANS COLLEGE OF PHARMACY",
+      "last_name_visible": "VANI",
+      "left_over_seats": 0,
+      "phase": "Second",
+      "rank": 155419,
+      "region": "SVU",
+      "roll_no": "960380010038",
+      "roll_no_blurred": "0038",
+      "roll_no_prefix": "96038001",
+      "total_seats": 1
+    }
+  ]
+}

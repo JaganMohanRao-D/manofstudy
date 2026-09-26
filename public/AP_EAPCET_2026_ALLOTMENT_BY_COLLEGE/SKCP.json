@@ -1,0 +1,31 @@
+{
+  "college_name": "S K C COLLEGE OF PHARMACY",
+  "college_code": "SKCP",
+  "records": [
+    {
+      "allot_category": "oc_girls_svu",
+      "applicant_name": "MANCHURI GUNAVATHI",
+      "branch_code": "PHM",
+      "branch_name": "B.PHARMACY (M.P.C)",
+      "community": "SC_II",
+      "course_type": "PHA",
+      "district": "CHITTOOR",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 45000,
+      "first_name_blurred": "MANCHURI",
+      "gender": "F",
+      "id": 71811,
+      "inst_code": "SKCP",
+      "inst_name": "S K C COLLEGE OF PHARMACY",
+      "last_name_visible": "GUNAVATHI",
+      "left_over_seats": 1,
+      "phase": "Second",
+      "rank": 139944,
+      "region": "SVU",
+      "roll_no": "960957010033",
+      "roll_no_blurred": "0033",
+      "roll_no_prefix": "96095701",
+      "total_seats": 2
+    }
+  ]
+}

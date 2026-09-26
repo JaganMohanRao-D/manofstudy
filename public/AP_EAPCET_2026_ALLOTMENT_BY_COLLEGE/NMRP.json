@@ -1,0 +1,31 @@
+{
+  "college_name": "NIMRA COLLEGE OF PHARMACY",
+  "college_code": "NMRP",
+  "records": [
+    {
+      "allot_category": "mus_gen_ur",
+      "applicant_name": "PATHAKOTA HEMANTH",
+      "branch_code": "PHD",
+      "branch_name": "DOCTOR OF PHARMACY (M.P.C)",
+      "community": "BC_B",
+      "course_type": "PHA",
+      "district": "KRISHNA",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 45000,
+      "first_name_blurred": "PATHAKOTA",
+      "gender": "M",
+      "id": 50078,
+      "inst_code": "NMRP",
+      "inst_name": "NIMRA COLLEGE OF PHARMACY",
+      "last_name_visible": "HEMANTH",
+      "left_over_seats": 0,
+      "phase": "Second",
+      "rank": 112730,
+      "region": "AU",
+      "roll_no": "960787050027",
+      "roll_no_blurred": "0027",
+      "roll_no_prefix": "96078705",
+      "total_seats": 1
+    }
+  ]
+}

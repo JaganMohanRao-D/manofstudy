@@ -1,0 +1,31 @@
+{
+  "college_name": "NARSARAOPET INSTT. OF PHARM.SCI.",
+  "college_code": "NSPP",
+  "records": [
+    {
+      "allot_category": "oc_girls_ur",
+      "applicant_name": "SHAIK NUSRAT JAHAN",
+      "branch_code": "PHM",
+      "branch_name": "B.PHARMACY (M.P.C)",
+      "community": "BC_E",
+      "course_type": "PHA",
+      "district": "GUNTUR",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 49400,
+      "first_name_blurred": "SHAIK",
+      "gender": "F",
+      "id": 52584,
+      "inst_code": "NSPP",
+      "inst_name": "NARSARAOPET INSTT. OF PHARM.SCI.",
+      "last_name_visible": "NUSRAT JAHAN",
+      "left_over_seats": 0,
+      "phase": "Second",
+      "rank": 68251,
+      "region": "AU",
+      "roll_no": "960565050015",
+      "roll_no_blurred": "0015",
+      "roll_no_prefix": "96056505",
+      "total_seats": 1
+    }
+  ]
+}
