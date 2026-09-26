@@ -118,7 +118,7 @@ export const Header: React.FC<HeaderProps> = ({
       label: 'AP Allotments',
       shortLabel: 'AP Allotments',
       icon: Award,
-      badge: '2025 Live',
+      badge: '2026 Data',
       badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
     },
     {
