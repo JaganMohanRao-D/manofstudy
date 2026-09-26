@@ -10,7 +10,7 @@ import {
   BarChart3,
   ExternalLink,
 } from 'lucide-react';
-import { get2026BranchSummaries } from '../services/apEapcetAllotmentService';
+import { get2026PredictorRows } from '../services/apEapcetAllotmentService';
 import APAllotmentExplorer from './ap-allotment/APAllotmentExplorer';
 
 export const POPULAR_BRANCHES = [
@@ -28,7 +28,7 @@ export const POPULAR_BRANCHES = [
 ];
 
 export default function ApCollegePredictor({
-  initialCollegeCode = 'AUCE',
+  initialCollegeCode = 'ALL',
   initialBranchCode = 'ALL',
   initialTab = 'intelligence',
   onNavigateToTab,
@@ -45,7 +45,7 @@ export default function ApCollegePredictor({
   const [predictorBranchFilter, setPredictorBranchFilter] = useState('ALL');
   const [predictorChanceFilter, setPredictorChanceFilter] = useState('ALL');
   const [predictorSearchTerm, setPredictorSearchTerm] = useState('');
-  const [branchSummaries, setBranchSummaries] = useState([]);
+  const [predictorRows, setPredictorRows] = useState([]);
   const [predictorLoading, setPredictorLoading] = useState(true);
 
   useEffect(() => {
@@ -63,45 +63,39 @@ export default function ApCollegePredictor({
     }
   }, [initialTab]);
 
-  // Predictor Calculation — deterministic from AP EAPCET 2026 allotment records only.
+  // Deterministic matching against AP EAPCET 2026 allotment records only.
   const predictorResults = useMemo(() => {
-    const numRank = parseInt(userRank.replace(/,/g, ''), 10);
-    if (isNaN(numRank) || numRank <= 0) return [];
+    const rank = parseInt(userRank.replace(/,/g, ''), 10);
+    if (!Number.isFinite(rank) || rank <= 0) return [];
 
-    const results = [];
-    branchSummaries.forEach((br) => {
-      if (predictorBranchFilter !== 'ALL' && br.branchCode !== predictorBranchFilter) return;
-      const categoryStats = br.categoryRanks?.[userCategory];
-      const closingRank = categoryStats?.maxRank || br.maxRank || 0;
-      const openingRank = categoryStats?.minRank || br.minRank || 0;
-      if (!closingRank) return;
-
-      let chance = 'NEAR OBSERVED RANGE';
-      if (numRank <= openingRank) chance = 'STRONG MATCH';
-      else if (numRank <= closingRank) chance = 'WITHIN OBSERVED RANGE';
-
-      results.push({
-        collegeCode: br.collegeCode,
-        collegeName: br.collegeName,
-        branchCode: br.branchCode,
-        branchName: br.branchName,
-        closingRank,
-        minRank: openingRank,
-        effectiveClosingRank: closingRank,
+    let rows = predictorRows.filter((row) => {
+      if (predictorBranchFilter !== 'ALL' && row.branchCode !== predictorBranchFilter) return false;
+      if (userCategory && row.category !== userCategory) return false;
+      if (userGender && row.gender !== userGender) return false;
+      if (userRegion && row.region !== userRegion) return false;
+      if (predictorSearchTerm.trim()) {
+        const q = predictorSearchTerm.trim().toLowerCase();
+        if (![row.collegeCode, row.collegeName, row.branchCode, row.branchName].some((v) => String(v).toLowerCase().includes(q))) return false;
+      }
+      return true;
+    }).map((row) => {
+      let chance = 'AMBITIOUS';
+      if (rank <= row.maxRank && rank >= row.minRank) chance = 'MODERATE';
+      else if (rank < row.minRank) chance = 'SAFE';
+      return {
+        ...row,
+        closingRank: row.maxRank,
+        effectiveClosingRank: row.maxRank,
+        minRank: row.minRank,
         chance,
-        chanceScore: chance === 'STRONG MATCH' ? 90 : chance === 'WITHIN OBSERVED RANGE' ? 70 : 40,
-        diff: closingRank - numRank,
-      });
+        chanceScore: chance === 'SAFE' ? 90 : chance === 'MODERATE' ? 70 : 40,
+        diff: row.maxRank - rank,
+      };
     });
 
-    let filtered = results;
-    if (predictorChanceFilter !== 'ALL') filtered = filtered.filter(r => r.chance === predictorChanceFilter);
-    if (predictorSearchTerm.trim()) {
-      const q = predictorSearchTerm.trim().toLowerCase();
-      filtered = filtered.filter(r => r.collegeCode.toLowerCase().includes(q) || r.collegeName.toLowerCase().includes(q) || r.branchCode.toLowerCase().includes(q) || r.branchName.toLowerCase().includes(q));
-    }
-    return filtered.sort((a,b) => b.diff - a.diff);
-  }, [userRank, userCategory, predictorBranchFilter, predictorChanceFilter, predictorSearchTerm, branchSummaries]);
+    if (predictorChanceFilter !== 'ALL') rows = rows.filter((row) => row.chance === predictorChanceFilter);
+    return rows.sort((a, b) => Math.abs(a.maxRank - rank) - Math.abs(b.maxRank - rank));
+  }, [userRank, userCategory, userGender, userRegion, predictorBranchFilter, predictorChanceFilter, predictorSearchTerm, predictorRows]);
 
   return (
     <div>
@@ -119,7 +113,7 @@ export default function ApCollegePredictor({
               }`}
             >
               <Building2 className="w-4 h-4" />
-              <span>Allotment Explorer (255 Colleges)</span>
+              <span>AP Allotments</span>
             </button>
 
             <button
@@ -153,10 +147,10 @@ export default function ApCollegePredictor({
                 <span>AP EAPCET 2026 Rank Predictor</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-black text-white">
-                Admission Probability Predictor
+                AP EAPCET 2026 College Predictor
               </h2>
               <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto">
-                Data-based matching against observed AP EAPCET 2026 allotment ranks. Results are not guaranteed admission cutoffs.
+                Based on AP EAPCET 2026 allotment records. Results are observed-data matches, not guaranteed admission cutoffs.
               </p>
             </div>
 
@@ -192,7 +186,7 @@ export default function ApCollegePredictor({
                     <option value="BC_C">BC-C</option>
                     <option value="BC_D">BC-D</option>
                     <option value="BC_E">BC-E</option>
-                    <option value="SC">SC</option>
+                    <option value="SC_I">SC-I</option><option value="SC_II">SC-II</option><option value="SC_III">SC-III</option>
                     <option value="ST">ST</option>
                   </select>
                 </div>
@@ -299,7 +293,7 @@ export default function ApCollegePredictor({
                             : 'bg-rose-500/15 text-rose-300 border border-rose-500/30'
                         }`}
                       >
-                        {res.chance} ({res.chanceScore}%)
+                        {res.chance}
                       </span>
                     </div>
 
@@ -314,7 +308,7 @@ export default function ApCollegePredictor({
 
                     <div className="flex items-center justify-between text-[11px] text-slate-400 pt-0.5">
                       <span>
-                        Observed last rank: <strong className="text-slate-200">#{res.effectiveClosingRank.toLocaleString()}</strong>
+                        Observed best rank: <strong className="text-slate-200">#{res.minRank.toLocaleString()}</strong><br />Observed last rank: <strong className="text-slate-200">#{res.effectiveClosingRank.toLocaleString()}</strong>
                       </span>
                       <button
                         type="button"
