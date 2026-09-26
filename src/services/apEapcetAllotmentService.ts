@@ -295,31 +295,16 @@ export async function getDatasetSummary(year: AllotmentYear): Promise<DatasetSum
   if (cached) return cached;
 
   const promise = (async () => {
-    const colleges = await loadAllColleges(year);
-    const phaseSet = new Set<number>();
-    const categorySet = new Set<string>();
-    const regionSet = new Set<string>();
-    const branchSet = new Set<string>();
-    let totalRecords = 0;
-
-    colleges.forEach((college) => {
-      totalRecords += college.recordCount;
-      college.allRecords.forEach((record) => {
-        if (record.phase) phaseSet.add(record.phase);
-        if (record.category) categorySet.add(record.category);
-        if (record.region) regionSet.add(record.region);
-        if (record.branch_code) branchSet.add(record.branch_code);
-      });
-    });
-
+    const index = await loadSearchIndex(year);
+    const stats = index.stats ?? {};
     return {
       year,
-      totalColleges: colleges.length,
-      totalRecords,
-      phases: Array.from(phaseSet).sort((a, b) => a - b),
-      categories: Array.from(categorySet).sort(),
-      regions: Array.from(regionSet).sort(),
-      branches: branchSet.size,
+      totalColleges: Number(stats.totalColleges ?? (await loadIndex(year)).length),
+      totalRecords: Number(stats.totalRecords ?? index.candidates.length),
+      phases: Array.isArray(stats.phases) ? stats.phases.map(Number).filter(Boolean).sort((a,b)=>a-b) : [],
+      categories: Array.isArray(stats.categories) ? stats.categories.map(String).sort() : [],
+      regions: Array.isArray(stats.regions) ? stats.regions.map(String).sort() : [],
+      branches: Number(stats.totalBranches ?? Object.keys(index.branchMap ?? {}).length),
     };
   })();
 
@@ -346,6 +331,7 @@ type SearchIndexCandidate = [number, string, string, string, string, string, num
 
 interface SearchIndexData {
   candidates: SearchIndexCandidate[];
+  stats?: { totalColleges?: number; totalRecords?: number; totalBranches?: number; categories?: string[]; regions?: string[]; phases?: number[] };
   branchMap?: Record<string, string>;
   collegeMap?: Record<string, string>;
 }
