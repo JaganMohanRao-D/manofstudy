@@ -20,16 +20,25 @@ import { search2026 as search2026Allotments, AllotmentYear } from '../../service
 interface APStudentSearchProps {
   onExploreCollegeBranch?: (collegeCode: string, branchCode?: string) => void;
   year?: AllotmentYear;
+  collegeCode?: string;
+  branchCode?: string;
+  phase?: 'ALL'|'1'|'2'|'3';
+  initialName?: string;
 }
 
 export const APStudentSearch: React.FC<APStudentSearchProps> = ({
   onExploreCollegeBranch,
+  year = '2026',
+  collegeCode = 'ALL',
+  branchCode = 'ALL',
+  phase = 'ALL',
+  initialName = '',
 }) => {
   // Search Mode: 'name' | 'rank'
   const [searchMode, setSearchMode] = useState<'name' | 'rank'>('name');
 
   // Input states
-  const [nameInput, setNameInput] = useState('');
+  const [nameInput, setNameInput] = useState(initialName);
   const [exactRankInput, setExactRankInput] = useState('');
   const [minRankInput, setMinRankInput] = useState('');
   const [maxRankInput, setMaxRankInput] = useState('');
@@ -99,6 +108,10 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
       setIsSearching(false);
     }
   }, [
+    year,
+    collegeCode,
+    branchCode,
+    phase,
     searchMode,
     nameInput,
     exactRankInput,
