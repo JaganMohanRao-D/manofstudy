@@ -416,6 +416,21 @@ export async function getBranchSummaries(year: AllotmentYear): Promise<BranchSum
   return summaries;
 }
 
+/**
+ * Backward-compatible 2026 search API used by APStudentSearch.
+ * The component historically called search2026(options); keep that contract
+ * while routing all searches through the year-aware searchAllotments service.
+ */
+export async function search2026(
+  options: SearchOptions & { rank?: number } = {}
+): Promise<AllotmentRecord[]> {
+  const { rank, ...rest } = options;
+  return searchAllotments('2026', {
+    ...rest,
+    exactRank: rest.exactRank ?? rank,
+  });
+}
+
 export async function get2026BranchSummaries() {
   return getBranchSummaries('2026');
 }
