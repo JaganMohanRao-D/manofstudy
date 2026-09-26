@@ -133,7 +133,7 @@ async function loadIndex(year: AllotmentYear): Promise<CollegeListItem[]> {
   if (existing) return existing;
 
   const promise = (async () => {
-    const response = await fetch(BASE_PATH[year] + 'index.json');
+    const response = await fetch(BASE_PATH[year] + 'manifest.json');
     if (!response.ok) throw new Error('Unable to load AP EAPCET ' + year + ' index');
     const data = await response.json();
 
@@ -388,6 +388,7 @@ export async function searchAllotments(year: AllotmentYear, options: SearchOptio
     if (phase && Number(rawPhase) !== phase) continue;
 
     const code = String(collegeCode ?? '').toUpperCase();
+    if (EXCLUDED_AP_COLLEGE_CODES.has(code)) continue;
     const bcode = String(branchCode ?? '').toUpperCase();
     results.push({
       rank: Number(rank),
