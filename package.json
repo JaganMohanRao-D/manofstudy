@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node scripts/generateManifest.cjs && vite --port=3000 --host=0.0.0.0",
-    "prebuild": "node scripts/generateManifest.cjs",
-    "build": "node scripts/generateManifest.cjs && vite build",
+    "dev": "node scripts/generateApAllotmentIndexes.cjs && node scripts/generateManifest.cjs && vite --port=3000 --host=0.0.0.0",
+    "prebuild": "node scripts/generateApAllotmentIndexes.cjs && node scripts/generateManifest.cjs",
+    "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit"
