@@ -764,7 +764,7 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
   const isStatewideOverviewActive = selectedCollegeCode === 'ALL' && selectedBranchCode === 'ALL' && !isGlobalSearchActive;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 py-4 sm:py-8 px-3 sm:px-6 lg:px-8 font-sans">
+    <div className="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 py-4 sm:py-8 px-3 sm:px-6 lg:px-8 font-sans">
       <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
 
         {/* 1. BRANDING & TITLE */}
