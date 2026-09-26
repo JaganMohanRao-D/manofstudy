@@ -9,8 +9,10 @@ import {
   Users,
   AlertCircle,
   GraduationCap,
+  Eye,
 } from 'lucide-react';
 import { AllotmentRecord, AllotmentYear } from '../../services/apEapcetAllotmentService';
+import APStudentDetailModal from './APStudentDetailModal';
 
 interface APAllotmentTableProps {
   records: AllotmentRecord[];
@@ -33,6 +35,7 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
   const [sortField, setSortField] = useState<'rank' | 'name'>('rank');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedStudent, setSelectedStudent] = useState<AllotmentRecord | null>(null);
   const pageSize = 25;
 
   // Filter and sort records
@@ -263,9 +266,19 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
 
                     {/* Candidate Name */}
                     <td className="py-3 px-4">
-                      <span className="font-bold text-slate-900 dark:text-white block">
-                        {r.cand_name}
-                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedStudent(r)}
+                        className="group text-left"
+                        title="View complete student allotment details"
+                      >
+                        <span className="font-bold text-slate-900 dark:text-white group-hover:text-cyan-500 dark:group-hover:text-cyan-300 transition-colors block">
+                          {r.cand_name}
+                        </span>
+                        <span className="mt-0.5 inline-flex items-center gap-1 text-[10px] font-semibold text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Eye className="h-3 w-3" /> View details
+                        </span>
+                      </button>
                     </td>
 
                     {/* Gender */}
@@ -325,9 +338,13 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
               className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 space-y-2 shadow-xs"
             >
               <div className="flex items-start justify-between gap-2">
-                <h4 className="font-bold text-slate-900 dark:text-white text-sm">
+                <button
+                  type="button"
+                  onClick={() => setSelectedStudent(r)}
+                  className="text-left font-bold text-slate-900 dark:text-white text-sm hover:text-cyan-500 dark:hover:text-cyan-300 transition-colors"
+                >
                   {r.cand_name}
-                </h4>
+                </button>
                 <span className={`px-2 py-0.5 rounded-lg font-mono font-bold text-xs shrink-0 ${getRankBadge(r.rank)}`}>
                   #{r.rank.toLocaleString()}
                 </span>
@@ -399,6 +416,11 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
           </button>
         </div>
       )}
+      <APStudentDetailModal
+        student={selectedStudent}
+        year={year}
+        onClose={() => setSelectedStudent(null)}
+      />
     </div>
   );
 };
