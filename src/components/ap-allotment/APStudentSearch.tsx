@@ -14,7 +14,8 @@ import {
   Building2,
   GitBranch,
 } from 'lucide-react';
-import { searchAllotments, AllotmentYear } from '../../services/apEapcetAllotmentService';
+import { searchAllotments, AllotmentYear, AllotmentRecord } from '../../services/apEapcetAllotmentService';
+import APStudentDetailModal from './APStudentDetailModal';
 
 interface APStudentSearchProps {
   onExploreCollegeBranch?: (collegeCode: string, branchCode?: string) => void;
