@@ -66,6 +66,8 @@ export interface DatasetSummary {
   categories: string[];
   regions: string[];
   branches: number;
+  minRank: number;
+  maxRank: number;
 }
 
 export interface BranchSummary {
@@ -305,6 +307,8 @@ export async function getDatasetSummary(year: AllotmentYear): Promise<DatasetSum
       categories: Array.isArray(stats.categories) ? stats.categories.map(String).sort() : [],
       regions: Array.isArray(stats.regions) ? stats.regions.map(String).sort() : [],
       branches: Number(stats.totalBranches ?? Object.keys(index.branchMap ?? {}).length),
+      minRank: Number(stats.minRank ?? 0),
+      maxRank: Number(stats.maxRank ?? 0),
     };
   })();
 
@@ -331,7 +335,7 @@ type SearchIndexCandidate = [number, string, string, string, string, string, num
 
 interface SearchIndexData {
   candidates: SearchIndexCandidate[];
-  stats?: { totalColleges?: number; totalRecords?: number; totalBranches?: number; categories?: string[]; regions?: string[]; phases?: number[] };
+  stats?: { totalColleges?: number; totalRecords?: number; totalBranches?: number; categories?: string[]; regions?: string[]; phases?: number[]; minRank?: number; maxRank?: number };
   branchMap?: Record<string, string>;
   collegeMap?: Record<string, string>;
 }
