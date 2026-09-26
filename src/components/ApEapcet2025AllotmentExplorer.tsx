@@ -1,8 +1,8 @@
 import React from 'react';
 import APAllotmentExplorerComponent from './ap-allotment/APAllotmentExplorer';
 
-export const ApEapcet2025AllotmentExplorer: React.FC = () => {
+export const ApEapcetAllotmentExplorer: React.FC = () => {
   return <APAllotmentExplorerComponent />;
 };
 
-export default ApEapcet2025AllotmentExplorer;
+export default ApEapcetAllotmentExplorer;
