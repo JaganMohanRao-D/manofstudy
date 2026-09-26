@@ -51,6 +51,11 @@ const ApEapcetRadar = lazy(() =>
     default: m.ApEapcetRadar || m.default,
   }))
 );
+const ApEapcet2025AllotmentExplorer = lazy(() =>
+  import('./components/ApEapcet2025AllotmentExplorer').then((m: any) => ({
+    default: m.ApEapcet2025AllotmentExplorer || m.default,
+  }))
+);
 const TgAllotmentExplorer = lazy(() =>
   import('./components/TgAllotmentExplorer').then((m: any) => ({
     default: m.TgAllotmentExplorer || m.default,
@@ -211,6 +216,14 @@ export const TOOLS_CONFIG: ToolMeta[] = [
     category: 'counselling',
     description: 'Live AP EAPCET Phase 2 leftover seats, college matrices & official branch fee schedules',
     badge: 'Phase 2 Live',
+  },
+  {
+    id: 'ap-allotments',
+    name: 'AP EAPCET 2025 Allotment Explorer',
+    shortName: 'AP Allotments 2025',
+    category: 'counselling',
+    description: 'Search student allotments, explore colleges and branches, and inspect observed category-wise rank ranges.',
+    badge: '2025 DATA',
   },
   {
     id: 'projects',
@@ -376,6 +389,12 @@ export default function App() {
       ) {
         setActiveWorkspace('tg-allotments');
       } else if (
+        hash === 'ap-allotments' ||
+        hash === 'ap-eapcet-2025' ||
+        hash === 'ap-allotment-explorer'
+      ) {
+        setActiveWorkspace('ap-allotments');
+      } else if (
         hash === 'eapcet-radar' ||
         hash === 'eapcet' ||
         hash === 'phase1' ||
@@ -492,6 +511,8 @@ export default function App() {
       handleSelectWorkspace('tg-predictor');
     } else if (tab === 'campus-connect') {
       handleSelectWorkspace('campus-connect');
+    } else if (tab === 'ap-allotments') {
+      handleSelectWorkspace('ap-allotments');
     } else if (tab === 'eapcet-radar') {
       handleSelectWorkspace('eapcet');
     } else if (tab === 'tg-allotments') {
@@ -547,6 +568,11 @@ export default function App() {
         return {
           title: 'AP EAPCET Phase 2 Vacancy Radar & Fees',
           icon: <Flame className="w-4 h-4 text-rose-500" />,
+        };
+      case 'ap-allotments':
+        return {
+          title: 'AP EAPCET 2025 Allotment Explorer',
+          icon: <Building2 className="w-4 h-4 text-indigo-500" />,
         };
       case 'tg-allotments':
         return {
@@ -802,6 +828,10 @@ export default function App() {
 
                 {activeWorkspace === 'eapcet' && (
                   <ApEapcetRadar initialTab={eapcetPhase} />
+                )}
+
+                {activeWorkspace === 'ap-allotments' && (
+                  <ApEapcet2025AllotmentExplorer />
                 )}
 
                 {activeWorkspace === 'tg-allotments' && (
