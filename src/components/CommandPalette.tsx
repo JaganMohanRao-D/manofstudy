@@ -143,12 +143,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'tool-ap-allotments',
-        title: 'AP EAPCET 2025 College-Wise Allotment Explorer',
+        title: 'AP Allotments (Namewise)',
         subtitle: 'Explore college allotments, student ranks and category-wise admission insights',
         category: 'Core Tools',
-        badge: 'AP 2025',
+        badge: 'AP 2026',
         icon: <Building2 className="w-4 h-4 text-emerald-500" />,
-        keywords: ['ap', 'ap eapcet', 'apeapcet', 'andhra pradesh', 'allotment', 'allotments', '2025', 'student search', 'ranks', 'svce', 'adit', 'gayatri', 'siddhartha', 'cutoff'],
+        keywords: ['ap', 'ap eapcet', 'apeapcet', 'andhra pradesh', 'allotment', 'allotments', '2026', 'student search', 'ranks', 'svce', 'adit', 'gayatri', 'siddhartha', 'cutoff'],
         action: () => onSelectTool('ap-allotments' as ToolTab),
       },
       {
