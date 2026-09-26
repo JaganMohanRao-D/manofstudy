@@ -854,7 +854,7 @@ export default function App() {
                 )}
 
                 {activeWorkspace === 'ap-allotments' && (
-                  <ApCollegePredictor />
+                  <ApEapcet2025AllotmentExplorer />
                 )}
 
                 {activeWorkspace === 'ap-predictor' && (
