@@ -342,39 +342,78 @@ export interface SearchOptions {
   limit?: number;
 }
 
-export async function searchAllotments(
-  year: AllotmentYear,
-  options: SearchOptions = {}
-): Promise<AllotmentRecord[]> {
-  const limit = options.limit ?? 500;
-  const targetCollege = String(options.collegeCode ?? 'ALL').toUpperCase();
-  const colleges =
-    targetCollege === 'ALL'
-      ? await loadAllColleges(year)
-      : [await getCollegeDetails(year, targetCollege)].filter(Boolean) as CollegeDetailData[];
+type SearchIndexCandidate = [number, string, string, string, string, string, number, string, string];
 
+interface SearchIndexData {
+  candidates: SearchIndexCandidate[];
+  branchMap?: Record<string, string>;
+  collegeMap?: Record<string, string>;
+}
+
+const searchIndexCache = new Map<AllotmentYear, Promise<SearchIndexData>>();
+
+async function loadSearchIndex(year: AllotmentYear): Promise<SearchIndexData> {
+  const cached = searchIndexCache.get(year);
+  if (cached) return cached;
+  const promise = (async () => {
+    const response = await fetch(BASE_PATH[year] + 'search_index.json');
+    if (!response.ok) throw new Error(`Unable to load AP EAPCET ${year} search index (HTTP ${response.status})`);
+    const data = await response.json();
+    return {
+      candidates: Array.isArray(data.candidates) ? data.candidates : [],
+      branchMap: data.branchMap ?? {},
+      collegeMap: data.collegeMap ?? {},
+    };
+  })();
+  searchIndexCache.set(year, promise);
+  return promise;
+}
+
+export async function searchAllotments(year: AllotmentYear, options: SearchOptions = {}): Promise<AllotmentRecord[]> {
+  const { candidates, branchMap = {}, collegeMap = {} } = await loadSearchIndex(year);
+  const limit = Math.max(1, Math.min(options.limit ?? 500, 1000));
   const nameQuery = normalize(options.nameQuery);
   const phase = options.phase && options.phase !== 'ALL' ? Number(options.phase) : 0;
+  const targetCollege = String(options.collegeCode ?? 'ALL').trim().toUpperCase();
+  const targetBranch = String(options.branchCode ?? 'ALL').trim().toUpperCase();
+  const targetCategory = String(options.category ?? 'ALL').trim().toUpperCase();
+  const targetAllotted = String(options.allottedCategory ?? 'ALL').trim().toUpperCase();
+  const targetGender = String(options.gender ?? 'ALL').trim().toUpperCase();
+  const targetRegion = String(options.region ?? 'ALL').trim().toUpperCase();
   const results: AllotmentRecord[] = [];
 
-  for (const college of colleges) {
-    for (const record of college.allRecords) {
-      if (nameQuery && !normalize(record.cand_name).includes(nameQuery)) continue;
-      if (options.exactRank && record.rank !== options.exactRank) continue;
-      if (options.minRank && record.rank < options.minRank) continue;
-      if (options.maxRank && record.rank > options.maxRank) continue;
-      if (options.branchCode && options.branchCode !== 'ALL' && record.branch_code !== options.branchCode) continue;
-      if (options.category && options.category !== 'ALL' && record.category !== options.category) continue;
-      if (options.allottedCategory && options.allottedCategory !== 'ALL' && record.alloted_category !== options.allottedCategory) continue;
-      if (options.gender && options.gender !== 'ALL' && record.gender !== options.gender) continue;
-      if (options.region && options.region !== 'ALL' && record.region !== options.region) continue;
-      if (phase && record.phase !== phase) continue;
+  for (const raw of candidates) {
+    const [rank, candName, gender, category, region, allottedCategory, rawPhase, collegeCode, branchCode] = raw;
+    if (!rank || rank <= 0) continue;
+    if (nameQuery && !normalize(candName).includes(nameQuery)) continue;
+    if (options.exactRank && rank !== options.exactRank) continue;
+    if (options.minRank && rank < options.minRank) continue;
+    if (options.maxRank && rank > options.maxRank) continue;
+    if (targetCollege !== 'ALL' && String(collegeCode).toUpperCase() !== targetCollege) continue;
+    if (targetBranch !== 'ALL' && String(branchCode).toUpperCase() !== targetBranch) continue;
+    if (targetCategory !== 'ALL' && String(category).toUpperCase() !== targetCategory) continue;
+    if (targetAllotted !== 'ALL' && String(allottedCategory).toUpperCase() !== targetAllotted) continue;
+    if (targetGender !== 'ALL' && String(gender).toUpperCase() !== targetGender) continue;
+    if (targetRegion !== 'ALL' && String(region).toUpperCase() !== targetRegion) continue;
+    if (phase && Number(rawPhase) !== phase) continue;
 
-      results.push(record);
-      if (results.length >= limit) return results;
-    }
+    const code = String(collegeCode ?? '').toUpperCase();
+    const bcode = String(branchCode ?? '').toUpperCase();
+    results.push({
+      rank: Number(rank),
+      cand_name: String(candName ?? ''),
+      gender: String(gender ?? '').toUpperCase(),
+      category: String(category ?? ''),
+      region: String(region ?? '').toUpperCase(),
+      alloted_category: String(allottedCategory ?? ''),
+      phase: Number(rawPhase) || 0,
+      college_code: code,
+      college_name: String(collegeMap[code] ?? collegeCode ?? ''),
+      branch_code: bcode,
+      branch_name: String(branchMap[bcode] ?? branchCode ?? ''),
+    });
+    if (results.length >= limit) break;
   }
-
   return results;
 }
 
