@@ -42,6 +42,7 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
   );
 
   const [selectedYear, setSelectedYear] = useState<AllotmentYear>('2026');
+  const [selectedPhase, setSelectedPhase] = useState<'ALL'|'1'|'2'|'3'>('ALL');
 
   // College & Branch Selection State
   const [selectedCollegeCode, setSelectedCollegeCode] = useState<string>('ALL');
@@ -283,9 +284,14 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
         <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <label className="text-xs font-semibold text-slate-300">Choose Allotment Year
-              <select value={selectedYear} onChange={e=>setSelectedYear(e.target.value as AllotmentYear)} className="mt-1 w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white">
-                <option value="2026">2026 All Phases</option>
-                <option value="2025">2025 All Phases</option>
+              <select value={selectedYear+':'+selectedPhase} onChange={e=>{const [y,p]=e.target.value.split(':');setSelectedYear(y as AllotmentYear);setSelectedPhase((p||'ALL') as any);setFilters(f=>({...f,phase:p||'ALL'}));}} className="mt-1 w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white">
+                <option value="2026:ALL">2026 All Phases</option>
+                <option value="2026:1">2026 1st Phase</option>
+                <option value="2026:2">2026 2nd Phase</option>
+                <option value="2026:3">2026 3rd Phase</option>
+                <option value="2025:ALL">2025 All Phases</option>
+                <option value="2025:1">2025 1st Phase</option>
+                <option value="2025:2">2025 2nd Phase</option>
               </select>
             </label>
             <label className="text-xs font-semibold text-slate-300">College
@@ -454,7 +460,7 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
 
         {/* 5. TAB 2: SEARCH STUDENT BY NAME */}
         {activeTab === 'student-search' && (
-          <APStudentSearch onExploreCollegeBranch={handleJumpToCollegeBranch} />
+          <APStudentSearch year={selectedYear} onExploreCollegeBranch={handleJumpToCollegeBranch} />
         )}
 
         {/* 6. TAB 3: SEARCH BY RANK / RANK RANGE */}
