@@ -350,7 +350,7 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
                 </section>
                 <section className="rounded-3xl border border-slate-800 bg-slate-900/80 p-4 shadow-xl">
                   <div className="mb-3 flex items-center justify-between"><div><h3 className="font-bold text-white">Allotted students</h3><p className="text-xs text-slate-500">{visibleRecords.length.toLocaleString()} records after active filters</p></div><span className="rounded-full bg-cyan-500/10 px-3 py-1 text-xs font-bold text-cyan-300">AP EAPCET {selectedYear}</span></div>
-                  <APAllotmentTable records={visibleRecords} collegeCode={currentCollege.college_code} collegeName={currentCollege.college_name} branchCode={selectedBranchCode} branchName={branchLabel} />
+                  <APAllotmentTable records={visibleRecords} collegeCode={currentCollege.college_code} collegeName={currentCollege.college_name} branchCode={selectedBranchCode} branchName={branchLabel} year={selectedYear} />
                 </section>
               </>
             ) : (
