@@ -14,14 +14,8 @@ import {
   Loader2,
   CheckCircle2,
 } from 'lucide-react';
-import {
-  getGlobalDatasetStats,
-  getAllCollegesList,
-  getCollegeDetails,
-  computeBranchAnalytics,
-  CollegeDetailData,
-  AllotmentRecord,
-} from '../../services/apEapcet2025AllotmentService';
+import { getCollegeList, getCollegeDetails, AllotmentYear, CollegeDetailData } from '../../services/apEapcetAllotmentService';
+import { computeBranchAnalytics } from '../../services/apEapcet2025AllotmentService';
 import APDatasetStats from './APDatasetStats';
 import APCollegeSelector from './APCollegeSelector';
 import APBranchSelector, { BranchOption } from './APBranchSelector';
@@ -38,7 +32,7 @@ interface APAllotmentExplorerProps {
 }
 
 export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
-  initialCollegeCode = 'AUCE',
+  initialCollegeCode = 'ALL',
   initialBranchCode = 'ALL',
   initialTab = 'college',
 }) => {
@@ -47,9 +41,13 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
     initialTab
   );
 
+  const [selectedYear, setSelectedYear] = useState<AllotmentYear>('2026');
+
   // College & Branch Selection State
-  const [selectedCollegeCode, setSelectedCollegeCode] = useState<string>(initialCollegeCode);
+  const [selectedCollegeCode, setSelectedCollegeCode] = useState<string>('ALL');
   const [selectedBranchCode, setSelectedBranchCode] = useState<string>(initialBranchCode);
+
+  const [collegesList, setCollegesList] = useState<any[]>([]);
 
   // Data Loading States
   const [collegeData, setCollegeData] = useState<CollegeDetailData | null>(null);
@@ -67,9 +65,13 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
     maxRank: '',
   });
 
-  // Global dataset static stats & 255 colleges
-  const datasetStats = useMemo(() => getGlobalDatasetStats(), []);
-  const collegesList = useMemo(() => getAllCollegesList(), []);
+  useEffect(() => {
+    getCollegeList(selectedYear).then(setCollegesList).catch(() => setCollegesList([]));
+    setSelectedCollegeCode('ALL');
+    setSelectedBranchCode('ALL');
+    setCollegeData(null);
+    setFilters({ category:'ALL', allottedCategory:'ALL', gender:'ALL', region:'ALL', phase:'ALL', minRank:'', maxRank:'' });
+  }, [selectedYear]);
 
   // Sync prop changes
   useEffect(() => {
@@ -91,7 +93,7 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
     setLoadError(null);
 
     try {
-      const data = await getCollegeDetails(code);
+      const data = await getCollegeDetails(selectedYear, code);
       if (!data) {
         setCollegeData(null);
         setLoadError(
@@ -108,7 +110,7 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
     } finally {
       setIsLoadingCollege(false);
     }
-  }, []);
+  }, [selectedYear]);
 
   useEffect(() => {
     loadCollege(selectedCollegeCode);
@@ -268,18 +270,32 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
         <div className="text-center space-y-2 sm:space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold tracking-wide shadow-sm">
             <Flame className="w-4 h-4 text-cyan-400 fill-cyan-400 animate-pulse" />
-            <span>AP EAPCET 2025 Allotment Intelligence</span>
+            <span>AP EAPCET Allotment Intelligence</span>
           </div>
           <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
-            AP EAPCET 2025 Allotment Explorer
+            AP Allotments (Namewise)
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 max-w-2xl mx-auto leading-relaxed px-1">
-            Explore college-wise allotments, student ranks and category-wise admission insights across 255 Andhra Pradesh engineering colleges.
+            Search AP EAPCET allotments by student name, rank, college, branch and phase.
           </p>
         </div>
 
-        {/* 2. OVERALL DATASET INSIGHTS DASHBOARD */}
-        <APDatasetStats stats={datasetStats} />
+        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <label className="text-xs font-semibold text-slate-300">Choose Allotment Year
+              <select value={selectedYear} onChange={e=>setSelectedYear(e.target.value as AllotmentYear)} className="mt-1 w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white">
+                <option value="2026">2026 All Phases</option>
+                <option value="2025">2025 All Phases</option>
+              </select>
+            </label>
+            <label className="text-xs font-semibold text-slate-300">College
+              <select value={selectedCollegeCode} onChange={e=>{setSelectedCollegeCode(e.target.value);setSelectedBranchCode('ALL');handleResetFilters();}} className="mt-1 w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white">
+                <option value="ALL">All Colleges</option>
+                {collegesList.map(c=><option key={c.collegeCode} value={c.collegeCode}>{c.collegeName} ({c.collegeCode})</option>)}
+              </select>
+            </label>
+          </div>
+        </div>
 
         {/* 3. MAIN NAVIGATION TABS */}
         <div className="flex justify-center pt-1">
@@ -449,8 +465,7 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
         {/* 7. MANDATORY DISCLAIMER */}
         <div className="bg-slate-900/60 border border-slate-800/80 rounded-xl p-3.5 text-center text-[11px] text-slate-500 max-w-4xl mx-auto leading-relaxed">
           <p>
-            <strong className="text-slate-400">Disclaimer:</strong> These insights are based on the AP EAPCET 2025 allotment records available in this dataset. They are intended for reference and awareness only and should not be treated as a guaranteed admission cutoff or official counselling prediction.
-          </p>
+            <strong className="text-slate-400">Disclaimer:</strong> These insights are based on the selected AP EAPCET allotment dataset and are for reference only.</p>
         </div>
 
       </div>
