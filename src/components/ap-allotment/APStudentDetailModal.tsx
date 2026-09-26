@@ -72,17 +72,10 @@ export const APStudentDetailModal: React.FC<APStudentDetailModalProps> = ({ stud
             <Detail label="College" value={student.college_name + ' (' + student.college_code + ')'} icon={GraduationCap} />
             <Detail label="Branch" value={student.branch_name + ' (' + student.branch_code + ')'} icon={GraduationCap} />
             <Detail label="Course type" value={student.course_type} icon={GraduationCap} />
-            <Detail label="District" value={student.district} icon={MapPin} />
-            <Detail label="Roll number" value={student.roll_no} icon={Hash} />
-            <Detail label="Record ID" value={student.id} icon={Database} />
-            <Detail label="Fee with exemption" value={fee(student.fee_with_exemption)} icon={WalletCards} />
-            <Detail label="Fee without exemption" value={fee(student.fee_with_no_exemption)} icon={WalletCards} />
+            <Detail label="District" value={student.district} icon={MapPin} />            <Detail label="With fee reimbursement" value={fee(student.fee_with_exemption)} icon={WalletCards} />
+            <Detail label="Actual tuition fee" value={fee(student.fee_with_no_exemption)} icon={WalletCards} />
             <Detail label="Total seats" value={student.total_seats} icon={Database} />
-            <Detail label="Left-over seats" value={student.left_over_seats} icon={Database} />
-            <Detail label="Roll prefix" value={student.roll_no_prefix} icon={Hash} />
-            <Detail label="First-name field" value={student.first_name_blurred} icon={UserRound} />
-            <Detail label="Last-name field" value={student.last_name_visible} icon={UserRound} />
-            <Detail label="Roll field (blurred)" value={student.roll_no_blurred} icon={Hash} />
+            <Detail label="Left-over seats" value={student.left_over_seats} icon={Database} />            <Detail label="Roll field (blurred)" value={student.roll_no_blurred} icon={Hash} />
           </div>
           <div className="mt-4 rounded-2xl border border-cyan-500/15 bg-cyan-500/5 p-4 text-xs leading-5 text-slate-500 dark:text-slate-400">
             <strong className="text-cyan-600 dark:text-cyan-300">Source note:</strong> Values above are shown from the selected AP EAPCET {year} allotment record. Missing fields are omitted rather than invented.
