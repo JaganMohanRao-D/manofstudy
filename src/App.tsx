@@ -221,9 +221,9 @@ export const TOOLS_CONFIG: ToolMeta[] = [
   {
     id: 'ap-predictor',
     name: 'AP EAPCET 2026 College Intelligence & Predictor',
-    shortName: 'AP Predictor 2025',
+    shortName: 'AP Predictor 2026',
     category: 'counselling',
-    description: 'Predict college admission probability with deterministic 2025 closing cutoffs and median analytics.',
+    description: 'Match AP EAPCET 2026 allotment records deterministically by rank, category, gender, region and branch.',
     badge: 'AI Intelligence',
   },
   {
@@ -232,7 +232,7 @@ export const TOOLS_CONFIG: ToolMeta[] = [
     shortName: 'AP Allotments',
     category: 'counselling',
     description: 'Search student allotments, explore colleges and branches, and inspect observed category-wise rank ranges.',
-    badge: '2025 DATA',
+    badge: '2026 DATA',
   },
   {
     id: 'projects',
