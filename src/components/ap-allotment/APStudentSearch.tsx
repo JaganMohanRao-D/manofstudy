@@ -46,7 +46,7 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
   const [categoryFilter, setCategoryFilter] = useState('ALL');
   const [genderFilter, setGenderFilter] = useState('ALL');
   const [regionFilter, setRegionFilter] = useState('ALL');
-  const [phaseFilter, setPhaseFilter] = useState('ALL');
+  const [phaseFilter, setPhaseFilter] = useState(phase);
 
   // Results & Loading
   const [isSearching, setIsSearching] = useState(false);
@@ -55,6 +55,15 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
   const [hasSearched, setHasSearched] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 25;
+
+  useEffect(() => {
+    setPhaseFilter(phase);
+    setNameInput(initialName);
+    setSearchResults([]);
+    setTotalMatches(0);
+    setHasSearched(false);
+    setCurrentPage(1);
+  }, [year, collegeCode, branchCode, phase, initialName]);
 
   // Execute Search
   const executeSearch = useCallback(async () => {
