@@ -236,7 +236,7 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
           <div className="relative">
             <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1.5 text-xs font-bold text-cyan-300">
               <Sparkles className="h-3.5 w-3.5" />
-              AP EAPCET {selectedYear{'}'} Allotment Records
+              AP EAPCET {selectedYear} Allotment Records
             </div>
             <h1 className="mt-3 text-2xl sm:text-4xl font-black tracking-tight text-white">AP Allotments (Namewise)</h1>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">
