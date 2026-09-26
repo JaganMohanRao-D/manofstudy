@@ -219,6 +219,15 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
     resetFilters();
   };
 
+  const datasetCards: Array<{ label: string; value: string | number; icon: React.ElementType }> = [
+    { label: 'Total allotments', value: datasetSummary?.totalRecords ?? 0, icon: Database },
+    { label: 'AP colleges', value: collegesList.length, icon: GraduationCap },
+    { label: 'Branches', value: datasetSummary?.branches ?? 0, icon: BookOpen },
+    { label: 'Observed rank span', value: bestRank && lastRank ? bestRank.toLocaleString() + ' – ' + lastRank.toLocaleString() : '—', icon: Target },
+  ];
+
+
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 py-5 sm:py-8 px-3 sm:px-6 font-sans">
       <div className="max-w-7xl mx-auto space-y-5 sm:space-y-7">
@@ -295,13 +304,8 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
         ) : selectedCollegeCode === 'ALL' ? (
           <section className="space-y-4">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-              {[
-                ['Total allotments', datasetSummary?.totalRecords ?? 0, Database],
-                ['AP colleges', collegesList.length, GraduationCap],
-                ['Branches', datasetSummary?.branches ?? 0, BookOpen],
-                ['Observed rank span', bestRank && lastRank ? bestRank.toLocaleString() + ' – ' + lastRank.toLocaleString() : '—', Target],
-              ].map(([label, value, Icon]) => (
-                <div key={String(label)} className="mos-fade-up mos-stat-card rounded-2xl border border-white/10 bg-slate-900/80 p-4 shadow-xl backdrop-blur-xl">
+              {datasetCards.map(({ label, value, icon: Icon }) => (
+                <div key={label} className="mos-fade-up mos-stat-card rounded-2xl border border-white/10 bg-slate-900/80 p-4 shadow-xl backdrop-blur-xl">
                   <div className="flex items-center justify-between"><span className="text-[10px] uppercase tracking-[0.15em] text-slate-500">{label}</span><Icon className="h-4 w-4 text-cyan-400" /></div>
                   <div className="mt-2 text-lg sm:text-2xl font-black text-white">{typeof value === 'number' ? value.toLocaleString() : value}</div>
                 </div>
