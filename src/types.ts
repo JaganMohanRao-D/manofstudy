@@ -2,6 +2,7 @@ export type WorkspaceView =
   | 'hub'
   | 'eapcet'
   | 'ap-allotments'
+  | 'ap-predictor'
   | 'tg-allotments'
   | 'tg-top-colleges'
   | 'tg-predictor'
@@ -26,6 +27,7 @@ export type WorkspaceView =
 
 export type ToolTab = 
   | 'ap-allotments'
+  | 'ap-predictor'
   | 'eapcet-radar'
   | 'tg-allotments'
   | 'tg-top-colleges'

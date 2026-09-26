@@ -89,11 +89,7 @@ export async function preloadApSearchIndex(): Promise<boolean> {
 
   loadIndexPromise = (async () => {
     try {
-      // Try /AP_EAPCET_2025_ALLOTMENT_BY_COLLEGE/search_index.json first, then fallback to /AP_EAPCET_2025_ALLOTMENT/search_index.json
-      let res = await fetch('/AP_EAPCET_2025_ALLOTMENT_BY_COLLEGE/search_index.json');
-      if (!res.ok) {
-        res = await fetch('/AP_EAPCET_2025_ALLOTMENT/search_index.json');
-      }
+      const res = await fetch('/AP_EAPCET_2025_ALLOTMENT_BY_COLLEGE/search_index.json');
       if (!res.ok) {
         throw new Error(`Failed to load search index: HTTP ${res.status}`);
       }
@@ -128,10 +124,7 @@ export async function fetchCollegeDetails(collegeCode: string): Promise<ApColleg
 
   const fileName = collegeMeta.file || `${code}.json`;
   try {
-    let res = await fetch(`/AP_EAPCET_2025_ALLOTMENT_BY_COLLEGE/${fileName}`);
-    if (!res.ok) {
-      res = await fetch(`/AP_EAPCET_2025_ALLOTMENT/${fileName}`);
-    }
+    const res = await fetch(`/AP_EAPCET_2025_ALLOTMENT_BY_COLLEGE/${fileName}`);
     if (!res.ok) {
       throw new Error(`HTTP ${res.status}`);
     }

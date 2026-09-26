@@ -52,6 +52,11 @@ const ApEapcetRadar = lazy(() =>
     default: m.ApEapcetRadar || m.default,
   }))
 );
+const ApCollegePredictor = lazy(() =>
+  import('./components/ApCollegePredictor').then((m: any) => ({
+    default: m.ApCollegePredictor || m.default,
+  }))
+);
 const ApEapcet2025AllotmentExplorer = lazy(() =>
   import('./components/ApEapcet2025AllotmentExplorer').then((m: any) => ({
     default: m.ApEapcet2025AllotmentExplorer || m.default,
@@ -212,6 +217,14 @@ export const TOOLS_CONFIG: ToolMeta[] = [
     category: 'counselling',
     description: 'Live AP EAPCET Phase 2 leftover seats, college matrices & official branch fee schedules',
     badge: 'Phase 2 Live',
+  },
+  {
+    id: 'ap-predictor',
+    name: 'AP EAPCET 2025 College Intelligence & Predictor',
+    shortName: 'AP Predictor 2025',
+    category: 'counselling',
+    description: 'Predict college admission probability with deterministic 2025 closing cutoffs and median analytics.',
+    badge: 'AI Intelligence',
   },
   {
     id: 'ap-allotments',
@@ -385,6 +398,13 @@ export default function App() {
       ) {
         setActiveWorkspace('tg-allotments');
       } else if (
+        hash === 'ap-predictor' ||
+        hash === 'ap-college-predictor' ||
+        hash === 'ap-intelligence' ||
+        hash === 'ap-cutoff'
+      ) {
+        setActiveWorkspace('ap-predictor');
+      } else if (
         hash === 'ap-allotments' ||
         hash === 'ap-eapcet-2025' ||
         hash === 'ap-allotment-explorer'
@@ -509,6 +529,8 @@ export default function App() {
       handleSelectWorkspace('campus-connect');
     } else if (tab === 'ap-allotments') {
       handleSelectWorkspace('ap-allotments');
+    } else if (tab === 'ap-predictor') {
+      handleSelectWorkspace('ap-predictor');
     } else if (tab === 'eapcet-radar') {
       handleSelectWorkspace('eapcet');
     } else if (tab === 'tg-allotments') {
@@ -568,7 +590,12 @@ export default function App() {
       case 'ap-allotments':
         return {
           title: 'AP EAPCET 2025 Allotment Explorer',
-          icon: <Building2 className="w-4 h-4 text-indigo-500" />,
+          icon: <Building2 className="w-4 h-4 text-cyan-400" />,
+        };
+      case 'ap-predictor':
+        return {
+          title: 'AP EAPCET 2025 College Intelligence & Cutoff Portal',
+          icon: <Compass className="w-4 h-4 text-rose-500" />,
         };
       case 'tg-allotments':
         return {
@@ -827,7 +854,11 @@ export default function App() {
                 )}
 
                 {activeWorkspace === 'ap-allotments' && (
-                  <ApEapcet2025AllotmentExplorer />
+                  <ApCollegePredictor />
+                )}
+
+                {activeWorkspace === 'ap-predictor' && (
+                  <ApCollegePredictor initialCollegeCode="AUCE" />
                 )}
 
                 {activeWorkspace === 'tg-allotments' && (
