@@ -10,7 +10,7 @@ import {
   AlertCircle,
   GraduationCap,
 } from 'lucide-react';
-import { AllotmentRecord } from '../../services/apEapcet2025AllotmentService';
+import { AllotmentRecord, AllotmentYear } from '../../services/apEapcetAllotmentService';
 
 interface APAllotmentTableProps {
   records: AllotmentRecord[];
@@ -18,6 +18,7 @@ interface APAllotmentTableProps {
   collegeName: string;
   branchCode: string;
   branchName: string;
+  year?: AllotmentYear;
 }
 
 export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
@@ -26,6 +27,7 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
   collegeName,
   branchCode,
   branchName,
+  year = '2026',
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState<'rank' | 'name'>('rank');
@@ -116,12 +118,12 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
     link.setAttribute('href', url);
     link.setAttribute(
       'download',
-      `AP_EAPCET_2025_${collegeCode}_${branchCode}_Allotments.csv`
+      `AP_EAPCET_${year}_${collegeCode}_${branchCode}_Allotments.csv`
     );
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }, [processedRecords, collegeCode, branchCode]);
+  }, [processedRecords, collegeCode, branchCode, year]);
 
   return (
     <div className="space-y-3">
