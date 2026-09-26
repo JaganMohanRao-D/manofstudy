@@ -1,28 +1,21 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { Building2, Users, Search, Award, BookOpen, SlidersHorizontal, AlertCircle, GraduationCap, Sparkles, Loader2, Database, ChevronRight } from 'lucide-react';
 import {
-  Building2,
-  Users,
-  Search,
-  Flame,
-  Award,
-  BookOpen,
-  SlidersHorizontal,
-  Compass,
-  AlertCircle,
-  GraduationCap,
-  Sparkles,
-  Loader2,
-  CheckCircle2,
-} from 'lucide-react';
-import { getCollegeList, getCollegeDetails, AllotmentYear, CollegeDetailData } from '../../services/apEapcetAllotmentService';
-import { computeBranchAnalytics } from '../../services/apEapcet2025AllotmentService';
-import APDatasetStats from './APDatasetStats';
-import APCollegeSelector from './APCollegeSelector';
-import APBranchSelector, { BranchOption } from './APBranchSelector';
-import APCategoryInsights from './APCategoryInsights';
-import APFilters, { FilterState } from './APFilters';
+  AllotmentYear,
+  PhaseFilter,
+  CollegeDetailData,
+  CollegeListItem,
+  AllotmentRecord,
+  getCollegeList,
+  getCollegeDetails,
+  loadAllColleges,
+  searchAllotments,
+  getDatasetSummary,
+} from '../../services/apEapcetAllotmentService';
 import APAllotmentTable from './APAllotmentTable';
 import APStudentSearch from './APStudentSearch';
+import APCollegeSelector from './APCollegeSelector';
+import APBranchSelector, { BranchOption } from './APBranchSelector';
 
 interface APAllotmentExplorerProps {
   initialCollegeCode?: string;
@@ -31,451 +24,349 @@ interface APAllotmentExplorerProps {
   onNavigateToTab?: (tabId: string) => void;
 }
 
+const PHASE_OPTIONS: Array<{ value: string; label: string }> = [
+  { value: '2026:ALL', label: '2026 All Phases' },
+  { value: '2026:1', label: '2026 1st Phase' },
+  { value: '2026:2', label: '2026 2nd Phase' },
+  { value: '2026:3', label: '2026 3rd Phase' },
+  { value: '2025:ALL', label: '2025 All Phases' },
+  { value: '2025:1', label: '2025 1st Phase' },
+  { value: '2025:2', label: '2025 2nd Phase' },
+];
+
 export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
   initialCollegeCode = 'ALL',
   initialBranchCode = 'ALL',
   initialTab = 'college',
 }) => {
-  // Navigation sub-tabs
-  const [activeTab, setActiveTab] = useState<'college' | 'student-search' | 'rank-search'>(
-    initialTab
-  );
-
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [selectedYear, setSelectedYear] = useState<AllotmentYear>('2026');
-  const [selectedPhase, setSelectedPhase] = useState<'ALL'|'1'|'2'|'3'>('ALL');
-
-  // College & Branch Selection State
-  const [selectedCollegeCode, setSelectedCollegeCode] = useState<string>('ALL');
-  const [selectedBranchCode, setSelectedBranchCode] = useState<string>(initialBranchCode);
-
-  const [collegesList, setCollegesList] = useState<any[]>([]);
-
-  // Data Loading States
+  const [selectedPhase, setSelectedPhase] = useState<PhaseFilter>('ALL');
+  const [selectedCollegeCode, setSelectedCollegeCode] = useState('ALL');
+  const [selectedBranchCode, setSelectedBranchCode] = useState('ALL');
+  const [collegesList, setCollegesList] = useState<CollegeListItem[]>([]);
   const [collegeData, setCollegeData] = useState<CollegeDetailData | null>(null);
-  const [isLoadingCollege, setIsLoadingCollege] = useState<boolean>(false);
+  const [allColleges, setAllColleges] = useState<CollegeDetailData[]>([]);
+  const [datasetSummary, setDatasetSummary] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
-
-  // Advanced Filters State
-  const [filters, setFilters] = useState<FilterState>({
+  const [studentSearch, setStudentSearch] = useState('');
+  const [filters, setFilters] = useState({
     category: 'ALL',
     allottedCategory: 'ALL',
     gender: 'ALL',
     region: 'ALL',
-    phase: 'ALL',
     minRank: '',
     maxRank: '',
   });
 
-  useEffect(() => {
-    getCollegeList(selectedYear).then(setCollegesList).catch(() => setCollegesList([]));
+  const phaseValue = selectedYear + ':' + selectedPhase;
+
+  const resetFilters = useCallback(() => {
+    setFilters({ category: 'ALL', allottedCategory: 'ALL', gender: 'ALL', region: 'ALL', minRank: '', maxRank: '' });
+  }, []);
+
+  const applyYearPhase = useCallback((value: string) => {
+    const [year, phase] = value.split(':') as [AllotmentYear, PhaseFilter];
+    setSelectedYear(year);
+    setSelectedPhase(phase);
     setSelectedCollegeCode('ALL');
     setSelectedBranchCode('ALL');
-    setCollegeData(null);
-    setFilters({ category:'ALL', allottedCategory:'ALL', gender:'ALL', region:'ALL', phase:'ALL', minRank:'', maxRank:'' });
-  }, [selectedYear]);
-
-  // Sync prop changes
-  useEffect(() => {
-    if (initialCollegeCode && initialCollegeCode !== selectedCollegeCode) {
-      setSelectedCollegeCode(initialCollegeCode);
-    }
-  }, [initialCollegeCode]);
+    setStudentSearch('');
+    resetFilters();
+  }, [resetFilters]);
 
   useEffect(() => {
-    if (initialBranchCode && initialBranchCode !== selectedBranchCode) {
-      setSelectedBranchCode(initialBranchCode);
-    }
-  }, [initialBranchCode]);
-
-  // Load college data whenever selectedCollegeCode changes
-  const loadCollege = useCallback(async (code: string) => {
-    if (!code || code === 'ALL') return;
-    setIsLoadingCollege(true);
+    let cancelled = false;
+    setIsLoading(true);
     setLoadError(null);
-
-    try {
-      const data = await getCollegeDetails(selectedYear, code);
-      if (!data) {
-        setCollegeData(null);
-        setLoadError(
-          `College [${code}] allotment data could not be loaded or is compiling for this counseling phase.`
-        );
-      } else {
-        setCollegeData(data);
-        setLoadError(null);
-      }
-    } catch (err) {
-      console.warn(`Error loading college ${code}:`, err);
-      setCollegeData(null);
-      setLoadError(`Unable to load data for college [${code}].`);
-    } finally {
-      setIsLoadingCollege(false);
-    }
+    Promise.all([getCollegeList(selectedYear), getDatasetSummary(selectedYear)])
+      .then(([list, summary]) => {
+        if (cancelled) return;
+        setCollegesList(list);
+        setDatasetSummary(summary);
+      })
+      .catch((error) => {
+        if (cancelled) return;
+        setCollegesList([]);
+        setDatasetSummary(null);
+        setLoadError(error instanceof Error ? error.message : 'Unable to load AP allotment data.');
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+    return () => { cancelled = true; };
   }, [selectedYear]);
 
   useEffect(() => {
-    loadCollege(selectedCollegeCode);
-  }, [selectedCollegeCode, loadCollege]);
+    if (!initialCollegeCode || initialCollegeCode === 'ALL') return;
+    // External navigation can request a college, but never override the clean default.
+    const exists = collegesList.some((c) => c.collegeCode === initialCollegeCode);
+    if (exists && selectedCollegeCode === 'ALL') setSelectedCollegeCode(initialCollegeCode);
+  }, [initialCollegeCode, collegesList, selectedCollegeCode]);
 
-  // Available branches inside this college
-  const branchOptions: BranchOption[] = useMemo(() => {
-    if (!collegeData || !collegeData.branches) return [];
-    return collegeData.branches.map((b) => ({
-      branchCode: b.branch_code,
-      branchName: b.branch_name,
-      recordCount: b.recordCount,
-    }));
-  }, [collegeData]);
-
-  // If selected branch does not exist in the newly selected college, fallback to 'ALL'
   useEffect(() => {
-    if (selectedBranchCode !== 'ALL' && branchOptions.length > 0) {
-      const exists = branchOptions.some((b) => b.branchCode === selectedBranchCode);
-      if (!exists) {
-        setSelectedBranchCode('ALL');
-      }
+    let cancelled = false;
+    if (selectedCollegeCode === 'ALL') {
+      setCollegeData(null);
+      setIsLoading(false);
+      return;
     }
-  }, [branchOptions, selectedBranchCode]);
+    setIsLoading(true);
+    getCollegeDetails(selectedYear, selectedCollegeCode)
+      .then((data) => { if (!cancelled) setCollegeData(data); })
+      .catch((error) => {
+        if (!cancelled) {
+          setCollegeData(null);
+          setLoadError(error instanceof Error ? error.message : 'Unable to load selected college.');
+        }
+      })
+      .finally(() => { if (!cancelled) setIsLoading(false); });
+    return () => { cancelled = true; };
+  }, [selectedYear, selectedCollegeCode]);
 
-  // Selected Branch Name
-  const currentBranchName = useMemo(() => {
-    if (selectedBranchCode === 'ALL') return 'All Branches (College-wide)';
-    const found = branchOptions.find((b) => b.branchCode === selectedBranchCode);
-    return found ? found.branchName : selectedBranchCode;
-  }, [selectedBranchCode, branchOptions]);
+  const visibleRecords = useMemo(() => {
+    const source = selectedCollegeCode === 'ALL'
+      ? allColleges.flatMap((college) => college.allRecords)
+      : (collegeData?.allRecords ?? []);
 
-  // Base raw records for the selected branch/college
-  const baseRecords = useMemo(() => {
-    if (!collegeData) return [];
-    if (selectedBranchCode === 'ALL') {
-      return collegeData.allRecords;
-    }
-    const branch = collegeData.branches.find((b) => b.branch_code === selectedBranchCode);
-    return branch ? branch.records : [];
+    return source.filter((record) => {
+      if (selectedPhase !== 'ALL' && record.phase !== Number(selectedPhase)) return false;
+      if (selectedBranchCode !== 'ALL' && record.branch_code !== selectedBranchCode) return false;
+      if (filters.category !== 'ALL' && record.category !== filters.category) return false;
+      if (filters.allottedCategory !== 'ALL' && record.alloted_category !== filters.allottedCategory) return false;
+      if (filters.gender !== 'ALL' && record.gender !== filters.gender) return false;
+      if (filters.region !== 'ALL' && record.region !== filters.region) return false;
+      if (filters.minRank && record.rank < Number(filters.minRank)) return false;
+      if (filters.maxRank && record.rank > Number(filters.maxRank)) return false;
+      return true;
+    });
+  }, [allColleges, collegeData, selectedCollegeCode, selectedPhase, selectedBranchCode, filters]);
+
+  useEffect(() => {
+    if (selectedCollegeCode !== 'ALL') return;
+    let cancelled = false;
+    setIsLoading(true);
+    loadAllColleges(selectedYear)
+      .then((data) => { if (!cancelled) setAllColleges(data); })
+      .catch((error) => { if (!cancelled) setLoadError(error instanceof Error ? error.message : 'Unable to load AP allotment records.'); })
+      .finally(() => { if (!cancelled) setIsLoading(false); });
+    return () => { cancelled = true; };
+  }, [selectedYear, selectedCollegeCode]);
+
+  useEffect(() => {
+    const available = new Set((collegeData?.branches ?? []).map((branch) => branch.branch_code));
+    if (selectedBranchCode !== 'ALL' && !available.has(selectedBranchCode)) setSelectedBranchCode('ALL');
   }, [collegeData, selectedBranchCode]);
 
-  // Compute available filter options that actually occur in the base records
-  const availableFilterOptions = useMemo(() => {
-    const cats = new Set<string>();
-    const alloted = new Set<string>();
-    const regions = new Set<string>();
-    const phases = new Set<number>();
+  const branchOptions: BranchOption[] = useMemo(() =>
+    (collegeData?.branches ?? []).map((branch) => ({
+      branchCode: branch.branch_code,
+      branchName: branch.branch_name,
+      recordCount: branch.recordCount,
+    })), [collegeData]);
 
-    baseRecords.forEach((r) => {
-      if (r.category) cats.add(r.category);
-      if (r.alloted_category) alloted.add(r.alloted_category);
-      if (r.region) regions.add(r.region);
-      if (r.phase) phases.add(r.phase);
+  const filteredCollegeBranches = useMemo(() => {
+    if (!collegeData) return [];
+    return collegeData.branches.map((branch) => ({
+      ...branch,
+      records: branch.records.filter((record) => selectedPhase === 'ALL' || record.phase === Number(selectedPhase)),
+    }));
+  }, [collegeData, selectedPhase]);
+
+  const phaseDistribution = useMemo(() => {
+    const counts: Record<string, number> = {};
+    visibleRecords.forEach((record) => { if (record.phase) counts[String(record.phase)] = (counts[String(record.phase)] || 0) + 1; });
+    return counts;
+  }, [visibleRecords]);
+
+  const categoryInsights = useMemo(() => {
+    const map = new Map<string, { min: number; max: number; count: number }>();
+    visibleRecords.forEach((record) => {
+      const key = record.category || 'Unknown';
+      const item = map.get(key) || { min: Infinity, max: 0, count: 0 };
+      item.min = Math.min(item.min, record.rank);
+      item.max = Math.max(item.max, record.rank);
+      item.count += 1;
+      map.set(key, item);
     });
+    return Array.from(map.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+  }, [visibleRecords]);
 
-    return {
-      categories: Array.from(cats).sort(),
-      allottedCategories: Array.from(alloted).sort(),
-      regions: Array.from(regions).sort(),
-      phases: Array.from(phases).sort((a, b) => a - b),
-    };
-  }, [baseRecords]);
+  const bestRank = visibleRecords.length ? Math.min(...visibleRecords.map((r) => r.rank)) : 0;
+  const lastRank = visibleRecords.length ? Math.max(...visibleRecords.map((r) => r.rank)) : 0;
 
-  // Active filter count
-  const activeFilterCount = useMemo(() => {
-    let count = 0;
-    if (filters.category !== 'ALL') count++;
-    if (filters.allottedCategory !== 'ALL') count++;
-    if (filters.gender !== 'ALL') count++;
-    if (filters.region !== 'ALL') count++;
-    if (filters.phase !== 'ALL') count++;
-    if (filters.minRank.trim() !== '') count++;
-    if (filters.maxRank.trim() !== '') count++;
-    return count;
-  }, [filters]);
+  const currentCollege = selectedCollegeCode !== 'ALL' ? collegeData : null;
+  const branchLabel = selectedBranchCode === 'ALL'
+    ? 'All Branches'
+    : branchOptions.find((branch) => branch.branchCode === selectedBranchCode)?.branchName || selectedBranchCode;
 
-  // Filtered records based on advanced filters
-  const filteredRecords = useMemo(() => {
-    let list = baseRecords;
-
-    if (filters.category !== 'ALL') {
-      list = list.filter((r) => r.category === filters.category);
+  const runStudentSearch = useCallback(async () => {
+    if (!studentSearch.trim()) return;
+    setIsLoading(true);
+    try {
+      const results = await searchAllotments(selectedYear, {
+        nameQuery: studentSearch.trim(),
+        collegeCode: selectedCollegeCode,
+        branchCode: selectedBranchCode,
+        phase: selectedPhase,
+        limit: 500,
+      });
+      setStudentSearch(studentSearch);
+      setActiveTab('student-search');
+      // The dedicated search tab is rendered below and owns its detailed result state.
+      return results;
+    } finally {
+      setIsLoading(false);
     }
+  }, [selectedYear, selectedCollegeCode, selectedBranchCode, selectedPhase, studentSearch]);
 
-    if (filters.allottedCategory !== 'ALL') {
-      list = list.filter((r) => r.alloted_category === filters.allottedCategory);
-    }
-
-    if (filters.gender !== 'ALL') {
-      list = list.filter((r) => r.gender === filters.gender);
-    }
-
-    if (filters.region !== 'ALL') {
-      list = list.filter((r) => r.region === filters.region);
-    }
-
-    if (filters.phase !== 'ALL') {
-      const p = Number(filters.phase);
-      list = list.filter((r) => r.phase === p);
-    }
-
-    if (filters.minRank.trim() !== '') {
-      const min = parseInt(filters.minRank, 10);
-      if (!isNaN(min)) {
-        list = list.filter((r) => r.rank >= min);
-      }
-    }
-
-    if (filters.maxRank.trim() !== '') {
-      const max = parseInt(filters.maxRank, 10);
-      if (!isNaN(max)) {
-        list = list.filter((r) => r.rank <= max);
-      }
-    }
-
-    return list;
-  }, [baseRecords, filters]);
-
-  // Analytics calculated dynamically from filtered records
-  const branchAnalytics = useMemo(() => {
-    return computeBranchAnalytics(filteredRecords);
-  }, [filteredRecords]);
-
-  // Reset filters handler
-  const handleResetFilters = () => {
-    setFilters({
-      category: 'ALL',
-      allottedCategory: 'ALL',
-      gender: 'ALL',
-      region: 'ALL',
-      phase: 'ALL',
-      minRank: '',
-      maxRank: '',
-    });
-  };
-
-  // Change single filter handler
-  const handleChangeFilter = (key: keyof FilterState, value: string) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
-  };
-
-  // Handler for jumping directly to explore a specific college + branch from search
-  const handleJumpToCollegeBranch = (collegeCode: string, branchCode?: string) => {
-    if (collegeCode) setSelectedCollegeCode(collegeCode);
-    if (branchCode) setSelectedBranchCode(branchCode);
-    setActiveTab('college');
-    handleResetFilters();
-    window.scrollTo({ top: 120, behavior: 'smooth' });
+  const onCollegeChange = (code: string) => {
+    setSelectedCollegeCode(code);
+    setSelectedBranchCode('ALL');
+    setAllColleges([]);
+    resetFilters();
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 py-4 sm:py-8 px-3 sm:px-6 lg:px-8 font-sans">
-      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
-
-        {/* 1. BRANDING & HEADER */}
-        <div className="text-center space-y-2 sm:space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold tracking-wide shadow-sm">
-            <Flame className="w-4 h-4 text-cyan-400 fill-cyan-400 animate-pulse" />
-            <span>AP EAPCET Allotment Intelligence</span>
-          </div>
-          <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
-            AP Allotments (Namewise)
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-400 max-w-2xl mx-auto leading-relaxed px-1">
-            Search AP EAPCET allotments by student name, rank, college, branch and phase.
-          </p>
-        </div>
-
-        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <label className="text-xs font-semibold text-slate-300">Choose Allotment Year
-              <select value={selectedYear+':'+selectedPhase} onChange={e=>{const [y,p]=e.target.value.split(':');setSelectedYear(y as AllotmentYear);setSelectedPhase((p||'ALL') as any);setFilters(f=>({...f,phase:p||'ALL'}));}} className="mt-1 w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white">
-                <option value="2026:ALL">2026 All Phases</option>
-                <option value="2026:1">2026 1st Phase</option>
-                <option value="2026:2">2026 2nd Phase</option>
-                <option value="2026:3">2026 3rd Phase</option>
-                <option value="2025:ALL">2025 All Phases</option>
-                <option value="2025:1">2025 1st Phase</option>
-                <option value="2025:2">2025 2nd Phase</option>
-              </select>
-            </label>
-            <label className="text-xs font-semibold text-slate-300">College
-              <select value={selectedCollegeCode} onChange={e=>{setSelectedCollegeCode(e.target.value);setSelectedBranchCode('ALL');handleResetFilters();}} className="mt-1 w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white">
-                <option value="ALL">All Colleges</option>
-                {collegesList.map(c=><option key={c.collegeCode} value={c.collegeCode}>{c.collegeName} ({c.collegeCode})</option>)}
-              </select>
-            </label>
-          </div>
-        </div>
-
-        {/* 3. MAIN NAVIGATION TABS */}
-        <div className="flex justify-center pt-1">
-          <div className="inline-flex flex-wrap justify-center p-1 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl gap-1">
-            <button
-              type="button"
-              onClick={() => setActiveTab('college')}
-              className={`px-3.5 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
-                activeTab === 'college'
-                  ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/20'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-              }`}
-            >
-              <Building2 className="w-4 h-4" />
-              <span>Explore by College &amp; Branch</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab('student-search')}
-              className={`px-3.5 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
-                activeTab === 'student-search'
-                  ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/20'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-              }`}
-            >
-              <Search className="w-4 h-4" />
-              <span>Search Student Name</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab('rank-search')}
-              className={`px-3.5 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
-                activeTab === 'rank-search'
-                  ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/20'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-              }`}
-            >
-              <Award className="w-4 h-4" />
-              <span>Explore a Rank / Range</span>
-            </button>
-          </div>
-        </div>
-
-        {/* 4. TAB 1: EXPLORE BY COLLEGE & BRANCH */}
-        {activeTab === 'college' && (
-          <div className="space-y-4 sm:space-y-6">
-
-            {/* Selectors Card (College + Branch) */}
-            <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-xl backdrop-blur-xl space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-                {/* College Combobox */}
-                <APCollegeSelector
-                  colleges={collegesList}
-                  selectedCollegeCode={selectedCollegeCode}
-                  onSelectCollege={(code) => {
-                    setSelectedCollegeCode(code);
-                    setSelectedBranchCode('ALL');
-                    handleResetFilters();
-                  }}
-                  isLoading={isLoadingCollege}
-                />
-
-                {/* Branch Selector */}
-                <APBranchSelector
-                  branches={branchOptions}
-                  selectedBranchCode={selectedBranchCode}
-                  onSelectBranch={(code) => {
-                    setSelectedBranchCode(code);
-                    handleResetFilters();
-                  }}
-                  totalCollegeRecords={collegeData?.recordCount || 0}
-                />
-              </div>
-
-              {/* Advanced Filter Strip */}
-              <APFilters
-                filters={filters}
-                onChangeFilter={handleChangeFilter}
-                onResetFilters={handleResetFilters}
-                availableCategories={availableFilterOptions.categories}
-                availableAllottedCategories={availableFilterOptions.allottedCategories}
-                availableRegions={availableFilterOptions.regions}
-                availablePhases={availableFilterOptions.phases}
-                activeFilterCount={activeFilterCount}
-              />
+    <div className="min-h-screen bg-slate-950 text-slate-100 py-5 sm:py-8 px-3 sm:px-6 font-sans">
+      <div className="max-w-7xl mx-auto space-y-5 sm:space-y-7">
+        <header className="relative overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-950 to-cyan-950/30 p-5 sm:p-8 shadow-2xl">
+          <div className="absolute -top-24 -right-24 h-56 w-56 rounded-full bg-cyan-500/10 blur-3xl" />
+          <div className="relative">
+            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1.5 text-xs font-bold text-cyan-300">
+              <Sparkles className="h-3.5 w-3.5" />
+              AP EAPCET {selectedYear{'}'} Allotment Records
             </div>
-
-            {/* Loading Indicator */}
-            {isLoadingCollege && (
-              <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-8 text-center space-y-2">
-                <Loader2 className="w-8 h-8 text-cyan-500 animate-spin mx-auto" />
-                <p className="text-xs text-slate-400">
-                  Loading allotment data for [{selectedCollegeCode}]...
-                </p>
-              </div>
-            )}
-
-            {/* Error State */}
-            {loadError && !isLoadingCollege && (
-              <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 text-amber-200 flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-                <div className="text-xs space-y-1">
-                  <h4 className="font-bold text-amber-300">{loadError}</h4>
-                  <p className="text-slate-400">Please choose another institution from the selector.</p>
-                </div>
-              </div>
-            )}
-
-            {/* College & Branch Content */}
-            {!isLoadingCollege && collegeData && (
-              <div className="space-y-4 sm:space-y-6">
-                {/* Category-Wise Best & Last Ranks + Gender Distribution */}
-                <APCategoryInsights
-                  analytics={branchAnalytics}
-                  collegeName={collegeData.college_name}
-                  collegeCode={collegeData.college_code}
-                  branchName={currentBranchName}
-                  branchCode={selectedBranchCode}
-                  selectedCategoryFilter={filters.category}
-                  onSelectCategoryFilter={(cat) => handleChangeFilter('category', cat)}
-                />
-
-                {/* Allotted Students Sortable Table */}
-                <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-xl backdrop-blur-xl space-y-4">
-                  <div className="flex items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
-                    <div>
-                      <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
-                        <GraduationCap className="w-4 h-4 text-cyan-400" />
-                        Allotted Students [{selectedCollegeCode} — {selectedBranchCode}]
-                      </h3>
-                      <p className="text-[11px] text-slate-400 mt-0.5">
-                        {filteredRecords.length.toLocaleString()} verified student allotments in this selection
-                      </p>
-                    </div>
-
-                    <span className="px-2 py-0.5 rounded-md font-mono text-xs font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
-                      {filteredRecords.length} Seats
-                    </span>
-                  </div>
-
-                  <APAllotmentTable
-                    records={filteredRecords}
-                    collegeCode={selectedCollegeCode}
-                    collegeName={collegeData.college_name}
-                    branchCode={selectedBranchCode}
-                    branchName={currentBranchName}
-                  />
-                </div>
-              </div>
-            )}
-
+            <h1 className="mt-3 text-2xl sm:text-4xl font-black tracking-tight text-white">AP Allotments (Namewise)</h1>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">
+              Explore AP EAPCET allotments by student name, rank, college, branch and phase.
+            </p>
           </div>
+        </header>
+
+        <section className="rounded-3xl border border-slate-800 bg-slate-900/80 p-4 sm:p-5 shadow-xl">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
+            <label className="text-xs font-bold text-slate-300">
+              Allotment Year
+              <select value={phaseValue} onChange={(e) => applyYearPhase(e.target.value)} className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-3 text-sm text-white outline-none focus:border-cyan-400">
+                {PHASE_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+              </select>
+            </label>
+            <label className="text-xs font-bold text-slate-300">
+              College
+              <select value={selectedCollegeCode} onChange={(e) => onCollegeChange(e.target.value)} className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-3 text-sm text-white outline-none focus:border-cyan-400">
+                <option value="ALL">All Colleges</option>
+                {collegesList.map((college) => <option key={college.collegeCode} value={college.collegeCode}>{college.collegeName} ({college.collegeCode})</option>)}
+              </select>
+            </label>
+            <label className="text-xs font-bold text-slate-300">
+              Branch
+              <select value={selectedBranchCode} onChange={(e) => { setSelectedBranchCode(e.target.value); resetFilters(); }} disabled={selectedCollegeCode === 'ALL'} className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-3 text-sm text-white outline-none focus:border-cyan-400 disabled:cursor-not-allowed disabled:opacity-50">
+                <option value="ALL">All Branches</option>
+                {branchOptions.map((branch) => <option key={branch.branchCode} value={branch.branchCode}>{branch.branchName} ({branch.branchCode})</option>)}
+              </select>
+            </label>
+            <label className="text-xs font-bold text-slate-300">
+              Search Student Name
+              <div className="relative mt-1.5">
+                <Search className="absolute left-3 top-3.5 h-4 w-4 text-slate-500" />
+                <input value={studentSearch} onChange={(e) => setStudentSearch(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') void runStudentSearch(); }} placeholder="Enter student name…" className="w-full rounded-xl border border-slate-700 bg-slate-950 py-3 pl-9 pr-3 text-sm text-white outline-none focus:border-cyan-400" />
+              </div>
+            </label>
+          </div>
+          <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] text-slate-400">
+            <span className="rounded-full border border-slate-700 bg-slate-950 px-2.5 py-1">Dataset: AP EAPCET {selectedYear}</span>
+            {selectedPhase !== 'ALL' && <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2.5 py-1 text-cyan-300">Phase {selectedPhase}</span>}
+            <span className="rounded-full border border-slate-700 bg-slate-950 px-2.5 py-1">{collegesList.length} AP colleges</span>
+          </div>
+        </section>
+
+        <nav className="flex justify-center">
+          <div className="inline-flex flex-wrap justify-center gap-1 rounded-2xl border border-slate-800 bg-slate-900 p-1 shadow-xl">
+            {[
+              ['college', 'Explore Colleges'],
+              ['student-search', 'Search Student Name'],
+              ['rank-search', 'Search by Rank'],
+            ].map(([id, label]) => (
+              <button key={id} type="button" onClick={() => setActiveTab(id as typeof activeTab)} className={'rounded-xl px-4 py-2 text-xs font-bold transition-all ' + (activeTab === id ? 'bg-cyan-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white')}>{label}</button>
+            ))}
+          </div>
+        </nav>
+
+        {activeTab === 'student-search' || activeTab === 'rank-search' ? (
+          <APStudentSearch year={selectedYear} collegeCode={selectedCollegeCode} branchCode={selectedBranchCode} phase={selectedPhase} initialName={studentSearch} />
+        ) : selectedCollegeCode === 'ALL' ? (
+          <section className="space-y-5">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+              {[
+                ['Colleges', allColleges.length || collegesList.length],
+                ['Allotments', visibleRecords.length || (datasetSummary?.totalRecords ?? 0)],
+                ['Branches', datasetSummary?.branches ?? '—'],
+                ['Phases', (datasetSummary?.phases ?? []).join(' · ') || '—'],
+              ].map(([label, value]) => (
+                <div key={label} className="rounded-2xl border border-slate-800 bg-slate-900/80 p-4 shadow-lg">
+                  <div className="text-[11px] uppercase tracking-wider text-slate-500">{label}</div>
+                  <div className="mt-1 text-xl font-black text-white">{value}</div>
+                </div>
+              ))}
+            </div>
+            <section className="rounded-3xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl">
+              <div className="flex items-center gap-3">
+                <div className="rounded-2xl bg-cyan-500/10 p-3 text-cyan-300"><Database className="h-5 w-5" /></div>
+                <div><h2 className="font-bold text-white">All Colleges</h2><p className="text-xs text-slate-400">Dataset overview for AP EAPCET {selectedYear}</p></div>
+              </div>
+              <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4"><div className="text-xs text-slate-500">Observed best rank</div><div className="mt-1 text-lg font-black text-cyan-300">{bestRank || '—'}</div></div>
+                <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4"><div className="text-xs text-slate-500">Observed last rank</div><div className="mt-1 text-lg font-black text-cyan-300">{lastRank || '—'}</div></div>
+                <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4"><div className="text-xs text-slate-500">Phase distribution</div><div className="mt-1 text-sm font-bold text-white">{Object.entries(phaseDistribution).map(([phase,count]) => 'P' + phase + ': ' + count).join(' · ') || '—'}</div></div>
+              </div>
+              <p className="mt-4 text-xs leading-5 text-slate-500">All Colleges is the default state. No college-specific dashboard is shown until an AP college is selected.</p>
+            </section>
+          </section>
+        ) : (
+          <section className="space-y-5">
+            {isLoading ? (
+              <div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-10 text-center"><Loader2 className="mx-auto h-8 w-8 animate-spin text-cyan-400" /><p className="mt-3 text-sm text-slate-400">Loading AP EAPCET {selectedYear} allotments…</p></div>
+            ) : currentCollege ? (
+              <>
+                <section className="rounded-3xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div><div className="text-xs font-bold uppercase tracking-wider text-cyan-400">AP College</div><h2 className="mt-1 text-xl sm:text-2xl font-black text-white">{currentCollege.college_name}</h2><p className="mt-1 text-xs text-slate-500">College code: {currentCollege.college_code} · {currentCollege.recordCount.toLocaleString()} allotments</p></div>
+                    <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/10 px-4 py-3 text-right"><div className="text-[10px] uppercase tracking-wider text-cyan-300">Selected view</div><div className="text-sm font-black text-white">{branchLabel}</div></div>
+                  </div>
+                </section>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                  {[
+                    ['Allotments', visibleRecords.length],
+                    ['Branches', currentCollege.branchCount],
+                    ['Observed best rank', bestRank || '—'],
+                    ['Observed last rank', lastRank || '—'],
+                  ].map(([label, value]) => <div key={label} className="rounded-2xl border border-slate-800 bg-slate-900/80 p-4 shadow-lg"><div className="text-[11px] uppercase tracking-wider text-slate-500">{label}</div><div className="mt-1 text-xl font-black text-white">{value}</div></div>)}
+                </div>
+                <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-5"><h3 className="font-bold text-white">Category insights</h3><div className="mt-4 space-y-2">{categoryInsights.map(([category, insight]) => <div key={category} className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/60 p-3 text-xs"><span className="font-bold text-slate-200">{category}</span><span className="text-slate-400">best {insight.min.toLocaleString()} · last {insight.max.toLocaleString()} · {insight.count} records</span></div>)}</div></div>
+                  <div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-5"><h3 className="font-bold text-white">Phase distribution</h3><div className="mt-4 space-y-2">{Object.entries(phaseDistribution).map(([phase,count]) => <div key={phase} className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/60 p-3 text-xs"><span className="font-bold text-slate-200">Phase {phase}</span><span className="text-slate-400">{count} records</span></div>)}</div></div>
+                </section>
+                <section className="rounded-3xl border border-slate-800 bg-slate-900/80 p-4 shadow-xl">
+                  <div className="mb-3 flex items-center justify-between"><div><h3 className="font-bold text-white">Allotted students</h3><p className="text-xs text-slate-500">{visibleRecords.length.toLocaleString()} records after active filters</p></div><span className="rounded-full bg-cyan-500/10 px-3 py-1 text-xs font-bold text-cyan-300">AP EAPCET {selectedYear}</span></div>
+                  <APAllotmentTable records={visibleRecords} collegeCode={currentCollege.college_code} collegeName={currentCollege.college_name} branchCode={selectedBranchCode} branchName={branchLabel} />
+                </section>
+              </>
+            ) : (
+              <div className="rounded-3xl border border-amber-500/20 bg-amber-500/5 p-8 text-center text-sm text-amber-200">Unable to load the selected AP college.</div>
+            )}
+          </section>
         )}
 
-        {/* 5. TAB 2: SEARCH STUDENT BY NAME */}
-        {activeTab === 'student-search' && (
-          <APStudentSearch year={selectedYear} onExploreCollegeBranch={handleJumpToCollegeBranch} />
-        )}
+        {loadError && <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 text-sm text-amber-200">{loadError}</div>}
 
-        {/* 6. TAB 3: SEARCH BY RANK / RANK RANGE */}
-        {activeTab === 'rank-search' && (
-          <APStudentSearch onExploreCollegeBranch={handleJumpToCollegeBranch} />
-        )}
-
-        {/* 7. MANDATORY DISCLAIMER */}
-        <div className="bg-slate-900/60 border border-slate-800/80 rounded-xl p-3.5 text-center text-[11px] text-slate-500 max-w-4xl mx-auto leading-relaxed">
-          <p>
-            <strong className="text-slate-400">Disclaimer:</strong> These insights are based on the selected AP EAPCET allotment dataset and are for reference only.</p>
+        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 text-center text-[11px] leading-5 text-slate-500">
+          <strong className="text-slate-400">Data notice:</strong> This workspace displays observed AP EAPCET allotment records from the selected dataset. These records are informational and should not be treated as guaranteed cutoffs or admission predictions.
         </div>
-
       </div>
     </div>
   );
 };
+
 export default APAllotmentExplorer;
