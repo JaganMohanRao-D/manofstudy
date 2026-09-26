@@ -40,8 +40,8 @@ export default function ApCollegePredictor({
   // Predictor state
   const [userRank, setUserRank] = useState('14500');
   const [userCategory, setUserCategory] = useState('OC');
-  const [userGender, setUserGender] = useState('M');
-  const [userRegion, setUserRegion] = useState('AU');
+  const [userGender, setUserGender] = useState('ALL');
+  const [userRegion, setUserRegion] = useState('ALL');
   const [predictorBranchFilter, setPredictorBranchFilter] = useState('ALL');
   const [predictorChanceFilter, setPredictorChanceFilter] = useState('ALL');
   const [predictorSearchTerm, setPredictorSearchTerm] = useState('');
@@ -51,7 +51,7 @@ export default function ApCollegePredictor({
   useEffect(() => {
     let alive = true;
     setPredictorLoading(true);
-    get2026BranchSummaries().then(data => { if (alive) setBranchSummaries(data); }).catch(() => { if (alive) setBranchSummaries([]); }).finally(() => { if (alive) setPredictorLoading(false); });
+    get2026PredictorRows().then(data => { if (alive) setPredictorRows(data); }).catch(() => { if (alive) setPredictorRows([]); }).finally(() => { if (alive) setPredictorLoading(false); });
     return () => { alive = false; };
   }, []);
   const [selectedCollegeForExplorer, setSelectedCollegeForExplorer] = useState(initialCollegeCode);
@@ -198,8 +198,8 @@ export default function ApCollegePredictor({
                     onChange={(e) => setUserGender(e.target.value)}
                     className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
                   >
-                    <option value="M">Male (Boys)</option>
-                    <option value="F">Female (Girls Quota 33%)</option>
+                    <option value="ALL">All Genders</option><option value="M">Male</option>
+                    <option value="F">Female</option>
                   </select>
                 </div>
 
@@ -337,4 +337,14 @@ export default function ApCollegePredictor({
       )}
     </div>
   );
-}
+}<div>
+                  <label className="text-xs font-semibold text-slate-300 mb-1 block">Region</label>
+                  <select value={userRegion} onChange={(e) => setUserRegion(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500">
+                    <option value="ALL">All Regions</option>
+                    <option value="AU">AU</option>
+                    <option value="SVU">SVU</option>
+                    <option value="NL">NL</option>
+                  </select>
+                </div>
+
+                
