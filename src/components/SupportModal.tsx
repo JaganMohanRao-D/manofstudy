@@ -11,13 +11,13 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
 
   const handleCopyPlatformUrl = async () => {
     try {
-      await navigator.clipboard.writeText('https://javisak.vercel.app');
+      await navigator.clipboard.writeText('https://manofstudy.com');
       setCopiedUrl(true);
       setTimeout(() => setCopiedUrl(false), 2500);
     } catch {
       // Fallback
       const tempInput = document.createElement('input');
-      tempInput.value = 'https://javisak.vercel.app';
+      tempInput.value = 'https://manofstudy.com';
       document.body.appendChild(tempInput);
       tempInput.select();
       document.execCommand('copy');
@@ -51,11 +51,11 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
 
   // Dynamic encrypted UPI intent link with payment note pre-filled
   const upiIntentUri =
-    'upi://pay?pa=7842587883@ybl&pn=JAVISAK%20Developer&tn=A%20kind%20support%20and%20gratitude%20for%20JAVISAK';
+    'upi://pay?pa=7842587883@ybl&pn=MAN%20OF%20STUDY%20Developer&tn=A%20kind%20support%20and%20gratitude%20for%20MAN%20OF%20STUDY';
 
   // Fast dynamic QR Code from reliable server generator
   const qrCodeUrl =
-    'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi%3A%2F%2Fpay%3Fpa%3D7842587883%40ybl%26pn%3DJAVISAK%2520Developer%26tn%3DA%2520kind%2520support%2520and%2520gratitude%2520for%2520JAVISAK';
+    'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi%3A%2F%2Fpay%3Fpa%3D7842587883%40ybl%26pn%3DMAN%2520OF%2520STUDY%2520Developer%26tn%3DA%2520kind%2520support%2520and%2520gratitude%2520for%2520MAN%2520OF%2520STUDY';
 
   return (
     <div
@@ -100,7 +100,7 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
           id="support-modal-title"
           className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-tight mb-3"
         >
-          Support JAVISAK Development{' '}
+          Support MAN OF STUDY Development{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-600 via-pink-600 to-amber-600 dark:from-rose-400 dark:via-pink-400 dark:to-amber-400">
             • 100% Free Forever
           </span>
@@ -109,7 +109,7 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
         {/* Emotional Narrative Storyline */}
         <div className="space-y-2 text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed text-left bg-slate-50/90 dark:bg-slate-800/40 p-3.5 sm:p-4 rounded-2xl border border-slate-100 dark:border-slate-800/70 mb-5">
           <p>
-            JAVISAK started with zero budget from a hostel room to rescue thousands of Telugu students from entrance confusion, attendance panic, and expensive ed-tech traps.
+            MAN OF STUDY started with zero budget from a hostel room to rescue thousands of students from entrance confusion, attendance panic, and expensive ed-tech traps.
           </p>
           <p>
             We host everything with <strong>zero paywalls, zero sketchy ads, and 100% student privacy</strong>. But running high-speed servers, radar scrapers, and database tools costs real money every month.
@@ -141,7 +141,7 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
           <div className="relative p-2 bg-white rounded-xl shadow-xs border border-slate-200/90">
             <img
               src={qrCodeUrl}
-              alt="Scan to Donate &amp; Support JAVISAK via UPI"
+              alt="Scan to Donate &amp; Support MAN OF STUDY via UPI"
               width={190}
               height={190}
               className="rounded-lg object-contain"

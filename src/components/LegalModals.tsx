@@ -11,8 +11,9 @@ import { AboutUs } from './AboutUs';
 import { ContactUs } from './ContactUs';
 import { PrivacyPolicy } from './PrivacyPolicy';
 import { Disclaimer } from './Disclaimer';
+import type { LegalModalType } from '../types';
 
-export type LegalModalType = 'about' | 'contact' | 'privacy' | 'terms' | 'disclaimer';
+export type { LegalModalType } from '../types';
 
 interface LegalModalsProps {
   type: LegalModalType | null;
@@ -88,14 +89,14 @@ export const LegalModals: React.FC<LegalModalsProps> = ({
             </div>
             <div>
               <h2 className="text-xl font-bold text-slate-900 dark:text-white capitalize">
-                {type === 'about' && 'About JAVISAK'}
+                {type === 'about' && 'About MAN OF STUDY'}
                 {type === 'contact' && 'Contact Support & Developer Desk'}
                 {type === 'privacy' && 'Privacy Policy & Data Disclosures'}
                 {type === 'terms' && 'Terms of Service'}
                 {type === 'disclaimer' && 'Academic & Admissions Disclaimer'}
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Official JAVISAK Institutional, Grassroots &amp; Regulatory Information
+                Official MAN OF STUDY Institutional, Grassroots &amp; Regulatory Information
               </p>
             </div>
           </div>
@@ -149,7 +150,7 @@ export const LegalModals: React.FC<LegalModalsProps> = ({
                   Terms of Service &amp; Usage Framework
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                  By accessing JAVISAK, you agree to these transparent educational terms. All tools are offered free of charge.
+                  By accessing MAN OF STUDY, you agree to these transparent educational terms. All tools are offered free of charge.
                 </p>
               </div>
 
@@ -158,7 +159,7 @@ export const LegalModals: React.FC<LegalModalsProps> = ({
                   1. Acceptable Educational &amp; Professional Use
                 </h4>
                 <p>
-                  JAVISAK provides productivity, document manipulation, and calculation utilities for personal, educational, and non-commercial professional use. You agree not to use the service to process unlawful, defamatory, infringing, or malicious content.
+                  MAN OF STUDY provides productivity, document manipulation, and calculation utilities for personal, educational, and non-commercial professional use. You agree not to use the service to process unlawful, defamatory, infringing, or malicious content.
                 </p>
               </section>
 
@@ -167,7 +168,7 @@ export const LegalModals: React.FC<LegalModalsProps> = ({
                   2. Client-Side Software Guarantee &amp; Availability
                 </h4>
                 <p>
-                  While JAVISAK strives for 99.9% platform uptime and tests algorithms against official university frameworks, all utilities are provided on an "as is" and "as available" basis without warranties of any kind, either express or implied.
+                  While MAN OF STUDY strives for 99.9% platform uptime and tests algorithms against official university frameworks, all utilities are provided on an "as is" and "as available" basis without warranties of any kind, either express or implied.
                 </p>
               </section>
 
@@ -176,7 +177,7 @@ export const LegalModals: React.FC<LegalModalsProps> = ({
                   3. Intellectual Property
                 </h4>
                 <p>
-                  All platform interfaces, proprietary computation engines, brand styling, visual designs, and source code are the intellectual property of JAVISAK. You retain complete ownership of all files, documents, and content processed using our client-side tools.
+                  All platform interfaces, proprietary computation engines, brand styling, visual designs, and source code are the intellectual property of MAN OF STUDY. You retain complete ownership of all files, documents, and content processed using our client-side tools.
                 </p>
               </section>
 
@@ -185,7 +186,7 @@ export const LegalModals: React.FC<LegalModalsProps> = ({
                   4. Safe Harbor, Admissions &amp; Scholarship Disclaimer
                 </h4>
                 <p>
-                  JAVISAK is an independent informational and utility platform. AP EAPCET data, college vacancy counts, and scholarship listings are aggregated from publicly available official portals for educational guidance only. JAVISAK is not affiliated with APSCHE, APCFSS, National Scholarship Portal (NSP), or any government body.
+                  MAN OF STUDY is an independent informational and utility platform. TG/AP EAPCET data, college vacancy counts, and scholarship listings are aggregated from publicly available official portals for educational guidance only. MAN OF STUDY is not affiliated with APSCHE, TSCHE, APCFSS, National Scholarship Portal (NSP), or any government body.
                 </p>
               </section>
 
@@ -194,7 +195,7 @@ export const LegalModals: React.FC<LegalModalsProps> = ({
                   5. Limitation of Liability
                 </h4>
                 <p>
-                  Under no circumstances shall JAVISAK, its operators, or contributors be liable for any direct, indirect, incidental, or consequential damages arising out of your use or inability to use the platform.
+                  Under no circumstances shall MAN OF STUDY, its operators, or contributors be liable for any direct, indirect, incidental, or consequential damages arising out of your use or inability to use the platform.
                 </p>
               </section>
             </div>

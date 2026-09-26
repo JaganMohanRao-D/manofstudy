@@ -17,12 +17,12 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
   const [copiedPlatform, setCopiedPlatform] = useState<boolean>(false);
 
   // Generate shareable URL for this specific branch
-  const shareUrl = typeof window !== 'undefined' && window.location.origin.includes('javisak.vercel.app')
+  const shareUrl = typeof window !== 'undefined'
     ? `${window.location.origin}${window.location.pathname}#branch=${branch.id}`
-    : `https://javisak.vercel.app/#branch=${branch.id}`;
+    : `https://manofstudy.com/#branch=${branch.id}`;
 
-  const shareTitle = `${branch.name} (${branch.code}) 4-Year Career Roadmap • JAVISAK`;
-  const shareText = `Explore the official 4-Year ${branch.name} Engineering Roadmap on JAVISAK with core subjects, industry skills, and salary benchmarks.`;
+  const shareTitle = `${branch.name} (${branch.code}) 4-Year Career Roadmap • MAN OF STUDY`;
+  const shareText = `Explore the official 4-Year ${branch.name} Engineering Roadmap on MAN OF STUDY with core subjects, industry skills, and salary benchmarks.`;
 
   // Explicit, safe close handler that ensures immediate cleanup of overlays
   const handleClose = useCallback(() => {

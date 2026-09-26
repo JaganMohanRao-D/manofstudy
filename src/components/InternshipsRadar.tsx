@@ -1,347 +1,527 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
-  Briefcase,
-  Sparkles,
-  ExternalLink,
-  ShieldCheck,
-  Building2,
-  Calendar,
-  CheckCircle2,
-  Search,
-  Filter,
-  DollarSign,
-  GraduationCap,
-  Landmark,
-  BadgeCheck,
   AlertCircle,
-  Clock,
-  Compass,
+  ArrowUpRight,
+  BadgeCheck,
+  BookOpen,
+  Building2,
+  CalendarDays,
+  CheckCircle2,
+  Clock3,
+  Code2,
+  ExternalLink,
+  Filter,
+  GraduationCap,
+  IndianRupee,
+  Landmark,
+  Search,
+  ShieldCheck,
+  Sparkles,
+  Users,
 } from 'lucide-react';
 
 export interface VerifiedInternship {
   id: string;
   name: string;
   provider: string;
-  trackType: 'govt' | 'opensource' | 'defense' | 'toptech' | 'research';
+  trackType: 'govt' | 'platform' | 'toptech' | 'research' | 'defense' | 'opensource';
   trackLabel: string;
   stipend: string;
-  stipendType: 'Paid' | 'High Stipend' | 'Funded Fellow';
+  stipendType: 'Paid' | 'Varies' | 'Unpaid / Credit' | 'Program-specific';
   eligibility: string;
   applicationWindow: string;
-  status: 'Active / Open' | 'Opening Soon' | 'Annual Cycle';
+  status: 'Open / Rolling' | 'Cycle-based' | 'Check live openings';
   description: string;
   applyUrl: string;
+  officialSource: string;
   verifiedBadges: string[];
   selectionProcess: string;
+  yearFit: '1st year friendly' | '1st–2nd year friendly' | 'Later-year / role-specific' | 'All years / listing-specific';
 }
 
 export const VERIFIED_INTERNSHIPS: VerifiedInternship[] = [
   {
-    id: 'aicte-portal',
-    name: 'AICTE Official National Internship Portal',
-    provider: 'Ministry of Education & All India Council for Technical Education',
+    id: 'aicte-national-internship-portal',
+    name: 'AICTE National Internship Portal',
+    provider: 'AICTE • Ministry of Education, Government of India',
     trackType: 'govt',
-    trackLabel: 'Government & Municipal',
-    stipend: '₹5,000 - ₹15,000 / month (or Govt Certificate)',
-    stipendType: 'Paid',
-    eligibility: 'B.Tech / B.E / B.Sc / B.Com students from recognized Indian colleges (1st to 4th year)',
-    applicationWindow: 'Rolling (New listings published weekly)',
-    status: 'Active / Open',
-    description: '100% verified non-scam internship portal directly run by AICTE. Connects students to official municipal corporations (TULIP - The Urban Learning Internship Program), NHAI highway planning, smart city projects, and vetted MSMEs.',
+    trackLabel: 'Government & Industry',
+    stipend: 'Varies by individual listing',
+    stipendType: 'Varies',
+    eligibility: 'Students from eligible AICTE / UGC / IGNOU and other recognised institutions; eligibility is defined by each internship listing.',
+    applicationWindow: 'Rolling • live opportunities are published on the portal',
+    status: 'Open / Rolling',
+    description: 'The official National Internship Portal connects students with internships across government missions, public-sector organisations, Smart Cities / TULIP, MSMEs and industry partners. Apply through the central portal rather than an unofficial copycat site.',
     applyUrl: 'https://internship.aicte-india.org/',
-    verifiedBadges: ['Ministry of Education Verified', 'TULIP Certified', 'No Application Fee'],
-    selectionProcess: 'Profile shortlisting + online assessment/interview conducted by participating civic bodies.',
+    officialSource: 'AICTE National Internship Portal',
+    verifiedBadges: ['Government of India', 'AICTE Official', '₹0 Student Registration'],
+    selectionProcess: 'Listing-specific: profile screening, assessment and/or interview as specified by the host organisation.',
+    yearFit: 'All years / listing-specific',
   },
   {
-    id: 'gsoc-2026',
-    name: 'Google Summer of Code (GSoC 2026)',
-    provider: 'Google Open Source Programs Office',
-    trackType: 'opensource',
-    trackLabel: 'Global Open Source',
-    stipend: '$1,500 – $3,300 USD (based on project size & purchasing power parity in India)',
-    stipendType: 'High Stipend',
-    eligibility: 'Any university student or open source beginner aged 18+ globally',
-    applicationWindow: 'March – April (Annual Spring Cycle)',
-    status: 'Active / Open',
-    description: 'Premier global program pairing student developers with open-source mentor organizations (Apache, Linux Foundation, Python Software Foundation, Blender, Mozilla). Students complete an 8- to 22-week coding project under expert guidance.',
-    applyUrl: 'https://summerofcode.withgoogle.com/',
-    verifiedBadges: ['Google Backed', 'Global Elite Resume Item', 'Zero Fee'],
-    selectionProcess: 'Proposal submission detailing technical approach, timeline, and prior open-source pull requests to mentor orgs.',
+    id: 'google-student-engineering',
+    name: 'Google Careers • Student Engineering Internships',
+    provider: 'Google',
+    trackType: 'toptech',
+    trackLabel: 'Top Tech',
+    stipend: 'Role-specific • see the live Google posting',
+    stipendType: 'Program-specific',
+    eligibility: 'Varies by role, graduation year and location. Google student programs and engineering internships can have different year requirements; check the live posting before applying.',
+    applicationWindow: 'Cycle-based • openings appear on Google Careers',
+    status: 'Check live openings',
+    description: 'Official Google Careers route for engineering and technical student opportunities. STEP and other early-career programs may be offered in particular cycles; do not assume every cycle is open to first-year students.',
+    applyUrl: 'https://www.google.com/about/careers/applications/students/engineering-and-technical-internships/',
+    officialSource: 'Google Careers',
+    verifiedBadges: ['Google Official', 'Student Careers', 'Direct Employer Portal'],
+    selectionProcess: 'Role-specific screening and technical assessment/interviews; requirements are stated in each posting.',
+    yearFit: 'Later-year / role-specific',
   },
   {
-    id: 'drdo-isro-trainee',
-    name: 'DRDO & ISRO Student Apprentice & Trainee Programs',
-    provider: 'Defense Research & Development Org (DRDO) / ISRO Space Centers',
-    trackType: 'defense',
-    trackLabel: 'Defense & Space Research',
-    stipend: '₹8,000 - ₹12,000 / month (Apprentice Act) / Research Grant',
+    id: 'microsoft-explore',
+    name: 'Microsoft Explore',
+    provider: 'Microsoft',
+    trackType: 'toptech',
+    trackLabel: 'Early Tech',
+    stipend: 'Competitive pay • see the live programme posting',
     stipendType: 'Paid',
-    eligibility: 'Pre-final and Final Year B.Tech / M.Sc students in ECE, CSE, Mech, Aero, Physics',
-    applicationWindow: 'January – May & July – October cycles',
-    status: 'Active / Open',
-    description: 'Official student trainee and research project placements at centers like VSSC (Thiruvananthapuram), URSC (Bengaluru), NRSC (Hyderabad), and DRDO labs. Work directly under defense scientists on propulsion, radar, telemetry, and avionics.',
-    applyUrl: 'https://www.drdo.gov.in/careers',
-    verifiedBadges: ['Govt of India', 'Defense Clearance', 'High Prestige'],
-    selectionProcess: 'Academic merit ranking (CGPA 7.5+), College No-Objection Certificate (NOC), and technical interview.',
+    eligibility: 'Designed for early undergraduate students. Microsoft states that the India Explore programme is an 8-week summer internship for first- and/or second-year college students, subject to the current application rules.',
+    applicationWindow: 'Summer programme • cycle-based',
+    status: 'Cycle-based',
+    description: 'A Microsoft programme built for students beginning their studies, with software-development exposure, mentoring, community building and a team project covering design, build and quality.',
+    applyUrl: 'https://careers.microsoft.com/v2/global/en/exploremicrosoft',
+    officialSource: 'Microsoft Careers',
+    verifiedBadges: ['Microsoft Official', '1st / 2nd Year Focus', '8-Week India Programme'],
+    selectionProcess: 'Application screening followed by programme-specific selection steps.',
+    yearFit: '1st–2nd year friendly',
   },
   {
-    id: 'lfx-mentorship',
-    name: 'Linux Foundation Mentorship (LFX)',
-    provider: 'The Linux Foundation & Cloud Native Computing Foundation (CNCF)',
-    trackType: 'opensource',
-    trackLabel: 'Global Open Source',
-    stipend: '$3,000 – $6,600 USD (full-term stipend based on country PPP)',
-    stipendType: 'High Stipend',
-    eligibility: 'Undergraduate and graduate students with Git and core systems programming skills',
-    applicationWindow: 'Spring (Jan), Summer (May), Fall (Aug) terms',
-    status: 'Active / Open',
-    description: 'Paid open source apprenticeship program where students contribute directly to mission-critical infrastructure software: Kubernetes, Linux Kernel, Envoy, Hyperledger, RISC-V, and PyTorch.',
-    applyUrl: 'https://lfx.linuxfoundation.org/tools/mentorship/',
-    verifiedBadges: ['Linux Foundation Official', 'Cloud Native Certified', 'Full Remote'],
-    selectionProcess: 'Coding task / pre-requisite pull request + statement of motivation evaluated by maintainers.',
-  },
-  {
-    id: 'internshala-govt-track',
-    name: 'Internshala Government & Public Policy Tracks',
-    provider: 'Verified Public Sector Undertakings (PSUs) & Ministries',
+    id: 'niti-aayog-internship',
+    name: 'NITI Aayog Internship Scheme',
+    provider: 'NITI Aayog • Government of India',
     trackType: 'govt',
-    trackLabel: 'Government & Public Sector',
-    stipend: '₹7,000 - ₹20,000 / month',
-    stipendType: 'Paid',
-    eligibility: 'Undergraduate and postgraduate students across all disciplines',
-    applicationWindow: 'Continuous live listings',
-    status: 'Active / Open',
-    description: 'Curated filter of strictly non-fraudulent government, public sector undertakings, university research centers, and UN-affiliated development programs listed on the national portal with zero upfront security deposits.',
-    applyUrl: 'https://internshala.com/internships/government-internship/',
-    verifiedBadges: ['Anti-Fraud Screened', 'No Hidden Fees', 'Live Tracking'],
-    selectionProcess: 'Resume screening followed by assignment or telephonic interview.',
+    trackLabel: 'Public Policy & Tech',
+    stipend: 'Check current scheme guidelines',
+    stipendType: 'Program-specific',
+    eligibility: 'Undergraduate / postgraduate students and research scholars enrolled in recognised universities or institutions; domain and duration requirements follow NITI Aayog guidelines.',
+    applicationWindow: 'Online application window: 1st–10th of every month',
+    status: 'Cycle-based',
+    description: 'Work with NITI Aayog verticals, divisions and cells across policy and development areas. The official site confirms a monthly online application window from the 1st to the 10th.',
+    applyUrl: 'https://www.niti.gov.in/internship',
+    officialSource: 'NITI Aayog',
+    verifiedBadges: ['Government of India', 'Monthly Window', 'Official Application'],
+    selectionProcess: 'Online application and selection by the relevant NITI Aayog vertical; exact criteria are scheme-specific.',
+    yearFit: 'All years / listing-specific',
+  },
+  {
+    id: 'isro-student-internship',
+    name: 'ISRO Student Internships & Projects',
+    provider: 'Indian Space Research Organisation • Department of Space',
+    trackType: 'research',
+    trackLabel: 'Space Research',
+    stipend: 'Centre / programme-specific',
+    stipendType: 'Program-specific',
+    eligibility: 'ISRO lists internship and academic-project opportunities for undergraduate and postgraduate students in science and technology; individual ISRO centres define their own eligibility and intake.',
+    applicationWindow: 'Centre-specific • summer, winter and long-term opportunities may be offered',
+    status: 'Check live openings',
+    description: 'Official ISRO route for internships, curriculum projects and training in space science and technology. Opportunities differ by centre, programme and academic background.',
+    applyUrl: 'https://www.isro.gov.in/Internship.html',
+    officialSource: 'ISRO',
+    verifiedBadges: ['Government of India', 'ISRO Official', 'Research / Projects'],
+    selectionProcess: 'Centre-specific application, academic screening and project availability.',
+    yearFit: 'Later-year / role-specific',
   },
   {
     id: 'rbi-summer-internship',
-    name: 'Reserve Bank of India (RBI) Summer Internship Scheme',
-    provider: 'Reserve Bank of India (Central Banking Authority)',
+    name: 'RBI Summer Internship',
+    provider: 'Reserve Bank of India',
     trackType: 'research',
-    trackLabel: 'Economics & Banking Research',
-    stipend: '₹45,000 / month + travel allowance',
-    stipendType: 'High Stipend',
-    eligibility: 'Pre-final year students pursuing B.Tech, Economics, Commerce, Finance, or Data Analytics',
-    applicationWindow: 'September – October for following summer',
-    status: 'Annual Cycle',
-    description: 'Highly competitive and prestigious policy research internship at RBI Central Office (Mumbai) and regional centers. Interns analyze monetary policy, digital payment fraud detection, and banking telemetry.',
+    trackLabel: 'Banking & Research',
+    stipend: 'Check the current RBI notification',
+    stipendType: 'Program-specific',
+    eligibility: 'Eligibility, disciplines, year of study, location and stipend are governed by the current RBI Summer Internship notification.',
+    applicationWindow: 'Annual / notification-based',
+    status: 'Cycle-based',
+    description: 'A research-oriented student opportunity at India’s central bank. Use the official RBI opportunities portal for the current notification rather than relying on old stipend or eligibility figures circulating online.',
     applyUrl: 'https://opportunities.rbi.org.in/',
-    verifiedBadges: ['Highest Govt Stipend', 'Central Bank Verified', 'Premier Brand'],
-    selectionProcess: 'Online application with research abstract + Regional Office interview in January/February.',
+    officialSource: 'RBI Opportunities',
+    verifiedBadges: ['RBI Official', 'Research Focus', 'Central Bank'],
+    selectionProcess: 'Notification-specific screening and selection.',
+    yearFit: 'Later-year / role-specific',
   },
   {
-    id: 'microsoft-learn-ambassadors',
-    name: 'Microsoft Student Ambassadors & Mentorship Program',
-    provider: 'Microsoft Corporation',
+    id: 'amazon-student-internships',
+    name: 'Amazon University Talent • Student Internships',
+    provider: 'Amazon',
     trackType: 'toptech',
-    trackLabel: 'Top Tech & Cloud',
-    stipend: 'Azure Credits ($150/mo), Free Certifications, Direct Recruiter Access',
+    trackLabel: 'Top Tech',
+    stipend: 'Role-specific • see the live Amazon.jobs listing',
     stipendType: 'Paid',
-    eligibility: 'Enrolled undergraduate students passionate about AI, Cloud, and Software Development',
-    applicationWindow: 'Quarterly intake (January, April, July, October)',
-    status: 'Active / Open',
-    description: 'Global student leadership program providing access to Microsoft engineers, free Azure cloud resources, technical workshops, and direct fast-track screening for Microsoft SWE summer internship interviews.',
-    applyUrl: 'https://studentambassadors.microsoft.com/',
-    verifiedBadges: ['Microsoft Official', 'Free Cert Vouchers', 'Direct Recruiter Visibility'],
-    selectionProcess: 'Video pitch submission demonstrating passion for coding and community tech teaching.',
+    eligibility: 'Varies by role and graduation year. Current India SDE internship examples can require a specific graduation year and age of 18+, so students must read the exact posting.',
+    applicationWindow: 'Multiple cycles / live job postings',
+    status: 'Check live openings',
+    description: 'Official Amazon.jobs student internship route covering software, cloud and other technical roles. Each job posting is the source of truth for graduation year, age, location and technical requirements.',
+    applyUrl: 'https://www.amazon.jobs/content/en/teams/amazon-web-services/internships',
+    officialSource: 'Amazon Jobs',
+    verifiedBadges: ['Amazon Official', 'Direct Employer Portal', 'Role-specific'],
+    selectionProcess: 'Application screening, online assessment and technical interviews where required by the role.',
+    yearFit: 'Later-year / role-specific',
   },
   {
-    id: 'iit-research-fellowship',
-    name: 'Indian Academy of Sciences (IASc-INSA-NASI) Summer Fellowship',
-    provider: 'Joint Science Academies (IISc, IITs, TIFR, IISERs)',
-    trackType: 'research',
-    trackLabel: 'Apex Academic Research',
-    stipend: '₹12,500 / month + round-trip train fare + on-campus hostel stay',
-    stipendType: 'Funded Fellow',
-    eligibility: '1st, 2nd, and 3rd year B.Tech, B.Sc, B.Pharm, Integrated M.Sc students',
-    applicationWindow: 'October – November (Annually for next summer)',
-    status: 'Annual Cycle',
-    description: 'Prestigious national 2-month summer fellowship placed at Indian Institute of Science (IISc Bengaluru), IITs, and Tata Institute of Fundamental Research (TIFR). Interns work on cutting-edge lab research with leading faculty.',
-    applyUrl: 'https://web-japps.ias.ac.in/fellowship/',
-    verifiedBadges: ['National Academy of Sciences', 'Free On-Campus Housing', 'Research Publication'],
-    selectionProcess: 'Academic transcripts evaluation + 2 letters of recommendation and write-up of research interests.',
+    id: 'drdo-student-internships',
+    name: 'DRDO Student Internships',
+    provider: 'Defence Research & Development Organisation • Ministry of Defence',
+    trackType: 'defense',
+    trackLabel: 'Defence Research',
+    stipend: 'Paid or programme-specific • see lab notification',
+    stipendType: 'Program-specific',
+    eligibility: 'Lab-specific. DRDO publishes individual internship advertisements for engineering UG/PG students and states the eligible disciplines, dates and application process in each notice.',
+    applicationWindow: 'Lab-specific • vacancy notifications',
+    status: 'Check live openings',
+    description: 'Official DRDO labs publish student internship notifications independently. Recent 2026 notices included paid engineering internships at CFEES Delhi, LRDE Bengaluru and DRDL Hyderabad.',
+    applyUrl: 'https://drdo.gov.in/drdo/en/careers',
+    officialSource: 'DRDO Careers / Vacancy Notices',
+    verifiedBadges: ['Government of India', 'DRDO Official', 'Lab-specific'],
+    selectionProcess: 'As stated in the individual DRDO laboratory advertisement; academic and document screening may apply.',
+    yearFit: 'Later-year / role-specific',
+  },
+  {
+    id: 'ibm-student-internships',
+    name: 'IBM Student Internships',
+    provider: 'IBM',
+    trackType: 'toptech',
+    trackLabel: 'Enterprise Tech',
+    stipend: 'Role-specific • see the live IBM opening',
+    stipendType: 'Paid',
+    eligibility: 'Varies by internship. IBM offers student internships across technical and business areas; each opening states its own degree, skills and location requirements.',
+    applicationWindow: 'Live openings / cycle-based',
+    status: 'Check live openings',
+    description: 'Official IBM Careers internship hub with direct employer applications. Technical opportunities can span software, cloud, AI and infrastructure depending on current openings.',
+    applyUrl: 'https://www.ibm.com/careers/internships',
+    officialSource: 'IBM Careers',
+    verifiedBadges: ['IBM Official', 'Direct Employer Portal', 'Multiple Domains'],
+    selectionProcess: 'Role-specific application screening and interviews/assessments.',
+    yearFit: 'Later-year / role-specific',
+  },
+  {
+    id: 'unstop-internships',
+    name: 'Unstop Internship Opportunities',
+    provider: 'Unstop',
+    trackType: 'platform',
+    trackLabel: 'Opportunity Platform',
+    stipend: 'Varies by employer / listing',
+    stipendType: 'Varies',
+    eligibility: 'Varies by listing. Read the employer, eligibility, stipend and work-mode details before applying.',
+    applicationWindow: 'Continuous listings',
+    status: 'Open / Rolling',
+    description: 'A large student opportunity platform for internships, competitions and jobs. This is not a government verification layer: treat each employer listing independently and use the platform as a discovery source.',
+    applyUrl: 'https://unstop.com/internship',
+    officialSource: 'Unstop',
+    verifiedBadges: ['Student Platform', 'Many Employers', 'Verify Each Listing'],
+    selectionProcess: 'Employer-specific: resume screening, tests, assignments or interviews.',
+    yearFit: 'All years / listing-specific',
+  },
+  {
+    id: 'prosple-india',
+    name: 'Prosple India',
+    provider: 'Prosple',
+    trackType: 'platform',
+    trackLabel: 'Opportunity Platform',
+    stipend: 'Varies by employer / listing',
+    stipendType: 'Varies',
+    eligibility: 'Varies by listing. Check the individual employer requirements and application page.',
+    applicationWindow: 'Continuous listings',
+    status: 'Open / Rolling',
+    description: 'Student and graduate opportunity platform with employer listings. Use it for discovery, then verify the employer, role and final application destination.',
+    applyUrl: 'https://in.prosple.com/',
+    officialSource: 'Prosple',
+    verifiedBadges: ['Student Platform', 'Employer Listings', 'Verify Each Listing'],
+    selectionProcess: 'Employer-specific.',
+    yearFit: 'All years / listing-specific',
+  },
+  {
+    id: 'lfx-mentorship',
+    name: 'Linux Foundation LFX Mentorship',
+    provider: 'The Linux Foundation',
+    trackType: 'opensource',
+    trackLabel: 'Open Source',
+    stipend: 'Project / term-specific',
+    stipendType: 'Program-specific',
+    eligibility: 'Depends on the individual mentorship project and term; students and developers should check the current project requirements.',
+    applicationWindow: 'Multiple mentorship terms',
+    status: 'Cycle-based',
+    description: 'Open-source mentorship opportunities across Linux Foundation projects. Strong fit for students who want public code contributions and maintainer mentorship.',
+    applyUrl: 'https://lfx.linuxfoundation.org/tools/mentorship/',
+    officialSource: 'Linux Foundation LFX',
+    verifiedBadges: ['Linux Foundation', 'Open Source', 'Mentor-led'],
+    selectionProcess: 'Project-specific proposal, technical evidence and maintainer selection.',
+    yearFit: 'All years / listing-specific',
+  },
+  {
+    id: 'gsoc',
+    name: 'Google Summer of Code',
+    provider: 'Google Open Source Programs Office',
+    trackType: 'opensource',
+    trackLabel: 'Open Source',
+    stipend: 'Project / location-specific',
+    stipendType: 'Program-specific',
+    eligibility: 'Eligibility and age requirements are defined by the current GSoC programme rules and should be checked for the active cycle.',
+    applicationWindow: 'Annual programme cycle',
+    status: 'Cycle-based',
+    description: 'A global open-source programme where accepted contributors work with participating open-source organisations. Applications, dates and eligibility change by cycle.',
+    applyUrl: 'https://summerofcode.withgoogle.com/',
+    officialSource: 'Google Summer of Code',
+    verifiedBadges: ['Google Official', 'Open Source', 'Global Programme'],
+    selectionProcess: 'Organisation selection plus contributor proposal and mentor evaluation.',
+    yearFit: 'All years / listing-specific',
   },
 ];
 
+const TRACKS = [
+  { id: 'all', label: 'All', icon: Sparkles },
+  { id: 'govt', label: 'Government', icon: Landmark },
+  { id: 'toptech', label: 'Top Tech', icon: Code2 },
+  { id: 'research', label: 'Research', icon: BookOpen },
+  { id: 'defense', label: 'Defence & Space', icon: ShieldCheck },
+  { id: 'opensource', label: 'Open Source', icon: Users },
+  { id: 'platform', label: 'Platforms', icon: GraduationCap },
+] as const;
+
 export const InternshipsRadar: React.FC = () => {
   const [selectedTrack, setSelectedTrack] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const tracks = [
-    { id: 'all', label: 'All Verified Tracks' },
-    { id: 'govt', label: 'Govt & Municipal' },
-    { id: 'opensource', label: 'Global Open Source' },
-    { id: 'defense', label: 'Defense & ISRO' },
-    { id: 'research', label: 'Research & Banking' },
-    { id: 'toptech', label: 'Top Tech MNCs' },
-  ];
+  const filteredInternships = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return VERIFIED_INTERNSHIPS.filter((item) => {
+      const trackMatch = selectedTrack === 'all' || item.trackType === selectedTrack;
+      if (!trackMatch) return false;
+      if (!q) return true;
+      return [item.name, item.provider, item.trackLabel, item.description, item.eligibility, item.stipend]
+        .join(' ')
+        .toLowerCase()
+        .includes(q);
+    });
+  }, [selectedTrack, searchQuery]);
 
-  const filteredInternships = VERIFIED_INTERNSHIPS.filter((item) => {
-    if (selectedTrack !== 'all' && item.trackType !== selectedTrack) return false;
-    if (!searchQuery) return true;
-    const q = searchQuery.toLowerCase();
-    return (
-      item.name.toLowerCase().includes(q) ||
-      item.provider.toLowerCase().includes(q) ||
-      item.description.toLowerCase().includes(q) ||
-      item.stipend.toLowerCase().includes(q) ||
-      item.eligibility.toLowerCase().includes(q)
-    );
-  });
+  const govtCount = VERIFIED_INTERNSHIPS.filter((i) => i.trackType === 'govt').length;
+  const firstYearCount = VERIFIED_INTERNSHIPS.filter((i) => i.yearFit === '1st year friendly' || i.yearFit === '1st–2nd year friendly').length;
 
   return (
     <div id="verified-internships-radar" className="space-y-6">
-      {/* Header Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-950 text-white border border-emerald-500/25 p-5 sm:p-7 shadow-xl">
-        <div className="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,#10b98118_1px,transparent_1px),linear-gradient(to_bottom,#10b98118_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
-        <div className="relative z-10 max-w-3xl space-y-3">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            <span>100% Non-Scam • Zero Registration Fees • Official Portals</span>
+      <section className="relative overflow-hidden rounded-[28px] border border-emerald-400/20 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,.18),transparent_35%),linear-gradient(135deg,#07121a,#07131d_55%,#061016)] p-5 sm:p-7 lg:p-8 shadow-2xl">
+        <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-emerald-400/10 blur-3xl" />
+        <div className="absolute -bottom-28 -left-16 h-60 w-60 rounded-full bg-cyan-400/10 blur-3xl" />
+        <div className="relative z-10">
+          <div className="flex flex-wrap items-center gap-2 mb-4">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-3 py-1 text-[11px] font-bold text-emerald-300">
+              <ShieldCheck className="h-3.5 w-3.5" /> Official-source directory
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-semibold text-slate-300">
+              Updated for 2026 discovery
+            </span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white">
-            Verified Student <span className="text-emerald-400">Internships Radar</span>
-          </h1>
+          <div className="max-w-4xl">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white">
+              Student <span className="text-emerald-400">Internship Radar</span>
+            </h1>
+            <p className="mt-3 max-w-3xl text-sm sm:text-base leading-7 text-slate-300">
+              A clean starting point for finding real internship programmes and employer portals.
+              Government schemes and company careers are separated from open opportunity platforms so students can judge each listing correctly.
+            </p>
+          </div>
 
-          <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-            Direct portal links to trusted, non-scam opportunities: AICTE National Portal, Google Summer of Code, DRDO/ISRO Research Apprenticeships, and Linux Foundation Mentorship.
-          </p>
+          <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3 max-w-4xl">
+            <div className="rounded-2xl border border-white/10 bg-white/[.05] p-3.5">
+              <p className="text-[10px] uppercase tracking-widest text-slate-400">Programmes</p>
+              <p className="mt-1 text-xl font-black text-white">{VERIFIED_INTERNSHIPS.length}+</p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/[.05] p-3.5">
+              <p className="text-[10px] uppercase tracking-widest text-slate-400">Government</p>
+              <p className="mt-1 text-xl font-black text-white">{govtCount}</p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/[.05] p-3.5">
+              <p className="text-[10px] uppercase tracking-widest text-slate-400">Early-year friendly</p>
+              <p className="mt-1 text-xl font-black text-white">{firstYearCount}</p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/[.05] p-3.5">
+              <p className="text-[10px] uppercase tracking-widest text-slate-400">Direct links</p>
+              <p className="mt-1 text-xl font-black text-emerald-300">Official</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="rounded-2xl border border-amber-400/20 bg-amber-400/[.06] p-4 sm:p-5">
+        <div className="flex items-start gap-3">
+          <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-300" />
+          <div>
+            <h2 className="text-sm font-bold text-amber-200">Apply safely</h2>
+            <p className="mt-1 text-xs sm:text-sm leading-6 text-amber-100/80">
+              Man of Study links to the official programme or platform. Always read the current listing before submitting documents.
+              Never pay a recruiter or unknown person to “guarantee” selection, and do not treat an opportunity platform as proof that every employer listing is genuine.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="sticky top-2 z-20 rounded-2xl border border-slate-200/10 bg-slate-950/90 p-3 shadow-xl backdrop-blur-xl">
+        <div className="flex flex-col gap-3">
+          <div className="relative">
+            <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
+            <input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search Google, AICTE, Microsoft, ISRO, CSE, remote..."
+              aria-label="Search internships"
+              className="w-full rounded-xl border border-slate-800 bg-slate-900 py-3 pl-10 pr-4 text-sm text-white outline-none placeholder:text-slate-500 focus:border-emerald-400/50 focus:ring-2 focus:ring-emerald-400/10"
+            />
+          </div>
+          <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
+            {TRACKS.map((track) => {
+              const Icon = track.icon;
+              const active = selectedTrack === track.id;
+              return (
+                <button
+                  key={track.id}
+                  type="button"
+                  onClick={() => setSelectedTrack(track.id)}
+                  className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-all ${active
+                    ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/10'
+                    : 'bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-white border border-slate-800'}`}
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                  {track.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <div className="flex items-center justify-between gap-3 px-1">
+        <div>
+          <p className="text-sm font-bold text-white">{filteredInternships.length} opportunities</p>
+          <p className="text-[11px] text-slate-500">Programme details can change; official posting is the final source of truth.</p>
+        </div>
+        <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-slate-500">
+          <Filter className="h-3.5 w-3.5" /> Filtered live in the browser
         </div>
       </div>
 
-      {/* Safety Notice Card */}
-      <div className="bg-amber-950/30 border border-amber-500/30 rounded-2xl p-4 text-xs text-amber-200 flex items-start gap-3">
-        <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-        <div className="space-y-1">
-          <p className="font-bold text-amber-300 text-sm">
-            JAVISAK Anti-Fraud Student Guarantee
-          </p>
-          <p className="leading-relaxed opacity-90">
-            Never pay any fee for an internship training certificate or HR registration. Genuine companies pay you for your talent; they never demand "training deposits". Every link below routes strictly to official, authenticated government and corporate portals.
-          </p>
-        </div>
-      </div>
-
-      {/* Filter and Search Bar */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3">
-        <div className="relative">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by program, agency (e.g. AICTE, GSoC, ISRO, Linux, RBI)..."
-            className="w-full pl-10 pr-4 py-2 text-xs sm:text-sm rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          />
-        </div>
-
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 text-xs">
-          {tracks.map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              onClick={() => setSelectedTrack(t.id)}
-              className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all cursor-pointer ${
-                selectedTrack === t.id
-                  ? 'bg-emerald-600 text-white shadow-xs'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
         {filteredInternships.map((intern) => (
-          <div
-            key={intern.id}
-            id={`internship-card-${intern.id}`}
-            className="group relative flex flex-col justify-between bg-slate-900 text-white rounded-2xl border border-slate-800 hover:border-emerald-500/50 hover:shadow-xl transition-all duration-300 p-5 space-y-4"
-          >
-            <div className="space-y-3">
-              {/* Header Badges */}
-              <div className="flex items-center justify-between gap-2">
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
-                  <BadgeCheck className="w-3 h-3" />
-                  {intern.trackLabel}
+          <article key={intern.id} className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-800 bg-slate-900 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-400/30 hover:shadow-emerald-950/20">
+            <div className="p-5 sm:p-6">
+              <div className="flex items-start justify-between gap-3">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2.5 py-1 text-[10px] font-bold text-emerald-300">
+                  <BadgeCheck className="h-3 w-3" /> {intern.trackLabel}
                 </span>
-
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-200 border border-slate-700 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-emerald-400" />
-                  {intern.status}
+                <span className="inline-flex items-center gap-1 rounded-full border border-slate-700 bg-slate-950/60 px-2.5 py-1 text-[10px] font-semibold text-slate-400">
+                  <Clock3 className="h-3 w-3" /> {intern.status}
                 </span>
               </div>
 
-              {/* Title & Provider */}
-              <div>
-                <h3 className="text-base sm:text-lg font-extrabold text-white tracking-tight leading-snug group-hover:text-emerald-300 transition-colors">
-                  {intern.name}
-                </h3>
-                <p className="text-xs font-semibold text-slate-400 flex items-center gap-1 mt-0.5">
-                  <Building2 className="w-3 h-3 text-slate-500 shrink-0" />
-                  <span>{intern.provider}</span>
-                </p>
-              </div>
-
-              {/* Description */}
-              <p className="text-slate-200 font-medium text-xs leading-relaxed opacity-95">
-                {intern.description}
+              <h3 className="mt-4 text-lg sm:text-xl font-extrabold leading-snug tracking-tight text-white">
+                {intern.name}
+              </h3>
+              <p className="mt-1 flex items-start gap-1.5 text-xs font-semibold leading-5 text-slate-400">
+                <Building2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-500" />
+                {intern.provider}
               </p>
 
-              {/* Stipend Card Box */}
-              <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1.5">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-[10px] font-bold uppercase text-slate-400 flex items-center gap-1">
-                    <DollarSign className="w-3 h-3 text-emerald-400" />
-                    Compensation / Stipend:
-                  </span>
-                  <span className="text-emerald-400 font-bold text-xs sm:text-sm">
-                    {intern.stipend}
-                  </span>
+              <p className="mt-4 text-sm leading-6 text-slate-300">{intern.description}</p>
+
+              <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-3.5">
+                  <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <IndianRupee className="h-3.5 w-3.5 text-emerald-400" /> Stipend
+                  </div>
+                  <p className="mt-1.5 text-xs font-bold leading-5 text-emerald-300">{intern.stipend}</p>
                 </div>
-                <div className="text-[11px] text-slate-300 flex items-start gap-1">
-                  <span className="font-semibold text-slate-400">Eligibility:</span>
-                  <span className="truncate">{intern.eligibility}</span>
+                <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-3.5">
+                  <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <GraduationCap className="h-3.5 w-3.5 text-cyan-400" /> Year fit
+                  </div>
+                  <p className="mt-1.5 text-xs font-bold leading-5 text-slate-200">{intern.yearFit}</p>
                 </div>
               </div>
 
-              {/* Verified Badges */}
-              <div className="flex flex-wrap gap-1.5 pt-1">
-                {intern.verifiedBadges.map((badge, idx) => (
-                  <span
-                    key={idx}
-                    className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-slate-800 text-emerald-300 border border-slate-700/80 flex items-center gap-1"
-                  >
-                    <CheckCircle2 className="w-2.5 h-2.5 text-emerald-400" />
-                    {badge}
+              <div className="mt-2.5 rounded-2xl border border-slate-800 bg-slate-950/40 p-3.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                      <CalendarDays className="h-3.5 w-3.5 text-cyan-400" /> Application window
+                    </p>
+                    <p className="mt-1 text-xs leading-5 text-slate-300">{intern.applicationWindow}</p>
+                  </div>
+                  <div>
+                    <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                      <ArrowUpRight className="h-3.5 w-3.5 text-amber-300" /> Selection
+                    </p>
+                    <p className="mt-1 text-xs leading-5 text-slate-300">{intern.selectionProcess}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Eligibility</p>
+                <p className="mt-1 text-xs leading-5 text-slate-300">{intern.eligibility}</p>
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {intern.verifiedBadges.map((badge) => (
+                  <span key={badge} className="inline-flex items-center gap-1 rounded-full border border-slate-700 bg-slate-800/70 px-2.5 py-1 text-[10px] font-semibold text-slate-300">
+                    <CheckCircle2 className="h-3 w-3 text-emerald-400" /> {badge}
                   </span>
                 ))}
               </div>
             </div>
 
-            {/* Direct Official Apply Action */}
-            <div className="pt-2 border-t border-slate-800">
+            <div className="mt-auto border-t border-slate-800 bg-slate-950/40 p-4 sm:p-5">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <span className="text-[10px] font-semibold text-slate-500">Source: {intern.officialSource}</span>
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-slate-400">
+                  <ShieldCheck className="h-3 w-3 text-emerald-400" /> Source-linked
+                </span>
+              </div>
               <a
                 href={intern.applyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-98 text-white text-xs font-bold transition-all shadow-xs cursor-pointer min-h-[38px]"
+                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 py-3 text-xs font-extrabold text-slate-950 transition hover:bg-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-300/50"
               >
-                <span>Visit Official Application Portal</span>
-                <ExternalLink className="w-3.5 h-3.5" />
+                Visit Official / Application Page
+                <ExternalLink className="h-4 w-4" />
               </a>
             </div>
-          </div>
+          </article>
         ))}
       </div>
+
+      {filteredInternships.length === 0 && (
+        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-10 text-center">
+          <Search className="mx-auto h-9 w-9 text-slate-600" />
+          <h3 className="mt-3 text-sm font-bold text-white">No matching opportunities</h3>
+          <p className="mt-1 text-xs text-slate-500">Try a company, domain, programme or branch keyword.</p>
+        </div>
+      )}
+
+      <section className="rounded-2xl border border-slate-800 bg-slate-900 p-5 sm:p-6">
+        <div className="flex items-start gap-3">
+          <BookOpen className="mt-0.5 h-5 w-5 shrink-0 text-cyan-400" />
+          <div>
+            <h2 className="text-sm font-bold text-white">How Man of Study verifies this directory</h2>
+            <p className="mt-1 text-xs sm:text-sm leading-6 text-slate-400">
+              Entries are linked to an official government, company or programme website. For marketplaces such as Unstop and Prosple,
+              the platform itself is separated from government/company programmes and each employer listing should still be checked independently.
+              Deadlines, stipend amounts and eligibility can change, so the live source always wins.
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
+
 export default InternshipsRadar;

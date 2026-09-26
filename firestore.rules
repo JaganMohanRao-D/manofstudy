@@ -1,0 +1,133 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Test collection for connection validation (read-only)
+    match /test/{docId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Legacy Posts Collection (read-only compatibility for old records)
+    match /posts/{postId} {
+      allow read: if true;
+      allow create, update, delete: if false;
+      match /replies/{replyId} {
+        allow read: if true;
+        allow create, update, delete: if false;
+      }
+    }
+
+    // Campus Posts (Doubt dispatches & questions)
+    match /campus_posts/{postId} {
+      allow read: if true;
+      allow create: if isAuthenticated()
+        && request.resource.data.authorUid == request.auth.uid
+        && (!('reportCount' in request.resource.data) || request.resource.data.reportCount == 0)
+        && (!('isHidden' in request.resource.data) || request.resource.data.isHidden == false);
+      allow update: if isAuthenticated()
+        && resource.data.authorUid == request.auth.uid
+        && request.resource.data.authorUid == resource.data.authorUid
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['reportCount', 'isHidden', 'isBanned']);
+      allow delete: if isAuthenticated()
+        && resource.data.authorUid == request.auth.uid;
+
+      match /replies/{replyId} {
+        allow read: if true;
+        allow create: if isAuthenticated()
+          && request.resource.data.authorUid == request.auth.uid
+          && (!('reportCount' in request.resource.data) || request.resource.data.reportCount == 0)
+          && (!('isHidden' in request.resource.data) || request.resource.data.isHidden == false);
+        allow update: if isAuthenticated()
+          && resource.data.authorUid == request.auth.uid
+          && request.resource.data.authorUid == resource.data.authorUid
+          && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['reportCount', 'isHidden', 'isAdmin', 'isVerifiedSolution']);
+        allow delete: if isAuthenticated()
+          && resource.data.authorUid == request.auth.uid;
+      }
+
+      match /upvotes/{userId} {
+        allow read: if isAuthenticated();
+        allow create: if isAuthenticated() && userId == request.auth.uid;
+        allow delete: if isAuthenticated() && userId == request.auth.uid;
+        allow update: if false;
+      }
+
+      match /replies/{replyId}/upvotes/{userId} {
+        allow read: if isAuthenticated();
+        allow create: if isAuthenticated() && userId == request.auth.uid;
+        allow delete: if isAuthenticated() && userId == request.auth.uid;
+        allow update: if false;
+      }
+    }
+
+    // User Profiles & Problem Solver Reputation
+    // Strictly confidential: Only the authenticated user can read their own profile document.
+    // Moderation, administration, and ban fields cannot be altered by clients.
+    match /users/{userId} {
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow create: if isAuthenticated()
+        && request.auth.uid == userId
+        && request.resource.data.uid == userId
+        && (!('isAdmin' in request.resource.data) || request.resource.data.isAdmin == false)
+        && (!('isModerator' in request.resource.data) || request.resource.data.isModerator == false)
+        && (!('isBanned' in request.resource.data) || request.resource.data.isBanned == false)
+        && (!('role' in request.resource.data) || request.resource.data.role in ['student', 'user'])
+        && (!('totalReports' in request.resource.data) || request.resource.data.totalReports == 0)
+        && (!('solutionsCount' in request.resource.data) || request.resource.data.solutionsCount <= 1);
+      allow update: if isAuthenticated()
+        && request.auth.uid == userId
+        && request.resource.data.uid == resource.data.uid
+        && (!('email' in resource.data) || request.resource.data.email == resource.data.email)
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['isAdmin', 'isModerator', 'isBanned', 'bannedReason', 'totalReports', 'role'])
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['solutionsCount'])
+            || request.resource.data.solutionsCount <= resource.data.solutionsCount + 1);
+      allow delete: if false;
+    }
+
+    // Community Reports & Auto-Moderation
+    // Only the reporter can view their submitted report; the reported author cannot see who reported them.
+    match /reports/{reportId} {
+      allow read: if isAuthenticated() && resource.data.reporterUid == request.auth.uid;
+      allow create: if isAuthenticated()
+        && request.resource.data.reporterUid == request.auth.uid
+        && request.resource.data.targetType in ['post', 'reply']
+        && request.resource.data.targetId is string
+        && request.resource.data.postId is string;
+      allow update, delete: if false;
+    }
+
+    // In-App Notifications Collection
+    // Only the intended recipient can read, update, or clear their notifications.
+    match /notifications/{notificationId} {
+      allow read, delete: if isAuthenticated()
+        && (resource.data.recipientEmail == request.auth.token.email || resource.data.recipientUid == request.auth.uid);
+      allow create: if isAuthenticated()
+        && request.resource.data.keys().hasAll(['recipientEmail', 'questionId'])
+        && request.resource.data.isRead == false;
+      allow update: if isAuthenticated()
+        && (resource.data.recipientEmail == request.auth.token.email || resource.data.recipientUid == request.auth.uid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead']);
+    }
+
+    // Mail Collection (For Firebase Trigger Email extension)
+    // Client writes are strictly forbidden. Only backend Cloud Functions (Admin SDK) can write transactional emails.
+    match /mail/{notificationId} {
+      allow read: if isAuthenticated() && (
+        ('toUids' in resource.data && request.auth.uid in resource.data.toUids) ||
+        ('recipientUid' in resource.data && request.auth.uid == resource.data.recipientUid)
+      );
+      allow write: if false;
+    }
+
+    // Deny all other unmatched paths by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -61,6 +61,9 @@ import {
   generatePdfFormFields,
   summarizePdf,
   exportPdfToMarkdown,
+  extractPagesPdf,
+  pdfToText,
+  editPdfMetadata,
 } from '../../utils/pdfToolkitEngine';
 import { formatPdfErrorMessage } from '../../utils/pdfErrorHelper';
 
@@ -87,7 +90,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
   const [compressLevel, setCompressLevel] = useState<number>(0.65);
 
   // Watermark
-  const [watermarkText, setWatermarkText] = useState<string>('JAVISAK');
+  const [watermarkText, setWatermarkText] = useState<string>('MAN OF STUDY');
   const [watermarkOpacity, setWatermarkOpacity] = useState<number>(0.25);
   const [watermarkAngle, setWatermarkAngle] = useState<number>(-45);
   const [watermarkColor, setWatermarkColor] = useState<string>('#475569');
@@ -103,7 +106,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
   const [passwordInput, setPasswordInput] = useState<string>('');
 
   // Edit Overlay
-  const [overlayText, setOverlayText] = useState<string>('APPROVED - JAVISAK');
+  const [overlayText, setOverlayText] = useState<string>('APPROVED - MAN OF STUDY');
   const [overlayPage, setOverlayPage] = useState<number>(1);
   const [overlayColor, setOverlayColor] = useState<string>('#0284c7');
 
@@ -112,7 +115,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
 
   // HTML content for HTML to PDF
   const [htmlCode, setHtmlCode] = useState<string>(
-    '<h1>Student Project Report</h1>\n<p>Generated smoothly with JAVISAK client-side engine.</p>'
+    '<h1>Student Project Report</h1>\n<p>Generated smoothly with MAN OF STUDY client-side engine.</p>'
   );
 
   // Sign Pad State
@@ -141,6 +144,23 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
     pageCountB: number;
     wordCountDiff: number;
   } | null>(null);
+
+  // Extract Pages, Text & Metadata states
+  const [extractPageRange, setExtractPageRange] = useState<string>('1-3');
+  const [extractedText, setExtractedText] = useState<string>('');
+  const [copiedText, setCopiedText] = useState<boolean>(false);
+  const [metaTitle, setMetaTitle] = useState<string>('');
+  const [metaAuthor, setMetaAuthor] = useState<string>('');
+  const [metaSubject, setMetaSubject] = useState<string>('');
+  const [metaKeywords, setMetaKeywords] = useState<string>('');
+
+  // PowerPoint to PDF options
+  const [pptxAspectRatio, setPptxAspectRatio] = useState<'auto' | '16:9' | '4:3' | 'a4'>('auto');
+  const [pptxPageRange, setPptxPageRange] = useState<string>('all');
+  const [pptxPreserveBg, setPptxPreserveBg] = useState<boolean>(true);
+  const [pptxPreserveImg, setPptxPreserveImg] = useState<boolean>(true);
+  const [pptxPreserveTbl, setPptxPreserveTbl] = useState<boolean>(true);
+  const [pptxSlideNums, setPptxSlideNums] = useState<boolean>(true);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const fileBInputRef = useRef<HTMLInputElement>(null);
@@ -325,10 +345,69 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
             setProgress((prev) => ({ ...prev, progressPercent: pct, statusMessage: msg }));
           });
           const downloadUrl = URL.createObjectURL(res.blob);
+          const secondaryDownloadUrl = res.secondaryBlob ? URL.createObjectURL(res.secondaryBlob) : undefined;
           setProgress({
             isProcessing: false,
             progressPercent: 100,
-            statusMessage: 'Converted PDF text layer into editable Word document!',
+            statusMessage: 'Converted PDF text layer into editable Microsoft Word (.docx) document!',
+            downloadUrl,
+            downloadFilename: res.filename,
+            secondaryDownloadUrl,
+            secondaryFilename: res.secondaryFilename,
+          });
+          break;
+        }
+
+        case 'extract-pages': {
+          const res = await extractPagesPdf(mainFile, extractPageRange || '1', (pct, msg) => {
+            setProgress((prev) => ({ ...prev, progressPercent: pct, statusMessage: msg }));
+          });
+          const downloadUrl = URL.createObjectURL(res.blob);
+          setProgress({
+            isProcessing: false,
+            progressPercent: 100,
+            statusMessage: `Extracted ${res.pageCount} page(s) into standalone PDF!`,
+            downloadUrl,
+            downloadFilename: res.filename,
+          });
+          break;
+        }
+
+        case 'pdf-to-text': {
+          const res = await pdfToText(mainFile, (pct, msg) => {
+            setProgress((prev) => ({ ...prev, progressPercent: pct, statusMessage: msg }));
+          });
+          setExtractedText(res.text);
+          const downloadUrl = URL.createObjectURL(res.blob);
+          setProgress({
+            isProcessing: false,
+            progressPercent: 100,
+            statusMessage: 'Extracted raw text layer from PDF document!',
+            downloadUrl,
+            downloadFilename: res.filename,
+          });
+          break;
+        }
+
+        case 'pdf-metadata': {
+          const keywordsArr = metaKeywords.split(',').map((k) => k.trim()).filter(Boolean);
+          const res = await editPdfMetadata(
+            mainFile,
+            {
+              title: metaTitle || undefined,
+              author: metaAuthor || undefined,
+              subject: metaSubject || undefined,
+              keywords: keywordsArr.length > 0 ? keywordsArr : undefined,
+            },
+            (pct, msg) => {
+              setProgress((prev) => ({ ...prev, progressPercent: pct, statusMessage: msg }));
+            }
+          );
+          const downloadUrl = URL.createObjectURL(res.blob);
+          setProgress({
+            isProcessing: false,
+            progressPercent: 100,
+            statusMessage: 'Updated metadata tags and compiled clean PDF!',
             downloadUrl,
             downloadFilename: res.filename,
           });
@@ -384,14 +463,25 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
         }
 
         case 'powerpoint-to-pdf': {
-          const res = await powerpointToPdf(mainFile, (pct, msg) => {
-            setProgress((prev) => ({ ...prev, progressPercent: pct, statusMessage: msg }));
-          });
+          const res = await powerpointToPdf(
+            mainFile,
+            {
+              aspectRatio: pptxAspectRatio,
+              pageRange: pptxPageRange.trim() || undefined,
+              preserveBackgrounds: pptxPreserveBg,
+              preserveImages: pptxPreserveImg,
+              preserveTables: pptxPreserveTbl,
+              includeSlideNumbers: pptxSlideNums,
+            },
+            (pct, msg) => {
+              setProgress((prev) => ({ ...prev, progressPercent: pct, statusMessage: msg }));
+            }
+          );
           const downloadUrl = URL.createObjectURL(res.blob);
           setProgress({
             isProcessing: false,
             progressPercent: 100,
-            statusMessage: 'Converted presentation notes to landscape PDF!',
+            statusMessage: `Converted ${res.pageCount} presentation slides to PDF!`,
             downloadUrl,
             downloadFilename: res.filename,
           });
@@ -512,7 +602,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
         }
 
         case 'html-to-pdf': {
-          const res = await htmlToPdf(htmlCode, 'JAVISAK Document', (pct, msg) => {
+          const res = await htmlToPdf(htmlCode, 'MAN OF STUDY Document', (pct, msg) => {
             setProgress((prev) => ({ ...prev, progressPercent: pct, statusMessage: msg }));
           });
           const downloadUrl = URL.createObjectURL(res.blob);
@@ -1015,6 +1105,102 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
             </div>
           )}
 
+          {/* Extract Pages Controls */}
+          {tool.id === 'extract-pages' && (
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3 text-xs">
+              <span className="font-semibold text-slate-800 block">Pages to Extract</span>
+              <div className="space-y-1">
+                <label className="text-slate-600 block">Specify page numbers or comma-separated ranges</label>
+                <input
+                  type="text"
+                  value={extractPageRange}
+                  onChange={(e) => setExtractPageRange(e.target.value)}
+                  placeholder="e.g. 1-3, 5"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono"
+                />
+                <p className="text-[11px] text-slate-500 pt-1">
+                  Example: <code className="text-blue-600 font-mono">1, 3, 5-8</code> exports pages 1, 3, 5, 6, 7, and 8 into a unified PDF.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* PDF Metadata Editor Controls */}
+          {tool.id === 'pdf-metadata' && (
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3 text-xs">
+              <span className="font-semibold text-slate-800 block">Document Metadata Properties</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-slate-600 block mb-1">Document Title</label>
+                  <input
+                    type="text"
+                    value={metaTitle}
+                    onChange={(e) => setMetaTitle(e.target.value)}
+                    placeholder="e.g. Operating Systems Lab Manual"
+                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-600 block mb-1">Author Name / Roll No.</label>
+                  <input
+                    type="text"
+                    value={metaAuthor}
+                    onChange={(e) => setMetaAuthor(e.target.value)}
+                    placeholder="e.g. Rahul Sharma (21B91A0501)"
+                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-600 block mb-1">Subject / Department</label>
+                  <input
+                    type="text"
+                    value={metaSubject}
+                    onChange={(e) => setMetaSubject(e.target.value)}
+                    placeholder="e.g. Computer Science & Engineering"
+                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-600 block mb-1">Keywords (comma-separated)</label>
+                  <input
+                    type="text"
+                    value={metaKeywords}
+                    onChange={(e) => setMetaKeywords(e.target.value)}
+                    placeholder="e.g. OS, lab, semester 5, final"
+                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* PDF to Text Extracted Preview */}
+          {tool.id === 'pdf-to-text' && extractedText && (
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2 text-xs">
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-slate-800">Extracted Text Preview</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(extractedText);
+                    setCopiedText(true);
+                    setTimeout(() => setCopiedText(false), 2000);
+                  }}
+                  className="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  {copiedText ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copiedText ? 'Copied!' : 'Copy to Clipboard'}
+                </button>
+              </div>
+              <textarea
+                readOnly
+                value={extractedText}
+                rows={6}
+                className="w-full p-2.5 bg-white border border-slate-200 rounded-lg font-mono text-[11px] text-slate-700 focus:outline-none resize-y"
+              />
+            </div>
+          )}
+
           {/* Compress Quality Slider */}
           {tool.id === 'compress-pdf' && (
             <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3 text-xs">
@@ -1041,6 +1227,93 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
             </div>
           )}
 
+          {/* PowerPoint to PDF Controls */}
+          {tool.id === 'powerpoint-to-pdf' && (
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3.5 text-xs">
+              <div className="space-y-1.5">
+                <span className="font-semibold text-slate-800 block">Slide Aspect Ratio</span>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {[
+                    { id: 'auto', label: 'Preserve Native', desc: 'Exact Dimensions' },
+                    { id: '16:9', label: '16:9 HD', desc: 'Standard Widescreen' },
+                    { id: '4:3', label: '4:3 Standard', desc: 'Traditional Slide' },
+                    { id: 'a4', label: 'A4 Landscape', desc: 'Handout / Print' },
+                  ].map((opt) => (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onClick={() => setPptxAspectRatio(opt.id as any)}
+                      className={`p-2 rounded-lg border text-left transition-colors cursor-pointer ${
+                        pptxAspectRatio === opt.id
+                          ? 'border-pink-500 bg-pink-50 text-pink-900 font-bold'
+                          : 'border-slate-200 hover:border-slate-300 bg-white text-slate-700'
+                      }`}
+                    >
+                      <div className="text-[11px] font-bold">{opt.label}</div>
+                      <div className="text-[9px] text-slate-500 truncate">{opt.desc}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-semibold text-slate-800 block">Slide Range</label>
+                <input
+                  type="text"
+                  value={pptxPageRange}
+                  onChange={(e) => setPptxPageRange(e.target.value)}
+                  placeholder="all or e.g. 1-4, 6"
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-slate-900 font-mono text-xs focus:outline-pink-500"
+                />
+                <p className="text-[10px] text-slate-500">
+                  Type <code className="text-pink-600 font-mono">all</code> to convert all slides in author sequence, or specify custom slide numbers.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-slate-200">
+                <label className="flex items-center gap-1.5 cursor-pointer text-slate-700 text-[11px]">
+                  <input
+                    type="checkbox"
+                    checked={pptxPreserveBg}
+                    onChange={(e) => setPptxPreserveBg(e.target.checked)}
+                    className="rounded border-slate-300 text-pink-600 focus:ring-pink-500"
+                  />
+                  <span>Preserve Themes &amp; Backgrounds</span>
+                </label>
+
+                <label className="flex items-center gap-1.5 cursor-pointer text-slate-700 text-[11px]">
+                  <input
+                    type="checkbox"
+                    checked={pptxPreserveImg}
+                    onChange={(e) => setPptxPreserveImg(e.target.checked)}
+                    className="rounded border-slate-300 text-pink-600 focus:ring-pink-500"
+                  />
+                  <span>Preserve Embedded Images</span>
+                </label>
+
+                <label className="flex items-center gap-1.5 cursor-pointer text-slate-700 text-[11px]">
+                  <input
+                    type="checkbox"
+                    checked={pptxPreserveTbl}
+                    onChange={(e) => setPptxPreserveTbl(e.target.checked)}
+                    className="rounded border-slate-300 text-pink-600 focus:ring-pink-500"
+                  />
+                  <span>Preserve Table Structures</span>
+                </label>
+
+                <label className="flex items-center gap-1.5 cursor-pointer text-slate-700 text-[11px]">
+                  <input
+                    type="checkbox"
+                    checked={pptxSlideNums}
+                    onChange={(e) => setPptxSlideNums(e.target.checked)}
+                    className="rounded border-slate-300 text-pink-600 focus:ring-pink-500"
+                  />
+                  <span>Footer Slide Numbers</span>
+                </label>
+              </div>
+            </div>
+          )}
+
           {/* Watermark Controls */}
           {tool.id === 'watermark-pdf' && (
             <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3 text-xs">
@@ -1050,7 +1323,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
                   type="text"
                   value={watermarkText}
                   onChange={(e) => setWatermarkText(e.target.value)}
-                  placeholder="CONFIDENTIAL / JAVISAK"
+                  placeholder="CONFIDENTIAL / MAN OF STUDY"
                   className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 font-bold uppercase tracking-wider"
                 />
               </div>

@@ -234,7 +234,7 @@ export const ApEapcetRadar: React.FC<ApEapcetRadarProps> = () => {
       )
       .join('\n');
 
-    const message = `🎓 *AP EAPCET Phase 2 Leftover Seat Vacancies*\n\n🏫 *${college.inst_name}* (Code: *${college.inst_code}*)\n📍 ${college.place}, ${college.district} (${college.affiliated_to})\n\n📊 *Branch Vacancies:*\n${branchesText}\n\n🔍 Check live AP EAPCET Phase 2 college matrix on JAVISAK:\n${window.location.origin}/#eapcet-radar`;
+    const message = `🎓 *AP EAPCET Phase 2 Leftover Seat Vacancies*\n\n🏫 *${college.inst_name}* (Code: *${college.inst_code}*)\n📍 ${college.place}, ${college.district} (${college.affiliated_to})\n\n📊 *Branch Vacancies:*\n${branchesText}\n\n🔍 Check live AP EAPCET Phase 2 college matrix on MAN OF STUDY:\n${window.location.origin}/#eapcet-radar`;
 
     const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
@@ -252,27 +252,27 @@ export const ApEapcetRadar: React.FC<ApEapcetRadarProps> = () => {
   return (
     <div id="eapcet-radar-container" className="space-y-4">
       {/* 1. Dedicated Header Banner for Phase 2 Left Over Seats */}
-      <div className="bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 mt-2">
+      <div className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 mt-2">
         <div className="flex items-start sm:items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center shrink-0 shadow-xs">
-            <Flame className="w-6 h-6 text-blue-600" />
+          <div className="w-11 h-11 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 shadow-xs">
+            <Flame className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
                 AP EAPCET Phase 2 Left Over Seats Radar
               </h2>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
                 Phase 2 Vacancies
               </span>
             </div>
-            <p className="text-xs text-slate-600 mt-0.5 max-w-2xl">
-              Live college-wise seat vacancy matrix, branch leftover seats &amp; official tuition fees across Andhra Pradesh institutions backed by <code className="text-[11px] bg-slate-100 px-1 py-0.5 rounded text-slate-800 font-mono">/eapcet_vacancies.json</code>.
+            <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 max-w-2xl">
+              Live college seat vacancy matrix and leftover branch seats across Andhra Pradesh institutions.
             </p>
           </div>
         </div>
 
-        <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0 self-start md:self-auto bg-slate-50 border border-slate-200/80 rounded-xl px-3.5 py-2.5 text-xs">
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0 self-start md:self-auto bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs">
           <div className="min-w-[72px]">
             <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">TOTAL VACANT</div>
             <div className="text-sm sm:text-base font-extrabold text-blue-600 font-mono">{filteredTotalVacancies.toLocaleString('en-IN')}</div>

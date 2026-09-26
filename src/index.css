@@ -1,6 +1,62 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
+  :root {
+    --mos-page-bg: #F5F7FB;
+    --mos-surface: #FFFFFF;
+    --mos-surface-raised: #FFFFFF;
+    --mos-surface-muted: #EEF2F7;
+    --mos-text-primary: #172033;
+    --mos-text-secondary: #475569;
+    --mos-text-muted: #64748B;
+    --mos-border: #D9E1EC;
+    --mos-border-strong: #B8C5D6;
+    --mos-primary: #059669;
+    --mos-primary-soft: rgba(5, 150, 105, 0.1);
+    --mos-accent: #0284C7;
+    --mos-success: #059669;
+    --mos-warning: #D97706;
+    --mos-danger: #E11D48;
+    --mos-info: #0284C7;
+    --mos-input-bg: #FFFFFF;
+    --mos-input-border: #CBD5E1;
+    --mos-shadow: rgba(15, 23, 42, 0.08);
+    --mos-overlay: rgba(15, 23, 42, 0.5);
+
+    /* Legacy tokens compatibility */
+    --mos-bg: var(--mos-page-bg);
+    --mos-border-hover: var(--mos-border-strong);
+  }
+
+  .dark {
+    --mos-page-bg: #060B16;
+    --mos-surface: #0D1627;
+    --mos-surface-raised: #111D31;
+    --mos-surface-muted: #172338;
+    --mos-text-primary: #F8FAFC;
+    --mos-text-secondary: #C7D2E3;
+    --mos-text-muted: #91A0B5;
+    --mos-border: rgba(255, 255, 255, 0.10);
+    --mos-border-strong: rgba(255, 255, 255, 0.18);
+    --mos-primary: #10B981;
+    --mos-primary-soft: rgba(16, 185, 129, 0.15);
+    --mos-accent: #38BDF8;
+    --mos-success: #10B981;
+    --mos-warning: #F59E0B;
+    --mos-danger: #F43F5E;
+    --mos-info: #38BDF8;
+    --mos-input-bg: #101C30;
+    --mos-input-border: rgba(255, 255, 255, 0.14);
+    --mos-shadow: rgba(0, 0, 0, 0.35);
+    --mos-overlay: rgba(0, 0, 0, 0.75);
+
+    /* Legacy tokens compatibility */
+    --mos-bg: var(--mos-page-bg);
+    --mos-border-hover: var(--mos-border-strong);
+  }
+
   html, body {
     max-width: 100vw;
     overflow-x: hidden;
@@ -8,6 +64,9 @@
 
   body {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--mos-page-bg);
+    color: var(--mos-text-primary);
+    transition: background-color 150ms ease, color 150ms ease;
   }
   
   code, kbd, samp, pre {
@@ -15,12 +74,57 @@
   }
 }
 
-/* Subtle clean SaaS grid pattern for light theme */
+/* High contrast surface and control utilities */
+.mos-card {
+  background-color: var(--mos-surface);
+  border: 1px solid var(--mos-border);
+  color: var(--mos-text-primary);
+  box-shadow: 0 1px 3px 0 var(--mos-shadow);
+}
+
+.mos-card-raised {
+  background-color: var(--mos-surface-raised);
+  border: 1px solid var(--mos-border-strong);
+  color: var(--mos-text-primary);
+  box-shadow: 0 4px 6px -1px var(--mos-shadow);
+}
+
+.mos-subcard {
+  background-color: var(--mos-surface-muted);
+  border: 1px solid var(--mos-border);
+  color: var(--mos-text-primary);
+}
+
+.mos-input {
+  background-color: var(--mos-input-bg);
+  border: 1px solid var(--mos-input-border);
+  color: var(--mos-text-primary);
+}
+.mos-input:focus {
+  outline: none;
+  border-color: var(--mos-accent);
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
+}
+
+.mos-label {
+  color: var(--mos-text-secondary);
+}
+
+.mos-muted {
+  color: var(--mos-text-muted);
+}
+
+/* Clean grid pattern */
 .tech-grid-pattern-light {
   background-size: 32px 32px;
   background-image: 
-    linear-gradient(to right, rgba(15, 23, 42, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
+    linear-gradient(to right, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+}
+.dark .tech-grid-pattern-light {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
 }
 
 /* Infinite marquee scrolling keyframes and utilities */

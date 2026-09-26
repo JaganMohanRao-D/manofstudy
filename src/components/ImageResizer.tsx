@@ -128,23 +128,23 @@ export const ImageResizer: React.FC = () => {
     <div id="exam-image-resizer-tool" className="space-y-6">
       
       {/* Tool Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:p-6 rounded-2xl border bg-white border-slate-200 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:p-6 rounded-2xl border bg-white dark:bg-slate-900/90 border-slate-200 dark:border-slate-800 shadow-sm text-slate-900 dark:text-slate-100">
         <div>
-          <div className="flex items-center gap-2 text-sky-600 text-xs font-semibold uppercase tracking-wider mb-1">
+          <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 text-xs font-semibold uppercase tracking-wider mb-1">
             <ImageIcon className="w-4 h-4" />
             <span>Zero-Upload Privacy Compression</span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
             Exam-Ready Image Resizer
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
             Client-side canvas compression for UPSC, GATE, JEE, NEET, and university application portals.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-medium">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-medium">
+            <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             <span>100% Client-Side Privacy</span>
           </div>
         </div>
@@ -259,6 +259,135 @@ export const ImageResizer: React.FC = () => {
               </div>
             </div>
 
+            {/* Indian Entrance Exam One-Click Presets */}
+            <div className="space-y-1.5 p-3 rounded-xl bg-sky-50/50 border border-sky-200/70">
+              <span className="text-[11px] font-bold text-sky-900 block flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-sky-600" />
+                Popular Indian Exam Presets:
+              </span>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 pt-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setConfig((prev) => ({
+                      ...prev,
+                      targetSizeKb: 50,
+                      sizePreset: '50kb',
+                      dimensionPreset: 'ssc_photo',
+                    }));
+                  }}
+                  className={`px-2 py-1.5 rounded-lg text-[11px] font-medium border text-left transition-colors cursor-pointer ${
+                    config.dimensionPreset === 'ssc_photo' && config.targetSizeKb === 50
+                      ? 'bg-sky-600 text-white border-sky-700 font-semibold'
+                      : 'bg-white text-slate-700 border-slate-200 hover:bg-sky-100/50'
+                  }`}
+                >
+                  <div className="font-bold">SSC Photo</div>
+                  <div className="text-[10px] opacity-80">20-50 KB • 200×230</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setConfig((prev) => ({
+                      ...prev,
+                      targetSizeKb: 20,
+                      sizePreset: '20kb',
+                      dimensionPreset: 'ssc_signature',
+                    }));
+                  }}
+                  className={`px-2 py-1.5 rounded-lg text-[11px] font-medium border text-left transition-colors cursor-pointer ${
+                    config.dimensionPreset === 'ssc_signature' && config.targetSizeKb === 20
+                      ? 'bg-sky-600 text-white border-sky-700 font-semibold'
+                      : 'bg-white text-slate-700 border-slate-200 hover:bg-sky-100/50'
+                  }`}
+                >
+                  <div className="font-bold">SSC Signature</div>
+                  <div className="text-[10px] opacity-80">10-20 KB • 140×60</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setConfig((prev) => ({
+                      ...prev,
+                      targetSizeKb: 50,
+                      sizePreset: '50kb',
+                      dimensionPreset: 'gate_photo',
+                    }));
+                  }}
+                  className={`px-2 py-1.5 rounded-lg text-[11px] font-medium border text-left transition-colors cursor-pointer ${
+                    config.dimensionPreset === 'gate_photo' && config.targetSizeKb === 50
+                      ? 'bg-sky-600 text-white border-sky-700 font-semibold'
+                      : 'bg-white text-slate-700 border-slate-200 hover:bg-sky-100/50'
+                  }`}
+                >
+                  <div className="font-bold">GATE Photo</div>
+                  <div className="text-[10px] opacity-80">&lt;50 KB • 240×320</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setConfig((prev) => ({
+                      ...prev,
+                      targetSizeKb: 20,
+                      sizePreset: '20kb',
+                      dimensionPreset: 'gate_signature',
+                    }));
+                  }}
+                  className={`px-2 py-1.5 rounded-lg text-[11px] font-medium border text-left transition-colors cursor-pointer ${
+                    config.dimensionPreset === 'gate_signature' && config.targetSizeKb === 20
+                      ? 'bg-sky-600 text-white border-sky-700 font-semibold'
+                      : 'bg-white text-slate-700 border-slate-200 hover:bg-sky-100/50'
+                  }`}
+                >
+                  <div className="font-bold">GATE Signature</div>
+                  <div className="text-[10px] opacity-80">&lt;20 KB • 280×80</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setConfig((prev) => ({
+                      ...prev,
+                      targetSizeKb: 50,
+                      sizePreset: '50kb',
+                      dimensionPreset: 'upsc_photo',
+                    }));
+                  }}
+                  className={`px-2 py-1.5 rounded-lg text-[11px] font-medium border text-left transition-colors cursor-pointer ${
+                    config.dimensionPreset === 'upsc_photo' && config.targetSizeKb === 50
+                      ? 'bg-sky-600 text-white border-sky-700 font-semibold'
+                      : 'bg-white text-slate-700 border-slate-200 hover:bg-sky-100/50'
+                  }`}
+                >
+                  <div className="font-bold">UPSC Photo</div>
+                  <div className="text-[10px] opacity-80">20-50 KB • 350×350</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setConfig((prev) => ({
+                      ...prev,
+                      targetSizeKb: 20,
+                      sizePreset: '20kb',
+                      dimensionPreset: 'upsc_signature',
+                    }));
+                  }}
+                  className={`px-2 py-1.5 rounded-lg text-[11px] font-medium border text-left transition-colors cursor-pointer ${
+                    config.dimensionPreset === 'upsc_signature' && config.targetSizeKb === 20
+                      ? 'bg-sky-600 text-white border-sky-700 font-semibold'
+                      : 'bg-white text-slate-700 border-slate-200 hover:bg-sky-100/50'
+                  }`}
+                >
+                  <div className="font-bold">UPSC Signature</div>
+                  <div className="text-[10px] opacity-80">10-20 KB • 350×150</div>
+                </button>
+              </div>
+            </div>
+
             {/* Custom KB Input if Custom is selected */}
             {config.sizePreset === 'custom' && (
               <div className="space-y-2 p-3 rounded-xl bg-slate-50 border border-slate-200">
@@ -305,6 +434,12 @@ export const ImageResizer: React.FC = () => {
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all cursor-pointer"
               >
                 <option value="original">Original Aspect & Dimensions</option>
+                <option value="ssc_photo">SSC Photo (3.5cm x 4.5cm / 200x230px)</option>
+                <option value="ssc_signature">SSC Signature (4.0cm x 2.0cm / 140x60px)</option>
+                <option value="gate_photo">GATE Photo (3.5cm x 4.5cm / 240x320px)</option>
+                <option value="gate_signature">GATE Signature (280x80px)</option>
+                <option value="upsc_photo">UPSC Photo (350x350px)</option>
+                <option value="upsc_signature">UPSC Signature (350x150px)</option>
                 <option value="passport_in">Indian Passport Photo (3.5cm x 4.5cm / 350x450px)</option>
                 <option value="signature_in">Official Exam Signature (3.5cm x 1.5cm / 280x120px)</option>
                 <option value="ssc_gate">SSC / GATE Standard (200x230px)</option>

@@ -298,7 +298,7 @@ export const BacklogPlanner = () => {
               <span>Smart Backlog Recovery Planner</span>
             </h1>
             <p className="text-sm text-slate-300 max-w-2xl leading-relaxed">
-              Calculate the exact minimum external semester marks needed to pass, prevent borderline detention, and follow an interactive 30-Day revision strategy customized to your subject archetype.
+              Calculate minimum external pass marks and follow an interactive 30-day subject revision roadmap.
             </p>
           </div>
 

@@ -66,7 +66,7 @@ const FormattedMarkdownContent: React.FC<{ content: string }> = ({ content }) =>
           return (
             <pre
               key={bIdx}
-              className="p-4 rounded-xl bg-slate-950 border border-slate-800 overflow-x-auto text-xs font-mono text-sky-300 leading-relaxed"
+              className="p-4 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 overflow-x-auto text-xs font-mono text-sky-700 dark:text-sky-300 leading-relaxed"
             >
               <code>{inner}</code>
             </pre>
@@ -97,26 +97,26 @@ const FormattedMarkdownContent: React.FC<{ content: string }> = ({ content }) =>
           return (
             <div
               key={bIdx}
-              className="overflow-x-auto my-6 rounded-xl border border-slate-700/60 shadow-lg"
+              className="overflow-x-auto my-6 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-xs dark:shadow-lg"
             >
-              <table className="w-full text-left border-collapse border border-slate-700/60 rounded-xl">
+              <table className="w-full text-left border-collapse border border-slate-200 dark:border-slate-700/60 rounded-xl">
                 <thead>
-                  <tr className="bg-slate-800/80 text-cyan-300 font-bold border-b border-slate-700">
+                  <tr className="bg-slate-100 dark:bg-slate-800/80 text-sky-800 dark:text-cyan-300 font-bold border-b border-slate-200 dark:border-slate-700">
                     {headers.map((h, hIdx) => (
                       <th
                         key={hIdx}
-                        className="p-3 text-xs sm:text-sm font-bold border-b border-slate-700 whitespace-nowrap"
+                        className="p-3 text-xs sm:text-sm font-bold border-b border-slate-200 dark:border-slate-700 whitespace-nowrap"
                       >
                         {renderInlineMarkdown(h)}
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60">
+                <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60">
                   {dataRows.map((row, rIdx) => (
                     <tr
                       key={rIdx}
-                      className="p-3 border-b border-slate-800/60 text-slate-300 text-sm hover:bg-slate-800/30 transition-colors"
+                      className="p-3 border-b border-slate-200 dark:border-slate-800/60 text-slate-700 dark:text-slate-300 text-sm hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors"
                     >
                       {row.map((cell, cIdx) => (
                         <td
@@ -259,6 +259,8 @@ export const GuidesHub: React.FC<GuidesHubProps> = ({
         return { ws: 'gpa', label: 'Calculate Internal Exam Safety Margins' };
       case 8:
         return { ws: 'essentials', label: 'Browse Verified Student Hardware Store' };
+      case 9:
+        return { ws: 'eapcet', label: 'Launch EAPCET & Cutoff Rank Simulator' };
       default:
         return null;
     }
@@ -279,7 +281,7 @@ export const GuidesHub: React.FC<GuidesHubProps> = ({
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-400/30 backdrop-blur-xs">
               <BookOpen className="w-3.5 h-3.5 text-blue-400" />
-              8-CHAPTER EDITORIAL COMPENDIUM
+              9-CHAPTER EDITORIAL COMPENDIUM
             </span>
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-400/30">
               Verified Academic Guidance 2026
@@ -287,11 +289,11 @@ export const GuidesHub: React.FC<GuidesHubProps> = ({
           </div>
 
           <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
-            Student &amp; Tier-3 Survival Editorial Hub
+            MOS Student Knowledge HUB
           </h2>
 
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-3xl">
-            Authoritative, field-tested guides for students in Andhra Pradesh and Telangana. From decoding Phase-2 seat surrender dynamics and avoiding attendance detention to self-taught coding mastery and budget developer workstations.
+            Authoritative, Field-Tested Technical &amp; Counselling Insights for Indian Students. From decoding Open Competition (OC) reservation mathematics and Phase-2 seat surrender dynamics to attendance condonation doctrines and developer workstations.
           </p>
 
           {/* Quick Category Switcher & Search Bar */}

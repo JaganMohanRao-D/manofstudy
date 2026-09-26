@@ -350,23 +350,23 @@ export const DsaPlacementTracker: React.FC<DsaPlacementTrackerProps> = ({
   return (
     <div className="space-y-6">
       {/* Overview Banner */}
-      <div className="rounded-3xl bg-white border border-slate-200/90 p-5 sm:p-7 shadow-xs space-y-4">
+      <div className="rounded-3xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 p-5 sm:p-7 shadow-xs space-y-4 text-slate-900 dark:text-slate-100">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="space-y-1.5 max-w-2xl">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-purple-50 text-purple-800 border border-purple-200">
-              <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+              <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
               <span>TCS Digital, Infosys SP, Amazon &amp; Product Company Prep</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
               DSA &amp; Placement Problem Tracker
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Curated essential algorithmic patterns required for high-paying campus placements (6 LPA – 24 LPA). Track solved questions, bookmark tricky patterns, and run code in our in-browser compiler.
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Essential algorithmic patterns and curated coding questions for campus placement interviews.
             </p>
           </div>
 
           {/* Progress Card */}
-          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 min-w-[240px] shrink-0 space-y-2">
+          <div className="bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 min-w-[240px] shrink-0 space-y-2">
             <div className="flex items-center justify-between text-xs font-bold">
               <span className="text-slate-700 flex items-center gap-1.5">
                 <Trophy className="w-4 h-4 text-amber-500" />

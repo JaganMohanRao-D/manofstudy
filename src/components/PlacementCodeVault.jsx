@@ -179,10 +179,10 @@ export const PlacementCodeVault = () => {
               <span>100% In-Browser Placement & Lab Suite</span>
             </div>
             <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-white">
-              JAVISAK Placement Code Vault &amp; Viva Flashcards
+              MAN OF STUDY Placement Code Vault &amp; Viva Flashcards
             </h1>
             <p className="text-sm text-slate-300 max-w-2xl leading-relaxed">
-              50+ high-frequency technical interview viva flashcards across OOPs, DBMS, OS, Networks &amp; DSA, plus 27 self-contained, non-blocking Python, C, and C++ code templates with zero infinite loops.
+              Technical interview viva flashcards and practical Python, C, and C++ placement code templates.
             </p>
           </div>
 
@@ -193,7 +193,7 @@ export const PlacementCodeVault = () => {
               <div className="text-[11px] text-slate-400 font-medium">Viva Cards</div>
             </div>
             <div className="bg-slate-800/80 border border-slate-700/80 px-4 py-3 rounded-2xl text-center shadow-sm">
-              <div className="text-2xl font-black text-cyan-400">27</div>
+              <div className="text-2xl font-black text-indigo-400">27</div>
               <div className="text-[11px] text-slate-400 font-medium">Code Templates</div>
             </div>
             <div className="bg-slate-800/80 border border-slate-700/80 px-4 py-3 rounded-2xl text-center shadow-sm">
@@ -211,7 +211,7 @@ export const PlacementCodeVault = () => {
             onClick={() => setActiveTab('viva')}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
               activeTab === 'viva'
-                ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/20'
+                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20'
                 : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700'
             }`}
           >
@@ -228,7 +228,7 @@ export const PlacementCodeVault = () => {
             onClick={() => setActiveTab('code')}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
               activeTab === 'code'
-                ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/20'
+                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20'
                 : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700'
             }`}
           >
@@ -257,7 +257,7 @@ export const PlacementCodeVault = () => {
                   onClick={() => setSelectedCategory(cat)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                     selectedCategory === cat
-                      ? 'bg-emerald-500 text-slate-950 font-black'
+                      ? 'bg-indigo-600 text-white font-bold'
                       : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700'
                   }`}
                 >

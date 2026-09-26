@@ -464,7 +464,7 @@ export const StudentEssentialsStore: React.FC<StudentEssentialsStoreProps> = ({
         <div className="flex items-center gap-2">
           <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
           <span>
-            <strong>Transparency Notice:</strong> JAVISAK participates in verified academic and equipment partner programs. Links open directly to authentic items on Amazon India. Prices and availability are subject to change.
+            <strong>Transparency Notice:</strong> MAN OF STUDY participates in verified academic and equipment partner programs. Links open directly to authentic items on Amazon India. Prices and availability are subject to change.
           </span>
         </div>
         <span className="text-[11px] text-slate-400 whitespace-nowrap">

@@ -105,6 +105,8 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeModalBranch, setActiveModalBranch] = useState<BranchRoadmap | null>(null);
   const [isExportingPdf, setIsExportingPdf] = useState<boolean>(false);
+  const [pdfExportStatus, setPdfExportStatus] = useState<'idle' | 'generating' | 'success' | 'error'>('idle');
+  const [pdfErrorMessage, setPdfErrorMessage] = useState<string | null>(null);
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
   const [isSearchFocused, setIsSearchFocused] = useState<boolean>(false);
   const [navFeedback, setNavFeedback] = useState<string | null>(null);
@@ -285,13 +287,28 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
   };
 
   const handleDownloadPdf = async (branch: BranchRoadmap) => {
+    if (isExportingPdf || pdfExportStatus === 'generating') return;
     try {
       setIsExportingPdf(true);
+      setPdfExportStatus('generating');
+      setPdfErrorMessage(null);
       // Allow UI to render spinner
-      await new Promise((resolve) => setTimeout(resolve, 60));
+      await new Promise((resolve) => setTimeout(resolve, 80));
       generateRoadmapPdf(branch);
+      setPdfExportStatus('success');
+      setTimeout(() => {
+        setPdfExportStatus('idle');
+      }, 3000);
     } catch (err) {
-      console.error('PDF export failed:', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('PDF export failed:', err);
+      }
+      setPdfExportStatus('error');
+      setPdfErrorMessage('PDF generation failed. Please try again.');
+      setTimeout(() => {
+        setPdfExportStatus('idle');
+        setPdfErrorMessage(null);
+      }, 4000);
     } finally {
       setIsExportingPdf(false);
     }
@@ -311,18 +328,18 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
 
   return (
     <div id="engineering-roadmaps-hub" className="space-y-6">
-      {/* Top Banner Header: Futuristic Slate/Cyan Tech Grid */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-950 to-cyan-950 text-white border border-cyan-500/25 p-5 sm:p-7 shadow-xl">
+      {/* Top Banner Header: Futuristic Slate/Indigo Tech Grid */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-950 to-indigo-950 text-white border border-indigo-500/25 p-5 sm:p-7 shadow-xl">
         {/* Subtle Tech Grid Lines */}
-        <div className="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,#06b6d418_1px,transparent_1px),linear-gradient(to_bottom,#06b6d418_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+        <div className="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,#6366f118_1px,transparent_1px),linear-gradient(to_bottom,#6366f118_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 
-        {/* Ambient Cyan/Indigo Glows */}
-        <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-cyan-500/15 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-16 left-1/4 w-64 h-64 rounded-full bg-indigo-500/15 blur-3xl pointer-events-none" />
+        {/* Ambient Indigo Glows */}
+        <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-indigo-500/15 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-16 left-1/4 w-64 h-64 rounded-full bg-blue-500/15 blur-3xl pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 backdrop-blur-xs">
-            <Compass className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 backdrop-blur-xs">
+            <Compass className="w-3.5 h-3.5 text-indigo-400" />
             <span>20+ DEGREE &amp; CAREER BLUEPRINTS • ZERO SERVER CALLS</span>
           </div>
 
@@ -331,14 +348,14 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-3xl">
-            Actionable semester blueprints, honest market realities, essential industry tech stacks, Tier-1 vs Tier-3 recruitment dynamics, and 1-click official PDF downloads for Engineering, B.Sc, B.Com, and B.A. career tracks.
+            Actionable semester blueprints, essential tech stacks, and career roadmaps for students.
           </p>
 
           <div className="flex flex-wrap items-center gap-3 pt-2">
             <button
               id="roadmap-share-link"
               onClick={handleShareHub}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-98 text-slate-200 hover:text-white text-xs sm:text-sm font-semibold border border-cyan-500/30 transition-all cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-98 text-slate-200 hover:text-white text-xs sm:text-sm font-semibold border border-indigo-500/30 transition-all cursor-pointer shadow-xs"
             >
               {copiedLink ? (
                 <>
@@ -347,7 +364,7 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
                 </>
               ) : (
                 <>
-                  <Share2 className="w-4 h-4 text-cyan-400" />
+                  <Share2 className="w-4 h-4 text-indigo-400" />
                   <span>Share Roadmaps Hub</span>
                 </>
               )}
@@ -357,7 +374,7 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
       </div>
 
       {/* Real-time Search & Navigation Bar */}
-      <div className="bg-white rounded-2xl border-2 border-indigo-100 p-4 sm:p-6 shadow-sm space-y-5">
+      <div className="bg-white dark:bg-slate-900/90 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 shadow-sm space-y-5">
         
         {/* Prominent Stream Selector Toggle (MPC vs BiPC) */}
         <div className="space-y-2.5">
@@ -732,6 +749,8 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
           onClose={handleCloseBranchModal}
           onDownloadPdf={handleDownloadPdf}
           isExportingPdf={isExportingPdf}
+          pdfExportStatus={pdfExportStatus}
+          pdfErrorMessage={pdfErrorMessage}
           onNavigateToStore={onNavigateToStore}
         />
       )}

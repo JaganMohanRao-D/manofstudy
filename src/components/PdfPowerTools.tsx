@@ -1,271 +1,373 @@
 import React, { useState, useMemo } from 'react';
 import {
   FileText,
-  Search,
-  Sparkles,
-  ShieldCheck,
-  Zap,
-  Lock,
-  Layers,
-  FileCheck,
-  SlidersHorizontal,
-  Scissors,
   Files,
+  Scissors,
   FileSpreadsheet,
   FileCode,
-  Image as ImageIcon,
-  Minimize2,
-  Stamp,
   RotateCw,
-  Unlock,
+  Crop,
   Wrench,
-  Hash,
+  Image as ImageIcon,
   Camera,
-  SearchCode,
+  Minimize2,
+  PenTool,
+  Stamp,
+  Hash,
+  AlignLeft,
+  Tag,
+  Sparkles,
+  Lock,
+  Unlock,
   GitCompare,
   EyeOff,
-  Crop,
-  FormInput,
-  Bot,
-  FileDown,
-  ArrowRight,
-  CheckCircle2,
+  Layers,
+  Search,
+  ArrowUpDown,
+  ShieldCheck,
+  ChevronRight,
+  SlidersHorizontal,
 } from 'lucide-react';
-import { PdfToolCategory, PdfToolDefinition } from '../types';
 import { ALL_PDF_TOOLS } from '../data/pdfToolsData';
+import { PdfToolDefinition, PdfToolCategory } from '../types';
 import { PdfToolModal } from './pdf-tools/PdfToolModal';
+import { PowerPointToPdfStudio } from './pdf-tools/PowerPointToPdfStudio';
+import { PdfToolsForFree } from './PdfToolsForFree';
+
+export { PdfToolsForFree, PowerPointToPdfStudio };
 
 export const PdfPowerTools: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<PdfToolCategory>('all');
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [activeTool, setActiveTool] = useState<PdfToolDefinition | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeModalTool, setActiveModalTool] = useState<PdfToolDefinition | null>(null);
+  const [viewMode, setViewMode] = useState<'hub' | 'classic' | 'pptx-studio'>('hub');
 
-  // Category counts
-  const categoryCounts = useMemo(() => {
-    return {
-      all: ALL_PDF_TOOLS.length,
-      convert: ALL_PDF_TOOLS.filter((t) => t.category === 'convert').length,
-      edit: ALL_PDF_TOOLS.filter((t) => t.category === 'edit').length,
-      secure: ALL_PDF_TOOLS.filter((t) => t.category === 'secure').length,
-      optimize: ALL_PDF_TOOLS.filter((t) => t.category === 'optimize').length,
-    };
-  }, []);
-
-  // Filtered tools
-  const filteredTools = useMemo(() => {
-    const q = searchQuery.toLowerCase().trim();
-    return ALL_PDF_TOOLS.filter((tool) => {
-      const matchesCat = selectedCategory === 'all' || tool.category === selectedCategory;
-      const matchesSearch =
-        !q ||
-        tool.name.toLowerCase().includes(q) ||
-        tool.tagline.toLowerCase().includes(q) ||
-        tool.description.toLowerCase().includes(q) ||
-        tool.acceptedFileTypes.toLowerCase().includes(q);
-      return matchesCat && matchesSearch;
-    });
-  }, [selectedCategory, searchQuery]);
-
-  // Icon mapping for each tool
+  // Map icons dynamically
   const getToolIcon = (toolId: string) => {
     switch (toolId) {
-      case 'merge-pdf':
-        return <Files className="w-5 h-5 text-sky-600" />;
-      case 'split-pdf':
-        return <Scissors className="w-5 h-5 text-sky-600" />;
-      case 'compress-pdf':
-        return <Minimize2 className="w-5 h-5 text-emerald-600" />;
-      case 'pdf-to-word':
-        return <FileText className="w-5 h-5 text-blue-600" />;
-      case 'pdf-to-powerpoint':
-        return <Layers className="w-5 h-5 text-amber-600" />;
-      case 'pdf-to-excel':
-        return <FileSpreadsheet className="w-5 h-5 text-emerald-600" />;
       case 'word-to-pdf':
-        return <FileText className="w-5 h-5 text-indigo-600" />;
+      case 'pdf-to-word':
+        return FileText;
       case 'powerpoint-to-pdf':
-        return <Layers className="w-5 h-5 text-orange-600" />;
+      case 'pdf-to-powerpoint':
+        return Layers;
       case 'excel-to-pdf':
-        return <FileSpreadsheet className="w-5 h-5 text-teal-600" />;
-      case 'edit-pdf':
-        return <Stamp className="w-5 h-5 text-purple-600" />;
-      case 'pdf-to-jpg':
-        return <ImageIcon className="w-5 h-5 text-rose-600" />;
-      case 'jpg-to-pdf':
-        return <ImageIcon className="w-5 h-5 text-pink-600" />;
-      case 'sign-pdf':
-        return <Sparkles className="w-5 h-5 text-sky-600" />;
-      case 'watermark-pdf':
-        return <Stamp className="w-5 h-5 text-indigo-600" />;
-      case 'rotate-pdf':
-        return <RotateCw className="w-5 h-5 text-cyan-600" />;
+      case 'pdf-to-excel':
+        return FileSpreadsheet;
       case 'html-to-pdf':
-        return <FileCode className="w-5 h-5 text-violet-600" />;
-      case 'unlock-pdf':
-        return <Unlock className="w-5 h-5 text-emerald-600" />;
-      case 'protect-pdf':
-        return <Lock className="w-5 h-5 text-amber-600" />;
-      case 'organize-pdf':
-        return <Layers className="w-5 h-5 text-blue-600" />;
+        return FileCode;
       case 'pdf-to-pdfa':
-        return <FileCheck className="w-5 h-5 text-slate-700" />;
-      case 'repair-pdf':
-        return <Wrench className="w-5 h-5 text-rose-600" />;
-      case 'page-numbers':
-        return <Hash className="w-5 h-5 text-sky-600" />;
-      case 'scan-to-pdf':
-        return <Camera className="w-5 h-5 text-teal-600" />;
-      case 'ocr-pdf':
-        return <SearchCode className="w-5 h-5 text-indigo-600" />;
-      case 'compare-pdf':
-        return <GitCompare className="w-5 h-5 text-purple-600" />;
-      case 'redact-pdf':
-        return <EyeOff className="w-5 h-5 text-rose-700" />;
+        return ShieldCheck;
+      case 'merge-pdf':
+        return Files;
+      case 'split-pdf':
+        return Scissors;
+      case 'extract-pages':
+        return Files;
+      case 'organize-pdf':
+        return ArrowUpDown;
+      case 'rotate-pdf':
+        return RotateCw;
       case 'crop-pdf':
-        return <Crop className="w-5 h-5 text-blue-600" />;
-      case 'pdf-forms':
-        return <FormInput className="w-5 h-5 text-sky-600" />;
-      case 'ai-summarizer':
-        return <Bot className="w-5 h-5 text-sky-600" />;
-      case 'translate-markdown':
-        return <FileDown className="w-5 h-5 text-emerald-600" />;
+        return Crop;
+      case 'repair-pdf':
+        return Wrench;
+      case 'images-to-pdf':
+      case 'pdf-to-jpg':
+        return ImageIcon;
+      case 'image-compressor':
+        return Sparkles;
+      case 'scan-to-pdf':
+        return Camera;
+      case 'compress-pdf':
+        return Minimize2;
+      case 'sign-pdf':
+        return PenTool;
+      case 'watermark-pdf':
+        return Stamp;
+      case 'page-numbers':
+        return Hash;
+      case 'pdf-to-text':
+        return AlignLeft;
+      case 'pdf-metadata':
+        return Tag;
+      case 'summarize-pdf':
+        return Sparkles;
+      case 'ocr-pdf':
+        return Search;
+      case 'protect-pdf':
+        return Lock;
+      case 'unlock-pdf':
+        return Unlock;
+      case 'compare-pdf':
+        return GitCompare;
+      case 'redact-pdf':
+        return EyeOff;
       default:
-        return <FileText className="w-5 h-5 text-sky-600" />;
+        return FileText;
     }
   };
 
+  const categories: { id: PdfToolCategory; label: string; count: number }[] = useMemo(() => {
+    return [
+      { id: 'all', label: 'All Tools', count: ALL_PDF_TOOLS.length },
+      { id: 'convert', label: 'Document Conversion', count: ALL_PDF_TOOLS.filter((t) => t.category === 'convert').length },
+      { id: 'manage', label: 'PDF Management', count: ALL_PDF_TOOLS.filter((t) => t.category === 'manage').length },
+      { id: 'image', label: 'PDF & Images', count: ALL_PDF_TOOLS.filter((t) => t.category === 'image').length },
+      { id: 'utilities', label: 'Text & Utilities', count: ALL_PDF_TOOLS.filter((t) => t.category === 'utilities').length },
+    ];
+  }, []);
+
+  const filteredTools = useMemo(() => {
+    const q = searchQuery.toLowerCase().trim();
+    return ALL_PDF_TOOLS.filter((tool) => {
+      const matchesCategory = selectedCategory === 'all' || tool.category === selectedCategory;
+      if (!matchesCategory) return false;
+      if (!q) return true;
+
+      return (
+        tool.name.toLowerCase().includes(q) ||
+        tool.tagline.toLowerCase().includes(q) ||
+        (tool.subtitle && tool.subtitle.toLowerCase().includes(q)) ||
+        tool.description.toLowerCase().includes(q) ||
+        (tool.keywords && tool.keywords.some((k) => k.toLowerCase().includes(q))) ||
+        (tool.fileHint && tool.fileHint.toLowerCase().includes(q))
+      );
+    });
+  }, [selectedCategory, searchQuery]);
+
+  if (viewMode === 'classic') {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between px-2">
+          <button
+            type="button"
+            onClick={() => setViewMode('hub')}
+            className="text-xs font-semibold text-pink-700 hover:text-pink-800 flex items-center gap-1.5 cursor-pointer"
+          >
+            ← Switch to 30+ Tools Hub
+          </button>
+          <span className="text-xs text-slate-500">Classic Inline Quick Workspace</span>
+        </div>
+        <PdfToolsForFree />
+      </div>
+    );
+  }
+
+  if (viewMode === 'pptx-studio') {
+    return (
+      <PowerPointToPdfStudio onBackToHub={() => setViewMode('hub')} />
+    );
+  }
+
   return (
-    <div id="pdf-power-tools-container" className="space-y-4">
+    <div className="space-y-6">
+      {/* Header Banner */}
+      <div className="bg-white border border-pink-200/80 rounded-2xl p-6 sm:p-7 shadow-xs">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold tracking-wide bg-pink-100 text-pink-700 border border-pink-200">
+                100% Free &amp; Offline
+              </span>
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                Zero Cloud Uploads
+              </span>
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                30+ High-Speed Tools
+              </span>
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                Indian Exam Presets
+              </span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              free pdf tools for students
+            </h1>
+            <p className="text-sm text-slate-600 leading-relaxed max-w-3xl">
+              Complete client-side PDF and document suite. Convert Word, PPT, Excel, split, merge, compress, sign, OCR, and format documents directly in your browser.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3 shrink-0 flex-wrap sm:flex-nowrap">
+            <button
+              type="button"
+              onClick={() => setViewMode('pptx-studio')}
+              className="px-3.5 py-2 text-xs font-semibold text-pink-700 bg-pink-50 hover:bg-pink-100 border border-pink-200 rounded-xl transition-colors cursor-pointer flex items-center gap-1.5"
+              title="Open PowerPoint to PDF Studio"
+            >
+              <Layers className="w-3.5 h-3.5 text-pink-600" />
+              <span>PPTX to PDF Studio</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('classic')}
+              className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl transition-colors cursor-pointer flex items-center gap-1.5"
+              title="Switch to inline classic view"
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5 text-slate-500" />
+              <span>Classic View</span>
+            </button>
+            <div className="w-10 h-10 rounded-xl bg-pink-50 border border-pink-200 flex items-center justify-center text-pink-600 shadow-xs">
+              <ShieldCheck className="w-5 h-5" />
+            </div>
+          </div>
+        </div>
+
+        {/* Indian Exam Shortcuts Pill */}
+        <div className="mt-5 pt-4 border-t border-slate-100 flex flex-wrap items-center gap-2">
+          <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5 text-pink-600" />
+            Exam Essentials:
+          </span>
+          {[
+            { id: 'powerpoint-to-pdf', label: 'PowerPoint (.pptx) to PDF (16:9 / 4:3)' },
+            { id: 'extract-pages', label: 'Extract Admit Card / Marksheet' },
+            { id: 'compress-pdf', label: 'Compress < 200 KB / 100 KB' },
+            { id: 'merge-pdf', label: 'Merge Certificates' },
+            { id: 'pdf-to-word', label: 'PDF to Word (.docx)' },
+            { id: 'images-to-pdf', label: 'Photo/ID to PDF' },
+          ].map((examTool) => {
+            const toolDef = ALL_PDF_TOOLS.find((t) => t.id === examTool.id);
+            return (
+              <button
+                key={examTool.id}
+                type="button"
+                onClick={() => {
+                  if (examTool.id === 'powerpoint-to-pdf') {
+                    setViewMode('pptx-studio');
+                  } else if (toolDef) {
+                    setActiveModalTool(toolDef);
+                  }
+                }}
+                className="px-2.5 py-1 rounded-lg text-xs font-medium bg-pink-50/70 hover:bg-pink-100/80 text-pink-800 border border-pink-200/70 transition-colors cursor-pointer flex items-center gap-1"
+              >
+                <span>{examTool.label}</span>
+                <ChevronRight className="w-3 h-3 text-pink-500" />
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Filter and Search Bar */}
-      <div
-        id="pdf-filter-bar"
-        className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4"
-      >
-        {/* Category Pills */}
-        <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
-          <button
-            onClick={() => setSelectedCategory('all')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
-              selectedCategory === 'all'
-                ? 'bg-sky-500 text-white shadow-xs'
-                : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
-            }`}
-          >
-            All Tools ({categoryCounts.all})
-          </button>
-          <button
-            onClick={() => setSelectedCategory('convert')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
-              selectedCategory === 'convert'
-                ? 'bg-sky-500 text-white shadow-xs'
-                : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
-            }`}
-          >
-            Convert ({categoryCounts.convert})
-          </button>
-          <button
-            onClick={() => setSelectedCategory('edit')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
-              selectedCategory === 'edit'
-                ? 'bg-sky-500 text-white shadow-xs'
-                : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
-            }`}
-          >
-            Edit &amp; Organize ({categoryCounts.edit})
-          </button>
-          <button
-            onClick={() => setSelectedCategory('secure')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
-              selectedCategory === 'secure'
-                ? 'bg-sky-500 text-white shadow-xs'
-                : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
-            }`}
-          >
-            Secure &amp; Repair ({categoryCounts.secure})
-          </button>
-          <button
-            onClick={() => setSelectedCategory('optimize')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
-              selectedCategory === 'optimize'
-                ? 'bg-sky-500 text-white shadow-xs'
-                : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
-            }`}
-          >
-            Optimize &amp; AI ({categoryCounts.optimize})
-          </button>
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        {/* Category Tabs */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
+          {categories.map((cat) => (
+            <button
+              key={cat.id}
+              type="button"
+              onClick={() => setSelectedCategory(cat.id)}
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                selectedCategory === cat.id
+                  ? 'bg-pink-600 text-white shadow-xs'
+                  : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+              }`}
+            >
+              {cat.label} ({cat.count})
+            </button>
+          ))}
         </div>
 
         {/* Search Input */}
-        <div className="relative w-full md:w-72 shrink-0">
+        <div className="relative sm:w-72">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
+            placeholder="Search 30+ tools (e.g. Word, SSC, Compress)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search PDF tools..."
-            className="w-full pl-9 pr-4 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white transition-all"
+            className="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-slate-200 bg-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500/20 focus:border-pink-500 transition-all"
           />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery('')}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 hover:text-slate-600 cursor-pointer"
+            >
+              ×
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Tools Grid (30 Tools) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {filteredTools.map((tool) => (
-          <div
-            key={tool.id}
-            id={`pdf-card-${tool.id}`}
-            onClick={() => setActiveTool(tool)}
-            className="group bg-white border border-slate-200 hover:border-sky-300 rounded-xl p-5 shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between space-y-4 hover:-translate-y-0.5"
-          >
-            <div className="space-y-3">
-              <div className="flex items-start justify-between gap-2">
-                <div className="w-10 h-10 rounded-lg bg-slate-50 border border-slate-200/80 group-hover:bg-sky-50 group-hover:border-sky-200 flex items-center justify-center transition-colors">
-                  {getToolIcon(tool.id)}
-                </div>
-                {tool.badge && (
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200 group-hover:bg-sky-50 group-hover:text-sky-700 group-hover:border-sky-200 transition-colors">
-                    {tool.badge}
-                  </span>
-                )}
-              </div>
-
-              <div>
-                <h3 className="text-sm font-bold text-slate-900 group-hover:text-sky-700 transition-colors">
-                  {tool.name}
-                </h3>
-                <p className="text-xs text-slate-500 line-clamp-2 mt-1 leading-relaxed">
-                  {tool.tagline}
-                </p>
-              </div>
-            </div>
-
-            <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-sky-600 group-hover:text-sky-700">
-              <span>Open Tool</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {filteredTools.length === 0 && (
-        <div className="bg-white border border-slate-200 rounded-xl p-12 text-center space-y-3 shadow-sm">
-          <p className="text-sm font-semibold text-slate-800">No PDF tools found matching "{searchQuery}"</p>
+      {/* Tools Grid */}
+      {filteredTools.length === 0 ? (
+        <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center space-y-3">
+          <Search className="w-8 h-8 text-slate-300 mx-auto" />
+          <h3 className="text-base font-bold text-slate-800">No matching tools found</h3>
+          <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            Try searching for common terms like "docx", "merge", "resize", "split", or "watermark".
+          </p>
           <button
+            type="button"
             onClick={() => {
               setSearchQuery('');
               setSelectedCategory('all');
             }}
-            className="px-4 py-2 text-xs font-semibold text-sky-700 bg-sky-50 border border-sky-200 rounded-lg hover:bg-sky-100"
+            className="px-4 py-2 text-xs font-semibold text-pink-700 bg-pink-50 hover:bg-pink-100 rounded-xl cursor-pointer"
           >
-            Reset Filters
+            Clear Filters
           </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5">
+          {filteredTools.map((tool) => {
+            const Icon = getToolIcon(tool.id);
+            return (
+              <button
+                key={tool.id}
+                type="button"
+                onClick={() => {
+                  if (tool.id === 'powerpoint-to-pdf') {
+                    setViewMode('pptx-studio');
+                  } else {
+                    setActiveModalTool(tool);
+                  }
+                }}
+                className="group p-4 bg-white hover:bg-pink-50/20 border border-slate-200 hover:border-pink-300 rounded-2xl text-left transition-all duration-150 shadow-xs hover:shadow-sm flex flex-col justify-between gap-3 cursor-pointer"
+              >
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-slate-50 group-hover:bg-pink-100 group-hover:text-pink-700 text-slate-700 flex items-center justify-center transition-colors">
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    {tool.badge && (
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-pink-700 bg-pink-50 px-2 py-0.5 rounded-md border border-pink-100">
+                        {tool.badge}
+                      </span>
+                    )}
+                  </div>
+
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900 group-hover:text-pink-700 transition-colors">
+                      {tool.name}
+                    </h3>
+                    <p className="text-xs text-slate-500 line-clamp-2 mt-1 leading-relaxed">
+                      {tool.subtitle || tool.tagline}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+                  <span className="font-mono">{tool.fileHint || 'Multiple formats'}</span>
+                  <span className="font-semibold text-pink-600 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
+                    Open <ChevronRight className="w-3 h-3" />
+                  </span>
+                </div>
+              </button>
+            );
+          })}
         </div>
       )}
 
-      {/* Active Modal Runner */}
-      {activeTool && (
-        <PdfToolModal tool={activeTool} onClose={() => setActiveTool(null)} />
+      {/* Active Modal */}
+      {activeModalTool && (
+        <PdfToolModal tool={activeModalTool} onClose={() => setActiveModalTool(null)} />
       )}
     </div>
   );
 };
+
+export default PdfPowerTools;
+

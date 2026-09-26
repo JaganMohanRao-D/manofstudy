@@ -2,6 +2,9 @@ export type WorkspaceView =
   | 'hub'
   | 'eapcet'
   | 'tg-allotments'
+  | 'tg-top-colleges'
+  | 'tg-predictor'
+  | 'tg-top-colleges'
   | 'roadmaps'
   | 'scholarships'
   | 'utilities'
@@ -17,11 +20,17 @@ export type WorkspaceView =
   | 'guides'
   | 'projects'
   | 'internships'
-  | 'humanizer';
+  | 'campus-connect'
+  | 'humanizer'
+  | 'gap-analyzer';
 
 export type ToolTab = 
   | 'eapcet-radar'
   | 'tg-allotments'
+  | 'tg-top-colleges'
+  | 'tg-predictor'
+  | 'campus-connect'
+  | 'gap-analyzer'
   | 'roadmaps'
   | 'scholarships'
   | 'pdf-tools'
@@ -37,9 +46,13 @@ export type ToolTab =
   | 'essentials'
   | 'store'
   | 'projects'
-  | 'internships';
+  | 'internships'
+  | 'guides'
+  | 'hub';
 
 export type ToolCategory = 'academic' | 'document' | 'writing' | 'counselling' | 'scholarship';
+
+export type LegalModalType = 'about' | 'contact' | 'privacy' | 'terms' | 'disclaimer';
 
 export interface SemesterPlan {
   semNumber: number;
@@ -247,7 +260,18 @@ export interface FutureGpaResult {
 
 export type ImageSizePreset = '20kb' | '50kb' | '100kb' | '200kb' | '500kb' | 'custom';
 
-export type DimensionPreset = 'original' | 'passport_in' | 'signature_in' | 'ssc_gate' | 'custom';
+export type DimensionPreset =
+  | 'original'
+  | 'passport_in'
+  | 'signature_in'
+  | 'ssc_photo'
+  | 'ssc_signature'
+  | 'gate_photo'
+  | 'gate_signature'
+  | 'upsc_photo'
+  | 'upsc_signature'
+  | 'ssc_gate'
+  | 'custom';
 
 export interface ImageResizerConfig {
   targetSizeKb: number;
@@ -395,13 +419,14 @@ export interface HumanizerResult {
 }
 
 // ----------------------------------------------------
-// Tool: Client-Side PDF Power Tools Types (30 Tools)
+// Tool: Client-Side PDF Power Tools Types (30+ Tools)
 // ----------------------------------------------------
-export type PdfToolCategory = 'all' | 'convert' | 'edit' | 'secure' | 'optimize';
+export type PdfToolCategory = 'all' | 'convert' | 'manage' | 'image' | 'utilities' | 'edit' | 'secure' | 'optimize';
 
 export type PdfToolId =
   | 'merge-pdf'
   | 'split-pdf'
+  | 'extract-pages'
   | 'compress-pdf'
   | 'pdf-to-word'
   | 'pdf-to-powerpoint'
@@ -409,9 +434,12 @@ export type PdfToolId =
   | 'word-to-pdf'
   | 'powerpoint-to-pdf'
   | 'excel-to-pdf'
+  | 'pdf-to-text'
+  | 'pdf-metadata'
   | 'edit-pdf'
   | 'pdf-to-jpg'
   | 'jpg-to-pdf'
+  | 'image-compressor'
   | 'sign-pdf'
   | 'watermark-pdf'
   | 'rotate-pdf'
@@ -435,11 +463,14 @@ export interface PdfToolDefinition {
   id: PdfToolId;
   name: string;
   tagline: string;
-  category: 'convert' | 'edit' | 'secure' | 'optimize';
+  category: 'convert' | 'manage' | 'image' | 'utilities' | 'edit' | 'secure' | 'optimize';
   badge?: string;
   acceptedFileTypes: string; // e.g., '.pdf' or '.jpg,.png,.jpeg' or '.docx,.txt' or '.xlsx,.csv'
   multipleFiles?: boolean;
   description: string;
+  subtitle?: string;
+  fileHint?: string;
+  keywords?: string[];
 }
 
 export interface PdfFileItem {
@@ -518,6 +549,52 @@ export interface InternalCalcResult {
   maxAchievableTotalPercent: number;
   shortfallMarks: number;
   cutoffBreakdown: GradeCutoffRow[];
+}
+
+export interface TgCandidateRecord {
+  rank: number;
+  name: string;
+  gender: 'M' | 'F' | string;
+  caste: string;
+  seatCategory: string;
+  region: string;
+  hallTicket: string;
+  collegeCode: string;
+  collegeName: string;
+  branchCode: string;
+  branchName: string;
+  phase?: string;
+}
+
+export interface TgBranchSummary {
+  branchCode: string;
+  branchName: string;
+  openingRank: number;
+  closingRank: number;
+  totalAllotted: number;
+}
+
+export interface TgBranchData extends TgBranchSummary {
+  collegeCode: string;
+  collegeName: string;
+  records: TgCandidateRecord[];
+}
+
+export interface TgCollegeFullData {
+  collegeCode: string;
+  collegeName: string;
+  branches: TgBranchData[];
+}
+
+export interface TgCollegeIndexItem {
+  collegeCode: string;
+  collegeName: string;
+  filename: string;
+  branchCount: number;
+  branches: TgBranchSummary[];
+  totalAllotted: number;
+  minRank: number;
+  maxRank: number;
 }
 
 

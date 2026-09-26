@@ -21,6 +21,8 @@ import {
   Wrench,
   Terminal,
   ExternalLink,
+  Loader2,
+  AlertCircle,
 } from 'lucide-react';
 import { BranchRoadmap } from '../../types';
 import { ShareRoadmapDialog } from './ShareRoadmapDialog';
@@ -32,6 +34,8 @@ export interface RoadmapModalProps {
   onClose: () => void;
   onDownloadPdf: (branch: BranchRoadmap) => void;
   isExportingPdf: boolean;
+  pdfExportStatus?: 'idle' | 'generating' | 'success' | 'error';
+  pdfErrorMessage?: string | null;
   onNavigateToStore?: (category?: string) => void;
 }
 
@@ -41,6 +45,8 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
   onClose,
   onDownloadPdf,
   isExportingPdf,
+  pdfExportStatus = 'idle',
+  pdfErrorMessage,
   onNavigateToStore,
 }) => {
   const [selectedYear, setSelectedYear] = useState<number>(1);
@@ -600,7 +606,7 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
           <div className="space-y-3 pt-6">
             <div className="flex items-center gap-2 text-slate-900 dark:text-slate-100 font-extrabold text-sm sm:text-base tracking-tight">
               <Compass className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-              <span>JAVISAK Strategic Placement Tips for {branch.code}</span>
+              <span>MAN OF STUDY Strategic Placement Tips for {branch.code}</span>
             </div>
 
             <div className="space-y-2.5">
@@ -634,7 +640,7 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
         {/* Modal Footer */}
         <div className="shrink-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
-            <span className="font-bold text-slate-800 dark:text-slate-200">Official JAVISAK Blueprint</span>
+            <span className="font-bold text-slate-800 dark:text-slate-200">Official MAN OF STUDY Blueprint</span>
             <span>•</span>
             <span>Zero server calls • 100% Client-side export</span>
           </div>
@@ -655,11 +661,36 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
             <button
               type="button"
               onClick={() => onDownloadPdf(branch)}
-              disabled={isExportingPdf}
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white font-bold text-xs shadow-xs transition-all cursor-pointer disabled:opacity-60 min-h-[40px]"
+              disabled={isExportingPdf || pdfExportStatus === 'generating'}
+              className={`flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl active:scale-98 font-bold text-xs shadow-xs transition-all cursor-pointer min-h-[40px] ${
+                pdfExportStatus === 'success'
+                  ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                  : pdfExportStatus === 'error'
+                  ? 'bg-rose-600 hover:bg-rose-700 text-white'
+                  : 'bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-60'
+              }`}
             >
-              <Download className="w-4 h-4" />
-              <span>{isExportingPdf ? 'Generating PDF...' : 'Download PDF Roadmap'}</span>
+              {isExportingPdf || pdfExportStatus === 'generating' ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Generating PDF...</span>
+                </>
+              ) : pdfExportStatus === 'success' ? (
+                <>
+                  <CheckCircle2 className="w-4 h-4 text-emerald-100" />
+                  <span>PDF downloaded successfully.</span>
+                </>
+              ) : pdfExportStatus === 'error' ? (
+                <>
+                  <AlertCircle className="w-4 h-4 text-rose-100" />
+                  <span>{pdfErrorMessage || 'PDF generation failed. Please try again.'}</span>
+                </>
+              ) : (
+                <>
+                  <Download className="w-4 h-4" />
+                  <span>Download Career Roadmap PDF</span>
+                </>
+              )}
             </button>
           </div>
         </div>

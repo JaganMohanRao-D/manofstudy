@@ -25,7 +25,7 @@ export const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     const mailtoUrl = `mailto:${supportEmail}?subject=${encodeURIComponent(
-      `[JAVISAK ${subjectCategory}] from ${senderName || 'Student'} (${senderCollege || 'College'})`
+      `[MAN OF STUDY ${subjectCategory}] from ${senderName || 'Student'} (${senderCollege || 'College'})`
     )}&body=${encodeURIComponent(message)}`;
     window.location.href = mailtoUrl;
     setIsPrepared(true);
@@ -46,21 +46,21 @@ export const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
 
       {/* Hero Header */}
       <div className="relative overflow-hidden rounded-3xl bg-slate-950 text-white border border-slate-800 p-6 sm:p-10 space-y-4 shadow-xl">
-        <div className="absolute -top-16 -right-16 w-80 h-80 rounded-full bg-blue-600/20 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-16 left-1/3 w-80 h-80 rounded-full bg-emerald-500/20 blur-3xl pointer-events-none" />
+        <div className="absolute -top-16 -right-16 w-80 h-80 rounded-full bg-emerald-600/20 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-16 left-1/3 w-80 h-80 rounded-full bg-teal-500/20 blur-3xl pointer-events-none" />
 
         <div className="relative z-10 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-400/30">
-            <Mail className="w-3.5 h-3.5 text-blue-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+            <Mail className="w-3.5 h-3.5 text-emerald-400" />
             <span>Developer Desk &amp; Student Support</span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
-            Contact JAVISAK
+            Contact MAN OF STUDY
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-2xl leading-relaxed">
-            Have a question regarding EAPCET vacancy data, noticed a university formula discrepancy, want to report a tool bug, or have a suggestion? We respond within 24 to 48 hours.
+            Have a question regarding TG/AP EAPCET allotment data, noticed a university formula discrepancy, want to report a tool bug, or have a suggestion? We respond within 24 to 48 hours.
           </p>
         </div>
       </div>
@@ -80,7 +80,7 @@ export const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
             </div>
 
             <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
-              <span className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold truncate">
+              <span className="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-bold truncate">
                 {supportEmail}
               </span>
               <button
@@ -104,13 +104,23 @@ export const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/40 dark:to-indigo-950/40 border border-blue-200 dark:border-blue-900/60 rounded-3xl p-6 space-y-2 text-xs">
-            <span className="font-bold text-blue-950 dark:text-blue-200 uppercase tracking-wider block text-[11px]">
+          <div className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/40 dark:to-teal-950/40 border border-emerald-200 dark:border-emerald-900/60 rounded-3xl p-6 space-y-2 text-xs">
+            <span className="font-bold text-emerald-950 dark:text-emerald-200 uppercase tracking-wider block text-[11px]">
               Platform Operator
             </span>
             <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-              JAVISAK is engineered and curated by Dunna Jagan Mohan Rao (creator of PlantMokk AI). Your suggestions directly influence upcoming feature releases and academic tools.
+              MAN OF STUDY is engineered and curated by <strong>JAGAN MOHAN RAO DUNNA</strong>. Your suggestions directly influence upcoming feature releases and academic tools.
             </p>
+            <div className="pt-1">
+              <a
+                href="https://www.linkedin.com/in/jagan-mohan-rao-dunna-546b72423"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0A66C2] hover:underline"
+              >
+                <span>Connect with Founder on LinkedIn →</span>
+              </a>
+            </div>
           </div>
         </div>
 

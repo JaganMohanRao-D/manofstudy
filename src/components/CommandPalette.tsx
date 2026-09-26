@@ -23,6 +23,7 @@ import {
   Lock,
   Unlock,
   Stamp,
+  Trophy,
   FileDown,
   ChevronRight,
   MessageSquare,
@@ -33,10 +34,11 @@ import {
   Briefcase,
   Star,
   ShieldAlert,
+  Users,
+  BookOpen,
 } from 'lucide-react';
-import { ToolTab } from '../types';
+import { ToolTab, LegalModalType } from '../types';
 import { ENGINEERING_ROADMAPS } from '../data/engineeringRoadmapsData';
-import { LegalModalType } from './LegalModals';
 
 export interface CommandPaletteProps {
   isOpen: boolean;
@@ -88,6 +90,56 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
     // 1. Primary Tools
     items.push(
+      {
+        id: 'tool-gap-analyzer',
+        title: 'AI Student Gap Analyzer',
+        subtitle: 'Understand where you are, identify your skill gaps, and see what to work on next.',
+        category: 'Core Tools',
+        badge: 'AI Diagnostic',
+        icon: <Sparkles className="w-4 h-4 text-emerald-400" />,
+        keywords: ['gap', 'analyzer', 'skills', 'career', 'roadmap', 'what next', 'simulator', 'placement gap', 'ai'],
+        action: () => onSelectTool('gap-analyzer'),
+      },
+      {
+        id: 'tool-campus-connect',
+        title: 'MOS CampusConnect — Student Network',
+        subtitle: 'Real campus updates, senior guidance, and peer doubt resolution across colleges',
+        category: 'Core Tools',
+        badge: 'NEW',
+        icon: <Users className="w-4 h-4 text-emerald-500" />,
+        keywords: ['campus', 'connect', 'community', 'doubt', 'query', 'viva', 'lab', 'cbit', 'ou', 'jntu', 'vnr', 'notes', 'placement'],
+        action: () => onSelectTool('campus-connect'),
+      },
+      {
+        id: 'tool-tg-top-colleges',
+        title: 'Top B.Tech Colleges in Telangana',
+        subtitle: 'Branch-specific OC allotment analysis with optional district filtering',
+        category: 'Core Tools',
+        badge: 'Data Analysis',
+        icon: <Trophy className="w-4 h-4 text-sky-500" />,
+        keywords: ['top colleges', 'telangana colleges', 'oc rank', 'median rank', 'district', 'eapcet', 'tg'],
+        action: () => onSelectTool('tg-top-colleges' as ToolTab),
+      },
+      {
+        id: 'tool-tg-predictor',
+        title: 'TG EAPCET College Predictor',
+        subtitle: 'Check admission chances across 151 colleges using 71,646 official 2026 allotment cutoffs',
+        category: 'Core Tools',
+        badge: '2026 Phase-3 Data',
+        icon: <Compass className="w-4 h-4 text-emerald-500" />,
+        keywords: ['predictor', 'college predictor', 'tg predictor', 'rank buffer', 'admission chances', 'closing rank', 'web options', 'tg eapcet', 'cutoff', 'counseling', 'buffer'],
+        action: () => onSelectTool('tg-predictor'),
+      },
+      {
+        id: 'tool-tg-top-colleges',
+        title: 'Top B.Tech Colleges in Telangana',
+        subtitle: 'Data-driven rankings based on valid OC allotment ranks for every engineering branch',
+        category: 'Core Tools',
+        badge: 'OC Rankings',
+        icon: <Award className="w-4 h-4 text-amber-500" />,
+        keywords: ['top colleges', 'ranking', 'best engineering colleges', 'top btech', 'telangana top colleges', 'oc rank', 'median rank', 'cse colleges', 'cbit', 'vnr', 'jnth'],
+        action: () => onSelectTool('tg-top-colleges'),
+      },
       {
         id: 'tool-tg-allotments',
         title: 'TG EAPCET 2026 Final Phase Allotments & Cutoffs',
@@ -144,12 +196,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'tool-pdf-tools',
-        title: '30+ PDF Power Tools',
-        subtitle: 'Zero-server WebAssembly PDF merge, split, compress, protect & convert',
+        title: 'free pdf tools for students',
+        subtitle: 'In-browser PDF merge, split, excel to pdf, image to pdf, protect & AI summary',
         category: 'Core Tools',
-        badge: 'PDF Suite',
+        badge: 'free pdf tools for students',
         icon: <FileText className="w-4 h-4 text-emerald-500" />,
-        keywords: ['pdf', 'merge', 'compress', 'split', 'watermark', 'convert', 'protect', 'unlock', 'word to pdf'],
+        keywords: ['pdf', 'merge', 'split', 'excel to pdf', 'image to pdf', 'protect', 'summarize', 'free pdf tools for students'],
         action: () => onSelectTool('pdf-tools'),
       },
       {
@@ -241,6 +293,34 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         icon: <ShoppingBag className="w-4 h-4 text-amber-500" />,
         keywords: ['store', 'gear', 'essentials', 'calculator', 'casio', 'fx991cw', 'laptop', 'amazon', 'books', 'pyq', 'keyboard', 'mouse', 'headphones'],
         action: () => onSelectTool('essentials'),
+      },
+      {
+        id: 'tool-guides-hub',
+        title: 'MOS Student Knowledge HUB (9 Chapters)',
+        subtitle: 'Chapter 9: Demystifying Engineering Seat Allotment, OC quota math & Phase-2 sliding rules',
+        category: 'Core Tools',
+        badge: '9 Chapters',
+        icon: <BookOpen className="w-4 h-4 text-blue-500" />,
+        keywords: [
+          'guides',
+          'editorial',
+          'chapter 9',
+          'reservation',
+          'quota',
+          'seat allotment',
+          'open category',
+          'oc',
+          'general',
+          'ews',
+          'obc',
+          'sc',
+          'st',
+          'phase 2',
+          'sliding',
+          'attendance',
+          'knowledge hub',
+        ],
+        action: () => onSelectTool('guides'),
       }
     );
 
@@ -326,13 +406,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         },
       },
       {
-        id: 'action-support-javisak',
-        title: '☕ Support the Developer / Keep JAVISAK Free',
+        id: 'action-support-mos',
+        title: '☕ Support the Developer / Keep MAN OF STUDY Free',
         subtitle: 'Help us pay server and scraper bills with a quick contribution via UPI',
         category: 'Quick Actions',
         badge: 'Donate',
         icon: <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />,
-        keywords: ['support', 'donate', 'donation', 'upi', 'developer', 'chai', 'coffee', 'fund', 'contribute', 'free forever'],
+        keywords: ['support', 'donate', 'donation', 'upi', 'developer', 'chai', 'coffee', 'fund', 'contribute', 'free forever', 'man of study', 'mos'],
         action: () => onOpenSupport?.(),
       },
       {
@@ -468,7 +548,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           </span>
           {[
             { label: 'All', q: '' },
-            { label: 'PDF Suite', q: 'pdf' },
+            { label: 'free pdf tools for students', q: 'pdf' },
             { label: 'Roadmaps', q: 'roadmap' },
             { label: 'Robotics', q: 'robotics' },
             { label: 'CSE', q: 'cse' },
