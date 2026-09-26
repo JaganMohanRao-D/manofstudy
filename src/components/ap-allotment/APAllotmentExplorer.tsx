@@ -258,7 +258,7 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
               </select>
             </label>
             <APCollegeSelector
-              colleges={collegesList.map((college) => ({ collegeCode: college.collegeCode, collegeName: college.collegeName }))}
+              colleges={collegesList.map((college) => ({ collegeCode: college.collegeCode, collegeName: college.collegeName, file: college.file, hasData: true, recordCount: college.recordCount, minRank: 0, maxRank: 0, branchCount: 0, branches: [] }))}
               selectedCollegeCode={selectedCollegeCode}
               onSelectCollege={onCollegeChange}
               isLoading={isLoading}
