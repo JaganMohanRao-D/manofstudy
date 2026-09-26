@@ -278,3 +278,9 @@
   .mos-fade-up, .mos-float, .mos-scale-in { animation: none !important; }
   .mos-stat-card, .mos-ap-control { transition: none !important; }
 }
+
+@media (max-width: 768px) {
+  .mos-fade-up { animation-duration: .5s !important; }
+  .mos-float { animation-duration: 5s !important; }
+  .mos-scale-in { animation-duration: .22s !important; }
+}
