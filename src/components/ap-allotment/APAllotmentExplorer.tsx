@@ -8,7 +8,6 @@ import {
   AllotmentRecord,
   getCollegeList,
   getCollegeDetails,
-  loadAllColleges,
   searchAllotments,
   getDatasetSummary,
 } from '../../services/apEapcetAllotmentService';
@@ -131,9 +130,7 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
   }, [selectedYear, selectedCollegeCode]);
 
   const visibleRecords = useMemo(() => {
-    const source = selectedCollegeCode === 'ALL'
-      ? allColleges.flatMap((college) => college.allRecords)
-      : (collegeData?.allRecords ?? []);
+    const source = selectedCollegeCode === 'ALL' ? [] : (collegeData?.allRecords ?? []);
 
     return source.filter((record) => {
       if (selectedPhase !== 'ALL' && record.phase !== Number(selectedPhase)) return false;
@@ -147,17 +144,6 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
       return true;
     });
   }, [allColleges, collegeData, selectedCollegeCode, selectedPhase, selectedBranchCode, filters]);
-
-  useEffect(() => {
-    if (selectedCollegeCode !== 'ALL') return;
-    let cancelled = false;
-    setIsLoading(true);
-    loadAllColleges(selectedYear)
-      .then((data) => { if (!cancelled) setAllColleges(data); })
-      .catch((error) => { if (!cancelled) setLoadError(error instanceof Error ? error.message : 'Unable to load AP allotment records.'); })
-      .finally(() => { if (!cancelled) setIsLoading(false); });
-    return () => { cancelled = true; };
-  }, [selectedYear, selectedCollegeCode]);
 
   useEffect(() => {
     const available = new Set((collegeData?.branches ?? []).map((branch) => branch.branch_code));
@@ -198,8 +184,8 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
     return Array.from(map.entries()).sort((a, b) => a[0].localeCompare(b[0]));
   }, [visibleRecords]);
 
-  const bestRank = visibleRecords.length ? Math.min(...visibleRecords.map((r) => r.rank)) : 0;
-  const lastRank = visibleRecords.length ? Math.max(...visibleRecords.map((r) => r.rank)) : 0;
+  const bestRank = selectedCollegeCode === 'ALL' ? Number(datasetSummary?.minRank ?? 0) : (visibleRecords.length ? Math.min(...visibleRecords.map((r) => r.rank)) : 0);
+  const lastRank = selectedCollegeCode === 'ALL' ? Number(datasetSummary?.maxRank ?? 0) : (visibleRecords.length ? Math.max(...visibleRecords.map((r) => r.rank)) : 0);
 
   const currentCollege = selectedCollegeCode !== 'ALL' ? collegeData : null;
   const branchLabel = selectedBranchCode === 'ALL'
