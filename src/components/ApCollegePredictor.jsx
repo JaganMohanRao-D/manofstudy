@@ -10,7 +10,7 @@ import {
   BarChart3,
   ExternalLink,
 } from 'lucide-react';
-import { AP_EAPCET_COLLEGES } from '../data/apEapcetCollegeManifest';
+import { get2026BranchSummaries } from '../services/apEapcetAllotmentService';
 import APAllotmentExplorer from './ap-allotment/APAllotmentExplorer';
 
 export const POPULAR_BRANCHES = [
@@ -45,6 +45,15 @@ export default function ApCollegePredictor({
   const [predictorBranchFilter, setPredictorBranchFilter] = useState('ALL');
   const [predictorChanceFilter, setPredictorChanceFilter] = useState('ALL');
   const [predictorSearchTerm, setPredictorSearchTerm] = useState('');
+  const [branchSummaries, setBranchSummaries] = useState([]);
+  const [predictorLoading, setPredictorLoading] = useState(true);
+
+  useEffect(() => {
+    let alive = true;
+    setPredictorLoading(true);
+    get2026BranchSummaries().then(data => { if (alive) setBranchSummaries(data); }).catch(() => { if (alive) setBranchSummaries([]); }).finally(() => { if (alive) setPredictorLoading(false); });
+    return () => { alive = false; };
+  }, []);
   const [selectedCollegeForExplorer, setSelectedCollegeForExplorer] = useState(initialCollegeCode);
   const [selectedBranchForExplorer, setSelectedBranchForExplorer] = useState(initialBranchCode);
 
@@ -54,102 +63,45 @@ export default function ApCollegePredictor({
     }
   }, [initialTab]);
 
-  // Predictor Calculation
+  // Predictor Calculation — deterministic from AP EAPCET 2026 allotment records only.
   const predictorResults = useMemo(() => {
     const numRank = parseInt(userRank.replace(/,/g, ''), 10);
     if (isNaN(numRank) || numRank <= 0) return [];
 
     const results = [];
+    branchSummaries.forEach((br) => {
+      if (predictorBranchFilter !== 'ALL' && br.branchCode !== predictorBranchFilter) return;
+      const categoryStats = br.categoryRanks?.[userCategory];
+      const closingRank = categoryStats?.maxRank || br.maxRank || 0;
+      const openingRank = categoryStats?.minRank || br.minRank || 0;
+      if (!closingRank) return;
 
-    AP_EAPCET_COLLEGES.forEach((col) => {
-      if (!col.hasData || !col.branches) return;
+      let chance = 'NEAR OBSERVED RANGE';
+      if (numRank <= openingRank) chance = 'STRONG MATCH';
+      else if (numRank <= closingRank) chance = 'WITHIN OBSERVED RANGE';
 
-      col.branches.forEach((br) => {
-        if (predictorBranchFilter !== 'ALL' && br.branchCode !== predictorBranchFilter) {
-          return;
-        }
-
-        const closingRank = br.maxRank || 0;
-        const minRank = br.minRank || 0;
-        if (closingRank === 0) return;
-
-        let factor = 1.0;
-        if (userCategory === 'EWS') factor = 1.08;
-        else if (userCategory === 'BC_A') factor = 1.15;
-        else if (userCategory === 'BC_B') factor = 1.12;
-        else if (userCategory === 'BC_C') factor = 1.18;
-        else if (userCategory === 'BC_D') factor = 1.14;
-        else if (userCategory === 'BC_E') factor = 1.25;
-        else if (userCategory === 'SC') factor = 1.45;
-        else if (userCategory === 'ST') factor = 1.65;
-
-        if (userGender === 'F') factor *= 1.08;
-
-        const effectiveClosingRank = Math.round(closingRank * factor);
-        const safeRankThreshold = Math.round(effectiveClosingRank * 0.82);
-
-        let chance = 'AMBITIOUS';
-        let chanceScore = 20;
-
-        if (numRank <= safeRankThreshold) {
-          chance = 'SAFE';
-          chanceScore = 90;
-        } else if (numRank <= effectiveClosingRank) {
-          chance = 'MODERATE';
-          chanceScore = 65;
-        } else if (numRank <= Math.round(effectiveClosingRank * 1.18)) {
-          chance = 'AMBITIOUS';
-          chanceScore = 35;
-        } else {
-          return;
-        }
-
-        results.push({
-          collegeCode: col.collegeCode,
-          collegeName: col.collegeName,
-          branchCode: br.branchCode,
-          branchName: br.branchName,
-          closingRank,
-          minRank,
-          effectiveClosingRank,
-          chance,
-          chanceScore,
-          diff: effectiveClosingRank - numRank,
-        });
+      results.push({
+        collegeCode: br.collegeCode,
+        collegeName: br.collegeName,
+        branchCode: br.branchCode,
+        branchName: br.branchName,
+        closingRank,
+        minRank: openingRank,
+        effectiveClosingRank: closingRank,
+        chance,
+        chanceScore: chance === 'STRONG MATCH' ? 90 : chance === 'WITHIN OBSERVED RANGE' ? 70 : 40,
+        diff: closingRank - numRank,
       });
     });
 
     let filtered = results;
-    if (predictorChanceFilter !== 'ALL') {
-      filtered = filtered.filter((r) => r.chance === predictorChanceFilter);
-    }
-
+    if (predictorChanceFilter !== 'ALL') filtered = filtered.filter(r => r.chance === predictorChanceFilter);
     if (predictorSearchTerm.trim()) {
       const q = predictorSearchTerm.trim().toLowerCase();
-      filtered = filtered.filter(
-        (r) =>
-          r.collegeCode.toLowerCase().includes(q) ||
-          r.collegeName.toLowerCase().includes(q) ||
-          r.branchCode.toLowerCase().includes(q) ||
-          r.branchName.toLowerCase().includes(q)
-      );
+      filtered = filtered.filter(r => r.collegeCode.toLowerCase().includes(q) || r.collegeName.toLowerCase().includes(q) || r.branchCode.toLowerCase().includes(q) || r.branchName.toLowerCase().includes(q));
     }
-
-    return filtered.sort((a, b) => {
-      const chanceOrder = { SAFE: 1, MODERATE: 2, AMBITIOUS: 3 };
-      if (chanceOrder[a.chance] !== chanceOrder[b.chance]) {
-        return chanceOrder[a.chance] - chanceOrder[b.chance];
-      }
-      return b.diff - a.diff;
-    });
-  }, [
-    userRank,
-    userCategory,
-    userGender,
-    predictorBranchFilter,
-    predictorChanceFilter,
-    predictorSearchTerm,
-  ]);
+    return filtered.sort((a,b) => b.diff - a.diff);
+  }, [userRank, userCategory, predictorBranchFilter, predictorChanceFilter, predictorSearchTerm, branchSummaries]);
 
   return (
     <div>
@@ -198,13 +150,13 @@ export default function ApCollegePredictor({
             <div className="text-center space-y-2">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold">
                 <Sparkles className="w-4 h-4" />
-                <span>AP EAPCET 2025 Rank Predictor</span>
+                <span>AP EAPCET 2026 Rank Predictor</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-black text-white">
                 Admission Probability Predictor
               </h2>
               <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto">
-                Deterministic estimation of Safe, Target, and Reach colleges calculated from official AP counseling cutoffs.
+                Data-based matching against observed AP EAPCET 2026 allotment ranks. Results are not guaranteed admission cutoffs.
               </p>
             </div>
 
@@ -313,6 +265,8 @@ export default function ApCollegePredictor({
               </div>
             </div>
 
+            {predictorLoading && <div className="text-center text-sm text-slate-400 py-8">Loading 2026 AP allotment data…</div>}
+
             {/* Results */}
             <div className="space-y-3">
               <div className="flex items-center justify-between px-1 text-xs">
@@ -360,7 +314,7 @@ export default function ApCollegePredictor({
 
                     <div className="flex items-center justify-between text-[11px] text-slate-400 pt-0.5">
                       <span>
-                        Estimated Cutoff: <strong className="text-slate-200">#{res.effectiveClosingRank.toLocaleString()}</strong>
+                        Observed last rank: <strong className="text-slate-200">#{res.effectiveClosingRank.toLocaleString()}</strong>
                       </span>
                       <button
                         type="button"
@@ -382,7 +336,7 @@ export default function ApCollegePredictor({
 
             {/* Disclaimer */}
             <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 text-center text-[11px] text-slate-500">
-              Disclaimer: Prediction chances are mathematical models based on historical cutoff datasets and do not guarantee admission.
+              Disclaimer: Results are calculated from observed AP EAPCET 2026 allotment records for the selected category. They are not guaranteed admission cutoffs.
             </div>
           </div>
         </div>
