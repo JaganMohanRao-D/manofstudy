@@ -138,7 +138,7 @@ export default function ApCollegePredictor({
           initialBranchCode={selectedBranchForExplorer}
         />
       ) : (
-        <div className="min-h-screen bg-slate-950 text-slate-100 py-6 px-3 sm:px-6 lg:px-8 font-sans">
+        <div className="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 py-6 px-3 sm:px-6 lg:px-8 font-sans">
           <div className="max-w-7xl mx-auto space-y-6">
             {/* Predictor Header */}
             <div className="text-center space-y-2">
