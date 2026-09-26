@@ -78,8 +78,13 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
 
   useEffect(() => {
     let cancelled = false;
-    setIsLoading(true);
+    // Hard year boundary: never render records cached from the previous dataset.
+    setAllColleges([]);
+    setCollegeData(null);
+    setDatasetSummary(null);
+    setCollegesList([]);
     setLoadError(null);
+    setIsLoading(true);
     Promise.all([getCollegeList(selectedYear), getDatasetSummary(selectedYear)])
       .then(([list, summary]) => {
         if (cancelled) return;
