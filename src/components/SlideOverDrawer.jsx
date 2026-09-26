@@ -198,7 +198,7 @@ export const SlideOverDrawer = ({
                   <div>
                     <div className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
                       <span>AP Allotments (Namewise)</span>
-                      <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded font-mono">2025</span>
+                      <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded font-mono">2026</span>
                     </div>
                     <div className="text-[10px] text-slate-400">
                       College allotments, student ranks &amp; category admission insights
