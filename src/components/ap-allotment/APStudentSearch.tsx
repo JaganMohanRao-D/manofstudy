@@ -54,6 +54,7 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
   const [totalMatches, setTotalMatches] = useState(0);
   const [hasSearched, setHasSearched] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedStudent, setSelectedStudent] = useState<AllotmentRecord | null>(null);
   const pageSize = 25;
 
   useEffect(() => {
@@ -398,9 +399,9 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
                 {/* Header: Name & Rank */}
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
-                    <h4 className="font-bold text-slate-900 dark:text-white text-sm truncate" title={r.cand_name}>
+                    <button type="button" onClick={() => setSelectedStudent(r)} className="block max-w-full truncate text-left font-bold text-slate-900 dark:text-white text-sm hover:text-cyan-500 dark:hover:text-cyan-300 transition-colors" title="View complete student allotment details">
                       {r.cand_name}
-                    </h4>
+                    </button>
                     <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">
                       Allotted Candidate
                     </span>
@@ -513,6 +514,11 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
           )}
         </div>
       )}
+      <APStudentDetailModal
+        student={selectedStudent}
+        year={year}
+        onClose={() => setSelectedStudent(null)}
+      />
     </div>
   );
 };
