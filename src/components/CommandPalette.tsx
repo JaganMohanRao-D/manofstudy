@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   Search,
+  Building2,
   Compass,
   FileText,
   Award,
@@ -139,6 +140,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         icon: <Award className="w-4 h-4 text-amber-500" />,
         keywords: ['top colleges', 'ranking', 'best engineering colleges', 'top btech', 'telangana top colleges', 'oc rank', 'median rank', 'cse colleges', 'cbit', 'vnr', 'jnth'],
         action: () => onSelectTool('tg-top-colleges'),
+      },
+      {
+        id: 'tool-ap-allotments',
+        title: 'AP EAPCET 2025 College-Wise Allotment Explorer',
+        subtitle: 'Explore college allotments, student ranks and category-wise admission insights',
+        category: 'Core Tools',
+        badge: 'AP 2025',
+        icon: <Building2 className="w-4 h-4 text-emerald-500" />,
+        keywords: ['ap', 'ap eapcet', 'apeapcet', 'andhra pradesh', 'allotment', 'allotments', '2025', 'student search', 'ranks', 'svce', 'adit', 'gayatri', 'siddhartha', 'cutoff'],
+        action: () => onSelectTool('ap-allotments' as ToolTab),
       },
       {
         id: 'tool-tg-allotments',

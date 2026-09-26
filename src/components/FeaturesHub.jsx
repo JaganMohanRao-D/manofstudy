@@ -13,6 +13,7 @@ import {
   FileText,
   Users,
   ShoppingBag,
+  Database,
   ArrowRight,
   ChevronRight,
   Briefcase,
@@ -109,6 +110,17 @@ export const WORKSPACES = [
     actionText: 'Search Allotments',
     icon: Award,
     iconBg: 'bg-rose-500/10 border-rose-500/30 text-rose-400',
+  },
+  {
+    id: 'ws-ap-allotments',
+    workspace: 'ap-allotments',
+    category: 'admissions',
+    title: 'AP EAPCET 2025 Allotment Explorer',
+    badge: '2025 DATA',
+    description: 'Search students by name or rank, explore any college and branch, and view observed category-wise rank ranges.',
+    actionText: 'Explore Allotments',
+    icon: Database,
+    iconBg: 'bg-indigo-500/10 border-indigo-500/30 text-indigo-400',
   },
   {
     id: 'ws-eapcet',
@@ -301,7 +313,7 @@ export const FeaturesHub = ({
           </p>
         </div>
         <span className="text-xs font-mono text-slate-500 dark:text-slate-400 font-medium">
-          13 Student Tools
+          14 Student Tools
         </span>
       </div>
 

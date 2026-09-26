@@ -32,6 +32,7 @@ import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { Footer } from './components/Footer';
 import { LegalModals } from './components/LegalModals';
+import { EducationalGuideAndSeo } from './components/EducationalGuideAndSeo';
 import type { EapcetPhaseTab } from './components/ApEapcetRadar';
 
 // Dynamic code splitting / Lazy loading for heavy sub-pages, modals, and tools
@@ -49,6 +50,16 @@ const EngineeringRoadmaps = lazy(() =>
 const ApEapcetRadar = lazy(() =>
   import('./components/ApEapcetRadar').then((m: any) => ({
     default: m.ApEapcetRadar || m.default,
+  }))
+);
+const ApCollegePredictor = lazy(() =>
+  import('./components/ApCollegePredictor').then((m: any) => ({
+    default: m.ApCollegePredictor || m.default,
+  }))
+);
+const ApEapcet2025AllotmentExplorer = lazy(() =>
+  import('./components/ApEapcet2025AllotmentExplorer').then((m: any) => ({
+    default: m.ApEapcet2025AllotmentExplorer || m.default,
   }))
 );
 const TgAllotmentExplorer = lazy(() =>
@@ -136,11 +147,6 @@ const StudentGapAnalyzer = lazy(() =>
     default: m.StudentGapAnalyzer || m.default,
   }))
 );
-const EducationalGuideAndSeo = lazy(() =>
-  import('./components/EducationalGuideAndSeo').then((m: any) => ({
-    default: m.EducationalGuideAndSeo || m.default,
-  }))
-);
 const StudentFaq = lazy(() =>
   import('./components/StudentFaq').then((m: any) => ({
     default: m.StudentFaq || m.default,
@@ -211,6 +217,22 @@ export const TOOLS_CONFIG: ToolMeta[] = [
     category: 'counselling',
     description: 'Live AP EAPCET Phase 2 leftover seats, college matrices & official branch fee schedules',
     badge: 'Phase 2 Live',
+  },
+  {
+    id: 'ap-predictor',
+    name: 'AP EAPCET 2025 College Intelligence & Predictor',
+    shortName: 'AP Predictor 2025',
+    category: 'counselling',
+    description: 'Predict college admission probability with deterministic 2025 closing cutoffs and median analytics.',
+    badge: 'AI Intelligence',
+  },
+  {
+    id: 'ap-allotments',
+    name: 'AP EAPCET 2025 Allotment Explorer',
+    shortName: 'AP Allotments 2025',
+    category: 'counselling',
+    description: 'Search student allotments, explore colleges and branches, and inspect observed category-wise rank ranges.',
+    badge: '2025 DATA',
   },
   {
     id: 'projects',
@@ -376,6 +398,19 @@ export default function App() {
       ) {
         setActiveWorkspace('tg-allotments');
       } else if (
+        hash === 'ap-predictor' ||
+        hash === 'ap-college-predictor' ||
+        hash === 'ap-intelligence' ||
+        hash === 'ap-cutoff'
+      ) {
+        setActiveWorkspace('ap-predictor');
+      } else if (
+        hash === 'ap-allotments' ||
+        hash === 'ap-eapcet-2025' ||
+        hash === 'ap-allotment-explorer'
+      ) {
+        setActiveWorkspace('ap-allotments');
+      } else if (
         hash === 'eapcet-radar' ||
         hash === 'eapcet' ||
         hash === 'phase1' ||
@@ -492,6 +527,10 @@ export default function App() {
       handleSelectWorkspace('tg-predictor');
     } else if (tab === 'campus-connect') {
       handleSelectWorkspace('campus-connect');
+    } else if (tab === 'ap-allotments') {
+      handleSelectWorkspace('ap-allotments');
+    } else if (tab === 'ap-predictor') {
+      handleSelectWorkspace('ap-predictor');
     } else if (tab === 'eapcet-radar') {
       handleSelectWorkspace('eapcet');
     } else if (tab === 'tg-allotments') {
@@ -547,6 +586,16 @@ export default function App() {
         return {
           title: 'AP EAPCET Phase 2 Vacancy Radar & Fees',
           icon: <Flame className="w-4 h-4 text-rose-500" />,
+        };
+      case 'ap-allotments':
+        return {
+          title: 'AP EAPCET 2025 Allotment Explorer',
+          icon: <Building2 className="w-4 h-4 text-cyan-400" />,
+        };
+      case 'ap-predictor':
+        return {
+          title: 'AP EAPCET 2025 College Intelligence & Cutoff Portal',
+          icon: <Compass className="w-4 h-4 text-rose-500" />,
         };
       case 'tg-allotments':
         return {
@@ -802,6 +851,14 @@ export default function App() {
 
                 {activeWorkspace === 'eapcet' && (
                   <ApEapcetRadar initialTab={eapcetPhase} />
+                )}
+
+                {activeWorkspace === 'ap-allotments' && (
+                  <ApCollegePredictor />
+                )}
+
+                {activeWorkspace === 'ap-predictor' && (
+                  <ApCollegePredictor initialCollegeCode="AUCE" />
                 )}
 
                 {activeWorkspace === 'tg-allotments' && (
