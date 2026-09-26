@@ -151,6 +151,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         action: () => onSelectTool('tg-allotments'),
       },
       {
+        id: 'tool-ap-allotments-2025',
+        title: 'AP EAPCET 2025 Allotment Explorer',
+        subtitle: 'Search allotments by student name or rank and explore all 255 college files',
+        category: 'Core Tools',
+        badge: 'AP 2025',
+        icon: <Award className="w-4 h-4 text-indigo-500" />,
+        keywords: ['ap eapcet', 'ap eapcet 2025', 'ap allotments', 'allotment explorer', 'rank search', 'student name', 'college allotment', 'andhra pradesh'],
+        action: () => onSelectTool('ap-allotments'),
+      },
+      {
         id: 'tool-eapcet-radar',
         title: 'AP EAPCET Phase 2 Vacancy Radar',
         subtitle: 'Live leftover seats, college intake matrix & official branch fees',
