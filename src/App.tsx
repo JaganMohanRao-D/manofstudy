@@ -220,7 +220,7 @@ export const TOOLS_CONFIG: ToolMeta[] = [
   },
   {
     id: 'ap-predictor',
-    name: 'AP EAPCET 2025 College Intelligence & Predictor',
+    name: 'AP EAPCET 2026 College Intelligence & Predictor',
     shortName: 'AP Predictor 2025',
     category: 'counselling',
     description: 'Predict college admission probability with deterministic 2025 closing cutoffs and median analytics.',
@@ -228,8 +228,8 @@ export const TOOLS_CONFIG: ToolMeta[] = [
   },
   {
     id: 'ap-allotments',
-    name: 'AP EAPCET 2025 Allotment Explorer',
-    shortName: 'AP Allotments 2025',
+    name: 'AP Allotments (Namewise)',
+    shortName: 'AP Allotments',
     category: 'counselling',
     description: 'Search student allotments, explore colleges and branches, and inspect observed category-wise rank ranges.',
     badge: '2025 DATA',
@@ -589,12 +589,12 @@ export default function App() {
         };
       case 'ap-allotments':
         return {
-          title: 'AP EAPCET 2025 Allotment Explorer',
+          title: 'AP Allotments (Namewise)',
           icon: <Building2 className="w-4 h-4 text-cyan-400" />,
         };
       case 'ap-predictor':
         return {
-          title: 'AP EAPCET 2025 College Intelligence & Cutoff Portal',
+          title: 'AP EAPCET 2026 College Intelligence & Allotment Data',
           icon: <Compass className="w-4 h-4 text-rose-500" />,
         };
       case 'tg-allotments':
