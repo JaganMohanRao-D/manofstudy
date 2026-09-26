@@ -197,7 +197,7 @@ export const SlideOverDrawer = ({
                   <Award className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                   <div>
                     <div className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
-                      <span>AP EAPCET 2025 Allotment Explorer</span>
+                      <span>AP Allotments (Namewise)</span>
                       <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded font-mono">2025</span>
                     </div>
                     <div className="text-[10px] text-slate-400">
