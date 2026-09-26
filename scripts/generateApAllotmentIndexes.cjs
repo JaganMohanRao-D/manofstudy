@@ -1,0 +1,164 @@
+const fs = require('fs');
+const path = require('path');
+
+const ROOT = path.join(process.cwd(), 'public', 'AP_EAPCET');
+const DATASETS = {
+  '2025': path.join(process.cwd(), 'public', 'AP_EAPCET_2025_ALLOTMENT_BY_COLLEGE'),
+  '2026': path.join(process.cwd(), 'public', 'AP_EAPCET_2026_ALLOTMENT_BY_COLLEGE'),
+};
+const EXCLUDED = new Set(['index.json', 'manifest.json', 'search_index.json']);
+
+function phaseNumber(value) {
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  const s = String(value ?? '').trim().toLowerCase();
+  if (s === '1' || s.includes('first')) return 1;
+  if (s === '2' || s.includes('second')) return 2;
+  if (s === '3' || s.includes('third')) return 3;
+  return 0;
+}
+
+function num(value) {
+  const n = Number(String(value ?? '').replace(/,/g, ''));
+  return Number.isFinite(n) ? Math.round(n) : 0;
+}
+
+function normalizeRecord(year, r, collegeCode, collegeName, branchCode = '', branchName = '') {
+  if (year === '2026') {
+    return {
+      rank: num(r.rank),
+      name: String(r.applicant_name ?? r.cand_name ?? r.name ?? '').trim(),
+      gender: String(r.gender ?? '').trim().toUpperCase(),
+      category: String(r.community ?? r.category ?? '').trim().toUpperCase(),
+      region: String(r.region ?? '').trim().toUpperCase(),
+      allottedCategory: String(r.allot_category ?? r.alloted_category ?? r.allotted_category ?? '').trim().toUpperCase(),
+      phase: phaseNumber(r.phase),
+      collegeCode,
+      collegeName,
+      branchCode: String(r.branch_code ?? branchCode ?? '').trim().toUpperCase(),
+      branchName: String(r.branch_name ?? branchName ?? '').trim(),
+    };
+  }
+  return {
+    rank: num(r.rank),
+    name: String(r.cand_name ?? r.applicant_name ?? r.name ?? '').trim(),
+    gender: String(r.gender ?? '').trim().toUpperCase(),
+    category: String(r.category ?? r.community ?? '').trim().toUpperCase(),
+    region: String(r.region ?? '').trim().toUpperCase(),
+    allottedCategory: String(r.alloted_category ?? r.allot_category ?? r.allotted_category ?? '').trim().toUpperCase(),
+    phase: phaseNumber(r.phase),
+    collegeCode,
+    collegeName,
+    branchCode: String(r.branch_code ?? branchCode ?? '').trim().toUpperCase(),
+    branchName: String(r.branch_name ?? branchName ?? '').trim(),
+  };
+}
+
+function processYear(year, dir) {
+  if (!fs.existsSync(dir)) throw new Error(`Missing AP EAPCET ${year} directory: ${dir}`);
+  const files = fs.readdirSync(dir).filter(f => f.endsWith('.json') && !EXCLUDED.has(f));
+  const colleges = [];
+  const candidates = [];
+  const branchMap = {};
+  const categorySet = new Set();
+  const allottedSet = new Set();
+  const regionSet = new Set();
+  const phaseSet = new Set();
+  const branchSet = new Set();
+  let totalRecords = 0;
+  let minRank = Infinity;
+  let maxRank = 0;
+
+  for (const file of files) {
+    const raw = JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
+    const collegeCode = String(raw.college_code ?? raw.collegeCode ?? raw.inst_code ?? file.replace(/\.json$/i, '')).trim().toUpperCase();
+    const collegeName = String(raw.college_name ?? raw.collegeName ?? raw.inst_name ?? collegeCode).trim();
+    const records = [];
+    const branchSummaries = new Map();
+
+    const add = (r, branchCode = '', branchName = '') => {
+      const x = normalizeRecord(year, r, collegeCode, collegeName, branchCode, branchName);
+      if (!x.rank || !x.name) return;
+      records.push(x);
+      totalRecords++;
+      minRank = Math.min(minRank, x.rank);
+      maxRank = Math.max(maxRank, x.rank);
+      if (x.category) categorySet.add(x.category);
+      if (x.allottedCategory) allottedSet.add(x.allottedCategory);
+      if (x.region) regionSet.add(x.region);
+      if (x.phase) phaseSet.add(x.phase);
+      if (x.branchCode) {
+        branchSet.add(x.branchCode);
+        branchMap[x.branchCode] = x.branchName || x.branchCode;
+      }
+      const key = x.branchCode || 'UNKNOWN';
+      if (!branchSummaries.has(key)) branchSummaries.set(key, { branchCode: key, branchName: x.branchName || key, recordCount: 0, minRank: Infinity, maxRank: 0, phases: new Set(), categories: new Set() });
+      const b = branchSummaries.get(key);
+      b.recordCount++;
+      b.minRank = Math.min(b.minRank, x.rank);
+      b.maxRank = Math.max(b.maxRank, x.rank);
+      if (x.phase) b.phases.add(x.phase);
+      if (x.category) b.categories.add(x.category);
+      candidates.push([x.rank, x.name, x.gender, x.category, x.region, x.allottedCategory, x.phase, x.collegeCode, x.branchCode]);
+    };
+
+    if (year === '2026') {
+      for (const r of (Array.isArray(raw.records) ? raw.records : [])) add(r, r.branch_code, r.branch_name);
+    } else {
+      for (const b of (Array.isArray(raw.branches) ? raw.branches : [])) {
+        for (const r of (Array.isArray(b.records) ? b.records : [])) add(r, b.branch_code, b.branch_name);
+      }
+    }
+
+    const branches = Array.from(branchSummaries.values()).map(b => ({
+      branchCode: b.branchCode,
+      branchName: b.branchName,
+      recordCount: b.recordCount,
+      minRank: b.minRank === Infinity ? 0 : b.minRank,
+      maxRank: b.maxRank,
+      phases: Array.from(b.phases).sort((a,b)=>a-b),
+      categories: Array.from(b.categories).sort(),
+    })).sort((a,b)=>a.branchCode.localeCompare(b.branchCode));
+
+    colleges.push({
+      collegeCode,
+      collegeName,
+      file,
+      recordCount: records.length,
+      branchCount: branches.length,
+      minRank: records.length ? Math.min(...records.map(r=>r.rank)) : 0,
+      maxRank: records.length ? Math.max(...records.map(r=>r.rank)) : 0,
+      branches,
+    });
+  }
+
+  colleges.sort((a,b)=>a.collegeCode.localeCompare(b.collegeCode));
+  const stats = {
+    year,
+    totalColleges: colleges.length,
+    totalRecords,
+    totalBranches: branchSet.size,
+    categories: Array.from(categorySet).sort(),
+    allottedCategories: Array.from(allottedSet).sort(),
+    regions: Array.from(regionSet).sort(),
+    phases: Array.from(phaseSet).sort((a,b)=>a-b),
+    minRank: minRank === Infinity ? 0 : minRank,
+    maxRank,
+    generatedAt: new Date().toISOString(),
+  };
+
+  const manifest = { version: `${year}.2`, generated_at: stats.generatedAt, stats, colleges };
+  const searchIndex = {
+    version: `${year}.2`,
+    generated_at: stats.generatedAt,
+    stats,
+    collegeMap: Object.fromEntries(colleges.map(c => [c.collegeCode, c.collegeName])),
+    branchMap,
+    candidates,
+  };
+
+  fs.writeFileSync(path.join(dir, 'manifest.json'), JSON.stringify(manifest));
+  fs.writeFileSync(path.join(dir, 'search_index.json'), JSON.stringify(searchIndex));
+  console.log(`AP EAPCET ${year}: ${colleges.length} colleges, ${totalRecords} records, ${candidates.length} indexed candidates`);
+}
+
+for (const [year, dir] of Object.entries(DATASETS)) processYear(year, dir);
