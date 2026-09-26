@@ -343,6 +343,10 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
                     ['Observed last rank', lastRank || '—'],
                   ].map(([label, value]) => <div key={label} className="rounded-2xl border border-slate-800 bg-slate-900/80 p-4 shadow-lg"><div className="text-[11px] uppercase tracking-wider text-slate-500">{label}</div><div className="mt-1 text-xl font-black text-white">{value}</div></div>)}
                 </div>
+                <section className="rounded-3xl border border-slate-800 bg-slate-900/80 p-4 shadow-xl">
+                  <div className="mb-3 flex items-center justify-between"><div><h3 className="font-bold text-white">Allotted students</h3><p className="text-xs text-slate-500">{visibleRecords.length.toLocaleString()} records after active filters</p></div><span className="rounded-full bg-cyan-500/10 px-3 py-1 text-xs font-bold text-cyan-300">AP EAPCET {selectedYear}</span></div>
+                  <APAllotmentTable records={visibleRecords} collegeCode={currentCollege.college_code} collegeName={currentCollege.college_name} branchCode={selectedBranchCode} branchName={branchLabel} year={selectedYear} />
+                </section>
                 <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   <div className="mos-fade-up rounded-[1.75rem] border border-white/10 bg-slate-900/80 p-5 shadow-xl">
                     <div className="flex items-center justify-between"><div><p className="text-[10px] font-black uppercase tracking-[0.14em] text-cyan-400">Category mix</p><h3 className="mt-1 font-black text-white">Candidate categories</h3></div><Users className="h-5 w-5 text-cyan-400" /></div>
