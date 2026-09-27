@@ -183,14 +183,8 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
             >
               Search by Rank / Range
             </button>
-          </div>
 
-          <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
-            Dataset: AP EAPCET {year} allotments
-          </span>
-        </div>
-
-        <button
+            <button
               type="button"
               onClick={() => {
                 setSearchMode('hallticket');
@@ -208,6 +202,11 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
               Hall Ticket
             </button>
           </div>
+
+          <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+            Dataset: AP EAPCET {year} allotments
+          </span>
+        </div>
 
         {/* Name Mode Inputs */}
         {searchMode === 'name' && (
