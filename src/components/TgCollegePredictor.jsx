@@ -1168,6 +1168,9 @@ export default function TgCollegePredictor({ onNavigateToAllotment }) {
           </div>
         </div>
       )}
+      <div className="mt-6 rounded-2xl border border-cyan-500/15 bg-cyan-500/5 p-3.5 text-[10px] leading-5 text-slate-500 dark:text-slate-400">
+        <strong className="text-cyan-600 dark:text-cyan-300">MOS data notice:</strong> This tool presents historical allotment records and derived statistics from the available 2026 source dataset. Figures are for educational context only, are not official cutoffs or admission guarantees, and should be checked against the current counselling authority's notices.
+      </div>
     </div>
   );
 }
