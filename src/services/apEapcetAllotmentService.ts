@@ -163,6 +163,19 @@ export async function getCollegeList(year: AllotmentYear = '2026') {
   return loadIndex(year);
 }
 
+export async function getAvailableBranches(
+  year: AllotmentYear = '2026'
+): Promise<Array<{ branchCode: string; branchName: string }>> {
+  const { branchMap = {} } = await loadSearchIndex(year);
+  return Object.entries(branchMap)
+    .filter(([code, name]) => Boolean(code && String(name).trim()))
+    .map(([branchCode, branchName]) => ({
+      branchCode: String(branchCode).trim().toUpperCase(),
+      branchName: String(branchName).trim(),
+    }))
+    .sort((a, b) => a.branchName.localeCompare(b.branchName));
+}
+
 export function getAvailableDistricts(colleges: CollegeListItem[]): string[] {
   return Array.from(new Set(colleges.map((c) => String(c.district ?? '').trim()).filter(Boolean))).sort((a,b)=>a.localeCompare(b));
 }
