@@ -6,7 +6,7 @@ const DATASETS = {
   '2025': path.join(process.cwd(), 'public', 'AP_EAPCET_2025_ALLOTMENT_BY_COLLEGE'),
   '2026': path.join(process.cwd(), 'public', 'AP_EAPCET_2026_ALLOTMENT_BY_COLLEGE'),
 };
-const EXCLUDED = new Set(['index.json', 'manifest.json', 'search_index.json']);
+const EXCLUDED = new Set(['index.json', 'manifest.json', 'search_index.json', 'top_colleges_index.json']);
 
 function phaseNumber(value) {
   if (typeof value === 'number' && Number.isFinite(value)) return value;
@@ -36,6 +36,7 @@ function normalizeRecord(year, r, collegeCode, collegeName, branchCode = '', bra
       collegeName,
       branchCode: String(r.branch_code ?? branchCode ?? '').trim().toUpperCase(),
       branchName: String(r.branch_name ?? branchName ?? '').trim(),
+      district: String(r.district ?? '').trim(),
     };
   }
   return {
@@ -64,6 +65,7 @@ function processYear(year, dir) {
   const regionSet = new Set();
   const phaseSet = new Set();
   const branchSet = new Set();
+  const apTopCollegeStats = new Map();
   let totalRecords = 0;
   let minRank = Infinity;
   let maxRank = 0;
@@ -89,6 +91,12 @@ function processYear(year, dir) {
       if (x.branchCode) {
         branchSet.add(x.branchCode);
         branchMap[x.branchCode] = x.branchName || x.branchCode;
+      }
+
+      if (year === '2026' && x.category === 'OC' && x.branchCode) {
+        const key = x.collegeCode + '::' + x.branchCode;
+        if (!apTopCollegeStats.has(key)) apTopCollegeStats.set(key, { collegeCode: x.collegeCode, collegeName: x.collegeName, district: x.district || 'Andhra Pradesh', branchCode: x.branchCode, branchName: x.branchName || x.branchCode, ocRanks: [] });
+        apTopCollegeStats.get(key).ocRanks.push(x.rank);
       }
       const key = x.branchCode || 'UNKNOWN';
       if (!branchSummaries.has(key)) branchSummaries.set(key, { branchCode: key, branchName: x.branchName || key, recordCount: 0, minRank: Infinity, maxRank: 0, phases: new Set(), categories: new Set() });
@@ -127,6 +135,7 @@ function processYear(year, dir) {
       branchCount: branches.length,
       minRank: records.length ? Math.min(...records.map(r=>r.rank)) : 0,
       maxRank: records.length ? Math.max(...records.map(r=>r.rank)) : 0,
+      district: records.find(r => r.district)?.district || 'Andhra Pradesh',
       branches,
     });
   }
