@@ -40,17 +40,9 @@ export const HeroSection = ({
         <span className="mos-hero-dot mos-hero-dot-5" />
         <span className="mos-hero-dot mos-hero-dot-6" />
         <span className="mos-hero-book mos-hero-book-1"><BookOpen /></span>
-        <span className="mos-hero-book mos-hero-book-2"><BookOpen /></span>
-        <span className="mos-hero-book mos-hero-book-3"><BookOpen /></span>
+        <span className="mos-hero-book mos-hero-book-2"><GraduationCap /></span>
+        <span className="mos-hero-book mos-hero-book-3"><FileText /></span>
       </div>
-
-      {/* Background Ambience: Subtle and non-distracting */}
-      <div className="hidden sm:block absolute -top-32 left-1/4 w-96 h-96 rounded-full bg-indigo-500/10 dark:bg-indigo-600/10 blur-[120px] pointer-events-none" />
-      <div className="hidden sm:block absolute top-1/3 -right-20 w-96 h-96 rounded-full bg-cyan-500/10 blur-[120px] pointer-events-none" />
-      <div className="hidden sm:block absolute -bottom-20 left-10 w-96 h-96 rounded-full bg-emerald-500/10 blur-[120px] pointer-events-none" />
-      
-      {/* Subtle tech grid pattern */}
-      <div className="hidden sm:block absolute inset-0 bg-[radial-gradient(#0284c715_1px,transparent_1px)] dark:bg-[radial-gradient(#38bdf80a_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
 
       {/* Hero Header & Value Proposition */}
       <div className="relative z-10 max-w-4xl mx-auto text-center space-y-5 sm:space-y-6 mos-hero-content">
