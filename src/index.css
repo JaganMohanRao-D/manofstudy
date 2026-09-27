@@ -1471,3 +1471,137 @@ html.dark .mos-hero-accent-green {
   color: #34D399 !important;
   -webkit-text-fill-color: #34D399 !important;
 }
+
+
+/* ==========================================================================
+   MOS FINAL UI POLISH — safe CSS-only layer
+   No component/runtime dependencies. Keeps the existing React render path intact.
+   ========================================================================== */
+
+/* Hero: calm depth without competing with the headline. */
+html.light .mos-hero-premium {
+  background:
+    radial-gradient(ellipse 70% 55% at 8% 8%, rgba(14,165,233,.10), transparent 58%),
+    radial-gradient(ellipse 65% 60% at 94% 18%, rgba(16,185,129,.09), transparent 60%),
+    radial-gradient(ellipse 55% 45% at 50% 100%, rgba(99,102,241,.055), transparent 65%),
+    linear-gradient(145deg, #ffffff 0%, #f8fbff 52%, #f6fcfa 100%) !important;
+}
+
+html.dark .mos-hero-premium {
+  background:
+    radial-gradient(ellipse 70% 55% at 8% 8%, rgba(14,165,233,.10), transparent 58%),
+    radial-gradient(ellipse 65% 60% at 94% 18%, rgba(16,185,129,.08), transparent 60%),
+    linear-gradient(145deg, #0d1627 0%, #091322 52%, #07131a 100%) !important;
+}
+
+/* Keep decorative layers behind every interactive/content element. */
+#hero-banner .mos-hero-ambient { z-index: 0; }
+#hero-banner .mos-hero-content,
+#hero-banner #features-hub { position: relative; z-index: 10; }
+
+/* More polished floating study objects. */
+.mos-hero-book {
+  opacity: .78;
+  box-shadow:
+    0 16px 36px rgba(15,23,42,.09),
+    inset 0 1px 0 rgba(255,255,255,.9);
+}
+html.dark .mos-hero-book {
+  opacity: .68;
+}
+
+/* Bright-theme title: never rely on transparent gradient text. */
+html.light .mos-hero-title {
+  color: #0f172a !important;
+  text-shadow: none !important;
+}
+html.light .mos-hero-accent-blue {
+  color: #1d4ed8 !important;
+  -webkit-text-fill-color: #1d4ed8 !important;
+}
+html.light .mos-hero-accent-green {
+  color: #047857 !important;
+  -webkit-text-fill-color: #047857 !important;
+}
+html.dark .mos-hero-accent-blue {
+  color: #60a5fa !important;
+  -webkit-text-fill-color: #60a5fa !important;
+}
+html.dark .mos-hero-accent-green {
+  color: #34d399 !important;
+  -webkit-text-fill-color: #34d399 !important;
+}
+
+/* Hero copy remains readable even on smaller screens. */
+.mos-hero-subtitle {
+  text-wrap: balance;
+}
+@media (max-width: 640px) {
+  #hero-banner {
+    min-height: auto !important;
+    padding-top: 2rem !important;
+    padding-bottom: 1.5rem !important;
+    border-radius: 1.25rem !important;
+  }
+  .mos-hero-title {
+    font-size: clamp(2rem, 9vw, 3rem) !important;
+    line-height: 1.08 !important;
+    letter-spacing: -.035em !important;
+  }
+  .mos-hero-subtitle {
+    font-size: .94rem !important;
+    line-height: 1.65 !important;
+  }
+  #hero-banner .mos-hero-book-1 { left: 2%; top: 13%; }
+  #hero-banner .mos-hero-book-2 { right: 2%; top: 15%; }
+  #hero-banner .mos-hero-book-3 { right: 7%; bottom: 4%; }
+}
+
+/* Prevent decorative animation from affecting touch/layout calculations. */
+.mos-hero-ambient,
+.mos-hero-ambient * {
+  pointer-events: none !important;
+}
+
+/* Consistent focus visibility for keyboard users. */
+button:focus-visible,
+[role="button"]:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--mos-accent) !important;
+  outline-offset: 2px;
+}
+
+/* Bright theme: make common workspace cards crisp instead of washed out. */
+html.light .mos-card,
+html.light .mos-card-raised,
+html.light .mos-subcard {
+  color: var(--mos-text-primary);
+}
+html.light .mos-card,
+html.light .mos-card-raised {
+  box-shadow: 0 6px 20px rgba(15,23,42,.055);
+}
+
+/* Touch devices: avoid hover-only visual states becoming confusing. */
+@media (hover: none) and (max-width: 768px) {
+  html.light .group.rounded-xl:hover,
+  html.light .group.rounded-2xl:hover,
+  html.light article.rounded-xl:hover,
+  html.light article.rounded-2xl:hover {
+    transform: none;
+  }
+}
+
+/* Respect reduced-motion settings without disabling normal page usability. */
+@media (prefers-reduced-motion: reduce) {
+  .mos-hero-orb,
+  .mos-hero-dot,
+  .mos-hero-book,
+  .mos-hero-float,
+  .mos-hero-bubble {
+    animation: none !important;
+  }
+}
