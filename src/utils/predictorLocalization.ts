@@ -108,7 +108,7 @@ export function getPredictorVerdict(
     },
     salutationEn,
     salutationTe,
-    englishText: `Seat allotment unlikely. Don't lose hope, ${salutationEn}... let's explore other great colleges! 🫂`,
+    englishText: `Seat allotment unlikely. Don't lose hope, ${salutationEn}... let's explore other options! 🥺`,
     teluguText: `ఈ కాలేజీలో సీటు రావడం కాస్త కష్టమే ${salutationTe}... బాధపడకండి, ఇతర మంచి ఆప్షన్లను చూద్దాం 🥺`,
   };
 }
