@@ -26,6 +26,7 @@ export type EapcetPhaseTab = 'phase2';
 
 interface ApEapcetRadarProps {
   initialTab?: string;
+  onNavigateToCbt?: () => void;
 }
 
 // Helper to sanitize and map raw JSON records into strongly-typed VacancyCollege models
@@ -52,7 +53,7 @@ function mapRawCollegeData(rawData: any[]): VacancyCollege[] {
   }));
 }
 
-export const ApEapcetRadar: React.FC<ApEapcetRadarProps> = () => {
+export const ApEapcetRadar: React.FC<ApEapcetRadarProps> = ({ onNavigateToCbt }) => {
   const [colleges, setColleges] = useState<VacancyCollege[]>(() =>
     mapRawCollegeData(rawVacanciesFallback as any[])
   );
@@ -332,6 +333,31 @@ export const ApEapcetRadar: React.FC<ApEapcetRadarProps> = () => {
       {/* ======================================================== */}
       {!isLoading && !error && (
         <div className="space-y-4">
+          {/* CBT Mock Test Promotion Banner */}
+          {onNavigateToCbt && (
+            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white p-4 sm:p-5 rounded-2xl shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/20 text-white">
+                  NEW: Exam Simulator
+                </div>
+                <h3 className="text-sm sm:text-base font-bold">
+                  EAPCET Computer-Based Test (CBT) Mock Examination
+                </h3>
+                <p className="text-xs text-blue-100 max-w-xl">
+                  Attempt an authentic 80-question test (Maths, Physics, Chem) with 90-minute live countdown timer, TCS iON palette, and step-by-step solutions.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={onNavigateToCbt}
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-white text-blue-700 hover:bg-blue-50 font-bold text-xs shadow-xs transition-colors shrink-0 cursor-pointer"
+              >
+                <span>Launch Mock Exam</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+
           {/* Search & Filter Bar */}
           <div className="bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-xs space-y-3.5">
             {/* Search Input & Metric Counters */}

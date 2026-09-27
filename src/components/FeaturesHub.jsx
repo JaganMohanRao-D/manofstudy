@@ -16,8 +16,10 @@ import {
   Database,
   ChevronRight,
   Briefcase,
-  MapPin
+  MapPin,
+  Target
 } from 'lucide-react';
+import { MockTestSeriesHub } from './MockTestSeriesHub';
 
 /**
  * Flagship Features (The Two Most Strategic Entry Points)
@@ -88,6 +90,28 @@ export const FLAGSHIP_FEATURES = [
  * Categorized, outcome-oriented, and uncluttered.
  */
 export const WORKSPACES = [
+  {
+    id: 'ws-mock-tests',
+    workspace: 'mock-tests',
+    category: 'admissions',
+    title: '🎯 Mock Test Series (CBT Simulator)',
+    badge: 'NEW CBT',
+    description: 'Real-time computer-based exam simulations: 160-Question EAPCET Grand Tests and Reliance Scholarship assessments.',
+    actionText: 'Open Test Series',
+    icon: Target,
+    iconBg: 'bg-blue-500/10 border-blue-500/30 text-blue-400',
+  },
+  {
+    id: 'ws-eapcet-cbt',
+    workspace: 'eapcet-cbt',
+    category: 'admissions',
+    title: 'EAPCET Computer-Based Test (CBT) Mock Exam Engine',
+    badge: 'CBT MOCK',
+    description: 'Realistic 80-question mock test simulating AP & TG EAPCET exam patterns with instant scorecard and detailed solutions.',
+    actionText: 'Take Mock Test',
+    icon: Award,
+    iconBg: 'bg-blue-500/10 border-blue-500/30 text-blue-400',
+  },
   {
     id: 'ws-tg-top-colleges',
     workspace: 'tg-top-colleges',
@@ -382,6 +406,12 @@ export const FeaturesHub = ({
           </section>
         ))}
       </section>
+
+      {/* 2.5 Centralized Mock Test Series Hub Section */}
+      <MockTestSeriesHub
+        isEmbedded={true}
+        onSelectWorkspace={onSelectWorkspace}
+      />
 
       {/* 3. Category Filter Tabs */}
       <div className="space-y-3 pt-2">

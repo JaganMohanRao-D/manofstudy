@@ -26,6 +26,7 @@ import {
   BookOpen,
   ShieldAlert,
   Users,
+  Target,
 } from 'lucide-react';
 import { ToolTab, ToolMeta, WorkspaceView, LegalModalType } from './types';
 import { Header } from './components/Header';
@@ -34,140 +35,186 @@ import { Footer } from './components/Footer';
 import { LegalModals } from './components/LegalModals';
 import { EducationalGuideAndSeo } from './components/EducationalGuideAndSeo';
 import type { EapcetPhaseTab } from './components/ApEapcetRadar';
+import { ChunkErrorBoundary } from './components/ChunkErrorBoundary';
+import { GuidesHub } from './components/GuidesHub';
 
-// Dynamic code splitting / Lazy loading for heavy sub-pages, modals, and tools
-const GuidesHub = lazy(() =>
-  import('./components/GuidesHub').then((m: any) => ({
-    default: m.GuidesHub || m.default,
-  }))
-);
-const ScholarshipsHub = lazy(() =>
+// Resilient dynamic code splitting with retry logic for network or stale bundle resilience
+const lazyWithRetry = <T extends React.ComponentType<any>>(
+  factory: () => Promise<{ default: T } | any>,
+  retries = 2
+): React.LazyExoticComponent<T> => {
+  return lazy(async () => {
+    let lastError: any = null;
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        const m = await factory();
+        return { default: m.default || m[Object.keys(m)[0]] };
+      } catch (err: any) {
+        lastError = err;
+        console.warn(`[LazyRetry] Dynamic chunk import failed (attempt ${attempt + 1}/${retries + 1}):`, err);
+        if (attempt < retries) {
+          await new Promise((r) => setTimeout(r, 400 * (attempt + 1)));
+        }
+      }
+    }
+    const isModuleError =
+      lastError?.message?.includes('dynamically imported module') ||
+      lastError?.message?.includes('Failed to fetch') ||
+      lastError?.name === 'TypeError';
+
+    if (isModuleError && typeof window !== 'undefined') {
+      const reloadKey = 'mos_chunk_reload_' + window.location.pathname;
+      if (!sessionStorage.getItem(reloadKey)) {
+        sessionStorage.setItem(reloadKey, 'true');
+        window.location.reload();
+      }
+    }
+    throw lastError;
+  });
+};
+
+const ScholarshipsHub = lazyWithRetry(() =>
   import('./components/ScholarshipsHub').then((m: any) => ({
     default: m.ScholarshipsHub || m.default,
   }))
 );
-const EngineeringRoadmaps = lazy(() =>
+const EngineeringRoadmaps = lazyWithRetry(() =>
   import('./components/EngineeringRoadmaps').then((m: any) => ({
     default: m.EngineeringRoadmaps || m.default,
   }))
 );
-const ApEapcetRadar = lazy(() =>
+const ApEapcetRadar = lazyWithRetry(() =>
   import('./components/ApEapcetRadar').then((m: any) => ({
     default: m.ApEapcetRadar || m.default,
   }))
 );
-const ApCollegePredictor = lazy(() =>
+const ApCollegePredictor = lazyWithRetry(() =>
   import('./components/ApCollegePredictor').then((m: any) => ({
     default: m.ApCollegePredictor || m.default,
   }))
 );
-const ApTopColleges = lazy(() => import('./components/ApTopColleges'));
-const ApEapcet2025AllotmentExplorer = lazy(() =>
+const ApTopColleges = lazyWithRetry(() => import('./components/ApTopColleges'));
+const ApEapcet2025AllotmentExplorer = lazyWithRetry(() =>
   import('./components/ApEapcet2025AllotmentExplorer').then((m: any) => ({
     default: m.ApEapcet2025AllotmentExplorer || m.default,
   }))
 );
-const TgAllotmentExplorer = lazy(() =>
+const TgAllotmentExplorer = lazyWithRetry(() =>
   import('./components/TgAllotmentExplorer').then((m: any) => ({
     default: m.TgAllotmentExplorer || m.default,
   }))
 );
-const TgTopColleges = lazy(() =>
+const TgTopColleges = lazyWithRetry(() =>
   import('./components/TgTopColleges').then((m: any) => ({
     default: m.TgTopColleges || m.default,
   }))
 );
-const TgCollegePredictor = lazy(() =>
+const TgCollegePredictor = lazyWithRetry(() =>
   import('./components/TgCollegePredictor').then((m: any) => ({
     default: m.TgCollegePredictor || m.default,
   }))
 );
-const AttendanceDefender = lazy(() =>
+const AttendanceDefender = lazyWithRetry(() =>
   import('./components/AttendanceDefender').then((m: any) => ({
     default: m.AttendanceDefender || m.default,
   }))
 );
-const GlobalGpaHub = lazy(() =>
+const GlobalGpaHub = lazyWithRetry(() =>
   import('./components/GlobalGpaHub').then((m: any) => ({
     default: m.GlobalGpaHub || m.default,
   }))
 );
-const InternalExamEstimator = lazy(() =>
+const InternalExamEstimator = lazyWithRetry(() =>
   import('./components/InternalExamEstimator').then((m: any) => ({
     default: m.InternalExamEstimator || m.default,
   }))
 );
-const PdfPowerTools = lazy(() =>
+const PdfPowerTools = lazyWithRetry(() =>
   import('./components/PdfPowerTools').then((m: any) => ({
     default: m.PdfPowerTools || m.default,
   }))
 );
-const ImageResizer = lazy(() =>
+const ImageResizer = lazyWithRetry(() =>
   import('./components/ImageResizer').then((m: any) => ({
     default: m.ImageResizer || m.default,
   }))
 );
-const AtsResumeMatcher = lazy(() =>
+const AtsResumeMatcher = lazyWithRetry(() =>
   import('./components/AtsResumeMatcher').then((m: any) => ({
     default: m.AtsResumeMatcher || m.default,
   }))
 );
-const PlacementCodeVault = lazy(() =>
+const PlacementCodeVault = lazyWithRetry(() =>
   import('./components/PlacementCodeVault').then((m: any) => ({
     default: m.PlacementCodeVault || m.default,
   }))
 );
-const BacklogPlanner = lazy(() =>
+const BacklogPlanner = lazyWithRetry(() =>
   import('./components/BacklogPlanner').then((m: any) => ({
     default: m.BacklogPlanner || m.default,
   }))
 );
-const DsaPlacementTracker = lazy(() =>
+const DsaPlacementTracker = lazyWithRetry(() =>
   import('./components/DsaPlacementTracker').then((m: any) => ({
     default: m.DsaPlacementTracker || m.default,
   }))
 );
-const StudentEssentialsStore = lazy(() =>
+const StudentEssentialsStore = lazyWithRetry(() =>
   import('./components/StudentEssentialsStore').then((m: any) => ({
     default: m.StudentEssentialsStore || m.default,
   }))
 );
-const MajorProjectsHub = lazy(() =>
+const MajorProjectsHub = lazyWithRetry(() =>
   import('./components/MajorProjectsHub').then((m: any) => ({
     default: m.MajorProjectsHub || m.default,
   }))
 );
-const InternshipsRadar = lazy(() =>
+const InternshipsRadar = lazyWithRetry(() =>
   import('./components/InternshipsRadar').then((m: any) => ({
     default: m.InternshipsRadar || m.default,
   }))
 );
-const CampusConnect = lazy(() =>
+const CampusConnect = lazyWithRetry(() =>
   import('./components/CampusConnect').then((m: any) => ({
     default: m.CampusConnect || m.default,
   }))
 );
-const StudentGapAnalyzer = lazy(() =>
+const StudentGapAnalyzer = lazyWithRetry(() =>
   import('./components/StudentGapAnalyzer/StudentGapAnalyzer').then((m: any) => ({
     default: m.StudentGapAnalyzer || m.default,
   }))
 );
-const StudentFaq = lazy(() =>
+const StudentFaq = lazyWithRetry(() =>
   import('./components/StudentFaq').then((m: any) => ({
     default: m.StudentFaq || m.default,
   }))
 );
-const StudentTestimonials = lazy(() =>
+const StudentTestimonials = lazyWithRetry(() =>
   import('./components/StudentTestimonials').then((m: any) => ({
     default: m.StudentTestimonials || m.default,
   }))
 );
-const SupportModal = lazy(() =>
+const CbtMockTestEngine = lazyWithRetry(() =>
+  import('./components/CbtMockTestEngine').then((m: any) => ({
+    default: m.CbtMockTestEngine || m.default,
+  }))
+);
+const EapcetCbtMockTestEngine = lazyWithRetry(() =>
+  import('./components/EapcetCbtMockTestEngine').then((m: any) => ({
+    default: m.EapcetCbtMockTestEngine || m.default,
+  }))
+);
+const MockTestSeriesHub = lazyWithRetry(() =>
+  import('./components/MockTestSeriesHub').then((m: any) => ({
+    default: m.MockTestSeriesHub || m.default,
+  }))
+);
+const SupportModal = lazyWithRetry(() =>
   import('./components/SupportModal').then((m: any) => ({
     default: m.SupportModal || m.default,
   }))
 );
-const CommandPalette = lazy(() =>
+const CommandPalette = lazyWithRetry(() =>
   import('./components/CommandPalette').then((m: any) => ({
     default: m.CommandPalette || m.default,
   }))
@@ -358,6 +405,7 @@ export default function App() {
   const [targetAllotmentBranch, setTargetAllotmentBranch] = useState<string>('');
   const [gpaSubTab, setGpaSubTab] = useState<'gpa' | 'internal'>('gpa');
   const [academicSubTab, setAcademicSubTab] = useState<'attendance' | 'gpa' | 'internal'>('attendance');
+  const [eapcetCbtSubTab, setEapcetCbtSubTab] = useState<string>('ap-full');
 
   // Show one respectful support prompt only after a real search result is produced.
   useEffect(() => {
@@ -532,10 +580,12 @@ export default function App() {
   }, []);
 
   // Dynamic Workspace Switcher Handler
-  const handleSelectWorkspace = (ws: WorkspaceView, targetSubTab?: ToolTab) => {
+  const handleSelectWorkspace = (ws: WorkspaceView, targetSubTab?: string) => {
     setActiveWorkspace(ws);
-    if (targetSubTab) {
-      setUtilitySubTab(targetSubTab);
+    if (ws === 'eapcet-cbt' && targetSubTab) {
+      setEapcetCbtSubTab(targetSubTab);
+    } else if (targetSubTab) {
+      setUtilitySubTab(targetSubTab as ToolTab);
     }
     if (ws === 'hub') {
       history.replaceState(null, '', window.location.pathname + window.location.search);
@@ -553,7 +603,13 @@ export default function App() {
 
   const handleSelectToolFromPalette = (tab: ToolTab) => {
     setIsCommandPaletteOpen(false);
-    if (tab === 'gap-analyzer') {
+    if (tab === 'mock-tests') {
+      handleSelectWorkspace('mock-tests');
+    } else if (tab === 'eapcet-cbt') {
+      handleSelectWorkspace('eapcet-cbt');
+    } else if (tab === 'cbt-mock-test') {
+      handleSelectWorkspace('cbt-mock-test');
+    } else if (tab === 'gap-analyzer') {
       handleSelectWorkspace('gap-analyzer');
     } else if (tab === 'tg-top-colleges') {
       handleSelectWorkspace('tg-top-colleges');
@@ -661,6 +717,21 @@ export default function App() {
           title: 'Verified 2026 Scholarships Hub (School to B.Tech)',
           icon: <GraduationCap className="w-4 h-4 text-emerald-500" />,
         };
+      case 'cbt-mock-test':
+        return {
+          title: 'Reliance Foundation Scholarship CBT Mock Test Engine',
+          icon: <Award className="w-4 h-4 text-emerald-500" />,
+        };
+      case 'mock-tests':
+        return {
+          title: '🎯 Mock Test Series — Real-Time CBT Simulation Hub',
+          icon: <Target className="w-4 h-4 text-blue-500" />,
+        };
+      case 'eapcet-cbt':
+        return {
+          title: 'EAPCET Computer-Based Test (CBT) Mock Exam Engine (AP & TG)',
+          icon: <Award className="w-4 h-4 text-blue-500" />,
+        };
       case 'utilities':
         return {
           title: 'free pdf tools for students',
@@ -736,35 +807,37 @@ export default function App() {
               onSelectWorkspace={(ws) => handleSelectWorkspace(ws)}
             />
 
-            <Suspense fallback={<LoadingFallback />}>
-              {/* High-Trust Reviews: Continuous Horizontal Marquee Carousel */}
-              <StudentTestimonials />
+            <ChunkErrorBoundary fallbackTitle="Unable to load interactive sections">
+              <Suspense fallback={<LoadingFallback />}>
+                {/* High-Trust Reviews: Continuous Horizontal Marquee Carousel */}
+                <StudentTestimonials />
 
-              {/* Authoritative 8-Chapter Student & Tier-3 Survival Editorial Hub */}
-              <div className="content-visibility-auto">
-                <GuidesHub
-                  onSelectWorkspace={(ws) => handleSelectWorkspace(ws as WorkspaceView)}
-                />
-              </div>
+                {/* Authoritative 8-Chapter Student & Tier-3 Survival Editorial Hub */}
+                <div className="content-visibility-auto">
+                  <GuidesHub
+                    onSelectWorkspace={(ws) => handleSelectWorkspace(ws as WorkspaceView)}
+                  />
+                </div>
 
-              {/* Educational Guides & Transparent Methodology Documentation */}
-              <div className="content-visibility-auto">
-                <EducationalGuideAndSeo />
-              </div>
+                {/* Educational Guides & Transparent Methodology Documentation */}
+                <div className="content-visibility-auto">
+                  <EducationalGuideAndSeo />
+                </div>
 
-              {/* Comprehensive Expandable Student FAQ */}
-              <div className="content-visibility-auto">
-                <StudentFaq
-                  onSelectTab={(tab) => {
-                    if (tab === 'eapcet-radar') handleSelectWorkspace('eapcet');
-                    else if (tab === 'roadmaps') handleSelectWorkspace('roadmaps');
-                    else if (tab === 'scholarships') handleSelectWorkspace('scholarships');
-                    else handleSelectWorkspace('utilities', tab);
-                  }}
-                  onOpenLegal={(type) => setLegalModal(type)}
-                />
-              </div>
-            </Suspense>
+                {/* Comprehensive Expandable Student FAQ */}
+                <div className="content-visibility-auto">
+                  <StudentFaq
+                    onSelectTab={(tab) => {
+                      if (tab === 'eapcet-radar') handleSelectWorkspace('eapcet');
+                      else if (tab === 'roadmaps') handleSelectWorkspace('roadmaps');
+                      else if (tab === 'scholarships') handleSelectWorkspace('scholarships');
+                      else handleSelectWorkspace('utilities', tab);
+                    }}
+                    onOpenLegal={(type) => setLegalModal(type)}
+                  />
+                </div>
+              </Suspense>
+            </ChunkErrorBoundary>
           </div>
         ) : (
           /* WHEN IN AN ACTIVE WORKSPACE: Focused, Single-Tool Workspace View */
@@ -793,7 +866,8 @@ export default function App() {
 
             {/* Specific Workspace Views */}
             <section id="workspace-viewport" className="relative min-h-[500px]">
-              <Suspense fallback={<LoadingFallback />}>
+              <ChunkErrorBoundary fallbackTitle="Unable to load tool workspace">
+                <Suspense fallback={<LoadingFallback />}>
                 {activeWorkspace === 'attendance' && (
                   <AttendanceDefender />
                 )}
@@ -889,7 +963,10 @@ export default function App() {
                 )}
 
                 {activeWorkspace === 'eapcet' && (
-                  <ApEapcetRadar initialTab={eapcetPhase} />
+                  <ApEapcetRadar
+                    initialTab={eapcetPhase}
+                    onNavigateToCbt={() => handleSelectWorkspace('eapcet-cbt')}
+                  />
                 )}
 
                 {activeWorkspace === 'ap-allotments' && (
@@ -950,7 +1027,32 @@ export default function App() {
                 )}
 
                 {activeWorkspace === 'scholarships' && (
-                  <ScholarshipsHub />
+                  <ScholarshipsHub onNavigateToCbt={() => handleSelectWorkspace('cbt-mock-test')} />
+                )}
+
+                {activeWorkspace === 'cbt-mock-test' && (
+                  <CbtMockTestEngine
+                    onBackToHub={() => handleSelectWorkspace('hub')}
+                    onSwitchToEapcet={() => handleSelectWorkspace('eapcet-cbt')}
+                  />
+                )}
+
+                {activeWorkspace === 'mock-tests' && (
+                  <MockTestSeriesHub
+                    onSelectWorkspace={(ws, subTab) => handleSelectWorkspace(ws, subTab)}
+                  />
+                )}
+
+                {activeWorkspace === 'eapcet-cbt' && (
+                  <EapcetCbtMockTestEngine
+                    key={eapcetCbtSubTab}
+                    initialState={eapcetCbtSubTab?.startsWith('tg') ? 'tg-eapcet' : 'ap-eapcet'}
+                    initialMode={eapcetCbtSubTab?.includes('express') ? 'express' : 'full'}
+                    onBackToHub={() => handleSelectWorkspace('hub')}
+                    onNavigateToPredictor={(examType) => {
+                      handleSelectWorkspace(examType === 'ap' ? 'ap-predictor' : 'tg-predictor');
+                    }}
+                  />
                 )}
 
                 {activeWorkspace === 'dsa' && (
@@ -1053,7 +1155,8 @@ export default function App() {
                   </div>
                 )}
               </Suspense>
-            </section>
+            </ChunkErrorBoundary>
+          </section>
           </div>
         )}
       </main>

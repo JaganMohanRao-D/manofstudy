@@ -92,6 +92,26 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     // 1. Primary Tools
     items.push(
       {
+        id: 'tool-mock-tests',
+        title: '🎯 Mock Test Series Hub',
+        subtitle: 'Real-time CBT simulation environments: 160-Question EAPCET Grand Test & Reliance Scholarship',
+        category: 'Core Tools',
+        badge: 'CBT Hub',
+        icon: <Award className="w-4 h-4 text-blue-500" />,
+        keywords: ['mock test', 'cbt', 'test series', 'eapcet', 'reliance', 'scholarship', 'exam', 'practice test', 'test series'],
+        action: () => onSelectTool('mock-tests'),
+      },
+      {
+        id: 'tool-eapcet-cbt',
+        title: 'EAPCET Computer-Based Test (CBT) Mock Exam Engine',
+        subtitle: 'Authentic 160-question grand test simulating AP & TG EAPCET patterns with step-by-step solutions',
+        category: 'Core Tools',
+        badge: 'CBT Exam',
+        icon: <Award className="w-4 h-4 text-blue-500" />,
+        keywords: ['eapcet', 'cbt', 'mock test', 'ap eapcet', 'tg eapcet', 'test', 'exam', 'nta', 'tcs ion', 'practice', 'rank predictor', 'maths', 'physics', 'chemistry'],
+        action: () => onSelectTool('eapcet-cbt'),
+      },
+      {
         id: 'tool-gap-analyzer',
         title: 'AI Student Gap Analyzer',
         subtitle: 'Understand where you are, identify your skill gaps, and see what to work on next.',

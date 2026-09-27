@@ -24,9 +24,15 @@ export type WorkspaceView =
   | 'internships'
   | 'campus-connect'
   | 'humanizer'
+  | 'cbt-mock-test'
+  | 'eapcet-cbt'
+  | 'mock-tests'
   | 'gap-analyzer';
 
 export type ToolTab = 
+  | 'mock-tests'
+  | 'cbt-mock-test'
+  | 'eapcet-cbt'
   | 'ap-allotments'
   | 'ap-predictor'
   | 'ap-top-colleges'

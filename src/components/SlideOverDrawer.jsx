@@ -164,9 +164,30 @@ export const SlideOverDrawer = ({
           <div className="space-y-2">
             <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               <Compass className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
-              <span>Counseling</span>
+              <span>Counseling &amp; Entrance Exams</span>
             </div>
             <div className="space-y-1">
+              <button
+                type="button"
+                id="drawer-counseling-mock-tests-btn"
+                onClick={() => handleNavigate('mock-tests')}
+                className="w-full flex items-center justify-between p-2.5 rounded-xl bg-blue-50/80 hover:bg-blue-100/80 border border-blue-200/80 dark:bg-blue-950/30 dark:hover:bg-blue-900/40 dark:border-blue-800/50 text-left transition-colors cursor-pointer group shadow-2xs"
+              >
+                <div className="flex items-start gap-2.5">
+                  <Award className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors flex items-center gap-1.5">
+                      <span>🎯 Mock Test Series Hub</span>
+                      <span className="text-[9px] bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 px-1.5 py-0.2 rounded font-mono font-semibold">NEW</span>
+                    </div>
+                    <div className="text-[10px] text-slate-600 dark:text-slate-400 leading-normal mt-0.5">
+                      160 Qs EAPCET Grand Test &amp; Reliance Scholarship CBT Simulations
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 group-hover:text-slate-700 dark:group-hover:text-slate-300 shrink-0" />
+              </button>
+
               <button
                 type="button"
                 id="drawer-counseling-eapcet-btn"
