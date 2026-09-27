@@ -319,3 +319,52 @@ html.light .mos-ap-explorer select option {
 html.light .mos-ap-explorer .bg-gradient-to-br {
   color: inherit;
 }
+
+/* ==========================================================
+   MAN OF STUDY — global theme contrast guard
+   Keeps legacy Tailwind utility classes readable when the user
+   switches between the site-wide Light and Dark themes.
+   ========================================================== */
+html.light .bg-slate-950,
+html.light .bg-slate-900,
+html.light .bg-slate-800 { background-color: var(--mos-surface) !important; }
+html.light .bg-slate-950\/60,
+html.light .bg-slate-950\/70,
+html.light .bg-slate-900\/80,
+html.light .bg-slate-900\/90 { background-color: color-mix(in srgb, var(--mos-surface) 94%, transparent) !important; }
+html.light .text-white,
+html.light .text-slate-100,
+html.light .text-slate-200 { color: var(--mos-text-primary) !important; }
+html.light .text-slate-300,
+html.light .text-slate-400 { color: var(--mos-text-secondary) !important; }
+html.light .text-slate-500 { color: var(--mos-text-muted) !important; }
+html.light .border-slate-800,
+html.light .border-slate-700 { border-color: var(--mos-border) !important; }
+
+html.dark .mos-ap-explorer .text-slate-950,
+html.dark .mos-ap-explorer .text-slate-900 { color: var(--mos-text-primary) !important; }
+html.dark .mos-ap-explorer .bg-white,
+html.dark .mos-ap-explorer .bg-white\/95,
+html.dark .mos-ap-explorer .bg-white\/90 { background-color: var(--mos-surface) !important; }
+html.dark .mos-ap-explorer .bg-slate-50,
+html.dark .mos-ap-explorer .bg-slate-100 { background-color: var(--mos-surface-muted) !important; }
+html.dark .mos-ap-explorer .border-slate-200,
+html.dark .mos-ap-explorer .border-slate-300 { border-color: var(--mos-border) !important; }
+
+html.light .mos-ap-control {
+  background: var(--mos-input-bg) !important;
+  color: var(--mos-text-primary) !important;
+  border-color: var(--mos-input-border) !important;
+}
+html.light .mos-ap-control::placeholder { color: var(--mos-text-muted) !important; }
+
+.mos-ap-explorer,
+.mos-ap-top {
+  color: var(--mos-text-primary);
+}
+.mos-ap-explorer .mos-ap-control,
+.mos-ap-top .mos-ap-control {
+  background: var(--mos-input-bg);
+  color: var(--mos-text-primary);
+  border-color: var(--mos-input-border);
+}
