@@ -7,6 +7,10 @@ import {
   BookOpen,
   GraduationCap,
   FileText,
+  Sparkles,
+  BookOpen,
+  GraduationCap,
+  FileText,
 } from 'lucide-react';
 import { FeaturesHub } from './FeaturesHub';
 
@@ -26,6 +30,18 @@ export const HeroSection = ({
       id="hero-banner"
       className="relative overflow-hidden mos-hero-premium bg-white dark:bg-slate-950 text-slate-900 dark:text-white py-10 sm:py-14 lg:py-16 px-4 sm:px-8 border border-slate-200/90 dark:border-slate-800/80 rounded-3xl shadow-lg dark:shadow-2xl space-y-10 sm:space-y-12 min-h-fit break-words transition-colors duration-200"
     >
+      {/* Premium ambient motion — decorative only, content remains fully static/readable. */}
+      <div className="mos-hero-ambient" aria-hidden="true">
+        <span className="mos-hero-bubble mos-hero-bubble-a" />
+        <span className="mos-hero-bubble mos-hero-bubble-b" />
+        <span className="mos-hero-bubble mos-hero-bubble-c" />
+        <span className="mos-hero-dot-field" />
+        <span className="mos-hero-float mos-hero-float-book"><BookOpen /></span>
+        <span className="mos-hero-float mos-hero-float-cap"><GraduationCap /></span>
+        <span className="mos-hero-float mos-hero-float-file"><FileText /></span>
+        <span className="mos-hero-float mos-hero-float-spark"><Sparkles /></span>
+      </div>
+
       {/* Background Ambience: Subtle and non-distracting */}
       <div className="hidden sm:block absolute -top-32 left-1/4 w-96 h-96 rounded-full bg-indigo-500/10 dark:bg-indigo-600/10 blur-[120px] pointer-events-none" />
       <div className="hidden sm:block absolute top-1/3 -right-20 w-96 h-96 rounded-full bg-cyan-500/10 blur-[120px] pointer-events-none" />
