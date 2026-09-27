@@ -14,10 +14,8 @@ import {
   Users,
   ShoppingBag,
   Database,
-  ArrowRight,
   ChevronRight,
   Briefcase,
-  CheckCircle2,
   MapPin
 } from 'lucide-react';
 
@@ -339,87 +337,7 @@ export const FeaturesHub = ({
         </span>
       </div>
 
-      {/* 2. Flagship Spotlight (AI Gap Analyzer & TG Predictor) */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-1">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400" />
-          <span>Flagship Features</span>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {FLAGSHIP_FEATURES.map((flagship) => {
-            const Icon = flagship.icon;
-            const isActive = flagship.workspace === activeWorkspace;
-
-            return (
-              <div
-                key={flagship.id}
-                id={flagship.id}
-                onClick={() => handleLaunchWorkspace(flagship)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleLaunchWorkspace(flagship);
-                  }
-                }}
-                tabIndex={0}
-                role="button"
-                className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${flagship.bgGradient} border ${flagship.borderColor} p-5 sm:p-6 transition-all duration-200 cursor-pointer group shadow-sm dark:shadow-lg hover:shadow-md dark:hover:shadow-xl hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 ${
-                  isActive ? 'ring-2 ring-emerald-500 border-emerald-500' : ''
-                }`}
-              >
-                <div className="flex items-start justify-between gap-4 mb-4">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs ${flagship.iconBg}`}
-                    >
-                      <Icon className={`w-5 h-5 ${flagship.iconColor}`} />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-wide border ${flagship.badgeStyle}`}>
-                          {flagship.badge}
-                        </span>
-                      </div>
-                      <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors">
-                        {flagship.title}
-                      </h3>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Outcome-oriented description */}
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
-                  {flagship.description}
-                </p>
-
-                {/* Highlights list */}
-                <div className="space-y-1.5 mb-5 text-xs text-slate-600 dark:text-slate-400">
-                  {flagship.highlights.map((h, i) => (
-                    <div key={i} className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400 shrink-0" />
-                      <span>{h}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Primary Action Button */}
-                <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between">
-                  <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300 flex items-center gap-1.5 transition-colors">
-                    <span>{flagship.actionText}</span>
-                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-                  </span>
-                  <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                    No login required
-                  </span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Regional admission hubs */}
+      {/* AP & Telangana admission hubs — primary hero entry points */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {regionalGroups.map((group) => (
           <section key={group.title} className="relative overflow-hidden rounded-[1.75rem] border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 p-4 sm:p-5 shadow-lg">
