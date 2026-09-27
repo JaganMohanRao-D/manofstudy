@@ -8,7 +8,7 @@ export default function ApTopColleges() {
   const [branch, setBranch] = useState('CSE');
   const [district, setDistrict] = useState('ALL');
   const [search, setSearch] = useState('');
-  const [sortBy, setSortBy] = useState('median_asc');
+  const [sortBy, setSortBy] = useState('fill_desc');
   const [branches, setBranches] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [rows, setRows] = useState([]);
@@ -70,7 +70,7 @@ export default function ApTopColleges() {
   );
 
   const summary = useMemo(() => {
-    if (!rows.length) return { median: 0, opening: 0, closing: 0, records: 0 };
+    if (!rows.length) return { median: 0, opening: 0, closing: 0, records: 0, seats: 0, filled: 0, remaining: 0, top25: 0 };
     const medians = rows.map((row) => row.stats.medianRank).filter((value) => value > 0).sort((a, b) => a - b);
     const openings = rows.map((row) => row.stats.openingRank).filter((value) => value > 0);
     const closings = rows.map((row) => row.stats.closingRank).filter((value) => value > 0);
@@ -84,6 +84,10 @@ export default function ApTopColleges() {
       opening: openings.length ? Math.min(...openings) : 0,
       closing: closings.length ? Math.max(...closings) : 0,
       records: rows.reduce((sum, row) => sum + row.stats.validOcAllotments, 0),
+      seats: rows.reduce((sum, row) => sum + (row.stats.seatStats?.totalSeats || 0), 0),
+      filled: rows.reduce((sum, row) => sum + (row.stats.seatStats?.filledSeats || 0), 0),
+      remaining: rows.reduce((sum, row) => sum + (row.stats.seatStats?.remainingSeats || 0), 0),
+      top25: rows.reduce((sum, row) => sum + row.stats.top25kAllotments, 0),
     };
   }, [rows]);
 
@@ -100,7 +104,7 @@ export default function ApTopColleges() {
               AP B.Tech College <span className="text-cyan-600 dark:text-cyan-300">Explorer</span>
             </h1>
             <p className="mt-3 max-w-3xl text-sm sm:text-base leading-7 text-slate-600 dark:text-slate-300">
-              Compare observed 2026 AP EAPCET college and branch rank patterns using opening rank, median rank and closing rank. This is historical context from the available allotment records, not an official ranking or admission guarantee.
+              Compare observed 2026 AP EAPCET college and branch demand using rank patterns, total seats, filled seats, seats remaining, seat fill rate and transparent rank-threshold allotment counts. This is historical context from the available allotment records, not an official ranking or admission guarantee.
             </p>
           </div>
         </header>
@@ -139,9 +143,14 @@ export default function ApTopColleges() {
             <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
               Sort observed ranks
               <select value={sortBy} onChange={(event) => setSortBy(event.target.value)} className="mos-ap-control mt-1.5 w-full rounded-2xl px-3.5 py-3.5 text-sm font-bold outline-none">
-                <option value="median_asc">Median rank · best first</option>
-                <option value="opening_asc">Opening rank · best first</option>
-                <option value="closing_asc">Closing rank · best first</option>
+                <option value="fill_desc">Seat fill rate · high first</option>
+                <option value="top25_desc">Rank ≤25,000 allotments · high first</option>
+                <option value="top25share_desc">Rank ≤25,000 share · high first</option>
+                <option value="filled_desc">Filled seats · high first</option>
+                <option value="remaining_asc">Remaining seats · low first</option>
+                <option value="median_asc">Median OC rank · low first</option>
+                <option value="opening_asc">Opening OC rank · low first</option>
+                <option value="closing_asc">Closing OC rank · low first</option>
               </select>
             </label>
           </div>
@@ -151,25 +160,39 @@ export default function ApTopColleges() {
               Statewide or district-specific view
             </span>
             <span className="rounded-full border border-slate-200 dark:border-white/10 bg-slate-100/90 dark:bg-slate-950/70 px-2.5 py-1">
-              Sort: {sortBy === 'opening_asc' ? 'lowest opening rank first' : sortBy === 'closing_asc' ? 'lowest closing rank first' : 'lowest median rank first'}
+              Sort: {sortBy === 'fill_desc'
+                ? 'highest seat fill rate first'
+                : sortBy === 'top25_desc'
+                  ? 'most allotments with rank ≤25,000 first'
+                  : sortBy === 'top25share_desc'
+                    ? 'highest rank ≤25,000 share first'
+                    : sortBy === 'filled_desc'
+                      ? 'most filled seats first'
+                      : sortBy === 'remaining_asc'
+                        ? 'fewest remaining seats first'
+                        : sortBy === 'opening_asc'
+                          ? 'lowest opening OC rank first'
+                          : sortBy === 'closing_asc'
+                            ? 'lowest closing OC rank first'
+                            : 'lowest median OC rank first'}
             </span>
           </div>
         </section>
 
         <section className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {[
-            ['Colleges offering this view', rows.length, Building2],
-            ['Median of college medians', summary.median, Target],
-            ['Best observed opening rank', summary.opening, TrendingUp],
-            ['Latest observed closing rank', summary.closing, BarChart3],
-          ].map(([label, value, Icon]) => (
+            ['Colleges in this view', rows.length, Building2, rows.length ? rows.length.toLocaleString('en-IN') : '—'],
+            ['Total seats in view', summary.seats, Target, summary.seats ? summary.seats.toLocaleString('en-IN') : '—'],
+            ['Filled seats in view', summary.filled, CheckCircle2, summary.filled ? summary.filled.toLocaleString('en-IN') : '—'],
+            ['Rank ≤25,000 allotments', summary.top25, TrendingUp, summary.top25 ? summary.top25.toLocaleString('en-IN') : '—'],
+          ].map(([label, value, Icon, displayValue]) => (
             <div key={String(label)} className="mos-stat-card rounded-2xl border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/85 p-4 shadow-lg">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] uppercase tracking-[.14em] text-slate-500 dark:text-slate-400">{label}</span>
                 {React.createElement(Icon, { className: 'h-4 w-4 text-cyan-600 dark:text-cyan-300' })}
               </div>
               <div className="mt-2 text-lg sm:text-2xl font-black text-slate-950 dark:text-white">
-                {typeof value === 'number' && value > 0 ? formatRank(value) : '—'}
+                {displayValue}
               </div>
             </div>
           ))}
@@ -229,15 +252,39 @@ export default function ApTopColleges() {
                     </div>
                   </div>
 
-                  <div className="mt-3 h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden relative">
-                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 via-indigo-400 to-amber-400 opacity-80" />
+                  <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <div className="rounded-xl bg-slate-50 dark:bg-slate-950/60 p-2.5">
+                      <div className="text-[9px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Total seats</div>
+                      <div className="mt-1 font-black text-slate-900 dark:text-white">{row.stats.seatStats ? row.stats.seatStats.totalSeats.toLocaleString('en-IN') : '—'}</div>
+                    </div>
+                    <div className="rounded-xl bg-emerald-500/10 p-2.5">
+                      <div className="text-[9px] uppercase tracking-wider text-emerald-700 dark:text-emerald-300">Filled</div>
+                      <div className="mt-1 font-black text-emerald-800 dark:text-emerald-200">{row.stats.seatStats ? row.stats.seatStats.filledSeats.toLocaleString('en-IN') : '—'}</div>
+                    </div>
+                    <div className="rounded-xl bg-amber-500/10 p-2.5">
+                      <div className="text-[9px] uppercase tracking-wider text-amber-700 dark:text-amber-300">Seats left</div>
+                      <div className="mt-1 font-black text-amber-800 dark:text-amber-200">{row.stats.seatStats ? row.stats.seatStats.remainingSeats.toLocaleString('en-IN') : '—'}</div>
+                    </div>
+                    <div className="rounded-xl bg-cyan-500/10 p-2.5">
+                      <div className="text-[9px] uppercase tracking-wider text-cyan-700 dark:text-cyan-300">Fill rate</div>
+                      <div className="mt-1 font-black text-cyan-800 dark:text-cyan-200">{row.stats.seatStats ? row.stats.seatStats.fillRatePercent.toFixed(1) + '%' : '—'}</div>
+                    </div>
+                  </div>
+
+                  <div className="mt-3 h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-cyan-500 to-emerald-500"
+                      style={{ width: Math.min(100, Math.max(0, row.stats.seatStats?.fillRatePercent || 0)) + '%' }}
+                    />
                   </div>
 
                   <div className="mt-2 flex flex-wrap items-center gap-2 text-[10px] text-slate-500 dark:text-slate-400">
                     <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
-                    {row.stats.validOcAllotments.toLocaleString()} valid OC candidate-category allotment records used
+                    {row.stats.top25kAllotments.toLocaleString('en-IN')} allotments with rank ≤25,000
                     <span className="hidden sm:inline">·</span>
-                    <span>Sorted by median observed rank</span>
+                    {row.stats.top25kSharePercent.toFixed(1)}% of observed allotments in this branch
+                    <span className="hidden sm:inline">·</span>
+                    {row.stats.validOcAllotments.toLocaleString('en-IN')} OC records used for rank metrics
                   </div>
                 </article>
               ))
@@ -248,7 +295,7 @@ export default function ApTopColleges() {
         <section className="rounded-2xl border border-cyan-500/15 bg-cyan-500/5 p-4 sm:p-5 text-xs leading-6 text-slate-700 dark:text-slate-300">
           <div className="font-black text-cyan-800 dark:text-cyan-300">How this comparison is calculated</div>
           <p className="mt-1">
-            The dataset is grouped by college and engineering branch. For each branch, only records whose candidate category is OC are used. Opening rank is the smallest observed rank, closing rank is the largest observed rank, and median rank is the mathematical median of all valid OC candidate ranks in that branch. Colleges are displayed by ascending median rank; this is a transparent observed-data comparison, not an official AP EAPCET ranking or a prediction of admission.
+            The dataset is grouped by college and engineering branch. OC records are used for opening/median/closing rank metrics. Seat capacity and remaining seats come directly from the 2026 allotment records; the latest available counselling phase snapshot is used for each branch, and filled seats are calculated as total seats minus seats remaining. “Rank ≤25,000 allotments” is an absolute-rank demand indicator, not a claim that those candidates are inherently “good” or that the college is objectively better. There is no hidden weighted college score.
           </p>
         </section>
       </div>
