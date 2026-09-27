@@ -580,3 +580,174 @@ html.dark #campus-connect .shadow-pink-200\/50 {
 
 
 
+
+
+/* Predictor pages — final light/dark contrast hardening */
+/*
+ * IMPORTANT: These scoped rules intentionally sit after the legacy utility
+ * overrides. The predictor components contain many older hard-coded Tailwind
+ * colors; the scope makes light/dark theme switching deterministic without
+ * changing the underlying data or predictor logic.
+ */
+
+/* ---------- LIGHT THEME ---------- */
+html.light .mos-tg-explorer,
+html.light .mos-ap-explorer {
+  background-color: var(--mos-page-bg) !important;
+  color: var(--mos-text-primary) !important;
+}
+
+html.light .mos-tg-explorer .bg-white,
+html.light .mos-ap-explorer .bg-white {
+  background-color: var(--mos-surface) !important;
+  color: var(--mos-text-primary) !important;
+}
+html.light .mos-tg-explorer .bg-white\/95,
+html.light .mos-tg-explorer .bg-white\/90,
+html.light .mos-tg-explorer .bg-white\/80,
+html.light .mos-ap-explorer .bg-white\/95,
+html.light .mos-ap-explorer .bg-white\/90,
+html.light .mos-ap-explorer .bg-white\/80 {
+  background-color: color-mix(in srgb, var(--mos-surface) 96%, transparent) !important;
+}
+
+html.light .mos-tg-explorer .bg-slate-50,
+html.light .mos-tg-explorer .bg-slate-100,
+html.light .mos-tg-explorer .bg-slate-200,
+html.light .mos-ap-explorer .bg-slate-50,
+html.light .mos-ap-explorer .bg-slate-100,
+html.light .mos-ap-explorer .bg-slate-200 {
+  background-color: var(--mos-surface-muted) !important;
+}
+
+html.light .mos-tg-explorer .bg-slate-950,
+html.light .mos-tg-explorer .bg-slate-900,
+html.light .mos-tg-explorer .bg-slate-800,
+html.light .mos-ap-explorer .bg-slate-950,
+html.light .mos-ap-explorer .bg-slate-900,
+html.light .mos-ap-explorer .bg-slate-800 {
+  background-color: var(--mos-surface) !important;
+}
+
+html.light .mos-tg-explorer .text-slate-950,
+html.light .mos-tg-explorer .text-slate-900,
+html.light .mos-tg-explorer .text-slate-800,
+html.light .mos-ap-explorer .text-slate-950,
+html.light .mos-ap-explorer .text-slate-900,
+html.light .mos-ap-explorer .text-slate-800 {
+  color: var(--mos-text-primary) !important;
+}
+html.light .mos-tg-explorer .text-slate-700,
+html.light .mos-tg-explorer .text-slate-600,
+html.light .mos-ap-explorer .text-slate-700,
+html.light .mos-ap-explorer .text-slate-600 {
+  color: var(--mos-text-secondary) !important;
+}
+html.light .mos-tg-explorer .text-slate-500,
+html.light .mos-tg-explorer .text-slate-400,
+html.light .mos-ap-explorer .text-slate-500,
+html.light .mos-ap-explorer .text-slate-400 {
+  color: var(--mos-text-muted) !important;
+}
+html.light .mos-tg-explorer .text-white,
+html.light .mos-ap-explorer .text-white {
+  color: var(--mos-text-primary) !important;
+}
+
+html.light .mos-tg-explorer .border-slate-100,
+html.light .mos-tg-explorer .border-slate-200,
+html.light .mos-tg-explorer .border-slate-300,
+html.light .mos-tg-explorer .border-slate-700,
+html.light .mos-tg-explorer .border-slate-800,
+html.light .mos-ap-explorer .border-slate-100,
+html.light .mos-ap-explorer .border-slate-200,
+html.light .mos-ap-explorer .border-slate-300,
+html.light .mos-ap-explorer .border-slate-700,
+html.light .mos-ap-explorer .border-slate-800 {
+  border-color: var(--mos-border) !important;
+}
+
+/* Keep native selects readable when their OS/browser popup is open. */
+html.light .mos-tg-explorer select,
+html.light .mos-ap-explorer select {
+  color: var(--mos-text-primary) !important;
+  background-color: var(--mos-input-bg) !important;
+  border-color: var(--mos-input-border) !important;
+  color-scheme: light;
+}
+html.light .mos-tg-explorer select option,
+html.light .mos-ap-explorer select option {
+  background-color: var(--mos-surface) !important;
+  color: var(--mos-text-primary) !important;
+}
+
+/* ---------- DARK THEME ---------- */
+html.dark .mos-tg-explorer,
+html.dark .mos-ap-explorer {
+  background-color: var(--mos-page-bg) !important;
+  color: var(--mos-text-primary) !important;
+}
+
+html.dark .mos-tg-explorer .bg-white,
+html.dark .mos-tg-explorer .bg-white\/95,
+html.dark .mos-tg-explorer .bg-white\/90,
+html.dark .mos-tg-explorer .bg-white\/80,
+html.dark .mos-ap-explorer .bg-white,
+html.dark .mos-ap-explorer .bg-white\/95,
+html.dark .mos-ap-explorer .bg-white\/90,
+html.dark .mos-ap-explorer .bg-white\/80 {
+  background-color: var(--mos-surface) !important;
+  color: var(--mos-text-primary) !important;
+}
+
+html.dark .mos-tg-explorer .bg-slate-50,
+html.dark .mos-tg-explorer .bg-slate-100,
+html.dark .mos-tg-explorer .bg-slate-200,
+html.dark .mos-ap-explorer .bg-slate-50,
+html.dark .mos-ap-explorer .bg-slate-100,
+html.dark .mos-ap-explorer .bg-slate-200 {
+  background-color: var(--mos-surface-muted) !important;
+}
+
+html.dark .mos-tg-explorer .text-slate-950,
+html.dark .mos-tg-explorer .text-slate-900,
+html.dark .mos-tg-explorer .text-slate-800,
+html.dark .mos-ap-explorer .text-slate-950,
+html.dark .mos-ap-explorer .text-slate-900,
+html.dark .mos-ap-explorer .text-slate-800 {
+  color: var(--mos-text-primary) !important;
+}
+html.dark .mos-tg-explorer .text-slate-700,
+html.dark .mos-tg-explorer .text-slate-600,
+html.dark .mos-ap-explorer .text-slate-700,
+html.dark .mos-ap-explorer .text-slate-600 {
+  color: var(--mos-text-secondary) !important;
+}
+html.dark .mos-tg-explorer .text-slate-500,
+html.dark .mos-tg-explorer .text-slate-400,
+html.dark .mos-ap-explorer .text-slate-500,
+html.dark .mos-ap-explorer .text-slate-400 {
+  color: var(--mos-text-muted) !important;
+}
+
+html.dark .mos-tg-explorer select,
+html.dark .mos-ap-explorer select {
+  color: var(--mos-text-primary) !important;
+  background-color: var(--mos-input-bg) !important;
+  border-color: var(--mos-input-border) !important;
+  color-scheme: dark;
+}
+html.dark .mos-tg-explorer select option,
+html.dark .mos-ap-explorer select option {
+  background-color: var(--mos-surface) !important;
+  color: var(--mos-text-primary) !important;
+}
+
+/* Verdict cards: never let a theme override turn text into the background. */
+.mos-tg-explorer .text-slate-900,
+.mos-tg-explorer .text-slate-800,
+.mos-ap-explorer .text-slate-900,
+.mos-ap-explorer .text-slate-800 {
+  text-shadow: none;
+  -webkit-text-fill-color: currentColor;
+}
