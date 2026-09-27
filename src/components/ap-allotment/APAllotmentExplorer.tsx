@@ -11,6 +11,7 @@ import {
   getCollegeDetails,
   searchAllotments,
   getDatasetSummary,
+  getAvailableBranches,
 } from '../../services/apEapcetAllotmentService';
 import APAllotmentTable from './APAllotmentTable';
 import APStudentSearch from './APStudentSearch';
@@ -49,6 +50,7 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
   const [collegeData, setCollegeData] = useState<CollegeDetailData | null>(null);
   const [allColleges, setAllColleges] = useState<CollegeDetailData[]>([]);
   const [datasetSummary, setDatasetSummary] = useState<any>(null);
+  const [datasetBranches, setDatasetBranches] = useState<BranchOption[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [studentSearch, setStudentSearch] = useState('');
@@ -87,14 +89,16 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
     setCollegeData(null);
     setDatasetSummary(null);
     setCollegesList([]);
+    setDatasetBranches([]);
     setSelectedDistrict('ALL');
     setLoadError(null);
     setIsLoading(true);
-    Promise.all([getCollegeList(selectedYear), getDatasetSummary(selectedYear)])
-      .then(([list, summary]) => {
+    Promise.all([getCollegeList(selectedYear), getDatasetSummary(selectedYear), getAvailableBranches(selectedYear)])
+      .then(([list, summary, branches]) => {
         if (cancelled) return;
         setCollegesList(list);
         setDatasetSummary(summary);
+        setDatasetBranches(branches.map((branch) => ({ ...branch, recordCount: 0 })));
       })
       .catch((error) => {
         if (cancelled) return;
@@ -156,12 +160,14 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
     if (selectedBranchCode !== 'ALL' && !available.has(selectedBranchCode)) setSelectedBranchCode('ALL');
   }, [collegeData, selectedBranchCode]);
 
-  const branchOptions: BranchOption[] = useMemo(() =>
-    (collegeData?.branches ?? []).map((branch) => ({
+  const branchOptions: BranchOption[] = useMemo(() => {
+    if (selectedCollegeCode === 'ALL') return datasetBranches;
+    return (collegeData?.branches ?? []).map((branch) => ({
       branchCode: branch.branch_code,
       branchName: branch.branch_name,
       recordCount: branch.recordCount,
-    })), [collegeData]);
+    }));
+  }, [collegeData, datasetBranches, selectedCollegeCode]);
 
   const filteredCollegeBranches = useMemo(() => {
     if (!collegeData) return [];
