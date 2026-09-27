@@ -36,7 +36,11 @@ import { EducationalGuideAndSeo } from './components/EducationalGuideAndSeo';
 import type { EapcetPhaseTab } from './components/ApEapcetRadar';
 
 // Dynamic code splitting / Lazy loading for heavy sub-pages, modals, and tools
-const GuidesHub = lazy(() => import('./components/GuidesHub'));
+const GuidesHub = lazy(() =>
+  import('./components/GuidesHub').then((m: any) => ({
+    default: m.GuidesHub || m.default,
+  }))
+);
 const ScholarshipsHub = lazy(() =>
   import('./components/ScholarshipsHub').then((m: any) => ({
     default: m.ScholarshipsHub || m.default,
