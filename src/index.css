@@ -1341,3 +1341,118 @@ html.light .mos-hero-premium .text-slate-500,
 html.light .mos-hero-premium .text-slate-600 {
   opacity: 1 !important;
 }
+
+
+/* Hero ambience aliases for the current JSX layer. */
+.mos-hero-bubble {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  will-change: transform;
+  opacity: .72;
+  filter: blur(.2px);
+  background: radial-gradient(circle at 35% 35%, rgba(14,165,233,.18), rgba(14,165,233,0) 70%);
+}
+.mos-hero-bubble-a {
+  width: 15rem; height: 15rem; left: -4rem; top: 10%;
+  animation: mos-hero-bubble-a 12s ease-in-out infinite;
+}
+.mos-hero-bubble-b {
+  width: 19rem; height: 19rem; right: -6rem; top: 7%;
+  background: radial-gradient(circle at 45% 45%, rgba(16,185,129,.16), rgba(16,185,129,0) 70%);
+  animation: mos-hero-bubble-b 15s ease-in-out infinite;
+}
+.mos-hero-bubble-c {
+  width: 12rem; height: 12rem; left: 45%; bottom: -6rem;
+  background: radial-gradient(circle at 50% 40%, rgba(99,102,241,.11), rgba(99,102,241,0) 70%);
+  animation: mos-hero-bubble-c 13s ease-in-out infinite;
+}
+.mos-hero-dot-field {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(14,116,144,.20) 1px, transparent 1.2px);
+  background-size: 27px 27px;
+  opacity: .52;
+  mask-image: linear-gradient(to bottom, black 0%, rgba(0,0,0,.72) 62%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, rgba(0,0,0,.72) 62%, transparent 100%);
+}
+.mos-hero-float {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 42px; height: 42px;
+  border: 1px solid rgba(148,163,184,.28);
+  border-radius: 14px;
+  background: rgba(255,255,255,.64);
+  color: #0E7490;
+  box-shadow: 0 12px 30px rgba(15,23,42,.07), inset 0 1px 0 rgba(255,255,255,.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  will-change: transform;
+  animation: mos-hero-float 8s ease-in-out infinite;
+}
+.mos-hero-float svg { width: 18px; height: 18px; }
+html.dark .mos-hero-float {
+  background: rgba(13,22,39,.70);
+  border-color: rgba(148,163,184,.16);
+  color: #67E8F9;
+  box-shadow: 0 14px 34px rgba(0,0,0,.28);
+}
+.mos-hero-float-book { left: 7%; top: 44%; transform: rotate(-7deg); animation-delay: -1.5s; }
+.mos-hero-float-cap { right: 8%; top: 40%; transform: rotate(8deg); animation-delay: -3.8s; }
+.mos-hero-float-file { right: 18%; bottom: 10%; transform: rotate(-4deg); animation-delay: -5.8s; }
+.mos-hero-float-spark { left: 18%; bottom: 12%; transform: rotate(5deg); animation-delay: -6.8s; }
+
+@keyframes mos-hero-bubble-a {
+  0%,100% { transform: translate3d(0,0,0) scale(1); }
+  50% { transform: translate3d(28px,-18px,0) scale(1.05); }
+}
+@keyframes mos-hero-bubble-b {
+  0%,100% { transform: translate3d(0,0,0) scale(1); }
+  50% { transform: translate3d(-26px,20px,0) scale(.96); }
+}
+@keyframes mos-hero-bubble-c {
+  0%,100% { transform: translate3d(0,0,0) scale(.98); }
+  50% { transform: translate3d(12px,-18px,0) scale(1.04); }
+}
+@keyframes mos-hero-float {
+  0%,100% { translate: 0 0; }
+  50% { translate: 0 -10px; }
+}
+
+@media (max-width: 900px) {
+  .mos-hero-float { width: 36px; height: 36px; border-radius: 12px; }
+  .mos-hero-float-book { left: 3%; top: 18%; }
+  .mos-hero-float-cap { right: 3%; top: 21%; }
+  .mos-hero-float-file { right: 8%; bottom: 7%; }
+  .mos-hero-float-spark { left: 8%; bottom: 8%; }
+}
+@media (max-width: 640px) {
+  .mos-hero-bubble-a { width: 10rem; height: 10rem; left: -4rem; }
+  .mos-hero-bubble-b { width: 11rem; height: 11rem; right: -4rem; }
+  .mos-hero-bubble-c { width: 8rem; height: 8rem; }
+  .mos-hero-dot-field { background-size: 22px 22px; opacity: .35; }
+  .mos-hero-float { width: 30px; height: 30px; border-radius: 9px; }
+  .mos-hero-float svg { width: 14px; height: 14px; }
+  .mos-hero-float-book { left: 4%; top: 15%; }
+  .mos-hero-float-cap { right: 4%; top: 17%; }
+  .mos-hero-float-file { right: 10%; bottom: 5%; }
+  .mos-hero-float-spark { left: 9%; bottom: 6%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mos-hero-bubble,
+  .mos-hero-float {
+    animation: none !important;
+  }
+}
+
+/* Bright-mode safety net for commonly used dark-surface gradient utilities. */
+html.light [class*="from-slate-950"],
+html.light [class*="from-slate-900"],
+html.light [class*="via-slate-950"],
+html.light [class*="via-slate-900"],
+html.light [class*="to-slate-950"],
+html.light [class*="to-slate-900"] {
+  --tw-gradient-from: var(--mos-surface) !important;
+  --tw-gradient-to: var(--mos-surface) !important;
+}
