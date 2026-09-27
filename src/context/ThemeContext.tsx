@@ -17,7 +17,7 @@ const ThemeContext = createContext<ThemeContextType>({
 });
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Dark mode is default as per requirements
+  // Light mode is the primary presentation for the redesigned MOS experience.
   const [theme, setThemeState] = useState<Theme>(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -25,8 +25,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           localStorage.getItem('mos_theme') ||
           localStorage.getItem('javisak_theme') ||
           localStorage.getItem('studymacha_theme');
-        if (saved === 'light') return 'light';
-        return 'dark';
+        if (saved === 'dark') return 'dark';
+        return 'light';
       } catch {
         return 'dark';
       }
