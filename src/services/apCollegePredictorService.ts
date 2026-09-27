@@ -462,8 +462,8 @@ export async function runApPredictorAnalysis(
         const bufferStr = Math.abs(rankBuffer).toLocaleString('en-IN');
         whyExplanation = `Your rank ${studentRank.toLocaleString('en-IN')} is comfortably within the 2026 closing rank of ${bestClosingRank.toLocaleString('en-IN')} (+${bufferStr} rank security cushion). High probability of allotment in early counseling rounds.`;
         highChanceCount++;
-      } else if (studentRank <= Math.round(bestClosingRank * 1.15)) {
-        // Medium / Competitive Chance (within 10-15% above closing rank)
+      } else if (studentRank <= Math.round(bestClosingRank * 1.10)) {
+        // Medium / Competitive Chance — mirror TG's 10% borderline window
         verdict = 'COMPETITIVE';
         classification = 'NEAR_RANGE';
         verdictLabel = '⚡ Target Reachable';
