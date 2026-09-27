@@ -143,6 +143,7 @@ async function loadIndex(year: AllotmentYear): Promise<CollegeListItem[]> {
         collegeName: String(college.college_name ?? college.collegeName ?? '').trim(),
         file: String(college.file ?? '').trim(),
         recordCount: Number(college.records ?? college.record_count ?? 0),
+        district: String(college.district ?? '').trim(),
       }))
       .filter(
         (college: CollegeListItem) =>
@@ -160,6 +161,10 @@ async function loadIndex(year: AllotmentYear): Promise<CollegeListItem[]> {
 
 export async function getCollegeList(year: AllotmentYear = '2026') {
   return loadIndex(year);
+}
+
+export function getAvailableDistricts(colleges: CollegeListItem[]): string[] {
+  return Array.from(new Set(colleges.map((c) => String(c.district ?? '').trim()).filter(Boolean))).sort((a,b)=>a.localeCompare(b));
 }
 
 function parseCollege(raw: any, meta: CollegeListItem): CollegeDetailData {
