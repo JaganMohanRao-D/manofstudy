@@ -1122,7 +1122,13 @@ html.light .text-pink-400 { color: #BE185D !important; }
 
 html.light .text-white\/60,
 html.light .text-white\/70,
-html.light .text-white\/80 {
+html.light .text-white\/80,
+html.light .text-zinc-300,
+html.light .text-zinc-400,
+html.light .text-zinc-500,
+html.light .text-neutral-300,
+html.light .text-neutral-400,
+html.light .text-neutral-500 {
   color: #334155 !important;
 }
 
@@ -1454,6 +1460,7 @@ html.light [class*="via-slate-900"],
 html.light [class*="to-slate-950"],
 html.light [class*="to-slate-900"] {
   --tw-gradient-from: var(--mos-surface) !important;
+  --tw-gradient-via: var(--mos-surface) !important;
   --tw-gradient-to: var(--mos-surface) !important;
 }
 
