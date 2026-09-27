@@ -1051,3 +1051,35 @@ html.dark body {
     box-shadow: 0 8px 24px rgba(15, 23, 42, 0.075) !important;
   }
 }
+
+
+/* Premium hero surface */
+html.light .mos-hero-premium {
+  background:
+    radial-gradient(circle at 12% 12%, rgba(14,165,233,.11), transparent 22rem),
+    radial-gradient(circle at 88% 20%, rgba(16,185,129,.10), transparent 24rem),
+    linear-gradient(145deg, #FFFFFF 0%, #F8FBFF 48%, #F7FCFA 100%) !important;
+  border-color: rgba(148,163,184,.30) !important;
+  box-shadow:
+    0 24px 70px rgba(15,23,42,.08),
+    inset 0 1px 0 rgba(255,255,255,.9) !important;
+}
+html.light .mos-hero-premium::after {
+  content: "";
+  position: absolute;
+  inset: 1rem;
+  border-radius: 1.35rem;
+  border: 1px solid rgba(255,255,255,.72);
+  pointer-events: none;
+}
+html.light .mos-hero-kicker {
+  background: rgba(255,255,255,.82) !important;
+  border-color: rgba(148,163,184,.30) !important;
+  box-shadow: 0 8px 24px rgba(15,23,42,.05);
+}
+html.light .mos-hero-title {
+  text-shadow: 0 1px 0 rgba(255,255,255,.8);
+}
+html.light .mos-hero-subtitle {
+  color: #334155 !important;
+}
