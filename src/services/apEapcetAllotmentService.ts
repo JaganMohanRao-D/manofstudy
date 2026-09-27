@@ -189,11 +189,11 @@ function parseCollege(raw: any, meta: CollegeListItem): CollegeDetailData {
   const branchMap = new Map<string, { name: string; records: AllotmentRecord[] }>();
 
   const push = (source: any, branchCodeHint = '', branchNameHint = '') => {
-    const rank = asOptionalNumber(source.rank);
-    if (!rank || rank <= 0) return;
+    const rawRank = asOptionalNumber(source.rank);
+    const rank = rawRank && rawRank > 0 ? Math.round(rawRank) : 0;
 
     const record: AllotmentRecord = {
-      rank: Math.round(rank),
+      rank,
       cand_name: String(source.cand_name ?? source.applicant_name ?? source.name ?? '').trim(),
       gender: String(source.gender ?? '').trim().toUpperCase(),
       category: String(source.category ?? source.community ?? '').trim(),
@@ -395,11 +395,11 @@ export async function searchAllotments(year: AllotmentYear, options: SearchOptio
 
   for (const raw of candidates) {
     const [rank, candName, gender, category, region, allottedCategory, rawPhase, collegeCode, branchCode, hallTicket] = raw;
-    if (!rank || rank <= 0) continue;
+    const numRank = typeof rank === 'number' ? rank : (asOptionalNumber(rank) ?? 0);
     if (nameQuery && !normalize(candName).includes(nameQuery)) continue;
-    if (options.exactRank && rank !== options.exactRank) continue;
-    if (options.minRank && rank < options.minRank) continue;
-    if (options.maxRank && rank > options.maxRank) continue;
+    if (options.exactRank && numRank !== options.exactRank) continue;
+    if (options.minRank && (numRank <= 0 || numRank < options.minRank)) continue;
+    if (options.maxRank && (numRank <= 0 || numRank > options.maxRank)) continue;
     if (targetCollege !== 'ALL' && String(collegeCode).toUpperCase() !== targetCollege) continue;
     if (targetBranch !== 'ALL' && String(branchCode).toUpperCase() !== targetBranch) continue;
     if (targetCategory !== 'ALL' && String(category).toUpperCase() !== targetCategory) continue;
@@ -413,7 +413,7 @@ export async function searchAllotments(year: AllotmentYear, options: SearchOptio
     if (EXCLUDED_AP_COLLEGE_CODES.has(code)) continue;
     const bcode = String(branchCode ?? '').toUpperCase();
     results.push({
-      rank: Number(rank),
+      rank: numRank,
       cand_name: String(candName ?? ''),
       gender: String(gender ?? '').toUpperCase(),
       category: String(category ?? ''),
@@ -442,14 +442,18 @@ export async function getBranchSummaries(year: AllotmentYear): Promise<BranchSum
       const categoryRanks: BranchSummary['categoryRanks'] = {};
 
       for (const record of branch.records) {
-        minRank = Math.min(minRank, record.rank);
-        maxRank = Math.max(maxRank, record.rank);
+        if (record.rank > 0) {
+          minRank = Math.min(minRank, record.rank);
+          maxRank = Math.max(maxRank, record.rank);
+        }
         const category = record.category || 'UNKNOWN';
         if (!categoryRanks[category]) {
           categoryRanks[category] = { minRank: Infinity, maxRank: 0, count: 0 };
         }
-        categoryRanks[category].minRank = Math.min(categoryRanks[category].minRank, record.rank);
-        categoryRanks[category].maxRank = Math.max(categoryRanks[category].maxRank, record.rank);
+        if (record.rank > 0) {
+          categoryRanks[category].minRank = Math.min(categoryRanks[category].minRank, record.rank);
+          categoryRanks[category].maxRank = Math.max(categoryRanks[category].maxRank, record.rank);
+        }
         categoryRanks[category].count += 1;
       }
 
@@ -461,7 +465,15 @@ export async function getBranchSummaries(year: AllotmentYear): Promise<BranchSum
         count: branch.recordCount,
         minRank: minRank === Infinity ? 0 : minRank,
         maxRank,
-        categoryRanks,
+        categoryRanks: Object.fromEntries(
+          Object.entries(categoryRanks).map(([cat, val]) => [
+            cat,
+            {
+              ...val,
+              minRank: val.minRank === Infinity ? 0 : val.minRank,
+            },
+          ])
+        ),
       });
     }
   }

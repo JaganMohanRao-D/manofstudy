@@ -43,6 +43,7 @@ import {
   CS_ALLIED_BRANCHES
 } from '../services/tgCollegePredictorService';
 import { TG_EAPCET_COLLEGE_MANIFEST } from '../data/tgEapcetCollegeManifest';
+import { getPredictorVerdict } from '../utils/predictorLocalization';
 
 // All official TG EAPCET Social Categories
 export const BASE_SOCIAL_CATEGORIES = [
@@ -707,14 +708,18 @@ export default function TgCollegePredictor({ onNavigateToAllotment }) {
                     {visibleMatches.map(match => {
                       const isCompared = comparedColleges.some(c => c.id === match.id);
                       const isAddedToOptions = webOptionsList.some(o => o.id === match.id);
+                      const currentRank = parseInt(String(rankInput).replace(/,/g, ''), 10) || 25000;
+                      const isEligible = currentRank <= match.maxObservedRank;
+                      const isBorderline = !isEligible && currentRank <= Math.round(match.maxObservedRank * 1.10);
+                      const verdictInfo = getPredictorVerdict(isEligible, isBorderline, selectedGender);
 
                       return (
                         <div
                           key={match.id}
-                          className="bg-slate-900/90 border border-slate-800 hover:border-slate-700 rounded-2xl p-5 transition-all shadow-sm flex flex-col justify-between space-y-4"
+                          className={`bg-slate-900/90 rounded-2xl p-5 transition-all shadow-sm flex flex-col justify-between space-y-4 border ${verdictInfo.cardStyle.border}`}
                         >
                           {/* Header: College Name, Code, Branch */}
-                          <div className="space-y-2">
+                          <div className="space-y-2.5">
                             <div className="flex items-start justify-between gap-3">
                               <div>
                                 <div className="flex items-center gap-2">
@@ -733,10 +738,9 @@ export default function TgCollegePredictor({ onNavigateToAllotment }) {
 
                               {/* Classification Badge */}
                               <div
-                                className={`px-2.5 py-1 rounded-full text-[11px] font-bold border flex items-center gap-1.5 shrink-0 ${match.badgeStyle.bg} ${match.badgeStyle.text} ${match.badgeStyle.border}`}
+                                className={`px-2.5 py-1 rounded-full text-[11px] font-bold border flex items-center gap-1.5 shrink-0 ${verdictInfo.badgeStyle.bg} ${verdictInfo.badgeStyle.text} ${verdictInfo.badgeStyle.border}`}
                               >
-                                <span className={`w-1.5 h-1.5 rounded-full ${match.badgeStyle.indicator}`}></span>
-                                <span>{match.classificationLabel}</span>
+                                <span>{verdictInfo.badgeText}</span>
                               </div>
                             </div>
 
@@ -789,6 +793,22 @@ export default function TgCollegePredictor({ onNavigateToAllotment }) {
                               <div className="text-[10px] text-slate-400">
                                 Real 2026 seats
                               </div>
+                            </div>
+                          </div>
+
+                          {/* DYNAMIC BILINGUAL GENDER-AWARE FEEDBACK (Strict Native Telugu Script) */}
+                          <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800/80 shadow-xs space-y-2">
+                            {/* English Message */}
+                            <div className="text-xs font-bold text-slate-100 flex items-start gap-2">
+                              <span className="text-sm shrink-0">
+                                {verdictInfo.level === 'HIGH' ? '😎' : verdictInfo.level === 'MODERATE' ? '⚡' : '🥺'}
+                              </span>
+                              <span className="leading-snug">{verdictInfo.englishText}</span>
+                            </div>
+
+                            {/* Strict Native Telugu Script Message */}
+                            <div className="text-xs font-medium text-slate-300 leading-relaxed font-sans pl-6 border-t border-slate-800/60 pt-2">
+                              {verdictInfo.teluguText}
                             </div>
                           </div>
 

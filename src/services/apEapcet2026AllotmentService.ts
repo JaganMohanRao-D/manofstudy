@@ -309,8 +309,7 @@ export async function getCollegeDetails2026(
 
     const parseRecord = (r: any, defaultBranchCode = '', defaultBranchName = '') => {
       const numRank = parseFloat(String(r.rank ?? '').replace(/,/g, ''));
-      const rank = !isNaN(numRank) && isFinite(numRank) ? Math.round(numRank) : 0;
-      if (rank <= 0) return;
+      const rank = !isNaN(numRank) && isFinite(numRank) && numRank > 0 ? Math.round(numRank) : 0;
 
       const cand_name = String(
         r.applicant_name ||
@@ -399,15 +398,17 @@ export async function getCollegeDetails2026(
           branch_code,
           branch_name,
           records: [],
-          bestRank: rank,
-          lastRank: rank,
+          bestRank: rank > 0 ? rank : Infinity,
+          lastRank: rank > 0 ? rank : 0,
         });
       }
 
       const bGroup = branchMap.get(branch_code)!;
       bGroup.records.push(record);
-      if (rank < bGroup.bestRank) bGroup.bestRank = rank;
-      if (rank > bGroup.lastRank) bGroup.lastRank = rank;
+      if (rank > 0) {
+        if (rank < bGroup.bestRank) bGroup.bestRank = rank;
+        if (rank > bGroup.lastRank) bGroup.lastRank = rank;
+      }
     };
 
     // Format 1: branches: [ { branch_code, branch_name, records: [...] } ]
@@ -431,7 +432,7 @@ export async function getCollegeDetails2026(
       branch_code: b.branch_code,
       branch_name: b.branch_name,
       recordCount: b.records.length,
-      bestRank: b.bestRank,
+      bestRank: b.bestRank === Infinity ? 0 : b.bestRank,
       lastRank: b.lastRank,
       records: b.records,
     }));
@@ -654,8 +655,8 @@ export async function searchAllotments2026(
     allMatches = colData.allRecords.filter((r) => {
       if (targetPhase !== null && r.phase !== targetPhase) return false;
       if (targetBranch && r.branch_code !== targetBranch) return false;
-      if (minRank !== null && minRank > 0 && r.rank < minRank) return false;
-      if (maxRank !== null && maxRank > 0 && r.rank > maxRank) return false;
+      if (minRank !== null && minRank > 0 && (r.rank <= 0 || r.rank < minRank)) return false;
+      if (maxRank !== null && maxRank > 0 && (r.rank <= 0 || r.rank > maxRank)) return false;
       if (targetCategory && !r.category.includes(targetCategory)) return false;
       if (targetAllotted && !r.alloted_category.includes(targetAllotted)) return false;
       if (targetGender && r.gender !== targetGender) return false;
@@ -691,7 +692,8 @@ export async function searchAllotments2026(
       for (let i = 0; i < rawList.length; i++) {
         const raw = rawList[i];
         // [rank, name, gender, cat, reg, allot, phase, col, branch, feeExempt, feeNoExempt, leftSeats, totSeats, rollNo]
-        const rRank = raw[0];
+        const rawRankVal = raw[0];
+        const rRank = typeof rawRankVal === 'number' ? rawRankVal : (parseFloat(String(rawRankVal ?? '').replace(/,/g, '')) || 0);
         const rName = raw[1];
         const rGender = raw[2];
         const rCat = raw[3];
@@ -703,8 +705,8 @@ export async function searchAllotments2026(
 
         if (targetPhase !== null && rPhase !== targetPhase) continue;
         if (targetBranch && rBranch !== targetBranch) continue;
-        if (minRank !== null && minRank > 0 && rRank < minRank) continue;
-        if (maxRank !== null && maxRank > 0 && rRank > maxRank) continue;
+        if (minRank !== null && minRank > 0 && (rRank <= 0 || rRank < minRank)) continue;
+        if (maxRank !== null && maxRank > 0 && (rRank <= 0 || rRank > maxRank)) continue;
         if (targetCategory && !rCat.includes(targetCategory)) continue;
         if (targetAllotted && !rAllot.includes(targetAllotted)) continue;
         if (targetGender && rGender !== targetGender) continue;
@@ -753,7 +755,8 @@ export async function searchAllotments2026(
 
       for (let i = 0; i < rawList.length; i++) {
         const raw = rawList[i];
-        const rRank = raw[0];
+        const rawRankVal = raw[0];
+        const rRank = typeof rawRankVal === 'number' ? rawRankVal : (parseFloat(String(rawRankVal ?? '').replace(/,/g, '')) || 0);
         const rName = raw[1];
         const rGender = raw[2];
         const rCat = raw[3];
@@ -765,8 +768,8 @@ export async function searchAllotments2026(
 
         if (targetPhase !== null && rPhase !== targetPhase) continue;
         if (targetBranch && rBranch !== targetBranch) continue;
-        if (minRank !== null && minRank > 0 && rRank < minRank) continue;
-        if (maxRank !== null && maxRank > 0 && rRank > maxRank) continue;
+        if (minRank !== null && minRank > 0 && (rRank <= 0 || rRank < minRank)) continue;
+        if (maxRank !== null && maxRank > 0 && (rRank <= 0 || rRank > maxRank)) continue;
         if (targetCategory && !rCat.includes(targetCategory)) continue;
         if (targetAllotted && !rAllot.includes(targetAllotted)) continue;
         if (targetGender && rGender !== targetGender) continue;
@@ -796,9 +799,13 @@ export async function searchAllotments2026(
 
   // Sorting
   if (sortBy === 'RANK_ASC') {
-    allMatches.sort((a, b) => a.rank - b.rank);
+    allMatches.sort((a, b) => {
+      const valA = a.rank > 0 ? a.rank : Infinity;
+      const valB = b.rank > 0 ? b.rank : Infinity;
+      return valA - valB;
+    });
   } else if (sortBy === 'RANK_DESC') {
-    allMatches.sort((a, b) => b.rank - a.rank);
+    allMatches.sort((a, b) => (b.rank || 0) - (a.rank || 0));
   } else if (sortBy === 'NAME_ASC') {
     allMatches.sort((a, b) => a.cand_name.localeCompare(b.cand_name));
   }

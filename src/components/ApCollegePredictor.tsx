@@ -37,6 +37,7 @@ import {
   CollegeOption,
   VerdictClassification,
 } from '../services/apCollegePredictorService';
+import { getPredictorVerdict } from '../utils/predictorLocalization';
 
 export interface ApCollegePredictorProps {
   initialCollegeCode?: string;
@@ -716,14 +717,18 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {displayedMatches.map((m) => {
                     const isAddedToWebOptions = webOptionsList.some((w) => w.id === m.id);
+                    const currentRank = parseInt(String(rankInput).replace(/,/g, ''), 10) || 18500;
+                    const isEligible = currentRank <= m.closingRank;
+                    const isBorderline = !isEligible && currentRank <= Math.round(m.closingRank * 1.10);
+                    const verdictInfo = getPredictorVerdict(isEligible, isBorderline, selectedGender);
 
                     return (
                       <div
                         key={m.id}
-                        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-3"
+                        className={`rounded-3xl p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-3.5 border ${verdictInfo.cardStyle.border} ${verdictInfo.cardStyle.bg} bg-white dark:bg-slate-900`}
                       >
                         {/* Top: College & Branch Details */}
-                        <div className="space-y-2">
+                        <div className="space-y-2.5">
                           <div className="flex items-start justify-between gap-3">
                             <div>
                               <div className="flex items-center gap-2">
@@ -739,11 +744,11 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
                               </h3>
                             </div>
 
-                            {/* Verdict Badge */}
+                            {/* Dynamic Verdict Status Badge */}
                             <span
-                              className={`px-3 py-1 rounded-full text-xs font-black shrink-0 border ${m.badgeStyle.bg} ${m.badgeStyle.text} ${m.badgeStyle.border}`}
+                              className={`px-3 py-1 rounded-full text-xs font-black shrink-0 border shadow-2xs ${verdictInfo.badgeStyle.bg} ${verdictInfo.badgeStyle.text} ${verdictInfo.badgeStyle.border}`}
                             >
-                              {m.verdictLabel}
+                              {verdictInfo.badgeText}
                             </span>
                           </div>
 
@@ -782,6 +787,22 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
                               <div className="font-bold text-blue-600 dark:text-blue-400 mt-0.5">
                                 {m.probabilityPercent}%
                               </div>
+                            </div>
+                          </div>
+
+                          {/* DYNAMIC BILINGUAL GENDER-AWARE FEEDBACK (Strict Native Telugu Script) */}
+                          <div className="p-3.5 rounded-2xl bg-white/90 dark:bg-slate-950/80 border border-slate-200/80 dark:border-slate-800/80 shadow-xs space-y-2">
+                            {/* English Message */}
+                            <div className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-start gap-2">
+                              <span className="text-sm shrink-0">
+                                {verdictInfo.level === 'HIGH' ? '😎' : verdictInfo.level === 'MODERATE' ? '⚡' : '🥺'}
+                              </span>
+                              <span className="leading-snug">{verdictInfo.englishText}</span>
+                            </div>
+
+                            {/* Strict Native Telugu Script Message */}
+                            <div className="text-xs font-medium text-slate-700 dark:text-slate-300 leading-relaxed font-sans pl-6 border-t border-slate-200/60 dark:border-slate-800/60 pt-2">
+                              {verdictInfo.teluguText}
                             </div>
                           </div>
 

@@ -1608,26 +1608,26 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
             <tr>
               <td className="border border-slate-300 p-2 font-bold">Verbal Ability (Q1 – Q20)</td>
               <td className="border border-slate-300 p-2 text-center font-mono">20</td>
-              <td className="border border-slate-300 p-2 text-center font-mono">{sectionAnalytics['verbal']?.attempted || 0}</td>
-              <td className="border border-slate-300 p-2 text-center font-mono text-emerald-700 font-bold">{sectionAnalytics['verbal']?.correct || 0}</td>
-              <td className="border border-slate-300 p-2 text-center font-mono text-rose-700">{sectionAnalytics['verbal']?.incorrect || 0}</td>
-              <td className="border border-slate-300 p-2 text-right font-black font-mono">{sectionAnalytics['verbal']?.score || 0} / 20</td>
+              <td className="border border-slate-300 p-2 text-center font-mono">{scorecardMetrics.sectionMetrics.verbal.attempted}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-emerald-700 font-bold">{scorecardMetrics.sectionMetrics.verbal.correct}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-rose-700">{scorecardMetrics.sectionMetrics.verbal.incorrect}</td>
+              <td className="border border-slate-300 p-2 text-right font-black font-mono">{scorecardMetrics.sectionMetrics.verbal.score} / 20</td>
             </tr>
             <tr>
               <td className="border border-slate-300 p-2 font-bold">Logical Reasoning (Q21 – Q40)</td>
               <td className="border border-slate-300 p-2 text-center font-mono">20</td>
-              <td className="border border-slate-300 p-2 text-center font-mono">{sectionAnalytics['logical']?.attempted || 0}</td>
-              <td className="border border-slate-300 p-2 text-center font-mono text-emerald-700 font-bold">{sectionAnalytics['logical']?.correct || 0}</td>
-              <td className="border border-slate-300 p-2 text-center font-mono text-rose-700">{sectionAnalytics['logical']?.incorrect || 0}</td>
-              <td className="border border-slate-300 p-2 text-right font-black font-mono">{sectionAnalytics['logical']?.score || 0} / 20</td>
+              <td className="border border-slate-300 p-2 text-center font-mono">{scorecardMetrics.sectionMetrics.logical.attempted}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-emerald-700 font-bold">{scorecardMetrics.sectionMetrics.logical.correct}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-rose-700">{scorecardMetrics.sectionMetrics.logical.incorrect}</td>
+              <td className="border border-slate-300 p-2 text-right font-black font-mono">{scorecardMetrics.sectionMetrics.logical.score} / 20</td>
             </tr>
             <tr>
               <td className="border border-slate-300 p-2 font-bold">Numerical Ability (Q41 – Q60)</td>
               <td className="border border-slate-300 p-2 text-center font-mono">20</td>
-              <td className="border border-slate-300 p-2 text-center font-mono">{sectionAnalytics['numerical']?.attempted || 0}</td>
-              <td className="border border-slate-300 p-2 text-center font-mono text-emerald-700 font-bold">{sectionAnalytics['numerical']?.correct || 0}</td>
-              <td className="border border-slate-300 p-2 text-center font-mono text-rose-700">{sectionAnalytics['numerical']?.incorrect || 0}</td>
-              <td className="border border-slate-300 p-2 text-right font-black font-mono">{sectionAnalytics['numerical']?.score || 0} / 20</td>
+              <td className="border border-slate-300 p-2 text-center font-mono">{scorecardMetrics.sectionMetrics.numerical.attempted}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-emerald-700 font-bold">{scorecardMetrics.sectionMetrics.numerical.correct}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-rose-700">{scorecardMetrics.sectionMetrics.numerical.incorrect}</td>
+              <td className="border border-slate-300 p-2 text-right font-black font-mono">{scorecardMetrics.sectionMetrics.numerical.score} / 20</td>
             </tr>
             <tr className="bg-slate-50 font-black">
               <td className="border border-slate-300 p-2 font-black">Grand Total Score</td>

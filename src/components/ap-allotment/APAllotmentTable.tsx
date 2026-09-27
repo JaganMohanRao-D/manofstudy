@@ -47,7 +47,7 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
       list = list.filter(
         (r) =>
           r.cand_name.toLowerCase().includes(q) ||
-          String(r.rank).includes(q) ||
+          (r.rank && String(r.rank).includes(q)) ||
           r.category.toLowerCase().includes(q) ||
           r.alloted_category.toLowerCase().includes(q)
       );
@@ -55,7 +55,9 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
 
     return [...list].sort((a, b) => {
       if (sortField === 'rank') {
-        return sortOrder === 'asc' ? a.rank - b.rank : b.rank - a.rank;
+        const rankA = a.rank && a.rank > 0 ? a.rank : (sortOrder === 'asc' ? Infinity : -Infinity);
+        const rankB = b.rank && b.rank > 0 ? b.rank : (sortOrder === 'asc' ? Infinity : -Infinity);
+        return sortOrder === 'asc' ? rankA - rankB : rankB - rankA;
       } else {
         const nameA = a.cand_name.toLowerCase();
         const nameB = b.cand_name.toLowerCase();
@@ -73,7 +75,9 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
 
   // Rank badge color
   const getRankBadge = (rank: number) => {
-    if (rank <= 5000) {
+    if (!rank || rank <= 0) {
+      return 'bg-slate-500/15 text-slate-700 dark:text-slate-300 border border-slate-500/30';
+    } else if (rank <= 5000) {
       return 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/40';
     } else if (rank <= 15000) {
       return 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40';
@@ -101,13 +105,13 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
     ];
 
     const rows = processedRecords.map((r) => [
-      r.rank,
+      r.rank && r.rank > 0 ? r.rank : '-',
       `"${(r.cand_name || '').replace(/"/g, '""')}"`,
       r.gender,
       r.category,
       r.region,
       `"${(r.alloted_category || '').replace(/"/g, '""')}"`,
-      r.phase,
+      r.phase && r.phase > 0 ? r.phase : 'NA',
       r.college_code,
       `"${(r.college_name || '').replace(/"/g, '""')}"`,
       r.branch_code,
@@ -260,7 +264,7 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
                     {/* Rank Badge */}
                     <td className="py-3 px-4 whitespace-nowrap">
                       <span className={`px-2.5 py-1 rounded-lg font-mono font-bold text-xs ${getRankBadge(r.rank)}`}>
-                        #{r.rank.toLocaleString()}
+                        {r.rank && r.rank > 0 ? `#${r.rank.toLocaleString()}` : '—'}
                       </span>
                     </td>
 
@@ -318,7 +322,7 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
                     {/* Phase */}
                     <td className="py-3 px-4 whitespace-nowrap">
                       <span className="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/30 font-semibold text-[11px]">
-                        Phase {r.phase}
+                        {r.phase && r.phase > 0 ? `Phase ${r.phase}` : 'Phase: NA'}
                       </span>
                     </td>
                   </tr>
@@ -346,7 +350,7 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
                   {r.cand_name}
                 </button>
                 <span className={`px-2 py-0.5 rounded-lg font-mono font-bold text-xs shrink-0 ${getRankBadge(r.rank)}`}>
-                  #{r.rank.toLocaleString()}
+                  {r.rank && r.rank > 0 ? `#${r.rank.toLocaleString()}` : '—'}
                 </span>
               </div>
 

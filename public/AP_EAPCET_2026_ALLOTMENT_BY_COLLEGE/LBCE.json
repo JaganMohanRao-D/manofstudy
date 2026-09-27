@@ -27426,6 +27426,31 @@
       "roll_no_blurred": "0062",
       "roll_no_prefix": "96017301",
       "total_seats": 48
+    },
+    {
+      "allot_category": "NA",
+      "applicant_name": "DUVVURU RICHITHA",
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "community": "BC_C",
+      "course_type": "ENG",
+      "district": "KRISHNA",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 78600,
+      "first_name_blurred": "DUVVURU",
+      "gender": "F",
+      "id": 42391,
+      "inst_code": "LBCE",
+      "inst_name": "LAKIREDDY BALIREDDY COLLEGE OF ENGINEERING",
+      "last_name_visible": "RICHITHA",
+      "left_over_seats": 0,
+      "phase": "NA",
+      "rank": "-",
+      "region": "AU",
+      "roll_no": "-",
+      "roll_no_blurred": "-",
+      "roll_no_prefix": "-",
+      "total_seats": 240
     }
   ]
 }

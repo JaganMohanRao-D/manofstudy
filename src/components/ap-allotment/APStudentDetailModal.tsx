@@ -49,7 +49,7 @@ export const APStudentDetailModal: React.FC<APStudentDetailModalProps> = ({ stud
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-cyan-600 dark:text-cyan-300">AP EAPCET {year}</span>
-                <span className="rounded-full border border-amber-500/20 bg-amber-500/10 px-2.5 py-1 text-[10px] font-black text-amber-600 dark:text-amber-300">Phase {student.phase}</span>
+                <span className="rounded-full border border-amber-500/20 bg-amber-500/10 px-2.5 py-1 text-[10px] font-black text-amber-600 dark:text-amber-300">{student.phase && student.phase > 0 ? `Phase ${student.phase}` : 'Phase: NA'}</span>
               </div>
               <h2 id="ap-student-detail-title" className="mt-3 truncate text-xl sm:text-2xl font-black text-slate-950 dark:text-white">{student.cand_name || 'Unnamed candidate'}</h2>
               <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Complete allotment record available in the selected source dataset.</p>
@@ -59,7 +59,9 @@ export const APStudentDetailModal: React.FC<APStudentDetailModalProps> = ({ stud
             </button>
           </div>
           <div className="relative mt-5 flex flex-wrap gap-2">
-            <span className="rounded-xl bg-amber-500/10 px-3 py-2 font-mono text-sm font-black text-amber-600 dark:text-amber-300">Rank #{student.rank.toLocaleString()}</span>
+            <span className="rounded-xl bg-amber-500/10 px-3 py-2 font-mono text-sm font-black text-amber-600 dark:text-amber-300">
+              {student.rank && student.rank > 0 ? `Rank #${student.rank.toLocaleString()}` : 'Rank: — (N/A)'}
+            </span>
             <span className="rounded-xl bg-indigo-500/10 px-3 py-2 font-mono text-xs font-bold text-indigo-600 dark:text-indigo-300">{student.alloted_category || 'Quota not listed'}</span>
           </div>
         </div>

@@ -143,7 +143,9 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
 
   // Rank badge styling
   const getRankBadge = (rank: number) => {
-    if (rank <= 5000) {
+    if (!rank || rank <= 0) {
+      return 'bg-slate-500/15 text-slate-700 dark:text-slate-300 border border-slate-500/30';
+    } else if (rank <= 5000) {
       return 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/40';
     } else if (rank <= 15000) {
       return 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40';
@@ -450,7 +452,7 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
                     </span>
                   </div>
                   <span className={`px-2.5 py-1 rounded-lg font-mono font-bold text-xs shrink-0 ${getRankBadge(r.rank)}`}>
-                    #{r.rank.toLocaleString()}
+                    {r.rank && r.rank > 0 ? `#${r.rank.toLocaleString()}` : '—'}
                   </span>
                 </div>
 
@@ -510,7 +512,7 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
                   </span>
 
                   <span className="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-700 dark:text-amber-400 font-medium">
-                    Phase {r.phase}
+                    {r.phase && r.phase > 0 ? `Phase ${r.phase}` : 'Phase: NA'}
                   </span>
 
                   <span className="ml-auto px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30 font-mono text-[10px] font-semibold truncate max-w-[130px]">
