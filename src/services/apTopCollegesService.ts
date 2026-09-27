@@ -1,23 +1,25 @@
 /**
- * AP EAPCET 2026 - Top B.Tech Colleges
+ * AP EAPCET 2026 observed college analysis.
  *
- * Uses only candidate-category OC allotment ranks from the available 2026 source
- * records. This is descriptive historical analysis, not an official ranking.
+ * This module reads a build-generated index derived from the AP EAPCET 2026
+ * allotment records. It never invents cutoffs: opening = minimum observed
+ * rank, closing = maximum observed rank, and median = mathematical median of
+ * the valid OC candidate-category records in the selected branch.
  */
 
 export interface APTopRankStats {
-  highestRank: number;
+  openingRank: number;
   medianRank: number;
-  lowestRank: number;
+  closingRank: number;
   validOcAllotments: number;
 }
 
 export interface APTopCollegeBranch {
   branchCode: string;
   branchName: string;
-  highestRank: number;
+  openingRank: number;
   medianRank: number;
-  lowestRank: number;
+  closingRank: number;
   validOcAllotments: number;
 }
 
@@ -26,6 +28,7 @@ export interface APTopCollege {
   collegeName: string;
   district: string;
   branches: Record<string, APTopCollegeBranch>;
+  allBranches: APTopRankStats | null;
 }
 
 interface APTopCollegeIndex {
@@ -33,6 +36,9 @@ interface APTopCollegeIndex {
   methodology: string;
   rankingBasis: string;
   totalColleges: number;
+  districts: string[];
+  branches: Array<{ code: string; name: string }>;
+  statewideBranchStats: Record<string, APTopRankStats>;
   colleges: APTopCollege[];
 }
 
@@ -56,7 +62,7 @@ export async function getAPTopCollegeIndex(): Promise<APTopCollegeIndex> {
   pending = fetch('/AP_EAPCET_2026_ALLOTMENT_BY_COLLEGE/top_colleges_index.json')
     .then(async (response) => {
       if (!response.ok) {
-        throw new Error('Unable to load AP EAPCET 2026 top-college analysis index.');
+        throw new Error('Unable to load the AP EAPCET 2026 college analysis index.');
       }
       const data = (await response.json()) as APTopCollegeIndex;
       cache = data;
@@ -83,6 +89,7 @@ export async function getAPTopCollegeRows(
 
   for (const college of index.colleges) {
     if (districtFilter !== 'ALL' && college.district.toUpperCase() !== districtFilter) continue;
+
     if (
       query &&
       !college.collegeName.toLowerCase().includes(query) &&
@@ -93,21 +100,7 @@ export async function getAPTopCollegeRows(
     }
 
     if (branchFilter === 'ALL') {
-      const branchRows = Object.values(college.branches);
-      if (!branchRows.length) continue;
-
-      const ranks = branchRows.flatMap((item) =>
-        Array.from({ length: item.validOcAllotments }, (_, index) =>
-          index === 0 ? item.highestRank : index === item.validOcAllotments - 1 ? item.lowestRank : item.medianRank
-        )
-      );
-      if (!ranks.length) continue;
-
-      const sorted = [...ranks].sort((a, b) => a - b);
-      const medianRank = sorted.length % 2
-        ? sorted[Math.floor(sorted.length / 2)]
-        : (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2;
-
+      if (!college.allBranches || college.allBranches.validOcAllotments <= 0) continue;
       rows.push({
         rankPosition: 0,
         collegeCode: college.collegeCode,
@@ -115,12 +108,7 @@ export async function getAPTopCollegeRows(
         district: college.district,
         branchCode: 'ALL',
         branchName: 'All branches with OC allotment records',
-        stats: {
-          highestRank: Math.min(...sorted),
-          medianRank,
-          lowestRank: Math.max(...sorted),
-          validOcAllotments: sorted.length,
-        },
+        stats: college.allBranches,
       });
       continue;
     }
@@ -136,9 +124,9 @@ export async function getAPTopCollegeRows(
       branchCode: branchData.branchCode,
       branchName: branchData.branchName,
       stats: {
-        highestRank: branchData.highestRank,
+        openingRank: branchData.openingRank,
         medianRank: branchData.medianRank,
-        lowestRank: branchData.lowestRank,
+        closingRank: branchData.closingRank,
         validOcAllotments: branchData.validOcAllotments,
       },
     });
@@ -146,8 +134,8 @@ export async function getAPTopCollegeRows(
 
   rows.sort((a, b) =>
     a.stats.medianRank - b.stats.medianRank ||
-    a.stats.highestRank - b.stats.highestRank ||
-    a.stats.lowestRank - b.stats.lowestRank ||
+    a.stats.openingRank - b.stats.openingRank ||
+    a.stats.closingRank - b.stats.closingRank ||
     a.collegeName.localeCompare(b.collegeName)
   );
 
@@ -166,15 +154,12 @@ export async function getAPTopCollegeDistricts(): Promise<string[]> {
 
 export async function getAPTopCollegeBranches(): Promise<{ code: string; name: string }[]> {
   const index = await getAPTopCollegeIndex();
-  const branches = new Map<string, string>();
+  return index.branches.length
+    ? index.branches.slice().sort((a, b) => a.name.localeCompare(b.name))
+    : [];
+}
 
-  for (const college of index.colleges) {
-    for (const branch of Object.values(college.branches)) {
-      branches.set(branch.branchCode, branch.branchName);
-    }
-  }
-
-  return Array.from(branches.entries())
-    .map(([code, name]) => ({ code, name }))
-    .sort((a, b) => a.name.localeCompare(b.name));
+export function clearAPTopCollegeCache() {
+  cache = null;
+  pending = null;
 }
