@@ -1,23 +1,116 @@
 import React, { useEffect, useState } from 'react';
-import { X, Heart, ShieldCheck, Zap, Coffee, Copy, Check, Share2, QrCode } from 'lucide-react';
+import {
+  X,
+  Heart,
+  Zap,
+  Copy,
+  Check,
+  Share2,
+  QrCode,
+  Code2,
+  Server,
+  BookOpen,
+  Sparkles,
+  Info,
+} from 'lucide-react';
 
 export interface SupportModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+interface ContributionTier {
+  id: string;
+  amount: number | null;
+  label: string;
+  category: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+  tag: string;
+}
+
+const CONTRIBUTION_TIERS: ContributionTier[] = [
+  {
+    id: 'tier-20',
+    amount: 20,
+    label: '₹20',
+    category: 'Content & Research',
+    description: 'Contributes toward data research, counseling analytics & student guides.',
+    icon: BookOpen,
+    tag: 'Research',
+  },
+  {
+    id: 'tier-50',
+    amount: 50,
+    label: '₹50',
+    category: 'Web Development',
+    description: 'Helps support UI/UX design, frontend tools, testing & new features.',
+    icon: Code2,
+    tag: 'Dev & UI',
+  },
+  {
+    id: 'tier-100',
+    amount: 100,
+    label: '₹100',
+    category: 'Hosting & Server',
+    description: 'Helps cover cloud hosting, data fetching pipelines & domain maintenance.',
+    icon: Server,
+    tag: 'Infrastructure',
+  },
+  {
+    id: 'tier-any',
+    amount: null,
+    label: 'Any',
+    category: 'Keep MOS Growing',
+    description: 'Voluntary contribution to keep MAN OF STUDY open, ad-free & updated.',
+    icon: Sparkles,
+    tag: 'Open Support',
+  },
+];
+
 export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) => {
+  const [selectedTierId, setSelectedTierId] = useState<string>('tier-50');
+  const [copiedUpi, setCopiedUpi] = useState<boolean>(false);
   const [copiedUrl, setCopiedUrl] = useState<boolean>(false);
+  const [showTechDetails, setShowTechDetails] = useState<boolean>(false);
 
   const PLATFORM_URL = 'https://manofstudy.pages.dev';
+  const UPI_ID = '7842587883@ybl';
+
+  const selectedTier =
+    CONTRIBUTION_TIERS.find((t) => t.id === selectedTierId) || CONTRIBUTION_TIERS[1];
+
+  const upiIntentUri = selectedTier.amount
+    ? `upi://pay?pa=${UPI_ID}&pn=MAN%20OF%20STUDY%20Developer&tn=Support%20for%20MAN%20OF%20STUDY&am=${selectedTier.amount}&cu=INR`
+    : `upi://pay?pa=${UPI_ID}&pn=MAN%20OF%20STUDY%20Developer&tn=Support%20for%20MAN%20OF%20STUDY`;
+
+  const qrCodeUrl =
+    'https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=4&data=' +
+    encodeURIComponent(upiIntentUri);
+
+  const handleCopyUpiId = async () => {
+    try {
+      await navigator.clipboard.writeText(UPI_ID);
+      setCopiedUpi(true);
+      setTimeout(() => setCopiedUpi(false), 2200);
+    } catch {
+      const tempInput = document.createElement('input');
+      tempInput.value = UPI_ID;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      setCopiedUpi(true);
+      setTimeout(() => setCopiedUpi(false), 2200);
+    }
+  };
 
   const handleCopyPlatformUrl = async () => {
     try {
       await navigator.clipboard.writeText(PLATFORM_URL);
       setCopiedUrl(true);
-      setTimeout(() => setCopiedUrl(false), 2500);
+      setTimeout(() => setCopiedUrl(false), 2200);
     } catch {
-      // Fallback
       const tempInput = document.createElement('input');
       tempInput.value = PLATFORM_URL;
       document.body.appendChild(tempInput);
@@ -25,11 +118,10 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
       document.execCommand('copy');
       document.body.removeChild(tempInput);
       setCopiedUrl(true);
-      setTimeout(() => setCopiedUrl(false), 2500);
+      setTimeout(() => setCopiedUrl(false), 2200);
     }
   };
 
-  // Close on ESC key and prevent body scroll when open
   useEffect(() => {
     if (!isOpen) return;
 
@@ -51,149 +143,288 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
 
   if (!isOpen) return null;
 
-  // UPI intent URI. The user reviews the payment in their own UPI app before confirming.
-  const upiIntentUri =
-    'upi://pay?pa=7842587883@ybl&pn=MAN%20OF%20STUDY%20Developer&tn=A%20kind%20support%20and%20gratitude%20for%20MAN%20OF%20STUDY';
-
-  // Generate the QR from the exact same URI used by the mobile button.
-  const qrCodeUrl =
-    'https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data=' +
-    encodeURIComponent(upiIntentUri);
-
   return (
     <div
       id="support-donation-modal-overlay"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/65 backdrop-blur-md animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-sm animate-in fade-in duration-150 overflow-y-auto"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-labelledby="support-modal-title"
     >
-      {/* Modal Card Container */}
       <div
         id="support-donation-modal-card"
-        className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-3.5 sm:p-7 shadow-2xl border border-slate-100 dark:border-slate-800 relative text-center overflow-hidden max-h-[calc(100dvh-20px)]"
+        className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-6 shadow-2xl border border-slate-200 dark:border-slate-800 relative text-left overflow-hidden max-h-[92vh] flex flex-col my-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Top Decorative Warm Gradient Bar */}
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-12 bg-rose-500/10 blur-xl pointer-events-none" />
+        {/* Top Accent Gradient Line */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-indigo-500" />
 
-        {/* Close Button (X) */}
+        {/* Close Button */}
         <button
           type="button"
           id="close-support-modal-btn"
           onClick={onClose}
-          className="absolute top-3.5 right-3.5 p-2 rounded-full text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          className="absolute top-3.5 right-3.5 p-1.5 rounded-full text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
           aria-label="Close Support Modal"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4" />
         </button>
 
-        {/* Emotional Badge */}
-        <div className="flex justify-center mt-1 mb-3">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/70 shadow-2xs">
-            <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 animate-pulse" />
-            <span>Built by Students, For Students</span>
-          </span>
-        </div>
+        {/* Modal Header */}
+        <div className="pr-8 mb-3">
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/80">
+              <Heart className="w-3 h-3 text-rose-500 fill-rose-500 animate-pulse" />
+              <span>Independent Student Project</span>
+            </span>
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10.5px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+              100% Free &amp; Ad-Free
+            </span>
+          </div>
 
-        {/* Title */}
-        <h2
-          id="support-modal-title"
-          className="text-[17px] sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-tight mb-2 sm:mb-3 px-5"
-        >
-          If MAN OF STUDY genuinely helped you, you can support its journey
-        </h2>
-
-        {/* Emotional Narrative Storyline */}
-        <div className="space-y-1.5 sm:space-y-2.5 text-[10.5px] sm:text-[13px] text-slate-600 dark:text-slate-300 leading-[1.35] sm:leading-relaxed text-left bg-slate-50/90 dark:bg-slate-800/40 p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-100 dark:border-slate-800/70 mb-2.5 sm:mb-5">
-          <p>
-            <strong>Thank you for using MAN OF STUDY.</strong> This platform is being built with a simple goal: make useful student information and practical tools available to students and parents without putting the important parts behind a paywall.
-          </p>
-          <p>
-            If a tool here genuinely saved you time, reduced some confusion, or helped you understand your options, your support can help us keep improving the platform and continue making these resources available to more students.
-          </p>
-          <p className="text-rose-700 dark:text-rose-300 font-semibold">
-            మీకు మా website నిజంగా helpful గా అనిపిస్తే, మీకు నచ్చినంత support చేయండి. మీ చిన్న సహాయం కూడా ఇలాంటి information ని మరింత మంది students &amp; parents కి free గా అందించడానికి ఉపయోగపడుతుంది. ❤️
+          <h2
+            id="support-modal-title"
+            className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight leading-snug"
+          >
+            Support MAN OF STUDY Development
+          </h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+            Every dataset, rank predictor, and student tool on this platform is built independently. Voluntary contributions help cover practical technical costs.
           </p>
         </div>
 
-        {/* Suggested Micro-Pills */}
-        <div className="hidden sm:flex items-center justify-center gap-1.5 flex-wrap mb-4">
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800/50">
-            <Coffee className="w-3 h-3 text-amber-600" /> ₹20 Chai
-          </span>
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800/50">
-            🍛 ₹50 Samosa &amp; Meal
-          </span>
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-sky-50 dark:bg-sky-950/40 text-sky-800 dark:text-sky-300 border border-sky-200 dark:border-sky-800/50">
-            💻 ₹100 Server Fuel
-          </span>
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-purple-50 dark:bg-purple-950/40 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-800/50">
-            ✨ Any Amount
-          </span>
-        </div>
+        {/* Scrollable Content Area */}
+        <div className="space-y-3.5 overflow-y-auto pr-1">
+          {/* Contribution Amount Tier Selection */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                Select Contribution Purpose
+              </label>
+              <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                {selectedTier.amount ? `Selected: ₹${selectedTier.amount}` : 'Flexible amount'}
+              </span>
+            </div>
 
-        {/* LAPTOP & DESKTOP (SCAN & PAY VIA DYNAMIC QR) */}
-        <div className="hidden sm:flex flex-col items-center justify-center p-4 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm mb-4">
-          {/* Dynamic Fast QR Code Showcase Container */}
-          <div className="relative p-2 bg-white rounded-xl shadow-xs border border-slate-200/90">
-            <img
-              src={qrCodeUrl}
-              alt="Scan to Donate &amp; Support MAN OF STUDY via UPI"
-              width={190}
-              height={190}
-              className="rounded-lg object-contain"
-              loading="lazy"
-              referrerPolicy="no-referrer"
-            />
-            <div className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700">
-              <QrCode className="w-3.5 h-3.5" /> UPI QR · scan with any supported UPI app
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {CONTRIBUTION_TIERS.map((tier) => {
+                const IconComponent = tier.icon;
+                const isSelected = selectedTierId === tier.id;
+
+                return (
+                  <button
+                    key={tier.id}
+                    type="button"
+                    onClick={() => setSelectedTierId(tier.id)}
+                    className={`p-2.5 rounded-xl border text-left transition-all relative flex flex-col justify-between cursor-pointer ${
+                      isSelected
+                        ? 'bg-emerald-50/80 dark:bg-emerald-950/40 border-emerald-500 dark:border-emerald-500 ring-2 ring-emerald-500/20 shadow-sm'
+                        : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-100/70 dark:hover:bg-slate-800/80'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between w-full mb-1.5">
+                      <span
+                        className={`text-sm font-black tracking-tight ${
+                          isSelected
+                            ? 'text-emerald-700 dark:text-emerald-300'
+                            : 'text-slate-900 dark:text-white'
+                        }`}
+                      >
+                        {tier.label}
+                      </span>
+                      <IconComponent
+                        className={`w-3.5 h-3.5 ${
+                          isSelected
+                            ? 'text-emerald-600 dark:text-emerald-400'
+                            : 'text-slate-400 dark:text-slate-500'
+                        }`}
+                      />
+                    </div>
+                    <div>
+                      <div
+                        className={`text-[11px] font-bold leading-tight truncate ${
+                          isSelected
+                            ? 'text-emerald-900 dark:text-emerald-200'
+                            : 'text-slate-700 dark:text-slate-300'
+                        }`}
+                      >
+                        {tier.category}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Selected Tier Context Note */}
+            <div className="mt-2 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60 flex items-start gap-2">
+              <div className="p-1 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5">
+                {React.createElement(selectedTier.icon, { className: 'w-3.5 h-3.5' })}
+              </div>
+              <div className="text-xs">
+                <span className="font-bold text-slate-800 dark:text-slate-200 mr-1.5">
+                  {selectedTier.category}:
+                </span>
+                <span className="text-slate-600 dark:text-slate-300">
+                  {selectedTier.description}
+                </span>
+              </div>
             </div>
           </div>
 
-          <p className="mt-2.5 text-[11px] font-medium text-slate-500 dark:text-slate-400 max-w-[280px]">
-            Scan with your preferred UPI app. The payment app will show the details before you confirm.
-          </p>
-        </div>
-
-        {/* MOBILE DEVICES (DIRECT 1-CLICK UPI APP LAUNCH) */}
-        <div className="mb-2.5 sm:mb-4">
-          <a
-            id="mobile-direct-upi-launch-btn"
-            href={upiIntentUri}
-            className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-[0.98] text-white font-bold py-2.5 sm:py-3 px-4 sm:px-5 rounded-xl sm:rounded-2xl w-full flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition-all cursor-pointer text-xs sm:text-sm"
-          >
-            <Zap className="w-4 h-4 fill-amber-300 text-amber-300 shrink-0" />
-            <span>Support Now · Open UPI App</span>
-          </a>
-          <p className="hidden sm:block text-[10px] text-slate-400 mt-1.5">
-            (Your UPI app will open; review the payment before confirming.)
-          </p>
-        </div>
-
-        {/* SHARE PLATFORM */}
-        <div className="mb-2.5 sm:mb-4 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60">
-          <div className="flex items-center justify-between gap-2">
-            <div className="min-w-0 text-left">
-              <p className="text-[10.5px] sm:text-xs font-semibold text-slate-600 dark:text-slate-300">Share MAN OF STUDY with your friends</p>
-              <p className="hidden sm:block text-[10px] text-slate-400 mt-0.5 break-all">manofstudy.pages.dev</p>
+          {/* Payment & QR Section */}
+          <div className="p-3 sm:p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center gap-3.5">
+            {/* QR Code Container */}
+            <div className="flex flex-col items-center justify-center shrink-0">
+              <div className="p-1.5 bg-white rounded-xl shadow-sm border border-slate-200">
+                <img
+                  src={qrCodeUrl}
+                  alt={`UPI QR Code for ${selectedTier.amount ? '₹' + selectedTier.amount : 'Support'}`}
+                  width={112}
+                  height={112}
+                  className="rounded-lg object-contain"
+                  loading="lazy"
+                />
+              </div>
+              <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 mt-1 flex items-center gap-1">
+                <QrCode className="w-2.5 h-2.5" /> GPay / PhonePe / Paytm
+              </span>
             </div>
-            <button type="button" id="share-platform-url-btn" onClick={handleCopyPlatformUrl} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg sm:rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-[11px] sm:text-xs shadow-sm transition-all cursor-pointer shrink-0">
-              {copiedUrl ? <><Check className="w-3.5 h-3.5" /><span>Copied!</span></> : <><Share2 className="w-3.5 h-3.5" /><span>Share</span></>}
+
+            {/* UPI Details & Direct Buttons */}
+            <div className="flex-1 w-full space-y-2">
+              {/* Direct UPI App Launch */}
+              <a
+                id="mobile-direct-upi-launch-btn"
+                href={upiIntentUri}
+                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-[0.98] text-white font-bold py-2.5 px-3 rounded-xl w-full flex items-center justify-center gap-2 shadow-md shadow-emerald-500/20 transition-all cursor-pointer text-xs sm:text-sm text-center"
+              >
+                <Zap className="w-3.5 h-3.5 fill-amber-300 text-amber-300 shrink-0" />
+                <span>
+                  {selectedTier.amount
+                    ? `Pay ₹${selectedTier.amount} via Any UPI App`
+                    : 'Support via Any UPI App'}
+                </span>
+              </a>
+
+              {/* UPI Channel Details & Copy Action (Masked ID for privacy) */}
+              <div className="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs">
+                <div className="truncate">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block leading-none">
+                    Verified Payment Channel
+                  </span>
+                  <span className="font-medium text-slate-700 dark:text-slate-300 text-xs truncate flex items-center gap-1.5">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    <span>Direct UPI · Student Platform Support</span>
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleCopyUpiId}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-[11px] transition-colors cursor-pointer shrink-0"
+                  aria-label="Copy UPI Payment Address"
+                >
+                  {copiedUpi ? (
+                    <>
+                      <Check className="w-3 h-3 text-emerald-500" />
+                      <span className="text-emerald-600 dark:text-emerald-400">Copied</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3 h-3 text-slate-500" />
+                      <span>Copy UPI VPA</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Telugu message */}
+              <p className="text-[10.5px] text-rose-700 dark:text-rose-300 font-semibold text-center sm:text-left leading-tight">
+                మా website మీకు ఉపయోగపడితే, మీ ఇష్టపూర్వకంగా support చేయవచ్చు. ❤️
+              </p>
+            </div>
+          </div>
+
+          {/* Technical Transparency Accordion / Breakdown */}
+          <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/40 p-3">
+            <button
+              type="button"
+              onClick={() => setShowTechDetails(!showTechDetails)}
+              className="w-full flex items-center justify-between text-left text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors cursor-pointer"
+            >
+              <span className="flex items-center gap-1.5">
+                <Info className="w-3.5 h-3.5 text-emerald-500" />
+                How contributions help support this project
+              </span>
+              <span className="text-[11px] text-slate-400 font-normal">
+                {showTechDetails ? 'Hide' : 'View details'}
+              </span>
+            </button>
+
+            {showTechDetails && (
+              <div className="mt-2.5 pt-2 border-t border-slate-200 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-400 space-y-1.5 leading-relaxed">
+                <p className="text-slate-700 dark:text-slate-300 font-medium">
+                  Voluntary support can help cover practical engineering &amp; operational expenses:
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[10.5px]">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                    <span>Web hosting &amp; server infrastructure</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-teal-500 shrink-0" />
+                    <span>Domain registration &amp; renewal</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+                    <span>AP/TG EAPCET counseling data curation</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0" />
+                    <span>UI/UX &amp; frontend feature development</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0" />
+                    <span>Testing, bug fixes &amp; maintenance</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" />
+                    <span>Keeping tools open &amp; 100% ad-free</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Share Platform Bar */}
+          <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60 flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <span className="text-[11px] font-bold text-slate-700 dark:text-slate-200 block truncate">
+                Share with classmates &amp; peers
+              </span>
+              <span className="text-[10px] text-slate-400 truncate block">
+                manofstudy.pages.dev
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={handleCopyPlatformUrl}
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shrink-0 transition-colors cursor-pointer shadow-sm"
+            >
+              {copiedUrl ? (
+                <>
+                  <Check className="w-3 h-3" />
+                  <span>Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Share2 className="w-3 h-3" />
+                  <span>Share Link</span>
+                </>
+              )}
             </button>
           </div>
-        </div>
-        {/* TRUST & GRATITUDE FOOTER */}
-        <div className="pt-2 sm:pt-3 border-t border-slate-100 dark:border-slate-800 space-y-0.5 sm:space-y-1 text-slate-500 dark:text-slate-400">
-          <div className="hidden sm:flex items-center justify-center gap-1.5 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
-            <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
-            <span>Direct UPI intent · You choose the amount and confirm it in your own UPI app.</span>
-          </div>
-          <p className="text-[10px] text-slate-400 dark:text-slate-500">
-            Thank you for helping us keep useful student resources accessible.
-          </p>
         </div>
       </div>
     </div>

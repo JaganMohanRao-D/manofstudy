@@ -1,12 +1,19 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = path.join(process.cwd(), 'public', 'AP_EAPCET');
 const DATASETS = {
   '2025': path.join(process.cwd(), 'public', 'AP_EAPCET_2025_ALLOTMENT_BY_COLLEGE'),
   '2026': path.join(process.cwd(), 'public', 'AP_EAPCET_2026_ALLOTMENT_BY_COLLEGE'),
 };
-const EXCLUDED = new Set(['index.json', 'manifest.json', 'search_index.json', 'top_colleges_index.json', 'CBIT.json']);
+const EXCLUDED = new Set([
+  'index.json',
+  'manifest.json',
+  'search_index.json',
+  'top_colleges_index.json',
+  'category_insights.json',
+  'predictor_index.json',
+  'CBIT.json',
+]);
 
 function phaseNumber(value) {
   if (typeof value === 'number' && Number.isFinite(value)) return value;
@@ -28,7 +35,7 @@ function normalizeRecord(year, r, collegeCode, collegeName, branchCode = '', bra
       rank: num(r.rank),
       name: String(r.applicant_name ?? r.cand_name ?? r.name ?? '').trim(),
       gender: String(r.gender ?? '').trim().toUpperCase(),
-      category: String(r.community ?? r.category ?? '').trim().toUpperCase(),
+      category: normalizeCommunityKey(String(r.community ?? r.category ?? '').trim().toUpperCase()),
       region: String(r.region ?? '').trim().toUpperCase(),
       allottedCategory: String(r.allot_category ?? r.alloted_category ?? r.allotted_category ?? '').trim().toUpperCase(),
       phase: phaseNumber(r.phase),
@@ -37,6 +44,9 @@ function normalizeRecord(year, r, collegeCode, collegeName, branchCode = '', bra
       branchCode: String(r.branch_code ?? branchCode ?? '').trim().toUpperCase(),
       branchName: String(r.branch_name ?? branchName ?? '').trim(),
       district: String(r.district ?? '').trim(),
+      totalSeats: num(r.total_seats),
+      leftOverSeats: num(r.left_over_seats),
+      hallTicket: String(r.roll_no ?? r.hall_ticket ?? r.hallTicket ?? ''),
     };
   }
   return {
@@ -51,7 +61,58 @@ function normalizeRecord(year, r, collegeCode, collegeName, branchCode = '', bra
     collegeName,
     branchCode: String(r.branch_code ?? branchCode ?? '').trim().toUpperCase(),
     branchName: String(r.branch_name ?? branchName ?? '').trim(),
+    district: '',
+    totalSeats: 0,
+    leftOverSeats: 0,
+    hallTicket: String(r.roll_no ?? r.hall_ticket ?? r.hallTicket ?? ''),
   };
+}
+
+const AP_CATEGORY_METADATA = [
+  { key: 'OC', display: 'OC', name: 'Open Competition (General Merit)' },
+  { key: 'EWS', display: 'EWS', name: 'Economically Weaker Section (10% Quota)' },
+  { key: 'BC_A', display: 'BC-A', name: 'Backward Class Group A (7% Quota)' },
+  { key: 'BC_B', display: 'BC-B', name: 'Backward Class Group B (10% Quota)' },
+  { key: 'BC_C', display: 'BC-C', name: 'Backward Class Group C (1% Quota)' },
+  { key: 'BC_D', display: 'BC-D', name: 'Backward Class Group D (7% Quota)' },
+  { key: 'BC_E', display: 'BC-E', name: 'Backward Class Group E (4% Quota)' },
+  { key: 'SC_I', display: 'SC-I', name: 'Scheduled Caste Group 1' },
+  { key: 'SC_II', display: 'SC-II', name: 'Scheduled Caste Group 2' },
+  { key: 'SC_III', display: 'SC-III', name: 'Scheduled Caste Group 3' },
+  { key: 'ST', display: 'ST', name: 'Scheduled Tribe (6% Quota)' },
+];
+
+function normalizeCommunityKey(catRaw) {
+  const s = String(catRaw ?? '').toUpperCase().trim();
+  if (s === 'SC_III' || s === 'SC-III' || s === 'SC3' || s === 'SC_3') return 'SC_III';
+  if (s === 'SC_II' || s === 'SC-II' || s === 'SC2' || s === 'SC_2') return 'SC_II';
+  if (s === 'SC_I' || s === 'SC-I' || s === 'SC1' || s === 'SC_1') return 'SC_I';
+  if (s === 'BC_A' || s === 'BC-A' || s === 'BCA') return 'BC_A';
+  if (s === 'BC_B' || s === 'BC-B' || s === 'BCB') return 'BC_B';
+  if (s === 'BC_C' || s === 'BC-C' || s === 'BCC') return 'BC_C';
+  if (s === 'BC_D' || s === 'BC-D' || s === 'BCD') return 'BC_D';
+  if (s === 'BC_E' || s === 'BC-E' || s === 'BCE') return 'BC_E';
+  if (s === 'EWS') return 'EWS';
+  if (s === 'ST') return 'ST';
+  if (s === 'OC' || s === 'OPEN') return 'OC';
+  return s;
+}
+
+function normalizeAllottedQuotaKey(allotCatRaw) {
+  const s = String(allotCatRaw ?? '').toUpperCase().trim();
+  if (s.startsWith('EWS') || s.includes('_EWS_') || s.endsWith('_EWS')) return 'EWS';
+  if (s.startsWith('BC_A') || s.includes('_BC_A_') || s.includes('_BCA_')) return 'BC_A';
+  if (s.startsWith('BC_B') || s.includes('_BC_B_') || s.includes('_BCB_')) return 'BC_B';
+  if (s.startsWith('BC_C') || s.includes('_BC_C_') || s.includes('_BCC_')) return 'BC_C';
+  if (s.startsWith('BC_D') || s.includes('_BC_D_') || s.includes('_BCD_')) return 'BC_D';
+  if (s.startsWith('BC_E') || s.includes('_BC_E_') || s.includes('_BCE_')) return 'BC_E';
+  // Match SC_III and SC_II strictly before SC_I to prevent prefix collision
+  if (s.startsWith('SC_III') || s.includes('_SC_III_') || s.includes('SC3') || s.includes('SC_3')) return 'SC_III';
+  if (s.startsWith('SC_II') || s.includes('_SC_II_') || s.includes('SC2') || s.includes('SC_2')) return 'SC_II';
+  if (s.startsWith('SC_I') || s.includes('_SC_I_') || s.includes('SC1') || s.includes('SC_1') || (s.startsWith('SC_') && !s.startsWith('SC_II') && !s.startsWith('SC_III')) || s === 'SC') return 'SC_I';
+  if (s.startsWith('ST') || s.includes('_ST_') || s.endsWith('_ST')) return 'ST';
+  if (s.startsWith('OC') || s.includes('_OC_') || s.startsWith('OPEN') || s.endsWith('_OC')) return 'OC';
+  return '';
 }
 
 function processYear(year, dir) {
@@ -65,14 +126,17 @@ function processYear(year, dir) {
   const regionSet = new Set();
   const phaseSet = new Set();
   const branchSet = new Set();
-  const apTopCollegeStats = new Map();
   let totalRecords = 0;
   let minRank = Infinity;
   let maxRank = 0;
 
+  const rawCollegesList = [];
+
   for (const file of files) {
     const raw = JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
     const collegeCode = String(raw.college_code ?? raw.collegeCode ?? raw.inst_code ?? file.replace(/\.json$/i, '')).trim().toUpperCase();
+    if (collegeCode === 'CBIT') continue; // Exclude erroneous Telangana institution from AP dataset
+
     const collegeName = String(raw.college_name ?? raw.collegeName ?? raw.inst_name ?? collegeCode).trim();
     const records = [];
     const branchSummaries = new Map();
@@ -93,20 +157,36 @@ function processYear(year, dir) {
         branchMap[x.branchCode] = x.branchName || x.branchCode;
       }
 
-      if (year === '2026' && x.category === 'OC' && x.branchCode) {
-        const key = x.collegeCode + '::' + x.branchCode;
-        if (!apTopCollegeStats.has(key)) apTopCollegeStats.set(key, { collegeCode: x.collegeCode, collegeName: x.collegeName, district: x.district || 'Andhra Pradesh', branchCode: x.branchCode, branchName: x.branchName || x.branchCode, ocRanks: [] });
-        apTopCollegeStats.get(key).ocRanks.push(x.rank);
-      }
       const key = x.branchCode || 'UNKNOWN';
-      if (!branchSummaries.has(key)) branchSummaries.set(key, { branchCode: key, branchName: x.branchName || key, recordCount: 0, minRank: Infinity, maxRank: 0, phases: new Set(), categories: new Set() });
+      if (!branchSummaries.has(key)) {
+        branchSummaries.set(key, {
+          branchCode: key,
+          branchName: x.branchName || key,
+          recordCount: 0,
+          minRank: Infinity,
+          maxRank: 0,
+          phases: new Set(),
+          categories: new Set(),
+        });
+      }
       const b = branchSummaries.get(key);
       b.recordCount++;
       b.minRank = Math.min(b.minRank, x.rank);
       b.maxRank = Math.max(b.maxRank, x.rank);
       if (x.phase) b.phases.add(x.phase);
       if (x.category) b.categories.add(x.category);
-      candidates.push([x.rank, x.name, x.gender, x.category, x.region, x.allottedCategory, x.phase, x.collegeCode, x.branchCode, String(r.roll_no ?? r.hall_ticket ?? r.hallTicket ?? '')]);
+      candidates.push([
+        x.rank,
+        x.name,
+        x.gender,
+        x.category,
+        x.region,
+        x.allottedCategory,
+        x.phase,
+        x.collegeCode,
+        x.branchCode,
+        x.hallTicket,
+      ]);
     };
 
     if (year === '2026') {
@@ -127,6 +207,8 @@ function processYear(year, dir) {
       categories: Array.from(b.categories).sort(),
     })).sort((a,b)=>a.branchCode.localeCompare(b.branchCode));
 
+    const derivedDistrict = records.find(r => r.district)?.district || 'Andhra Pradesh';
+
     colleges.push({
       collegeCode,
       collegeName,
@@ -135,8 +217,15 @@ function processYear(year, dir) {
       branchCount: branches.length,
       minRank: records.length ? Math.min(...records.map(r=>r.rank)) : 0,
       maxRank: records.length ? Math.max(...records.map(r=>r.rank)) : 0,
-      district: records.find(r => r.district)?.district || 'Andhra Pradesh',
+      district: derivedDistrict,
       branches,
+    });
+
+    rawCollegesList.push({
+      collegeCode,
+      collegeName,
+      district: derivedDistrict,
+      records,
     });
   }
 
@@ -168,11 +257,9 @@ function processYear(year, dir) {
   fs.writeFileSync(path.join(dir, 'manifest.json'), JSON.stringify(manifest));
   fs.writeFileSync(path.join(dir, 'search_index.json'), JSON.stringify(searchIndex));
 
-  // AP 2026 Top B.Tech College analysis index.
-  // Rank metrics use candidate-category OC records. Seat metrics use the
-  // latest observed counselling phase snapshot available for each branch.
-  // "Top-rank" metrics are transparent counts at fixed rank thresholds,
-  // not a subjective quality score.
+  // ==========================================
+  // AP 2026 EXPANDED INDEX GENERATION
+  // ==========================================
   if (year === '2026') {
     const RANK_THRESHOLDS = [10000, 25000, 50000];
 
@@ -182,7 +269,7 @@ function processYear(year, dir) {
       const middle = Math.floor(valid.length / 2);
       const median = valid.length % 2
         ? valid[middle]
-        : (valid[middle - 1] + valid[middle]) / 2;
+        : Math.round((valid[middle - 1] + valid[middle]) / 2);
       return {
         openingRank: valid[0],
         medianRank: median,
@@ -226,72 +313,6 @@ function processYear(year, dir) {
       };
     };
 
-    const collegeMap = new Map();
-    const branchNameMap = new Map();
-    const districtMap = new Map();
-
-    for (const file of files) {
-      const raw = JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
-      const code = String(raw.college_code ?? raw.collegeCode ?? raw.inst_code ?? file.replace(/\.json$/i, '')).trim().toUpperCase();
-      if (code === 'CBIT') continue;
-
-      const name = String(raw.college_name ?? raw.collegeName ?? raw.inst_name ?? code).trim();
-      const records = Array.isArray(raw.records) ? raw.records : [];
-      const district = String(
-        records.find((record) => record && record.district)?.district ?? 'Andhra Pradesh'
-      ).trim() || 'Andhra Pradesh';
-
-      if (!collegeMap.has(code)) {
-        collegeMap.set(code, {
-          collegeCode: code,
-          collegeName: name,
-          district,
-          branches: new Map(),
-          allRanks: [],
-          allSeatSnapshots: [],
-        });
-      }
-
-      const college = collegeMap.get(code);
-      districtMap.set(district, true);
-
-      for (const record of records) {
-        const rank = num(record.rank);
-        const branchCode = String(record.branch_code ?? '').trim().toUpperCase();
-        const branchName = String(record.branch_name ?? branchCode).trim();
-        const category = String(record.community ?? record.category ?? '').trim().toUpperCase();
-        const phase = phaseNumber(record.phase);
-        const totalSeats = num(record.total_seats);
-        const leftOverSeats = num(record.left_over_seats);
-
-        if (!branchCode) continue;
-        branchNameMap.set(branchCode, branchName);
-
-        if (!college.branches.has(branchCode)) {
-          college.branches.set(branchCode, {
-            branchCode,
-            branchName,
-            ocRanks: [],
-            allRanks: [],
-            seatSnapshots: [],
-          });
-        }
-
-        const branch = college.branches.get(branchCode);
-        if (rank > 0) {
-          branch.allRanks.push(rank);
-          college.allRanks.push(rank);
-          if (category === 'OC') branch.ocRanks.push(rank);
-        }
-
-        if (totalSeats > 0 && leftOverSeats >= 0 && leftOverSeats <= totalSeats) {
-          const snapshot = { phase, totalSeats, leftOverSeats };
-          branch.seatSnapshots.push(snapshot);
-          college.allSeatSnapshots.push(snapshot);
-        }
-      }
-    }
-
     const makeMetrics = (ocRanks, allRanks, seatSnapshots) => {
       const ranks = rankStats(ocRanks);
       const seats = seatStats(seatSnapshots);
@@ -308,6 +329,7 @@ function processYear(year, dir) {
           closingRank: 0,
           validOcAllotments: 0,
         }),
+        isLimitedData: (ranks?.validOcAllotments || 0) < 3,
         observedAllotments,
         topRankAllotments,
         top25kAllotments: top25,
@@ -318,105 +340,366 @@ function processYear(year, dir) {
       };
     };
 
-    const topColleges = Array.from(collegeMap.values()).map((college) => {
+    // 1. TOP COLLEGES INDEX
+    const branchNameMap = new Map();
+    const districtMap = new Map();
+    const collegeTopList = [];
+    const predictorCollegesList = [];
+
+    // CATEGORY INSIGHTS ACCUMULATORS
+    const createCategoryAccumulator = () => {
+      const map = {};
+      for (const item of AP_CATEGORY_METADATA) {
+        map[item.key] = {
+          category: item.key,
+          displayLabel: item.display,
+          categoryName: item.name,
+          boys: { topRank: null, lastRank: null, recordCount: 0, colleges: new Set(), branches: new Set() },
+          girls: { topRank: null, lastRank: null, recordCount: 0, colleges: new Set(), branches: new Set() },
+          totalRecords: 0,
+          colleges: new Set(),
+          branches: new Set(),
+        };
+      }
+      return map;
+    };
+
+    const quotaInsights = createCategoryAccumulator();
+    const casteInsights = createCategoryAccumulator();
+    let totalInsightsRecords = 0;
+
+    for (const college of rawCollegesList) {
+      districtMap.set(college.district, (districtMap.get(college.district) || 0) + 1);
+
+      const branchGroup = new Map();
+      const collegeAllRanks = [];
+
+      for (const r of college.records) {
+        const bCode = r.branchCode;
+        if (!bCode) continue;
+        branchNameMap.set(bCode, r.branchName || bCode);
+
+        if (!branchGroup.has(bCode)) {
+          branchGroup.set(bCode, {
+            branchCode: bCode,
+            branchName: r.branchName || bCode,
+            ocRanks: [],
+            allRanks: [],
+            seatSnapshots: [],
+            records: [],
+          });
+        }
+        const bObj = branchGroup.get(bCode);
+        bObj.records.push(r);
+
+        if (r.rank > 0) {
+          bObj.allRanks.push(r.rank);
+          collegeAllRanks.push(r.rank);
+          if (r.category === 'OC') {
+            bObj.ocRanks.push(r.rank);
+          }
+
+          // Category Insights Tracking
+          totalInsightsRecords++;
+          const gender = r.gender === 'F' ? 'girls' : 'boys';
+
+          // A. By Candidate Caste
+          if (casteInsights[r.category]) {
+            const cItem = casteInsights[r.category];
+            const g = cItem[gender];
+            if (g.topRank === null || r.rank < g.topRank) g.topRank = r.rank;
+            if (g.lastRank === null || r.rank > g.lastRank) g.lastRank = r.rank;
+            g.recordCount++;
+            g.colleges.add(college.collegeCode);
+            g.branches.add(bCode);
+            cItem.totalRecords++;
+            cItem.colleges.add(college.collegeCode);
+            cItem.branches.add(bCode);
+          }
+
+          // B. By Allotted Quota
+          const quotaKey = normalizeAllottedQuotaKey(r.allottedCategory);
+          if (quotaKey && quotaInsights[quotaKey]) {
+            const qItem = quotaInsights[quotaKey];
+            const g = qItem[gender];
+            if (g.topRank === null || r.rank < g.topRank) g.topRank = r.rank;
+            if (g.lastRank === null || r.rank > g.lastRank) g.lastRank = r.rank;
+            g.recordCount++;
+            g.colleges.add(college.collegeCode);
+            g.branches.add(bCode);
+            qItem.totalRecords++;
+            qItem.colleges.add(college.collegeCode);
+            qItem.branches.add(bCode);
+          }
+        }
+
+        if (r.totalSeats > 0 && r.leftOverSeats >= 0 && r.leftOverSeats <= r.totalSeats) {
+          bObj.seatSnapshots.push({
+            phase: r.phase,
+            totalSeats: r.totalSeats,
+            leftOverSeats: r.leftOverSeats,
+          });
+        }
+      }
+
+      // Build branches object for top colleges
       const branches = {};
-      for (const [branchCode, branch] of college.branches.entries()) {
-        branches[branchCode] = {
-          branchCode,
-          branchName: branch.branchName,
-          ...makeMetrics(branch.ocRanks, branch.allRanks, branch.seatSnapshots),
+      const predictorBranches = {};
+
+      for (const [bCode, bObj] of branchGroup.entries()) {
+        const metrics = makeMetrics(bObj.ocRanks, bObj.allRanks, bObj.seatSnapshots);
+        branches[bCode] = {
+          branchCode: bCode,
+          branchName: bObj.branchName,
+          ...metrics,
+        };
+
+        // Predictor branch stats per category
+        const categoriesStats = {};
+        const genderStats = {};
+
+        for (const catItem of AP_CATEGORY_METADATA) {
+          const cat = catItem.key;
+          const matchingCatRecords = bObj.records.filter(
+            rec => (rec.category === cat || rec.category === 'OC') && rec.rank > 0
+          );
+          if (matchingCatRecords.length > 0) {
+            const ranks = matchingCatRecords.map(rec => rec.rank).sort((a, b) => a - b);
+            const med = ranks.length % 2
+              ? ranks[Math.floor(ranks.length / 2)]
+              : Math.round((ranks[Math.floor(ranks.length / 2) - 1] + ranks[Math.floor(ranks.length / 2)]) / 2);
+            categoriesStats[cat] = {
+              min: ranks[0],
+              max: ranks[ranks.length - 1],
+              median: med,
+              count: ranks.length,
+            };
+          }
+
+          // Per Gender stats (M, F)
+          for (const gen of ['M', 'F']) {
+            const key = `${cat}_${gen}`;
+            const matchingGenderRecords = bObj.records.filter(rec => {
+              if (rec.rank <= 0) return false;
+              // Male candidates cannot take exclusive girls quota
+              const allotCat = rec.allottedCategory || '';
+              if (gen === 'M' && allotCat.includes('GIRLS') && !allotCat.includes('GEN')) return false;
+              const matchesCat = rec.category === cat || rec.category === 'OC';
+              return matchesCat;
+            });
+            if (matchingGenderRecords.length > 0) {
+              const ranks = matchingGenderRecords.map(rec => rec.rank).sort((a, b) => a - b);
+              const med = ranks.length % 2
+                ? ranks[Math.floor(ranks.length / 2)]
+                : Math.round((ranks[Math.floor(ranks.length / 2) - 1] + ranks[Math.floor(ranks.length / 2)]) / 2);
+              genderStats[key] = {
+                min: ranks[0],
+                max: ranks[ranks.length - 1],
+                median: med,
+                count: ranks.length,
+              };
+            }
+          }
+        }
+
+        predictorBranches[bCode] = {
+          name: bObj.branchName,
+          totalAllotted: bObj.allRanks.length,
+          minRank: bObj.allRanks.length ? Math.min(...bObj.allRanks) : 0,
+          maxRank: bObj.allRanks.length ? Math.max(...bObj.allRanks) : 0,
+          categories: categoriesStats,
+          genders: genderStats,
+          seatStats: metrics.seatStats,
         };
       }
 
-      const branchValues = Array.from(college.branches.values());
-      const allOcRanks = branchValues.flatMap((branch) => branch.ocRanks);
-      const allBranchMetrics = makeMetrics(allOcRanks, college.allRanks, []);
+      const branchValues = Array.from(branchGroup.values());
+      const allOcRanks = branchValues.flatMap(b => b.ocRanks);
+      const allBranchMetrics = makeMetrics(allOcRanks, collegeAllRanks, []);
 
-      // For an all-branches view, seat capacity is the sum of each branch's
-      // latest observed seat snapshot rather than the mode of raw records.
-      const branchSeatStats = branchValues
-        .map((branch) => seatStats(branch.seatSnapshots))
+      // Aggregate seat stats from branch latest snapshots
+      const branchSeatSnapshots = branchValues
+        .map(b => seatStats(b.seatSnapshots))
         .filter(Boolean);
-      if (branchSeatStats.length) {
-        const totalSeats = branchSeatStats.reduce((sum, item) => sum + item.totalSeats, 0);
-        const filledSeats = branchSeatStats.reduce((sum, item) => sum + item.filledSeats, 0);
-        const remainingSeats = branchSeatStats.reduce((sum, item) => sum + item.remainingSeats, 0);
+      if (branchSeatSnapshots.length) {
+        const totalSeats = branchSeatSnapshots.reduce((sum, item) => sum + item.totalSeats, 0);
+        const filledSeats = branchSeatSnapshots.reduce((sum, item) => sum + item.filledSeats, 0);
+        const remainingSeats = branchSeatSnapshots.reduce((sum, item) => sum + item.remainingSeats, 0);
         allBranchMetrics.seatStats = {
           totalSeats,
           filledSeats,
           remainingSeats,
           fillRatePercent: totalSeats ? Number(((filledSeats / totalSeats) * 100).toFixed(1)) : 0,
-          latestPhase: Math.max(...branchSeatStats.map((item) => item.latestPhase)),
+          latestPhase: Math.max(...branchSeatSnapshots.map(item => item.latestPhase)),
         };
       }
 
-      return {
-        collegeCode: college.collegeCode,
-        collegeName: college.collegeName,
-        district: college.district,
-        branches,
-        allBranches: allBranchMetrics,
-      };
-    }).filter((college) => Object.keys(college.branches).length > 0)
-      .sort((a, b) => a.collegeCode.localeCompare(b.collegeCode));
+      if (Object.keys(branches).length > 0) {
+        collegeTopList.push({
+          collegeCode: college.collegeCode,
+          collegeName: college.collegeName,
+          district: college.district,
+          branches,
+          allBranches: allBranchMetrics,
+        });
 
-    const statewideBranchRanks = new Map();
-    for (const college of topColleges) {
-      for (const [branchCode, branch] of Object.entries(college.branches)) {
-        if (!statewideBranchRanks.has(branchCode)) statewideBranchRanks.set(branchCode, []);
-        statewideBranchRanks.get(branchCode).push(branch);
+        predictorCollegesList.push({
+          code: college.collegeCode,
+          name: college.collegeName,
+          district: college.district,
+          branches: predictorBranches,
+        });
       }
     }
 
-    const statewideBranchStats = {};
-    for (const [branchCode, branchRows] of statewideBranchRanks.entries()) {
-      const ocRanks = branchRows.flatMap((row) => {
-        const ranks = [];
-        if (row.validOcAllotments > 0) {
-          // Statewide rank stats are recomputed from college-level aggregate
-          // values below only where raw rank arrays are available.
-        }
-        return ranks;
-      });
-      const observedAllotments = branchRows.reduce((sum, row) => sum + row.observedAllotments, 0);
-      const top25kAllotments = branchRows.reduce((sum, row) => sum + row.top25kAllotments, 0);
-      const totalSeats = branchRows.reduce((sum, row) => sum + (row.seatStats?.totalSeats || 0), 0);
-      const filledSeats = branchRows.reduce((sum, row) => sum + (row.seatStats?.filledSeats || 0), 0);
-      const remainingSeats = branchRows.reduce((sum, row) => sum + (row.seatStats?.remainingSeats || 0), 0);
-      statewideBranchStats[branchCode] = {
-        observedAllotments,
-        top25kAllotments,
-        top25kSharePercent: observedAllotments ? Number(((top25kAllotments / observedAllotments) * 100).toFixed(1)) : 0,
-        totalSeats,
-        filledSeats,
-        remainingSeats,
-        fillRatePercent: totalSeats ? Number(((filledSeats / totalSeats) * 100).toFixed(1)) : 0,
-      };
-    }
+    collegeTopList.sort((a, b) => a.collegeCode.localeCompare(b.collegeCode));
+    predictorCollegesList.sort((a, b) => a.code.localeCompare(b.code));
 
-    const branches = Array.from(branchNameMap.entries())
+    const branchesList = Array.from(branchNameMap.entries())
       .map(([code, name]) => ({ code, name }))
       .sort((a, b) => a.name.localeCompare(b.name));
 
     const topIndex = {
       generatedAt: new Date().toISOString(),
-      methodology: 'Observed AP EAPCET 2026 allotment analysis. OC rank statistics use valid candidate-category OC records. Seat statistics use the latest observed counselling phase snapshot for each college/branch. Top-rank counts use transparent absolute-rank thresholds.',
-      rankingBasis: 'Users can sort by median/opening/closing observed OC rank, filled seats, seat fill rate, remaining seats, top-rank allotments up to rank 25,000, or top-rank share up to rank 25,000.',
+      methodology:
+        'Observed AP EAPCET 2026 allotment analysis. OC rank statistics use valid candidate-category OC records as a standardized comparison cohort. Seat statistics use the latest observed counselling phase snapshot for each college/branch. Top-rank counts use transparent absolute-rank thresholds.',
+      rankingBasis:
+        'Users can sort by seat fill rate, filled seats, remaining seats, median/opening/closing observed OC rank, or allotments with rank ≤25,000.',
+      disclaimer:
+        'Methodology note: College-level rank comparisons use observed OC-category allotment ranks as a standardized comparison cohort. This does not indicate that any category or community is better or worse than another. Category-specific allotment information remains available separately in the College Predictor using the category selected by the user. All figures are historical observations from the available 2026 allotment dataset and are not guarantees of future admission.',
       topRankThresholds: RANK_THRESHOLDS,
-      totalColleges: topColleges.length,
+      totalColleges: collegeTopList.length,
       districts: Array.from(districtMap.keys()).sort((a, b) => a.localeCompare(b)),
-      branches,
-      statewideBranchStats,
-      colleges: topColleges,
+      branches: branchesList,
+      colleges: collegeTopList,
     };
 
-    fs.writeFileSync(
-      path.join(dir, 'top_colleges_index.json'),
-      JSON.stringify(topIndex),
-      'utf8'
-    );
-    console.log(`Generated AP 2026 top-colleges index: ${topColleges.length} colleges, ${branches.length} branches`);
+    fs.writeFileSync(path.join(dir, 'top_colleges_index.json'), JSON.stringify(topIndex, null, 2), 'utf8');
+
+    // 2. CATEGORY INSIGHTS JSON
+    const serializeCategoryStats = (map) => {
+      return AP_CATEGORY_METADATA.map(item => {
+        const obj = map[item.key];
+        return {
+          category: obj.category,
+          displayLabel: obj.displayLabel,
+          categoryName: obj.categoryName,
+          boys: {
+            topRank: obj.boys.topRank,
+            lastRank: obj.boys.lastRank,
+            recordCount: obj.boys.recordCount,
+            collegesCount: obj.boys.colleges.size,
+            branchesCount: obj.boys.branches.size,
+          },
+          girls: {
+            topRank: obj.girls.topRank,
+            lastRank: obj.girls.lastRank,
+            recordCount: obj.girls.recordCount,
+            collegesCount: obj.girls.colleges.size,
+            branchesCount: obj.girls.branches.size,
+          },
+          totalRecords: obj.totalRecords,
+          collegesRepresented: obj.colleges.size,
+          branchesRepresented: obj.branches.size,
+        };
+      });
+    };
+
+    const categoryInsightsData = {
+      datasetStats: {
+        totalRecords: totalInsightsRecords,
+        totalColleges: rawCollegesList.length,
+        totalBranches: branchNameMap.size,
+        generatedAt: new Date().toISOString(),
+      },
+      byAllottedQuota: serializeCategoryStats(quotaInsights),
+      byCandidateCaste: serializeCategoryStats(casteInsights),
+    };
+
+    fs.writeFileSync(path.join(dir, 'category_insights.json'), JSON.stringify(categoryInsightsData, null, 2), 'utf8');
+
+    // 3. PREDICTOR INDEX JSON
+    const predictorIndexData = {
+      version: '2026.2',
+      generatedAt: new Date().toISOString(),
+      totalColleges: predictorCollegesList.length,
+      categories: AP_CATEGORY_METADATA.map(c => c.key),
+      branches: branchesList,
+      colleges: predictorCollegesList,
+    };
+
+    fs.writeFileSync(path.join(dir, 'predictor_index.json'), JSON.stringify(predictorIndexData), 'utf8');
+
+    // Also write src/data/apEapcetCollegeManifest.ts for build-time typed exports
+    const manifestTsContent = `// AUTOGENERATED BUILD-TIME MANIFEST FROM public/AP_EAPCET_2026_ALLOTMENT_BY_COLLEGE/
+// DO NOT EDIT MANUALLY. Run 'node scripts/generateApAllotmentIndexes.cjs' to regenerate.
+
+export interface ApBranchItem {
+  branchCode: string;
+  branchName: string;
+  recordCount: number;
+  minRank: number;
+  maxRank: number;
+  phases: number[];
+  categories: string[];
+}
+
+export interface ApCollegeItem {
+  collegeCode: string;
+  collegeName: string;
+  file: string;
+  recordCount: number;
+  branchCount: number;
+  minRank: number;
+  maxRank: number;
+  district?: string;
+  branches: ApBranchItem[];
+}
+
+export interface ApAllotmentGlobalStats {
+  year: string;
+  totalColleges: number;
+  totalRecords: number;
+  totalBranches: number;
+  categories: string[];
+  allottedCategories: string[];
+  regions: string[];
+  phases: number[];
+  minRank: number;
+  maxRank: number;
+  generatedAt: string;
+}
+
+export interface CategoryGenderInsight {
+  topRank: number | null;
+  lastRank: number | null;
+  recordCount: number;
+  collegesCount: number;
+  branchesCount: number;
+}
+
+export interface CategoryInsightItem {
+  category: string;
+  displayLabel: string;
+  categoryName: string;
+  boys: CategoryGenderInsight;
+  girls: CategoryGenderInsight;
+  totalRecords: number;
+  collegesRepresented: number;
+  branchesRepresented: number;
+}
+
+export const AP_EAPCET_GLOBAL_STATS: ApAllotmentGlobalStats = ${JSON.stringify(stats, null, 2)};
+export const AP_EAPCET_CATEGORY_INSIGHTS = ${JSON.stringify(categoryInsightsData, null, 2)};
+export const AP_EAPCET_COLLEGES: ApCollegeItem[] = ${JSON.stringify(colleges, null, 2)};
+`;
+    fs.writeFileSync(path.join(process.cwd(), 'src/data/apEapcetCollegeManifest.ts'), manifestTsContent, 'utf8');
+
+    console.log(`Generated AP 2026 category insights: ${totalInsightsRecords} records analyzed`);
+    console.log(`Generated AP 2026 top-colleges index: ${collegeTopList.length} colleges, ${branchesList.length} branches`);
+    console.log(`Generated AP 2026 predictor index: ${predictorCollegesList.length} colleges`);
   }
+
   console.log(`AP EAPCET ${year}: ${colleges.length} colleges, ${totalRecords} records, ${candidates.length} indexed candidates`);
 }
 

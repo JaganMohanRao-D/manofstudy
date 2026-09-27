@@ -118,7 +118,7 @@ export async function fetchCollegeDetails(collegeCode: string): Promise<ApColleg
   }
 
   const collegeMeta = AP_EAPCET_COLLEGES.find((c) => c.collegeCode.toUpperCase() === code);
-  if (!collegeMeta || !collegeMeta.hasData) {
+  if (!collegeMeta || (collegeMeta.recordCount ?? 0) === 0) {
     return null;
   }
 

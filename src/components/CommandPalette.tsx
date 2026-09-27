@@ -428,12 +428,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'action-support-mos',
-        title: '☕ Support the Developer / Keep MAN OF STUDY Free',
-        subtitle: 'Help us pay server and scraper bills with a quick contribution via UPI',
+        title: 'Support MAN OF STUDY / Keep it Open & Free',
+        subtitle: 'Voluntary contributions help cover hosting, research and development costs',
         category: 'Quick Actions',
-        badge: 'Donate',
+        badge: 'Support',
         icon: <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />,
-        keywords: ['support', 'donate', 'donation', 'upi', 'developer', 'chai', 'coffee', 'fund', 'contribute', 'free forever', 'man of study', 'mos'],
+        keywords: ['support', 'donate', 'donation', 'upi', 'developer', 'fund', 'contribute', 'free forever', 'man of study', 'mos', 'hosting', 'research', 'server'],
         action: () => onOpenSupport?.(),
       },
       {
