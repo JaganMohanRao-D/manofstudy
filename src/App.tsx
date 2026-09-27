@@ -355,6 +355,29 @@ export default function App() {
   const [gpaSubTab, setGpaSubTab] = useState<'gpa' | 'internal'>('gpa');
   const [academicSubTab, setAcademicSubTab] = useState<'attendance' | 'gpa' | 'internal'>('attendance');
 
+  // One respectful support prompt per browser session after opening a result-oriented tool.
+  useEffect(() => {
+    const supportWorkspaces = new Set<WorkspaceView>([
+      'ap-allotments', 'ap-predictor', 'ap-top-colleges',
+      'tg-allotments', 'tg-predictor', 'tg-top-colleges',
+      'eapcet', 'attendance', 'gpa', 'utilities', 'scholarships', 'internships', 'roadmaps'
+    ]);
+    if (!supportWorkspaces.has(activeWorkspace)) return;
+
+    try {
+      if (sessionStorage.getItem('mos_support_prompt_v1') === 'shown') return;
+    } catch {
+      // Storage restrictions must never break the application.
+    }
+
+    const timer = window.setTimeout(() => {
+      try { sessionStorage.setItem('mos_support_prompt_v1', 'shown'); } catch {}
+      setIsSupportModalOpen(true);
+    }, 4200);
+
+    return () => window.clearTimeout(timer);
+  }, [activeWorkspace]);
+
   const supportEmail = 'support.jamord@gmail.com';
 
   const handleCopyEmail = () => {
@@ -878,7 +901,7 @@ export default function App() {
                 )}
 
                 {activeWorkspace === 'ap-predictor' && (
-                  <ApCollegePredictor initialCollegeCode="AUCE" />
+                  <ApCollegePredictor initialCollegeCode="ALL" initialBranchCode="ALL" />
                 )}
 
                 {activeWorkspace === 'ap-top-colleges' && (
