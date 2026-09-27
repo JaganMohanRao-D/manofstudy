@@ -368,3 +368,24 @@ html.light .mos-ap-control::placeholder { color: var(--mos-text-muted) !importan
   color: var(--mos-text-primary);
   border-color: var(--mos-input-border);
 }
+
+
+/* TG EAPCET explorer — intentional high-contrast light theme. */
+html.light .mos-tg-explorer .bg-slate-950 { background-color: #ffffff !important; }
+html.light .mos-tg-explorer .bg-slate-900 { background-color: #ffffff !important; }
+html.light .mos-tg-explorer .bg-slate-800 { background-color: #f1f5f9 !important; }
+html.light .mos-tg-explorer .text-white { color: #172033 !important; }
+html.light .mos-tg-explorer .text-slate-100,
+html.light .mos-tg-explorer .text-slate-200 { color: #172033 !important; }
+html.light .mos-tg-explorer .text-slate-300,
+html.light .mos-tg-explorer .text-slate-400 { color: #475569 !important; }
+html.light .mos-tg-explorer .text-slate-500 { color: #64748b !important; }
+html.light .mos-tg-explorer .border-slate-800,
+html.light .mos-tg-explorer .border-slate-700 { border-color: #d9e1ec !important; }
+html.light .mos-tg-explorer input,
+html.light .mos-tg-explorer select { color: #172033 !important; }
+html.light .mos-tg-explorer input::placeholder { color: #64748b !important; }
+html.light .mos-tg-explorer table thead { background-color: #f8fafc !important; color: #334155 !important; }
+html.light .mos-tg-explorer table tbody { color: #334155 !important; }
+html.light .mos-tg-explorer .shadow-xl,
+html.light .mos-tg-explorer .shadow-2xl { box-shadow: 0 10px 30px rgba(15,23,42,.10) !important; }
