@@ -34,8 +34,8 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
   phase = 'ALL',
   initialName = '',
 }) => {
-  // Search Mode: 'name' | 'rank'
-  const [searchMode, setSearchMode] = useState<'name' | 'rank'>('name');
+  // Search Mode: name, rank/range, or hall ticket
+  const [searchMode, setSearchMode] = useState<'name' | 'rank' | 'hallticket'>('name');
 
   // Input states
   const [nameInput, setNameInput] = useState(initialName);
@@ -79,6 +79,7 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
     try {
       const records = await searchAllotments(year, {
         nameQuery: searchMode === 'name' ? nameInput : undefined,
+        hallTicket: searchMode === 'hallticket' ? nameInput : undefined,
         exactRank: searchMode === 'rank' ? exactRank ?? undefined : undefined,
         minRank: searchMode === 'rank' ? minRank ?? undefined : undefined,
         maxRank: searchMode === 'rank' ? maxRank ?? undefined : undefined,
@@ -119,7 +120,7 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
 
   // Debounced trigger for typing in name search
   useEffect(() => {
-    if (searchMode === 'name' && nameInput.trim().length >= 2) {
+    if ((searchMode === 'name' || searchMode === 'hallticket') && nameInput.trim().length >= 2) {
       const timer = setTimeout(() => {
         executeSearch();
       }, 300);
@@ -189,6 +190,25 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
           </span>
         </div>
 
+        <button
+              type="button"
+              onClick={() => {
+                setSearchMode('hallticket');
+                setExactRankInput('');
+                setMinRankInput('');
+                setMaxRankInput('');
+                setNameInput('');
+              }}
+              className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+                searchMode === 'hallticket'
+                  ? 'bg-cyan-600 text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              Hall Ticket
+            </button>
+          </div>
+
         {/* Name Mode Inputs */}
         {searchMode === 'name' && (
           <div className="space-y-3">
@@ -224,6 +244,22 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
               >
                 {isSearching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
                 <span>Search Student</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Hall Ticket Mode */}
+        {searchMode === 'hallticket' && (
+          <div className="space-y-3">
+            <div className="flex flex-col sm:flex-row gap-2">
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                <input type="text" value={nameInput} onChange={(e) => setNameInput(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') executeSearch(); }} placeholder="Enter hall ticket / roll number..." className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl pl-9 pr-8 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 placeholder-slate-400 dark:placeholder-slate-500 shadow-inner" />
+              </div>
+              <button type="button" onClick={executeSearch} disabled={isSearching || !nameInput.trim()} className="px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs sm:text-sm font-bold transition-all disabled:opacity-40 flex items-center justify-center gap-2 cursor-pointer">
+                {isSearching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+                <span>Search Hall Ticket</span>
               </button>
             </div>
           </div>
