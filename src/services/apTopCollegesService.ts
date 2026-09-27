@@ -12,6 +12,17 @@ export interface APTopRankStats {
   medianRank: number;
   closingRank: number;
   validOcAllotments: number;
+  observedAllotments: number;
+  topRankAllotments: Record<string, number>;
+  top25kAllotments: number;
+  top25kSharePercent: number;
+  seatStats: {
+    totalSeats: number;
+    filledSeats: number;
+    remainingSeats: number;
+    fillRatePercent: number;
+    latestPhase: number;
+  } | null;
 }
 
 export interface APTopCollegeBranch {
@@ -79,7 +90,15 @@ export async function getAPTopCollegeRows(
   branch = 'CSE',
   district = 'ALL',
   searchQuery = '',
-  sortBy: 'median_asc' | 'opening_asc' | 'closing_asc' = 'median_asc'
+  sortBy:
+    | 'median_asc'
+    | 'opening_asc'
+    | 'closing_asc'
+    | 'fill_desc'
+    | 'filled_desc'
+    | 'remaining_asc'
+    | 'top25_desc'
+    | 'top25share_desc' = 'median_asc'
 ): Promise<APTopCollegeRow[]> {
   const index = await getAPTopCollegeIndex();
   const branchFilter = String(branch || 'CSE').trim().toUpperCase();
@@ -134,17 +153,30 @@ export async function getAPTopCollegeRows(
   }
 
   rows.sort((a, b) => {
+    const aSeats = a.stats.seatStats;
+    const bSeats = b.stats.seatStats;
+
     const primary =
       sortBy === 'opening_asc'
         ? a.stats.openingRank - b.stats.openingRank
         : sortBy === 'closing_asc'
           ? a.stats.closingRank - b.stats.closingRank
-          : a.stats.medianRank - b.stats.medianRank;
+          : sortBy === 'fill_desc'
+            ? (bSeats?.fillRatePercent ?? -1) - (aSeats?.fillRatePercent ?? -1)
+            : sortBy === 'filled_desc'
+              ? (bSeats?.filledSeats ?? -1) - (aSeats?.filledSeats ?? -1)
+              : sortBy === 'remaining_asc'
+                ? (aSeats?.remainingSeats ?? Number.POSITIVE_INFINITY) - (bSeats?.remainingSeats ?? Number.POSITIVE_INFINITY)
+                : sortBy === 'top25_desc'
+                  ? b.stats.top25kAllotments - a.stats.top25kAllotments
+                  : sortBy === 'top25share_desc'
+                    ? b.stats.top25kSharePercent - a.stats.top25kSharePercent
+                    : a.stats.medianRank - b.stats.medianRank;
 
     return primary ||
+      b.stats.top25kAllotments - a.stats.top25kAllotments ||
+      (bSeats?.fillRatePercent ?? -1) - (aSeats?.fillRatePercent ?? -1) ||
       a.stats.medianRank - b.stats.medianRank ||
-      a.stats.openingRank - b.stats.openingRank ||
-      a.stats.closingRank - b.stats.closingRank ||
       a.collegeName.localeCompare(b.collegeName);
   });
 
