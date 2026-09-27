@@ -337,14 +337,4 @@ export default function ApCollegePredictor({
       )}
     </div>
   );
-}<div>
-                  <label className="text-xs font-semibold text-slate-300 mb-1 block">Region</label>
-                  <select value={userRegion} onChange={(e) => setUserRegion(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500">
-                    <option value="ALL">All Regions</option>
-                    <option value="AU">AU</option>
-                    <option value="SVU">SVU</option>
-                    <option value="NL">NL</option>
-                  </select>
-                </div>
-
-                
+}<
