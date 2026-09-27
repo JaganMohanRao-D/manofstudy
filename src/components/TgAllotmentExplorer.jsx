@@ -764,7 +764,7 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
   const isStatewideOverviewActive = selectedCollegeCode === 'ALL' && selectedBranchCode === 'ALL' && !isGlobalSearchActive;
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 py-4 sm:py-8 px-3 sm:px-6 lg:px-8 font-sans">
+    <div className="mos-tg-explorer min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 py-4 sm:py-8 px-3 sm:px-6 lg:px-8 font-sans">
       <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
 
         {/* 1. BRANDING & TITLE */}
@@ -1109,7 +1109,7 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
                       executeGlobalSearch();
                     }
                   }}
-                  placeholder="Search candidate name, hall ticket, or rank..."
+                  placeholder="Search candidate name..."
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-8 py-2 text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-rose-500 placeholder-slate-500 shadow-inner"
                 />
                 {searchQuery && (
