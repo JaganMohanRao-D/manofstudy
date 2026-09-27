@@ -8,9 +8,6 @@ import {
   GraduationCap,
   FileText,
   Sparkles,
-  BookOpen,
-  GraduationCap,
-  FileText,
 } from 'lucide-react';
 import { FeaturesHub } from './FeaturesHub';
 
