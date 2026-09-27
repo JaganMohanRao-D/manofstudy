@@ -190,6 +190,13 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
     return Array.from(map.entries()).sort((a, b) => a[0].localeCompare(b[0]));
   }, [visibleRecords]);
 
+  const genderMix = useMemo(() => {
+    const boys = visibleRecords.filter((record) => record.gender === 'M').length;
+    const girls = visibleRecords.filter((record) => record.gender === 'F').length;
+    const total = boys + girls;
+    return { boys, girls, total, boysPct: total ? Math.round((boys / total) * 100) : 0, girlsPct: total ? Math.round((girls / total) * 100) : 0 };
+  }, [visibleRecords]);
+
   const bestRank = selectedCollegeCode === 'ALL' ? Number(datasetSummary?.minRank ?? 0) : (visibleRecords.length ? Math.min(...visibleRecords.map((r) => r.rank)) : 0);
   const lastRank = selectedCollegeCode === 'ALL' ? Number(datasetSummary?.maxRank ?? 0) : (visibleRecords.length ? Math.max(...visibleRecords.map((r) => r.rank)) : 0);
 
@@ -366,7 +373,7 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
                   <div className="mb-3 flex items-center justify-between"><div><h3 className="font-bold text-slate-950 dark:text-white">Allotted students</h3><p className="text-xs text-slate-500 dark:text-slate-400">{visibleRecords.length.toLocaleString()} records after active filters</p></div><span className="rounded-full bg-cyan-500/10 px-3 py-1 text-xs font-bold text-cyan-300">AP EAPCET {selectedYear}</span></div>
                   <APAllotmentTable records={visibleRecords} collegeCode={currentCollege.college_code} collegeName={currentCollege.college_name} branchCode={selectedBranchCode} branchName={branchLabel} year={selectedYear} />
                 </section>
-                <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                   <div className="mos-fade-up rounded-[1.75rem] border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-white dark:bg-slate-900/80 p-5 shadow-xl">
                     <div className="flex items-center justify-between"><div><p className="text-[10px] font-black uppercase tracking-[0.14em] text-cyan-400">Category mix</p><h3 className="mt-1 font-black text-slate-950 dark:text-white">Candidate categories</h3></div><Users className="h-5 w-5 text-cyan-400" /></div>
                     <div className="mt-4 space-y-3">{categoryInsights.map(([category, insight]) => {
