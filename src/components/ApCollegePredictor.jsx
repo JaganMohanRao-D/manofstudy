@@ -26,8 +26,11 @@ import {
   runApPredictorAnalysis,
   getApPredictorIndex,
   AP_SOCIAL_CATEGORIES,
-  AP_BRANCH_OPTIONS
+  AP_BRANCH_OPTIONS,
+  AP_REGION_OPTIONS,
+  AP_SPECIAL_CATEGORIES
 } from '../services/apCollegePredictorService';
+import { getPredictorVerdict } from '../utils/predictorLocalization';
 
 export default function ApCollegePredictor({
   initialCollegeCode = 'ALL',
@@ -37,7 +40,9 @@ export default function ApCollegePredictor({
   const [userRankInput, setUserRankInput] = useState('18500');
   const [selectedCategory, setSelectedCategory] = useState('OC');
   const [selectedGender, setSelectedGender] = useState('M');
+  const [selectedRegion, setSelectedRegion] = useState('AU');
   const [selectedBranch, setSelectedBranch] = useState('ALL');
+  const [selectedSpecialCategory, setSelectedSpecialCategory] = useState('NONE');
   const [collegeSearchQuery, setCollegeSearchQuery] = useState('');
   const [activeTabFilter, setActiveTabFilter] = useState('ALL'); // 'ALL' | 'WITHIN_RANGE' | 'NEAR_RANGE' | 'OUTSIDE_RANGE'
   const [sortBy, setSortBy] = useState('SELECTIVE'); // 'SELECTIVE' | 'CLOSING_DESC' | 'CLOSEST_TO_RANK' | 'NAME_ASC'
@@ -65,8 +70,10 @@ export default function ApCollegePredictor({
           rank: cleanRank,
           category: selectedCategory,
           gender: selectedGender,
+          region: selectedRegion,
           branch: selectedBranch,
           collegeQuery: collegeSearchQuery,
+          specialCategory: selectedSpecialCategory,
           sortBy: sortBy,
         });
 
@@ -84,7 +91,7 @@ export default function ApCollegePredictor({
       isSubscribed = false;
       clearTimeout(timer);
     };
-  }, [userRankInput, selectedCategory, selectedGender, selectedBranch, collegeSearchQuery, sortBy]);
+  }, [userRankInput, selectedCategory, selectedGender, selectedRegion, selectedBranch, collegeSearchQuery, selectedSpecialCategory, sortBy]);
 
   const filteredMatches = useMemo(() => {
     if (!analysisResult?.matches) return [];
@@ -102,7 +109,7 @@ export default function ApCollegePredictor({
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans pb-24">
+    <div className="min-h-screen mos-ap-explorer bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans pb-24">
       {/* Top Breadcrumb & Header */}
       <div className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/90 dark:bg-slate-900/60 backdrop-blur-md sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
@@ -235,11 +242,32 @@ export default function ApCollegePredictor({
                 <p className="text-[11px] text-slate-500 dark:text-slate-400">Includes women reservation pool</p>
               </div>
 
-              {/* STEP 4: Preferred Branch */}
+              {/* STEP 4: Local Region */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                  <span className="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30 flex items-center justify-center text-[10px] font-bold">4</span>
+                  Local Region
+                </label>
+                <div className="relative">
+                  <select
+                    value={selectedRegion}
+                    onChange={(e) => setSelectedRegion(e.target.value)}
+                    className="w-full appearance-none px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-sm font-semibold outline-none focus:border-cyan-500 pr-9 cursor-pointer"
+                  >
+                    {AP_REGION_OPTIONS.map((region) => (
+                      <option key={region.id} value={region.id}>{region.label}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Matches AP regional quota pools</p>
+              </div>
+
+              {/* STEP 5: Preferred Branch */}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                   <span className="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30 flex items-center justify-center text-[10px] font-bold">
-                    4
+                    5
                   </span>
                   Preferred Branch
                 </label>
@@ -258,6 +286,42 @@ export default function ApCollegePredictor({
               </div>
             </div>
           </div>
+        </section>
+
+        {/* Explicit Special Category Reservation — same evaluation model as TG */}
+        <section className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-3">
+            <div className="flex items-center gap-1.5 text-xs font-extrabold uppercase text-slate-700 dark:text-slate-300">
+              <Award className="w-3.5 h-3.5 text-cyan-500" />
+              Special Category Reservation
+            </div>
+            <span className="text-[11px] text-slate-500 dark:text-slate-400">
+              {selectedSpecialCategory === 'NONE' ? 'General category + gender + region pools' : 'Selected special-reservation pool only'}
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {AP_SPECIAL_CATEGORIES.map((option) => {
+              const active = selectedSpecialCategory === option.id;
+              return (
+                <button
+                  key={option.id}
+                  type="button"
+                  onClick={() => setSelectedSpecialCategory(option.id)}
+                  aria-pressed={active}
+                  className={`px-3 py-2 rounded-xl text-[11px] sm:text-xs font-bold border transition-all ${
+                    active
+                      ? 'bg-cyan-600 text-white border-cyan-500 shadow-sm'
+                      : 'bg-slate-50 dark:bg-slate-950 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700 hover:border-cyan-400'
+                  }`}
+                >
+                  {active ? '✓ ' : '○ '}{option.label}
+                </button>
+              );
+            })}
+          </div>
+          <p className="mt-2 text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400">
+            None excludes PWD/PH, NCC, CAP and Sports quota records. A selected special category is evaluated only against matching 2026 AP allotment quota records.
+          </p>
         </section>
 
         {/* SUMMARY STATS & CLASSIFICATION TABS */}
@@ -433,6 +497,28 @@ export default function ApCollegePredictor({
                     <div className="mt-0.5 font-mono font-bold text-amber-600 dark:text-amber-400 text-sm">#{match.maxObservedRank ? match.maxObservedRank.toLocaleString('en-IN') : '—'}</div>
                   </div>
                 </div>
+
+                {/* TG-matched bilingual verdict: always show English + native Telugu */}
+                {(() => {
+                  const currentRank = Number(match.studentRank || userRankInput) || 0;
+                  const closing = Number(match.maxObservedRank || 0);
+                  const isEligible = closing > 0 && currentRank <= closing;
+                  const isBorderline = closing > 0 && !isEligible && currentRank <= Math.round(closing * 1.10);
+                  const verdictInfo = getPredictorVerdict(isEligible, isBorderline, selectedGender);
+                  return (
+                    <div className={`p-3.5 rounded-2xl border space-y-2 ${verdictInfo.cardStyle.border} ${verdictInfo.cardStyle.bg}`}>
+                      <div className={`text-xs font-bold flex items-start gap-2 ${verdictInfo.badgeStyle.text}`}>
+                        <span className="text-sm shrink-0">
+                          {verdictInfo.level === 'HIGH' ? '😎' : verdictInfo.level === 'MODERATE' ? '⚡' : '🥺'}
+                        </span>
+                        <span className="leading-snug">{verdictInfo.englishText}</span>
+                      </div>
+                      <div className="text-xs font-medium text-slate-700 dark:text-slate-200 leading-relaxed pt-2 border-t border-slate-200 dark:border-slate-800">
+                        {verdictInfo.teluguText}
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 {/* Explanation text & navigation action */}
                 <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
