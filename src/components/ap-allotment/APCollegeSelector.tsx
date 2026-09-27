@@ -35,7 +35,7 @@ export const APCollegeSelector: React.FC<APCollegeSelectorProps> = ({
       return {
         collegeCode: 'ALL',
         collegeName: 'All Colleges (Statewide)',
-      } as ApCollegeItem;
+      };
     }
     return colleges.find((c) => c.collegeCode.toUpperCase() === selectedCollegeCode.toUpperCase());
   }, [colleges, selectedCollegeCode]);
