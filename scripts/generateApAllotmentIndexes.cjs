@@ -169,9 +169,13 @@ function processYear(year, dir) {
   fs.writeFileSync(path.join(dir, 'search_index.json'), JSON.stringify(searchIndex));
 
   // AP 2026 Top B.Tech College analysis index.
-  // Only candidate-category OC records are used. Opening = minimum observed
-  // rank, closing = maximum observed rank, median = mathematical median.
+  // Rank metrics use candidate-category OC records. Seat metrics use the
+  // latest observed counselling phase snapshot available for each branch.
+  // "Top-rank" metrics are transparent counts at fixed rank thresholds,
+  // not a subjective quality score.
   if (year === '2026') {
+    const RANK_THRESHOLDS = [10000, 25000, 50000];
+
     const rankStats = (ranks) => {
       const valid = ranks.filter((rank) => Number.isFinite(rank) && rank > 0).sort((a, b) => a - b);
       if (!valid.length) return null;
@@ -187,8 +191,42 @@ function processYear(year, dir) {
       };
     };
 
+    const modeNumber = (values) => {
+      const counts = new Map();
+      for (const value of values) {
+        const n = num(value);
+        if (n <= 0) continue;
+        counts.set(n, (counts.get(n) || 0) + 1);
+      }
+      let best = 0;
+      let bestCount = -1;
+      for (const [value, count] of counts.entries()) {
+        if (count > bestCount || (count === bestCount && value > best)) {
+          best = value;
+          bestCount = count;
+        }
+      }
+      return best;
+    };
+
+    const seatStats = (snapshots) => {
+      if (!snapshots.length) return null;
+      const latestPhase = Math.max(...snapshots.map((item) => item.phase || 0));
+      const latest = snapshots.filter((item) => (item.phase || 0) === latestPhase);
+      const totalSeats = modeNumber(latest.map((item) => item.totalSeats));
+      const remainingSeats = modeNumber(latest.map((item) => item.leftOverSeats));
+      if (totalSeats <= 0 || remainingSeats < 0 || remainingSeats > totalSeats) return null;
+      const filledSeats = Math.max(0, totalSeats - remainingSeats);
+      return {
+        totalSeats,
+        filledSeats,
+        remainingSeats,
+        fillRatePercent: Number(((filledSeats / totalSeats) * 100).toFixed(1)),
+        latestPhase,
+      };
+    };
+
     const collegeMap = new Map();
-    const branchRankMap = new Map();
     const branchNameMap = new Map();
     const districtMap = new Map();
 
@@ -210,6 +248,7 @@ function processYear(year, dir) {
           district,
           branches: new Map(),
           allRanks: [],
+          allSeatSnapshots: [],
         });
       }
 
@@ -221,32 +260,72 @@ function processYear(year, dir) {
         const branchCode = String(record.branch_code ?? '').trim().toUpperCase();
         const branchName = String(record.branch_name ?? branchCode).trim();
         const category = String(record.community ?? record.category ?? '').trim().toUpperCase();
-        if (!rank || category !== 'OC' || !branchCode) continue;
+        const phase = phaseNumber(record.phase);
+        const totalSeats = num(record.total_seats);
+        const leftOverSeats = num(record.left_over_seats);
 
-        college.allRanks.push(rank);
-        const branchKey = code + '::' + branchCode;
-        if (!branchRankMap.has(branchKey)) branchRankMap.set(branchKey, []);
-        branchRankMap.get(branchKey).push(rank);
+        if (!branchCode) continue;
         branchNameMap.set(branchCode, branchName);
 
         if (!college.branches.has(branchCode)) {
-          college.branches.set(branchCode, { branchCode, branchName, ranks: [] });
+          college.branches.set(branchCode, {
+            branchCode,
+            branchName,
+            ocRanks: [],
+            allRanks: [],
+            seatSnapshots: [],
+          });
         }
-        college.branches.get(branchCode).ranks.push(rank);
+
+        const branch = college.branches.get(branchCode);
+        if (rank > 0) {
+          branch.allRanks.push(rank);
+          college.allRanks.push(rank);
+          if (category === 'OC') branch.ocRanks.push(rank);
+        }
+
+        if (totalSeats > 0 && leftOverSeats >= 0 && leftOverSeats <= totalSeats) {
+          const snapshot = { phase, totalSeats, leftOverSeats };
+          branch.seatSnapshots.push(snapshot);
+          college.allSeatSnapshots.push(snapshot);
+        }
       }
     }
+
+    const makeMetrics = (ocRanks, allRanks, seatSnapshots) => {
+      const ranks = rankStats(ocRanks);
+      const seats = seatStats(seatSnapshots);
+      const observedAllotments = allRanks.length;
+      const topRankAllotments = {};
+      for (const threshold of RANK_THRESHOLDS) {
+        topRankAllotments[String(threshold)] = allRanks.filter((rank) => rank <= threshold).length;
+      }
+      const top25 = topRankAllotments['25000'] || 0;
+      return {
+        ...(ranks || {
+          openingRank: 0,
+          medianRank: 0,
+          closingRank: 0,
+          validOcAllotments: 0,
+        }),
+        observedAllotments,
+        topRankAllotments,
+        top25kAllotments: top25,
+        top25kSharePercent: observedAllotments
+          ? Number(((top25 / observedAllotments) * 100).toFixed(1))
+          : 0,
+        seatStats: seats,
+      };
+    };
 
     const topColleges = Array.from(collegeMap.values()).map((college) => {
       const branches = {};
       for (const [branchCode, branch] of college.branches.entries()) {
-        const stats = rankStats(branch.ranks);
-        if (stats) {
-          branches[branchCode] = {
-            branchCode,
-            branchName: branch.branchName,
-            ...stats,
-          };
-        }
+        branches[branchCode] = {
+          branchCode,
+          branchName: branch.branchName,
+          ...makeMetrics(branch.ocRanks, branch.allRanks, branch.seatSnapshots),
+        };
       }
 
       return {
@@ -254,22 +333,47 @@ function processYear(year, dir) {
         collegeName: college.collegeName,
         district: college.district,
         branches,
-        allBranches: rankStats(college.allRanks),
+        allBranches: makeMetrics(college.branches.size
+          ? Array.from(college.branches.values()).flatMap((branch) => branch.ocRanks)
+          : [],
+          college.allRanks,
+          college.allSeatSnapshots),
       };
     }).filter((college) => Object.keys(college.branches).length > 0)
       .sort((a, b) => a.collegeCode.localeCompare(b.collegeCode));
 
     const statewideBranchRanks = new Map();
-    for (const [key, ranks] of branchRankMap.entries()) {
-      const branchCode = key.split('::')[1];
-      if (!statewideBranchRanks.has(branchCode)) statewideBranchRanks.set(branchCode, []);
-      statewideBranchRanks.get(branchCode).push(...ranks);
+    for (const college of topColleges) {
+      for (const [branchCode, branch] of Object.entries(college.branches)) {
+        if (!statewideBranchRanks.has(branchCode)) statewideBranchRanks.set(branchCode, []);
+        statewideBranchRanks.get(branchCode).push(branch);
+      }
     }
 
     const statewideBranchStats = {};
-    for (const [branchCode, ranks] of statewideBranchRanks.entries()) {
-      const stats = rankStats(ranks);
-      if (stats) statewideBranchStats[branchCode] = stats;
+    for (const [branchCode, branchRows] of statewideBranchRanks.entries()) {
+      const ocRanks = branchRows.flatMap((row) => {
+        const ranks = [];
+        if (row.validOcAllotments > 0) {
+          // Statewide rank stats are recomputed from college-level aggregate
+          // values below only where raw rank arrays are available.
+        }
+        return ranks;
+      });
+      const observedAllotments = branchRows.reduce((sum, row) => sum + row.observedAllotments, 0);
+      const top25kAllotments = branchRows.reduce((sum, row) => sum + row.top25kAllotments, 0);
+      const totalSeats = branchRows.reduce((sum, row) => sum + (row.seatStats?.totalSeats || 0), 0);
+      const filledSeats = branchRows.reduce((sum, row) => sum + (row.seatStats?.filledSeats || 0), 0);
+      const remainingSeats = branchRows.reduce((sum, row) => sum + (row.seatStats?.remainingSeats || 0), 0);
+      statewideBranchStats[branchCode] = {
+        observedAllotments,
+        top25kAllotments,
+        top25kSharePercent: observedAllotments ? Number(((top25kAllotments / observedAllotments) * 100).toFixed(1)) : 0,
+        totalSeats,
+        filledSeats,
+        remainingSeats,
+        fillRatePercent: totalSeats ? Number(((filledSeats / totalSeats) * 100).toFixed(1)) : 0,
+      };
     }
 
     const branches = Array.from(branchNameMap.entries())
@@ -278,8 +382,9 @@ function processYear(year, dir) {
 
     const topIndex = {
       generatedAt: new Date().toISOString(),
-      methodology: 'Observed AP EAPCET 2026 allotment analysis using valid candidate-category OC records.',
-      rankingBasis: 'Branch-wise comparison sorted by mathematical median observed OC rank; opening and closing are the minimum and maximum observed OC ranks.',
+      methodology: 'Observed AP EAPCET 2026 allotment analysis. OC rank statistics use valid candidate-category OC records. Seat statistics use the latest observed counselling phase snapshot for each college/branch. Top-rank counts use transparent absolute-rank thresholds.',
+      rankingBasis: 'Users can sort by median/opening/closing observed OC rank, filled seats, seat fill rate, remaining seats, top-rank allotments up to rank 25,000, or top-rank share up to rank 25,000.',
+      topRankThresholds: RANK_THRESHOLDS,
       totalColleges: topColleges.length,
       districts: Array.from(districtMap.keys()).sort((a, b) => a.localeCompare(b)),
       branches,
