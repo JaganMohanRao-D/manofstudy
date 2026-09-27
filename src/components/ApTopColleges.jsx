@@ -9,7 +9,7 @@ export default function ApTopColleges() {
   const [district, setDistrict] = useState('ALL');
   const [search, setSearch] = useState('');
   const [branches, setBranches] = useState([]);
-  const [districts, setDistricts] = useState<string[]>([]);
+  const [districts, setDistricts] = useState([]);
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
 
