@@ -57,6 +57,7 @@ const ApCollegePredictor = lazy(() =>
     default: m.ApCollegePredictor || m.default,
   }))
 );
+const ApTopColleges = lazy(() => import('./components/ApTopColleges'));
 const ApEapcet2025AllotmentExplorer = lazy(() =>
   import('./components/ApEapcet2025AllotmentExplorer').then((m: any) => ({
     default: m.ApEapcet2025AllotmentExplorer || m.default,
@@ -225,6 +226,14 @@ export const TOOLS_CONFIG: ToolMeta[] = [
     category: 'counselling',
     description: 'Match AP EAPCET 2026 allotment records deterministically by rank, category, gender, region and branch.',
     badge: 'AI Intelligence',
+  },
+  {
+    id: 'ap-top-colleges',
+    name: 'AP EAPCET Top B.Tech Colleges',
+    shortName: 'AP Top Colleges',
+    category: 'counselling',
+    description: 'Explore branch-wise observed 2026 allotment rank patterns using a consistent OC reference group.',
+    badge: '2026 DATA',
   },
   {
     id: 'ap-allotments',
@@ -404,6 +413,12 @@ export default function App() {
         hash === 'ap-cutoff'
       ) {
         setActiveWorkspace('ap-predictor');
+      } else if (
+        hash === 'ap-top-colleges' ||
+        hash === 'ap-top-btech' ||
+        hash === 'ap-rankings'
+      ) {
+        setActiveWorkspace('ap-top-colleges');
       } else if (
         hash === 'ap-allotments' ||
         hash === 'ap-eapcet-2025' ||
@@ -596,6 +611,11 @@ export default function App() {
         return {
           title: 'AP EAPCET 2026 College Intelligence & Allotment Data',
           icon: <Compass className="w-4 h-4 text-rose-500" />,
+        };
+      case 'ap-top-colleges':
+        return {
+          title: 'AP EAPCET Top B.Tech Colleges — Observed 2026 Ranks',
+          icon: <Award className="w-4 h-4 text-cyan-500" />,
         };
       case 'tg-allotments':
         return {
@@ -859,6 +879,10 @@ export default function App() {
 
                 {activeWorkspace === 'ap-predictor' && (
                   <ApCollegePredictor initialCollegeCode="AUCE" />
+                )}
+
+                {activeWorkspace === 'ap-top-colleges' && (
+                  <ApTopColleges />
                 )}
 
                 {activeWorkspace === 'tg-allotments' && (
