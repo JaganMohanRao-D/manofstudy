@@ -1452,19 +1452,6 @@ html.dark .mos-hero-float {
   }
 }
 
-/* Bright-mode safety net for commonly used dark-surface gradient utilities. */
-html.light [class*="from-slate-950"],
-html.light [class*="from-slate-900"],
-html.light [class*="via-slate-950"],
-html.light [class*="via-slate-900"],
-html.light [class*="to-slate-950"],
-html.light [class*="to-slate-900"] {
-  --tw-gradient-from: var(--mos-surface) !important;
-  --tw-gradient-via: var(--mos-surface) !important;
-  --tw-gradient-to: var(--mos-surface) !important;
-}
-
-
 /* Final hero title readability: solid accent colors for reliable bright-mode rendering. */
 html.light .mos-hero-accent-blue {
   color: #1D4ED8 !important;
