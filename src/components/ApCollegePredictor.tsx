@@ -241,7 +241,7 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
+    <div className="mos-ap-explorer space-y-6 animate-in fade-in duration-300">
       {/* Hero Banner with Youthful Aesthetic */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 text-white p-6 sm:p-8 md:p-10 border border-blue-800/30 shadow-xl">
         <div className="absolute top-0 right-0 -mt-10 -mr-10 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
