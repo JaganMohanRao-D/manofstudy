@@ -5,9 +5,6 @@ import {
   Lock,
   ArrowDown,
   BookOpen,
-  GraduationCap,
-  FileText,
-  Sparkles,
 } from 'lucide-react';
 import { FeaturesHub } from './FeaturesHub';
 
