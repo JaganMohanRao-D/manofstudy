@@ -2,13 +2,13 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { BarChart3, Building2, CheckCircle2, MapPin, Search, Sparkles, Target, TrendingUp } from 'lucide-react';
 import { getAPTopCollegeBranches, getAPTopCollegeDistricts, getAPTopCollegeRows } from '../services/apTopCollegesService';
 
-const formatRank = (value: number) => Number.isFinite(value) ? Math.round(value).toLocaleString('en-IN') : '—';
+const formatRank = (value) => Number.isFinite(value) ? Math.round(value).toLocaleString('en-IN') : '—';
 
 export default function ApTopColleges() {
   const [branch, setBranch] = useState('CSE');
   const [district, setDistrict] = useState('ALL');
   const [search, setSearch] = useState('');
-  const [branches, setBranches] = useState<{ code: string; name: string }[]>([]);
+  const [branches, setBranches] = useState([]);
   const [districts, setDistricts] = useState<string[]>([]);
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -81,7 +81,7 @@ export default function ApTopColleges() {
         <section className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {[['Colleges shown', rows.length, Building2], ['Branch view', branch === 'ALL' ? 'All' : branch, Target], ['District', district === 'ALL' ? 'All' : district, MapPin], ['Data year', '2026', BarChart3]].map(([label, value, Icon]) => (
             <div key={String(label)} className="mos-stat-card rounded-2xl border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/85 p-4 shadow-lg">
-              <div className="flex items-center justify-between"><span className="text-[10px] uppercase tracking-[.14em] text-slate-500 dark:text-slate-400">{label}</span>{React.createElement(Icon as React.ElementType, { className: 'h-4 w-4 text-cyan-500' })}</div>
+              <div className="flex items-center justify-between"><span className="text-[10px] uppercase tracking-[.14em] text-slate-500 dark:text-slate-400">{label}</span>{React.createElement(Icon, { className: 'h-4 w-4 text-cyan-500' })}</div>
               <div className="mt-2 text-lg sm:text-2xl font-black text-slate-950 dark:text-white">{typeof value === 'number' ? value.toLocaleString() : value}</div>
             </div>
           ))}
