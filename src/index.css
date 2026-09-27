@@ -1083,3 +1083,261 @@ html.light .mos-hero-title {
 html.light .mos-hero-subtitle {
   color: #334155 !important;
 }
+
+
+/* ==========================================================================
+   MAN OF STUDY — HERO MOTION + LIGHT-MODE CONTRAST HARDENING v3
+   Decorative motion is lightweight, pointer-safe and disabled for reduced
+   motion users. Content remains the visual priority.
+   ========================================================================== */
+
+/* Stronger light-theme semantic colors for legacy components that used
+   very pale dark-mode text tokens on bright surfaces. */
+html.light .text-cyan-300 { color: #0E7490 !important; }
+html.light .text-cyan-400 { color: #0E7490 !important; }
+html.light .text-sky-300 { color: #0369A1 !important; }
+html.light .text-sky-400 { color: #0369A1 !important; }
+html.light .text-blue-300 { color: #1D4ED8 !important; }
+html.light .text-blue-400 { color: #1D4ED8 !important; }
+html.light .text-indigo-300 { color: #4338CA !important; }
+html.light .text-indigo-400 { color: #4338CA !important; }
+html.light .text-violet-300 { color: #6D28D9 !important; }
+html.light .text-violet-400 { color: #6D28D9 !important; }
+html.light .text-purple-300 { color: #7E22CE !important; }
+html.light .text-purple-400 { color: #7E22CE !important; }
+html.light .text-teal-300 { color: #0F766E !important; }
+html.light .text-teal-400 { color: #0F766E !important; }
+html.light .text-emerald-300 { color: #047857 !important; }
+html.light .text-emerald-400 { color: #047857 !important; }
+html.light .text-green-300 { color: #15803D !important; }
+html.light .text-green-400 { color: #15803D !important; }
+html.light .text-amber-300 { color: #B45309 !important; }
+html.light .text-amber-400 { color: #B45309 !important; }
+html.light .text-orange-300 { color: #C2410C !important; }
+html.light .text-orange-400 { color: #C2410C !important; }
+html.light .text-rose-300 { color: #BE123C !important; }
+html.light .text-rose-400 { color: #BE123C !important; }
+html.light .text-pink-300 { color: #BE185D !important; }
+html.light .text-pink-400 { color: #BE185D !important; }
+
+html.light .text-white\/60,
+html.light .text-white\/70,
+html.light .text-white\/80 {
+  color: #334155 !important;
+}
+
+/* Gradient text must remain genuinely readable in the bright theme. */
+html.light .mos-hero-gradient-text {
+  background-image: linear-gradient(
+    100deg,
+    #1D4ED8 0%,
+    #0F766E 52%,
+    #047857 100%
+  ) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.72);
+}
+html.dark .mos-hero-gradient-text {
+  background-image: linear-gradient(
+    100deg,
+    #60A5FA 0%,
+    #5EEAD4 52%,
+    #6EE7B7 100%
+  ) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* Hero decorative layer */
+.mos-hero-ambient,
+.mos-hero-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.mos-hero-grid {
+  opacity: .65;
+  background-image:
+    radial-gradient(circle, rgba(14,116,144,.14) 1px, transparent 1.2px),
+    linear-gradient(120deg, transparent 0%, rgba(14,165,233,.035) 50%, transparent 100%);
+  background-size: 26px 26px, 100% 100%;
+  mask-image: linear-gradient(to bottom, black 0%, rgba(0,0,0,.78) 62%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, rgba(0,0,0,.78) 62%, transparent 100%);
+}
+html.dark .mos-hero-grid {
+  opacity: .35;
+  background-image:
+    radial-gradient(circle, rgba(56,189,248,.20) 1px, transparent 1.2px),
+    linear-gradient(120deg, transparent 0%, rgba(16,185,129,.045) 50%, transparent 100%);
+}
+
+.mos-hero-orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(1px);
+  will-change: transform;
+  opacity: .58;
+}
+.mos-hero-orb-a {
+  width: 16rem;
+  height: 16rem;
+  left: -5rem;
+  top: 20%;
+  background: radial-gradient(circle at 35% 35%, rgba(14,165,233,.18), rgba(14,165,233,0) 68%);
+  animation: mos-hero-orbit-a 11s ease-in-out infinite;
+}
+.mos-hero-orb-b {
+  width: 20rem;
+  height: 20rem;
+  right: -7rem;
+  top: 8%;
+  background: radial-gradient(circle at 45% 45%, rgba(16,185,129,.16), rgba(16,185,129,0) 68%);
+  animation: mos-hero-orbit-b 14s ease-in-out infinite;
+}
+.mos-hero-orb-c {
+  width: 13rem;
+  height: 13rem;
+  left: 42%;
+  bottom: -7rem;
+  background: radial-gradient(circle at 50% 40%, rgba(99,102,241,.12), rgba(99,102,241,0) 70%);
+  animation: mos-hero-orbit-c 13s ease-in-out infinite;
+}
+
+.mos-hero-dot {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(3,105,161,.42);
+  box-shadow: 0 0 0 5px rgba(3,105,161,.035), 0 0 18px rgba(3,105,161,.12);
+  animation: mos-hero-dot-float 7s ease-in-out infinite;
+}
+html.dark .mos-hero-dot {
+  background: rgba(94,234,212,.52);
+  box-shadow: 0 0 0 5px rgba(94,234,212,.035), 0 0 18px rgba(94,234,212,.16);
+}
+.mos-hero-dot-1 { left: 11%; top: 24%; animation-delay: -1s; }
+.mos-hero-dot-2 { left: 20%; top: 66%; animation-delay: -3.2s; }
+.mos-hero-dot-3 { left: 78%; top: 27%; animation-delay: -5s; }
+.mos-hero-dot-4 { left: 87%; top: 64%; animation-delay: -2.1s; }
+.mos-hero-dot-5 { left: 63%; top: 18%; animation-delay: -4.2s; }
+.mos-hero-dot-6 { left: 36%; top: 76%; animation-delay: -6.1s; }
+
+.mos-hero-book {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(148,163,184,.28);
+  border-radius: 14px;
+  background: rgba(255,255,255,.62);
+  color: #0E7490;
+  box-shadow: 0 12px 30px rgba(15,23,42,.07), inset 0 1px 0 rgba(255,255,255,.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transform: rotate(-7deg);
+  animation: mos-hero-book-float 8s ease-in-out infinite;
+}
+.mos-hero-book svg { width: 18px; height: 18px; }
+html.dark .mos-hero-book {
+  background: rgba(13,22,39,.68);
+  border-color: rgba(148,163,184,.16);
+  color: #67E8F9;
+  box-shadow: 0 14px 34px rgba(0,0,0,.28);
+}
+.mos-hero-book-1 { left: 7%; top: 46%; animation-delay: -1.5s; }
+.mos-hero-book-2 { right: 8%; top: 42%; transform: rotate(8deg); animation-delay: -4s; }
+.mos-hero-book-3 { right: 18%; bottom: 11%; transform: rotate(-4deg); animation-delay: -6.2s; }
+
+@keyframes mos-hero-orbit-a {
+  0%, 100% { transform: translate3d(0,0,0) scale(1); }
+  50% { transform: translate3d(34px,-18px,0) scale(1.06); }
+}
+@keyframes mos-hero-orbit-b {
+  0%, 100% { transform: translate3d(0,0,0) scale(1); }
+  50% { transform: translate3d(-30px,22px,0) scale(.96); }
+}
+@keyframes mos-hero-orbit-c {
+  0%, 100% { transform: translate3d(0,0,0) scale(.98); }
+  50% { transform: translate3d(12px,-22px,0) scale(1.04); }
+}
+@keyframes mos-hero-dot-float {
+  0%, 100% { transform: translate3d(0,0,0); opacity: .38; }
+  50% { transform: translate3d(0,-14px,0); opacity: .82; }
+}
+@keyframes mos-hero-book-float {
+  0%, 100% { margin-top: 0; }
+  50% { margin-top: -10px; }
+}
+
+/* Keep content above every decorative layer. */
+.mos-hero-content { z-index: 10; }
+
+/* Responsive: decorative objects become smaller and stay away from text. */
+@media (max-width: 900px) {
+  .mos-hero-book {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+  }
+  .mos-hero-book-1 { left: 3%; top: 19%; }
+  .mos-hero-book-2 { right: 3%; top: 22%; }
+  .mos-hero-book-3 { right: 8%; bottom: 7%; }
+}
+@media (max-width: 640px) {
+  .mos-hero-grid { opacity: .38; background-size: 22px 22px, 100% 100%; }
+  .mos-hero-orb-a { width: 11rem; height: 11rem; left: -5rem; }
+  .mos-hero-orb-b { width: 12rem; height: 12rem; right: -5rem; }
+  .mos-hero-orb-c { width: 9rem; height: 9rem; }
+  .mos-hero-dot { width: 4px; height: 4px; }
+  .mos-hero-book { width: 31px; height: 31px; border-radius: 10px; }
+  .mos-hero-book svg { width: 15px; height: 15px; }
+  .mos-hero-book-1 { left: 4%; top: 16%; }
+  .mos-hero-book-2 { right: 4%; top: 18%; }
+  .mos-hero-book-3 { right: 10%; bottom: 5%; }
+  .mos-hero-title { text-wrap: balance; }
+  .mos-hero-subtitle { max-width: 34rem; }
+}
+
+/* Respect OS-level motion preferences for all hero ambience. */
+@media (prefers-reduced-motion: reduce) {
+  .mos-hero-orb,
+  .mos-hero-dot,
+  .mos-hero-book {
+    animation: none !important;
+  }
+}
+
+/* Improve small-screen page rhythm and prevent horizontal clipping. */
+@media (max-width: 640px) {
+  body { overflow-x: clip; }
+  #hero-banner {
+    border-radius: 1.35rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  #features-hub {
+    padding-top: .25rem;
+  }
+  #features-hub > div {
+    min-width: 0;
+  }
+  #features-hub .grid {
+    min-width: 0;
+  }
+}
+
+/* Protect important light-theme text from opacity utilities that can make it
+   look washed out on white surfaces. */
+html.light .mos-hero-premium .text-slate-400,
+html.light .mos-hero-premium .text-slate-500,
+html.light .mos-hero-premium .text-slate-600 {
+  opacity: 1 !important;
+}
