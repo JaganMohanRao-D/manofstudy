@@ -53,6 +53,34 @@ export const HeroSection = ({
           Admissions, academics, career roadmaps, AI guidance, PDF tools and everyday student utilities — all in one place.
         </p>
 
+        {/* AP + Telangana tools — primary admissions entry points directly under the hero message. */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 max-w-5xl mx-auto pt-1">
+          {[
+            { label: 'For AP Students', items: [
+              ['AP Allotments', 'ap-allotments'],
+              ['AP College Predictor', 'ap-predictor'],
+              ['AP Top B.Tech Colleges', 'ap-top-colleges'],
+            ]},
+            { label: 'For Telangana Students', items: [
+              ['TG Allotments', 'tg-allotments'],
+              ['TG College Predictor', 'tg-predictor'],
+              ['TG Top B.Tech Colleges', 'tg-top-colleges'],
+            ]},
+          ].map((group) => (
+            <div key={group.label} className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/90 dark:bg-slate-900/70 p-3 text-left shadow-sm">
+              <div className="px-2 pb-2 text-[10px] font-black uppercase tracking-[.16em] text-slate-500 dark:text-slate-400">{group.label}</div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {group.items.map(([label, workspace]) => (
+                  <button key={workspace} type="button" onClick={() => onSelectWorkspace?.(workspace)} className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 px-3 py-2.5 text-left hover:border-cyan-400/60 dark:hover:border-cyan-400/40 hover:-translate-y-0.5 transition-all">
+                    <span className="block text-xs font-bold text-slate-900 dark:text-white">{label}</span>
+                    <span className="block mt-0.5 text-[10px] text-slate-500 dark:text-slate-400">2026 allotment data</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
         {/* ONE Clear Primary Action CTA */}
         <div className="pt-2 flex justify-center">
           <button
