@@ -552,6 +552,12 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
       setGlobalSearchResults(data.results || []);
       setGlobalSearchStats(data.stats || null);
       setCurrentPage(1);
+
+      if (q && Array.isArray(data.results) && data.results.length > 0) {
+        window.dispatchEvent(new CustomEvent('mos:tool-result-ready', {
+          detail: { tool: 'tg-name-search', resultCount: data.results.length },
+        }));
+      }
     } catch (err) {
       console.warn('Cross-college search notice:', err);
       // Final attempt on client engine
