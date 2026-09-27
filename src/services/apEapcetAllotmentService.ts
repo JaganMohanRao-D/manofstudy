@@ -142,7 +142,7 @@ async function loadIndex(year: AllotmentYear): Promise<CollegeListItem[]> {
         collegeCode: String(college.college_code ?? college.collegeCode ?? '').trim(),
         collegeName: String(college.college_name ?? college.collegeName ?? '').trim(),
         file: String(college.file ?? '').trim(),
-        recordCount: Number(college.records ?? college.record_count ?? 0),
+        recordCount: Number(college.recordCount ?? college.records ?? college.record_count ?? 0),
         district: String(college.district ?? '').trim(),
       }))
       .filter(

@@ -31,6 +31,12 @@ export const APCollegeSelector: React.FC<APCollegeSelectorProps> = ({
   }, []);
 
   const selectedCollege = useMemo(() => {
+    if (selectedCollegeCode.toUpperCase() === 'ALL') {
+      return {
+        collegeCode: 'ALL',
+        collegeName: 'All Colleges (Statewide)',
+      };
+    }
     return colleges.find((c) => c.collegeCode.toUpperCase() === selectedCollegeCode.toUpperCase());
   }, [colleges, selectedCollegeCode]);
 
@@ -116,6 +122,31 @@ export const APCollegeSelector: React.FC<APCollegeSelectorProps> = ({
 
           {/* College Options List */}
           <div className="overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800/60 text-xs flex-1">
+            <button
+              type="button"
+              onClick={() => {
+                onSelectCollege('ALL');
+                setIsOpen(false);
+                setSearchTerm('');
+              }}
+              className={`w-full text-left px-3 py-2.5 flex items-center justify-between hover:bg-cyan-50 dark:hover:bg-slate-800 transition-colors cursor-pointer ${
+                selectedCollegeCode.toUpperCase() === 'ALL'
+                  ? 'bg-cyan-50 dark:bg-cyan-500/15 text-cyan-900 dark:text-cyan-200 font-bold'
+                  : 'text-slate-800 dark:text-slate-200'
+              }`}
+            >
+              <div className="flex items-center gap-2 truncate pr-2">
+                <span className="px-1.5 py-0.5 rounded font-mono text-[10px] font-bold bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-500/30">
+                  ALL
+                </span>
+                <div className="truncate">
+                  <span className="block truncate">All Colleges (Statewide)</span>
+                  <span className="block text-[10px] text-slate-500 dark:text-slate-400">Search across every AP EAPCET college</span>
+                </div>
+              </div>
+              {selectedCollegeCode.toUpperCase() === 'ALL' && <Check className="w-3.5 h-3.5 text-cyan-500 shrink-0" />}
+            </button>
+
             {filteredColleges.length === 0 ? (
               <div className="p-4 text-center text-slate-400 text-xs">
                 No colleges found matching "{searchTerm}"

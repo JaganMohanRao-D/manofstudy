@@ -1109,7 +1109,7 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
                       executeGlobalSearch();
                     }
                   }}
-                  placeholder="Search Student Name (e.g. JAGAN), Hall Ticket, or TS EAPCET Rank (e.g. 42500)..."
+                  placeholder="Search candidate name, hall ticket, or rank..."
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-8 py-2 text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-rose-500 placeholder-slate-500 shadow-inner"
                 />
                 {searchQuery && (
