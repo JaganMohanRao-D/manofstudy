@@ -150,9 +150,8 @@ export const APCollegeSelector: React.FC<APCollegeSelectorProps> = ({
                       <span className="truncate">{c.collegeName}</span>
                     </div>
 
-                    <div className="flex items-center gap-1 text-[10px] text-slate-400 font-mono shrink-0 ml-1">
-                      <span>{c.recordCount} seats</span>
-                      {isSelected && <Check className="w-3.5 h-3.5 text-cyan-500 ml-1" />}
+                    <div className="flex items-center gap-1 shrink-0 ml-1">
+                      {isSelected && <Check className="w-3.5 h-3.5 text-cyan-500" />}
                     </div>
                   </button>
                 );
