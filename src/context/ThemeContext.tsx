@@ -28,10 +28,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (saved === 'dark') return 'dark';
         return 'light';
       } catch {
-        return 'dark';
+        return 'light';
       }
     }
-    return 'dark';
+    return 'light';
   });
 
   useEffect(() => {
