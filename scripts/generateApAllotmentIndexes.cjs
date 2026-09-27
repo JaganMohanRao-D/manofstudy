@@ -143,11 +143,18 @@ function processYear(year, dir) {
 
     const add = (r, branchCode = '', branchName = '') => {
       const x = normalizeRecord(year, r, collegeCode, collegeName, branchCode, branchName);
-      if (!x.rank || !x.name) return;
+      // Keep rankless/name-only records in the searchable index.
+      // Some official dataset rows (for example, records with rank "-") are
+      // still valid candidate records and must remain discoverable by name.
+      if (!x.name) return;
       records.push(x);
       totalRecords++;
-      minRank = Math.min(minRank, x.rank);
-      maxRank = Math.max(maxRank, x.rank);
+
+      // Rank statistics must only use valid numeric ranks.
+      if (x.rank > 0) {
+        minRank = Math.min(minRank, x.rank);
+        maxRank = Math.max(maxRank, x.rank);
+      }
       if (x.category) categorySet.add(x.category);
       if (x.allottedCategory) allottedSet.add(x.allottedCategory);
       if (x.region) regionSet.add(x.region);
