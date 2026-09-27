@@ -105,7 +105,7 @@ export const APCollegeSelector: React.FC<APCollegeSelectorProps> = ({
                 autoFocus
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Type college code (AUCE, VRSE) or name..."
+                placeholder="Type college code (VRSE, JNTU) or name..."
                 className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg pl-8 pr-7 py-1.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500"
               />
               {searchTerm && (

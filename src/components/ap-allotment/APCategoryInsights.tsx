@@ -11,10 +11,17 @@ import {
   Layers,
 } from 'lucide-react';
 import {
-  BranchAnalyticsResult,
   CategoryRankInsight,
   AllottedCategoryInsight,
-} from '../../services/apEapcet2025AllotmentService';
+} from '../../services/apAllotmentUnifiedService';
+
+interface BranchAnalyticsResult {
+  totalStudents: number;
+  bestOverallRank: number;
+  lastOverallRank: number;
+  categoryInsights: CategoryRankInsight[];
+  allottedCategoryBreakdown: AllottedCategoryInsight[];
+}
 
 interface APCategoryInsightsProps {
   analytics: BranchAnalyticsResult;
@@ -51,6 +58,17 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
     return { text: 'text-slate-400', bg: 'bg-slate-500/10', border: 'border-slate-500/30' };
   };
 
+  const totalStudents = (analytics?.totalStudents ?? 0).toLocaleString();
+  const maleCount = (analytics as any)?.genderDistribution?.male ?? 0;
+  const malePct = (analytics as any)?.genderDistribution?.malePct ?? 0;
+  const femaleCount = (analytics as any)?.genderDistribution?.female ?? 0;
+  const femalePct = (analytics as any)?.genderDistribution?.femalePct ?? 0;
+  const medianRank = analytics?.medianRank ?? (analytics as any)?.medianAllotmentRank ?? 0;
+  const bestRank = analytics?.bestOverallRank ?? 0;
+  const lastRank = analytics?.lastOverallRank ?? 0;
+  const categoryInsights = analytics?.categoryInsights ?? [];
+  const allottedQuotas = (analytics as any)?.allottedCategoryInsights || analytics?.allottedCategoryBreakdown || [];
+
   return (
     <div className="space-y-4">
       {/* 4 Summary Metric Strips */}
@@ -62,10 +80,10 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
             Total Seats Allotted
           </span>
           <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1">
-            {analytics.totalStudents.toLocaleString()}
+            {totalStudents}
           </div>
           <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
-            Boys: {analytics.genderDistribution.male} ({analytics.genderDistribution.malePct}%) | Girls: {analytics.genderDistribution.female} ({analytics.genderDistribution.femalePct}%)
+            Boys: {maleCount} ({malePct}%) | Girls: {femaleCount} ({femalePct}%)
           </div>
         </div>
 
@@ -76,7 +94,7 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
             Median Allotment Rank
           </span>
           <div className="text-xl sm:text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-1">
-            {analytics.medianRank > 0 ? `#${analytics.medianRank.toLocaleString()}` : '—'}
+            {medianRank > 0 ? `#${medianRank.toLocaleString()}` : '—'}
           </div>
           <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
             50th percentile rank admitted
@@ -90,7 +108,7 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
             Opening Rank (Best)
           </span>
           <div className="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1">
-            {analytics.bestOverallRank > 0 ? `#${analytics.bestOverallRank.toLocaleString()}` : '—'}
+            {bestRank > 0 ? `#${bestRank.toLocaleString()}` : '—'}
           </div>
           <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
             First admitted student in this pool
@@ -104,7 +122,7 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
             Closing Cutoff Rank
           </span>
           <div className="text-xl sm:text-2xl font-black text-rose-600 dark:text-rose-400 mt-1">
-            {analytics.lastOverallRank > 0 ? `#${analytics.lastOverallRank.toLocaleString()}` : '—'}
+            {lastRank > 0 ? `#${lastRank.toLocaleString()}` : '—'}
           </div>
           <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
             Last admitted student in this pool
@@ -133,7 +151,7 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
 
         {/* Category Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 pt-1">
-          {analytics.categoryInsights.map((item) => {
+          {categoryInsights.map((item) => {
             const colors = getCategoryColor(item.category);
             const isSelected = selectedCategoryFilter === item.category;
 
@@ -178,8 +196,8 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
                 </div>
 
                 <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 pt-1.5 mt-1 border-t border-dashed border-slate-200 dark:border-slate-800/40">
-                  <span>Boys: {item.maleCount}</span>
-                  <span>Girls: {item.femaleCount}</span>
+                  <span>Boys: {item.maleCount ?? 0}</span>
+                  <span>Girls: {item.femaleCount ?? 0}</span>
                 </div>
               </div>
             );
@@ -199,13 +217,13 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
       </div>
 
       {/* Collapsible Allotted Quotas Breakdown */}
-      {analytics.allottedCategoryInsights.length > 0 && (
+      {allottedQuotas.length > 0 && (
         <div className="bg-slate-900/90 dark:bg-slate-900/90 bg-white border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Layers className="w-4 h-4 text-purple-500" />
               <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
-                Allotted Quota Distribution ({analytics.allottedCategoryInsights.length} Quota Codes)
+                Allotted Quota Distribution ({allottedQuotas.length} Quota Codes)
               </h4>
             </div>
             <button
@@ -220,7 +238,7 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
 
           {isAllottedCatExpanded && (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 pt-1 animate-in fade-in duration-150">
-              {analytics.allottedCategoryInsights.map((q) => (
+              {allottedQuotas.map((q: any) => (
                 <div
                   key={q.allottedCategory}
                   className="bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 text-xs space-y-1"
@@ -232,9 +250,9 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
                     <span className="text-[10px] text-slate-400 font-mono">{q.count}</span>
                   </div>
                   <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 pt-1 border-t border-slate-200 dark:border-slate-800">
-                    <span>#{q.bestRank?.toLocaleString()}</span>
+                    <span>#{q.bestRank != null ? q.bestRank.toLocaleString() : '—'}</span>
                     <span>→</span>
-                    <span>#{q.lastRank?.toLocaleString()}</span>
+                    <span>#{q.lastRank != null ? q.lastRank.toLocaleString() : '—'}</span>
                   </div>
                 </div>
               ))}

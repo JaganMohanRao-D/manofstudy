@@ -187,7 +187,7 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
         </div>
         {/* TRUST & GRATITUDE FOOTER */}
         <div className="pt-2 sm:pt-3 border-t border-slate-100 dark:border-slate-800 space-y-0.5 sm:space-y-1 text-slate-500 dark:text-slate-400">
-          <div className="hidden sm:flex items-center justify-center gap-1.5 text-[11px] font-medium" text-emerald-600 dark:text-emerald-400">
+          <div className="hidden sm:flex items-center justify-center gap-1.5 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
             <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
             <span>Direct UPI intent · You choose the amount and confirm it in your own UPI app.</span>
           </div>

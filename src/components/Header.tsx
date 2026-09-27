@@ -115,10 +115,10 @@ export const Header: React.FC<HeaderProps> = ({
     {
       id: 'tier2-ap-allotments',
       workspace: 'ap-allotments',
-      label: 'AP Allotments',
+      label: 'AP Allotments (Namewise)',
       shortLabel: 'AP Allotments',
       icon: Award,
-      badge: '2026 Data',
+      badge: 'Namewise',
       badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
     },
     {

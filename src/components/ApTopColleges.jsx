@@ -70,7 +70,7 @@ export default function ApTopColleges() {
   );
 
   const summary = useMemo(() => {
-    if (!rows.length) return { median: 0, opening: 0, closing: 0, records: 0, seats: 0, filled: 0, remaining: 0, top25: 0 };
+    if (!rows.length) return { median: 0, opening: 0, closing: 0, records: 0, seats: 0, filled: 0, remaining: 0, top25: 0, fillRate: '—' };
     const medians = rows.map((row) => row.stats.medianRank).filter((value) => value > 0).sort((a, b) => a - b);
     const openings = rows.map((row) => row.stats.openingRank).filter((value) => value > 0);
     const closings = rows.map((row) => row.stats.closingRank).filter((value) => value > 0);
@@ -79,15 +79,20 @@ export default function ApTopColleges() {
       : medians.length
         ? (medians[medians.length / 2 - 1] + medians[medians.length / 2]) / 2
         : 0;
+    const totalSeats = rows.reduce((sum, row) => sum + (row.stats.seatStats?.totalSeats || 0), 0);
+    const filledSeats = rows.reduce((sum, row) => sum + (row.stats.seatStats?.filledSeats || 0), 0);
+    const remainingSeats = rows.reduce((sum, row) => sum + (row.stats.seatStats?.remainingSeats || 0), 0);
+    const fillRate = totalSeats > 0 ? ((filledSeats / totalSeats) * 100).toFixed(1) + '%' : '—';
     return {
       median,
       opening: openings.length ? Math.min(...openings) : 0,
       closing: closings.length ? Math.max(...closings) : 0,
       records: rows.reduce((sum, row) => sum + row.stats.validOcAllotments, 0),
-      seats: rows.reduce((sum, row) => sum + (row.stats.seatStats?.totalSeats || 0), 0),
-      filled: rows.reduce((sum, row) => sum + (row.stats.seatStats?.filledSeats || 0), 0),
-      remaining: rows.reduce((sum, row) => sum + (row.stats.seatStats?.remainingSeats || 0), 0),
-      top25: rows.reduce((sum, row) => sum + row.stats.top25kAllotments, 0),
+      seats: totalSeats,
+      filled: filledSeats,
+      remaining: remainingSeats,
+      fillRate,
+      top25: rows.reduce((sum, row) => sum + (row.stats.top25kAllotments || 0), 0),
     };
   }, [rows]);
 
@@ -179,19 +184,21 @@ export default function ApTopColleges() {
           </div>
         </section>
 
-        <section className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
           {[
-            ['Colleges in this view', rows.length, Building2, rows.length ? rows.length.toLocaleString('en-IN') : '—'],
-            ['Total seats in view', summary.seats, Target, summary.seats ? summary.seats.toLocaleString('en-IN') : '—'],
-            ['Filled seats in view', summary.filled, CheckCircle2, summary.filled ? summary.filled.toLocaleString('en-IN') : '—'],
-            ['Rank ≤25,000 allotments', summary.top25, TrendingUp, summary.top25 ? summary.top25.toLocaleString('en-IN') : '—'],
+            ['Colleges in view', rows.length, Building2, rows.length ? rows.length.toLocaleString('en-IN') : '—'],
+            ['Total seats', summary.seats, Target, summary.seats ? summary.seats.toLocaleString('en-IN') : '—'],
+            ['Filled seats', summary.filled, CheckCircle2, summary.filled ? summary.filled.toLocaleString('en-IN') : '—'],
+            ['Seats left', summary.remaining, BarChart3, summary.remaining ? summary.remaining.toLocaleString('en-IN') : '—'],
+            ['Fill rate', summary.fillRate, Sparkles, summary.fillRate],
+            ['Rank ≤25k allotments', summary.top25, TrendingUp, summary.top25 ? summary.top25.toLocaleString('en-IN') : '—'],
           ].map(([label, value, Icon, displayValue]) => (
-            <div key={String(label)} className="mos-stat-card rounded-2xl border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/85 p-4 shadow-lg">
+            <div key={String(label)} className="mos-stat-card rounded-2xl border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/85 p-3.5 sm:p-4 shadow-md">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] uppercase tracking-[.14em] text-slate-500 dark:text-slate-400">{label}</span>
-                {React.createElement(Icon, { className: 'h-4 w-4 text-cyan-600 dark:text-cyan-300' })}
+                <span className="text-[9.5px] uppercase tracking-[.14em] text-slate-500 dark:text-slate-400 font-bold truncate">{label}</span>
+                {React.createElement(Icon, { className: 'h-3.5 w-3.5 text-cyan-600 dark:text-cyan-300 shrink-0' })}
               </div>
-              <div className="mt-2 text-lg sm:text-2xl font-black text-slate-950 dark:text-white">
+              <div className="mt-1.5 text-base sm:text-xl font-black text-slate-950 dark:text-white">
                 {displayValue}
               </div>
             </div>
@@ -293,9 +300,9 @@ export default function ApTopColleges() {
         </section>
 
         <section className="rounded-2xl border border-cyan-500/15 bg-cyan-500/5 p-4 sm:p-5 text-xs leading-6 text-slate-700 dark:text-slate-300">
-          <div className="font-black text-cyan-800 dark:text-cyan-300">How this comparison is calculated</div>
+          <div className="font-black text-cyan-800 dark:text-cyan-300">How these insights are calculated</div>
           <p className="mt-1">
-            The dataset is grouped by college and engineering branch. OC records are used for opening/median/closing rank metrics. Seat capacity and remaining seats come directly from the 2026 allotment records; the latest available counselling phase snapshot is used for each branch, and filled seats are calculated as total seats minus seats remaining. “Rank ≤25,000 allotments” is an absolute-rank demand indicator, not a claim that those candidates are inherently “good” or that the college is objectively better. There is no hidden weighted college score.
+            These insights are calculated from the available AP EAPCET 2026 allotment records. Rank statistics use observed OC candidate-category allotments. Seat statistics use the latest available counselling-phase seat snapshot for each college and branch. Filled seats are calculated from total seats minus remaining seats. Rank-threshold metrics (e.g. allotments with rank ≤25,000) are descriptive demand indicators and are not official college rankings or admission guarantees. An allotment record represents an observed allotment in the dataset and should not automatically be interpreted as confirmed joining/reporting.
           </p>
         </section>
       </div>

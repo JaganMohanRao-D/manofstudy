@@ -18,7 +18,7 @@ import APStudentSearch from './APStudentSearch';
 import APCollegeSelector from './APCollegeSelector';
 import APBranchSelector, { BranchOption } from './APBranchSelector';
 
-interface APAllotmentExplorerProps {
+export interface APAllotmentExplorerProps {
   initialCollegeCode?: string;
   initialBranchCode?: string;
   initialTab?: 'college' | 'student-search' | 'rank-search';
@@ -390,7 +390,7 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
                   <div className="mos-fade-up rounded-[1.75rem] border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/80 p-5 shadow-xl">
                     <div className="flex items-center justify-between"><div><p className="text-[10px] font-black uppercase tracking-[0.14em] text-indigo-400">Phase activity</p><h3 className="mt-1 font-black text-slate-950 dark:text-white">Allotment distribution</h3></div><TrendingUp className="h-5 w-5 text-indigo-400" /></div>
                     <div className="mt-5 space-y-4">{Object.entries(phaseDistribution).map(([phase,count]) => {
-                      const max = Math.max(...Object.values(phaseDistribution), 1);
+                      const max = Math.max(...(Object.values(phaseDistribution) as number[]), 1);
                       const pct = Math.round((Number(count) / max) * 100);
                       return <div key={phase}><div className="flex items-center justify-between text-xs"><span className="font-bold text-slate-800 dark:text-slate-200">Phase {phase}</span><span className="font-mono text-slate-600 dark:text-slate-400">{Number(count).toLocaleString()}</span></div><div className="mt-1.5 h-3 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800"><div className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-cyan-400 transition-all duration-700" style={{width: pct + '%'}} /></div></div>;
                     })}</div>

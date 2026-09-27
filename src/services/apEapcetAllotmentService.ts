@@ -56,6 +56,8 @@ export interface CollegeListItem {
   collegeName: string;
   file: string;
   recordCount: number;
+  district?: string;
+  place?: string;
 }
 
 export interface DatasetSummary {

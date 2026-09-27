@@ -673,7 +673,7 @@ export default function TgTopColleges({
               <span>Valid OC Allotments</span>
             </div>
             <div className="text-xl sm:text-2xl font-black text-emerald-400 font-mono">
-              {calculationResult.summary.totalValidOcAllotments.toLocaleString()}
+              {calculationResult?.summary?.totalValidOcAllotments?.toLocaleString?.() ?? calculationResult?.summary?.totalValidOcAllotments ?? 0}
             </div>
             <p className="text-[10px] text-slate-400 truncate">
               Candidate records analyzed

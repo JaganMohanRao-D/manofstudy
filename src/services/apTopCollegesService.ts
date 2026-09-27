@@ -25,13 +25,9 @@ export interface APTopRankStats {
   } | null;
 }
 
-export interface APTopCollegeBranch {
+export interface APTopCollegeBranch extends APTopRankStats {
   branchCode: string;
   branchName: string;
-  openingRank: number;
-  medianRank: number;
-  closingRank: number;
-  validOcAllotments: number;
 }
 
 export interface APTopCollege {
@@ -143,12 +139,7 @@ export async function getAPTopCollegeRows(
       district: college.district,
       branchCode: branchData.branchCode,
       branchName: branchData.branchName,
-      stats: {
-        openingRank: branchData.openingRank,
-        medianRank: branchData.medianRank,
-        closingRank: branchData.closingRank,
-        validOcAllotments: branchData.validOcAllotments,
-      },
+      stats: branchData,
     });
   }
 

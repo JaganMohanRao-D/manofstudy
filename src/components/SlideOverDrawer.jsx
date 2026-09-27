@@ -198,10 +198,31 @@ export const SlideOverDrawer = ({
                   <div>
                     <div className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
                       <span>AP Allotments (Namewise)</span>
-                      <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded font-mono">2026</span>
+                      <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded font-mono">Namewise</span>
                     </div>
                     <div className="text-[10px] text-slate-400">
-                      College allotments, student ranks &amp; category admission insights
+                      Explore AP EAPCET allotments by student name, rank, college, branch and phase.
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-600 group-hover:text-slate-300 shrink-0" />
+              </button>
+
+              <button
+                type="button"
+                id="drawer-counseling-ap-predictor-btn"
+                onClick={() => handleNavigate('ap-predictor')}
+                className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-800/70 text-left transition-colors cursor-pointer group border border-transparent hover:border-slate-800"
+              >
+                <div className="flex items-start gap-2.5">
+                  <Compass className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="text-xs font-bold text-white group-hover:text-sky-300 transition-colors flex items-center gap-1.5">
+                      <span>AP College Predictor 2026</span>
+                      <span className="text-[9px] bg-sky-500/20 text-sky-300 px-1.5 py-0.2 rounded font-mono">2026</span>
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      Deterministic admission estimates calculated from official 2026 AP EAPCET records
                     </div>
                   </div>
                 </div>

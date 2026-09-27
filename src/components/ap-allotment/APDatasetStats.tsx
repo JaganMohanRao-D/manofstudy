@@ -7,6 +7,11 @@ interface APDatasetStatsProps {
 }
 
 export const APDatasetStats: React.FC<APDatasetStatsProps> = ({ stats }) => {
+  const totalColleges = stats?.totalColleges ?? 0;
+  const totalRecords = (stats?.totalRecords ?? 0).toLocaleString();
+  const totalBranches = (stats?.totalBranches ?? 0).toLocaleString();
+  const categoriesCount = stats?.categories?.length ?? 0;
+
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
       {/* Total Colleges */}
@@ -18,7 +23,7 @@ export const APDatasetStats: React.FC<APDatasetStatsProps> = ({ stats }) => {
           </span>
         </div>
         <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-          {stats.totalColleges}
+          {totalColleges}
         </div>
         <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
           All 255 AP Institutions
@@ -34,7 +39,7 @@ export const APDatasetStats: React.FC<APDatasetStatsProps> = ({ stats }) => {
           </span>
         </div>
         <div className="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400 tracking-tight">
-          {stats.totalRecords.toLocaleString()}
+          {totalRecords}
         </div>
         <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
           Verified Student Seats
@@ -50,7 +55,7 @@ export const APDatasetStats: React.FC<APDatasetStatsProps> = ({ stats }) => {
           </span>
         </div>
         <div className="text-xl sm:text-2xl font-black text-indigo-600 dark:text-indigo-400 tracking-tight">
-          {stats.totalBranches.toLocaleString()}
+          {totalBranches}
         </div>
         <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
           CSE, ECE, EEE, MEC, etc.
@@ -66,7 +71,7 @@ export const APDatasetStats: React.FC<APDatasetStatsProps> = ({ stats }) => {
           </span>
         </div>
         <div className="text-xl sm:text-2xl font-black text-purple-600 dark:text-purple-400 tracking-tight">
-          {stats.categories.length} Pools
+          {categoriesCount} Pools
         </div>
         <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
           OC, BC_A-E, SC, ST, EWS

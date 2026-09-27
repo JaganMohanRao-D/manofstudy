@@ -47,12 +47,6 @@
       "records": 1825
     },
     {
-      "college_name": "SRICITY INTERNATIONAL UNIVERSITY",
-      "college_code": "SIUPU",
-      "file": "SIUPU.json",
-      "records": 63
-    },
-    {
       "college_name": "VISHNU WOMENS UNIVERSITY  VISHNUPUR",
       "college_code": "VISWPU",
       "file": "VISWPU.json",
@@ -129,12 +123,6 @@
       "college_code": "GPRE",
       "file": "GPRE.json",
       "records": 908
-    },
-    {
-      "college_name": "JNTUK COLLEGE OF ENGG. KAKINADA-5 YEAR INTEGRATED MTECH SELF SUPPORTING",
-      "college_code": "JNTKMTSS",
-      "file": "JNTKMTSS.json",
-      "records": 80
     },
     {
       "college_name": "G.PULLAIAH COLL. OF ENGG. AND TECHNOLOGY",
@@ -231,12 +219,6 @@
       "college_code": "GDLV",
       "file": "GDLV.json",
       "records": 1193
-    },
-    {
-      "college_name": "PRAGATI UNIVERSITY",
-      "college_code": "PRAGPU",
-      "file": "PRAGPU.json",
-      "records": 250
     },
     {
       "college_name": "ANNAMACHARYA  UNIVERSITY",
@@ -419,12 +401,6 @@
       "records": 275
     },
     {
-      "college_name": "SEVEN HILLS COLLEGE OF PHARMACY",
-      "college_code": "SHCP",
-      "file": "SHCP.json",
-      "records": 3
-    },
-    {
       "college_name": "QIS COLLEGE OF ENGG. AND TECHNOLOGY",
       "college_code": "QISE",
       "file": "QISE.json",
@@ -477,12 +453,6 @@
       "college_code": "PKSK",
       "file": "PKSK.json",
       "records": 378
-    },
-    {
-      "college_name": "RVS UNIVERSITY",
-      "college_code": "RVSPU",
-      "file": "RVSPU.json",
-      "records": 46
     },
     {
       "college_name": "POTTI SRIRAMULU COLLEGE OF ENGG AND TECHNOLOGY",
@@ -809,12 +779,6 @@
       "records": 356
     },
     {
-      "college_name": "SRI VISHNU COLLEGE OF PHARMACY",
-      "college_code": "SCPB",
-      "file": "SCPB.json",
-      "records": 22
-    },
-    {
       "college_name": "CENTURION UNIVERSITY OF TECHNOLOGY & MANAGEMENT",
       "college_code": "CENUPU",
       "file": "CENUPU.json",
@@ -881,12 +845,6 @@
       "records": 600
     },
     {
-      "college_name": "BHASKARA INST. OF PHARMACY",
-      "college_code": "BIPB",
-      "file": "BIPB.json",
-      "records": 1
-    },
-    {
       "college_name": "BHIMAVARAM INST. OF ENGG. AND TECHNOLOGY",
       "college_code": "BVRM",
       "file": "BVRM.json",
@@ -917,22 +875,10 @@
       "records": 474
     },
     {
-      "college_name": "GOKUL COLLEGE OF PHARMACY",
-      "college_code": "GOKP",
-      "file": "GOKP.json",
-      "records": 2
-    },
-    {
       "college_name": "IDEAL INSTITUTE OF TECHNOLOGY",
       "college_code": "IDEL",
       "file": "IDEL.json",
       "records": 478
-    },
-    {
-      "college_name": "CHALAPATHI UNIVERSITY",
-      "college_code": "CITYPU",
-      "file": "CITYPU.json",
-      "records": 1337
     },
     {
       "college_name": "R V INSTITUTE OF TECHNOLOGY",
@@ -1043,12 +989,6 @@
       "records": 177
     },
     {
-      "college_name": "AU COLLEGE OF PHARMACEUTICAL SCIENCES",
-      "college_code": "AUCP",
-      "file": "AUCP.json",
-      "records": 19
-    },
-    {
       "college_name": "BHEEMA INST OF TECHNOLOGY AND SCI",
       "college_code": "BEMA",
       "file": "BEMA.json",
@@ -1143,12 +1083,6 @@
       "college_code": "ELRU",
       "file": "ELRU.json",
       "records": 246
-    },
-    {
-      "college_name": "SIR C.R.REDDY COLLEGE OF PHARMACY",
-      "college_code": "CRRP",
-      "file": "CRRP.json",
-      "records": 11
     },
     {
       "college_name": "SRINIVASA INSTITUTE OF TECHNOLOGY AND MANG STUDIES",
@@ -1259,12 +1193,6 @@
       "records": 72
     },
     {
-      "college_name": "HINDU COLLEGE OF PHARMACY",
-      "college_code": "HICP",
-      "file": "HICP.json",
-      "records": 9
-    },
-    {
       "college_name": "SATYA INST OF TECHNOLOGY AND MGMT",
       "college_code": "SGVP",
       "file": "SGVP.json",
@@ -1299,12 +1227,6 @@
       "college_code": "ISTSOC",
       "file": "ISTSOC.json",
       "records": 44
-    },
-    {
-      "college_name": "JNTUA-OIL TECHNOLOGICAL AND PHARMACEUTICAL  RESEARCH INST-SELF FINANCE",
-      "college_code": "OTRISF",
-      "file": "OTRISF.json",
-      "records": 2
     },
     {
       "college_name": "INDIRA INST OF TECHNOLOGY SCI",
@@ -1343,12 +1265,6 @@
       "records": 26
     },
     {
-      "college_name": "MOTHER THERESA INST OF PHARMACEUTICAL EDUCATION AND RESEARCH",
-      "college_code": "MIPR",
-      "file": "MIPR.json",
-      "records": 1
-    },
-    {
       "college_name": "WELLFARE INST OF SCIENCE TECH AND MGMT",
       "college_code": "WSTM",
       "file": "WSTM.json",
@@ -1373,28 +1289,10 @@
       "records": 138
     },
     {
-      "college_name": "JNTU-GV COLLEGE OF PHARMACEUTICAL SCIENCES-SELF FINANCE",
-      "college_code": "JNVPSF",
-      "file": "JNVPSF.json",
-      "records": 5
-    },
-    {
       "college_name": "KRISHNA UNIVERSITY -SELF FINANCE",
       "college_code": "KRUESF",
       "file": "KRUESF.json",
       "records": 98
-    },
-    {
-      "college_name": "ANU COLL OF PHARMACEUTICAL SCIENCES-SELF FINANCE",
-      "college_code": "ANUPSF",
-      "file": "ANUPSF.json",
-      "records": 5
-    },
-    {
-      "college_name": "AU COLLEGE OF PHARMACEUTICAL SCIENCES-SELF FINANCE",
-      "college_code": "AUCPSF",
-      "file": "AUCPSF.json",
-      "records": 10
     },
     {
       "college_name": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE",
@@ -1409,12 +1307,6 @@
       "records": 75
     },
     {
-      "college_name": "CHEBROLU HANUMAIAH INST. OF PHARM SCIENCES",
-      "college_code": "CIPS",
-      "file": "CIPS.json",
-      "records": 7
-    },
-    {
       "college_name": "SRI VASAVI INST. OF PHARM. SCI.",
       "college_code": "VSVP",
       "file": "VSVP.json",
@@ -1427,12 +1319,6 @@
       "records": 40
     },
     {
-      "college_name": "COLLEGE OF PHARMACY - ANNAMACHARYA  UNIVERSITY",
-      "college_code": "ANCPPU",
-      "file": "ANCPPU.json",
-      "records": 7
-    },
-    {
       "college_name": "S.V COLLEGE OF ENGINEERING",
       "college_code": "SVEP",
       "file": "SVEP.json",
@@ -1443,30 +1329,6 @@
       "college_code": "BESTPU",
       "file": "BESTPU.json",
       "records": 32
-    },
-    {
-      "college_name": "M.A.M COLLEGE OF PHARMACY",
-      "college_code": "MAMN",
-      "file": "MAMN.json",
-      "records": 14
-    },
-    {
-      "college_name": "NARSARAOPET INSTT. OF PHARM.SCI.",
-      "college_code": "NSPP",
-      "file": "NSPP.json",
-      "records": 1
-    },
-    {
-      "college_name": "ST.ANNS COLLEGE OF PHARAMACY",
-      "college_code": "ANNP",
-      "file": "ANNP.json",
-      "records": 5
-    },
-    {
-      "college_name": "GLOBAL COLL OF ENGG AND TECHNOLOGY",
-      "college_code": "GLBC",
-      "file": "GLBC.json",
-      "records": 26
     },
     {
       "college_name": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY",
@@ -1493,12 +1355,6 @@
       "records": 21
     },
     {
-      "college_name": "PRAKASAM COLLEGE OF PHARMACY",
-      "college_code": "PCPK",
-      "file": "PCPK.json",
-      "records": 4
-    },
-    {
       "college_name": "UNIVERSAL COLLEGE OF ENGG AND TECHNOLOGY",
       "college_code": "UNIV",
       "file": "UNIV.json",
@@ -1517,22 +1373,10 @@
       "records": 44
     },
     {
-      "college_name": "SESHACHALA COLLEGE OF PHARMACY",
-      "college_code": "SESP",
-      "file": "SESP.json",
-      "records": 1
-    },
-    {
       "college_name": "VAGDEVI COLLEGE OF PHARMACY",
       "college_code": "VCPG",
       "file": "VCPG.json",
       "records": 1
-    },
-    {
-      "college_name": "SCHOOL OF PHARMACEUTICAL SCI. AND TECH.-SELF FINANCE",
-      "college_code": "JNKPSF",
-      "file": "JNKPSF.json",
-      "records": 8
     },
     {
       "college_name": "GOKUL GROUP OF INSTITUTIONS",
@@ -1547,40 +1391,16 @@
       "records": 1
     },
     {
-      "college_name": "DR.K V SUBBA REDDY INST OF PHARMACY",
-      "college_code": "KVSP",
-      "file": "KVSP.json",
-      "records": 1
-    },
-    {
       "college_name": "S V UNIVERSITY COLLEGE OF PHARMACEUTICAL SCIENCES-SELF FINANCE",
       "college_code": "SVUPSF",
       "file": "SVUPSF.json",
       "records": 2
     },
     {
-      "college_name": "CHENNUPATI INDO-AMERICAN SCHOOL OF PHARMACY",
-      "college_code": "IASP",
-      "file": "IASP.json",
-      "records": 1
-    },
-    {
-      "college_name": "CHALAPATHI INSTITUTE OF PHARMACEUTICAL SCI.",
-      "college_code": "CLPT",
-      "file": "CLPT.json",
-      "records": 15
-    },
-    {
       "college_name": "DAMISETTY BALA SURESH INST OF TECHNOLOGY",
       "college_code": "DSIT",
       "file": "DSIT.json",
       "records": 26
-    },
-    {
-      "college_name": "ADARSHA COLL OF PHARMACY",
-      "college_code": "ADCP",
-      "file": "ADCP.json",
-      "records": 2
     },
     {
       "college_name": "V JS COLLEGE OF PHARMACY",
@@ -1595,18 +1415,6 @@
       "records": 2
     },
     {
-      "college_name": "NIRMALA COLLEGE OF PHARMACY",
-      "college_code": "NICP",
-      "file": "NICP.json",
-      "records": 2
-    },
-    {
-      "college_name": "INST. OF PHARM. TECH. S P MAHILA VISWA VIDYALAYAM",
-      "college_code": "SPMS",
-      "file": "SPMS.json",
-      "records": 6
-    },
-    {
       "college_name": "VIGNAN INST.OF PHARM.",
       "college_code": "VIPV",
       "file": "VIPV.json",
@@ -1619,12 +1427,6 @@
       "records": 10
     },
     {
-      "college_name": "SCHOOL OF PHARMACY - GODAVARI GLOBAL UNIVERSITY",
-      "college_code": "GGURSPU",
-      "file": "GGURSPU.json",
-      "records": 4
-    },
-    {
       "college_name": "YELAMARTY B. PHARMACY COLLEGE",
       "college_code": "YLMV",
       "file": "YLMV.json",
@@ -1635,12 +1437,6 @@
       "college_code": "LENO",
       "file": "LENO.json",
       "records": 10
-    },
-    {
-      "college_name": "ADITYA COLLEGE OF PHARMACY",
-      "college_code": "ACPS",
-      "file": "ACPS.json",
-      "records": 1
     },
     {
       "college_name": "BHASKAR  INSTITUTE  OF TECHNOLOGY & SCIENCE",
@@ -1679,12 +1475,6 @@
       "records": 18
     },
     {
-      "college_name": "NIRMALA COLL. OF PHARM",
-      "college_code": "NRML",
-      "file": "NRML.json",
-      "records": 10
-    },
-    {
       "college_name": "VELAGA NAGESWARA RAO COLL OF ENGINEERING",
       "college_code": "VNRC",
       "file": "VNRC.json",
@@ -1703,70 +1493,10 @@
       "records": 2
     },
     {
-      "college_name": "SWATHI COLLEGE OF PHARMACY",
-      "college_code": "SCPN",
-      "file": "SCPN.json",
-      "records": 4
-    },
-    {
-      "college_name": "QIS COLLEGE OF PHARMACY",
-      "college_code": "QISP",
-      "file": "QISP.json",
-      "records": 4
-    },
-    {
       "college_name": "VIJAYA INST OF PHARM SCI FOR WOMEN",
       "college_code": "VIPW",
       "file": "VIPW.json",
       "records": 3
-    },
-    {
-      "college_name": "NARAYANA PHARMACY COLLEGE",
-      "college_code": "NRNP",
-      "file": "NRNP.json",
-      "records": 6
-    },
-    {
-      "college_name": "KRISHNA TEJA PHARMACY COLLEGE",
-      "college_code": "KTPT",
-      "file": "KTPT.json",
-      "records": 1
-    },
-    {
-      "college_name": "ADI KAVI NANNAYA UNIVERSITY COLLEGE OF PHARMACEUTICAL SCIENCES",
-      "college_code": "AKNT",
-      "file": "AKNT.json",
-      "records": 2
-    },
-    {
-      "college_name": "BALAJI COLLEGE OF PHARMACY",
-      "college_code": "BALA",
-      "file": "BALA.json",
-      "records": 2
-    },
-    {
-      "college_name": "BAPATLA COLLEGE OF PHARMACY",
-      "college_code": "BCOP",
-      "file": "BCOP.json",
-      "records": 8
-    },
-    {
-      "college_name": "KITS COLLEGE OF PHARMACY FOR WOMEN",
-      "college_code": "KCPW",
-      "file": "KCPW.json",
-      "records": 2
-    },
-    {
-      "college_name": "NALANDA INST OF PHARM.SCI.",
-      "college_code": "SIPS",
-      "file": "SIPS.json",
-      "records": 1
-    },
-    {
-      "college_name": "NIMRA COLLEGE OF PHARMACY",
-      "college_code": "NMRP",
-      "file": "NMRP.json",
-      "records": 1
     },
     {
       "college_name": "VIKAS COLL. OF PHARMACY",
@@ -1775,51 +1505,15 @@
       "records": 4
     },
     {
-      "college_name": "PRIYADARSHINI INST OF PHARMACEUTICAL EDUCATION AND RESEARCH",
-      "college_code": "PIPR",
-      "file": "PIPR.json",
-      "records": 2
-    },
-    {
       "college_name": "SRI NALANDA INSTITUTE OF ENGINEERING  AND TECHNOLOGY",
       "college_code": "SNIT",
       "file": "SNIT.json",
       "records": 4
     },
     {
-      "college_name": "ST.JOHNS COLLEGE OF PHARM SCI",
-      "college_code": "JNYP",
-      "file": "JNYP.json",
-      "records": 1
-    },
-    {
-      "college_name": "CHALAPATHI COLLEGE OF PHARMACY",
-      "college_code": "CCPY",
-      "file": "CCPY.json",
-      "records": 4
-    },
-    {
       "college_name": "SRI VENKATESWARA  PHARMACY  COLLEGE",
       "college_code": "SVPH",
       "file": "SVPH.json",
-      "records": 1
-    },
-    {
-      "college_name": "A.K.R.G. COLLEGE OF PHARMACY",
-      "college_code": "AKRP",
-      "file": "AKRP.json",
-      "records": 1
-    },
-    {
-      "college_name": "A M REDDY MEMORIAL COLL. OF PHARMACY",
-      "college_code": "ARMN",
-      "file": "ARMN.json",
-      "records": 1
-    },
-    {
-      "college_name": "SRI VASAVI COLLEGE OF PHARMACY",
-      "college_code": "SVAP",
-      "file": "SVAP.json",
       "records": 1
     },
     {
@@ -1835,18 +1529,6 @@
       "records": 1
     },
     {
-      "college_name": "RAGHAVENDRA INST. OF PHARM. EDUCATION",
-      "college_code": "RIPA",
-      "file": "RIPA.json",
-      "records": 2
-    },
-    {
-      "college_name": "MAHARAJAHS COLLEGE PHARMACY",
-      "college_code": "MHRJ",
-      "file": "MHRJ.json",
-      "records": 3
-    },
-    {
       "college_name": "CHAITANYA INST. OF SCI. AND TECHNOLOGY",
       "college_code": "CHKN",
       "file": "CHKN.json",
@@ -1859,76 +1541,10 @@
       "records": 1
     },
     {
-      "college_name": "GOKULA KRISHNA COLLEGE OF PHARMACY",
-      "college_code": "GKPS",
-      "file": "GKPS.json",
-      "records": 2
-    },
-    {
-      "college_name": "SIMS COLLEGE OF PHARMACY",
-      "college_code": "SIMS",
-      "file": "SIMS.json",
-      "records": 1
-    },
-    {
-      "college_name": "SRI MITTAPALLI PHARMACY COLLEGE",
-      "college_code": "MPPC",
-      "file": "MPPC.json",
-      "records": 1
-    },
-    {
-      "college_name": "ST.MARYS COLLEGE OF PHARMACY",
-      "college_code": "SMPC",
-      "file": "SMPC.json",
-      "records": 3
-    },
-    {
-      "college_name": "MALINENI PERUMALLU PHARMACY COLLEGE",
-      "college_code": "MPES",
-      "file": "MPES.json",
-      "records": 1
-    },
-    {
-      "college_name": "S K C COLLEGE OF PHARMACY",
-      "college_code": "SKCP",
-      "file": "SKCP.json",
-      "records": 1
-    },
-    {
-      "college_name": "M B SCHOOL OF PHARMACEUTICAL SCIENCES (MOHAN BABU UNIVERSITY )",
-      "college_code": "MBUSPS",
-      "file": "MBUSPS.json",
-      "records": 1
-    },
-    {
-      "college_name": "SASHIKANTH REDDY COLL OF PHARM",
-      "college_code": "SRPN",
-      "file": "SRPN.json",
-      "records": 1
-    },
-    {
       "college_name": "SRI ANNAMACHARYA INSTITUTE OF TECHNOLOGY AND SCIENCE",
       "college_code": "SATS",
       "file": "SATS.json",
       "records": 3
-    },
-    {
-      "college_name": "NOVA COLLEGE OF ENGINEERING AND TECHNOLOGY",
-      "college_code": "NVAV",
-      "file": "NVAV.json",
-      "records": 2
-    },
-    {
-      "college_name": "MALINENI LAKSHMAIAH COLLEGE OF PHARMACY",
-      "college_code": "MLCP",
-      "file": "MLCP.json",
-      "records": 1
-    },
-    {
-      "college_name": "DR. SAMUEL GEORGE INSTITUTE OF PHARM. SCI.S",
-      "college_code": "SGIP",
-      "file": "SGIP.json",
-      "records": 1
     },
     {
       "college_name": "VIJAYA COLLEGE OF PHARMACY",
@@ -1943,57 +1559,15 @@
       "records": 2
     },
     {
-      "college_name": "JAGANS COLLEGE OF PHARMACY",
-      "college_code": "JAGN",
-      "file": "JAGN.json",
-      "records": 1
-    },
-    {
-      "college_name": "ST.ANNS COLLEGE OF PHARAMACY",
-      "college_code": "SAPV",
-      "file": "SAPV.json",
-      "records": 1
-    },
-    {
-      "college_name": "CHAITANYA COLLEGE OF PHARMACY",
-      "college_code": "CCPM",
-      "file": "CCPM.json",
-      "records": 1
-    },
-    {
-      "college_name": "RAJIV GANDHI COLLEGE OF PHARMACY",
-      "college_code": "RGCP",
-      "file": "RGCP.json",
-      "records": 1
-    },
-    {
       "college_name": "VISWA BHARATHI COLLEGE OF PHARMACEUTICAL SCI.S",
       "college_code": "VBCP",
       "file": "VBCP.json",
       "records": 1
     },
     {
-      "college_name": "SKU COLL OF PHARMCEUTICAL SCIENCE-SELF FINANCE",
-      "college_code": "SKUPSF",
-      "file": "SKUPSF.json",
-      "records": 1
-    },
-    {
-      "college_name": "B.A. AND K.R. COLLEGE OF PHARMACY",
-      "college_code": "BAKR",
-      "file": "BAKR.json",
-      "records": 1
-    },
-    {
       "college_name": "CHIRANJEEVI REDDY INST OF ENGG AND TECHNOLOGY FOR WOMEN",
       "college_code": "CRIT",
       "file": "CRIT.json",
-      "records": 1
-    },
-    {
-      "college_name": "JOGAIAH INST OF TECHNOLOGY AND SCI",
-      "college_code": "JITS",
-      "file": "JITS.json",
       "records": 1
     },
     {
@@ -2007,12 +1581,7 @@
       "college_code": "DJRC",
       "file": "DJRC.json",
       "records": 1
-    },
-    {
-      "college_name": "DR.C.S.N.INSTITUTE OF PHARMACY",
-      "college_code": "CSNP",
-      "file": "CSNP.json",
-      "records": 1
     }
-  ]
+  ],
+  "totalColleges": 263
 }

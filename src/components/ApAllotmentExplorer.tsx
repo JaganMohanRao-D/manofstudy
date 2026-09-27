@@ -1,15 +1,11 @@
 import React from 'react';
-import APAllotmentExplorerComponent from './ap-allotment/APAllotmentExplorer';
+import APAllotmentExplorer, { APAllotmentExplorerProps } from './ap-allotment/APAllotmentExplorer';
 
-export interface ApAllotmentExplorerProps {
-  initialCollegeCode?: string;
-  initialBranchCode?: string;
-  initialTab?: 'college' | 'student-search' | 'rank-search';
-  onNavigateToTab?: (tabId: string) => void;
-}
+export { APAllotmentExplorer };
+export type { APAllotmentExplorerProps as ApAllotmentExplorerProps };
 
-export const ApAllotmentExplorer: React.FC<ApAllotmentExplorerProps> = (props) => {
-  return <APAllotmentExplorerComponent {...props} />;
+export const ApAllotmentExplorer: React.FC<APAllotmentExplorerProps> = (props) => {
+  return <APAllotmentExplorer {...props} />;
 };
 
 export default ApAllotmentExplorer;

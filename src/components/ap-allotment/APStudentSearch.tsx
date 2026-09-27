@@ -77,7 +77,8 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
     const maxRank = maxRankInput.trim() ? parseInt(maxRankInput.replace(/[^0-9]/g, ''), 10) : null;
 
     try {
-      const records = await searchAllotments(year, {
+      const searchYear: AllotmentYear = year === '2025' ? '2025' : '2026';
+      const records = await searchAllotments(searchYear, {
         nameQuery: searchMode === 'name' ? nameInput : undefined,
         hallTicket: searchMode === 'hallticket' ? nameInput : undefined,
         exactRank: searchMode === 'rank' ? exactRank ?? undefined : undefined,

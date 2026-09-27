@@ -295,18 +295,18 @@ export async function runPredictorAnalysis(input: PredictorStudentInput): Promis
       let whyExplanation = '';
       if (classification === 'WITHIN_RANGE') {
         if (userRank < minRank) {
-          whyExplanation = `Shown because matching 2026 allotment records for your category (${category}), gender (${gender === 'F' ? 'Female' : 'Male'}) and branch (${branchCode}) span from rank #${minRank.toLocaleString()} to #${maxRank.toLocaleString()} (${count} records). Your rank #${userRank.toLocaleString()} is ahead of the historical opening rank.`;
+          whyExplanation = `Shown because matching 2026 allotment records for your category (${category}), gender (${gender === 'F' ? 'Female' : 'Male'}) and branch (${branchCode}) span from rank #${(minRank ?? 0).toLocaleString()} to #${(maxRank ?? 0).toLocaleString()} (${count} records). Your rank #${(userRank ?? 0).toLocaleString()} is ahead of the historical opening rank.`;
         } else {
-          whyExplanation = `Shown because matching 2026 allotment records for your selected profile (${category}, ${gender === 'F' ? 'Female' : 'Male'}, ${branchCode}) include ranks from #${minRank.toLocaleString()} to #${maxRank.toLocaleString()} (median #${medianRank.toLocaleString()}, ${count} records). Your rank #${userRank.toLocaleString()} falls directly within this observed range.`;
+          whyExplanation = `Shown because matching 2026 allotment records for your selected profile (${category}, ${gender === 'F' ? 'Female' : 'Male'}, ${branchCode}) include ranks from #${(minRank ?? 0).toLocaleString()} to #${(maxRank ?? 0).toLocaleString()} (median #${(medianRank ?? 0).toLocaleString()}, ${count} records). Your rank #${(userRank ?? 0).toLocaleString()} falls directly within this observed range.`;
         }
       } else if (classification === 'NEAR_RANGE') {
         const diffRanks = userRank - maxRank;
-        whyExplanation = `Shown because the last observed admitted candidate for ${category} ${gender === 'F' ? 'Girls' : 'Boys'} in ${branchCode} held rank #${maxRank.toLocaleString()}. Your rank #${userRank.toLocaleString()} is within ${diffRanks.toLocaleString()} ranks (${percentDiff}%) of this historical boundary.`;
+        whyExplanation = `Shown because the last observed admitted candidate for ${category} ${gender === 'F' ? 'Girls' : 'Boys'} in ${branchCode} held rank #${(maxRank ?? 0).toLocaleString()}. Your rank #${(userRank ?? 0).toLocaleString()} is within ${(diffRanks ?? 0).toLocaleString()} ranks (${percentDiff}%) of this historical boundary.`;
       } else if (classification === 'INSUFFICIENT_DATA') {
-        whyExplanation = `Only ${count} allotment record was observed in the official 2026 dataset for ${category} in ${branchCode} (rank #${maxRank.toLocaleString()}). While data exists, fewer than 3 records were found, which is insufficient for statistical range estimation.`;
+        whyExplanation = `Only ${count} allotment record was observed in the official 2026 dataset for ${category} in ${branchCode} (rank #${(maxRank ?? 0).toLocaleString()}). While data exists, fewer than 3 records were found, which is insufficient for statistical range estimation.`;
       } else {
         const diffRanks = userRank - maxRank;
-        whyExplanation = `In the 2026 allotments, the last admitted candidate for ${category} in ${branchCode} was rank #${maxRank.toLocaleString()}. Your rank #${userRank.toLocaleString()} is ${diffRanks.toLocaleString()} ranks beyond the observed allotment records for this quota.`;
+        whyExplanation = `In the 2026 allotments, the last admitted candidate for ${category} in ${branchCode} was rank #${(maxRank ?? 0).toLocaleString()}. Your rank #${(userRank ?? 0).toLocaleString()} is ${(diffRanks ?? 0).toLocaleString()} ranks beyond the observed allotment records for this quota.`;
       }
 
       matches.push({

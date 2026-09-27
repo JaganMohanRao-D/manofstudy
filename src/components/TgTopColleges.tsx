@@ -24,7 +24,7 @@ import {
 
 const PAGE_SIZE = 10;
 
-const formatRank = (value: number) => value.toLocaleString('en-IN');
+const formatRank = (value: number) => (value != null ? value.toLocaleString('en-IN') : '—');
 
 function SelectField({
   label,
@@ -376,8 +376,8 @@ export const TgTopColleges: React.FC = () => {
         <>
           <div className="grid grid-cols-2 gap-2 border-b border-slate-200/80 px-4 py-4 sm:grid-cols-4 sm:px-7 dark:border-slate-800">
             {[
-              ['Eligible colleges', total.toLocaleString('en-IN'), Trophy],
-              ['Valid OC allotments', totalOcAllotments.toLocaleString('en-IN'), Database],
+              ['Eligible colleges', (total ?? 0).toLocaleString('en-IN'), Trophy],
+              ['Valid OC allotments', (totalOcAllotments ?? 0).toLocaleString('en-IN'), Database],
               ['Observed rank floor', rankFloor ? formatRank(rankFloor) : '—', Award],
               ['Observed rank ceiling', rankCeiling ? formatRank(rankCeiling) : '—', BarChart3],
             ].map(([label, value, Icon]: any) => (
