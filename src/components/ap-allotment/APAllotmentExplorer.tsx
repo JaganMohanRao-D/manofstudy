@@ -7,6 +7,7 @@ import {
   CollegeListItem,
   AllotmentRecord,
   getCollegeList,
+  getAvailableDistricts,
   getCollegeDetails,
   searchAllotments,
   getDatasetSummary,
@@ -41,6 +42,7 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
   const [activeTab, setActiveTab] = useState(initialTab);
   const [selectedYear, setSelectedYear] = useState<AllotmentYear>('2026');
   const [selectedPhase, setSelectedPhase] = useState<PhaseFilter>('ALL');
+  const [selectedDistrict, setSelectedDistrict] = useState('ALL');
   const [selectedCollegeCode, setSelectedCollegeCode] = useState('ALL');
   const [selectedBranchCode, setSelectedBranchCode] = useState('ALL');
   const [collegesList, setCollegesList] = useState<CollegeListItem[]>([]);
@@ -60,6 +62,8 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
   });
 
   const phaseValue = selectedYear + ':' + selectedPhase;
+  const districtOptions = useMemo(() => getAvailableDistricts(collegesList), [collegesList]);
+  const filteredColleges = useMemo(() => selectedDistrict === 'ALL' ? collegesList : collegesList.filter((c) => String(c.district ?? '').toUpperCase() === selectedDistrict.toUpperCase()), [collegesList, selectedDistrict]);
 
   const resetFilters = useCallback(() => {
     setFilters({ category: 'ALL', allottedCategory: 'ALL', gender: 'ALL', region: 'ALL', minRank: '', maxRank: '' });
@@ -69,6 +73,7 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
     const [year, phase] = value.split(':') as [AllotmentYear, PhaseFilter];
     setSelectedYear(year);
     setSelectedPhase(phase);
+    setSelectedDistrict('ALL');
     setSelectedCollegeCode('ALL');
     setSelectedBranchCode('ALL');
     setStudentSearch('');
@@ -82,6 +87,7 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
     setCollegeData(null);
     setDatasetSummary(null);
     setCollegesList([]);
+    setSelectedDistrict('ALL');
     setLoadError(null);
     setIsLoading(true);
     Promise.all([getCollegeList(selectedYear), getDatasetSummary(selectedYear)])
@@ -212,6 +218,13 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
     }
   }, [selectedYear, selectedCollegeCode, selectedBranchCode, selectedPhase, studentSearch]);
 
+  const onDistrictChange = (district: string) => {
+    setSelectedDistrict(district);
+    setSelectedCollegeCode('ALL');
+    setSelectedBranchCode('ALL');
+    resetFilters();
+  };
+
   const onCollegeChange = (code: string) => {
     setSelectedCollegeCode(code);
     setSelectedBranchCode('ALL');
@@ -229,9 +242,9 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
 
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-900 dark:text-slate-100 py-5 sm:py-8 px-3 sm:px-6 font-sans">
+    <div className="mos-ap-explorer min-h-screen bg-[var(--mos-page-bg)] text-[var(--mos-text-primary)] py-5 sm:py-8 px-3 sm:px-6 font-sans transition-colors duration-200">
       <div className="max-w-7xl mx-auto space-y-5 sm:space-y-7">
-        <header className="mos-ap-hero relative overflow-hidden rounded-[2rem] border border-cyan-400/10 bg-gradient-to-br from-slate-900 via-slate-950 to-indigo-950/50 p-5 sm:p-8 shadow-2xl shadow-cyan-950/20">
+        <header className="mos-ap-hero relative overflow-hidden rounded-[2rem] border border-cyan-400/10 bg-gradient-to-br from-cyan-50 via-white to-indigo-50 dark:from-slate-900 dark:via-slate-950 dark:to-indigo-950/50 p-5 sm:p-8 shadow-2xl shadow-cyan-950/20">
           <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-cyan-400/10 blur-3xl mos-float" />
           <div className="absolute -bottom-24 left-1/3 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl" />
           <div className="relative grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
@@ -253,21 +266,27 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
           <div className="mb-3 flex items-center justify-between gap-3">
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.18em] text-cyan-400">Explore the dataset</p>
-              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Year, college and branch stay locked to the same AP dataset.</p>
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Choose year → district → college → branch. Every view stays inside the selected AP dataset.</p>
             </div>
             <div className="hidden sm:flex items-center gap-2 rounded-full border border-emerald-400/15 bg-emerald-400/5 px-3 py-1.5 text-[10px] font-bold text-emerald-300">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" /> Live dataset view
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1fr_1.25fr_1.25fr]">
+          <div className="grid grid-cols-1 gap-3 lg:grid-cols-4">
             <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
               Allotment year & phase
               <select value={phaseValue} onChange={(e) => applyYearPhase(e.target.value)} className="mos-ap-control mt-1.5 w-full rounded-2xl px-3.5 py-3.5 text-sm font-bold text-slate-950 dark:text-white outline-none">
                 {PHASE_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
               </select>
             </label>
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300">District
+              <select value={selectedDistrict} onChange={(e) => onDistrictChange(e.target.value)} className="mos-ap-control mt-1.5 w-full rounded-2xl px-3.5 py-3.5 text-sm font-bold outline-none">
+                <option value="ALL">All Districts</option>
+                {districtOptions.map((district) => <option key={district} value={district}>{district}</option>)}
+              </select>
+            </label>
             <APCollegeSelector
-              colleges={collegesList.map((college) => ({ collegeCode: college.collegeCode, collegeName: college.collegeName, file: college.file, hasData: true, recordCount: college.recordCount, minRank: 0, maxRank: 0, branchCount: 0, branches: [] }))}
+              colleges={filteredColleges.map((college) => ({ collegeCode: college.collegeCode, collegeName: college.collegeName, file: college.file, hasData: true, recordCount: college.recordCount, minRank: 0, maxRank: 0, branchCount: 0, branches: [] }))}
               selectedCollegeCode={selectedCollegeCode}
               onSelectCollege={onCollegeChange}
               isLoading={isLoading}
@@ -282,7 +301,7 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
           <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] text-slate-600 dark:text-slate-400">
             <span className="rounded-full border border-slate-200 dark:border-white/10 bg-slate-100/90 dark:bg-slate-950/70 px-2.5 py-1">Dataset: AP EAPCET {selectedYear}</span>
             {selectedPhase !== 'ALL' && <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2.5 py-1 text-cyan-300">Phase {selectedPhase}</span>}
-            <span className="rounded-full border border-slate-200 dark:border-white/10 bg-slate-100/90 dark:bg-slate-950/70 px-2.5 py-1">{collegesList.length} AP colleges</span>
+            <span className="rounded-full border border-slate-200 dark:border-white/10 bg-slate-100/90 dark:bg-slate-950/70 px-2.5 py-1">{filteredColleges.length} colleges in view</span>
             {selectedCollegeCode !== 'ALL' && <span className="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2.5 py-1 text-indigo-300">{branchOptions.length} branches</span>}
           </div>
         </section>
