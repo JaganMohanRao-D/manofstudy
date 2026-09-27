@@ -1456,3 +1456,24 @@ html.light [class*="to-slate-900"] {
   --tw-gradient-from: var(--mos-surface) !important;
   --tw-gradient-to: var(--mos-surface) !important;
 }
+
+
+/* Final hero title readability: solid accent colors for reliable bright-mode rendering. */
+html.light .mos-hero-accent-blue {
+  color: #1D4ED8 !important;
+  -webkit-text-fill-color: #1D4ED8 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.95);
+}
+html.light .mos-hero-accent-green {
+  color: #047857 !important;
+  -webkit-text-fill-color: #047857 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.95);
+}
+html.dark .mos-hero-accent-blue {
+  color: #60A5FA !important;
+  -webkit-text-fill-color: #60A5FA !important;
+}
+html.dark .mos-hero-accent-green {
+  color: #34D399 !important;
+  -webkit-text-fill-color: #34D399 !important;
+}
