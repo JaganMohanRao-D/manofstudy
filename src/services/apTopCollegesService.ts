@@ -78,7 +78,8 @@ export async function getAPTopCollegeIndex(): Promise<APTopCollegeIndex> {
 export async function getAPTopCollegeRows(
   branch = 'CSE',
   district = 'ALL',
-  searchQuery = ''
+  searchQuery = '',
+  sortBy: 'median_asc' | 'opening_asc' | 'closing_asc' = 'median_asc'
 ): Promise<APTopCollegeRow[]> {
   const index = await getAPTopCollegeIndex();
   const branchFilter = String(branch || 'CSE').trim().toUpperCase();
@@ -132,12 +133,20 @@ export async function getAPTopCollegeRows(
     });
   }
 
-  rows.sort((a, b) =>
-    a.stats.medianRank - b.stats.medianRank ||
-    a.stats.openingRank - b.stats.openingRank ||
-    a.stats.closingRank - b.stats.closingRank ||
-    a.collegeName.localeCompare(b.collegeName)
-  );
+  rows.sort((a, b) => {
+    const primary =
+      sortBy === 'opening_asc'
+        ? a.stats.openingRank - b.stats.openingRank
+        : sortBy === 'closing_asc'
+          ? a.stats.closingRank - b.stats.closingRank
+          : a.stats.medianRank - b.stats.medianRank;
+
+    return primary ||
+      a.stats.medianRank - b.stats.medianRank ||
+      a.stats.openingRank - b.stats.openingRank ||
+      a.stats.closingRank - b.stats.closingRank ||
+      a.collegeName.localeCompare(b.collegeName);
+  });
 
   rows.forEach((row, index) => {
     row.rankPosition = index + 1;
