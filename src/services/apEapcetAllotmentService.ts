@@ -487,40 +487,52 @@ export async function get2026BranchSummaries() {
 }
 
 export async function get2026PredictorRows(): Promise<PredictorRow[]> {
-  const colleges = await loadAllColleges('2026');
+  const { candidates, branchMap = {}, collegeMap = {} } = await loadSearchIndex('2026');
   const grouped = new Map<string, PredictorRow>();
 
-  for (const college of colleges) {
-    for (const record of college.allRecords) {
-      if (!record.category) continue;
-      const key = [
-        college.college_code,
-        record.branch_code,
-        record.category,
-        record.gender || 'ALL',
-        record.region || 'ALL',
-      ].join('||');
+  for (const raw of candidates) {
+    const [rank, _candidateName, gender, category, region, _allottedCategory, phase, collegeCodeRaw, branchCodeRaw] = raw;
+    const rankNumber = Number(rank);
+    if (!Number.isFinite(rankNumber) || rankNumber <= 0 || !category) continue;
 
-      const existing = grouped.get(key);
-      if (!existing) {
-        grouped.set(key, {
-          collegeCode: college.college_code,
-          collegeName: college.college_name,
-          branchCode: record.branch_code,
-          branchName: record.branch_name,
-          category: record.category,
-          gender: record.gender || 'ALL',
-          region: record.region || 'ALL',
-          minRank: record.rank,
-          maxRank: record.rank,
-          count: 1,
-          phases: record.phase ? [record.phase] : [],
-        });
-      } else {
-        existing.minRank = Math.min(existing.minRank, record.rank);
-        existing.maxRank = Math.max(existing.maxRank, record.rank);
-        existing.count += 1;
-        if (record.phase && !existing.phases.includes(record.phase)) existing.phases.push(record.phase);
+    const collegeCode = String(collegeCodeRaw ?? '').trim().toUpperCase();
+    const branchCode = String(branchCodeRaw ?? '').trim().toUpperCase();
+    if (!collegeCode || !branchCode || EXCLUDED_AP_COLLEGE_CODES.has(collegeCode)) continue;
+
+    const normalizedGender = String(gender ?? '').trim().toUpperCase() || 'ALL';
+    const normalizedRegion = String(region ?? '').trim().toUpperCase() || 'ALL';
+    const normalizedCategory = String(category ?? '').trim().toUpperCase();
+    const phaseNumberValue = Number(phase) || 0;
+
+    const key = [
+      collegeCode,
+      branchCode,
+      normalizedCategory,
+      normalizedGender,
+      normalizedRegion,
+    ].join('||');
+
+    const existing = grouped.get(key);
+    if (!existing) {
+      grouped.set(key, {
+        collegeCode,
+        collegeName: String(collegeMap[collegeCode] ?? collegeCode),
+        branchCode,
+        branchName: String(branchMap[branchCode] ?? branchCode),
+        category: normalizedCategory,
+        gender: normalizedGender,
+        region: normalizedRegion,
+        minRank: rankNumber,
+        maxRank: rankNumber,
+        count: 1,
+        phases: phaseNumberValue ? [phaseNumberValue] : [],
+      });
+    } else {
+      existing.minRank = Math.min(existing.minRank, rankNumber);
+      existing.maxRank = Math.max(existing.maxRank, rankNumber);
+      existing.count += 1;
+      if (phaseNumberValue && !existing.phases.includes(phaseNumberValue)) {
+        existing.phases.push(phaseNumberValue);
       }
     }
   }
