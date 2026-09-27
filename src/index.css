@@ -533,3 +533,50 @@ html.dark #campus-connect .shadow-pink-200\/50 {
   box-shadow: 0 4px 6px -1px var(--mos-shadow) !important;
 }
 
+/* =========================================================================
+   CBT Examination Scorecard & Certificate Official Print Styles
+   ========================================================================= */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+
+  body {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide app chrome, headers, footers, and interactive elements */
+  #main-header,
+  #tier2-secondary-feature-strip,
+  footer,
+  .print\:hidden,
+  button:not(.print-visible) {
+    display: none !important;
+  }
+
+  /* Optimize certificate & scorecard container */
+  #cbt-printable-certificate,
+  #cbt-scorecard-container {
+    border: 2px solid #334155 !important;
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    box-shadow: none !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+    page-break-inside: avoid !important;
+  }
+
+  #cbt-printable-certificate * {
+    color: #0F172A !important;
+  }
+
+  #cbt-printable-certificate .text-white {
+    color: #0F172A !important;
+  }
+}
+
+

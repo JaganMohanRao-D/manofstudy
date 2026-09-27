@@ -53,62 +53,28 @@ export const HeroSection = ({
           Admissions, academics, career roadmaps, AI guidance, PDF tools and everyday student utilities — all in one place.
         </p>
 
-        {/* AP + Telangana tools — primary admissions entry points directly under the hero message. */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-5xl mx-auto pt-1">
-          {[
-            {
-              label: 'For AP Students',
-              accent: 'from-cyan-500/15 via-blue-500/10 to-transparent',
-              dot: 'bg-cyan-500',
-              items: [
-                ['AP Allotments', 'ap-allotments', 'Search allotments'],
-                ['AP College Predictor', 'ap-predictor', 'Check rank matches'],
-                ['AP Top B.Tech Colleges', 'ap-top-colleges', 'Compare observed ranks'],
-              ],
-            },
-            {
-              label: 'For Telangana Students',
-              accent: 'from-emerald-500/15 via-teal-500/10 to-transparent',
-              dot: 'bg-emerald-500',
-              items: [
-                ['TG Allotments', 'tg-allotments', 'Search allotments'],
-                ['TG College Predictor', 'tg-predictor', 'Check rank matches'],
-                ['TG Top B.Tech Colleges', 'tg-top-colleges', 'Explore observed ranks'],
-              ],
-            },
-          ].map((group) => (
-            <div key={group.label} className={`relative overflow-hidden rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-gradient-to-br ${group.accent} bg-white/90 dark:bg-slate-900/85 p-3.5 sm:p-4 text-left shadow-md hover:shadow-xl transition-all duration-300`}>
-              <div className="absolute -right-10 -top-10 w-28 h-28 rounded-full bg-white/50 dark:bg-white/5 blur-2xl" />
-              <div className="relative flex items-center gap-2 px-1 pb-3">
-                <span className={`relative flex h-2.5 w-2.5 rounded-full ${group.dot}`}>
-                  <span className={`absolute inline-flex h-full w-full animate-ping rounded-full ${group.dot} opacity-50`} />
-                </span>
-                <span className="text-[10px] font-black uppercase tracking-[.18em] text-slate-600 dark:text-slate-300">{group.label}</span>
-                <span className="ml-auto text-[9px] font-bold text-slate-400 dark:text-slate-500">2026 DATA</span>
-              </div>
-              <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-2">
-                {group.items.map(([label, workspace, hint]) => (
-                  <button key={workspace} type="button" onClick={() => onSelectWorkspace?.(workspace)} className="group rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white/85 dark:bg-slate-950/65 px-3 py-3 text-left hover:border-cyan-400/70 dark:hover:border-cyan-400/50 hover:-translate-y-1 hover:shadow-lg transition-all duration-200">
-                    <span className="block text-xs font-extrabold text-slate-900 dark:text-white leading-snug">{label}</span>
-                    <span className="block mt-1 text-[10px] font-medium text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300">{hint}</span>
-                    <span className="mt-2 block h-0.5 w-8 rounded-full bg-gradient-to-r from-cyan-500 to-emerald-500 opacity-70 group-hover:w-12 transition-all" />
-                  </button>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+        {/* Primary Call to Actions: Mock Test Series & Explore Tools */}
+        <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+          <button
+            type="button"
+            id="hero-mock-test-btn"
+            onClick={() => onSelectWorkspace?.('mock-tests')}
+            className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-sm sm:text-base transition-all duration-200 shadow-lg shadow-blue-600/25 hover:shadow-blue-600/35 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+          >
+            <span>🎯 Launch Mock Test Series</span>
+            <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-blue-400/30 text-white border border-blue-300/30">
+              160 Qs CBT
+            </span>
+          </button>
 
-        {/* ONE Clear Primary Action CTA */}
-        <div className="pt-2 flex justify-center">
           <button
             type="button"
             id="hero-explore-tools-btn"
             onClick={handleScrollToTools}
-            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-slate-950 font-bold text-sm sm:text-base transition-all duration-200 shadow-lg shadow-emerald-600/20 dark:shadow-emerald-500/20 hover:shadow-emerald-600/30 dark:hover:shadow-emerald-500/30 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+            className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white font-bold text-sm sm:text-base border border-slate-200 dark:border-slate-700 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
           >
-            <span>Explore Student Tools</span>
-            <ArrowDown className="w-4 h-4 text-white dark:text-slate-950" />
+            <span>Explore All Workspaces</span>
+            <ArrowDown className="w-4 h-4 text-slate-600 dark:text-slate-300" />
           </button>
         </div>
 

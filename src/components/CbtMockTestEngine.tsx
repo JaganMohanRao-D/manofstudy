@@ -29,6 +29,11 @@ import {
   RELIANCE_SCHOLARSHIP_MOCK_TEST,
   MockQuestion,
 } from '../data/cbtMockTestData';
+import {
+  CandidateOnboardingModal,
+  CandidateProfile,
+} from './CandidateOnboardingModal';
+import { Maximize2, Minimize2, Printer, UserCheck } from 'lucide-react';
 
 export type QuestionStatus =
   | 'not_visited'
@@ -40,12 +45,28 @@ export type QuestionStatus =
 interface CbtMockTestEngineProps {
   onBackToHub?: () => void;
   onSwitchToEapcet?: () => void;
+  onExamStatusChange?: (isActive: boolean) => void;
 }
 
 export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
   onBackToHub,
   onSwitchToEapcet,
+  onExamStatusChange,
 }) => {
+  // Candidate Profile
+  const [candidateProfile, setCandidateProfile] = useState<CandidateProfile | null>(() => {
+    try {
+      const stored = sessionStorage.getItem('mos_cbt_candidate_profile');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed?.fullName) return parsed;
+      }
+    } catch (e) {}
+    return null;
+  });
+  const [isOnboardingModalOpen, setIsOnboardingModalOpen] = useState<boolean>(false);
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+
   // Test Phase: 'instructions' | 'test' | 'scorecard'
   const [phase, setPhase] = useState<'instructions' | 'test' | 'scorecard'>('instructions');
 
@@ -137,10 +158,58 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
     }
   }, [currentQuestionIndex, phase]);
 
+  // Notify App.tsx of active examination status
+  useEffect(() => {
+    if (onExamStatusChange) {
+      onExamStatusChange(phase === 'test');
+    }
+  }, [phase, onExamStatusChange]);
+
+  // Fullscreen change listener
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(Boolean(document.fullscreenElement));
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
+
+  const toggleFullscreen = async () => {
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+        setIsFullscreen(true);
+      } else {
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+          setIsFullscreen(false);
+        }
+      }
+    } catch (e) {
+      console.warn('Fullscreen toggle failed', e);
+    }
+  };
+
   // Start Exam
   const handleStartExam = () => {
     if (!hasAcceptedTerms) return;
+    if (!candidateProfile) {
+      setIsOnboardingModalOpen(true);
+      return;
+    }
+    executeStartExam();
+  };
 
+  const handleCandidateOnboardingConfirm = (profile: CandidateProfile) => {
+    setCandidateProfile(profile);
+    try {
+      sessionStorage.setItem('mos_cbt_candidate_profile', JSON.stringify(profile));
+    } catch (e) {}
+    setIsOnboardingModalOpen(false);
+    executeStartExam();
+  };
+
+  const executeStartExam = () => {
     // Initialize all statuses to 'not_visited', with question 0 as 'not_answered'
     const initialStatuses: Record<number, QuestionStatus> = {};
     for (let i = 0; i < questions.length; i++) {
@@ -613,6 +682,14 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
             </button>
           </div>
         </div>
+
+        {/* Candidate Setup Modal */}
+        <CandidateOnboardingModal
+          isOpen={isOnboardingModalOpen}
+          onClose={() => setIsOnboardingModalOpen(false)}
+          examType="reliance"
+          onConfirm={handleCandidateOnboardingConfirm}
+        />
       </div>
     );
   }
@@ -638,7 +715,11 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
                 Reliance Foundation Scholarship Test
               </h2>
               <div className="text-[11px] text-[var(--mos-text-muted)] flex items-center gap-2">
-                <span>Candidate ID: MOS-2026-RF-7842</span>
+                <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                  {candidateProfile?.fullName || 'Candidate'}
+                </span>
+                <span>•</span>
+                <span className="font-mono">{candidateProfile?.rollNumber || 'MOS-2026-RF-7842'}</span>
                 <span className="hidden sm:inline">•</span>
                 <span className="hidden sm:inline">60 MCQs / 60 Mins</span>
               </div>
@@ -695,6 +776,17 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
 
           {/* Live Countdown Timer & Submit Trigger */}
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Fullscreen Button */}
+            <button
+              type="button"
+              onClick={toggleFullscreen}
+              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] text-[var(--mos-text-secondary)] hover:text-[var(--mos-text-primary)] text-xs font-semibold cursor-pointer"
+              title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen CBT Mode'}
+            >
+              {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5 text-emerald-500" />}
+              <span className="text-[11px]">{isFullscreen ? 'Window' : 'Fullscreen'}</span>
+            </button>
+
             <div
               className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl border text-xs sm:text-sm font-mono font-black ${
                 isTimerLow
@@ -1099,8 +1191,46 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
             <span>Official Examination Scorecard</span>
           </div>
 
-          <div className="text-xs font-mono text-[var(--mos-text-muted)]">
-            Submission Recorded: {new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-black dark:bg-slate-800 dark:hover:bg-slate-700 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs print:hidden"
+            >
+              <Printer className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Print / Download PDF Scorecard</span>
+            </button>
+            <div className="text-xs font-mono text-[var(--mos-text-muted)]">
+              {new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+            </div>
+          </div>
+        </div>
+
+        {/* Candidate Information Card */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3.5 rounded-2xl bg-[var(--mos-surface-muted)] border border-[var(--mos-border)] text-xs">
+          <div>
+            <div className="text-[10px] uppercase font-bold text-[var(--mos-text-muted)]">Candidate Name</div>
+            <div className="font-black text-[var(--mos-text-primary)] text-sm mt-0.5">
+              {candidateProfile?.fullName || 'Verified Candidate'}
+            </div>
+          </div>
+          <div>
+            <div className="text-[10px] uppercase font-bold text-[var(--mos-text-muted)]">Candidate Roll No</div>
+            <div className="font-mono font-bold text-[var(--mos-text-primary)] text-xs mt-0.5">
+              {candidateProfile?.rollNumber || 'MOS-2026-RF-7842'}
+            </div>
+          </div>
+          <div>
+            <div className="text-[10px] uppercase font-bold text-[var(--mos-text-muted)]">Exam Pattern</div>
+            <div className="font-semibold text-[var(--mos-text-primary)] text-xs mt-0.5">
+              Reliance UG Scholarship (60 Qs)
+            </div>
+          </div>
+          <div>
+            <div className="text-[10px] uppercase font-bold text-[var(--mos-text-muted)]">Status</div>
+            <div className="font-bold text-emerald-600 dark:text-emerald-400 text-xs mt-0.5">
+              Completed
+            </div>
           </div>
         </div>
 

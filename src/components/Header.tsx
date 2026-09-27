@@ -74,12 +74,13 @@ export const Header: React.FC<HeaderProps> = ({
   /**
    * High-contrast secondary strip navigation items:
    * 1. Feature Hub
-   * 2. Academics
-   * 3. Code Vault
-   * 4. TG Allotments (Name Wise)
-   * 5. AP EAPCET Matrix
-   * 6. Attendance Defender
-   * 7. Study Guides
+   * 2. AI Gap Analyzer
+   * 3. Academics
+   * 4. 🎯 Mock Test Series (NEW)
+   * 5. AP Allotments (Namewise)
+   * 6. TG Allotments (Name Wise)
+   * 7. Attendance Defender
+   * 8. Study Guides
    */
   const primaryModules: NavModuleItem[] = [
     {
@@ -105,12 +106,14 @@ export const Header: React.FC<HeaderProps> = ({
       matchWorkspaces: ['academics', 'gpa', 'backlog'],
     },
     {
-      id: 'tier2-vault',
-      workspace: 'vault',
-      label: 'Code Vault',
-      icon: Terminal,
-      badge: 'Viva',
-      badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+      id: 'tier2-mock-tests',
+      workspace: 'mock-tests',
+      label: '🎯 Mock Test Series',
+      shortLabel: 'Mock Tests',
+      icon: Award,
+      badge: 'NEW',
+      badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+      matchWorkspaces: ['mock-tests', 'eapcet-cbt', 'cbt-mock-test'],
     },
     {
       id: 'tier2-ap-allotments',
@@ -129,12 +132,6 @@ export const Header: React.FC<HeaderProps> = ({
       icon: Award,
       badge: '2026',
       badgeColor: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
-    },
-    {
-      id: 'tier2-eapcet',
-      workspace: 'eapcet',
-      label: 'AP EAPCET Matrix',
-      icon: Flame,
     },
     {
       id: 'tier2-attendance',

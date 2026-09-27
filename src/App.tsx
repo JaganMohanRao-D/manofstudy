@@ -406,6 +406,7 @@ export default function App() {
   const [gpaSubTab, setGpaSubTab] = useState<'gpa' | 'internal'>('gpa');
   const [academicSubTab, setAcademicSubTab] = useState<'attendance' | 'gpa' | 'internal'>('attendance');
   const [eapcetCbtSubTab, setEapcetCbtSubTab] = useState<string>('ap-full');
+  const [isExamActive, setIsExamActive] = useState<boolean>(false);
 
   // Show one respectful support prompt only after a real search result is produced.
   useEffect(() => {
@@ -569,6 +570,21 @@ export default function App() {
         setLegalModal('contact');
       } else if (hash === 'terms') {
         setLegalModal('terms');
+      } else if (
+        hash === 'mock-test-series' ||
+        hash === 'mock-tests' ||
+        hash === 'mock-test' ||
+        hash === 'test-series' ||
+        hash === 'cbt-series'
+      ) {
+        setActiveWorkspace('mock-tests');
+      } else if (
+        hash === 'eapcet-cbt' ||
+        hash === 'ap-cbt' ||
+        hash === 'tg-cbt' ||
+        hash === 'eapcet-test'
+      ) {
+        setActiveWorkspace('eapcet-cbt');
       } else if (hash === 'hub' || hash === '') {
         setActiveWorkspace('hub');
       }
@@ -786,17 +802,23 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[var(--mos-page-bg)] text-[var(--mos-text-primary)] tech-grid-pattern-light flex flex-col justify-between transition-colors duration-200">
       {/* 1. Modern Streamlined Header (Zero Clutter, No Secondary Ribbon) */}
-      <Header
-        activeWorkspace={activeWorkspace}
-        onSelectWorkspace={(ws) => handleSelectWorkspace(ws)}
-        onSelectEapcetPhase={handleSelectEapcetPhase}
-        onOpenLegal={(type) => setLegalModal(type)}
-        onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
-        onOpenSupport={() => setIsSupportModalOpen(true)}
-      />
+      {!isExamActive && (
+        <Header
+          activeWorkspace={activeWorkspace}
+          onSelectWorkspace={(ws) => handleSelectWorkspace(ws)}
+          onSelectEapcetPhase={handleSelectEapcetPhase}
+          onOpenLegal={(type) => setLegalModal(type)}
+          onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+          onOpenSupport={() => setIsSupportModalOpen(true)}
+        />
+      )}
 
       {/* 2. Main Content Container */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-6 flex-1 w-full max-w-full overflow-hidden">
+      <main className={`flex-1 w-full max-w-full overflow-hidden ${
+        isExamActive
+          ? 'p-0 max-w-full'
+          : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-6'
+      }`}>
         
         {/* WHEN ON FEATURE HUB: Clean, Modern Landing Experience */}
         {activeWorkspace === 'hub' ? (
@@ -842,27 +864,29 @@ export default function App() {
         ) : (
           /* WHEN IN AN ACTIVE WORKSPACE: Focused, Single-Tool Workspace View */
           <div className="space-y-4 animate-in fade-in duration-200">
-            {/* Breadcrumb Navigation Header in Normal Document Flow */}
-            <div className="relative w-full mb-4 px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors">
-              <button
-                type="button"
-                onClick={() => handleSelectWorkspace('hub')}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer shadow-2xs group shrink-0 self-start sm:self-auto"
-                title="Return to MAN OF STUDY Feature Hub"
-              >
-                <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
-                <span>← Back to Feature Hub</span>
-              </button>
+            {/* Breadcrumb Navigation Header in Normal Document Flow (hidden during active CBT testing) */}
+            {!isExamActive && (
+              <div className="relative w-full mb-4 px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors">
+                <button
+                  type="button"
+                  onClick={() => handleSelectWorkspace('hub')}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer shadow-2xs group shrink-0 self-start sm:self-auto"
+                  title="Return to MAN OF STUDY Feature Hub"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
+                  <span>← Back to Feature Hub</span>
+                </button>
 
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 overflow-hidden">
-                <span className="hidden sm:inline">Workspace</span>
-                <span className="hidden sm:inline">/</span>
-                <span className="text-slate-900 dark:text-slate-100 font-bold flex items-center gap-1.5 truncate">
-                  {currentDetails.icon}
-                  <span className="truncate">{currentDetails.title}</span>
-                </span>
+                <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 overflow-hidden">
+                  <span className="hidden sm:inline">Workspace</span>
+                  <span className="hidden sm:inline">/</span>
+                  <span className="text-slate-900 dark:text-slate-100 font-bold flex items-center gap-1.5 truncate">
+                    {currentDetails.icon}
+                    <span className="truncate">{currentDetails.title}</span>
+                  </span>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Specific Workspace Views */}
             <section id="workspace-viewport" className="relative min-h-[500px]">
@@ -1034,6 +1058,7 @@ export default function App() {
                   <CbtMockTestEngine
                     onBackToHub={() => handleSelectWorkspace('hub')}
                     onSwitchToEapcet={() => handleSelectWorkspace('eapcet-cbt')}
+                    onExamStatusChange={setIsExamActive}
                   />
                 )}
 
@@ -1052,6 +1077,7 @@ export default function App() {
                     onNavigateToPredictor={(examType) => {
                       handleSelectWorkspace(examType === 'ap' ? 'ap-predictor' : 'tg-predictor');
                     }}
+                    onExamStatusChange={setIsExamActive}
                   />
                 )}
 
@@ -1179,11 +1205,13 @@ export default function App() {
         </div>
       </div>
 
-      {/* Minimalist High-Performance Footer */}
-      <Footer
-        onOpenLegalModal={(type) => setLegalModal(type)}
-        onOpenSupportModal={() => setIsSupportModalOpen(true)}
-      />
+      {/* Minimalist High-Performance Footer (hidden during active CBT testing) */}
+      {!isExamActive && (
+        <Footer
+          onOpenLegalModal={(type) => setLegalModal(type)}
+          onOpenSupportModal={() => setIsSupportModalOpen(true)}
+        />
+      )}
 
       {/* 6. Legal & Contact Modal */}
       {legalModal && (
