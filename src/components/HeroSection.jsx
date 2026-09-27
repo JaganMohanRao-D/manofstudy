@@ -4,6 +4,9 @@ import {
   Database,
   Lock,
   ArrowDown,
+  BookOpen,
+  GraduationCap,
+  FileText,
 } from 'lucide-react';
 import { FeaturesHub } from './FeaturesHub';
 
@@ -32,7 +35,7 @@ export const HeroSection = ({
       <div className="hidden sm:block absolute inset-0 bg-[radial-gradient(#0284c715_1px,transparent_1px)] dark:bg-[radial-gradient(#38bdf80a_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
 
       {/* Hero Header & Value Proposition */}
-      <div className="relative z-10 max-w-4xl mx-auto text-center space-y-5 sm:space-y-6">
+      <div className="relative z-10 max-w-4xl mx-auto text-center space-y-5 sm:space-y-6 mos-hero-content">
         
         {/* Ethos Kicker: Calm, conceptual motto */}
         <div className="mos-hero-kicker inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide bg-slate-100 dark:bg-slate-900/90 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 shadow-xs">
@@ -43,7 +46,7 @@ export const HeroSection = ({
         {/* Primary Headline — product-first, concise, and feature-led */}
         <h1 className="mos-hero-title text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.08] text-center px-2">
           <span>One platform.</span>{' '}
-          <span className="bg-gradient-to-r from-blue-600 via-teal-600 to-emerald-600 dark:from-blue-400 dark:via-teal-300 dark:to-emerald-400 bg-clip-text text-transparent">
+          <span className="mos-hero-gradient-text bg-gradient-to-r from-blue-700 via-teal-700 to-emerald-700 dark:from-blue-400 dark:via-teal-300 dark:to-emerald-400 bg-clip-text text-transparent">
             Everything students need.
           </span>
         </h1>
