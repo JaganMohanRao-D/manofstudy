@@ -54,26 +54,44 @@ export const HeroSection = ({
         </p>
 
         {/* AP + Telangana tools — primary admissions entry points directly under the hero message. */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 max-w-5xl mx-auto pt-1">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-5xl mx-auto pt-1">
           {[
-            { label: 'For AP Students', items: [
-              ['AP Allotments', 'ap-allotments'],
-              ['AP College Predictor', 'ap-predictor'],
-              ['AP Top B.Tech Colleges', 'ap-top-colleges'],
-            ]},
-            { label: 'For Telangana Students', items: [
-              ['TG Allotments', 'tg-allotments'],
-              ['TG College Predictor', 'tg-predictor'],
-              ['TG Top B.Tech Colleges', 'tg-top-colleges'],
-            ]},
+            {
+              label: 'For AP Students',
+              accent: 'from-cyan-500/15 via-blue-500/10 to-transparent',
+              dot: 'bg-cyan-500',
+              items: [
+                ['AP Allotments', 'ap-allotments', 'Search allotments'],
+                ['AP College Predictor', 'ap-predictor', 'Check rank matches'],
+                ['AP Top B.Tech Colleges', 'ap-top-colleges', 'Compare observed ranks'],
+              ],
+            },
+            {
+              label: 'For Telangana Students',
+              accent: 'from-emerald-500/15 via-teal-500/10 to-transparent',
+              dot: 'bg-emerald-500',
+              items: [
+                ['TG Allotments', 'tg-allotments', 'Search allotments'],
+                ['TG College Predictor', 'tg-predictor', 'Check rank matches'],
+                ['TG Top B.Tech Colleges', 'tg-top-colleges', 'Explore observed ranks'],
+              ],
+            },
           ].map((group) => (
-            <div key={group.label} className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/90 dark:bg-slate-900/70 p-3 text-left shadow-sm">
-              <div className="px-2 pb-2 text-[10px] font-black uppercase tracking-[.16em] text-slate-500 dark:text-slate-400">{group.label}</div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                {group.items.map(([label, workspace]) => (
-                  <button key={workspace} type="button" onClick={() => onSelectWorkspace?.(workspace)} className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 px-3 py-2.5 text-left hover:border-cyan-400/60 dark:hover:border-cyan-400/40 hover:-translate-y-0.5 transition-all">
-                    <span className="block text-xs font-bold text-slate-900 dark:text-white">{label}</span>
-                    <span className="block mt-0.5 text-[10px] text-slate-500 dark:text-slate-400">2026 allotment data</span>
+            <div key={group.label} className={`relative overflow-hidden rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-gradient-to-br ${group.accent} bg-white/90 dark:bg-slate-900/85 p-3.5 sm:p-4 text-left shadow-md hover:shadow-xl transition-all duration-300`}>
+              <div className="absolute -right-10 -top-10 w-28 h-28 rounded-full bg-white/50 dark:bg-white/5 blur-2xl" />
+              <div className="relative flex items-center gap-2 px-1 pb-3">
+                <span className={`relative flex h-2.5 w-2.5 rounded-full ${group.dot}`}>
+                  <span className={`absolute inline-flex h-full w-full animate-ping rounded-full ${group.dot} opacity-50`} />
+                </span>
+                <span className="text-[10px] font-black uppercase tracking-[.18em] text-slate-600 dark:text-slate-300">{group.label}</span>
+                <span className="ml-auto text-[9px] font-bold text-slate-400 dark:text-slate-500">2026 DATA</span>
+              </div>
+              <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {group.items.map(([label, workspace, hint]) => (
+                  <button key={workspace} type="button" onClick={() => onSelectWorkspace?.(workspace)} className="group rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white/85 dark:bg-slate-950/65 px-3 py-3 text-left hover:border-cyan-400/70 dark:hover:border-cyan-400/50 hover:-translate-y-1 hover:shadow-lg transition-all duration-200">
+                    <span className="block text-xs font-extrabold text-slate-900 dark:text-white leading-snug">{label}</span>
+                    <span className="block mt-1 text-[10px] font-medium text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300">{hint}</span>
+                    <span className="mt-2 block h-0.5 w-8 rounded-full bg-gradient-to-r from-cyan-500 to-emerald-500 opacity-70 group-hover:w-12 transition-all" />
                   </button>
                 ))}
               </div>
