@@ -21,7 +21,7 @@ export const HeroSection = ({
   return (
     <section
       id="hero-banner"
-      className="relative overflow-hidden bg-white dark:bg-slate-950 text-slate-900 dark:text-white py-10 sm:py-14 lg:py-16 px-4 sm:px-8 border border-slate-200/90 dark:border-slate-800/80 rounded-3xl shadow-lg dark:shadow-2xl space-y-10 sm:space-y-12 min-h-fit break-words transition-colors duration-200"
+      className="relative overflow-hidden mos-hero-premium bg-white dark:bg-slate-950 text-slate-900 dark:text-white py-10 sm:py-14 lg:py-16 px-4 sm:px-8 border border-slate-200/90 dark:border-slate-800/80 rounded-3xl shadow-lg dark:shadow-2xl space-y-10 sm:space-y-12 min-h-fit break-words transition-colors duration-200"
     >
       {/* Background Ambience: Subtle and non-distracting */}
       <div className="hidden sm:block absolute -top-32 left-1/4 w-96 h-96 rounded-full bg-indigo-500/10 dark:bg-indigo-600/10 blur-[120px] pointer-events-none" />
@@ -35,13 +35,13 @@ export const HeroSection = ({
       <div className="relative z-10 max-w-4xl mx-auto text-center space-y-5 sm:space-y-6">
         
         {/* Ethos Kicker: Calm, conceptual motto */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide bg-slate-100 dark:bg-slate-900/90 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 shadow-xs">
+        <div className="mos-hero-kicker inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide bg-slate-100 dark:bg-slate-900/90 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 shadow-xs">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 shrink-0" />
           <span>Of the student, by the student, for the student</span>
         </div>
 
         {/* Primary Headline — product-first, concise, and feature-led */}
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.08] text-center px-2">
+        <h1 className="mos-hero-title text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.08] text-center px-2">
           <span>One platform.</span>{' '}
           <span className="bg-gradient-to-r from-blue-600 via-teal-600 to-emerald-600 dark:from-blue-400 dark:via-teal-300 dark:to-emerald-400 bg-clip-text text-transparent">
             Everything students need.
@@ -49,7 +49,7 @@ export const HeroSection = ({
         </h1>
 
         {/* Supporting Text */}
-        <p className="text-base sm:text-lg lg:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed font-normal px-2">
+        <p className="mos-hero-subtitle text-base sm:text-lg lg:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed font-normal px-2">
           Admissions, academics, career roadmaps, AI guidance, PDF tools and everyday student utilities — all in one place.
         </p>
 
