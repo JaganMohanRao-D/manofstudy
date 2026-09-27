@@ -202,7 +202,7 @@ export const SlideOverDrawer = ({
                       <span className="text-[9px] bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300 border border-amber-200 dark:border-amber-500/30 px-1.5 py-0.2 rounded font-mono font-semibold">LIVE</span>
                     </div>
                     <div className="text-[10px] text-slate-600 dark:text-slate-400 leading-normal mt-0.5">
-                      College branch cutoffs, vacant seat matrix &amp; fee tier checker
+                      College branch cutoffs, vacant seat allotment &amp; fee tier checker
                     </div>
                   </div>
                 </div>

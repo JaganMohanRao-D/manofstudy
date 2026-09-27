@@ -138,6 +138,14 @@ export const CATEGORY_LABELS: Record<string, string> = {
 // Computer science allied branches for quick grouped search
 export const CS_ALLIED_BRANCHES = ['CSE', 'CSM', 'CSD', 'CSC', 'INF', 'AID', 'AIM', 'CSB', 'CSO', 'CSA', 'CIC', 'CSN', 'CSW', 'CSI', 'CSG'];
 
+export const TG_SPECIAL_CATEGORIES = [
+  { id: 'NONE', label: 'None / General (Default)' },
+  { id: 'PWD', label: 'PWD / PH (Persons with Disabilities)' },
+  { id: 'NCC', label: 'NCC (National Cadet Corps)' },
+  { id: 'CAP', label: 'CAP (Children of Armed Personnel)' },
+  { id: 'SPORTS', label: 'Sports Quota' },
+];
+
 export const DISTRICT_OPTIONS = [
   'All Districts',
   'Hyderabad / Ranga Reddy / Medchal',
@@ -207,9 +215,34 @@ export async function runPredictorAnalysis(input: PredictorStudentInput): Promis
       let statsObj: { min: number; max: number; cnt: number; med: number } | null = null;
       let quotaDesc = `${category} (${gender === 'F' ? 'Girls Quota + General' : 'General/Boys Pool'})`;
 
-      if (specialQuota && branchData.specials && branchData.specials[specialQuota]) {
-        statsObj = branchData.specials[specialQuota];
-        quotaDesc = `${specialQuota} Special Reservation Quota`;
+      if (specialQuota && branchData.specials) {
+        if (specialQuota === 'PWD') {
+          statsObj =
+            branchData.specials['PWD'] ||
+            branchData.specials['PH'] ||
+            branchData.specials['PHO'] ||
+            branchData.specials['PHH'] ||
+            branchData.specials['PHV'] ||
+            branchData.specials['PHC'] ||
+            null;
+          quotaDesc = 'PWD / PH Special Reservation Quota';
+        } else if (specialQuota === 'SPORTS') {
+          statsObj =
+            branchData.specials['SPORTS'] ||
+            branchData.specials['SG'] ||
+            branchData.specials['SP'] ||
+            null;
+          quotaDesc = 'Sports Quota Special Reservation';
+        } else if (specialQuota === 'NCC') {
+          statsObj = branchData.specials['NCC'] || null;
+          quotaDesc = 'NCC Special Reservation Quota';
+        } else if (specialQuota === 'CAP') {
+          statsObj = branchData.specials['CAP'] || null;
+          quotaDesc = 'CAP Special Reservation Quota';
+        } else if (branchData.specials[specialQuota]) {
+          statsObj = branchData.specials[specialQuota];
+          quotaDesc = `${specialQuota} Special Reservation Quota`;
+        }
       } else if (branchData.stats && branchData.stats[key]) {
         statsObj = branchData.stats[key];
       }

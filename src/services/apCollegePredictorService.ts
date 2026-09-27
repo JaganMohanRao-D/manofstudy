@@ -108,11 +108,11 @@ export const AP_REGION_OPTIONS = [
 ];
 
 export const AP_SPECIAL_CATEGORIES = [
-  { id: 'NONE', label: 'None (General Standard Quota)' },
+  { id: 'NONE', label: 'None / General (Default)' },
   { id: 'PWD', label: 'PWD / PH (Persons with Disabilities)' },
   { id: 'NCC', label: 'NCC (National Cadet Corps)' },
   { id: 'CAP', label: 'CAP (Children of Armed Personnel)' },
-  { id: 'SPORTS', label: 'Sports & Games Quota' },
+  { id: 'SPORTS', label: 'Sports Quota' },
 ];
 
 export const AP_CS_ALLIED_BRANCHES = [

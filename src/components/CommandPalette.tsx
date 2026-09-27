@@ -194,7 +194,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       {
         id: 'tool-eapcet-radar',
         title: 'AP EAPCET Phase 2 Vacancy Radar',
-        subtitle: 'Live leftover seats, college intake matrix & official branch fees',
+        subtitle: 'Live leftover seats, college intake metrics & official branch fees',
         category: 'Core Tools',
         badge: 'Counselling',
         icon: <Flame className="w-4 h-4 text-rose-500" />,

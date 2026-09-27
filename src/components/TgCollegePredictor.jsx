@@ -40,7 +40,8 @@ import {
   getPredictorIndex,
   CATEGORY_LABELS,
   DISTRICT_OPTIONS,
-  CS_ALLIED_BRANCHES
+  CS_ALLIED_BRANCHES,
+  TG_SPECIAL_CATEGORIES
 } from '../services/tgCollegePredictorService';
 import { TG_EAPCET_COLLEGE_MANIFEST } from '../data/tgEapcetCollegeManifest';
 import { getPredictorVerdict } from '../utils/predictorLocalization';
@@ -63,16 +64,7 @@ export const BASE_SOCIAL_CATEGORIES = [
 ];
 
 // Special Reservation Quotas
-export const SPECIAL_RESERVATION_OPTIONS = [
-  { id: 'NONE', label: 'None (Standard Category Seats)' },
-  { id: 'NCC', label: 'NCC (National Cadet Corps)' },
-  { id: 'SPORTS', label: 'SPORTS / SG (Sports & Games)' },
-  { id: 'CAP', label: 'CAP (Children of Armed Personnel / Defense)' },
-  { id: 'PHO', label: 'PHO (Orthopedically / Locomotor Impaired)' },
-  { id: 'PHH', label: 'PHH (Hearing Impaired)' },
-  { id: 'PHV', label: 'PHV (Visual Impaired)' },
-  { id: 'PHC', label: 'PHC / PHA / PHM (Multiple / Autism / Speech)' },
-];
+export const SPECIAL_RESERVATION_OPTIONS = TG_SPECIAL_CATEGORIES;
 
 // Curated list of all 37 branches in 2026 dataset
 export const ALL_BRANCH_OPTIONS = [
@@ -488,7 +480,50 @@ export default function TgCollegePredictor({ onNavigateToAllotment }) {
                   </div>
                 </div>
 
-                {/* Collapsible "More filters" */}
+                {/* Explicit Special Category Reservation Section */}
+                <div className="space-y-2 pt-3 border-t border-slate-800/80">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                      <Award className="w-3.5 h-3.5 text-blue-400" />
+                      <span>Special Category Reservation</span>
+                    </label>
+                    <span className="text-[11px] text-slate-400 font-medium">
+                      {selectedSpecialQuota === 'NONE'
+                        ? 'Comparing pure general merit & caste quotas'
+                        : `Evaluating sub-quota: ${selectedSpecialQuota}`}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {SPECIAL_RESERVATION_OPTIONS.map((opt) => {
+                      const isSelected = selectedSpecialQuota === opt.id;
+                      return (
+                        <button
+                          key={opt.id}
+                          type="button"
+                          onClick={() => setSelectedSpecialQuota(opt.id)}
+                          className={`px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 border ${
+                            isSelected
+                              ? 'bg-blue-600 text-white border-blue-500 shadow-xs'
+                              : 'bg-slate-950 text-slate-300 border-slate-800 hover:border-slate-700 hover:bg-slate-900'
+                          }`}
+                        >
+                          <span
+                            className={`w-3.5 h-3.5 rounded-full flex items-center justify-center border text-[9px] ${
+                              isSelected
+                                ? 'border-white bg-white text-blue-600 font-black'
+                                : 'border-slate-600 bg-transparent text-transparent'
+                            }`}
+                          >
+                            ✓
+                          </span>
+                          <span>{opt.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Collapsible "More filters" (District & College Search) */}
                 <div className="pt-2 border-t border-slate-800/80">
                   <button
                     type="button"
@@ -496,7 +531,7 @@ export default function TgCollegePredictor({ onNavigateToAllotment }) {
                     className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition-colors"
                   >
                     <SlidersHorizontal className="w-3.5 h-3.5 text-blue-400" />
-                    <span>{showMoreFilters ? 'Hide advanced filters' : 'More filters (District, Specific College, Special Quotas)'}</span>
+                    <span>{showMoreFilters ? 'Hide location & college filters' : 'More filters (District & Specific College Search)'}</span>
                     {showMoreFilters ? (
                       <ChevronUp className="w-3.5 h-3.5 text-slate-500" />
                     ) : (
@@ -505,7 +540,7 @@ export default function TgCollegePredictor({ onNavigateToAllotment }) {
                   </button>
 
                   {showMoreFilters && (
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-3 mt-2 bg-slate-950/60 p-4 rounded-xl border border-slate-800/60 animate-in fade-in duration-200">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 mt-2 bg-slate-950/60 p-4 rounded-xl border border-slate-800/60 animate-in fade-in duration-200">
                       {/* District / Location */}
                       <div className="space-y-1.5">
                         <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
@@ -538,25 +573,6 @@ export default function TgCollegePredictor({ onNavigateToAllotment }) {
                           placeholder="e.g. CBIT, VNR, JNTU, OU"
                           className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white placeholder:text-slate-500"
                         />
-                      </div>
-
-                      {/* Special Quota */}
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                          <Award className="w-3.5 h-3.5 text-slate-400" />
-                          Special Reservation Quota
-                        </label>
-                        <select
-                          value={selectedSpecialQuota}
-                          onChange={(e) => setSelectedSpecialQuota(e.target.value)}
-                          className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white"
-                        >
-                          {SPECIAL_RESERVATION_OPTIONS.map(opt => (
-                            <option key={opt.id} value={opt.id}>
-                              {opt.label}
-                            </option>
-                          ))}
-                        </select>
                       </div>
                     </div>
                   )}

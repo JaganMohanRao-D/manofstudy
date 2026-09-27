@@ -1,7 +1,7 @@
 /**
  * AP & TG College Predictor Localization & Dynamic Salutation Engine
  * Strict native Telugu script (తెలుగు లిపి) with dynamic gender-based addressing (Bro vs Sister / బ్రో vs సిస్టర్).
- * Zero Teenglish / Latin transliteration allowed.
+ * Absolutely ZERO Teenglish / Latin transliteration allowed in Telugu text.
  */
 
 export type GenderInput = 'Male' | 'Female' | 'M' | 'F' | string;
@@ -109,6 +109,6 @@ export function getPredictorVerdict(
     salutationEn,
     salutationTe,
     englishText: `Seat allotment unlikely. Don't lose hope, ${salutationEn}... let's explore other great colleges! 🫂`,
-    teluguText: `ఈ college lo సీటు రావడం కాస్త కష్టమే ${salutationTe}... బాధపడకండి, ఇతర మంచి ఆప్షన్లను చూద్దాం 🥺`,
+    teluguText: `ఈ కాలేజీలో సీటు రావడం కాస్త కష్టమే ${salutationTe}... బాధపడకండి, ఇతర మంచి ఆప్షన్లను చూద్దాం 🥺`,
   };
 }

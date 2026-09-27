@@ -235,7 +235,7 @@ export const ApEapcetRadar: React.FC<ApEapcetRadarProps> = ({ onNavigateToCbt })
       )
       .join('\n');
 
-    const message = `🎓 *AP EAPCET Phase 2 Leftover Seat Vacancies*\n\n🏫 *${college.inst_name}* (Code: *${college.inst_code}*)\n📍 ${college.place}, ${college.district} (${college.affiliated_to})\n\n📊 *Branch Vacancies:*\n${branchesText}\n\n🔍 Check live AP EAPCET Phase 2 college matrix on MAN OF STUDY:\n${window.location.origin}/#eapcet-radar`;
+    const message = `🎓 *AP EAPCET Phase 2 Leftover Seat Vacancies*\n\n🏫 *${college.inst_name}* (Code: *${college.inst_code}*)\n📍 ${college.place}, ${college.district} (${college.affiliated_to})\n\n📊 *Branch Vacancies:*\n${branchesText}\n\n🔍 Check live AP EAPCET Phase 2 college vacancies on MAN OF STUDY:\n${window.location.origin}/#eapcet-radar`;
 
     const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
@@ -268,7 +268,7 @@ export const ApEapcetRadar: React.FC<ApEapcetRadarProps> = ({ onNavigateToCbt })
               </span>
             </div>
             <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 max-w-2xl">
-              Live college seat vacancy matrix and leftover branch seats across Andhra Pradesh institutions.
+              Live college seat vacancies and leftover branch seats across Andhra Pradesh institutions.
             </p>
           </div>
         </div>
