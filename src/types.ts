@@ -3,6 +3,7 @@ export type WorkspaceView =
   | 'eapcet'
   | 'ap-allotments'
   | 'ap-predictor'
+  | 'ap-top-colleges'
   | 'tg-allotments'
   | 'tg-top-colleges'
   | 'tg-predictor'
@@ -28,6 +29,7 @@ export type WorkspaceView =
 export type ToolTab = 
   | 'ap-allotments'
   | 'ap-predictor'
+  | 'ap-top-colleges'
   | 'eapcet-radar'
   | 'tg-allotments'
   | 'tg-top-colleges'
