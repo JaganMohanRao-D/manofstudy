@@ -94,6 +94,12 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
       setSearchResults(records);
       setTotalMatches(records.length);
       setHasSearched(true);
+
+      if (searchMode === 'name' && records.length > 0) {
+        window.dispatchEvent(new CustomEvent('mos:tool-result-ready', {
+          detail: { tool: 'ap-name-search', resultCount: records.length },
+        }));
+      }
     } catch (err) {
       console.warn('Search failed:', err);
       setSearchResults([]);
