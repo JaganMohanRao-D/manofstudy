@@ -17,7 +17,8 @@ import {
   ArrowRight,
   ChevronRight,
   Briefcase,
-  CheckCircle2
+  CheckCircle2,
+  MapPin
 } from 'lucide-react';
 
 /**
@@ -298,6 +299,27 @@ export const FeaturesHub = ({
     ? WORKSPACES
     : WORKSPACES.filter((w) => w.category === selectedCategory);
 
+  const regionalGroups = [
+    {
+      title: 'FOR TELANGANA STUDENTS',
+      subtitle: 'EAPCET allotments, college discovery and rank-based context for Telangana.',
+      tools: [
+        { workspace: 'tg-allotments', title: 'TG Namewise Allotments', description: 'Search 2026 candidate allotments and inspect college, branch and category details.', icon: Database },
+        { workspace: 'tg-predictor', title: 'TG College Predictor', description: 'Explore historical allotment patterns around your rank and preferences.', icon: Compass },
+        { workspace: 'tg-top-colleges', title: 'Top B.Tech Colleges in Telangana', description: 'Compare observed 2026 branch-wise rank patterns with transparent methodology.', icon: Award },
+      ],
+    },
+    {
+      title: 'FOR AP STUDENTS',
+      subtitle: 'AP EAPCET 2025 & 2026 allotment exploration and rank-based analysis.',
+      tools: [
+        { workspace: 'ap-allotments', title: 'AP Namewise Allotments', description: 'Choose 2025 or 2026, then explore districts, colleges, branches and candidates.', icon: Database },
+        { workspace: 'ap-predictor', title: 'AP College Predictor', description: 'Match your rank against the available AP EAPCET 2026 allotment records.', icon: Compass },
+        { workspace: 'ap-top-colleges', title: 'AP Top B.Tech Colleges — Observed Ranks', description: 'Explore 2026 branch-wise highest, median and last observed OC ranks.', icon: Award },
+      ],
+    },
+  ];
+
   return (
     <div className="space-y-6 sm:space-y-8">
       
@@ -396,6 +418,41 @@ export const FeaturesHub = ({
           })}
         </div>
       </div>
+
+      {/* Regional admission hubs */}
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {regionalGroups.map((group) => (
+          <section key={group.title} className="relative overflow-hidden rounded-[1.75rem] border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 p-4 sm:p-5 shadow-lg">
+            <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-cyan-400/10 blur-3xl" />
+            <div className="relative">
+              <div className="flex items-start justify-between gap-3 mb-4">
+                <div>
+                  <span className="text-[10px] font-black uppercase tracking-[.16em] text-cyan-600 dark:text-cyan-300">{group.title}</span>
+                  <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">{group.subtitle}</p>
+                </div>
+                <MapPin className="w-5 h-5 text-cyan-500 shrink-0" />
+              </div>
+              <div className="space-y-2.5">
+                {group.tools.map((tool) => {
+                  const Icon = tool.icon;
+                  return (
+                    <button key={tool.workspace} type="button" onClick={() => onSelectWorkspace && onSelectWorkspace(tool.workspace)} className="w-full text-left group rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/50 hover:border-cyan-400/50 hover:bg-cyan-50/60 dark:hover:bg-cyan-500/5 p-3.5 transition-all duration-200 hover:-translate-y-0.5">
+                      <div className="flex items-center gap-3">
+                        <span className="w-10 h-10 rounded-xl grid place-items-center bg-cyan-500/10 text-cyan-600 dark:text-cyan-300 border border-cyan-500/20 shrink-0"><Icon className="w-4 h-4" /></span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-sm font-black text-slate-900 dark:text-white">{tool.title}</span>
+                          <span className="block mt-0.5 text-[11px] leading-5 text-slate-500 dark:text-slate-400">{tool.description}</span>
+                        </span>
+                        <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-cyan-500 group-hover:translate-x-0.5 transition-all shrink-0" />
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        ))}
+      </section>
 
       {/* 3. Category Filter Tabs */}
       <div className="space-y-3 pt-2">
