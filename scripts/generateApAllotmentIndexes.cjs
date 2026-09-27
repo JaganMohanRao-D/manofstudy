@@ -106,7 +106,7 @@ function processYear(year, dir) {
       b.maxRank = Math.max(b.maxRank, x.rank);
       if (x.phase) b.phases.add(x.phase);
       if (x.category) b.categories.add(x.category);
-      candidates.push([x.rank, x.name, x.gender, x.category, x.region, x.allottedCategory, x.phase, x.collegeCode, x.branchCode]);
+      candidates.push([x.rank, x.name, x.gender, x.category, x.region, x.allottedCategory, x.phase, x.collegeCode, x.branchCode, String(r.roll_no ?? r.hall_ticket ?? r.hallTicket ?? '')]);
     };
 
     if (year === '2026') {
