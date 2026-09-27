@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { X, UserRound, GraduationCap, MapPin, WalletCards, Hash, Database } from 'lucide-react';
+import { X, UserRound, GraduationCap, MapPin, WalletCards, Database } from 'lucide-react';
 import { AllotmentRecord, AllotmentYear } from '../../services/apEapcetAllotmentService';
 
 interface APStudentDetailModalProps {
@@ -75,7 +75,7 @@ export const APStudentDetailModal: React.FC<APStudentDetailModalProps> = ({ stud
             <Detail label="District" value={student.district} icon={MapPin} />            <Detail label="With fee reimbursement" value={fee(student.fee_with_exemption)} icon={WalletCards} />
             <Detail label="Actual tuition fee" value={fee(student.fee_with_no_exemption)} icon={WalletCards} />
             <Detail label="Total seats" value={student.total_seats} icon={Database} />
-            <Detail label="Left-over seats" value={student.left_over_seats} icon={Database} />            <Detail label="Roll field (blurred)" value={student.roll_no_blurred} icon={Hash} />
+            <Detail label="Left-over seats" value={student.left_over_seats} icon={Database} />
           </div>
           <div className="mt-4 rounded-2xl border border-cyan-500/15 bg-cyan-500/5 p-4 text-xs leading-5 text-slate-500 dark:text-slate-400">
             <strong className="text-cyan-600 dark:text-cyan-300">Source note:</strong> Values above are shown from the selected AP EAPCET {year} allotment record. Missing fields are omitted rather than invented.
