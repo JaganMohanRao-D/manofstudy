@@ -328,16 +328,34 @@ function processYear(year, dir) {
         };
       }
 
+      const branchValues = Array.from(college.branches.values());
+      const allOcRanks = branchValues.flatMap((branch) => branch.ocRanks);
+      const allBranchMetrics = makeMetrics(allOcRanks, college.allRanks, []);
+
+      // For an all-branches view, seat capacity is the sum of each branch's
+      // latest observed seat snapshot rather than the mode of raw records.
+      const branchSeatStats = branchValues
+        .map((branch) => seatStats(branch.seatSnapshots))
+        .filter(Boolean);
+      if (branchSeatStats.length) {
+        const totalSeats = branchSeatStats.reduce((sum, item) => sum + item.totalSeats, 0);
+        const filledSeats = branchSeatStats.reduce((sum, item) => sum + item.filledSeats, 0);
+        const remainingSeats = branchSeatStats.reduce((sum, item) => sum + item.remainingSeats, 0);
+        allBranchMetrics.seatStats = {
+          totalSeats,
+          filledSeats,
+          remainingSeats,
+          fillRatePercent: totalSeats ? Number(((filledSeats / totalSeats) * 100).toFixed(1)) : 0,
+          latestPhase: Math.max(...branchSeatStats.map((item) => item.latestPhase)),
+        };
+      }
+
       return {
         collegeCode: college.collegeCode,
         collegeName: college.collegeName,
         district: college.district,
         branches,
-        allBranches: makeMetrics(college.branches.size
-          ? Array.from(college.branches.values()).flatMap((branch) => branch.ocRanks)
-          : [],
-          college.allRanks,
-          college.allSeatSnapshots),
+        allBranches: allBranchMetrics,
       };
     }).filter((college) => Object.keys(college.branches).length > 0)
       .sort((a, b) => a.collegeCode.localeCompare(b.collegeCode));
