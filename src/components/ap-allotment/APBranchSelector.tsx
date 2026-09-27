@@ -64,7 +64,7 @@ export const APBranchSelector: React.FC<APBranchSelectorProps> = ({
             Select Branch / ఇంజనీరింగ్ బ్రాంచ్
           </span>
           <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
-            {branches.length} Branches in this College
+            {branches.length} {totalCollegeRecords > 0 ? 'Branches in selected college' : 'Branches available'}
           </span>
         </label>
 
@@ -142,7 +142,7 @@ export const APBranchSelector: React.FC<APBranchSelectorProps> = ({
                   <span className="font-bold">All Branches in College</span>
                 </div>
                 <span className="text-[10px] text-slate-400 font-mono">
-                  {totalCollegeRecords} seats
+                  {totalCollegeRecords > 0 ? `${totalCollegeRecords.toLocaleString()} seats` : 'Statewide dataset'}
                 </span>
               </button>
 
@@ -198,7 +198,7 @@ export const APBranchSelector: React.FC<APBranchSelectorProps> = ({
                 : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
             }`}
           >
-            All Branches ({totalCollegeRecords})
+            All Branches{totalCollegeRecords > 0 ? ` (${totalCollegeRecords.toLocaleString()})` : ''}
           </button>
           {branches.map((b) => (
             <button
