@@ -365,16 +365,16 @@ export const InternshipsRadar: React.FC = () => {
         </div>
       </section>
 
-      <section className="sticky top-2 z-20 rounded-2xl border border-slate-200/10 bg-slate-950/90 p-3 shadow-xl backdrop-blur-xl">
+      <section className="sticky top-2 z-20 rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface)]/95 p-3 shadow-xl backdrop-blur-xl">
         <div className="flex flex-col gap-3">
           <div className="relative">
-            <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
+            <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-[var(--mos-text-muted)]" />
             <input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search Google, AICTE, Microsoft, ISRO, CSE, remote..."
               aria-label="Search internships"
-              className="w-full rounded-xl border border-slate-800 bg-slate-900 py-3 pl-10 pr-4 text-sm text-white outline-none placeholder:text-slate-500 focus:border-emerald-400/50 focus:ring-2 focus:ring-emerald-400/10"
+              className="w-full rounded-xl border border-[var(--mos-input-border)] bg-[var(--mos-input-bg)] py-3 pl-10 pr-4 text-sm text-[var(--mos-text-primary)] outline-none placeholder:text-[var(--mos-text-muted)] focus:border-emerald-400/50 focus:ring-2 focus:ring-emerald-400/10"
             />
           </div>
           <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
@@ -386,9 +386,9 @@ export const InternshipsRadar: React.FC = () => {
                   key={track.id}
                   type="button"
                   onClick={() => setSelectedTrack(track.id)}
-                  className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-all ${active
-                    ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/10'
-                    : 'bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-white border border-slate-800'}`}
+                  className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-all cursor-pointer ${active
+                    ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/10'
+                    : 'bg-[var(--mos-surface-muted)] text-[var(--mos-text-secondary)] hover:bg-[var(--mos-border)] hover:text-[var(--mos-text-primary)] border border-[var(--mos-border)]'}`}
                 >
                   <Icon className="h-3.5 w-3.5" />
                   {track.label}
@@ -401,95 +401,95 @@ export const InternshipsRadar: React.FC = () => {
 
       <div className="flex items-center justify-between gap-3 px-1">
         <div>
-          <p className="text-sm font-bold text-white">{filteredInternships.length} opportunities</p>
-          <p className="text-[11px] text-slate-500">Programme details can change; official posting is the final source of truth.</p>
+          <p className="text-sm font-bold text-[var(--mos-text-primary)]">{filteredInternships.length} opportunities</p>
+          <p className="text-[11px] text-[var(--mos-text-muted)]">Programme details can change; official posting is the final source of truth.</p>
         </div>
-        <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-slate-500">
+        <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-[var(--mos-text-muted)]">
           <Filter className="h-3.5 w-3.5" /> Filtered live in the browser
         </div>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
         {filteredInternships.map((intern) => (
-          <article key={intern.id} className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-800 bg-slate-900 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-400/30 hover:shadow-emerald-950/20">
+          <article key={intern.id} className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-[var(--mos-border)] bg-[var(--mos-surface)] shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/30 hover:shadow-emerald-950/10">
             <div className="p-5 sm:p-6">
               <div className="flex items-start justify-between gap-3">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2.5 py-1 text-[10px] font-bold text-emerald-300">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2.5 py-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-300">
                   <BadgeCheck className="h-3 w-3" /> {intern.trackLabel}
                 </span>
-                <span className="inline-flex items-center gap-1 rounded-full border border-slate-700 bg-slate-950/60 px-2.5 py-1 text-[10px] font-semibold text-slate-400">
+                <span className="inline-flex items-center gap-1 rounded-full border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-2.5 py-1 text-[10px] font-semibold text-[var(--mos-text-muted)]">
                   <Clock3 className="h-3 w-3" /> {intern.status}
                 </span>
               </div>
 
-              <h3 className="mt-4 text-lg sm:text-xl font-extrabold leading-snug tracking-tight text-white">
+              <h3 className="mt-4 text-lg sm:text-xl font-extrabold leading-snug tracking-tight text-[var(--mos-text-primary)]">
                 {intern.name}
               </h3>
-              <p className="mt-1 flex items-start gap-1.5 text-xs font-semibold leading-5 text-slate-400">
-                <Building2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-500" />
+              <p className="mt-1 flex items-start gap-1.5 text-xs font-semibold leading-5 text-[var(--mos-text-muted)]">
+                <Building2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--mos-text-muted)]" />
                 {intern.provider}
               </p>
 
-              <p className="mt-4 text-sm leading-6 text-slate-300">{intern.description}</p>
+              <p className="mt-4 text-sm leading-6 text-[var(--mos-text-secondary)]">{intern.description}</p>
 
               <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-3.5">
-                  <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                    <IndianRupee className="h-3.5 w-3.5 text-emerald-400" /> Stipend
+                <div className="rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] p-3.5">
+                  <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--mos-text-muted)]">
+                    <IndianRupee className="h-3.5 w-3.5 text-emerald-500 dark:text-emerald-400" /> Stipend
                   </div>
-                  <p className="mt-1.5 text-xs font-bold leading-5 text-emerald-300">{intern.stipend}</p>
+                  <p className="mt-1.5 text-xs font-bold leading-5 text-emerald-600 dark:text-emerald-300">{intern.stipend}</p>
                 </div>
-                <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-3.5">
-                  <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                    <GraduationCap className="h-3.5 w-3.5 text-cyan-400" /> Year fit
+                <div className="rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] p-3.5">
+                  <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--mos-text-muted)]">
+                    <GraduationCap className="h-3.5 w-3.5 text-cyan-500 dark:text-cyan-400" /> Year fit
                   </div>
-                  <p className="mt-1.5 text-xs font-bold leading-5 text-slate-200">{intern.yearFit}</p>
+                  <p className="mt-1.5 text-xs font-bold leading-5 text-[var(--mos-text-primary)]">{intern.yearFit}</p>
                 </div>
               </div>
 
-              <div className="mt-2.5 rounded-2xl border border-slate-800 bg-slate-950/40 p-3.5">
+              <div className="mt-2.5 rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] p-3.5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                      <CalendarDays className="h-3.5 w-3.5 text-cyan-400" /> Application window
+                    <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--mos-text-muted)]">
+                      <CalendarDays className="h-3.5 w-3.5 text-cyan-500 dark:text-cyan-400" /> Application window
                     </p>
-                    <p className="mt-1 text-xs leading-5 text-slate-300">{intern.applicationWindow}</p>
+                    <p className="mt-1 text-xs leading-5 text-[var(--mos-text-secondary)]">{intern.applicationWindow}</p>
                   </div>
                   <div>
-                    <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                      <ArrowUpRight className="h-3.5 w-3.5 text-amber-300" /> Selection
+                    <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--mos-text-muted)]">
+                      <ArrowUpRight className="h-3.5 w-3.5 text-amber-500 dark:text-amber-300" /> Selection
                     </p>
-                    <p className="mt-1 text-xs leading-5 text-slate-300">{intern.selectionProcess}</p>
+                    <p className="mt-1 text-xs leading-5 text-[var(--mos-text-secondary)]">{intern.selectionProcess}</p>
                   </div>
                 </div>
               </div>
 
               <div className="mt-4">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Eligibility</p>
-                <p className="mt-1 text-xs leading-5 text-slate-300">{intern.eligibility}</p>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--mos-text-muted)]">Eligibility</p>
+                <p className="mt-1 text-xs leading-5 text-[var(--mos-text-secondary)]">{intern.eligibility}</p>
               </div>
 
               <div className="mt-4 flex flex-wrap gap-1.5">
                 {intern.verifiedBadges.map((badge) => (
-                  <span key={badge} className="inline-flex items-center gap-1 rounded-full border border-slate-700 bg-slate-800/70 px-2.5 py-1 text-[10px] font-semibold text-slate-300">
-                    <CheckCircle2 className="h-3 w-3 text-emerald-400" /> {badge}
+                  <span key={badge} className="inline-flex items-center gap-1 rounded-full border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-2.5 py-1 text-[10px] font-semibold text-[var(--mos-text-secondary)]">
+                    <CheckCircle2 className="h-3 w-3 text-emerald-500 dark:text-emerald-400" /> {badge}
                   </span>
                 ))}
               </div>
             </div>
 
-            <div className="mt-auto border-t border-slate-800 bg-slate-950/40 p-4 sm:p-5">
+            <div className="mt-auto border-t border-[var(--mos-border)] bg-[var(--mos-surface-muted)]/50 p-4 sm:p-5">
               <div className="mb-3 flex items-center justify-between gap-3">
-                <span className="text-[10px] font-semibold text-slate-500">Source: {intern.officialSource}</span>
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-slate-400">
-                  <ShieldCheck className="h-3 w-3 text-emerald-400" /> Source-linked
+                <span className="text-[10px] font-semibold text-[var(--mos-text-muted)]">Source: {intern.officialSource}</span>
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[var(--mos-text-secondary)]">
+                  <ShieldCheck className="h-3 w-3 text-emerald-500 dark:text-emerald-400" /> Source-linked
                 </span>
               </div>
               <a
                 href={intern.applyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 py-3 text-xs font-extrabold text-slate-950 transition hover:bg-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-300/50"
+                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-4 py-3 text-xs font-extrabold text-white transition focus:outline-none focus:ring-2 focus:ring-emerald-300/50 cursor-pointer"
               >
                 Visit Official / Application Page
                 <ExternalLink className="h-4 w-4" />
@@ -500,19 +500,19 @@ export const InternshipsRadar: React.FC = () => {
       </div>
 
       {filteredInternships.length === 0 && (
-        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-10 text-center">
-          <Search className="mx-auto h-9 w-9 text-slate-600" />
-          <h3 className="mt-3 text-sm font-bold text-white">No matching opportunities</h3>
-          <p className="mt-1 text-xs text-slate-500">Try a company, domain, programme or branch keyword.</p>
+        <div className="rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface)] p-10 text-center">
+          <Search className="mx-auto h-9 w-9 text-[var(--mos-text-muted)]" />
+          <h3 className="mt-3 text-sm font-bold text-[var(--mos-text-primary)]">No matching opportunities</h3>
+          <p className="mt-1 text-xs text-[var(--mos-text-muted)]">Try a company, domain, programme or branch keyword.</p>
         </div>
       )}
 
-      <section className="rounded-2xl border border-slate-800 bg-slate-900 p-5 sm:p-6">
+      <section className="rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface)] p-5 sm:p-6 shadow-xs">
         <div className="flex items-start gap-3">
-          <BookOpen className="mt-0.5 h-5 w-5 shrink-0 text-cyan-400" />
+          <BookOpen className="mt-0.5 h-5 w-5 shrink-0 text-cyan-500 dark:text-cyan-400" />
           <div>
-            <h2 className="text-sm font-bold text-white">How Man of Study verifies this directory</h2>
-            <p className="mt-1 text-xs sm:text-sm leading-6 text-slate-400">
+            <h2 className="text-sm font-bold text-[var(--mos-text-primary)]">How Man of Study verifies this directory</h2>
+            <p className="mt-1 text-xs sm:text-sm leading-6 text-[var(--mos-text-secondary)]">
               Entries are linked to an official government, company or programme website. For marketplaces such as Unstop and Prosple,
               the platform itself is separated from government/company programmes and each employer listing should still be checked independently.
               Deadlines, stipend amounts and eligibility can change, so the live source always wins.

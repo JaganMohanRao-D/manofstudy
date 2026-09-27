@@ -2,6 +2,22 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --color-mos-page-bg: var(--mos-page-bg);
+  --color-mos-surface: var(--mos-surface);
+  --color-mos-surface-raised: var(--mos-surface-raised);
+  --color-mos-surface-muted: var(--mos-surface-muted);
+  --color-mos-text-primary: var(--mos-text-primary);
+  --color-mos-text-secondary: var(--mos-text-secondary);
+  --color-mos-text-muted: var(--mos-text-muted);
+  --color-mos-border: var(--mos-border);
+  --color-mos-border-strong: var(--mos-border-strong);
+  --color-mos-primary: var(--mos-primary);
+  --color-mos-accent: var(--mos-accent);
+  --color-mos-input-bg: var(--mos-input-bg);
+  --color-mos-input-border: var(--mos-input-border);
+}
+
 @layer base {
   :root {
     --mos-page-bg: #F5F7FB;
@@ -24,6 +40,21 @@
     --mos-input-border: #CBD5E1;
     --mos-shadow: rgba(15, 23, 42, 0.08);
     --mos-overlay: rgba(15, 23, 42, 0.5);
+
+    /* Conceptual design tokens */
+    --background: var(--mos-page-bg);
+    --foreground: var(--mos-text-primary);
+    --card: var(--mos-surface);
+    --card-foreground: var(--mos-text-primary);
+    --muted: var(--mos-surface-muted);
+    --muted-foreground: var(--mos-text-muted);
+    --border: var(--mos-border);
+    --primary: var(--mos-primary);
+    --primary-foreground: #FFFFFF;
+    --secondary: var(--mos-surface-muted);
+    --secondary-foreground: var(--mos-text-secondary);
+    --accent: var(--mos-accent);
+    --accent-foreground: #FFFFFF;
 
     /* Legacy tokens compatibility */
     --mos-bg: var(--mos-page-bg);
@@ -51,6 +82,21 @@
     --mos-input-border: rgba(255, 255, 255, 0.14);
     --mos-shadow: rgba(0, 0, 0, 0.35);
     --mos-overlay: rgba(0, 0, 0, 0.75);
+
+    /* Conceptual design tokens */
+    --background: var(--mos-page-bg);
+    --foreground: var(--mos-text-primary);
+    --card: var(--mos-surface);
+    --card-foreground: var(--mos-text-primary);
+    --muted: var(--mos-surface-muted);
+    --muted-foreground: var(--mos-text-muted);
+    --border: var(--mos-border);
+    --primary: var(--mos-primary);
+    --primary-foreground: #060B16;
+    --secondary: var(--mos-surface-muted);
+    --secondary-foreground: var(--mos-text-secondary);
+    --accent: var(--mos-accent);
+    --accent-foreground: #060B16;
 
     /* Legacy tokens compatibility */
     --mos-bg: var(--mos-page-bg);
@@ -177,39 +223,41 @@
    ========================================================== */
 @media (hover: none) {
   [id^="branch-card-"] {
-    background-color: #f8fafc;
-    border-color: #e2e8f0;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.07);
+    background-color: var(--mos-surface);
+    border-color: var(--mos-border);
+    box-shadow: 0 1px 3px 0 var(--mos-shadow);
   }
   
   .dark [id^="branch-card-"] {
-    background-color: #0f172a;
-    border-color: #1e293b;
+    background-color: var(--mos-surface-raised);
+    border-color: var(--mos-border);
   }
 
   [id^="branch-card-"] h3 {
-    color: #0f172a !important;
+    color: var(--mos-text-primary) !important;
   }
 
   .dark [id^="branch-card-"] h3 {
-    color: #f8fafc !important;
+    color: var(--mos-text-primary) !important;
   }
 
   [id^="branch-card-"] p {
-    color: #334155 !important;
+    color: var(--mos-text-secondary) !important;
   }
 
   .dark [id^="branch-card-"] p {
-    color: #cbd5e1 !important;
+    color: var(--mos-text-secondary) !important;
   }
 
   /* Ensure modal card text is fully opaque and high contrast on mobile */
   #roadmap-modal-container {
-    background-color: #f8fafc;
+    background-color: var(--mos-surface);
+    color: var(--mos-text-primary);
   }
 
   .dark #roadmap-modal-container {
-    background-color: #0f172a;
+    background-color: var(--mos-surface);
+    color: var(--mos-text-primary);
   }
 }
 
@@ -291,30 +339,30 @@ html.light .mos-ap-explorer {
   background: var(--mos-page-bg) !important;
   color: var(--mos-text-primary) !important;
 }
-html.light .mos-ap-explorer .bg-slate-950 { background-color: #f8fafc !important; }
-html.light .mos-ap-explorer .bg-slate-950\/60 { background-color: rgba(248,250,252,.86) !important; }
-html.light .mos-ap-explorer .bg-slate-950\/70 { background-color: rgba(248,250,252,.92) !important; }
-html.light .mos-ap-explorer .bg-slate-900 { background-color: #ffffff !important; }
-html.light .mos-ap-explorer .bg-slate-900\/80 { background-color: rgba(255,255,255,.94) !important; }
-html.light .mos-ap-explorer .bg-slate-900\/60 { background-color: rgba(255,255,255,.90) !important; }
-html.light .mos-ap-explorer .bg-white\/\[0\.03\] { background-color: #f8fafc !important; }
-html.light .mos-ap-explorer .bg-slate-800 { background-color: #e2e8f0 !important; }
+html.light .mos-ap-explorer .bg-slate-950 { background-color: var(--mos-page-bg) !important; }
+html.light .mos-ap-explorer .bg-slate-950\/60 { background-color: var(--mos-surface-muted) !important; }
+html.light .mos-ap-explorer .bg-slate-950\/70 { background-color: var(--mos-surface-muted) !important; }
+html.light .mos-ap-explorer .bg-slate-900 { background-color: var(--mos-surface) !important; }
+html.light .mos-ap-explorer .bg-slate-900\/80 { background-color: var(--mos-surface) !important; }
+html.light .mos-ap-explorer .bg-slate-900\/60 { background-color: var(--mos-surface) !important; }
+html.light .mos-ap-explorer .bg-white\/\[0\.03\] { background-color: var(--mos-surface-muted) !important; }
+html.light .mos-ap-explorer .bg-slate-800 { background-color: var(--mos-surface-muted) !important; }
 html.light .mos-ap-explorer .border-white\/10,
-html.light .mos-ap-explorer .border-slate-800 { border-color: #d9e1ec !important; }
-html.light .mos-ap-explorer .text-white { color: #172033 !important; }
-html.light .mos-ap-explorer .text-slate-100 { color: #172033 !important; }
-html.light .mos-ap-explorer .text-slate-200 { color: #334155 !important; }
-html.light .mos-ap-explorer .text-slate-300 { color: #475569 !important; }
-html.light .mos-ap-explorer .text-slate-400 { color: #64748b !important; }
-html.light .mos-ap-explorer .text-slate-500 { color: #64748b !important; }
+html.light .mos-ap-explorer .border-slate-800 { border-color: var(--mos-border) !important; }
+html.light .mos-ap-explorer .text-white { color: var(--mos-text-primary) !important; }
+html.light .mos-ap-explorer .text-slate-100 { color: var(--mos-text-primary) !important; }
+html.light .mos-ap-explorer .text-slate-200 { color: var(--mos-text-primary) !important; }
+html.light .mos-ap-explorer .text-slate-300 { color: var(--mos-text-secondary) !important; }
+html.light .mos-ap-explorer .text-slate-400 { color: var(--mos-text-secondary) !important; }
+html.light .mos-ap-explorer .text-slate-500 { color: var(--mos-text-muted) !important; }
 html.light .mos-ap-explorer .mos-ap-control {
-  background: #fff !important;
-  color: #172033 !important;
-  border-color: #cbd5e1 !important;
+  background: var(--mos-input-bg) !important;
+  color: var(--mos-text-primary) !important;
+  border-color: var(--mos-input-border) !important;
 }
 html.light .mos-ap-explorer select option {
-  background: #fff;
-  color: #172033;
+  background: var(--mos-surface);
+  color: var(--mos-text-primary);
 }
 html.light .mos-ap-explorer .bg-gradient-to-br {
   color: inherit;
@@ -371,21 +419,117 @@ html.light .mos-ap-control::placeholder { color: var(--mos-text-muted) !importan
 
 
 /* TG EAPCET explorer — intentional high-contrast light theme. */
-html.light .mos-tg-explorer .bg-slate-950 { background-color: #ffffff !important; }
-html.light .mos-tg-explorer .bg-slate-900 { background-color: #ffffff !important; }
-html.light .mos-tg-explorer .bg-slate-800 { background-color: #f1f5f9 !important; }
-html.light .mos-tg-explorer .text-white { color: #172033 !important; }
+html.light .mos-tg-explorer .bg-slate-950 { background-color: var(--mos-surface) !important; }
+html.light .mos-tg-explorer .bg-slate-900 { background-color: var(--mos-surface) !important; }
+html.light .mos-tg-explorer .bg-slate-800 { background-color: var(--mos-surface-muted) !important; }
+html.light .mos-tg-explorer .text-white { color: var(--mos-text-primary) !important; }
 html.light .mos-tg-explorer .text-slate-100,
-html.light .mos-tg-explorer .text-slate-200 { color: #172033 !important; }
+html.light .mos-tg-explorer .text-slate-200 { color: var(--mos-text-primary) !important; }
 html.light .mos-tg-explorer .text-slate-300,
-html.light .mos-tg-explorer .text-slate-400 { color: #475569 !important; }
-html.light .mos-tg-explorer .text-slate-500 { color: #64748b !important; }
+html.light .mos-tg-explorer .text-slate-400 { color: var(--mos-text-secondary) !important; }
+html.light .mos-tg-explorer .text-slate-500 { color: var(--mos-text-muted) !important; }
 html.light .mos-tg-explorer .border-slate-800,
-html.light .mos-tg-explorer .border-slate-700 { border-color: #d9e1ec !important; }
+html.light .mos-tg-explorer .border-slate-700 { border-color: var(--mos-border) !important; }
 html.light .mos-tg-explorer input,
-html.light .mos-tg-explorer select { color: #172033 !important; }
-html.light .mos-tg-explorer input::placeholder { color: #64748b !important; }
-html.light .mos-tg-explorer table thead { background-color: #f8fafc !important; color: #334155 !important; }
-html.light .mos-tg-explorer table tbody { color: #334155 !important; }
+html.light .mos-tg-explorer select { color: var(--mos-text-primary) !important; }
+html.light .mos-tg-explorer input::placeholder { color: var(--mos-text-muted) !important; }
+html.light .mos-tg-explorer table thead { background-color: var(--mos-surface-muted) !important; color: var(--mos-text-secondary) !important; }
+html.light .mos-tg-explorer table tbody { color: var(--mos-text-secondary) !important; }
 html.light .mos-tg-explorer .shadow-xl,
-html.light .mos-tg-explorer .shadow-2xl { box-shadow: 0 10px 30px rgba(15,23,42,.10) !important; }
+html.light .mos-tg-explorer .shadow-2xl { box-shadow: 0 10px 30px var(--mos-shadow) !important; }
+
+/* Direct semantic helper classes */
+.bg-mos-page { background-color: var(--mos-page-bg); }
+.bg-mos-surface { background-color: var(--mos-surface); }
+.bg-mos-surface-raised { background-color: var(--mos-surface-raised); }
+.bg-mos-surface-muted { background-color: var(--mos-surface-muted); }
+.bg-mos-input { background-color: var(--mos-input-bg); }
+.text-mos-primary-text { color: var(--mos-text-primary); }
+.text-mos-secondary-text { color: var(--mos-text-secondary); }
+.text-mos-muted-text { color: var(--mos-text-muted); }
+.border-mos-border { border-color: var(--mos-border); }
+.border-mos-border-strong { border-color: var(--mos-border-strong); }
+.border-mos-input { border-color: var(--mos-input-border); }
+
+/* Buttons & Vibrant CTAs contrast guarantee: maintain white text on colored solid backgrounds */
+html.light button.bg-emerald-500,
+html.light button.bg-emerald-600,
+html.light button.bg-blue-600,
+html.light button.bg-sky-500,
+html.light button.bg-sky-600,
+html.light button.bg-indigo-600,
+html.light button.bg-pink-500,
+html.light a.bg-emerald-500,
+html.light a.bg-emerald-600,
+html.light a.bg-sky-500,
+html.light a.bg-sky-600,
+html.light a.bg-blue-600,
+html.light a.bg-indigo-600,
+html.light [class*="bg-emerald-500"] .text-white,
+html.light [class*="bg-emerald-600"] .text-white,
+html.light [class*="bg-blue-600"] .text-white,
+html.light [class*="bg-sky-500"] .text-white,
+html.light [class*="bg-sky-600"] .text-white,
+html.light [class*="bg-indigo-600"] .text-white,
+html.light [class*="bg-pink-500"] .text-white,
+html.light [class*="bg-pink-600"] .text-white,
+html.light [class*="bg-rose-500"] .text-white,
+html.light [class*="bg-rose-600"] .text-white,
+html.light [class*="bg-emerald-500"].text-white,
+html.light [class*="bg-emerald-600"].text-white,
+html.light [class*="bg-blue-600"].text-white,
+html.light [class*="bg-sky-500"].text-white,
+html.light [class*="bg-sky-600"].text-white,
+html.light [class*="bg-indigo-600"].text-white,
+html.light [class*="bg-pink-500"].text-white {
+  color: #FFFFFF !important;
+}
+
+/* CampusConnect Dark Mode Accessibility Support */
+html.dark #campus-connect {
+  background: linear-gradient(to bottom, #060B16, #0D1627, #060B16) !important;
+  color: var(--mos-text-primary) !important;
+}
+html.dark #campus-connect .bg-white,
+html.dark #campus-connect .bg-white\/90,
+html.dark #campus-connect .bg-white\/95 {
+  background-color: var(--mos-surface) !important;
+  color: var(--mos-text-primary) !important;
+  border-color: var(--mos-border) !important;
+}
+html.dark #campus-connect .bg-gradient-to-b {
+  background: linear-gradient(to bottom, #111D31, #0D1627) !important;
+  border-color: var(--mos-border) !important;
+}
+html.dark #campus-connect input,
+html.dark #campus-connect select,
+html.dark #campus-connect textarea {
+  background-color: var(--mos-input-bg) !important;
+  color: var(--mos-text-primary) !important;
+  border-color: var(--mos-input-border) !important;
+}
+html.dark #campus-connect .text-slate-950,
+html.dark #campus-connect .text-slate-900,
+html.dark #campus-connect .text-slate-800 {
+  color: var(--mos-text-primary) !important;
+}
+html.dark #campus-connect .text-slate-700,
+html.dark #campus-connect .text-slate-600 {
+  color: var(--mos-text-secondary) !important;
+}
+html.dark #campus-connect .text-slate-500,
+html.dark #campus-connect .text-slate-400 {
+  color: var(--mos-text-muted) !important;
+}
+html.dark #campus-connect .border-pink-100,
+html.dark #campus-connect .border-pink-200,
+html.dark #campus-connect .border-pink-200\/70,
+html.dark #campus-connect .border-pink-200\/80 {
+  border-color: var(--mos-border) !important;
+}
+html.dark #campus-connect .shadow-pink-100\/50,
+html.dark #campus-connect .shadow-pink-200\/40,
+html.dark #campus-connect .shadow-pink-200\/50 {
+  box-shadow: 0 4px 6px -1px var(--mos-shadow) !important;
+}
+

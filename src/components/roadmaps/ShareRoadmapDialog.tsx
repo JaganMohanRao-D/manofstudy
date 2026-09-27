@@ -1,158 +1,138 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Share2, Copy, Check, X, MessageCircle, Linkedin, Twitter, ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import {
+  X,
+  Copy,
+  Check,
+  Share2,
+  MessageCircle,
+  Linkedin,
+  Twitter,
+  ExternalLink,
+} from 'lucide-react';
 import { BranchRoadmap } from '../../types';
 
-export interface ShareRoadmapDialogProps {
+interface ShareRoadmapDialogProps {
   branch: BranchRoadmap;
-  isOpen: boolean;
   onClose: () => void;
 }
 
 export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
   branch,
-  isOpen,
   onClose,
 }) => {
-  const [copied, setCopied] = useState<boolean>(false);
-  const [copiedPlatform, setCopiedPlatform] = useState<boolean>(false);
+  const [copied, setCopied] = useState(false);
+  const [copiedPlatform, setCopiedPlatform] = useState(false);
 
-  // Generate shareable URL for this specific branch
-  const shareUrl = typeof window !== 'undefined'
-    ? `${window.location.origin}${window.location.pathname}#branch=${branch.id}`
-    : `https://manofstudy.com/#branch=${branch.id}`;
+  // Generate branch deep link
+  const origin = typeof window !== 'undefined' ? window.location.origin : '';
+  const shareUrl = `${origin}/#roadmap-${branch.id}`;
 
-  const shareTitle = `${branch.name} (${branch.code}) 4-Year Career Roadmap • MAN OF STUDY`;
-  const shareText = `Explore the official 4-Year ${branch.name} Engineering Roadmap on MAN OF STUDY with core subjects, industry skills, and salary benchmarks.`;
-
-  // Explicit, safe close handler that ensures immediate cleanup of overlays
-  const handleClose = useCallback(() => {
-    onClose();
-
-    // DOM cleanup safeguard to prevent any residual dimmer loops
-    setTimeout(() => {
-      const residualDimmers = document.querySelectorAll('#share-dialog-dimmer, #share-dialog-backdrop');
-      residualDimmers.forEach((el) => {
-        if (el.parentNode) el.parentNode.removeChild(el);
-      });
-    }, 50);
-  }, [onClose]);
-
-  // Global keydown listener for immediate 'Escape' key dismissal
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        e.stopPropagation();
-        handleClose();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown, true);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown, true);
-    };
-  }, [isOpen, handleClose]);
-
-  if (!isOpen) return null;
+  const shareText = `Check out the comprehensive 4-Year Engineering Roadmap for ${branch.name} (${branch.code}) on MAN OF STUDY! Includes semester subjects, lab skills, certifications, open-source projects, and placement prep.`;
 
   const handleCopyLink = async () => {
     try {
-      await navigator.clipboard.writeText(shareUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
-    } catch {
-      // Fallback for older browsers
-      const input = document.getElementById('share-url-input') as HTMLInputElement | null;
-      if (input) {
-        input.select();
-        document.execCommand('copy');
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(shareUrl);
         setCopied(true);
         setTimeout(() => setCopied(false), 2500);
       }
-    }
-  };
-
-  const handleNativeShare = async () => {
-    if (typeof navigator !== 'undefined' && navigator.share) {
-      try {
-        await navigator.share({
-          title: shareTitle,
-          text: shareText,
-          url: shareUrl,
-        });
-        handleClose();
-      } catch {
-        // User cancelled or share failed, stay open without crash
-      }
-    } else {
-      handleCopyLink();
+    } catch {
+      // Fallback
     }
   };
 
   const handleWhatsApp = () => {
-    const text = encodeURIComponent(`${shareTitle}\n\n${shareText}\n\n${shareUrl}`);
-    window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank', 'noopener,noreferrer');
+    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(
+      `${shareText}\n\n👉 Access Roadmap: ${shareUrl}`
+    )}`;
+    window.open(url, '_blank');
   };
 
   const handleLinkedIn = () => {
-    const url = encodeURIComponent(shareUrl);
-    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank', 'noopener,noreferrer');
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+      shareUrl
+    )}`;
+    window.open(url, '_blank');
   };
 
   const handleTwitter = () => {
-    const text = encodeURIComponent(`${shareTitle}\n${shareUrl}`);
-    window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank', 'noopener,noreferrer');
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+      shareText
+    )}&url=${encodeURIComponent(shareUrl)}`;
+    window.open(url, '_blank');
+  };
+
+  const handleNativeShare = async () => {
+    if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
+      try {
+        await navigator.share({
+          title: `${branch.name} 4-Year Roadmap | MAN OF STUDY`,
+          text: shareText,
+          url: shareUrl,
+        });
+      } catch {
+        // User cancelled or share failed
+      }
+    }
+  };
+
+  // Close handler with state reset
+  const handleClose = () => {
+    onClose();
   };
 
   return (
     <div
-      id="share-roadmap-modal-root"
-      className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-4 overflow-y-auto"
-      role="region"
-      aria-label="Share dialog modal overlay"
+      id="share-roadmap-dialog-backdrop"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[var(--mos-overlay)] backdrop-blur-sm animate-in fade-in duration-200"
+      onClick={handleClose}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') handleClose();
+      }}
+      tabIndex={-1}
     >
-      {/* 1. Strict Background Dimmer Overlay with direct Click & TouchEnd listener */}
+      {/* 1. Backdrop Touch Dismissal Layer */}
       <div
-        id="share-dialog-dimmer"
-        className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs cursor-pointer z-0 transition-opacity animate-in fade-in duration-150"
+        className="absolute inset-0"
+        aria-hidden="true"
         onClick={handleClose}
         onTouchEnd={(e) => {
           e.preventDefault();
           handleClose();
         }}
+        role="button"
+        tabIndex={-1}
         aria-label="Dismiss share dialog overlay"
       />
 
       {/* 2. Dialog Container */}
       <div
         id="share-roadmap-dialog"
-        className="relative z-10 w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate-in zoom-in-95 duration-150"
+        className="relative z-10 w-full max-w-lg bg-[var(--mos-surface)] text-[var(--mos-text-primary)] rounded-2xl shadow-2xl border border-[var(--mos-border)] overflow-hidden animate-in zoom-in-95 duration-150"
         role="dialog"
         aria-modal="true"
         aria-labelledby="share-dialog-title"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-slate-50 text-slate-900 p-5 flex items-start justify-between gap-3 border-b border-slate-200">
+        <div className="bg-[var(--mos-surface-muted)] text-[var(--mos-text-primary)] p-5 flex items-start justify-between gap-3 border-b border-[var(--mos-border)]">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded-md text-[11px] font-black uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
+              <span className="px-2 py-0.5 rounded-md text-[11px] font-black uppercase tracking-wider bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
                 {branch.code}
               </span>
-              <span className="text-xs font-semibold text-slate-600">
+              <span className="text-xs font-semibold text-[var(--mos-text-secondary)]">
                 {branch.categoryLabel}
               </span>
             </div>
             <h3
               id="share-dialog-title"
-              className="text-lg sm:text-xl font-black tracking-tight text-slate-900 flex items-center gap-2"
+              className="text-lg sm:text-xl font-black tracking-tight text-[var(--mos-text-primary)] flex items-center gap-2"
             >
-              <Share2 className="w-5 h-5 text-blue-600" />
+              <Share2 className="w-5 h-5 text-blue-500" />
               <span>Share this Roadmap</span>
             </h3>
-            <p className="text-xs text-slate-600 line-clamp-1">
+            <p className="text-xs text-[var(--mos-text-secondary)] line-clamp-1">
               {branch.name}
             </p>
           </div>
@@ -167,7 +147,7 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
               handleClose();
             }}
             title="Close dialog (Esc)"
-            className="p-2 rounded-xl bg-white hover:bg-rose-50 hover:text-rose-600 active:scale-95 text-slate-700 transition-all border border-slate-200 cursor-pointer min-h-[40px] min-w-[40px] flex items-center justify-center"
+            className="p-2 rounded-xl bg-[var(--mos-surface)] hover:bg-rose-500/10 hover:text-rose-500 active:scale-95 text-[var(--mos-text-secondary)] transition-all border border-[var(--mos-border)] cursor-pointer min-h-[40px] min-w-[40px] flex items-center justify-center"
             aria-label="Close share dialog"
           >
             <X className="w-5 h-5" />
@@ -180,7 +160,7 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
           <div className="space-y-2">
             <label
               htmlFor="share-url-input"
-              className="text-xs font-bold text-slate-700 uppercase tracking-wider block"
+              className="text-xs font-bold text-[var(--mos-text-secondary)] uppercase tracking-wider block"
             >
               Direct Shareable Link
             </label>
@@ -190,7 +170,7 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
                 type="text"
                 readOnly
                 value={shareUrl}
-                className="flex-1 px-3.5 py-2.5 rounded-xl text-xs font-mono bg-slate-50 border border-slate-200 text-slate-700 select-all focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+                className="flex-1 px-3.5 py-2.5 rounded-xl text-xs font-mono bg-[var(--mos-input-bg)] border border-[var(--mos-input-border)] text-[var(--mos-text-primary)] select-all focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
               />
               <button
                 id="share-copy-link-btn"
@@ -212,15 +192,15 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
               </button>
             </div>
             {copied && (
-              <p className="text-[11px] text-emerald-600 font-semibold flex items-center gap-1 animate-in fade-in">
+              <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1 animate-in fade-in">
                 <Check className="w-3.5 h-3.5" />
                 <span>Link copied to clipboard! You can paste it into chats or study groups.</span>
               </p>
             )}
 
             {/* Copy Platform Main URL */}
-            <div className="pt-2 flex items-center justify-between border-t border-slate-100">
-              <span className="text-xs text-slate-500 font-medium">Platform URL:</span>
+            <div className="pt-2 flex items-center justify-between border-t border-[var(--mos-border)]">
+              <span className="text-xs text-[var(--mos-text-muted)] font-medium">Platform URL:</span>
               <button
                 type="button"
                 id="copy-platform-url-btn"
@@ -233,17 +213,17 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
                     // Fallback
                   }
                 }}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold cursor-pointer transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--mos-surface-muted)] hover:bg-[var(--mos-border)] text-[var(--mos-text-secondary)] hover:text-[var(--mos-text-primary)] text-xs font-semibold cursor-pointer transition-colors border border-[var(--mos-border)]"
                 title="Copy Platform URL"
               >
                 {copiedPlatform ? (
                   <>
-                    <Check className="w-3.5 h-3.5 text-emerald-600" />
-                    <span className="text-emerald-600">Link copied to clipboard!</span>
+                    <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                    <span className="text-emerald-600 dark:text-emerald-400">Link copied to clipboard!</span>
                   </>
                 ) : (
                   <>
-                    <Copy className="w-3.5 h-3.5 text-slate-500" />
+                    <Copy className="w-3.5 h-3.5 text-[var(--mos-text-muted)]" />
                     <span>Copy Platform URL</span>
                   </>
                 )}
@@ -253,7 +233,7 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
 
           {/* Social Share Grid */}
           <div className="space-y-2">
-            <span className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
+            <span className="text-xs font-bold text-[var(--mos-text-secondary)] uppercase tracking-wider block">
               Share With Batchmates
             </span>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
@@ -261,9 +241,9 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
               <button
                 type="button"
                 onClick={handleWhatsApp}
-                className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100/90 active:scale-95 text-emerald-700 border border-emerald-200 text-xs font-bold transition-all cursor-pointer min-h-[44px]"
+                className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 active:scale-95 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 text-xs font-bold transition-all cursor-pointer min-h-[44px]"
               >
-                <MessageCircle className="w-4 h-4 text-emerald-600" />
+                <MessageCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 <span>WhatsApp</span>
               </button>
 
@@ -271,9 +251,9 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
               <button
                 type="button"
                 onClick={handleLinkedIn}
-                className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-sky-50 hover:bg-sky-100/90 active:scale-95 text-sky-700 border border-sky-200 text-xs font-bold transition-all cursor-pointer min-h-[44px]"
+                className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-sky-500/10 hover:bg-sky-500/20 active:scale-95 text-sky-700 dark:text-sky-300 border border-sky-500/30 text-xs font-bold transition-all cursor-pointer min-h-[44px]"
               >
-                <Linkedin className="w-4 h-4 text-sky-600" />
+                <Linkedin className="w-4 h-4 text-sky-600 dark:text-sky-400" />
                 <span>LinkedIn</span>
               </button>
 
@@ -281,9 +261,9 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
               <button
                 type="button"
                 onClick={handleTwitter}
-                className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200/90 active:scale-95 text-slate-800 border border-slate-300 text-xs font-bold transition-all cursor-pointer min-h-[44px]"
+                className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-[var(--mos-surface-muted)] hover:bg-[var(--mos-border)] active:scale-95 text-[var(--mos-text-primary)] border border-[var(--mos-border)] text-xs font-bold transition-all cursor-pointer min-h-[44px]"
               >
-                <Twitter className="w-4 h-4 text-slate-700" />
+                <Twitter className="w-4 h-4 text-[var(--mos-text-muted)]" />
                 <span>Twitter (X)</span>
               </button>
             </div>
@@ -294,16 +274,16 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
             <button
               type="button"
               onClick={handleNativeShare}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 active:scale-95 text-indigo-700 border border-indigo-200 text-xs font-bold transition-all cursor-pointer min-h-[44px]"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 active:scale-95 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30 text-xs font-bold transition-all cursor-pointer min-h-[44px]"
             >
-              <ExternalLink className="w-4 h-4 text-indigo-600" />
+              <ExternalLink className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               <span>Open System Share Sheet</span>
             </button>
           )}
         </div>
 
         {/* Footer with definitive "Done" dismissal */}
-        <div className="bg-slate-50 border-t border-slate-200 p-4 flex items-center justify-end gap-3">
+        <div className="bg-[var(--mos-surface-muted)] border-t border-[var(--mos-border)] p-4 flex items-center justify-end gap-3">
           <button
             id="share-dialog-done-btn"
             type="button"
@@ -312,7 +292,7 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
               e.preventDefault();
               handleClose();
             }}
-            className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-95 text-white font-bold text-xs shadow-xs transition-all cursor-pointer min-h-[42px]"
+            className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[var(--mos-text-primary)] hover:opacity-90 active:scale-95 text-[var(--mos-page-bg)] font-bold text-xs shadow-xs transition-all cursor-pointer min-h-[42px]"
           >
             Done
           </button>

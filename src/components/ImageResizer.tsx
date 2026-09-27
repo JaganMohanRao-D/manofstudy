@@ -128,22 +128,22 @@ export const ImageResizer: React.FC = () => {
     <div id="exam-image-resizer-tool" className="space-y-6">
       
       {/* Tool Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:p-6 rounded-2xl border bg-white dark:bg-slate-900/90 border-slate-200 dark:border-slate-800 shadow-sm text-slate-900 dark:text-slate-100">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:p-6 rounded-2xl border bg-[var(--mos-surface)] border-[var(--mos-border)] shadow-sm text-[var(--mos-text-primary)]">
         <div>
           <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 text-xs font-semibold uppercase tracking-wider mb-1">
             <ImageIcon className="w-4 h-4" />
             <span>Zero-Upload Privacy Compression</span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--mos-text-primary)]">
             Exam-Ready Image Resizer
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+          <p className="text-xs sm:text-sm text-[var(--mos-text-muted)] mt-0.5">
             Client-side canvas compression for UPSC, GATE, JEE, NEET, and university application portals.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-medium">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 text-xs font-medium">
             <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             <span>100% Client-Side Privacy</span>
           </div>
@@ -165,8 +165,8 @@ export const ImageResizer: React.FC = () => {
             onClick={() => fileInputRef.current?.click()}
             className={`p-6 sm:p-7 rounded-2xl border-2 border-dashed text-center cursor-pointer transition-all duration-200 ${
               isDragging
-                ? 'border-sky-500 bg-sky-50/50'
-                : 'border-slate-300 hover:border-sky-500 bg-white hover:bg-slate-50'
+                ? 'border-sky-500 bg-sky-500/10'
+                : 'border-[var(--mos-border-strong)] hover:border-sky-500 bg-[var(--mos-surface)] hover:bg-[var(--mos-surface-muted)]'
             }`}
           >
             <input
@@ -182,18 +182,18 @@ export const ImageResizer: React.FC = () => {
             />
 
             <div className="flex flex-col items-center justify-center space-y-3">
-              <div className="p-3 rounded-full bg-slate-100 text-sky-600">
+              <div className="p-3 rounded-full bg-[var(--mos-surface-muted)] text-sky-600 dark:text-sky-400 border border-[var(--mos-border)]">
                 <UploadCloud className="w-6 h-6" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-slate-900">
+                <p className="text-sm font-semibold text-[var(--mos-text-primary)]">
                   {selectedFile ? (
-                    <span className="text-sky-600 truncate max-w-xs block">{selectedFile.name}</span>
+                    <span className="text-sky-600 dark:text-sky-400 truncate max-w-xs block">{selectedFile.name}</span>
                   ) : (
                     'Click to upload or drag & drop photo'
                   )}
                 </p>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-[var(--mos-text-muted)] mt-1">
                   Supports JPG, PNG, WEBP up to 25MB
                 </p>
               </div>
@@ -205,9 +205,9 @@ export const ImageResizer: React.FC = () => {
                     e.stopPropagation();
                     loadSampleImage();
                   }}
-                  className="px-3 py-1.5 rounded-xl text-xs font-medium bg-white hover:bg-sky-50 hover:border-sky-300 hover:text-sky-700 text-slate-700 border border-slate-200 transition-all duration-200 ease-out active:scale-95 flex items-center gap-1.5 cursor-pointer shadow-xs"
+                  className="px-3 py-1.5 rounded-xl text-xs font-medium bg-[var(--mos-surface-muted)] hover:bg-[var(--mos-border)] text-[var(--mos-text-secondary)] hover:text-[var(--mos-text-primary)] border border-[var(--mos-border)] transition-all duration-200 ease-out active:scale-95 flex items-center gap-1.5 cursor-pointer shadow-xs"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-sky-600" />
+                  <Sparkles className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
                   <span>Try with Specimen Sample</span>
                 </button>
               )}
@@ -215,15 +215,15 @@ export const ImageResizer: React.FC = () => {
           </div>
 
           {/* Compression Configuration Card */}
-          <div className="p-5 sm:p-6 rounded-2xl border bg-white border-slate-200 shadow-sm space-y-5">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500 flex items-center gap-2">
-              <Sliders className="w-4 h-4 text-sky-600" />
+          <div className="p-5 sm:p-6 rounded-2xl border bg-[var(--mos-surface)] border-[var(--mos-border)] shadow-sm space-y-5 text-[var(--mos-text-primary)]">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--mos-text-muted)] flex items-center gap-2">
+              <Sliders className="w-4 h-4 text-sky-600 dark:text-sky-400" />
               Target File Size & Dimensions
             </h3>
 
             {/* Target Size Preset Selection */}
             <div className="space-y-2">
-              <label htmlFor="target-size-preset-select" className="text-xs sm:text-sm font-medium text-slate-700">
+              <label htmlFor="target-size-preset-select" className="text-xs sm:text-sm font-medium text-[var(--mos-text-secondary)]">
                 Target Size Constraint
               </label>
               
@@ -231,7 +231,7 @@ export const ImageResizer: React.FC = () => {
                 id="target-size-preset-select"
                 value={config.sizePreset}
                 onChange={(e) => handlePresetSizeChange(e.target.value as ImageSizePreset)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all cursor-pointer"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[var(--mos-input-border)] bg-[var(--mos-input-bg)] text-[var(--mos-text-primary)] text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all cursor-pointer"
               >
                 <option value="20kb">&lt; 20 KB (Strict UPSC / SSC Signature)</option>
                 <option value="50kb">&lt; 50 KB (Standard JEE / NEET / GATE Photo)</option>
@@ -250,7 +250,7 @@ export const ImageResizer: React.FC = () => {
                     className={`py-1.5 px-1 rounded-xl text-xs font-medium text-center transition-all duration-200 ease-out active:scale-95 cursor-pointer ${
                       config.sizePreset === preset
                         ? 'bg-sky-500 text-white font-semibold shadow-sm border border-sky-500'
-                        : 'bg-white text-slate-700 hover:bg-sky-50 hover:border-sky-300 hover:text-sky-700 border border-slate-200'
+                        : 'bg-[var(--mos-surface-muted)] text-[var(--mos-text-secondary)] hover:bg-[var(--mos-border)] hover:text-[var(--mos-text-primary)] border border-[var(--mos-border)]'
                     }`}
                   >
                     {preset === 'custom' ? 'Custom' : `<${preset.replace('kb', 'KB')}`}
@@ -259,144 +259,15 @@ export const ImageResizer: React.FC = () => {
               </div>
             </div>
 
-            {/* Indian Entrance Exam One-Click Presets */}
-            <div className="space-y-1.5 p-3 rounded-xl bg-sky-50/50 border border-sky-200/70">
-              <span className="text-[11px] font-bold text-sky-900 block flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-sky-600" />
-                Popular Indian Exam Presets:
-              </span>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 pt-1">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setConfig((prev) => ({
-                      ...prev,
-                      targetSizeKb: 50,
-                      sizePreset: '50kb',
-                      dimensionPreset: 'ssc_photo',
-                    }));
-                  }}
-                  className={`px-2 py-1.5 rounded-lg text-[11px] font-medium border text-left transition-colors cursor-pointer ${
-                    config.dimensionPreset === 'ssc_photo' && config.targetSizeKb === 50
-                      ? 'bg-sky-600 text-white border-sky-700 font-semibold'
-                      : 'bg-white text-slate-700 border-slate-200 hover:bg-sky-100/50'
-                  }`}
-                >
-                  <div className="font-bold">SSC Photo</div>
-                  <div className="text-[10px] opacity-80">20-50 KB • 200×230</div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setConfig((prev) => ({
-                      ...prev,
-                      targetSizeKb: 20,
-                      sizePreset: '20kb',
-                      dimensionPreset: 'ssc_signature',
-                    }));
-                  }}
-                  className={`px-2 py-1.5 rounded-lg text-[11px] font-medium border text-left transition-colors cursor-pointer ${
-                    config.dimensionPreset === 'ssc_signature' && config.targetSizeKb === 20
-                      ? 'bg-sky-600 text-white border-sky-700 font-semibold'
-                      : 'bg-white text-slate-700 border-slate-200 hover:bg-sky-100/50'
-                  }`}
-                >
-                  <div className="font-bold">SSC Signature</div>
-                  <div className="text-[10px] opacity-80">10-20 KB • 140×60</div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setConfig((prev) => ({
-                      ...prev,
-                      targetSizeKb: 50,
-                      sizePreset: '50kb',
-                      dimensionPreset: 'gate_photo',
-                    }));
-                  }}
-                  className={`px-2 py-1.5 rounded-lg text-[11px] font-medium border text-left transition-colors cursor-pointer ${
-                    config.dimensionPreset === 'gate_photo' && config.targetSizeKb === 50
-                      ? 'bg-sky-600 text-white border-sky-700 font-semibold'
-                      : 'bg-white text-slate-700 border-slate-200 hover:bg-sky-100/50'
-                  }`}
-                >
-                  <div className="font-bold">GATE Photo</div>
-                  <div className="text-[10px] opacity-80">&lt;50 KB • 240×320</div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setConfig((prev) => ({
-                      ...prev,
-                      targetSizeKb: 20,
-                      sizePreset: '20kb',
-                      dimensionPreset: 'gate_signature',
-                    }));
-                  }}
-                  className={`px-2 py-1.5 rounded-lg text-[11px] font-medium border text-left transition-colors cursor-pointer ${
-                    config.dimensionPreset === 'gate_signature' && config.targetSizeKb === 20
-                      ? 'bg-sky-600 text-white border-sky-700 font-semibold'
-                      : 'bg-white text-slate-700 border-slate-200 hover:bg-sky-100/50'
-                  }`}
-                >
-                  <div className="font-bold">GATE Signature</div>
-                  <div className="text-[10px] opacity-80">&lt;20 KB • 280×80</div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setConfig((prev) => ({
-                      ...prev,
-                      targetSizeKb: 50,
-                      sizePreset: '50kb',
-                      dimensionPreset: 'upsc_photo',
-                    }));
-                  }}
-                  className={`px-2 py-1.5 rounded-lg text-[11px] font-medium border text-left transition-colors cursor-pointer ${
-                    config.dimensionPreset === 'upsc_photo' && config.targetSizeKb === 50
-                      ? 'bg-sky-600 text-white border-sky-700 font-semibold'
-                      : 'bg-white text-slate-700 border-slate-200 hover:bg-sky-100/50'
-                  }`}
-                >
-                  <div className="font-bold">UPSC Photo</div>
-                  <div className="text-[10px] opacity-80">20-50 KB • 350×350</div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setConfig((prev) => ({
-                      ...prev,
-                      targetSizeKb: 20,
-                      sizePreset: '20kb',
-                      dimensionPreset: 'upsc_signature',
-                    }));
-                  }}
-                  className={`px-2 py-1.5 rounded-lg text-[11px] font-medium border text-left transition-colors cursor-pointer ${
-                    config.dimensionPreset === 'upsc_signature' && config.targetSizeKb === 20
-                      ? 'bg-sky-600 text-white border-sky-700 font-semibold'
-                      : 'bg-white text-slate-700 border-slate-200 hover:bg-sky-100/50'
-                  }`}
-                >
-                  <div className="font-bold">UPSC Signature</div>
-                  <div className="text-[10px] opacity-80">10-20 KB • 350×150</div>
-                </button>
-              </div>
-            </div>
-
-            {/* Custom KB Input if Custom is selected */}
+            {/* Custom KB Input if 'custom' is active */}
             {config.sizePreset === 'custom' && (
-              <div className="space-y-2 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="custom-kb-input" className="text-xs font-medium text-slate-700">
-                    Custom Target Max Size (KB)
+              <div className="space-y-1.5 p-3 rounded-xl bg-[var(--mos-surface-muted)] border border-[var(--mos-border)]">
+                <div className="flex justify-between items-center text-xs">
+                  <label htmlFor="custom-kb-input" className="font-medium text-[var(--mos-text-secondary)]">
+                    Target KB Upper Limit
                   </label>
-                  <span className="text-xs font-bold text-sky-600">
-                    {config.targetSizeKb} KB
+                  <span className="text-[11px] text-[var(--mos-text-muted)]">
+                    Target: {config.targetSizeKb} KB
                   </span>
                 </div>
                 <input
@@ -411,7 +282,7 @@ export const ImageResizer: React.FC = () => {
                       targetSizeKb: Math.max(5, parseInt(e.target.value, 10) || 50),
                     }))
                   }
-                  className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500"
+                  className="w-full px-3 py-2 rounded-xl bg-[var(--mos-input-bg)] border border-[var(--mos-input-border)] text-[var(--mos-text-primary)] text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500"
                   placeholder="e.g. 45"
                 />
               </div>
@@ -419,7 +290,7 @@ export const ImageResizer: React.FC = () => {
 
             {/* Dimension Preset Selection */}
             <div className="space-y-2">
-              <label htmlFor="dimension-preset-select" className="text-xs sm:text-sm font-medium text-slate-700">
+              <label htmlFor="dimension-preset-select" className="text-xs sm:text-sm font-medium text-[var(--mos-text-secondary)]">
                 Exam Dimension Standard
               </label>
               <select
@@ -431,7 +302,7 @@ export const ImageResizer: React.FC = () => {
                     dimensionPreset: e.target.value as DimensionPreset,
                   }))
                 }
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all cursor-pointer"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[var(--mos-input-border)] bg-[var(--mos-input-bg)] text-[var(--mos-text-primary)] text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all cursor-pointer"
               >
                 <option value="original">Original Aspect & Dimensions</option>
                 <option value="ssc_photo">SSC Photo (3.5cm x 4.5cm / 200x230px)</option>
@@ -449,9 +320,9 @@ export const ImageResizer: React.FC = () => {
 
             {/* Custom Width & Height when custom is active */}
             {config.dimensionPreset === 'custom' && (
-              <div className="grid grid-cols-2 gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
+              <div className="grid grid-cols-2 gap-3 p-3 rounded-xl bg-[var(--mos-surface-muted)] border border-[var(--mos-border)]">
                 <div className="space-y-1">
-                  <label htmlFor="custom-width-input" className="text-[11px] font-medium text-slate-600">Width (px)</label>
+                  <label htmlFor="custom-width-input" className="text-[11px] font-medium text-[var(--mos-text-secondary)]">Width (px)</label>
                   <input
                     id="custom-width-input"
                     type="number"
@@ -462,11 +333,11 @@ export const ImageResizer: React.FC = () => {
                         customWidth: parseInt(e.target.value, 10) || 300,
                       }))
                     }
-                    className="w-full px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500"
+                    className="w-full px-3 py-1.5 rounded-lg bg-[var(--mos-input-bg)] border border-[var(--mos-input-border)] text-[var(--mos-text-primary)] text-xs focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label htmlFor="custom-height-input" className="text-[11px] font-medium text-slate-600">Height (px)</label>
+                  <label htmlFor="custom-height-input" className="text-[11px] font-medium text-[var(--mos-text-secondary)]">Height (px)</label>
                   <input
                     id="custom-height-input"
                     type="number"
@@ -477,7 +348,7 @@ export const ImageResizer: React.FC = () => {
                         customHeight: parseInt(e.target.value, 10) || 400,
                       }))
                     }
-                    className="w-full px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500"
+                    className="w-full px-3 py-1.5 rounded-lg bg-[var(--mos-input-bg)] border border-[var(--mos-input-border)] text-[var(--mos-text-primary)] text-xs focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500"
                   />
                 </div>
               </div>
@@ -485,7 +356,7 @@ export const ImageResizer: React.FC = () => {
 
             {/* Output Format selector */}
             <div className="space-y-2">
-              <label className="text-xs font-medium text-slate-700 block">
+              <label className="text-xs font-medium text-[var(--mos-text-secondary)] block">
                 Output File Format
               </label>
               <div className="grid grid-cols-3 gap-2">
@@ -500,7 +371,7 @@ export const ImageResizer: React.FC = () => {
                     className={`py-2 px-2 rounded-xl text-xs font-medium transition-all duration-200 ease-out active:scale-95 cursor-pointer ${
                       config.format === fmt.id
                         ? 'bg-sky-500 text-white border border-sky-500 font-semibold shadow-sm'
-                        : 'bg-white text-slate-700 border border-slate-200 hover:bg-sky-50 hover:border-sky-300 hover:text-sky-700'
+                        : 'bg-[var(--mos-surface-muted)] text-[var(--mos-text-secondary)] border border-[var(--mos-border)] hover:bg-[var(--mos-surface)] hover:text-[var(--mos-text-primary)]'
                     }`}
                   >
                     {fmt.label}
@@ -514,19 +385,19 @@ export const ImageResizer: React.FC = () => {
         {/* Right Column: Live Side-by-Side Comparison & Instant Download (7 Columns) */}
         <div className="lg:col-span-7 space-y-5">
           {error && (
-            <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-medium">
+            <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-800 dark:text-rose-200 text-xs font-medium">
               {error}
             </div>
           )}
 
           {result ? (
-            <div className="p-5 sm:p-6 rounded-2xl border bg-white border-slate-200 shadow-sm space-y-5">
+            <div className="p-5 sm:p-6 rounded-2xl border bg-[var(--mos-surface)] border-[var(--mos-border)] shadow-sm space-y-5 text-[var(--mos-text-primary)]">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 flex items-center gap-2">
-                  <Eye className="w-4 h-4 text-sky-600" />
+                <span className="text-xs font-semibold uppercase tracking-wider text-[var(--mos-text-muted)] flex items-center gap-2">
+                  <Eye className="w-4 h-4 text-sky-600 dark:text-sky-400" />
                   Compressed Output Preview
                 </span>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
                   {result.compressedSizeKb <= config.targetSizeKb ? 'Target Met' : 'Optimized'} ({result.timeTakenMs}ms)
                 </span>
               </div>
@@ -535,11 +406,11 @@ export const ImageResizer: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 
                 {/* Original Image Card */}
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col items-center text-center space-y-3">
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                <div className="p-3.5 rounded-xl bg-[var(--mos-surface-muted)] border border-[var(--mos-border)] flex flex-col items-center text-center space-y-3">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[var(--mos-text-muted)]">
                     Original Source
                   </span>
-                  <div className="w-full h-48 bg-white rounded-xl overflow-hidden flex items-center justify-center p-2 border border-slate-200">
+                  <div className="w-full h-48 bg-[var(--mos-surface)] rounded-xl overflow-hidden flex items-center justify-center p-2 border border-[var(--mos-border)]">
                     <img
                       src={result.originalUrl}
                       alt="Original specimen"
@@ -548,23 +419,23 @@ export const ImageResizer: React.FC = () => {
                     />
                   </div>
                   <div className="w-full space-y-1 text-xs">
-                    <div className="flex justify-between text-slate-500">
+                    <div className="flex justify-between text-[var(--mos-text-muted)]">
                       <span>Size:</span>
-                      <strong className="text-slate-900 font-semibold">{result.originalSizeKb} KB</strong>
+                      <strong className="text-[var(--mos-text-primary)] font-semibold">{result.originalSizeKb} KB</strong>
                     </div>
-                    <div className="flex justify-between text-slate-500">
+                    <div className="flex justify-between text-[var(--mos-text-muted)]">
                       <span>Dimensions:</span>
-                      <strong className="text-slate-900 font-semibold">{result.originalWidth} × {result.originalHeight} px</strong>
+                      <strong className="text-[var(--mos-text-primary)] font-semibold">{result.originalWidth} × {result.originalHeight} px</strong>
                     </div>
                   </div>
                 </div>
 
                 {/* Compressed Target Output Card */}
-                <div className="p-3.5 rounded-xl bg-sky-50/40 border border-sky-200 flex flex-col items-center text-center space-y-3">
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-sky-700 flex items-center gap-1">
+                <div className="p-3.5 rounded-xl bg-sky-500/[.06] border border-sky-500/25 flex flex-col items-center text-center space-y-3">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-sky-600 dark:text-sky-400 flex items-center gap-1">
                     <Sparkles className="w-3 h-3" /> Exam-Ready Result
                   </span>
-                  <div className="w-full h-48 bg-white rounded-xl overflow-hidden flex items-center justify-center p-2 border border-sky-100">
+                  <div className="w-full h-48 bg-[var(--mos-surface)] rounded-xl overflow-hidden flex items-center justify-center p-2 border border-sky-500/20">
                     <img
                       src={result.compressedUrl}
                       alt="Compressed output"
@@ -573,34 +444,34 @@ export const ImageResizer: React.FC = () => {
                     />
                   </div>
                   <div className="w-full space-y-1 text-xs">
-                    <div className="flex justify-between text-slate-500">
+                    <div className="flex justify-between text-[var(--mos-text-muted)]">
                       <span>Result Size:</span>
-                      <strong className="text-sky-600 font-bold text-sm">{result.compressedSizeKb} KB</strong>
+                      <strong className="text-sky-600 dark:text-sky-400 font-bold text-sm">{result.compressedSizeKb} KB</strong>
                     </div>
-                    <div className="flex justify-between text-slate-500">
+                    <div className="flex justify-between text-[var(--mos-text-muted)]">
                       <span>Dimensions:</span>
-                      <strong className="text-slate-900 font-semibold">{result.compressedWidth} × {result.compressedHeight} px</strong>
+                      <strong className="text-[var(--mos-text-primary)] font-semibold">{result.compressedWidth} × {result.compressedHeight} px</strong>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Compression Ratio & Performance Summary Banner */}
-              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-3">
+              <div className="p-3.5 rounded-xl bg-[var(--mos-surface-muted)] border border-[var(--mos-border)] flex items-center justify-between gap-3">
                 <div>
-                  <div className="text-[10px] sm:text-xs text-slate-500 uppercase font-medium">
+                  <div className="text-[10px] sm:text-xs text-[var(--mos-text-muted)] uppercase font-medium">
                     Size Reduction Efficiency
                   </div>
-                  <div className="text-lg sm:text-xl font-bold text-emerald-600">
+                  <div className="text-lg sm:text-xl font-bold text-emerald-600 dark:text-emerald-400">
                     -{result.compressionRatio}% Saved
                   </div>
                 </div>
 
                 <div className="text-right">
-                  <div className="text-[10px] sm:text-xs text-slate-500 uppercase font-medium">
+                  <div className="text-[10px] sm:text-xs text-[var(--mos-text-muted)] uppercase font-medium">
                     Format & Duration
                   </div>
-                  <div className="text-xs sm:text-sm font-semibold text-slate-700">
+                  <div className="text-xs sm:text-sm font-semibold text-[var(--mos-text-primary)]">
                     {result.format} • {result.timeTakenMs} ms
                   </div>
                 </div>
@@ -618,24 +489,24 @@ export const ImageResizer: React.FC = () => {
             </div>
           ) : (
             /* Placeholder State before upload */
-            <div className="p-8 sm:p-12 rounded-2xl border bg-white border-slate-200 text-center space-y-4 flex flex-col items-center justify-center min-h-[400px] shadow-sm">
-              <div className="w-14 h-14 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600">
+            <div className="p-8 sm:p-12 rounded-2xl border bg-[var(--mos-surface)] border-[var(--mos-border)] text-center space-y-4 flex flex-col items-center justify-center min-h-[400px] shadow-sm text-[var(--mos-text-primary)]">
+              <div className="w-14 h-14 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-600 dark:text-sky-400">
                 <ImageIcon className="w-7 h-7" />
               </div>
               <div className="max-w-md space-y-1">
-                <h3 className="text-base font-bold text-slate-900">
+                <h3 className="text-base font-bold text-[var(--mos-text-primary)]">
                   No Image Selected Yet
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                <p className="text-xs sm:text-sm text-[var(--mos-text-muted)] leading-relaxed">
                   Upload your passport photograph or signature on the left. The browser will instantly compress and format it to your exact KB limit without compromising critical visual clarity.
                 </p>
               </div>
 
               <button
                 onClick={loadSampleImage}
-                className="px-3.5 py-2 rounded-xl bg-white hover:bg-sky-50 hover:border-sky-300 hover:text-sky-700 text-slate-700 border border-slate-200 text-xs font-semibold transition-all duration-200 ease-out active:scale-95 flex items-center gap-2 cursor-pointer shadow-xs"
+                className="px-3.5 py-2 rounded-xl bg-[var(--mos-surface-muted)] hover:bg-[var(--mos-border)] text-[var(--mos-text-secondary)] hover:text-[var(--mos-text-primary)] border border-[var(--mos-border)] text-xs font-semibold transition-all duration-200 ease-out active:scale-95 flex items-center gap-2 cursor-pointer shadow-xs"
               >
-                <Sparkles className="w-3.5 h-3.5 text-sky-600" />
+                <Sparkles className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
                 <span>Load Specimen Photo To Test Now</span>
               </button>
             </div>
@@ -645,3 +516,5 @@ export const ImageResizer: React.FC = () => {
     </div>
   );
 };
+
+export default ImageResizer;

@@ -709,7 +709,7 @@ export default function App() {
   const currentDetails = getWorkspaceDetails();
 
   return (
-    <div className="min-h-screen bg-[#F5F7FB] dark:bg-[#060B16] text-[#172033] dark:text-[#F8FAFC] tech-grid-pattern-light flex flex-col justify-between transition-colors duration-200">
+    <div className="min-h-screen bg-[var(--mos-page-bg)] text-[var(--mos-text-primary)] tech-grid-pattern-light flex flex-col justify-between transition-colors duration-200">
       {/* 1. Modern Streamlined Header (Zero Clutter, No Secondary Ribbon) */}
       <Header
         activeWorkspace={activeWorkspace}

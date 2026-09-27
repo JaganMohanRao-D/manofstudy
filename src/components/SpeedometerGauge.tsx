@@ -52,11 +52,12 @@ export const SpeedometerGauge: React.FC<SpeedometerGaugeProps> = ({
           </linearGradient>
         </defs>
 
-        {/* Outer track background (Dark theme surface) */}
+        {/* Outer track background (Theme adaptive track) */}
         <path
           d={`M ${cx - radius} ${cy} A ${radius} ${radius} 0 0 1 ${cx + radius} ${cy}`}
           fill="none"
-          stroke="#1e293b"
+          stroke="currentColor"
+          className="text-slate-200 dark:text-slate-800"
           strokeWidth={strokeWidth}
           strokeLinecap="round"
         />
@@ -75,7 +76,8 @@ export const SpeedometerGauge: React.FC<SpeedometerGaugeProps> = ({
               y1={y1}
               x2={x2}
               y2={y2}
-              stroke="#475569"
+              stroke="currentColor"
+              className="text-slate-300 dark:text-slate-700"
               strokeWidth="1.5"
               strokeLinecap="round"
             />
@@ -106,7 +108,8 @@ export const SpeedometerGauge: React.FC<SpeedometerGaugeProps> = ({
                 cy={targetY}
                 r="3.5"
                 fill="#38bdf8"
-                stroke="#0f172a"
+                stroke="currentColor"
+                className="text-slate-900 dark:text-slate-950"
                 strokeWidth="1.5"
               />
             </g>
@@ -125,18 +128,18 @@ export const SpeedometerGauge: React.FC<SpeedometerGaugeProps> = ({
             points={`${cx - 2.5},${cy} ${cx + 2.5},${cy} ${cx},${cy - radius + 10}`}
             fill={statusColor}
           />
-          <circle cx={cx} cy={cy} r="6" fill="#0f172a" stroke={statusColor} strokeWidth="2.5" />
+          <circle cx={cx} cy={cy} r="6" className="fill-slate-900 dark:fill-slate-950" stroke={statusColor} strokeWidth="2.5" />
           <circle cx={cx} cy={cy} r="2.5" fill={statusColor} />
         </g>
 
         {/* Min, Mid and Max Labels */}
-        <text x="18" y="104" fill="#94a3b8" className="text-[10px] font-mono font-medium" textAnchor="start">
+        <text x="18" y="104" className="fill-[var(--mos-text-muted)] text-[10px] font-mono font-medium" textAnchor="start">
           0%
         </text>
-        <text x="100" y="30" fill="#94a3b8" className="text-[10px] font-mono font-medium" textAnchor="middle">
+        <text x="100" y="30" className="fill-[var(--mos-text-muted)] text-[10px] font-mono font-medium" textAnchor="middle">
           50%
         </text>
-        <text x="182" y="104" fill="#94a3b8" className="text-[10px] font-mono font-medium" textAnchor="end">
+        <text x="182" y="104" className="fill-[var(--mos-text-muted)] text-[10px] font-mono font-medium" textAnchor="end">
           100%
         </text>
       </svg>
@@ -144,16 +147,16 @@ export const SpeedometerGauge: React.FC<SpeedometerGaugeProps> = ({
       {/* Hero Numerical Readout Display */}
       <div className="-mt-1 flex flex-col items-center gap-1.5">
         <div className="flex items-baseline gap-1">
-          <span className="text-4xl sm:text-5xl font-black tracking-tight text-white font-mono">
+          <span className="text-4xl sm:text-5xl font-black tracking-tight text-[var(--mos-text-primary)] font-mono">
             {clampedPercent.toFixed(1)}
           </span>
-          <span className="text-2xl font-bold text-slate-400 font-mono">%</span>
+          <span className="text-2xl font-bold text-[var(--mos-text-muted)] font-mono">%</span>
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-xs">
-            <span className="text-slate-400 font-medium">Target:</span>
-            <span className="font-bold text-cyan-400 font-mono">{minRequired}%</span>
+          <div className="flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[var(--mos-surface-muted)] border border-[var(--mos-border)] text-xs">
+            <span className="text-[var(--mos-text-muted)] font-medium">Target:</span>
+            <span className="font-bold text-cyan-600 dark:text-cyan-400 font-mono">{minRequired}%</span>
           </div>
           
           <span

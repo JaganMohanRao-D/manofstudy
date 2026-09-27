@@ -267,7 +267,7 @@ export const TgTopColleges: React.FC = () => {
   const activeBranch = branches.find((branch) => branch.branchCode === branchCode);
 
   return (
-    <div className="relative isolate overflow-hidden rounded-[32px] border border-slate-200/90 bg-[#F8FBFF] text-slate-900 shadow-[0_30px_100px_-55px_rgba(2,132,199,.45)] dark:border-slate-800 dark:bg-[#070D19] dark:text-white">
+    <div className="relative isolate overflow-hidden rounded-[32px] border border-[var(--mos-border)] bg-[var(--mos-surface)] text-[var(--mos-text-primary)] shadow-[0_30px_100px_-55px_rgba(2,132,199,.45)]">
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-sky-400/15 blur-3xl" />
         <div className="absolute right-0 top-20 h-80 w-80 rounded-full bg-violet-500/10 blur-3xl" />
