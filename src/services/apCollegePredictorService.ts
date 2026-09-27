@@ -6,7 +6,7 @@
 
 export interface ApPredictorInput {
   rank: number;
-  category: 'OC' | 'BC_A' | 'BC_B' | 'BC_C' | 'BC_D' | 'BC_E' | 'SC' | 'ST' | 'EWS' | string;
+  category: 'OC' | 'BC_A' | 'BC_B' | 'BC_C' | 'BC_D' | 'BC_E' | 'SC_I' | 'SC_II' | 'SC_III' | 'SC' | 'ST' | 'EWS' | string;
   gender: 'M' | 'F' | string;
   region: 'AU' | 'SVU' | 'UR' | string;
   specialCategory: 'NONE' | 'PWD' | 'NCC' | 'CAP' | 'SPORTS' | string;
@@ -97,7 +97,10 @@ export const AP_SOCIAL_CATEGORIES = [
   { id: 'BC_C', label: 'BC-C (Backward Class Group C - 1%)' },
   { id: 'BC_D', label: 'BC-D (Backward Class Group D - 7%)' },
   { id: 'BC_E', label: 'BC-E (Backward Class Group E - 4%)' },
-  { id: 'SC', label: 'SC (Scheduled Caste - 15%)' },
+  { id: 'SC_I', label: 'SC-I (Scheduled Caste Group 1)' },
+  { id: 'SC_II', label: 'SC-II (Scheduled Caste Group 2)' },
+  { id: 'SC_III', label: 'SC-III (Scheduled Caste Group 3)' },
+  { id: 'SC', label: 'SC (Scheduled Caste - General Pool)' },
   { id: 'ST', label: 'ST (Scheduled Tribe - 6%)' },
 ];
 
@@ -274,8 +277,14 @@ function isQuotaEligible(
   let matchesDirectCat = false;
   const userCatLower = (userCat || 'OC').toLowerCase();
 
-  if (userCatLower === 'sc') {
-    matchesDirectCat = q.startsWith('sc_') || q.startsWith('sc_i_') || q.startsWith('sc_ii_') || q.startsWith('sc_iii_');
+  if (userCatLower === 'sc_i') {
+    matchesDirectCat = q.startsWith('sc_i_');
+  } else if (userCatLower === 'sc_ii') {
+    matchesDirectCat = q.startsWith('sc_ii_');
+  } else if (userCatLower === 'sc_iii') {
+    matchesDirectCat = q.startsWith('sc_iii_');
+  } else if (userCatLower === 'sc') {
+    matchesDirectCat = q.startsWith('sc_i_') || q.startsWith('sc_ii_') || q.startsWith('sc_iii_');
   } else if (userCatLower.startsWith('bc_')) {
     matchesDirectCat = q.startsWith(userCatLower + '_');
   } else {
