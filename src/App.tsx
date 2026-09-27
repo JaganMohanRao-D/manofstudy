@@ -355,29 +355,21 @@ export default function App() {
   const [gpaSubTab, setGpaSubTab] = useState<'gpa' | 'internal'>('gpa');
   const [academicSubTab, setAcademicSubTab] = useState<'attendance' | 'gpa' | 'internal'>('attendance');
 
-  // One respectful support prompt per browser session after opening a result-oriented tool.
+  // Show one respectful support prompt only after a real search result is produced.
   useEffect(() => {
-    const supportWorkspaces = new Set<WorkspaceView>([
-      'ap-allotments', 'ap-predictor', 'ap-top-colleges',
-      'tg-allotments', 'tg-predictor', 'tg-top-colleges',
-      'eapcet', 'attendance', 'gpa', 'utilities', 'scholarships', 'internships', 'roadmaps'
-    ]);
-    if (!supportWorkspaces.has(activeWorkspace)) return;
-
-    try {
-      if (sessionStorage.getItem('mos_support_prompt_v1') === 'shown') return;
-    } catch {
-      // Storage restrictions must never break the application.
-    }
-
-    const timer = window.setTimeout(() => {
-      try { sessionStorage.setItem('mos_support_prompt_v1', 'shown'); } catch {}
+    const handleToolResultReady = () => {
+      try {
+        if (sessionStorage.getItem('mos_support_prompt_v1') === 'shown') return;
+        sessionStorage.setItem('mos_support_prompt_v1', 'shown');
+      } catch {
+        // Storage restrictions must never break the application.
+      }
       setIsSupportModalOpen(true);
-    }, 4200);
+    };
 
-    return () => window.clearTimeout(timer);
-  }, [activeWorkspace]);
-
+    window.addEventListener('mos:tool-result-ready', handleToolResultReady);
+    return () => window.removeEventListener('mos:tool-result-ready', handleToolResultReady);
+  }, []);
   const supportEmail = 'support.jamord@gmail.com';
 
   const handleCopyEmail = () => {
