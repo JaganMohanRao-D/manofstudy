@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { BarChart3, Building2, CheckCircle2, MapPin, Search, Sparkles, Target, TrendingUp } from 'lucide-react';
-import { getAPTopCollegeBranches, getAPTopCollegeDistricts, getAPTopCollegeRows, APTopCollegeRow } from '../services/apTopCollegesService';
+import { getAPTopCollegeBranches, getAPTopCollegeDistricts, getAPTopCollegeRows } from '../services/apTopCollegesService';
 
 const formatRank = (value: number) => Number.isFinite(value) ? Math.round(value).toLocaleString('en-IN') : '—';
 
@@ -10,7 +10,7 @@ export default function ApTopColleges() {
   const [search, setSearch] = useState('');
   const [branches, setBranches] = useState<{ code: string; name: string }[]>([]);
   const [districts, setDistricts] = useState<string[]>([]);
-  const [rows, setRows] = useState<APTopCollegeRow[]>([]);
+  const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
