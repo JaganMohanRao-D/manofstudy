@@ -281,7 +281,7 @@ export default function TgCollegePredictor({ onNavigateToAllotment }) {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans pb-28">
+    <div className="min-h-screen mos-tg-explorer bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans pb-28">
       {/* Top Breadcrumb & Header */}
       <div className="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-md sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
