@@ -63,6 +63,9 @@ export const Header: React.FC<HeaderProps> = ({
   const { isDarkMode, toggleTheme } = useTheme();
 
   const handleNavClick = (ws: WorkspaceView, tabFallback?: ToolTab) => {
+    if (ws === 'scholarships') {
+      window.location.hash = 'scholarships';
+    }
     if (onSelectWorkspace) {
       onSelectWorkspace(ws);
     }
@@ -74,13 +77,14 @@ export const Header: React.FC<HeaderProps> = ({
   /**
    * High-contrast secondary strip navigation items:
    * 1. Feature Hub
-   * 2. AI Gap Analyzer
-   * 3. Academics
-   * 4. 🎯 Mock Test Series (NEW)
-   * 5. AP Allotments (Namewise)
-   * 6. TG Allotments (Name Wise)
-   * 7. Attendance Defender
-   * 8. Study Guides
+   * 2. 🎓 Scholarships (PROMINENT TAB)
+   * 3. 🎯 Mock Test Series (NEW)
+   * 4. AP Allotments (Namewise)
+   * 5. TG EAPCET Allotments (Namewise)
+   * 6. AI Gap Analyzer
+   * 7. Academics
+   * 8. Attendance Defender
+   * 9. Study Guides
    */
   const primaryModules: NavModuleItem[] = [
     {
@@ -90,20 +94,13 @@ export const Header: React.FC<HeaderProps> = ({
       icon: Home,
     },
     {
-      id: 'tier2-gap-analyzer',
-      workspace: 'gap-analyzer',
-      label: 'AI Gap Analyzer',
-      shortLabel: 'Gap Analyzer',
-      icon: Sparkles,
-      badge: 'AI Diagnostic',
-      badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
-    },
-    {
-      id: 'tier2-academics',
-      workspace: 'academics',
-      label: 'Academics',
-      icon: ShieldCheck,
-      matchWorkspaces: ['academics', 'gpa', 'backlog'],
+      id: 'tier2-scholarships',
+      workspace: 'scholarships',
+      label: '🎓 Scholarships',
+      shortLabel: 'Scholarships',
+      icon: GraduationCap,
+      badge: '2026 Live',
+      badgeColor: 'bg-amber-500/20 text-amber-600 dark:text-amber-300 border-amber-500/30',
     },
     {
       id: 'tier2-mock-tests',
@@ -127,11 +124,27 @@ export const Header: React.FC<HeaderProps> = ({
     {
       id: 'tier2-tg-allotments',
       workspace: 'tg-allotments',
-      label: 'TG Allotments (Name Wise)',
+      label: 'TG EAPCET Allotments (Namewise)',
       shortLabel: 'TG Allotments',
       icon: Award,
       badge: '2026',
       badgeColor: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
+    },
+    {
+      id: 'tier2-gap-analyzer',
+      workspace: 'gap-analyzer',
+      label: 'AI Gap Analyzer',
+      shortLabel: 'Gap Analyzer',
+      icon: Sparkles,
+      badge: 'AI Diagnostic',
+      badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+    },
+    {
+      id: 'tier2-academics',
+      workspace: 'academics',
+      label: 'Academics',
+      icon: ShieldCheck,
+      matchWorkspaces: ['academics', 'gpa', 'backlog'],
     },
     {
       id: 'tier2-attendance',

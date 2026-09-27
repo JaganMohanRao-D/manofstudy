@@ -19,14 +19,23 @@ import {
   Trash2,
   Copy,
   Check,
+  Zap,
+  Target,
+  Flame,
+  ShieldCheck,
+  ChevronUp,
 } from 'lucide-react';
 import {
   runApPredictorAnalysis,
-  getApPredictorIndex,
+  getApCollegeDropdownList,
   AP_SOCIAL_CATEGORIES,
+  AP_REGION_OPTIONS,
+  AP_SPECIAL_CATEGORIES,
   AP_BRANCH_OPTIONS,
   ApCollegeBranchMatch,
   ApPredictorResponse,
+  CollegeOption,
+  VerdictClassification,
 } from '../services/apCollegePredictorService';
 
 export interface ApCollegePredictorProps {
@@ -43,44 +52,65 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
   // Navigation tabs: 'predictor' vs 'web-options'
   const [activeTab, setActiveTab] = useState<'predictor' | 'web-options'>('predictor');
 
-  // Input states - NEVER default to AUCE or CBIT!
-  const [rankInput, setRankInput] = useState<string>('22500');
+  // Input states - Candidate inputs
+  const [rankInput, setRankInput] = useState<string>('18500');
   const [rankError, setRankError] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('OC');
-  const [selectedGender, setSelectedGender] = useState<string>('M');
+  const [selectedGender, setSelectedGender] = useState<'M' | 'F'>('M');
+  const [selectedRegion, setSelectedRegion] = useState<string>('AU');
+  const [selectedSpecialCategory, setSelectedSpecialCategory] = useState<string>('NONE');
+  const [selectedTargetCollege, setSelectedTargetCollege] = useState<string>(
+    initialCollegeCode && initialCollegeCode !== 'ALL' && initialCollegeCode !== 'CBIT' && initialCollegeCode !== 'AUCE'
+      ? initialCollegeCode
+      : 'ALL'
+  );
   const [selectedBranch, setSelectedBranch] = useState<string>(
     initialBranchCode && initialBranchCode !== 'ALL' ? initialBranchCode : 'ALL'
   );
-  const [selectedRegion, setSelectedRegion] = useState<string>('AU');
-  const [collegeSearchQuery, setCollegeSearchQuery] = useState<string>(
-    initialCollegeCode && initialCollegeCode !== 'ALL' && initialCollegeCode !== 'CBIT' && initialCollegeCode !== 'AUCE'
-      ? initialCollegeCode
-      : ''
-  );
-  const [showMoreFilters, setShowMoreFilters] = useState<boolean>(false);
+  const [collegeSearchFilter, setCollegeSearchFilter] = useState<string>('');
+
+  // Dropdown college list from 2026 manifest
+  const [collegeOptions, setCollegeOptions] = useState<CollegeOption[]>([]);
+  const [isCollegeDropdownOpen, setIsCollegeDropdownOpen] = useState<boolean>(false);
 
   // Analysis state
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
   const [analysisResults, setAnalysisResults] = useState<ApPredictorResponse | null>(null);
-  const [activeFilterTab, setActiveFilterTab] = useState<'ALL' | 'WITHIN' | 'NEAR' | 'OUTSIDE' | 'INSUFFICIENT'>('ALL');
+  const [activeVerdictFilter, setActiveVerdictFilter] = useState<'ALL' | 'SAFE' | 'TARGET' | 'DREAM' | 'STEEP'>('ALL');
   const [sortBy, setSortBy] = useState<'SELECTIVE' | 'CLOSING_DESC' | 'CLOSEST_TO_RANK' | 'NAME_ASC'>('SELECTIVE');
-
-  // Comparison State
-  const [comparedColleges, setComparedColleges] = useState<ApCollegeBranchMatch[]>([]);
-  const [isCompareModalOpen, setIsCompareModalOpen] = useState<boolean>(false);
 
   // Web Options Priority Order List
   const [webOptionsList, setWebOptionsList] = useState<ApCollegeBranchMatch[]>([]);
   const [hasCopiedList, setHasCopiedList] = useState<boolean>(false);
+
+  // Load college dropdown list on mount
+  useEffect(() => {
+    async function loadColleges() {
+      const list = await getApCollegeDropdownList();
+      setCollegeOptions(list);
+    }
+    loadColleges();
+  }, []);
+
+  // Filtered colleges for searchable dropdown
+  const filteredDropdownColleges = useMemo(() => {
+    if (!collegeSearchFilter.trim()) return collegeOptions;
+    const q = collegeSearchFilter.toLowerCase();
+    return collegeOptions.filter(
+      (c) => c.code.toLowerCase().includes(q) || c.name.toLowerCase().includes(q) || (c.district && c.district.toLowerCase().includes(q))
+    );
+  }, [collegeOptions, collegeSearchFilter]);
 
   // Run predictor analysis
   const handleRunPrediction = async (
     rankVal = rankInput,
     catVal = selectedCategory,
     genVal = selectedGender,
-    branchVal = selectedBranch,
     regVal = selectedRegion,
-    colVal = collegeSearchQuery
+    specVal = selectedSpecialCategory,
+    colVal = selectedTargetCollege,
+    branchVal = selectedBranch,
+    searchVal = collegeSearchFilter
   ) => {
     const numRank = parseInt(String(rankVal).replace(/,/g, ''), 10);
     if (isNaN(numRank) || numRank < 1 || numRank > 350000) {
@@ -95,9 +125,11 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
         rank: numRank,
         category: catVal,
         gender: genVal,
-        branch: branchVal,
         region: regVal,
-        collegeQuery: colVal,
+        specialCategory: specVal,
+        collegeCode: colVal,
+        branch: branchVal,
+        collegeQuery: colVal === 'ALL' ? searchVal : '',
         sortBy,
       });
       setAnalysisResults(response);
@@ -108,25 +140,21 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
     }
   };
 
-  // Auto-run first analysis on mount using 2026 predictor index
+  // Initial calculation on mount
   useEffect(() => {
     let isMounted = true;
     async function init() {
-      setIsAnalyzing(true);
-      try {
-        await getApPredictorIndex();
-        if (isMounted) {
-          const colQuery =
-            initialCollegeCode && initialCollegeCode !== 'ALL' && initialCollegeCode !== 'CBIT' && initialCollegeCode !== 'AUCE'
-              ? initialCollegeCode
-              : '';
-          const branchQuery = initialBranchCode || 'ALL';
-          handleRunPrediction('22500', 'OC', 'M', branchQuery, 'AU', colQuery);
-        }
-      } catch (err) {
-        console.warn('Failed to initialize AP predictor:', err);
-      } finally {
-        if (isMounted) setIsAnalyzing(false);
+      if (isMounted) {
+        handleRunPrediction(
+          '18500',
+          'OC',
+          'M',
+          'AU',
+          'NONE',
+          initialCollegeCode && initialCollegeCode !== 'ALL' ? initialCollegeCode : 'ALL',
+          initialBranchCode || 'ALL',
+          ''
+        );
       }
     }
     init();
@@ -136,56 +164,46 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
   }, []);
 
   // Filter & sort matches
-  const sortedMatches = useMemo(() => {
+  const displayedMatches = useMemo(() => {
     if (!analysisResults || !analysisResults.matches) return [];
     let list = [...analysisResults.matches];
 
-    // Filter tab
-    if (activeFilterTab === 'WITHIN') {
-      list = list.filter((m) => m.classification === 'WITHIN_RANGE');
-    } else if (activeFilterTab === 'NEAR') {
-      list = list.filter((m) => m.classification === 'NEAR_RANGE');
-    } else if (activeFilterTab === 'OUTSIDE') {
-      list = list.filter((m) => m.classification === 'OUTSIDE_RANGE');
-    } else if (activeFilterTab === 'INSUFFICIENT') {
-      list = list.filter((m) => m.classification === 'INSUFFICIENT_DATA');
+    // Verdict filter tab
+    if (activeVerdictFilter === 'SAFE') {
+      list = list.filter((m) => m.verdict === 'HIGH_CHANCE');
+    } else if (activeVerdictFilter === 'TARGET') {
+      list = list.filter((m) => m.verdict === 'COMPETITIVE');
+    } else if (activeVerdictFilter === 'DREAM') {
+      list = list.filter((m) => m.verdict === 'DREAM');
+    } else if (activeVerdictFilter === 'STEEP') {
+      list = list.filter((m) => m.verdict === 'STEEP_REACH');
     }
 
     const sRank = analysisResults.appliedFilter.rank;
     if (sortBy === 'SELECTIVE') {
+      const p: Record<VerdictClassification, number> = {
+        HIGH_CHANCE: 1,
+        COMPETITIVE: 2,
+        DREAM: 3,
+        STEEP_REACH: 4,
+        INSUFFICIENT_DATA: 5,
+      };
       list.sort((a, b) => {
-        const p = { WITHIN_RANGE: 1, NEAR_RANGE: 2, OUTSIDE_RANGE: 3, INSUFFICIENT_DATA: 4 };
-        if (p[a.classification] !== p[b.classification]) {
-          return p[a.classification] - p[b.classification];
+        if (p[a.verdict] !== p[b.verdict]) {
+          return p[a.verdict] - p[b.verdict];
         }
-        return a.minObservedRank - b.minObservedRank;
+        return b.closingRank - a.closingRank;
       });
     } else if (sortBy === 'CLOSING_DESC') {
-      list.sort((a, b) => b.maxObservedRank - a.maxObservedRank);
+      list.sort((a, b) => b.closingRank - a.closingRank);
     } else if (sortBy === 'CLOSEST_TO_RANK') {
-      list.sort(
-        (a, b) =>
-          Math.abs(a.maxObservedRank - sRank) - Math.abs(b.maxObservedRank - sRank)
-      );
+      list.sort((a, b) => Math.abs(a.closingRank - sRank) - Math.abs(b.closingRank - sRank));
     } else if (sortBy === 'NAME_ASC') {
       list.sort((a, b) => a.collegeName.localeCompare(b.collegeName));
     }
 
     return list;
-  }, [analysisResults, activeFilterTab, sortBy]);
-
-  // Toggle compare
-  const toggleCompare = (item: ApCollegeBranchMatch) => {
-    if (comparedColleges.some((c) => c.id === item.id)) {
-      setComparedColleges(comparedColleges.filter((c) => c.id !== item.id));
-    } else {
-      if (comparedColleges.length >= 4) {
-        alert('You can compare a maximum of 4 colleges simultaneously.');
-        return;
-      }
-      setComparedColleges([...comparedColleges, item]);
-    }
-  };
+  }, [analysisResults, activeVerdictFilter, sortBy]);
 
   // Toggle Web Option
   const toggleWebOption = (item: ApCollegeBranchMatch) => {
@@ -196,13 +214,24 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
     }
   };
 
-  // Copy web options
+  // Move web option up or down
+  const moveWebOption = (index: number, direction: 'UP' | 'DOWN') => {
+    const newList = [...webOptionsList];
+    const targetIdx = direction === 'UP' ? index - 1 : index + 1;
+    if (targetIdx < 0 || targetIdx >= newList.length) return;
+    const temp = newList[index];
+    newList[index] = newList[targetIdx];
+    newList[targetIdx] = temp;
+    setWebOptionsList(newList);
+  };
+
+  // Copy web options list
   const handleCopyWebOptions = () => {
     if (webOptionsList.length === 0) return;
     const text = webOptionsList
       .map(
         (w, i) =>
-          `${i + 1}. [${w.collegeCode}] ${w.collegeName} - ${w.branchName} (${w.branchCode}) | Observed Closing: ${w.maxObservedRank != null ? w.maxObservedRank.toLocaleString('en-IN') : '—'}`
+          `Option #${i + 1}: [${w.collegeCode}] ${w.collegeName} | ${w.branchCode} (${w.branchName}) | 2026 Closing: ${w.closingRank.toLocaleString('en-IN')} | Quota: ${w.matchedQuotaCode || 'General'}`
       )
       .join('\n');
     navigator.clipboard.writeText(text);
@@ -211,46 +240,52 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
   };
 
   return (
-    <div className="space-y-6">
-      {/* Hero Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-6 sm:p-8 md:p-10 border border-indigo-800/30 shadow-xl">
+    <div className="space-y-6 animate-in fade-in duration-300">
+      {/* Hero Banner with Youthful Aesthetic */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 text-white p-6 sm:p-8 md:p-10 border border-blue-800/30 shadow-xl">
+        <div className="absolute top-0 right-0 -mt-10 -mr-10 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+
         <div className="relative z-10 max-w-3xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase bg-indigo-500/20 text-indigo-300 border border-indigo-400/30">
-            <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-            <span>AP EAPCET 2026 Intelligence</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase bg-blue-500/20 text-blue-300 border border-blue-400/30">
+            <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+            <span>APSCHE 2026 Deterministic Quota Engine</span>
           </div>
 
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-white leading-tight">
-            AP College Predictor 2026
+            Next-Gen AP College Predictor 2026
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 font-medium leading-relaxed">
-            Data-based admission estimates grounded in actual AP EAPCET 2026 allotment registers across all participating Andhra Pradesh colleges.
+            Strict multi-tier quota matching (Gender isolation, AU/SVU regional seats, and special quotas) across 100,621+ verified 2026 AP EAPCET college allotment records.
           </p>
 
-          {/* Mandatory Disclaimer Label */}
-          <div className="pt-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold">
-              <AlertCircle className="w-4 h-4 shrink-0 text-amber-400" />
-              <span>Based on AP EAPCET 2026 allotment records (Not a guaranteed seat assurance)</span>
-            </div>
+          <div className="pt-2 flex flex-wrap items-center gap-2 text-xs">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-semibold">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Strict Quota Isolation: Male candidates never compared to Girls quotas</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-300 font-semibold">
+              <Target className="w-3.5 h-3.5 text-blue-400" />
+              <span>262 Verified AP Colleges Indexed</span>
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Tabs */}
+      {/* Primary Tab Navigation: Predictor vs Web Options */}
       <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
         <button
           type="button"
           onClick={() => setActiveTab('predictor')}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === 'predictor'
-              ? 'bg-indigo-600 text-white shadow-xs'
+              ? 'bg-blue-600 text-white shadow-xs'
               : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
           }`}
         >
           <Compass className="w-4 h-4" />
-          <span>College Predictor Analysis</span>
+          <span>College Predictor Engine</span>
         </button>
 
         <button
@@ -258,7 +293,7 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
           onClick={() => setActiveTab('web-options')}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === 'web-options'
-              ? 'bg-indigo-600 text-white shadow-xs'
+              ? 'bg-blue-600 text-white shadow-xs'
               : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
           }`}
         >
@@ -269,18 +304,24 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
 
       {activeTab === 'predictor' ? (
         <div className="space-y-6">
-          {/* INPUT FORM CARD */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-sm space-y-4">
-            <h2 className="text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-2">
-              <SlidersHorizontal className="w-4 h-4 text-indigo-500" />
-              <span>Enter Your Counseling Details</span>
-            </h2>
+          {/* ========================================================================= */}
+          {/* CANDIDATE INTAKE & TARGET FILTER PANEL                                    */}
+          {/* ========================================================================= */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-7 shadow-xs space-y-5">
+            <div className="flex items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
+              <h2 className="text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                <SlidersHorizontal className="w-4 h-4 text-blue-500" />
+                <span>Candidate Profile &amp; Preferences</span>
+              </h2>
+              <span className="text-[11px] font-mono font-bold text-slate-400">APSCHE 2026 Standards</span>
+            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {/* 1. Rank */}
+              {/* 1. AP EAPCET Rank */}
               <div className="space-y-1.5">
-                <label className="text-2xs font-extrabold uppercase text-slate-500 dark:text-slate-400">
-                  AP EAPCET Rank
+                <label className="text-xs font-extrabold uppercase text-slate-600 dark:text-slate-300 flex items-center gap-1.5">
+                  <Flame className="w-3.5 h-3.5 text-amber-500" />
+                  <span>AP EAPCET Rank</span>
                 </label>
                 <input
                   type="number"
@@ -289,22 +330,22 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
                     setRankInput(e.target.value);
                     if (rankError) setRankError('');
                   }}
-                  placeholder="e.g. 15000"
-                  className="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
+                  placeholder="e.g. 18500"
+                  className="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-black text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
-                {rankError && <p className="text-3xs font-bold text-rose-500">{rankError}</p>}
+                {rankError && <p className="text-[11px] font-bold text-rose-500">{rankError}</p>}
               </div>
 
-              {/* 2. Category */}
+              {/* 2. Caste Category */}
               <div className="space-y-1.5">
-                <label className="text-2xs font-extrabold uppercase text-slate-500 dark:text-slate-400">
-                  Community Category
+                <label className="text-xs font-extrabold uppercase text-slate-600 dark:text-slate-300">
+                  Caste Category
                 </label>
                 <div className="relative">
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="w-full appearance-none px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500 pr-9 cursor-pointer"
+                    className="w-full appearance-none px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 pr-9 cursor-pointer"
                   >
                     {AP_SOCIAL_CATEGORIES.map((c) => (
                       <option key={c.id} value={c.id}>
@@ -318,8 +359,8 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
 
               {/* 3. Gender */}
               <div className="space-y-1.5">
-                <label className="text-2xs font-extrabold uppercase text-slate-500 dark:text-slate-400">
-                  Gender
+                <label className="text-xs font-extrabold uppercase text-slate-600 dark:text-slate-300">
+                  Candidate Gender
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
@@ -327,7 +368,7 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
                     onClick={() => setSelectedGender('M')}
                     className={`py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                       selectedGender === 'M'
-                        ? 'bg-indigo-600 text-white shadow-xs'
+                        ? 'bg-blue-600 text-white shadow-xs'
                         : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
                     }`}
                   >
@@ -347,16 +388,151 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
                 </div>
               </div>
 
-              {/* 4. Preferred Branch */}
+              {/* 4. Region */}
               <div className="space-y-1.5">
-                <label className="text-2xs font-extrabold uppercase text-slate-500 dark:text-slate-400">
-                  Target Course / Branch
+                <label className="text-xs font-extrabold uppercase text-slate-600 dark:text-slate-300">
+                  Local Region
+                </label>
+                <div className="relative">
+                  <select
+                    value={selectedRegion}
+                    onChange={(e) => setSelectedRegion(e.target.value)}
+                    className="w-full appearance-none px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 pr-9 cursor-pointer"
+                  >
+                    {AP_REGION_OPTIONS.map((r) => (
+                      <option key={r.id} value={r.id}>
+                        {r.label}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
+              </div>
+            </div>
+
+            {/* Row 2: Special Category, Target College & Preferred Branch */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
+              {/* Special Category */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-extrabold uppercase text-slate-600 dark:text-slate-300">
+                  Special Reservation Category
+                </label>
+                <div className="relative">
+                  <select
+                    value={selectedSpecialCategory}
+                    onChange={(e) => setSelectedSpecialCategory(e.target.value)}
+                    className="w-full appearance-none px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 pr-9 cursor-pointer"
+                  >
+                    {AP_SPECIAL_CATEGORIES.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.label}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
+              </div>
+
+              {/* Target College (Searchable Dropdown with "🏛️ All Colleges (Combined AP)" as Default) */}
+              <div className="space-y-1.5 relative">
+                <label className="text-xs font-extrabold uppercase text-slate-600 dark:text-slate-300 flex items-center justify-between">
+                  <span>Target College</span>
+                  {selectedTargetCollege !== 'ALL' && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedTargetCollege('ALL');
+                        setCollegeSearchFilter('');
+                      }}
+                      className="text-[10px] text-blue-600 dark:text-blue-400 font-bold hover:underline"
+                    >
+                      Reset to All Colleges
+                    </button>
+                  )}
+                </label>
+
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setIsCollegeDropdownOpen(!isCollegeDropdownOpen)}
+                    className="w-full text-left px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 flex items-center justify-between gap-2 cursor-pointer"
+                  >
+                    <span className="truncate">
+                      {selectedTargetCollege === 'ALL'
+                        ? '🏛️ All Colleges (Combined AP)'
+                        : `${selectedTargetCollege} - ${collegeOptions.find((c) => c.code === selectedTargetCollege)?.name || selectedTargetCollege}`}
+                    </span>
+                    <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {isCollegeDropdownOpen && (
+                    <div className="absolute z-50 left-0 right-0 mt-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl p-2 max-h-72 overflow-y-auto space-y-1">
+                      <div className="sticky top-0 bg-white dark:bg-slate-900 pb-2 z-10">
+                        <div className="relative">
+                          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                          <input
+                            type="text"
+                            value={collegeSearchFilter}
+                            onChange={(e) => setCollegeSearchFilter(e.target.value)}
+                            placeholder="Search code or college name..."
+                            className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs text-slate-900 dark:text-white border-none focus:outline-hidden"
+                            autoFocus
+                          />
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedTargetCollege('ALL');
+                          setIsCollegeDropdownOpen(false);
+                        }}
+                        className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold cursor-pointer transition-colors ${
+                          selectedTargetCollege === 'ALL'
+                            ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                            : 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200'
+                        }`}
+                      >
+                        🏛️ All Colleges (Combined AP State Wide)
+                      </button>
+
+                      {filteredDropdownColleges.map((col) => (
+                        <button
+                          key={col.code}
+                          type="button"
+                          onClick={() => {
+                            setSelectedTargetCollege(col.code);
+                            setIsCollegeDropdownOpen(false);
+                          }}
+                          className={`w-full text-left px-3 py-2 rounded-xl text-xs cursor-pointer transition-colors ${
+                            selectedTargetCollege === col.code
+                              ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-bold'
+                              : 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300'
+                          }`}
+                        >
+                          <div className="font-bold flex items-center justify-between">
+                            <span>{col.code}</span>
+                            <span className="text-[10px] text-slate-400">{col.district}</span>
+                          </div>
+                          <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate">{col.name}</div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Preferred Branch */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-extrabold uppercase text-slate-600 dark:text-slate-300">
+                  Preferred Branch / Discipline
                 </label>
                 <div className="relative">
                   <select
                     value={selectedBranch}
                     onChange={(e) => setSelectedBranch(e.target.value)}
-                    className="w-full appearance-none px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500 pr-9 cursor-pointer"
+                    className="w-full appearance-none px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 pr-9 cursor-pointer"
                   >
                     {AP_BRANCH_OPTIONS.map((b) => (
                       <option key={b.code} value={b.code}>
@@ -369,411 +545,402 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
               </div>
             </div>
 
-            {/* Optional Filter Toggle */}
-            <div className="pt-2 flex flex-wrap items-center justify-between gap-3">
-              <button
-                type="button"
-                onClick={() => setShowMoreFilters(!showMoreFilters)}
-                className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 cursor-pointer"
-              >
-                <span>{showMoreFilters ? '− Hide filters' : '+ College & region filters'}</span>
-              </button>
+            {/* Run Button Action */}
+            <div className="pt-2 flex items-center justify-between gap-4 border-t border-slate-100 dark:border-slate-800">
+              <div className="text-xs text-slate-500 dark:text-slate-400">
+                Filter: <span className="font-bold text-slate-800 dark:text-slate-200">{selectedCategory}</span> | <span className="font-bold text-slate-800 dark:text-slate-200">{selectedGender === 'M' ? 'Male' : 'Female'}</span> | <span className="font-bold text-slate-800 dark:text-slate-200">{selectedRegion}</span> | <span className="font-bold text-slate-800 dark:text-slate-200">{selectedBranch}</span>
+              </div>
 
               <button
                 type="button"
-                disabled={isAnalyzing}
                 onClick={() =>
                   handleRunPrediction(
                     rankInput,
                     selectedCategory,
                     selectedGender,
-                    selectedBranch,
                     selectedRegion,
-                    collegeSearchQuery
+                    selectedSpecialCategory,
+                    selectedTargetCollege,
+                    selectedBranch,
+                    collegeSearchFilter
                   )
                 }
-                className="px-6 py-2.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-500 hover:to-sky-500 text-white font-black text-xs shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                disabled={isAnalyzing}
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold text-xs shadow-md active:scale-95 transition-all cursor-pointer disabled:opacity-50"
               >
                 {isAnalyzing ? (
-                  <RefreshCw className="w-4 h-4 animate-spin" />
+                  <>
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    <span>Analyzing 100K+ Allotments...</span>
+                  </>
                 ) : (
-                  <Compass className="w-4 h-4" />
+                  <>
+                    <Sparkles className="w-4 h-4 text-amber-300" />
+                    <span>Run Next-Gen Prediction</span>
+                  </>
                 )}
-                <span>Run 2026 Prediction</span>
               </button>
             </div>
-
-            {showMoreFilters && (
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-3 animate-in fade-in duration-150">
-                <div className="space-y-1">
-                  <label className="text-2xs font-bold uppercase text-slate-500 dark:text-slate-400">
-                    Candidate Region
-                  </label>
-                  <select
-                    value={selectedRegion}
-                    onChange={(e) => setSelectedRegion(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200"
-                  >
-                    <option value="AU">AU (Andhra University Region)</option>
-                    <option value="SVU">SVU (Sri Venkateswara Region)</option>
-                    <option value="UR">UR / Non-Local (Statewide)</option>
-                    <option value="ALL">All Regions</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-2xs font-bold uppercase text-slate-500 dark:text-slate-400">
-                    Filter by College Name / Code (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    value={collegeSearchQuery}
-                    onChange={(e) => setCollegeSearchQuery(e.target.value)}
-                    placeholder="Search college code or name..."
-                    className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200"
-                  />
-                </div>
-              </div>
-            )}
           </div>
 
-          {/* SUMMARY CARDS */}
+          {/* ========================================================================= */}
+          {/* VERDICT SUMMARY CARDS & FILTERS                                           */}
+          {/* ========================================================================= */}
           {analysisResults && (
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
-              <button
-                type="button"
-                onClick={() => setActiveFilterTab('WITHIN')}
-                className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
-                  activeFilterTab === 'WITHIN'
-                    ? 'bg-emerald-500/15 border-emerald-500 ring-2 ring-emerald-500/20'
-                    : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-emerald-300'
-                }`}
-              >
-                <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 mb-1">
-                  <span className="text-2xs font-bold uppercase tracking-wider">Within Range</span>
-                  <CheckCircle2 className="w-4 h-4" />
-                </div>
-                <div className="text-2xl font-black text-emerald-700 dark:text-emerald-300">
-                  {analysisResults.summary.withinRangeCount}
-                </div>
-                <span className="text-3xs text-slate-500 dark:text-slate-400 block mt-0.5">
-                  Admitted in 2026 within your rank
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveFilterTab('NEAR')}
-                className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
-                  activeFilterTab === 'NEAR'
-                    ? 'bg-blue-500/15 border-blue-500 ring-2 ring-blue-500/20'
-                    : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-blue-300'
-                }`}
-              >
-                <div className="flex items-center justify-between text-blue-600 dark:text-blue-400 mb-1">
-                  <span className="text-2xs font-bold uppercase tracking-wider">Near Range (±15%)</span>
-                  <TrendingUp className="w-4 h-4" />
-                </div>
-                <div className="text-2xl font-black text-blue-700 dark:text-blue-300">
-                  {analysisResults.summary.nearRangeCount}
-                </div>
-                <span className="text-3xs text-slate-500 dark:text-slate-400 block mt-0.5">
-                  Borderline closing cutoff range
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveFilterTab('OUTSIDE')}
-                className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
-                  activeFilterTab === 'OUTSIDE'
-                    ? 'bg-rose-500/15 border-rose-500 ring-2 ring-rose-500/20'
-                    : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-rose-300'
-                }`}
-              >
-                <div className="flex items-center justify-between text-rose-600 dark:text-rose-400 mb-1">
-                  <span className="text-2xs font-bold uppercase tracking-wider">Outside Range</span>
-                  <AlertCircle className="w-4 h-4" />
-                </div>
-                <div className="text-2xl font-black text-rose-700 dark:text-rose-300">
-                  {analysisResults.summary.outsideRangeCount}
-                </div>
-                <span className="text-3xs text-slate-500 dark:text-slate-400 block mt-0.5">
-                  Above observed closing cutoff
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveFilterTab('ALL')}
-                className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
-                  activeFilterTab === 'ALL'
-                    ? 'bg-indigo-500/15 border-indigo-500 ring-2 ring-indigo-500/20'
-                    : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-indigo-300'
-                }`}
-              >
-                <div className="flex items-center justify-between text-indigo-600 dark:text-indigo-400 mb-1">
-                  <span className="text-2xs font-bold uppercase tracking-wider">All Matches</span>
-                  <Building2 className="w-4 h-4" />
-                </div>
-                <div className="text-2xl font-black text-indigo-700 dark:text-indigo-300">
-                  {analysisResults.summary.totalMatches}
-                </div>
-                <span className="text-3xs text-slate-500 dark:text-slate-400 block mt-0.5">
-                  Across {analysisResults.summary.analyzedCollegesCount} AP colleges
-                </span>
-              </button>
-            </div>
-          )}
-
-          {/* RESULTS LIST & CARDS */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-sm space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
-              <div className="space-y-0.5">
-                <h3 className="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2">
-                  <Building2 className="w-4 h-4 text-indigo-500" />
-                  <span>Predicted College Matches (2026 Dataset)</span>
-                  <span className="px-2 py-0.5 rounded-full text-2xs font-bold bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300">
-                    {sortedMatches.length} Options
-                  </span>
-                </h3>
-                <p className="text-2xs text-slate-500 dark:text-slate-400">
-                  Data-based estimate using official 2026 AP EAPCET allotment registers
-                </p>
-              </div>
-
-              {/* Sorting */}
-              <div className="flex items-center gap-2">
-                <span className="text-2xs font-extrabold text-slate-400 uppercase">Sort:</span>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as any)}
-                  className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 border-none text-xs font-bold text-slate-700 dark:text-slate-300 focus:outline-hidden"
+            <div className="space-y-4">
+              {/* Verdict Summary Counts */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {/* Safe Bets */}
+                <button
+                  type="button"
+                  onClick={() => setActiveVerdictFilter(activeVerdictFilter === 'SAFE' ? 'ALL' : 'SAFE')}
+                  className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+                    activeVerdictFilter === 'SAFE'
+                      ? 'bg-emerald-500/15 border-emerald-500 shadow-sm'
+                      : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-emerald-400/50'
+                  }`}
                 >
-                  <option value="SELECTIVE">Selective First (Top Cutoffs)</option>
-                  <option value="CLOSING_DESC">Highest Closing Rank First</option>
-                  <option value="CLOSEST_TO_RANK">Closest to My Rank</option>
-                  <option value="NAME_ASC">College Name (A → Z)</option>
-                </select>
-              </div>
-            </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400">
+                      {analysisResults.summary.highChanceCount}
+                    </span>
+                    <span className="text-lg">🔥</span>
+                  </div>
+                  <div className="text-xs font-bold text-slate-800 dark:text-slate-200 mt-1">Safe Bets / Top Shot</div>
+                  <div className="text-[10px] text-slate-500">Rank &lt;= 2026 Closing Rank</div>
+                </button>
 
-            {/* List */}
-            {isAnalyzing ? (
-              <div className="py-16 text-center space-y-3">
-                <RefreshCw className="w-8 h-8 text-indigo-500 animate-spin mx-auto" />
-                <p className="text-xs font-bold text-slate-500">
-                  Calculating deterministic matches from official 2026 AP allotment records...
-                </p>
-              </div>
-            ) : sortedMatches.length === 0 ? (
-              <div className="py-16 text-center space-y-2 max-w-sm mx-auto">
-                <Info className="w-8 h-8 text-slate-400 mx-auto" />
-                <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200">
-                  Insufficient 2026 allotment data for this combination
-                </h4>
-                <p className="text-xs text-slate-500">
-                  No verified 2026 allotment records were recorded matching your selected rank, branch, and category. Try switching the branch filter to "All Branches" or relaxing your search query.
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {sortedMatches.map((m) => {
-                  const isCompared = comparedColleges.some((c) => c.id === m.id);
-                  const isWebOption = webOptionsList.some((w) => w.id === m.id);
+                {/* Target Reachable */}
+                <button
+                  type="button"
+                  onClick={() => setActiveVerdictFilter(activeVerdictFilter === 'TARGET' ? 'ALL' : 'TARGET')}
+                  className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+                    activeVerdictFilter === 'TARGET'
+                      ? 'bg-amber-500/15 border-amber-500 shadow-sm'
+                      : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-amber-400/50'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl font-black text-amber-600 dark:text-amber-400">
+                      {analysisResults.summary.competitiveCount}
+                    </span>
+                    <span className="text-lg">⚡</span>
+                  </div>
+                  <div className="text-xs font-bold text-slate-800 dark:text-slate-200 mt-1">Target Reachable</div>
+                  <div className="text-[10px] text-slate-500">Within 10-15% of cutoff</div>
+                </button>
 
-                  return (
-                    <div
-                      key={m.id}
-                      className="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 hover:border-indigo-300 dark:hover:border-indigo-700 transition-all space-y-3"
+                {/* Dream Shots */}
+                <button
+                  type="button"
+                  onClick={() => setActiveVerdictFilter(activeVerdictFilter === 'DREAM' ? 'ALL' : 'DREAM')}
+                  className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+                    activeVerdictFilter === 'DREAM'
+                      ? 'bg-violet-500/15 border-violet-500 shadow-sm'
+                      : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-violet-400/50'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl font-black text-violet-600 dark:text-violet-400">
+                      {analysisResults.summary.dreamCount}
+                    </span>
+                    <span className="text-lg">🚀</span>
+                  </div>
+                  <div className="text-xs font-bold text-slate-800 dark:text-slate-200 mt-1">Dream Shots</div>
+                  <div className="text-[10px] text-slate-500">Aspirational option buffer</div>
+                </button>
+
+                {/* Steep Reach */}
+                <button
+                  type="button"
+                  onClick={() => setActiveVerdictFilter(activeVerdictFilter === 'STEEP' ? 'ALL' : 'STEEP')}
+                  className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+                    activeVerdictFilter === 'STEEP'
+                      ? 'bg-slate-200 dark:bg-slate-800 border-slate-400 shadow-sm'
+                      : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-slate-400/50'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl font-black text-slate-700 dark:text-slate-300">
+                      {analysisResults.summary.steepReachCount}
+                    </span>
+                    <span className="text-lg">🏔️</span>
+                  </div>
+                  <div className="text-xs font-bold text-slate-800 dark:text-slate-200 mt-1">Steep Reach</div>
+                  <div className="text-[10px] text-slate-500">Higher rank threshold</div>
+                </button>
+              </div>
+
+              {/* Sort Bar & Controls */}
+              <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-50 dark:bg-slate-900/60 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-slate-600 dark:text-slate-400">
+                    Showing {displayedMatches.length} Eligible College Allotment Options
+                  </span>
+                  {activeVerdictFilter !== 'ALL' && (
+                    <button
+                      type="button"
+                      onClick={() => setActiveVerdictFilter('ALL')}
+                      className="text-blue-600 dark:text-blue-400 font-bold hover:underline"
                     >
-                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
-                        <div className="space-y-1">
-                          <div className="flex flex-wrap items-center gap-2">
-                            <span className="px-2 py-0.5 rounded-md font-mono text-2xs font-extrabold bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300">
-                              {m.collegeCode}
-                            </span>
+                      (Clear filter)
+                    </button>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-slate-500">Sort by:</span>
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value as any)}
+                    className="px-2.5 py-1 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-slate-800 dark:text-slate-200 cursor-pointer"
+                  >
+                    <option value="SELECTIVE">Selectivity &amp; Probability</option>
+                    <option value="CLOSING_DESC">Closing Rank (Highest First)</option>
+                    <option value="CLOSEST_TO_RANK">Closest to My Rank</option>
+                    <option value="NAME_ASC">College Name (A-Z)</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Results Grid / List */}
+              {displayedMatches.length === 0 ? (
+                <div className="p-8 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-2">
+                  <Info className="w-8 h-8 text-slate-400 mx-auto" />
+                  <div className="font-black text-slate-800 dark:text-slate-200">No matching branches found</div>
+                  <p className="text-xs text-slate-500">
+                    Try adjusting the local region, branch filter, or selecting &quot;All Colleges&quot; to expand the prediction scope.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {displayedMatches.map((m) => {
+                    const isAddedToWebOptions = webOptionsList.some((w) => w.id === m.id);
+
+                    return (
+                      <div
+                        key={m.id}
+                        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-3"
+                      >
+                        {/* Top: College & Branch Details */}
+                        <div className="space-y-2">
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-mono font-black text-xs px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
+                                  {m.collegeCode}
+                                </span>
+                                <span className="text-[11px] font-bold text-slate-400">
+                                  {m.district || 'Andhra Pradesh'}
+                                </span>
+                              </div>
+                              <h3 className="font-black text-sm text-slate-900 dark:text-white mt-1 leading-snug">
+                                {m.collegeName}
+                              </h3>
+                            </div>
+
+                            {/* Verdict Badge */}
                             <span
-                              className={`px-2.5 py-0.5 rounded-md text-2xs font-extrabold border flex items-center gap-1.5 ${m.badgeStyle.bg} ${m.badgeStyle.text} ${m.badgeStyle.border}`}
+                              className={`px-3 py-1 rounded-full text-xs font-black shrink-0 border ${m.badgeStyle.bg} ${m.badgeStyle.text} ${m.badgeStyle.border}`}
                             >
-                              <span
-                                className={`w-1.5 h-1.5 rounded-full ${m.badgeStyle.indicator}`}
-                              />
-                              <span>{m.classificationLabel}</span>
+                              {m.verdictLabel}
                             </span>
                           </div>
 
-                          <h4 className="text-sm font-black text-slate-900 dark:text-white">
-                            {m.collegeName}
-                          </h4>
-
-                          <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 flex items-center gap-1.5">
-                            <GitBranch className="w-3.5 h-3.5 text-indigo-500" />
-                            <span>
-                              {m.branchName} ({m.branchCode})
+                          {/* Branch */}
+                          <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 text-xs flex items-center justify-between">
+                            <div className="font-extrabold text-blue-900 dark:text-blue-300 flex items-center gap-1.5">
+                              <GitBranch className="w-3.5 h-3.5 text-blue-500" />
+                              <span>{m.branchName}</span>
+                              <span className="font-mono text-slate-400">({m.branchCode})</span>
+                            </div>
+                            <span className="font-mono font-bold text-slate-500 text-[11px]">
+                              {m.matchingRecordCount} Allotted
                             </span>
+                          </div>
+
+                          {/* Closing Rank & Cushion Grid */}
+                          <div className="grid grid-cols-3 gap-2 text-center text-xs p-2.5 rounded-xl bg-slate-50/70 dark:bg-slate-950/40 border border-slate-200/80 dark:border-slate-800">
+                            <div>
+                              <div className="text-[10px] uppercase font-bold text-slate-400">2026 Closing</div>
+                              <div className="font-mono font-black text-slate-900 dark:text-white mt-0.5">
+                                {m.closingRank.toLocaleString('en-IN')}
+                              </div>
+                            </div>
+                            <div>
+                              <div className="text-[10px] uppercase font-bold text-slate-400">Rank Buffer</div>
+                              <div
+                                className={`font-mono font-bold mt-0.5 ${
+                                  m.rankBuffer >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'
+                                }`}
+                              >
+                                {m.rankBuffer >= 0 ? `+${m.rankBuffer.toLocaleString('en-IN')}` : m.rankBuffer.toLocaleString('en-IN')}
+                              </div>
+                            </div>
+                            <div>
+                              <div className="text-[10px] uppercase font-bold text-slate-400">Probability</div>
+                              <div className="font-bold text-blue-600 dark:text-blue-400 mt-0.5">
+                                {m.probabilityPercent}%
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Why Explanation */}
+                          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-sans">
+                            {m.whyExplanation}
                           </p>
+
+                          <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
+                            {m.quotaDescription}
+                          </div>
                         </div>
 
-                        {/* Actions */}
-                        <div className="flex flex-wrap items-center gap-1.5 shrink-0 self-start">
+                        {/* Action Buttons */}
+                        <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
                           <button
                             type="button"
                             onClick={() => toggleWebOption(m)}
-                            className={`px-3 py-1.5 rounded-xl text-2xs font-bold transition-all cursor-pointer flex items-center gap-1 ${
-                              isWebOption
-                                ? 'bg-indigo-600 text-white shadow-xs'
-                                : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100'
+                            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                              isAddedToWebOptions
+                                ? 'bg-emerald-600 text-white shadow-xs'
+                                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
                             }`}
                           >
-                            {isWebOption ? <Check className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
-                            <span>{isWebOption ? 'Saved Option' : 'Save Option'}</span>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => toggleCompare(m)}
-                            className={`px-3 py-1.5 rounded-xl text-2xs font-bold transition-all cursor-pointer ${
-                              isCompared
-                                ? 'bg-sky-600 text-white shadow-xs'
-                                : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100'
-                            }`}
-                          >
-                            <span>{isCompared ? 'Comparing' : 'Compare'}</span>
+                            {isAddedToWebOptions ? (
+                              <>
+                                <Check className="w-3.5 h-3.5" />
+                                <span>Added to Web Options</span>
+                              </>
+                            ) : (
+                              <>
+                                <Plus className="w-3.5 h-3.5" />
+                                <span>Add to Web Options</span>
+                              </>
+                            )}
                           </button>
 
                           {onNavigateToAllotment && (
                             <button
                               type="button"
                               onClick={() => onNavigateToAllotment(m.collegeCode, m.branchCode)}
-                              className="p-1.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-indigo-600 transition-colors"
-                              title="Inspect this college in AP Allotments (Namewise)"
+                              className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
                             >
+                              <span>View Allotments</span>
                               <ExternalLink className="w-3.5 h-3.5" />
                             </button>
                           )}
                         </div>
                       </div>
-
-                      {/* Rank Metrics Grid */}
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-slate-200/80 dark:border-slate-700/60 text-xs">
-                        <div className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800">
-                          <span className="text-3xs text-slate-500 uppercase block">Best Observed</span>
-                          <span className="font-extrabold text-emerald-600 dark:text-emerald-400">
-                            {m.minObservedRank > 0 ? m.minObservedRank.toLocaleString('en-IN') : '—'}
-                          </span>
-                        </div>
-
-                        <div className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800">
-                          <span className="text-3xs text-slate-500 uppercase block">Last Observed</span>
-                          <span className="font-extrabold text-amber-600 dark:text-amber-400">
-                            {m.maxObservedRank > 0 ? m.maxObservedRank.toLocaleString('en-IN') : '—'}
-                          </span>
-                        </div>
-
-                        <div className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800">
-                          <span className="text-3xs text-slate-500 uppercase block">Your Rank</span>
-                          <span className="font-extrabold text-sky-600 dark:text-sky-400">
-                            {m.studentRank != null ? m.studentRank.toLocaleString('en-IN') : '—'}
-                          </span>
-                        </div>
-
-                        <div className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800">
-                          <span className="text-3xs text-slate-500 uppercase block">Rank Difference</span>
-                          <span
-                            className={`font-extrabold ${
-                              (m.rankBuffer ?? 0) >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
-                            }`}
-                          >
-                            {(m.rankBuffer ?? 0) >= 0 ? `+${(m.rankBuffer ?? 0).toLocaleString('en-IN')} Safe` : `${(m.rankBuffer ?? 0).toLocaleString('en-IN')} Above`}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Explanation & Data Basis */}
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-2xs text-slate-500 dark:text-slate-400 pt-1">
-                        <p className="italic">{m.whyExplanation}</p>
-                        <span className="text-3xs px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 shrink-0 font-semibold">
-                          {m.dataBasis}
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       ) : (
-        /* TAB 2: Web Options Strategy List */
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-4">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
+        /* ========================================================================= */
+        /* WEB OPTIONS STRATEGY LIST BUILDER                                         */
+        /* ========================================================================= */
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-7 shadow-xs space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
             <div>
-              <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
-                <Award className="w-5 h-5 text-indigo-500" />
-                <span>Web Options Strategy List</span>
-                <span className="px-2 py-0.5 rounded-full text-2xs font-extrabold bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300">
-                  {webOptionsList.length} Selected
-                </span>
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Organize your counseling priority options before submitting on the official portal
+              <h2 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
+                <Award className="w-5 h-5 text-blue-600" />
+                <span>My Tailored Web Options Priority List ({webOptionsList.length})</span>
+              </h2>
+              <p className="text-xs text-slate-500 mt-1">
+                Ordered preferences formatted for immediate entry into the APSCHE online counseling web options portal.
               </p>
             </div>
 
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                disabled={webOptionsList.length === 0}
                 onClick={handleCopyWebOptions}
-                className="px-3.5 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white disabled:opacity-40 transition-colors flex items-center gap-1.5 cursor-pointer"
+                disabled={webOptionsList.length === 0}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold cursor-pointer transition-all disabled:opacity-50"
               >
-                {hasCopiedList ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                <span>{hasCopiedList ? 'Copied!' : 'Copy List'}</span>
+                {hasCopiedList ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                <span>{hasCopiedList ? 'Copied to Clipboard!' : 'Copy Web Options List'}</span>
               </button>
+
+              {webOptionsList.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setWebOptionsList([])}
+                  className="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-rose-600 text-xs font-bold hover:bg-rose-50 dark:hover:bg-rose-950/20 cursor-pointer"
+                >
+                  Clear All
+                </button>
+              )}
             </div>
           </div>
 
           {webOptionsList.length === 0 ? (
-            <div className="py-16 text-center space-y-2 max-w-sm mx-auto">
-              <Plus className="w-8 h-8 text-slate-400 mx-auto" />
-              <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200">
-                No colleges in your web options list
-              </h4>
-              <p className="text-xs text-slate-500">
-                Click "+ Save Option" on any predicted college match to save it to your priority order.
+            <div className="p-10 text-center space-y-3 bg-slate-50 dark:bg-slate-950/40 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
+              <Sparkles className="w-8 h-8 text-slate-400 mx-auto" />
+              <div className="font-black text-slate-800 dark:text-slate-200">No Web Options Added Yet</div>
+              <p className="text-xs text-slate-500 max-w-md mx-auto">
+                Navigate to the &quot;College Predictor Engine&quot; tab and click &quot;+ Add to Web Options&quot; on safe bets, targets, and dream colleges to construct your optimal priority ladder.
               </p>
+              <button
+                type="button"
+                onClick={() => setActiveTab('predictor')}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 text-white font-bold text-xs"
+              >
+                Go to Predictor
+              </button>
             </div>
           ) : (
-            <div className="space-y-2">
-              {webOptionsList.map((item, idx) => (
+            <div className="space-y-3">
+              {webOptionsList.map((w, index) => (
                 <div
-                  key={`web_opt_${item.id}`}
-                  className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 text-xs"
+                  key={w.id}
+                  className="flex items-center justify-between gap-3 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 text-xs"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-black flex items-center justify-center text-xs shrink-0">
-                      {idx + 1}
+                    <span className="w-7 h-7 rounded-xl bg-blue-600 text-white font-black text-xs flex items-center justify-center shrink-0">
+                      {index + 1}
                     </span>
                     <div>
-                      <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                        <span className="font-mono text-sky-600 dark:text-sky-400">[{item.collegeCode}]</span>
-                        <span>{item.collegeName}</span>
+                      <div className="font-black text-slate-900 dark:text-white">
+                        [{w.collegeCode}] {w.collegeName}
                       </div>
-                      <div className="text-slate-500 text-2xs">
-                        {item.branchName} ({item.branchCode}) • Observed Closing: {item.maxObservedRank != null ? item.maxObservedRank.toLocaleString('en-IN') : '—'}
+                      <div className="text-slate-500 font-medium">
+                        {w.branchName} ({w.branchCode}) | 2026 Closing: {w.closingRank.toLocaleString('en-IN')}
                       </div>
                     </div>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => toggleWebOption(item)}
-                    className="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
-                    title="Remove option"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => moveWebOption(index, 'UP')}
+                      disabled={index === 0}
+                      className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 disabled:opacity-30 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer"
+                      title="Move Up"
+                    >
+                      <ChevronUp className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => moveWebOption(index, 'DOWN')}
+                      disabled={index === webOptionsList.length - 1}
+                      className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 disabled:opacity-30 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer"
+                      title="Move Down"
+                    >
+                      <ChevronDown className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setWebOptionsList(webOptionsList.filter((x) => x.id !== w.id))}
+                      className="p-1.5 rounded-lg border border-rose-200 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 cursor-pointer"
+                      title="Remove"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

@@ -1552,6 +1552,128 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
           )}
         </div>
       </div>
+
+      {/* ========================================================================= */}
+      {/* ZERO-FAIL DEDICATED PRINT SHEET (Visible ONLY during print via CSS)       */}
+      {/* ========================================================================= */}
+      <div id="certificate-print-sheet" className="p-8 bg-white text-slate-900 border-4 border-slate-900 rounded-3xl space-y-6">
+        <div className="flex items-center justify-between border-b-2 border-slate-800 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-xl">
+              MOS
+            </div>
+            <div>
+              <h1 className="text-xl font-black uppercase tracking-tight text-slate-950">
+                MAN OF STUDY - CBT SIMULATION PERFORMANCE REPORT
+              </h1>
+              <p className="text-xs font-semibold text-slate-600">
+                Reliance Foundation UG Scholarship Examination Assessment Simulation
+              </p>
+            </div>
+          </div>
+          <div className="text-right text-xs font-mono text-slate-600">
+            <div>Report ID: {candidateProfile?.rollNumber || 'MOS-2026-RF'}</div>
+            <div>Generated: {new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+          </div>
+        </div>
+
+        <div className="p-5 bg-slate-50 border-2 border-slate-300 rounded-2xl text-center space-y-2">
+          <div className="text-xs font-extrabold uppercase tracking-widest text-slate-500">
+            Official Assessment Certificate
+          </div>
+          <div className="text-base text-slate-800 leading-relaxed">
+            This is to certify that <span className="font-black text-slate-950 underline decoration-slate-400 underline-offset-4">{candidateProfile?.fullName || 'Verified Candidate'}</span> has achieved <span className="font-black text-slate-950 text-xl">{scorecardMetrics.totalScore}</span> / <span className="font-bold text-slate-700">60 Marks</span> in the <span className="font-extrabold text-blue-900">Reliance Foundation UG Scholarship Test</span> conducted by Man of Study.
+          </div>
+        </div>
+
+        <div className="grid grid-cols-4 gap-3 text-xs border border-slate-300 rounded-xl p-3 bg-white">
+          <div><span className="font-bold text-slate-500 uppercase text-[10px] block">Candidate Name</span><div className="font-black mt-0.5">{candidateProfile?.fullName || 'Candidate'}</div></div>
+          <div><span className="font-bold text-slate-500 uppercase text-[10px] block">Roll Number</span><div className="font-mono font-bold mt-0.5">{candidateProfile?.rollNumber || 'MOS-RF-2026'}</div></div>
+          <div><span className="font-bold text-slate-500 uppercase text-[10px] block">Evaluation Scheme</span><div className="font-semibold mt-0.5">60 MCQs (Verbal + Logical + Numerical)</div></div>
+          <div><span className="font-bold text-slate-500 uppercase text-[10px] block">Result Status</span><div className="font-black mt-0.5 text-emerald-700">COMPLETED ({scorecardMetrics.percentage.toFixed(1)}%)</div></div>
+        </div>
+
+        <table className="w-full text-xs border-collapse border border-slate-300">
+          <thead>
+            <tr className="bg-slate-100 text-slate-800">
+              <th className="border border-slate-300 p-2 text-left">Section</th>
+              <th className="border border-slate-300 p-2 text-center">Max Marks</th>
+              <th className="border border-slate-300 p-2 text-center">Attempted</th>
+              <th className="border border-slate-300 p-2 text-center">Correct</th>
+              <th className="border border-slate-300 p-2 text-center">Wrong</th>
+              <th className="border border-slate-300 p-2 text-right">Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border border-slate-300 p-2 font-bold">Verbal Ability (Q1 – Q20)</td>
+              <td className="border border-slate-300 p-2 text-center font-mono">20</td>
+              <td className="border border-slate-300 p-2 text-center font-mono">{sectionAnalytics['verbal']?.attempted || 0}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-emerald-700 font-bold">{sectionAnalytics['verbal']?.correct || 0}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-rose-700">{sectionAnalytics['verbal']?.incorrect || 0}</td>
+              <td className="border border-slate-300 p-2 text-right font-black font-mono">{sectionAnalytics['verbal']?.score || 0} / 20</td>
+            </tr>
+            <tr>
+              <td className="border border-slate-300 p-2 font-bold">Logical Reasoning (Q21 – Q40)</td>
+              <td className="border border-slate-300 p-2 text-center font-mono">20</td>
+              <td className="border border-slate-300 p-2 text-center font-mono">{sectionAnalytics['logical']?.attempted || 0}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-emerald-700 font-bold">{sectionAnalytics['logical']?.correct || 0}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-rose-700">{sectionAnalytics['logical']?.incorrect || 0}</td>
+              <td className="border border-slate-300 p-2 text-right font-black font-mono">{sectionAnalytics['logical']?.score || 0} / 20</td>
+            </tr>
+            <tr>
+              <td className="border border-slate-300 p-2 font-bold">Numerical Ability (Q41 – Q60)</td>
+              <td className="border border-slate-300 p-2 text-center font-mono">20</td>
+              <td className="border border-slate-300 p-2 text-center font-mono">{sectionAnalytics['numerical']?.attempted || 0}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-emerald-700 font-bold">{sectionAnalytics['numerical']?.correct || 0}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-rose-700">{sectionAnalytics['numerical']?.incorrect || 0}</td>
+              <td className="border border-slate-300 p-2 text-right font-black font-mono">{sectionAnalytics['numerical']?.score || 0} / 20</td>
+            </tr>
+            <tr className="bg-slate-50 font-black">
+              <td className="border border-slate-300 p-2 font-black">Grand Total Score</td>
+              <td className="border border-slate-300 p-2 text-center font-mono">60</td>
+              <td className="border border-slate-300 p-2 text-center font-mono">{scorecardMetrics.attemptedCount}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-emerald-700">{scorecardMetrics.correctCount}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-rose-700">{scorecardMetrics.incorrectCount}</td>
+              <td className="border border-slate-300 p-2 text-right font-black font-mono text-sm text-blue-900">{scorecardMetrics.totalScore} / 60</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div className="grid grid-cols-3 gap-3 p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs">
+          <div>
+            <span className="font-bold text-slate-500 uppercase text-[10px] block">Accuracy Rate</span>
+            <div className="font-black text-sm text-slate-900 mt-0.5">{scorecardMetrics.accuracy.toFixed(1)}%</div>
+          </div>
+          <div>
+            <span className="font-bold text-slate-500 uppercase text-[10px] block">Time Spent</span>
+            <div className="font-black text-sm text-slate-900 mt-0.5">{formatTime(scorecardMetrics.timeSpentSeconds)}</div>
+          </div>
+          <div>
+            <span className="font-bold text-slate-500 uppercase text-[10px] block">Scholarship Readiness</span>
+            <div className="font-black text-sm text-emerald-700 mt-0.5">
+              {scorecardMetrics.percentage >= 60 ? 'High Scholarship Aptitude' : 'Competitive Foundation'}
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-4 border-t-2 border-slate-300 flex items-center justify-between text-[11px] text-slate-600">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full border-2 border-emerald-600 flex items-center justify-center font-black text-emerald-700 text-xs">
+              ✓
+            </div>
+            <div>
+              <div className="font-bold text-slate-900">VERIFIED ASSESSMENT RECORD</div>
+              <div className="text-[9px] text-slate-500">Man of Study Evaluation System</div>
+            </div>
+          </div>
+
+          <div className="text-right">
+            <div className="font-serif italic font-bold text-slate-800 text-sm">Controller of Examinations</div>
+            <div className="text-[9px] text-slate-500">Man of Study CBT Simulation Council</div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
