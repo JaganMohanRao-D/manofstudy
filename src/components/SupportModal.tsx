@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { X, Heart, Sparkles, ShieldCheck, Zap, Coffee, Copy, Check, Share2 } from 'lucide-react';
+import { X, Heart, ShieldCheck, Zap, Coffee, Copy, Check, Share2, QrCode } from 'lucide-react';
 
 export interface SupportModalProps {
   isOpen: boolean;
@@ -11,13 +11,13 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
 
   const handleCopyPlatformUrl = async () => {
     try {
-      await navigator.clipboard.writeText('https://manofstudy.com');
+      await navigator.clipboard.writeText('https://monofstudy.pages.dev');
       setCopiedUrl(true);
       setTimeout(() => setCopiedUrl(false), 2500);
     } catch {
       // Fallback
       const tempInput = document.createElement('input');
-      tempInput.value = 'https://manofstudy.com';
+      tempInput.value = 'https://monofstudy.pages.dev';
       document.body.appendChild(tempInput);
       tempInput.select();
       document.execCommand('copy');
@@ -49,13 +49,14 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
 
   if (!isOpen) return null;
 
-  // Dynamic encrypted UPI intent link with payment note pre-filled
+  // UPI intent URI. The user reviews the payment in their own UPI app before confirming.
   const upiIntentUri =
     'upi://pay?pa=7842587883@ybl&pn=MAN%20OF%20STUDY%20Developer&tn=A%20kind%20support%20and%20gratitude%20for%20MAN%20OF%20STUDY';
 
-  // Fast dynamic QR Code from reliable server generator
+  // Generate the QR from the exact same URI used by the mobile button.
   const qrCodeUrl =
-    'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=upi%3A%2F%2Fpay%3Fpa%3D7842587883%40ybl%26pn%3DMAN%2520OF%2520STUDY%2520Developer%26tn%3DA%2520kind%2520support%2520and%2520gratitude%2520for%2520MAN%2520OF%2520STUDY';
+    'https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data=' +
+    encodeURIComponent(upiIntentUri);
 
   return (
     <div
@@ -100,22 +101,19 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
           id="support-modal-title"
           className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-tight mb-3"
         >
-          Support MAN OF STUDY Development{' '}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-600 via-pink-600 to-amber-600 dark:from-rose-400 dark:via-pink-400 dark:to-amber-400">
-            • 100% Free Forever
-          </span>
+          If MAN OF STUDY genuinely helped you, you can support its journey
         </h2>
 
         {/* Emotional Narrative Storyline */}
-        <div className="space-y-2 text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed text-left bg-slate-50/90 dark:bg-slate-800/40 p-3.5 sm:p-4 rounded-2xl border border-slate-100 dark:border-slate-800/70 mb-5">
+        <div className="space-y-2.5 text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed text-left bg-slate-50/90 dark:bg-slate-800/40 p-3.5 sm:p-4 rounded-2xl border border-slate-100 dark:border-slate-800/70 mb-5">
           <p>
-            MAN OF STUDY started with zero budget from a hostel room to rescue thousands of students from entrance confusion, attendance panic, and expensive ed-tech traps.
+            <strong>Thank you for using MAN OF STUDY.</strong> This platform is being built with a simple goal: make useful student information and practical tools available to students and parents without putting the important parts behind a paywall.
           </p>
           <p>
-            We host everything with <strong>zero paywalls, zero sketchy ads, and 100% student privacy</strong>. But running high-speed servers, radar scrapers, and database tools costs real money every month.
+            If a tool here genuinely saved you time, reduced some confusion, or helped you understand your options, your support can help us keep improving the platform and continue making these resources available to more students.
           </p>
-          <p className="text-rose-700 dark:text-rose-300 font-medium">
-            Even a small contribution of ₹10, ₹20, or a cup of chai (₹50) directly helps us pay server bills and keep this platform alive and free for every rural &amp; college student. Your kindness fuels our code.
+          <p className="text-rose-700 dark:text-rose-300 font-semibold">
+            మీకు మా website నిజంగా helpful గా అనిపిస్తే, మీకు నచ్చినంత support చేయండి. మీ చిన్న సహాయం కూడా ఇలాంటి information ని మరింత మంది students &amp; parents కి free గా అందించడానికి ఉపయోగపడుతుంది. ❤️
           </p>
         </div>
 
@@ -148,16 +146,13 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
               loading="lazy"
               referrerPolicy="no-referrer"
             />
-            {/* Center UPI Mini Badge */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-7 h-7 rounded-full bg-white shadow-md border border-slate-200 flex items-center justify-center">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              </div>
+            <div className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700">
+              <QrCode className="w-3.5 h-3.5" /> UPI QR · scan with any supported UPI app
             </div>
           </div>
 
           <p className="mt-2.5 text-[11px] font-medium text-slate-500 dark:text-slate-400 max-w-[280px]">
-            Scan with <strong>PhonePe, Google Pay, Paytm, BHIM</strong> or any UPI App to contribute custom amount.
+            Scan with your preferred UPI app. The payment app will show the details before you confirm.
           </p>
         </div>
 
@@ -169,10 +164,10 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
             className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-[0.98] text-white font-bold py-3 px-5 rounded-2xl w-full flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition-all cursor-pointer text-xs sm:text-sm"
           >
             <Zap className="w-4 h-4 fill-amber-300 text-amber-300 shrink-0" />
-            <span>Pay via Any UPI App (PhonePe / GPay / Paytm / BHIM)</span>
+            <span>Support Now · Open UPI App</span>
           </a>
           <p className="text-[10px] text-slate-400 mt-1.5 sm:hidden">
-            (Tap above to directly open your installed UPI app)
+            (Your UPI app will open; review the payment before confirming.)
           </p>
         </div>
 
@@ -180,7 +175,7 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
         <div className="mb-4 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 space-y-2 text-center">
           <div className="flex items-center justify-between gap-2">
             <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
-              Can't donate right now? Share with classmates:
+              Can't support right now? You can still share MAN OF STUDY with another student:
             </span>
             <button
               type="button"
@@ -214,10 +209,10 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
         <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-1 text-slate-500 dark:text-slate-400">
           <div className="flex items-center justify-center gap-1.5 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
             <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
-            <span>100% Secure Peer-to-Peer UPI Payment. You choose any amount in your app.</span>
+            <span>Direct UPI intent · You choose the amount and confirm it in your own UPI app.</span>
           </div>
           <p className="text-[10px] text-slate-400 dark:text-slate-500">
-            No intermediaries • No extra commissions • Directly fuels platform bandwidth &amp; scrapers
+            Thank you for helping us keep useful student resources accessible.
           </p>
         </div>
       </div>
