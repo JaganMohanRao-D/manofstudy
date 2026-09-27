@@ -221,7 +221,7 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') executeSearch();
                   }}
-                  placeholder="Search candidate name (e.g. PEDDIBOYINA BHAVITHA, JAGAN, PREETHI)..."
+                  placeholder="Search candidate name..."
                   className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl pl-9 pr-8 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 placeholder-slate-400 dark:placeholder-slate-500 shadow-inner"
                 />
                 {nameInput && (
