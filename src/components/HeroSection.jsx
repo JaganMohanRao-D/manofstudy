@@ -29,14 +29,19 @@ export const HeroSection = ({
     >
       {/* Premium ambient motion — decorative only, content remains fully static/readable. */}
       <div className="mos-hero-ambient" aria-hidden="true">
-        <span className="mos-hero-bubble mos-hero-bubble-a" />
-        <span className="mos-hero-bubble mos-hero-bubble-b" />
-        <span className="mos-hero-bubble mos-hero-bubble-c" />
-        <span className="mos-hero-dot-field" />
-        <span className="mos-hero-float mos-hero-float-book"><BookOpen /></span>
-        <span className="mos-hero-float mos-hero-float-cap"><GraduationCap /></span>
-        <span className="mos-hero-float mos-hero-float-file"><FileText /></span>
-        <span className="mos-hero-float mos-hero-float-spark"><Sparkles /></span>
+        <span className="mos-hero-grid" />
+        <span className="mos-hero-orb mos-hero-orb-a" />
+        <span className="mos-hero-orb mos-hero-orb-b" />
+        <span className="mos-hero-orb mos-hero-orb-c" />
+        <span className="mos-hero-dot mos-hero-dot-1" />
+        <span className="mos-hero-dot mos-hero-dot-2" />
+        <span className="mos-hero-dot mos-hero-dot-3" />
+        <span className="mos-hero-dot mos-hero-dot-4" />
+        <span className="mos-hero-dot mos-hero-dot-5" />
+        <span className="mos-hero-dot mos-hero-dot-6" />
+        <span className="mos-hero-book mos-hero-book-1"><BookOpen /></span>
+        <span className="mos-hero-book mos-hero-book-2"><BookOpen /></span>
+        <span className="mos-hero-book mos-hero-book-3"><BookOpen /></span>
       </div>
 
       {/* Background Ambience: Subtle and non-distracting */}
@@ -59,9 +64,8 @@ export const HeroSection = ({
         {/* Primary Headline — product-first, concise, and feature-led */}
         <h1 className="mos-hero-title text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.08] text-center px-2">
           <span>One platform.</span>{' '}
-          <span className="mos-hero-gradient-text bg-gradient-to-r from-blue-700 via-teal-700 to-emerald-700 dark:from-blue-400 dark:via-teal-300 dark:to-emerald-400 bg-clip-text text-transparent">
-            Everything students need.
-          </span>
+          <span className="mos-hero-accent-blue">Everything</span>{' '}
+          <span className="mos-hero-accent-green">students need.</span>
         </h1>
 
         {/* Supporting Text */}
