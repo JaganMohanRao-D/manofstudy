@@ -8,6 +8,7 @@ export default function ApTopColleges() {
   const [branch, setBranch] = useState('CSE');
   const [district, setDistrict] = useState('ALL');
   const [search, setSearch] = useState('');
+  const [sortBy, setSortBy] = useState('median_asc');
   const [branches, setBranches] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [rows, setRows] = useState([]);
@@ -41,7 +42,7 @@ export default function ApTopColleges() {
     let active = true;
     setLoading(true);
 
-    getAPTopCollegeRows(branch, district, search)
+    getAPTopCollegeRows(branch, district, search, sortBy)
       .then((next) => {
         if (active) {
           setRows(next);
@@ -61,7 +62,7 @@ export default function ApTopColleges() {
     return () => {
       active = false;
     };
-  }, [branch, district, search]);
+  }, [branch, district, search, sortBy]);
 
   const selectedBranchName = useMemo(
     () => branches.find((item) => item.code === branch)?.name || (branch === 'ALL' ? 'All Engineering Branches' : branch),
@@ -134,6 +135,15 @@ export default function ApTopColleges() {
                 />
               </div>
             </label>
+
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
+              Sort observed ranks
+              <select value={sortBy} onChange={(event) => setSortBy(event.target.value)} className="mos-ap-control mt-1.5 w-full rounded-2xl px-3.5 py-3.5 text-sm font-bold outline-none">
+                <option value="median_asc">Median rank · best first</option>
+                <option value="opening_asc">Opening rank · best first</option>
+                <option value="closing_asc">Closing rank · best first</option>
+              </select>
+            </label>
           </div>
 
           <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] text-slate-600 dark:text-slate-400">
@@ -141,7 +151,7 @@ export default function ApTopColleges() {
               Statewide or district-specific view
             </span>
             <span className="rounded-full border border-slate-200 dark:border-white/10 bg-slate-100/90 dark:bg-slate-950/70 px-2.5 py-1">
-              Primary sort: lowest median rank first
+              Sort: {sortBy === 'opening_asc' ? 'lowest opening rank first' : sortBy === 'closing_asc' ? 'lowest closing rank first' : 'lowest median rank first'}
             </span>
           </div>
         </section>
