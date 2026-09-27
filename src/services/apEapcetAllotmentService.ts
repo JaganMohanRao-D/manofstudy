@@ -332,11 +332,12 @@ export interface SearchOptions {
   allottedCategory?: string;
   gender?: string;
   region?: string;
+  hallTicket?: string;
   phase?: PhaseFilter | number;
   limit?: number;
 }
 
-type SearchIndexCandidate = [number, string, string, string, string, string, number, string, string];
+type SearchIndexCandidate = [number, string, string, string, string, string, number, string, string, string];
 
 interface SearchIndexData {
   candidates: SearchIndexCandidate[];
@@ -378,7 +379,7 @@ export async function searchAllotments(year: AllotmentYear, options: SearchOptio
   const results: AllotmentRecord[] = [];
 
   for (const raw of candidates) {
-    const [rank, candName, gender, category, region, allottedCategory, rawPhase, collegeCode, branchCode] = raw;
+    const [rank, candName, gender, category, region, allottedCategory, rawPhase, collegeCode, branchCode, hallTicket] = raw;
     if (!rank || rank <= 0) continue;
     if (nameQuery && !normalize(candName).includes(nameQuery)) continue;
     if (options.exactRank && rank !== options.exactRank) continue;
@@ -390,6 +391,7 @@ export async function searchAllotments(year: AllotmentYear, options: SearchOptio
     if (targetAllotted !== 'ALL' && String(allottedCategory).toUpperCase() !== targetAllotted) continue;
     if (targetGender !== 'ALL' && String(gender).toUpperCase() !== targetGender) continue;
     if (targetRegion !== 'ALL' && String(region).toUpperCase() !== targetRegion) continue;
+    if (options.hallTicket && !String(hallTicket ?? '').toUpperCase().includes(String(options.hallTicket).trim().toUpperCase())) continue;
     if (phase && Number(rawPhase) !== phase) continue;
 
     const code = String(collegeCode ?? '').toUpperCase();
@@ -407,6 +409,7 @@ export async function searchAllotments(year: AllotmentYear, options: SearchOptio
       college_name: String(collegeMap[code] ?? collegeCode ?? ''),
       branch_code: bcode,
       branch_name: String(branchMap[bcode] ?? branchCode ?? ''),
+      roll_no: String(hallTicket ?? ''),
     });
     if (results.length >= limit) break;
   }
