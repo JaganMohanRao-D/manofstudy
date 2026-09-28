@@ -548,9 +548,6 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         filteredCommands[selectedIndex].action();
         onClose();
       }
-    } else if (e.key === 'Escape') {
-      e.preventDefault();
-      onClose();
     }
   };
 
