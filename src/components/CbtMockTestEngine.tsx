@@ -421,24 +421,24 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
     const percentage = (totalScore / questions.length) * 100;
     const timeSpentSeconds = TOTAL_TIME_SECONDS - secondsRemaining;
 
-    // Scholarship likelihood assessment based on official Reliance Foundation cutoffs
+    // Practice-performance descriptor only; this does not estimate scholarship selection or official cutoffs
     let likelihood: { level: string; color: string; desc: string } = {
-      level: 'Strong Selection Likelihood',
+      level: 'Strong Practice Performance',
       color: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/30',
-      desc: 'Your score of 45+ places you in the top 10th percentile, making you an exceptionally strong candidate for the ₹2,00,000 Reliance Foundation Undergraduate Scholarship.',
+      desc: 'Your mock-test score indicates strong performance in this practice set. This result is for self-assessment only and does not predict scholarship selection.',
     };
 
     if (totalScore < 30) {
       likelihood = {
         level: 'Needs Targeted Revision',
         color: 'text-rose-500 bg-rose-500/10 border-rose-500/30',
-        desc: 'Reliance Foundation scholarships typically require scores of 40+ to make the shortlisted merit tier. Review the full explanations below to strengthen your fundamentals.',
+        desc: 'Use the explanations below to identify topics that need more practice. This mock score should not be treated as an official cutoff or selection indicator.',
       };
     } else if (totalScore < 42) {
       likelihood = {
-        level: 'Competitive / Borderline Cutoff',
+        level: 'Developing Practice Performance',
         color: 'text-amber-500 bg-amber-500/10 border-amber-500/30',
-        desc: 'You have a solid foundation but may be close to the regional cutoff boundary. A brief review of the numerical & logical reasoning tricks below can push you comfortably above 48.',
+        desc: 'You have a useful starting point. Review the numerical and logical reasoning solutions below to strengthen your practice performance.',
       };
     }
 
