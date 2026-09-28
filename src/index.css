@@ -1885,8 +1885,7 @@ html.light .mos-about-content {
 }
 html.light .mos-about-content h2,
 html.light .mos-about-content h3,
-html.light .mos-about-content strong,
-html.light .mos-about-content span {
+html.light .mos-about-content strong {
   color: #0F172A;
 }
 html.light .mos-about-content p,
