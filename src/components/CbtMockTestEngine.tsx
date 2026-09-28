@@ -388,9 +388,9 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
     let unattemptedCount = 0;
 
     const sectionMetrics = {
-      verbal: { total: 0, correct: 0, incorrect: 0, unattempted: 0, score: 0 },
-      logical: { total: 0, correct: 0, incorrect: 0, unattempted: 0, score: 0 },
-      numerical: { total: 0, correct: 0, incorrect: 0, unattempted: 0, score: 0 },
+      verbal: { total: 0, attempted: 0, correct: 0, incorrect: 0, unattempted: 0, score: 0 },
+      logical: { total: 0, attempted: 0, correct: 0, incorrect: 0, unattempted: 0, score: 0 },
+      numerical: { total: 0, attempted: 0, correct: 0, incorrect: 0, unattempted: 0, score: 0 },
     };
 
     questions.forEach((q, idx) => {
@@ -401,6 +401,8 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
       sectionMetrics[q.section].total++;
 
       if (isAttempted) {
+        sectionMetrics[q.section].attempted++;
+
         if (isCorrect) {
           totalScore += 1;
           correctCount++;
@@ -449,6 +451,7 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
       correctCount,
       incorrectCount,
       unattemptedCount,
+      attemptedCount: attemptedTotal,
       timeSpentSeconds,
       sectionMetrics,
       likelihood,
