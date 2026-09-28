@@ -1646,6 +1646,8 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
                         </div>
                       </article>
                     ))}
+                  </div>
+                )}
 
                 {/* Pagination Controls */}
                 {totalPages > 1 && (
