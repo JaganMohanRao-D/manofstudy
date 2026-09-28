@@ -73,15 +73,43 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
-  // Focus input whenever palette opens
+  // Focus input whenever palette opens and make Escape reliable
+  // even when the input is not the active element.
   useEffect(() => {
-    if (isOpen) {
-      setSearchQuery('');
-      setSelectedIndex(0);
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 50);
-    }
+    if (!isOpen) return;
+
+    setSearchQuery('');
+    setSelectedIndex(0);
+
+    const focusTimer = window.setTimeout(() => {
+      inputRef.current?.focus();
+    }, 50);
+
+    const handleGlobalEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleGlobalEscape);
+
+    return () => {
+      window.clearTimeout(focusTimer);
+      window.removeEventListener('keydown', handleGlobalEscape);
+    };
+  }, [isOpen, onClose]);
+
+  // Prevent the page underneath from scrolling while the search palette is open.
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
   }, [isOpen]);
 
   // Build full registry of command palette items
@@ -532,16 +560,20 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     <div
       id="command-palette-backdrop"
       onClick={onClose}
-      className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-start justify-center p-3 sm:p-6 sm:pt-20 overflow-y-auto animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-start justify-center p-2 sm:p-6 sm:pt-20 overflow-y-auto overscroll-contain animate-in fade-in duration-150"
+      role="presentation"
     >
       <div
         id="command-palette-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Man of Study quick search"
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[82vh] transition-all transform scale-100"
+        className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[calc(100dvh-1rem)] sm:max-h-[82vh] transition-all transform scale-100"
       >
         {/* Top Search Input Box */}
-        <div className="relative flex items-center px-4 py-3.5 border-b border-slate-100 bg-slate-50/50">
-          <Search className="w-5 h-5 text-slate-400 mr-3 shrink-0" />
+        <div className="relative flex items-center gap-2 px-3 sm:px-4 py-3 sm:py-3.5 border-b border-slate-100 bg-slate-50/80">
+          <Search className="w-5 h-5 text-slate-400 shrink-0" />
           <input
             ref={inputRef}
             id="command-palette-input"
@@ -549,25 +581,37 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Type a tool name, roadmap (CSE, ECE, Robotics), or command..."
-            className="w-full text-sm sm:text-base text-slate-900 placeholder:text-slate-400 bg-transparent focus:outline-none"
+            placeholder="Search tools, roadmaps, scholarships..."
+            className="min-w-0 flex-1 text-sm sm:text-base text-slate-900 placeholder:text-slate-400 bg-transparent focus:outline-none"
             autoComplete="off"
             spellCheck="false"
+            aria-label="Search Man of Study"
           />
 
           {searchQuery && (
             <button
+              type="button"
               onClick={() => setSearchQuery('')}
-              className="p-1 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors mr-2 cursor-pointer"
-              aria-label="Clear query"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer shrink-0"
+              aria-label="Clear search"
             >
               <X className="w-4 h-4" />
             </button>
           )}
 
-          <div className="flex items-center gap-1 shrink-0 text-[10px] font-mono font-semibold px-2 py-1 rounded bg-slate-200 text-slate-600">
-            <span>ESC</span>
-          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-200 active:bg-slate-300 transition-colors cursor-pointer shrink-0"
+            aria-label="Close quick search"
+            title="Close search"
+          >
+            <X className="w-5 h-5" />
+          </button>
+
+          <span className="hidden sm:flex items-center gap-1 shrink-0 text-[10px] font-mono font-semibold px-2 py-1 rounded bg-slate-200 text-slate-600">
+            ESC
+          </span>
         </div>
 
         {/* Quick Filter Tag Chips */}
