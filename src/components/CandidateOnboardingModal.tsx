@@ -46,6 +46,12 @@ export const CandidateOnboardingModal: React.FC<CandidateOnboardingModalProps> =
   const [interMarksType, setInterMarksType] = useState<'total1000' | 'group600'>('total1000');
   const [interMarks, setInterMarks] = useState<string>('920');
   const [errorMsg, setErrorMsg] = useState<string>('');
+  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    setPortalTarget(document.body);
+  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -56,7 +62,7 @@ export const CandidateOnboardingModal: React.FC<CandidateOnboardingModalProps> =
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !portalTarget) return null;
 
   const isAp = examType === 'ap-eapcet';
   const isTg = examType === 'tg-eapcet';
@@ -297,7 +303,7 @@ export const CandidateOnboardingModal: React.FC<CandidateOnboardingModalProps> =
         </form>
       </div>
     </div>,
-    document.body
+    portalTarget
   );
 };
 
