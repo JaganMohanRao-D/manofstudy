@@ -28,7 +28,7 @@ export const APStudentDetailModal: React.FC<APStudentDetailModalProps> = ({ stud
 
   useEffect(() => {
     if (typeof document === 'undefined') return;
-    setPortalTarget(document.body);
+    setPortalTarget(document.getElementById('modal-root'));
   }, []);
 
   useEffect(() => {
