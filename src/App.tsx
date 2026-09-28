@@ -577,8 +577,6 @@ export default function App() {
         else setUtilitySubTab('pdf-tools');
       } else if (hash === 'guides' || hash === 'editorial' || hash === 'survival' || hash.startsWith('guide-')) {
         setActiveWorkspace('guides');
-      } else if (hash === 'campus-connect' || hash === 'campus' || hash === 'community' || hash === 'connect') {
-        setActiveWorkspace('hub');
       } else if (
         hash === 'gap-analyzer' ||
         hash === 'gap' ||
@@ -604,14 +602,24 @@ export default function App() {
         hash === 'test-series' ||
         hash === 'cbt-series'
       ) {
-        setActiveWorkspace('mock-tests');
+        if (user) {
+          setActiveWorkspace('mock-tests');
+        } else {
+          setPendingProtectedWorkspace({ workspace: 'mock-tests' });
+          openAuthModal({ type: 'mock-test' });
+        }
       } else if (
         hash === 'eapcet-cbt' ||
         hash === 'ap-cbt' ||
         hash === 'tg-cbt' ||
         hash === 'eapcet-test'
       ) {
-        setActiveWorkspace('eapcet-cbt');
+        if (user) {
+          setActiveWorkspace('eapcet-cbt');
+        } else {
+          setPendingProtectedWorkspace({ workspace: 'eapcet-cbt' });
+          openAuthModal({ type: 'mock-test' });
+        }
       } else if (hash === 'hub' || hash === '') {
         setActiveWorkspace('hub');
       }
@@ -620,7 +628,7 @@ export default function App() {
     handleHashChange();
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+  }, [user, openAuthModal]);
 
   useEffect(() => {
     const seoPath = getSeoLandingPath();
@@ -703,7 +711,14 @@ export default function App() {
     if (!user || !pendingProtectedWorkspace) return;
     const pending = pendingProtectedWorkspace;
     setPendingProtectedWorkspace(null);
-    handleSelectWorkspace(pending.workspace, pending.subTab);
+    setActiveWorkspace(pending.workspace);
+    if (pending.workspace === 'eapcet-cbt' && pending.subTab) {
+      setEapcetCbtSubTab(pending.subTab);
+    } else if (pending.subTab) {
+      setUtilitySubTab(pending.subTab as ToolTab);
+    }
+    window.location.hash = pending.workspace;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [user, pendingProtectedWorkspace]);
 
   const handleSelectEapcetPhase = () => {
@@ -725,8 +740,6 @@ export default function App() {
       handleSelectWorkspace('tg-top-colleges');
     } else if (tab === 'tg-predictor') {
       handleSelectWorkspace('tg-predictor');
-    } else if (tab === 'campus-connect') {
-      handleSelectWorkspace('campus-connect');
     } else if (tab === 'ap-allotments') {
       handleSelectWorkspace('ap-allotments');
     } else if (tab === 'ap-predictor') {
@@ -866,11 +879,6 @@ export default function App() {
         return {
           title: 'MOS Student Knowledge HUB (9 Chapters)',
           icon: <BookOpen className="w-4 h-4 text-sky-500" />,
-        };
-      case 'campus-connect':
-        return {
-          title: 'MOS CampusConnect — Student Network',
-          icon: <Users className="w-4 h-4 text-emerald-500" />,
         };
       case 'gap-analyzer':
         return {
