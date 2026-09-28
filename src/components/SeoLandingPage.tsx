@@ -8,6 +8,7 @@ type SeoLandingPageProps = {
   howTo: string[];
   faqs: Array<{ question: string; answer: string }>;
   relatedLinks: Array<{ href: string; label: string }>;
+  toolIntro?: string;
 };
 
 export const SeoLandingPage: React.FC<SeoLandingPageProps> = ({
@@ -18,6 +19,7 @@ export const SeoLandingPage: React.FC<SeoLandingPageProps> = ({
   howTo,
   faqs,
   relatedLinks,
+  toolIntro,
 }) => {
   return (
     <div className="space-y-8 animate-in fade-in duration-200">
@@ -30,7 +32,7 @@ export const SeoLandingPage: React.FC<SeoLandingPageProps> = ({
       <section aria-labelledby="mos-live-tool" className="space-y-4">
         <div>
           <h2 id="mos-live-tool" className="text-xl sm:text-2xl font-black text-slate-950 dark:text-white">Use the Man of Study tool</h2>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Search the available allotment dataset directly below.</p>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{toolIntro || 'Use the interactive Man of Study tool directly below.'}</p>
         </div>
         {tool}
       </section>
