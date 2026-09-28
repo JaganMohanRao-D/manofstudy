@@ -38,6 +38,7 @@ import type { EapcetPhaseTab } from './components/ApEapcetRadar';
 import { ChunkErrorBoundary } from './components/ChunkErrorBoundary';
 import { GuidesHub } from './components/GuidesHub';
 import { SeoLandingPage } from './components/SeoLandingPage';
+import { useAuth } from './context/AuthContext';
 
 // Resilient dynamic code splitting with retry logic for network or stale bundle resilience
 const lazyWithRetry = <T extends React.ComponentType<any>>(
@@ -173,11 +174,6 @@ const MajorProjectsHub = lazyWithRetry(() =>
 const InternshipsRadar = lazyWithRetry(() =>
   import('./components/InternshipsRadar').then((m: any) => ({
     default: m.InternshipsRadar || m.default,
-  }))
-);
-const CampusConnect = lazyWithRetry(() =>
-  import('./components/CampusConnect').then((m: any) => ({
-    default: m.CampusConnect || m.default,
   }))
 );
 const StudentGapAnalyzer = lazyWithRetry(() =>
@@ -432,6 +428,11 @@ export default function App() {
   const [academicSubTab, setAcademicSubTab] = useState<'attendance' | 'gpa' | 'internal'>('attendance');
   const [eapcetCbtSubTab, setEapcetCbtSubTab] = useState<string>('ap-full');
   const [isExamActive, setIsExamActive] = useState<boolean>(false);
+  const [pendingProtectedWorkspace, setPendingProtectedWorkspace] = useState<{
+    workspace: WorkspaceView;
+    subTab?: string;
+  } | null>(null);
+  const { user, openAuthModal } = useAuth();
 
   // Show one respectful support prompt only after a real search result is produced.
   useEffect(() => {
@@ -447,7 +448,7 @@ export default function App() {
 
     window.addEventListener('mos:tool-result-ready', handleToolResultReady);
     return () => window.removeEventListener('mos:tool-result-ready', handleToolResultReady);
-  }, []);
+  }, [user, openAuthModal]);
   const supportEmail = 'support.jamord@gmail.com';
 
   const handleCopyEmail = () => {
@@ -577,7 +578,7 @@ export default function App() {
       } else if (hash === 'guides' || hash === 'editorial' || hash === 'survival' || hash.startsWith('guide-')) {
         setActiveWorkspace('guides');
       } else if (hash === 'campus-connect' || hash === 'campus' || hash === 'community' || hash === 'connect') {
-        setActiveWorkspace('campus-connect');
+        setActiveWorkspace('hub');
       } else if (
         hash === 'gap-analyzer' ||
         hash === 'gap' ||
@@ -673,6 +674,12 @@ export default function App() {
 
   // Dynamic Workspace Switcher Handler
   const handleSelectWorkspace = (ws: WorkspaceView, targetSubTab?: string) => {
+    const requiresMockAuth = ws === 'mock-tests' || ws === 'cbt-mock-test' || ws === 'eapcet-cbt';
+    if (requiresMockAuth && !user) {
+      setPendingProtectedWorkspace({ workspace: ws, subTab: targetSubTab });
+      openAuthModal({ type: 'mock-test' });
+      return;
+    }
     setActiveWorkspace(ws);
     const seoPath = getSeoLandingPath();
     if (seoPath) {
@@ -691,6 +698,13 @@ export default function App() {
     // Smooth scroll to top instantly
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    if (!user || !pendingProtectedWorkspace) return;
+    const pending = pendingProtectedWorkspace;
+    setPendingProtectedWorkspace(null);
+    handleSelectWorkspace(pending.workspace, pending.subTab);
+  }, [user, pendingProtectedWorkspace]);
 
   const handleSelectEapcetPhase = () => {
     setEapcetPhase('phase2');
@@ -1270,17 +1284,6 @@ export default function App() {
                 {activeWorkspace === 'guides' && (
                   <GuidesHub
                     onSelectWorkspace={(ws) => handleSelectWorkspace(ws as WorkspaceView)}
-                  />
-                )}
-
-                {activeWorkspace === 'campus-connect' && (
-                  <CampusConnect
-                    onNavigateToTool={(tool) =>
-                      handleSelectWorkspace(
-                        'utilities',
-                        tool === 'image-tools' || tool === 'resizer' ? 'resizer' : 'pdf-tools'
-                      )
-                    }
                   />
                 )}
 
