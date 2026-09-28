@@ -390,6 +390,10 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
                   {r.alloted_category}
                 </span>
               </div>
+
+              {expandedStudentKey === `mobile-${r.rank}-${r.cand_name}-${idx}` && (
+                <APStudentInlineDetails student={r} year={year} />
+              )}
             </div>
           ))}
         </div>
