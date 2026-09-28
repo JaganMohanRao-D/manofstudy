@@ -50,6 +50,90 @@ const categoryClass = (category: string) => {
 
 const isOpen = (s: IndianScholarship) => (s.status || '').toLowerCase().includes('open');
 
+type ScholarshipVisualTheme = {
+  scene: string;
+  accent: string;
+};
+
+const scholarshipVisualThemes: Record<string, ScholarshipVisualTheme> = {
+  'central-sector-csss-2026': { scene: 'Indian university student studying with books and laptop in a modern campus library, academic achievement and opportunity', accent: 'from-sky-500/80 to-indigo-700/80' },
+  'top-class-sc-2026': { scene: 'Indian college student in a modern university setting, inclusive higher education, academic excellence, confident future', accent: 'from-indigo-500/80 to-violet-700/80' },
+  'pm-yasasvi-top-class-college-2026': { scene: 'Indian undergraduate student in a contemporary college campus, education opportunity, books and laptop, hopeful future', accent: 'from-cyan-500/80 to-blue-700/80' },
+  'aicte-pragati-2026': { scene: 'Indian female engineering student working on a laptop with subtle engineering and technology elements in a university lab', accent: 'from-fuchsia-500/80 to-rose-700/80' },
+  'aicte-saksham-2026': { scene: 'Indian engineering student with accessible modern university technology and inclusive campus environment, optimistic academic setting', accent: 'from-teal-500/80 to-cyan-700/80' },
+  'aicte-swanath-2026': { scene: 'Indian college student studying independently in a supportive modern academic environment, resilience and educational opportunity', accent: 'from-emerald-500/80 to-teal-700/80' },
+  'inspire-she-2026': { scene: 'Indian science student in a bright research laboratory with books, microscope and subtle scientific atmosphere', accent: 'from-violet-500/80 to-fuchsia-700/80' },
+  'post-matric-sc-2026': { scene: 'Indian college student from a diverse campus community studying with laptop and books, higher education opportunity', accent: 'from-blue-500/80 to-indigo-700/80' },
+  'post-matric-obc-2026': { scene: 'Indian student in a university classroom studying with laptop and books, educational opportunity and achievement', accent: 'from-amber-500/80 to-orange-700/80' },
+  'post-matric-minority-2026': { scene: 'diverse Indian university students studying together in a modern campus library, inclusive education and opportunity', accent: 'from-slate-500/80 to-blue-700/80' },
+  'reliance-ug-2026': { scene: 'Indian first-year university student with laptop and books in a premium modern campus, technology and academic ambition', accent: 'from-blue-500/80 to-cyan-700/80' },
+  'reliance-pg-2026': { scene: 'Indian postgraduate student working on advanced computer science and technology research in a modern university lab', accent: 'from-cyan-500/80 to-blue-800/80' },
+  'hdfc-ecss-2026': { scene: 'Indian college student studying with laptop and books in a warm modern academic environment, support and opportunity', accent: 'from-emerald-500/80 to-green-700/80' },
+  'tata-pankh-2026': { scene: 'Indian student on a modern university campus with a subtle uplifting light and abstract wing-like shapes suggesting opportunity and growth', accent: 'from-orange-500/80 to-amber-700/80' },
+  'lic-golden-jubilee-2026': { scene: 'Indian university student receiving an academic opportunity in a dignified modern campus setting, achievement and education', accent: 'from-yellow-500/80 to-amber-700/80' },
+};
+
+const getScholarshipVisualTheme = (s: IndianScholarship): ScholarshipVisualTheme => {
+  if (scholarshipVisualThemes[s.id]) return scholarshipVisualThemes[s.id];
+  const text = (s.title + ' ' + s.target + ' ' + s.category).toLowerCase();
+  if (/girl|women|female/.test(text)) {
+    return { scene: 'Indian female university student studying with laptop and books in a modern campus, education and opportunity', accent: 'from-fuchsia-500/80 to-rose-700/80' };
+  }
+  if (/science|research|stem|technology|engineering|computer/.test(text)) {
+    return { scene: 'Indian engineering or science student working with laptop and modern academic technology in a university lab', accent: 'from-cyan-500/80 to-blue-700/80' };
+  }
+  if (/government|central|state/.test(text)) {
+    return { scene: 'Indian university student studying with books and laptop in a modern public university campus, education opportunity', accent: 'from-sky-500/80 to-indigo-700/80' };
+  }
+  return { scene: 'Indian university student studying with books and laptop in a modern campus, education opportunity and academic growth', accent: 'from-emerald-500/80 to-teal-700/80' };
+};
+
+const getScholarshipAiImageUrl = (s: IndianScholarship): string => {
+  const theme = getScholarshipVisualTheme(s);
+  const prompt = [
+    'premium editorial scholarship website hero illustration',
+    theme.scene,
+    'photorealistic but polished, natural Indian setting, cinematic soft lighting, sophisticated blue and emerald educational palette',
+    'clean composition with empty darker space around the lower-left area for a website text overlay',
+    'no logos, no brand marks, no seals, no government emblems, no watermarks, no readable text, no letters, no fake certificates',
+    '16:9 horizontal composition'
+  ].join(', ');
+  return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1200&height=675&nologo=true`;
+};
+
+const ScholarshipVisual: React.FC<{ scholarship: IndianScholarship; compact?: boolean }> = ({ scholarship, compact = false }) => {
+  const theme = getScholarshipVisualTheme(scholarship);
+  const [failed, setFailed] = useState(false);
+  const titleParts = scholarship.title.split(/[:—–]/).map(part => part.trim()).filter(Boolean);
+
+  return (
+    <div className={`relative overflow-hidden ${compact ? 'h-44' : 'h-48'} w-full bg-slate-900`}>
+      {!failed ? (
+        <img
+          src={getScholarshipAiImageUrl(scholarship)}
+          alt=""
+          loading="lazy"
+          onError={() => setFailed(true)}
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+        />
+      ) : (
+        <div className={`absolute inset-0 bg-gradient-to-br ${theme.accent}`}>
+          <div className="absolute -right-10 -top-10 h-36 w-36 rounded-full border border-white/15 bg-white/10 blur-sm" />
+          <div className="absolute -left-8 bottom-[-50px] h-40 w-40 rounded-full border border-white/10 bg-black/10" />
+        </div>
+      )}
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
+        <div className="max-w-[92%] text-white drop-shadow-lg">
+          <div className="text-[9px] font-black uppercase tracking-[.18em] text-emerald-200/90">Scholarship opportunity</div>
+          <div className="mt-1 text-base sm:text-lg font-black leading-tight">{titleParts[0]}</div>
+          {titleParts[1] && <div className="text-xs sm:text-sm font-bold leading-tight text-white/90">{titleParts.slice(1).join(' — ')}</div>}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const ScholarshipsHub: React.FC = () => {
   const [scholarships, setScholarships] = useState<IndianScholarship[]>([]);
   const [selectedScholarship, setSelectedScholarship] = useState<IndianScholarship | null>(null);
@@ -187,8 +271,9 @@ export const ScholarshipsHub: React.FC = () => {
               <button onClick={() => setFeaturedIndex(i => (i + 1) % featured.length)} className="p-2 rounded-lg border border-[var(--mos-border)] hover:border-[var(--mos-border-strong)] bg-[var(--mos-surface-muted)] text-[var(--mos-text-primary)] cursor-pointer" aria-label="Next featured scholarship">›</button>
             </div>
           </div>
-          <button onClick={() => setSelectedScholarship(currentFeatured)} className="w-full text-left rounded-2xl border border-emerald-500/20 bg-emerald-500/[.04] p-4 sm:p-5 hover:border-emerald-500/40 transition-colors cursor-pointer">
-            <div className="flex flex-col lg:flex-row lg:items-center gap-5">
+          <button onClick={() => setSelectedScholarship(currentFeatured)} className="group w-full text-left rounded-2xl border border-emerald-500/20 bg-emerald-500/[.04] hover:border-emerald-500/40 transition-colors cursor-pointer overflow-hidden">
+            <ScholarshipVisual scholarship={currentFeatured} compact />
+            <div className="p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center gap-5">
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap gap-2">
                   <span className={`rounded-full border px-2.5 py-1 text-[10px] font-bold ${categoryClass(currentFeatured.category)}`}>{currentFeatured.category}</span>
@@ -254,6 +339,7 @@ export const ScholarshipsHub: React.FC = () => {
             const girls = isExclusivelyForGirls(s);
             return (
               <article key={s.id} className="group flex flex-col rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface)] hover:border-emerald-500/40 transition-all overflow-hidden shadow-xs">
+                <ScholarshipVisual scholarship={s} />
                 <div className="p-4 sm:p-5 flex-1">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-2 min-w-0">
