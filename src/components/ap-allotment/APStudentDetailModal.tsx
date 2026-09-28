@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, UserRound, GraduationCap, MapPin, WalletCards, Database } from 'lucide-react';
 import { AllotmentRecord, AllotmentYear } from '../../services/apEapcetAllotmentService';
 
@@ -17,7 +18,8 @@ const Detail = ({ label, value, icon: Icon }: { label: string; value?: React.Rea
         {label}
       </div>
       <div className="mt-1.5 break-words text-sm font-bold text-slate-900 dark:text-white">{value}</div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
@@ -39,7 +41,7 @@ export const APStudentDetailModal: React.FC<APStudentDetailModalProps> = ({ stud
   if (!student) return null;
   const fee = (value?: number) => value === undefined ? undefined : '₹' + value.toLocaleString('en-IN');
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4">
       <button aria-label="Close student details" className="absolute inset-0 bg-slate-950/80 backdrop-blur-md" onClick={onClose} />
       <section role="dialog" aria-modal="true" aria-labelledby="ap-student-detail-title" className="relative w-full sm:max-w-3xl max-h-[92vh] overflow-hidden rounded-t-[2rem] sm:rounded-[2rem] border border-white/10 bg-white dark:bg-slate-900 shadow-2xl mos-scale-in">
