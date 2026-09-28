@@ -22,7 +22,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
       )}
 
       {/* Hero Header */}
-      <div className="relative overflow-hidden rounded-3xl bg-slate-950 text-white border border-slate-800 p-6 sm:p-10 space-y-4 shadow-xl">
+      <div className="mos-about-hero relative overflow-hidden rounded-3xl bg-slate-950 text-white border border-slate-800 p-6 sm:p-10 space-y-4 shadow-xl">
         <div className="absolute -top-16 -right-16 w-80 h-80 rounded-full bg-blue-600/20 blur-3xl pointer-events-none" />
         <div className="absolute -bottom-16 left-1/3 w-80 h-80 rounded-full bg-emerald-500/20 blur-3xl pointer-events-none" />
 
