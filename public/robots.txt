@@ -13,4 +13,4 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-Sitemap: https://javisak.vercel.app/sitemap.xml
+Sitemap: https://manofstudy.pages.dev/sitemap.xml
