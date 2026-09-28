@@ -257,6 +257,7 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs">
                 {paginatedRecords.map((r, idx) => (
+                  <React.Fragment key={`row-${r.rank}-${r.cand_name}-${idx}`}>
                   <tr
                     key={`${r.rank}-${r.cand_name}-${idx}`}
                     className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
@@ -333,6 +334,7 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
                       </td>
                     </tr>
                   )}
+                  </React.Fragment>
                 ))}
               </tbody>
             </table>
