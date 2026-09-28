@@ -50,11 +50,9 @@ export const CampusAuthModal: React.FC = () => {
     typeof window !== 'undefined' ? window.location.hostname : '';
 
   const actionLabel =
-    pendingAction?.type === 'ask-doubt'
-      ? 'Post Student Doubt'
-      : pendingAction?.type === 'post-solution'
-      ? 'Post Verified Solution'
-      : 'CampusConnect Access';
+    pendingAction?.type === 'mock-test'
+      ? 'Mock Test Access'
+      : 'Google Sign-In';
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[var(--mos-overlay)] backdrop-blur-xs animate-in fade-in duration-200">
@@ -83,13 +81,13 @@ export const CampusAuthModal: React.FC = () => {
           <div className="space-y-1">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-pink-500/10 text-pink-700 dark:text-pink-300 border border-pink-500/20">
               <Sparkles className="w-3 h-3 text-pink-500" />
-              Verified Student Network
+              Verified Google Sign-In
             </span>
             <h2 className="text-xl font-extrabold text-[var(--mos-text-primary)] tracking-tight">
-              Sign in to CampusConnect
+              Sign in to Man of Study
             </h2>
             <p className="text-xs text-[var(--mos-text-secondary)] leading-relaxed max-w-xs mx-auto">
-              Use your Google Account to ask doubts and help other students.
+              Use your Google Account to continue to the Man of Study Mock Test Series.
             </p>
           </div>
 
@@ -225,10 +223,10 @@ export const CampusAuthModal: React.FC = () => {
           <div className="p-3.5 rounded-xl bg-[var(--mos-surface-muted)] border border-[var(--mos-border)] text-[var(--mos-text-secondary)] text-xs space-y-1">
             <div className="flex items-center gap-1.5 font-bold text-[var(--mos-text-primary)] text-[11px]">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-              <span>Privacy &amp; Accountability Guarantee</span>
+              <span>Secure Sign-In</span>
             </div>
             <p className="text-[11px] leading-relaxed text-[var(--mos-text-muted)]">
-              Google sign-in is required to keep CampusConnect accountable. You can choose to display your name or post publicly as <span className="font-semibold text-[var(--mos-text-primary)]">Anonymous Student</span>.
+              Google sign-in is required before starting a mock test. Your signed-in Google name and profile picture are used only to personalize the mock-test experience.
             </p>
           </div>
         </div>
