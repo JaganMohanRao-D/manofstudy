@@ -288,9 +288,29 @@
     transition-duration: 150ms !important;
   }
 
+  /* The testimonial marquee is content, not decorative motion.
+     Keep it slow enough to read comfortably on phones. */
+  .animate-infinite-marquee {
+    animation-duration: 75s !important;
+  }
+
   /* Exclude spinners and essential feedback */
   .animate-spin {
     animation: spin 1s linear infinite !important;
+  }
+}
+
+/* Give the student-review stream a calm mobile reading speed. */
+@media (max-width: 640px) {
+  .animate-infinite-marquee {
+    animation-duration: 75s !important;
+  }
+}
+
+/* Respect users who explicitly request reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-infinite-marquee {
+    animation: none !important;
   }
 }
 
