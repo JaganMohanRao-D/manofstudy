@@ -19,11 +19,18 @@ const Detail = ({ label, value, icon: Icon }: { label: string; value?: React.Rea
       </div>
       <div className="mt-1.5 break-words text-sm font-bold text-slate-900 dark:text-white">{value}</div>
     </div>,
-    document.body
+    portalTarget
   );
 };
 
 export const APStudentDetailModal: React.FC<APStudentDetailModalProps> = ({ student, year, onClose }) => {
+  const [portalTarget, setPortalTarget] = React.useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    setPortalTarget(document.body);
+  }, []);
+
   useEffect(() => {
     if (!student) return;
     const onKeyDown = (event: KeyboardEvent) => {
@@ -38,7 +45,7 @@ export const APStudentDetailModal: React.FC<APStudentDetailModalProps> = ({ stud
     };
   }, [student, onClose]);
 
-  if (!student) return null;
+  if (!student || !portalTarget) return null;
   const fee = (value?: number) => value === undefined ? undefined : '₹' + value.toLocaleString('en-IN');
 
   return createPortal(
