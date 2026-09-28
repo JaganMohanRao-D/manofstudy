@@ -46,6 +46,7 @@ import {
   CandidateProfile,
   ExamType,
 } from './CandidateOnboardingModal';
+import { useAuth } from '../context/AuthContext';
 
 export type QuestionStatus =
   | 'not_visited'
@@ -85,6 +86,8 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
   initialState = 'ap-eapcet',
   onExamStatusChange,
 }) => {
+  const { user } = useAuth();
+
   // Test Mode: 'full' (160 Qs | 180 Mins) or 'express' (80 Qs | 90 Mins)
   const [testMode, setTestMode] = useState<'full' | 'express'>(initialMode);
 
@@ -1015,8 +1018,13 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
         {/* 1. Top Real CBT Header */}
         <header className="sticky top-0 z-40 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-xs px-3 sm:px-6 py-2.5 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 text-white font-black text-xs flex items-center justify-center shrink-0">
-              CBT
+            <div className="w-9 h-9 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 flex items-center justify-center shrink-0 overflow-hidden">
+              <img
+                src="https://i.ibb.co/zHPk2tv4/Chat-GPT-Image-Sep-13-2026-08-04-48-PM.png"
+                alt="Man of Study"
+                className="w-full h-full object-contain"
+                loading="eager"
+              />
             </div>
             <div className="min-w-0">
               <div className="text-xs sm:text-sm font-black text-slate-900 dark:text-white truncate">
@@ -1026,7 +1034,7 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
               <div className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5 truncate">
                 <User className="w-3 h-3 shrink-0" />
                 <span className="font-bold text-slate-700 dark:text-slate-300">
-                  {candidateProfile?.fullName || 'Candidate'}
+                  {user?.displayName || candidateProfile?.fullName || 'Candidate'}
                 </span>
                 <span>•</span>
                 <span className="font-mono">{candidateProfile?.rollNumber || 'MOS-CBT-2026'}</span>
@@ -1035,7 +1043,17 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
           </div>
 
           {/* Right Header: Fullscreen Button, Live Countdown Timer, and Submit Button */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0"><div className="flex items-center gap-2 px-1.5 py-1 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+              <div className="w-7 h-7 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                {user?.photoURL ? (
+                  <img src={user.photoURL} alt="Signed-in Google profile" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                ) : (
+                  <User className="w-3.5 h-3.5 text-slate-500" />
+                )}
+              </div>
+              <span className="hidden sm:block max-w-[130px] truncate text-[10px] font-bold text-slate-700 dark:text-slate-300">{user?.displayName || 'Google User'}</span>
+            </div>
+
             {/* Fullscreen Toggle Button */}
             <button
               type="button"
