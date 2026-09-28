@@ -274,8 +274,9 @@ export const Header: React.FC<HeaderProps> = ({
             type="button"
             id="header-command-palette-trigger"
             onClick={onOpenCommandPalette}
-            className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 bg-slate-100/90 hover:bg-slate-200/90 dark:bg-slate-900/90 dark:hover:bg-slate-800 text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 rounded-xl text-xs transition-all cursor-pointer shadow-2xs shrink-0"
+            className="w-9 h-9 sm:w-auto sm:h-auto flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 bg-slate-100/90 hover:bg-slate-200/90 dark:bg-slate-900/90 dark:hover:bg-slate-800 text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 rounded-xl text-xs transition-all cursor-pointer shadow-2xs shrink-0"
             title="Open Quick Search & Command Palette (Ctrl/Cmd+K)"
+            aria-label="Open Man of Study quick search"
           >
             <Search className="w-3.5 h-3.5 text-sky-600 dark:text-cyan-400 shrink-0" />
             <span className="hidden md:inline font-medium text-slate-700 dark:text-slate-300">
