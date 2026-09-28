@@ -2192,17 +2192,17 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
             <tr>
               <td className="border border-slate-300 p-2 font-bold">Mathematics (Q1 – Q80)</td>
               <td className="border border-slate-300 p-2 text-center font-mono">80</td>
-              <td className="border border-slate-300 p-2 text-center font-mono">{scoreReport.subjectBreakdown.maths.attempted}</td>
-              <td className="border border-slate-300 p-2 text-center font-mono text-emerald-700 font-bold">{scoreReport.subjectBreakdown.maths.correct}</td>
-              <td className="border border-slate-300 p-2 text-center font-mono text-rose-700">{scoreReport.subjectBreakdown.maths.wrong}</td>
-              <td className="border border-slate-300 p-2 text-right font-black font-mono">{scoreReport.subjectBreakdown.maths.score} / 80</td>
+              <td className="border border-slate-300 p-2 text-center font-mono">{scoreReport.subjectBreakdown.math.attempted}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-emerald-700 font-bold">{scoreReport.subjectBreakdown.math.correct}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-rose-700">{scoreReport.subjectBreakdown.math.incorrect}</td>
+              <td className="border border-slate-300 p-2 text-right font-black font-mono">{scoreReport.subjectBreakdown.math.score} / 80</td>
             </tr>
             <tr>
               <td className="border border-slate-300 p-2 font-bold">Physics (Q81 – Q120)</td>
               <td className="border border-slate-300 p-2 text-center font-mono">40</td>
               <td className="border border-slate-300 p-2 text-center font-mono">{scoreReport.subjectBreakdown.physics.attempted}</td>
               <td className="border border-slate-300 p-2 text-center font-mono text-emerald-700 font-bold">{scoreReport.subjectBreakdown.physics.correct}</td>
-              <td className="border border-slate-300 p-2 text-center font-mono text-rose-700">{scoreReport.subjectBreakdown.physics.wrong}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-rose-700">{scoreReport.subjectBreakdown.physics.incorrect}</td>
               <td className="border border-slate-300 p-2 text-right font-black font-mono">{scoreReport.subjectBreakdown.physics.score} / 40</td>
             </tr>
             <tr>
@@ -2210,7 +2210,7 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
               <td className="border border-slate-300 p-2 text-center font-mono">40</td>
               <td className="border border-slate-300 p-2 text-center font-mono">{scoreReport.subjectBreakdown.chemistry.attempted}</td>
               <td className="border border-slate-300 p-2 text-center font-mono text-emerald-700 font-bold">{scoreReport.subjectBreakdown.chemistry.correct}</td>
-              <td className="border border-slate-300 p-2 text-center font-mono text-rose-700">{scoreReport.subjectBreakdown.chemistry.wrong}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-rose-700">{scoreReport.subjectBreakdown.chemistry.incorrect}</td>
               <td className="border border-slate-300 p-2 text-right font-black font-mono">{scoreReport.subjectBreakdown.chemistry.score} / 40</td>
             </tr>
             <tr className="bg-slate-50 font-black">
