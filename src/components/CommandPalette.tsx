@@ -35,7 +35,6 @@ import {
   Briefcase,
   Star,
   ShieldAlert,
-  Users,
   BookOpen,
 } from 'lucide-react';
 import { ToolTab, LegalModalType } from '../types';
@@ -120,16 +119,6 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         icon: <Sparkles className="w-4 h-4 text-emerald-400" />,
         keywords: ['gap', 'analyzer', 'skills', 'career', 'roadmap', 'what next', 'simulator', 'placement gap', 'ai'],
         action: () => onSelectTool('gap-analyzer'),
-      },
-      {
-        id: 'tool-campus-connect',
-        title: 'MOS CampusConnect — Student Network',
-        subtitle: 'Real campus updates, senior guidance, and peer doubt resolution across colleges',
-        category: 'Core Tools',
-        badge: 'NEW',
-        icon: <Users className="w-4 h-4 text-emerald-500" />,
-        keywords: ['campus', 'connect', 'community', 'doubt', 'query', 'viva', 'lab', 'cbit', 'ou', 'jntu', 'vnr', 'notes', 'placement'],
-        action: () => onSelectTool('campus-connect'),
       },
       {
         id: 'tool-tg-top-colleges',
