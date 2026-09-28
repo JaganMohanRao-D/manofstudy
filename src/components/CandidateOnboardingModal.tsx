@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   User,
   Award,
@@ -45,6 +46,15 @@ export const CandidateOnboardingModal: React.FC<CandidateOnboardingModalProps> =
   const [interMarksType, setInterMarksType] = useState<'total1000' | 'group600'>('total1000');
   const [interMarks, setInterMarks] = useState<string>('920');
   const [errorMsg, setErrorMsg] = useState<string>('');
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -102,7 +112,7 @@ export const CandidateOnboardingModal: React.FC<CandidateOnboardingModalProps> =
     onConfirm(profile);
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[9999] flex min-h-[100dvh] items-center justify-center overflow-y-auto p-3 sm:p-4 bg-slate-950/75 backdrop-blur-sm animate-in fade-in duration-200">
       <div
         className="w-full max-w-lg max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2rem)] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden relative flex flex-col"
@@ -286,7 +296,8 @@ export const CandidateOnboardingModal: React.FC<CandidateOnboardingModalProps> =
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
