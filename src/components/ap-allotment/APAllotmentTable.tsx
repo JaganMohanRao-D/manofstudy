@@ -12,7 +12,7 @@ import {
   Eye,
 } from 'lucide-react';
 import { AllotmentRecord, AllotmentYear } from '../../services/apEapcetAllotmentService';
-import APStudentDetailModal from './APStudentDetailModal';
+import APStudentInlineDetails from './APStudentInlineDetails';
 
 interface APAllotmentTableProps {
   records: AllotmentRecord[];
@@ -35,7 +35,7 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
   const [sortField, setSortField] = useState<'rank' | 'name'>('rank');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedStudent, setSelectedStudent] = useState<AllotmentRecord | null>(null);
+  const [expandedStudentKey, setExpandedStudentKey] = useState<string | null>(null);
   const pageSize = 25;
 
   // Filter and sort records
@@ -272,9 +272,9 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
                     <td className="py-3 px-4">
                       <button
                         type="button"
-                        onClick={() => setSelectedStudent(r)}
+                        onClick={() => setExpandedStudentKey((current) => current === `desktop-${r.rank}-${r.cand_name}-${idx}` ? null : `desktop-${r.rank}-${r.cand_name}-${idx}`)}
                         className="group text-left"
-                        title="View complete student allotment details"
+                        title="Show student allotment details"
                       >
                         <span className="font-bold text-slate-900 dark:text-white group-hover:text-cyan-500 dark:group-hover:text-cyan-300 transition-colors block">
                           {r.cand_name}
@@ -326,6 +326,13 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
                       </span>
                     </td>
                   </tr>
+                  {expandedStudentKey === `desktop-${r.rank}-${r.cand_name}-${idx}` && (
+                    <tr className="bg-cyan-500/[0.03]">
+                      <td colSpan={7} className="px-4 pb-4">
+                        <APStudentInlineDetails student={r} year={year} />
+                      </td>
+                    </tr>
+                  )}
                 ))}
               </tbody>
             </table>
@@ -344,7 +351,7 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
               <div className="flex items-start justify-between gap-2">
                 <button
                   type="button"
-                  onClick={() => setSelectedStudent(r)}
+                  onClick={() => setExpandedStudentKey((current) => current === `mobile-${r.rank}-${r.cand_name}-${idx}` ? null : `mobile-${r.rank}-${r.cand_name}-${idx}`)}
                   className="text-left font-bold text-slate-900 dark:text-white text-sm hover:text-cyan-500 dark:hover:text-cyan-300 transition-colors"
                 >
                   {r.cand_name}
@@ -419,12 +426,7 @@ export const APAllotmentTable: React.FC<APAllotmentTableProps> = ({
             <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
-      )}
-      <APStudentDetailModal
-        student={selectedStudent}
-        year={year}
-        onClose={() => setSelectedStudent(null)}
-      />
+      )} 
     </div>
   );
 };
