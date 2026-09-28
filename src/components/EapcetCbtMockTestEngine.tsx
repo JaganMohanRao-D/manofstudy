@@ -1808,7 +1808,7 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
               {scoreReport.accuracy}%
             </div>
             <div className="text-[10px] text-slate-500 mt-0.5">
-              {scoreReport.correctCount} of {scoreReport.attemptedTotal} attempted
+              {scoreReport.correctCountCount} of {scoreReport.attemptedTotal} attempted
             </div>
           </div>
 
@@ -1965,7 +1965,7 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
                   : 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400'
               }`}
             >
-              Correct ({scoreReport.correctCount})
+              Correct ({scoreReport.correctCountCount})
             </button>
             <button
               type="button"
@@ -1976,7 +1976,7 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
                   : 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400'
               }`}
             >
-              Incorrect ({scoreReport.incorrectCount})
+              Incorrect ({scoreReport.incorrectCountCount})
             </button>
             <button
               type="button"
@@ -2164,7 +2164,7 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
             Official Assessment Certificate
           </div>
           <div className="text-base text-slate-800 leading-relaxed">
-            This is to certify that <span className="font-black text-slate-950 underline decoration-slate-400 underline-offset-4">{candidateProfile?.fullName || 'Verified Candidate'}</span> has achieved <span className="font-black text-slate-950 text-xl">{scoreReport.totalScore}</span> / <span className="font-bold text-slate-700">{scoreReport.maxMarks} Marks</span> in the <span className="font-extrabold text-blue-900">{selectedExamId === 'ap-eapcet' ? 'AP EAPCET 2026' : 'TG EAPCET 2026'} Full-Length Grand Test</span> conducted by Man of Study.
+            This is to certify that <span className="font-black text-slate-950 underline decoration-slate-400 underline-offset-4">{candidateProfile?.fullName || 'Verified Candidate'}</span> has achieved <span className="font-black text-slate-950 text-xl">{scoreReport.totalScore}</span> / <span className="font-bold text-slate-700">{160} Marks</span> in the <span className="font-extrabold text-blue-900">{selectedExamId === 'ap-eapcet' ? 'AP EAPCET 2026' : 'TG EAPCET 2026'} Full-Length Grand Test</span> conducted by Man of Study.
           </div>
         </div>
 
@@ -2216,9 +2216,9 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
             <tr className="bg-slate-50 font-black">
               <td className="border border-slate-300 p-2 font-black">Grand Total / CBT Score</td>
               <td className="border border-slate-300 p-2 text-center font-mono">160</td>
-              <td className="border border-slate-300 p-2 text-center font-mono">{scoreReport.answered}</td>
-              <td className="border border-slate-300 p-2 text-center font-mono text-emerald-700">{scoreReport.correct}</td>
-              <td className="border border-slate-300 p-2 text-center font-mono text-rose-700">{scoreReport.incorrect}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono">{scoreReport.attemptedTotal}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-emerald-700">{scoreReport.correctCount}</td>
+              <td className="border border-slate-300 p-2 text-center font-mono text-rose-700">{scoreReport.incorrectCount}</td>
               <td className="border border-slate-300 p-2 text-right font-black font-mono text-sm text-blue-900">{scoreReport.totalScore} / 160</td>
             </tr>
           </tbody>
@@ -2232,12 +2232,12 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
           </div>
           <div>
             <span className="font-bold text-slate-500 uppercase text-[10px] block">Time Elapsed</span>
-            <div className="font-black text-sm text-slate-900 mt-0.5">{formatTime(scoreReport.timeTakenSeconds)}</div>
+            <div className="font-black text-sm text-slate-900 mt-0.5">{formatTime(timeTakenSeconds)}</div>
           </div>
           <div>
             <span className="font-bold text-slate-500 uppercase text-[10px] block">Estimated State Rank Range</span>
             <div className="font-black text-sm text-blue-900 mt-0.5">
-              {scoreReport.isQualified ? (scoreReport.rankRange || 'N/A') : 'Not Qualified (<40 Cutoff)'}
+              {scoreReport.isQualified ? (scoreReport.estimatedRankRange || 'N/A') : 'Not Qualified (<40 Cutoff)'}
             </div>
           </div>
         </div>
