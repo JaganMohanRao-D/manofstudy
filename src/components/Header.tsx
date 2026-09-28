@@ -20,7 +20,6 @@ import {
   Heart,
   BookOpen,
   Award,
-  Users,
 } from 'lucide-react';
 import { ToolTab, WorkspaceView, LegalModalType } from '../types';
 import { NavigationDrawer } from './NavigationDrawer';
@@ -161,15 +160,6 @@ export const Header: React.FC<HeaderProps> = ({
       icon: BookOpen,
       badge: '9 Ch',
       badgeColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
-    },
-    {
-      id: 'tier2-campus-connect',
-      workspace: 'campus-connect',
-      label: 'CampusConnect',
-      shortLabel: 'Connect',
-      icon: Users,
-      badge: 'NEW',
-      badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
     },
     {
       id: 'tier2-pdf-tools',
