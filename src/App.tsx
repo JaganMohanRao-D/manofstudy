@@ -37,6 +37,7 @@ import { EducationalGuideAndSeo } from './components/EducationalGuideAndSeo';
 import type { EapcetPhaseTab } from './components/ApEapcetRadar';
 import { ChunkErrorBoundary } from './components/ChunkErrorBoundary';
 import { GuidesHub } from './components/GuidesHub';
+import { SeoLandingPage } from './components/SeoLandingPage';
 
 // Resilient dynamic code splitting with retry logic for network or stale bundle resilience
 const lazyWithRetry = <T extends React.ComponentType<any>>(
@@ -392,8 +393,21 @@ export const TOOLS_CONFIG: ToolMeta[] = [
   },
 ];
 
+const SEO_LANDING_PATHS = {
+  apAllotments: '/ap-eapcet/college-wise-allotments/',
+  tgAllotments: '/tg-eapcet/name-wise-allotments/',
+} as const;
+
+const getSeoLandingPath = () => {
+  if (typeof window === 'undefined') return null;
+  const path = window.location.pathname.replace(/\\/+$/, '') || '/';
+  if (path === SEO_LANDING_PATHS.apAllotments.replace(/\\/+$/, '')) return 'apAllotments' as const;
+  if (path === SEO_LANDING_PATHS.tgAllotments.replace(/\\/+$/, '')) return 'tgAllotments' as const;
+  return null;
+};
+
 export default function App() {
-  const [activeWorkspace, setActiveWorkspace] = useState<WorkspaceView>('hub');
+  const [activeWorkspace, setActiveWorkspace] = useState<WorkspaceView>(() => getSeoLandingPath() ? (getSeoLandingPath() === 'apAllotments' ? 'ap-allotments' : 'tg-allotments') : 'hub');
   const [utilitySubTab, setUtilitySubTab] = useState<ToolTab>('pdf-tools');
   const [eapcetPhase, setEapcetPhase] = useState<EapcetPhaseTab>('phase2');
   const [legalModal, setLegalModal] = useState<LegalModalType | null>(null);
@@ -446,6 +460,7 @@ export default function App() {
 
   // Sync activeWorkspace with URL hash for bookmarking and history
   useEffect(() => {
+    if (getSeoLandingPath()) return;
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '').toLowerCase();
       if (
@@ -595,9 +610,51 @@ export default function App() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
+  useEffect(() => {
+    const seoPath = getSeoLandingPath();
+    if (!seoPath) return;
+
+    const config = seoPath === 'apAllotments'
+      ? {
+          title: 'AP EAPCET 2026 College-Wise Allotments | Man of Study',
+          description: 'Explore AP EAPCET 2026 engineering allotment records by college and branch with the Man of Study allotment explorer.',
+          canonical: 'https://manofstudy.pages.dev/ap-eapcet/college-wise-allotments/',
+        }
+      : {
+          title: 'TG EAPCET 2026 Name-Wise Seat Allotments | Man of Study',
+          description: 'Search Telangana EAPCET 2026 final-phase engineering seat allotment records by student name, hall ticket, college and branch.',
+          canonical: 'https://manofstudy.pages.dev/tg-eapcet/name-wise-allotments/',
+        };
+
+    document.title = config.title;
+    const setMeta = (selector: string, content: string) => {
+      const el = document.head.querySelector(selector) as HTMLMetaElement | null;
+      if (el) el.setAttribute('content', content);
+    };
+    setMeta('meta[name="description"]', config.description);
+    setMeta('meta[property="og:title"]', config.title);
+    setMeta('meta[property="og:description"]', config.description);
+    setMeta('meta[property="og:url"]', config.canonical);
+    setMeta('meta[name="twitter:title"]', config.title);
+    setMeta('meta[name="twitter:description"]', config.description);
+    setMeta('meta[name="twitter:url"]', config.canonical);
+
+    let canonical = document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.rel = 'canonical';
+      document.head.appendChild(canonical);
+    }
+    canonical.href = config.canonical;
+  }, []);
+
   // Dynamic Workspace Switcher Handler
   const handleSelectWorkspace = (ws: WorkspaceView, targetSubTab?: string) => {
     setActiveWorkspace(ws);
+    const seoPath = getSeoLandingPath();
+    if (seoPath) {
+      history.replaceState(null, '', '/');
+    }
     if (ws === 'eapcet-cbt' && targetSubTab) {
       setEapcetCbtSubTab(targetSubTab);
     } else if (targetSubTab) {
@@ -820,8 +877,53 @@ export default function App() {
           : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-6'
       }`}>
         
-        {/* WHEN ON FEATURE HUB: Clean, Modern Landing Experience */}
-        {activeWorkspace === 'hub' ? (
+        {getSeoLandingPath() === 'apAllotments' ? (
+          <SeoLandingPage
+            eyebrow="AP EAPCET 2026 · Engineering Admissions"
+            title="AP EAPCET 2026 College-Wise Allotments"
+            description="Use the Man of Study AP allotment explorer to browse the available 2026 engineering allotment dataset by college, branch, rank and category. The page is built around the same interactive allotment tool available across Man of Study."
+            tool={<ApEapcet2025AllotmentExplorer />}
+            howTo={[
+              'Open the college selector and choose a specific AP engineering college, or use the statewide view.',
+              'Choose a branch to narrow the allotment records and observed rank information.',
+              'Use the student search and filters inside the explorer when you need a candidate-level record.',
+              'Treat observed allotment records as historical dataset information and verify current counselling notices with official AP admissions sources.'
+            ]}
+            faqs={[
+              { question: 'What does this AP EAPCET page contain?', answer: 'It provides the Man of Study interactive explorer for the AP EAPCET engineering allotment dataset, including college, branch and candidate-level views available in the project data.' },
+              { question: 'Can I search by college and branch?', answer: 'Yes. The explorer supports college and branch selection and exposes the available records for the selected context.' },
+              { question: 'Are these guaranteed future cutoffs?', answer: 'No. Allotment records describe the dataset available to the tool. They should not be treated as a guarantee of a future allotment or admission outcome.' }
+            ]}
+            relatedLinks={[
+              { href: '/ap-eapcet/college-wise-allotments/', label: 'AP College-Wise Allotments' },
+              { href: '/tg-eapcet/name-wise-allotments/', label: 'TG Name-Wise Allotments' },
+              { href: '/#ap-predictor', label: 'AP EAPCET College Predictor' }
+            ]}
+          />
+        ) : getSeoLandingPath() === 'tgAllotments' ? (
+          <SeoLandingPage
+            eyebrow="TG EAPCET 2026 · Final Phase"
+            title="TG EAPCET 2026 Name-Wise Seat Allotments"
+            description="Search the Man of Study Telangana EAPCET 2026 final-phase allotment explorer by candidate name, hall ticket, college and branch, with available category and rank information."
+            tool={<TgAllotmentExplorer initialCollegeCode="ALL" initialBranchCode="ALL" initialTab="explorer" />}
+            howTo={[
+              'Keep All Colleges selected for a statewide search, or choose a specific college first.',
+              'Use the candidate search field for a student name, hall ticket or other supported search term.',
+              'Open a result to view the available college, branch, category, gender, region and rank details.',
+              'Use the displayed allotment data as a reference and verify official Telangana counselling information before making decisions.'
+            ]}
+            faqs={[
+              { question: 'What is name-wise TG EAPCET allotment search?', answer: 'It is an interactive candidate search within the Telangana EAPCET 2026 final-phase allotment dataset available in Man of Study.' },
+              { question: 'Can I search across colleges?', answer: 'Yes. The statewide explorer supports an All Colleges context, while individual college views can load the corresponding allotment data.' },
+              { question: 'Does an allotment record guarantee admission?', answer: 'No. A dataset record is informational. Current counselling instructions, reporting requirements and official allotment notices remain authoritative.' }
+            ]}
+            relatedLinks={[
+              { href: '/tg-eapcet/name-wise-allotments/', label: 'TG Name-Wise Allotments' },
+              { href: '/ap-eapcet/college-wise-allotments/', label: 'AP College-Wise Allotments' },
+              { href: '/#tg-predictor', label: 'TG EAPCET College Predictor' }
+            ]}
+          />
+        ) : activeWorkspace === 'hub' ? (
           <div className="space-y-8 animate-in fade-in duration-200">
             {/* Dynamic Feature Selector Hero & Bento Cards Showcase */}
             <HeroSection
