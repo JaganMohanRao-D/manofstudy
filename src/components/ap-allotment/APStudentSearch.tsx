@@ -15,7 +15,7 @@ import {
   GitBranch,
 } from 'lucide-react';
 import { searchAllotments, AllotmentYear, AllotmentRecord } from '../../services/apEapcetAllotmentService';
-import APStudentDetailModal from './APStudentDetailModal';
+import APStudentInlineDetails from './APStudentInlineDetails';
 
 interface APStudentSearchProps {
   onExploreCollegeBranch?: (collegeCode: string, branchCode?: string) => void;
@@ -55,7 +55,7 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
   const [totalMatches, setTotalMatches] = useState(0);
   const [hasSearched, setHasSearched] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedStudent, setSelectedStudent] = useState<AllotmentRecord | null>(null);
+  const [expandedStudentKey, setExpandedStudentKey] = useState<string | null>(null);
   const pageSize = 25;
 
   useEffect(() => {
@@ -65,6 +65,7 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
     setTotalMatches(0);
     setHasSearched(false);
     setCurrentPage(1);
+    setExpandedStudentKey(null);
   }, [year, collegeCode, branchCode, phase, initialName]);
 
   // Execute Search
@@ -444,7 +445,12 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
                 {/* Header: Name & Rank */}
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
-                    <button type="button" onClick={() => setSelectedStudent(r)} className="block max-w-full truncate text-left font-bold text-slate-900 dark:text-white text-sm hover:text-cyan-500 dark:hover:text-cyan-300 transition-colors" title="View complete student allotment details">
+                    <button
+                      type="button"
+                      onClick={() => setExpandedStudentKey((current) => current === `res-${r.college_code}-${r.branch_code}-${r.rank}-${idx}` ? null : `res-${r.college_code}-${r.branch_code}-${r.rank}-${idx}`)}
+                      className="block max-w-full truncate text-left font-bold text-slate-900 dark:text-white text-sm hover:text-cyan-500 dark:hover:text-cyan-300 transition-colors"
+                      title="Show student allotment details"
+                    >
                       {r.cand_name}
                     </button>
                     <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">
@@ -558,12 +564,7 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
             </div>
           )}
         </div>
-      )}
-      <APStudentDetailModal
-        student={selectedStudent}
-        year={year}
-        onClose={() => setSelectedStudent(null)}
-      />
+      )} 
     </div>
   );
 };
