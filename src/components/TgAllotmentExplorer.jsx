@@ -1116,7 +1116,7 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
                     }
                   }}
                   placeholder="Search candidate name..."
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-8 py-2 text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-rose-500 placeholder-slate-500 shadow-inner"
+                  className="mos-tg-search-control w-full rounded-xl pl-9 pr-8 py-2 text-xs sm:text-sm focus:outline-none shadow-inner"
                 />
                 {searchQuery && (
                   <button
@@ -1136,7 +1136,7 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
                   id="btn-global-search"
                   onClick={() => executeGlobalSearch()}
                   disabled={isSearchingGlobal || (!searchQuery.trim() && selectedCollegeCode !== 'ALL')}
-                  className={`flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-md ${
+                  className={`mos-tg-search-button flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-md ${
                     isGlobalSearchActive
                       ? 'bg-rose-500 text-white shadow-rose-500/30 ring-2 ring-rose-400/50'
                       : 'bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300'
@@ -1154,7 +1154,7 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
                 <button
                   type="button"
                   onClick={() => setSortOrder((prev) => (prev === 'ASC' ? 'DESC' : 'ASC'))}
-                  className="flex items-center gap-1 px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-300 text-xs font-semibold"
+                  className="mos-tg-filter-control mos-tg-sort-control"
                 >
                   <ArrowUpDown className="w-3.5 h-3.5 text-emerald-400" />
                   <span className="hidden sm:inline">{sortOrder === 'ASC' ? 'Rank: Low-High' : 'Rank: High-Low'}</span>
@@ -1174,7 +1174,7 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
                     executeGlobalSearch({ gender: e.target.value });
                   }
                 }}
-                className="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-300 text-xs focus:outline-none focus:border-emerald-500"
+                className="mos-tg-filter-control"
               >
                 <option value="ALL">All Genders</option>
                 <option value="M">Boys (M)</option>
@@ -1191,7 +1191,7 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
                     executeGlobalSearch({ caste: e.target.value });
                   }
                 }}
-                className="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-300 text-xs focus:outline-none focus:border-emerald-500"
+                className="mos-tg-filter-control"
               >
                 <option value="ALL">All Castes</option>
                 {availableCastes.map((c) => (
@@ -1209,7 +1209,7 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
                     executeGlobalSearch({ category: e.target.value });
                   }
                 }}
-                className="col-span-2 bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-300 text-xs focus:outline-none focus:border-emerald-500"
+                className="col-span-2 mos-tg-filter-control"
               >
                 <option value="ALL">All Seat Categories / Quotas</option>
                 {availableSeatCategories.map((q) => (
@@ -1533,7 +1533,7 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
 
                 {/* Candidate List Cards */}
                 {activeDisplayList.length === 0 ? (
-                  <div className="py-14 text-center text-slate-400 bg-slate-900 border border-slate-800 rounded-2xl space-y-2 p-4">
+                  <div className="mos-tg-empty-state py-14 text-center rounded-2xl space-y-2 p-4">
                     <Users className="w-8 h-8 mx-auto text-slate-600 mb-1" />
                     <p className="text-sm font-semibold text-white">No candidate records found</p>
                     <p className="text-xs text-slate-400 max-w-md mx-auto">
@@ -1555,87 +1555,97 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3">
                     {paginatedCandidates.map((c, idx) => (
-                      <div 
-                        key={`${c.hallTicket || ''}-${c.rank}-${c.collegeCode || ''}-${idx}`} 
-                        className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-3.5 space-y-2 hover:border-slate-700 hover:bg-slate-900/90 transition-all shadow-sm"
+                      <article
+                        key={`${c.hallTicket || ''}-${c.rank}-${c.collegeCode || ''}-${idx}`}
+                        className="mos-tg-candidate-card group"
                       >
-                        {/* Header: Candidate Name & Rank */}
-                        <div className="flex justify-between items-start gap-2">
-                          <div className="space-y-0.5 min-w-0 flex-1">
-                            <div className="flex items-center gap-1.5 flex-wrap">
-                              <h4 className="text-xs sm:text-sm font-bold text-white tracking-tight truncate" title={c.name}>
+                        {/* Candidate header */}
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <h4
+                                className="text-sm sm:text-[15px] font-extrabold tracking-tight text-slate-900 dark:text-white truncate"
+                                title={c.name}
+                              >
                                 {c.name}
                               </h4>
                               {c.matchType && getMatchBadge(c.matchType)}
                             </div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-[11px] text-slate-400 font-mono">HT: {c.hallTicket}</span>
+
+                            <div className="mt-1 flex items-center gap-2">
+                              <span className="text-[10px] sm:text-[11px] font-mono text-slate-500 dark:text-slate-400">
+                                HT: {c.hallTicket}
+                              </span>
                               <button
                                 type="button"
                                 onClick={() => handleCopyTicket(c.hallTicket)}
                                 title="Copy Hall Ticket"
-                                className="text-slate-500 hover:text-emerald-400 transition-colors cursor-pointer"
+                                className="mos-tg-icon-button"
                               >
                                 {copiedTicket === c.hallTicket ? (
-                                  <Check className="w-3 h-3 text-emerald-400" />
+                                  <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                                 ) : (
                                   <Copy className="w-3 h-3" />
                                 )}
                               </button>
                             </div>
                           </div>
-                          <span className="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-lg text-xs font-mono font-bold shrink-0">
+
+                          <span className="mos-tg-rank-pill shrink-0">
                             #{c.rank?.toLocaleString()}
                           </span>
                         </div>
 
-                        {/* College & Branch Meta Strip (Always clear & unambiguous) */}
-                        <div className="pt-1 pb-1 border-t border-slate-800/70 flex items-center justify-between gap-1 text-[11px]">
-                          <div className="truncate text-slate-300">
-                            <span className="font-bold text-rose-300 font-mono mr-1">[{c.collegeCode}]</span>
-                            <span className="text-slate-200 font-medium truncate mr-1.5">
+                        {/* College + branch */}
+                        <div className="mos-tg-college-strip mt-3">
+                          <div className="min-w-0 flex items-center gap-2">
+                            <span className="mos-tg-college-code shrink-0">[{c.collegeCode}]</span>
+                            <span
+                              className="min-w-0 truncate text-xs font-semibold text-slate-700 dark:text-slate-200"
+                              title={c.collegeName || c.collegeCode}
+                            >
                               {c.collegeName || c.collegeCode}
                             </span>
-                            <span className="font-mono text-indigo-300 font-semibold">({c.branchCode})</span>
+                            <span className="mos-tg-branch-code shrink-0">({c.branchCode})</span>
                           </div>
 
-                          {/* Quick Jump into this specific college & branch */}
                           {(isGlobalSearchActive || selectedCollegeCode === 'ALL') && (
                             <button
                               type="button"
                               onClick={() => handleJumpToCollegeBranch(c.collegeCode, c.branchCode)}
-                              className="text-[10px] text-emerald-400 hover:text-emerald-300 hover:underline flex items-center gap-0.5 shrink-0 cursor-pointer"
+                              className="mos-tg-explore-link shrink-0"
                               title={`Open full ${c.collegeCode} allotment list`}
                             >
                               <span>Explore</span>
-                              <ExternalLink className="w-2.5 h-2.5" />
+                              <ExternalLink className="w-3 h-3" />
                             </button>
                           )}
                         </div>
 
-                        {/* Demographics & Seat Quota Details */}
-                        <div className="flex items-center gap-1.5 pt-0.5 text-[10px] sm:text-[11px] flex-wrap">
-                          <span className={`px-1.5 py-0.2 rounded font-medium ${
-                            c.gender === 'M' ? 'bg-cyan-500/15 text-cyan-300' : 'bg-rose-500/15 text-rose-300'
-                          }`}>
-                            {c.gender === 'M' ? 'Boys (M)' : c.gender === 'F' ? 'Girls (F)' : c.gender}
+                        {/* Candidate attributes */}
+                        <div className="mt-3 flex items-center gap-1.5 flex-wrap">
+                          <span className={`mos-tg-chip ${c.gender === 'M' ? 'mos-tg-chip-male' : c.gender === 'F' ? 'mos-tg-chip-female' : 'mos-tg-chip-neutral'}`}>
+                            <Users className="w-3 h-3" />
+                            {c.gender === 'M' ? 'Boys (M)' : c.gender === 'F' ? 'Girls (F)' : c.gender || '—'}
                           </span>
-                          <span className="px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 font-medium">
+
+                          <span className="mos-tg-chip mos-tg-chip-caste">
+                            <ShieldCheck className="w-3 h-3" />
                             {c.caste || 'GEN'}
                           </span>
+
                           {c.region && (
-                            <span className="px-1.5 py-0.2 rounded bg-slate-800/80 text-slate-400">
+                            <span className="mos-tg-chip mos-tg-chip-region">
                               {c.region}
                             </span>
                           )}
-                          <span className="ml-auto px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-mono font-semibold text-[10px]">
-                            {c.seatCategory}
+
+                          <span className="mos-tg-seat-pill ml-auto">
+                            {c.seatCategory || '—'}
                           </span>
                         </div>
-                      </div>
+                      </article>
                     ))}
-                  </div>
-                )}
 
                 {/* Pagination Controls */}
                 {totalPages > 1 && (
