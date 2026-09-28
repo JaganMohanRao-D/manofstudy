@@ -137,8 +137,8 @@ export const ScholarshipsHub: React.FC = () => {
   ];
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-3 sm:px-5 lg:px-8 py-6 sm:py-8 space-y-6 text-[var(--mos-text-primary)]">
-      <div className="relative overflow-hidden rounded-[28px] border border-slate-700/70 bg-[radial-gradient(circle_at_top_right,_rgba(16,185,129,.18),_transparent_34%),linear-gradient(135deg,#0b1220,#101a2c)] p-5 sm:p-7 lg:p-9 shadow-2xl">
+    <section className="mos-scholarships-hub w-full max-w-7xl mx-auto px-3 sm:px-5 lg:px-8 py-6 sm:py-8 space-y-6 text-[var(--mos-text-primary)]">
+      <div className="mos-scholarship-hero relative overflow-hidden rounded-[28px] border border-slate-700/70 bg-[radial-gradient(circle_at_top_right,_rgba(16,185,129,.18),_transparent_34%),linear-gradient(135deg,#0b1220,#101a2c)] p-5 sm:p-7 lg:p-9 shadow-2xl">
         <div className="absolute -right-20 -top-20 h-52 w-52 rounded-full bg-emerald-400/10 blur-3xl" />
         <div className="relative grid lg:grid-cols-[1.3fr_.7fr] gap-7 items-end">
           <div>
