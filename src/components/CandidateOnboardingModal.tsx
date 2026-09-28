@@ -50,7 +50,7 @@ export const CandidateOnboardingModal: React.FC<CandidateOnboardingModalProps> =
 
   useEffect(() => {
     if (typeof document === 'undefined') return;
-    setPortalTarget(document.body);
+    setPortalTarget(document.getElementById('modal-root'));
   }, []);
 
   useEffect(() => {
