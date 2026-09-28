@@ -1853,3 +1853,49 @@ html.light .mos-card-raised {
     animation: none !important;
   }
 }
+
+
+/* ==========================================================================
+   MOS ACCESSIBILITY CONTRAST FIXES — Scholarship hero + About Us
+   These scoped rules intentionally override the global light-theme legacy
+   Tailwind bridge only where a dark surface requires light text.
+   ========================================================================== */
+
+/* Scholarship hero stays a true dark hero in the light site theme. */
+html.light .mos-scholarship-hero .text-white {
+  color: #F8FAFC !important;
+  -webkit-text-fill-color: #F8FAFC !important;
+}
+html.light .mos-scholarship-hero .text-slate-200,
+html.light .mos-scholarship-hero .text-slate-300 {
+  color: #CBD5E1 !important;
+}
+html.light .mos-scholarship-hero .text-slate-400 {
+  color: #94A3B8 !important;
+}
+html.light .mos-scholarship-hero .text-emerald-300 {
+  color: #6EE7B7 !important;
+  -webkit-text-fill-color: #6EE7B7 !important;
+}
+
+/* About Us content uses a deliberately high-contrast light surface. */
+html.light .mos-about-content {
+  color: #334155 !important;
+  background-color: #FFFFFF !important;
+}
+html.light .mos-about-content h2,
+html.light .mos-about-content h3,
+html.light .mos-about-content strong,
+html.light .mos-about-content span {
+  color: #0F172A;
+}
+html.light .mos-about-content p,
+html.light .mos-about-content li {
+  color: #334155;
+}
+html.light .mos-about-content a {
+  color: #1D4ED8;
+}
+html.dark .mos-about-content {
+  color: var(--mos-text-secondary);
+}
