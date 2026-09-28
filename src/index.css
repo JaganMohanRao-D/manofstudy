@@ -681,6 +681,167 @@ html.light .mos-ap-explorer select option {
   color: var(--mos-text-primary) !important;
 }
 
+
+/* TG EAPCET — candidate explorer card system
+ * Uses MOS semantic theme tokens so light mode never produces low-contrast
+ * slate-on-slate badges or dark blocks on the bright page.
+ */
+.mos-tg-candidate-card {
+  background: var(--mos-surface-raised);
+  border: 1px solid var(--mos-border);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 8px 24px var(--mos-shadow);
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+.mos-tg-candidate-card:hover {
+  transform: translateY(-1px);
+  border-color: var(--mos-border-strong);
+  box-shadow: 0 12px 30px var(--mos-shadow);
+}
+
+.mos-tg-rank-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(5, 150, 105, 0.10);
+  color: #047857;
+  border: 1px solid rgba(5, 150, 105, 0.28);
+  font: 700 11px/1.2 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+html.dark .mos-tg-rank-pill {
+  color: #6ee7b7;
+  background: rgba(16, 185, 129, 0.13);
+  border-color: rgba(52, 211, 153, 0.28);
+}
+
+.mos-tg-college-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid var(--mos-border);
+  border-radius: 10px;
+  background: var(--mos-surface-muted);
+}
+.mos-tg-college-code {
+  color: #e11d48;
+  font: 800 10px/1.2 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+.mos-tg-branch-code {
+  color: #4f46e5;
+  font: 700 10px/1.2 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+html.dark .mos-tg-branch-code { color: #a5b4fc; }
+
+.mos-tg-explore-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #047857;
+  font-size: 10px;
+  font-weight: 700;
+}
+.mos-tg-explore-link:hover { color: #065f46; text-decoration: underline; }
+html.dark .mos-tg-explore-link { color: #6ee7b7; }
+html.dark .mos-tg-explore-link:hover { color: #a7f3d0; }
+
+.mos-tg-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 24px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--mos-border);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+.mos-tg-chip-male {
+  background: rgba(6, 182, 212, 0.10);
+  color: #0e7490;
+  border-color: rgba(6, 182, 212, 0.25);
+}
+.mos-tg-chip-female {
+  background: rgba(244, 63, 94, 0.10);
+  color: #be123c;
+  border-color: rgba(244, 63, 94, 0.25);
+}
+.mos-tg-chip-neutral {
+  background: var(--mos-surface-muted);
+  color: var(--mos-text-secondary);
+}
+.mos-tg-chip-caste {
+  background: var(--mos-surface-muted);
+  color: var(--mos-text-primary);
+}
+.mos-tg-chip-region {
+  background: var(--mos-surface);
+  color: var(--mos-text-secondary);
+}
+html.dark .mos-tg-chip-male { color: #67e8f9; }
+html.dark .mos-tg-chip-female { color: #fda4af; }
+
+.mos-tg-seat-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 3px 9px;
+  border-radius: 7px;
+  background: #eef2ff;
+  color: #4338ca;
+  border: 1px solid #c7d2fe;
+  font: 700 9px/1.2 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  letter-spacing: .01em;
+}
+html.dark .mos-tg-seat-pill {
+  background: rgba(99, 102, 241, 0.15);
+  color: #c7d2fe;
+  border-color: rgba(129, 140, 248, 0.30);
+}
+
+.mos-tg-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  color: var(--mos-text-muted);
+  background: transparent;
+  transition: background 120ms ease, color 120ms ease;
+}
+.mos-tg-icon-button:hover {
+  color: var(--mos-primary);
+  background: var(--mos-primary-soft);
+}
+
+.mos-tg-search-control,
+.mos-tg-filter-control {
+  background: var(--mos-input-bg) !important;
+  color: var(--mos-text-primary) !important;
+  border: 1px solid var(--mos-input-border) !important;
+}
+.mos-tg-search-control::placeholder { color: var(--mos-text-muted) !important; }
+.mos-tg-search-control:focus,
+.mos-tg-filter-control:focus {
+  border-color: var(--mos-primary) !important;
+  box-shadow: 0 0 0 3px var(--mos-primary-soft);
+}
+.mos-tg-sort-control:hover { border-color: var(--mos-border-strong) !important; }
+
+.mos-tg-empty-state {
+  background: var(--mos-surface);
+  border: 1px solid var(--mos-border);
+  box-shadow: 0 8px 24px var(--mos-shadow);
+}
+.mos-tg-search-button { min-height: 38px; }
+
 /* ---------- DARK THEME ---------- */
 html.dark .mos-tg-explorer,
 html.dark .mos-ap-explorer {
