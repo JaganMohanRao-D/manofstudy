@@ -834,13 +834,6 @@ export default function App() {
                 {/* High-Trust Reviews: Continuous Horizontal Marquee Carousel */}
                 <StudentTestimonials />
 
-                {/* Authoritative 8-Chapter Student & Tier-3 Survival Editorial Hub */}
-                <div className="content-visibility-auto">
-                  <GuidesHub
-                    onSelectWorkspace={(ws) => handleSelectWorkspace(ws as WorkspaceView)}
-                  />
-                </div>
-
                 {/* Educational Guides & Transparent Methodology Documentation */}
                 <div className="content-visibility-auto">
                   <EducationalGuideAndSeo />
