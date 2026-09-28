@@ -842,6 +842,93 @@ html.dark .mos-tg-seat-pill {
 }
 .mos-tg-search-button { min-height: 38px; }
 
+
+/* AP EAPCET — TG-style visual system
+ * Uses MOS semantic tokens for safe light/dark contrast.
+ */
+.mos-ap-state-card,
+.mos-ap-state-panel {
+  background: var(--mos-surface-raised);
+  border: 1px solid var(--mos-border);
+  box-shadow: 0 12px 32px var(--mos-shadow);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+.mos-ap-state-card:hover,
+.mos-ap-state-panel:hover {
+  border-color: var(--mos-border-strong);
+}
+.mos-ap-state-card:hover {
+  transform: translateY(-1px);
+}
+.mos-ap-state-panel {
+  overflow: hidden;
+}
+.mos-ap-quick-chip,
+.mos-ap-branch-chip,
+.mos-ap-college-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid var(--mos-border);
+  background: var(--mos-surface-muted);
+  color: var(--mos-text-primary);
+  transition: all 160ms ease;
+  cursor: pointer;
+}
+.mos-ap-quick-chip {
+  min-height: 34px;
+  padding: 7px 11px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 800;
+}
+.mos-ap-quick-chip:hover {
+  border-color: rgba(6,182,212,.45);
+  background: rgba(6,182,212,.08);
+  transform: translateY(-1px);
+}
+.mos-ap-branch-chip {
+  min-width: 0;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 9px 10px;
+  border-radius: 11px;
+}
+.mos-ap-branch-chip:hover {
+  border-color: rgba(99,102,241,.45);
+  background: rgba(99,102,241,.08);
+  transform: translateY(-1px);
+}
+.mos-ap-college-chip {
+  min-height: 34px;
+  padding: 7px 10px;
+  border-radius: 11px;
+  font-size: 10px;
+  font-weight: 800;
+}
+.mos-ap-college-chip:hover {
+  border-color: rgba(16,185,129,.45);
+  background: rgba(16,185,129,.08);
+  transform: translateY(-1px);
+}
+.mos-ap-statewide-hero {
+  animation: mos-ap-hero-in 420ms ease both;
+}
+@keyframes mos-ap-hero-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mos-ap-statewide-hero,
+  .mos-ap-state-card,
+  .mos-ap-quick-chip,
+  .mos-ap-branch-chip,
+  .mos-ap-college-chip {
+    animation: none !important;
+    transition: none !important;
+  }
+}
 /* ---------- DARK THEME ---------- */
 html.dark .mos-tg-explorer,
 html.dark .mos-ap-explorer {
