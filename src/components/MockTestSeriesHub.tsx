@@ -23,6 +23,7 @@ import {
   CandidateProfile,
   ExamType,
 } from './CandidateOnboardingModal';
+import { useAuth } from '../context/AuthContext';
 
 export interface MockTestSeriesHubProps {
   onSelectWorkspace?: (ws: WorkspaceView, subTab?: string) => void;
@@ -39,8 +40,13 @@ export const MockTestSeriesHub: React.FC<MockTestSeriesHubProps> = ({
   // Candidate Setup Modal State
   const [onboardingOpen, setOnboardingOpen] = useState<boolean>(false);
   const [targetExamType, setTargetExamType] = useState<ExamType>('ap-eapcet');
+  const { user, openAuthModal } = useAuth();
 
   const handleOpenOnboarding = (examType: ExamType) => {
+    if (!user) {
+      openAuthModal({ type: 'mock-test' });
+      return;
+    }
     setTargetExamType(examType);
     setOnboardingOpen(true);
   };
@@ -91,6 +97,26 @@ export const MockTestSeriesHub: React.FC<MockTestSeriesHubProps> = ({
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
               Real-Time CBT Simulation Environments
             </h2>
+            {user && (
+              <div className="flex items-center gap-2.5 pt-1">
+                <div className="w-8 h-8 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shrink-0">
+                  {user.photoURL ? (
+                    <img
+                      src={user.photoURL}
+                      alt=""
+                      className="w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <UserCheck className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-slate-400">Signed in</div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white truncate max-w-[220px]">{user.displayName || 'Google User'}</div>
+                </div>
+              </div>
+            )}
 
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed">
               Standard-aligned computer-based test engines featuring 160-question grand tests, official 75:25 IPE weightage calculations, countdown timers, TCS iON question palettes, dynamic rank range prediction, and step-by-step solutions.
