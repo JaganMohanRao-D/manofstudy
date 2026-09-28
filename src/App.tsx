@@ -431,7 +431,7 @@ export default function App() {
     workspace: WorkspaceView;
     subTab?: string;
   } | null>(null);
-  const { user, openAuthModal } = useAuth();
+  const { user, loading: authLoading, openAuthModal, closeAuthModal } = useAuth();
 
   // Show one respectful support prompt only after a real search result is produced.
   useEffect(() => {
@@ -471,7 +471,7 @@ export default function App() {
 
   // Sync activeWorkspace with URL hash for bookmarking and history
   useEffect(() => {
-    if (getSeoLandingPath()) return;
+    if (getSeoLandingPath() || authLoading) return;
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '').toLowerCase();
       if (
@@ -627,7 +627,7 @@ export default function App() {
     handleHashChange();
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, [user, openAuthModal]);
+  }, [authLoading, user, openAuthModal]);
 
   useEffect(() => {
     const seoPath = getSeoLandingPath();
@@ -710,6 +710,7 @@ export default function App() {
     if (!user || !pendingProtectedWorkspace) return;
     const pending = pendingProtectedWorkspace;
     setPendingProtectedWorkspace(null);
+    closeAuthModal();
     setActiveWorkspace(pending.workspace);
     if (pending.workspace === 'eapcet-cbt' && pending.subTab) {
       setEapcetCbtSubTab(pending.subTab);
@@ -718,7 +719,7 @@ export default function App() {
     }
     window.location.hash = pending.workspace;
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [user, pendingProtectedWorkspace]);
+  }, [user, pendingProtectedWorkspace, closeAuthModal]);
 
   const handleSelectEapcetPhase = () => {
     setEapcetPhase('phase2');
