@@ -400,9 +400,9 @@ const SEO_LANDING_PATHS = {
 
 const getSeoLandingPath = () => {
   if (typeof window === 'undefined') return null;
-  const path = window.location.pathname.replace(/\\/+$/, '') || '/';
-  if (path === SEO_LANDING_PATHS.apAllotments.replace(/\\/+$/, '')) return 'apAllotments' as const;
-  if (path === SEO_LANDING_PATHS.tgAllotments.replace(/\\/+$/, '')) return 'tgAllotments' as const;
+  const path = window.location.pathname.replace(/\/+$/, '') || '/';
+  if (path === SEO_LANDING_PATHS.apAllotments.replace(/\/+$/, '')) return 'apAllotments' as const;
+  if (path === SEO_LANDING_PATHS.tgAllotments.replace(/\/+$/, '')) return 'tgAllotments' as const;
   return null;
 };
 
