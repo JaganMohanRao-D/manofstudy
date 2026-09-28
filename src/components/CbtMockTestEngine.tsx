@@ -34,6 +34,7 @@ import {
   CandidateProfile,
 } from './CandidateOnboardingModal';
 import { Maximize2, Minimize2, Printer, UserCheck } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export type QuestionStatus =
   | 'not_visited'
@@ -53,6 +54,8 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
   onSwitchToEapcet,
   onExamStatusChange,
 }) => {
+  const { user } = useAuth();
+
   // Candidate Profile
   const [candidateProfile, setCandidateProfile] = useState<CandidateProfile | null>(() => {
     try {
@@ -710,8 +713,13 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
         <header className="sticky top-2 z-30 p-3 sm:p-4 rounded-2xl bg-[var(--mos-surface)]/95 backdrop-blur-xl border border-[var(--mos-border)] shadow-md flex flex-wrap items-center justify-between gap-3">
           {/* Exam Title & Active Section Indicators */}
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0">
-              <GraduationCap className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 flex items-center justify-center shrink-0 overflow-hidden">
+              <img
+                src="https://i.ibb.co/zHPk2tv4/Chat-GPT-Image-Sep-13-2026-08-04-48-PM.png"
+                alt="Man of Study"
+                className="w-full h-full object-contain"
+                loading="eager"
+              />
             </div>
             <div>
               <h2 className="text-xs sm:text-sm font-extrabold text-[var(--mos-text-primary)] leading-tight">
@@ -719,7 +727,7 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
               </h2>
               <div className="text-[11px] text-[var(--mos-text-muted)] flex items-center gap-2">
                 <span className="font-bold text-emerald-600 dark:text-emerald-400">
-                  {candidateProfile?.fullName || 'Candidate'}
+                  {user?.displayName || candidateProfile?.fullName || 'Candidate'}
                 </span>
                 <span>•</span>
                 <span className="font-mono">{candidateProfile?.rollNumber || 'MOS-2026-RF-7842'}</span>
@@ -778,7 +786,17 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
           </div>
 
           {/* Live Countdown Timer & Submit Trigger */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3"><div className="flex items-center gap-2 px-1.5 py-1 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+              <div className="w-7 h-7 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                {user?.photoURL ? (
+                  <img src={user.photoURL} alt="Signed-in Google profile" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                ) : (
+                  <User className="w-3.5 h-3.5 text-slate-500" />
+                )}
+              </div>
+              <span className="hidden sm:block max-w-[130px] truncate text-[10px] font-bold text-slate-700 dark:text-slate-300">{user?.displayName || 'Google User'}</span>
+            </div>
+
             {/* Fullscreen Button */}
             <button
               type="button"
