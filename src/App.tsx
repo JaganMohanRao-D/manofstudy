@@ -396,6 +396,8 @@ export const TOOLS_CONFIG: ToolMeta[] = [
 const SEO_LANDING_PATHS = {
   apAllotments: '/ap-eapcet/college-wise-allotments/',
   tgAllotments: '/tg-eapcet/name-wise-allotments/',
+  apPredictor: '/ap-eapcet/college-predictor/',
+  tgPredictor: '/tg-eapcet/college-predictor/',
 } as const;
 
 const getSeoLandingPath = () => {
@@ -403,11 +405,20 @@ const getSeoLandingPath = () => {
   const path = window.location.pathname.replace(/\/+$/, '') || '/';
   if (path === SEO_LANDING_PATHS.apAllotments.replace(/\/+$/, '')) return 'apAllotments' as const;
   if (path === SEO_LANDING_PATHS.tgAllotments.replace(/\/+$/, '')) return 'tgAllotments' as const;
+  if (path === SEO_LANDING_PATHS.apPredictor.replace(/\/+$/, '')) return 'apPredictor' as const;
+  if (path === SEO_LANDING_PATHS.tgPredictor.replace(/\/+$/, '')) return 'tgPredictor' as const;
   return null;
 };
 
 export default function App() {
-  const [activeWorkspace, setActiveWorkspace] = useState<WorkspaceView>(() => getSeoLandingPath() ? (getSeoLandingPath() === 'apAllotments' ? 'ap-allotments' : 'tg-allotments') : 'hub');
+  const [activeWorkspace, setActiveWorkspace] = useState<WorkspaceView>(() => {
+    const seoPath = getSeoLandingPath();
+    if (seoPath === 'apAllotments') return 'ap-allotments';
+    if (seoPath === 'tgAllotments') return 'tg-allotments';
+    if (seoPath === 'apPredictor') return 'ap-predictor';
+    if (seoPath === 'tgPredictor') return 'tg-predictor';
+    return 'hub';
+  });
   const [utilitySubTab, setUtilitySubTab] = useState<ToolTab>('pdf-tools');
   const [eapcetPhase, setEapcetPhase] = useState<EapcetPhaseTab>('phase2');
   const [legalModal, setLegalModal] = useState<LegalModalType | null>(null);
@@ -620,11 +631,23 @@ export default function App() {
           description: 'Explore AP EAPCET 2026 engineering allotment records by college and branch with the Man of Study allotment explorer.',
           canonical: 'https://manofstudy.pages.dev/ap-eapcet/college-wise-allotments/',
         }
-      : {
-          title: 'TG EAPCET 2026 Name-Wise Seat Allotments | Man of Study',
-          description: 'Search Telangana EAPCET 2026 final-phase engineering seat allotment records by student name, hall ticket, college and branch.',
-          canonical: 'https://manofstudy.pages.dev/tg-eapcet/name-wise-allotments/',
-        };
+      : seoPath === 'tgAllotments'
+        ? {
+            title: 'TG EAPCET 2026 Name-Wise Seat Allotments | Man of Study',
+            description: 'Search Telangana EAPCET 2026 final-phase engineering seat allotment records by student name, hall ticket, college and branch.',
+            canonical: 'https://manofstudy.pages.dev/tg-eapcet/name-wise-allotments/',
+          }
+        : seoPath === 'apPredictor'
+          ? {
+              title: 'AP EAPCET College Predictor 2026 | Man of Study',
+              description: 'Use the AP EAPCET 2026 College Predictor to explore college and branch options based on rank, category, gender, region and preferences.',
+              canonical: 'https://manofstudy.pages.dev/ap-eapcet/college-predictor/',
+            }
+          : {
+              title: 'TG EAPCET College Predictor 2026 | Man of Study',
+              description: 'Use the Telangana EAPCET 2026 College Predictor to explore college and branch options based on rank, category, gender, branch and preferences.',
+              canonical: 'https://manofstudy.pages.dev/tg-eapcet/college-predictor/',
+            };
 
     document.title = config.title;
     const setMeta = (selector: string, content: string) => {
@@ -921,6 +944,58 @@ export default function App() {
               { href: '/tg-eapcet/name-wise-allotments/', label: 'TG Name-Wise Allotments' },
               { href: '/ap-eapcet/college-wise-allotments/', label: 'AP College-Wise Allotments' },
               { href: '/#tg-predictor', label: 'TG EAPCET College Predictor' }
+            ]}
+          />
+        ) : getSeoLandingPath() === 'apPredictor' ? (
+          <SeoLandingPage
+            eyebrow="AP EAPCET 2026 · College Prediction"
+            title="AP EAPCET College Predictor 2026"
+            description="Use the Man of Study AP EAPCET College Predictor to explore colleges and branches that match your entered rank, category, gender, region and preferences. It is designed to help students explore available options using the project's 2026 allotment data."
+            tool={<ApCollegePredictor initialCollegeCode="ALL" initialBranchCode="ALL" />}
+            toolIntro="Enter your AP EAPCET rank and preferences, then use the interactive predictor to explore matching college and branch options."
+            howTo={[
+              'Enter your AP EAPCET rank and select your category, gender and region.',
+              'Choose a preferred branch or college, or keep the options broad to explore more matches.',
+              'Run the prediction to review matching colleges, branches and the available rank-based information.',
+              'Use the results as an exploration aid, not as a guarantee of future allotment or admission.'
+            ]}
+            faqs={[
+              { question: 'What is the AP EAPCET College Predictor?', answer: 'It is an interactive Man of Study tool that uses the project’s available AP EAPCET allotment data to explore college and branch options for an entered rank and selected preferences.' },
+              { question: 'Can I predict colleges based on my AP EAPCET rank?', answer: 'Yes. Enter your rank and relevant preferences to explore the college and branch matches returned by the predictor.' },
+              { question: 'Can I check AP EAPCET colleges and branches?', answer: 'Yes. The predictor lets you narrow results by college and branch while considering the supported candidate preferences.' },
+              { question: 'Is the AP EAPCET College Predictor a guaranteed allotment?', answer: 'No. Predictions are informational and based on the available dataset and selected inputs. Actual counselling rules, seat availability and official allotments determine admission.' }
+            ]}
+            relatedLinks={[
+              { href: '/ap-eapcet/college-predictor/', label: 'AP EAPCET College Predictor' },
+              { href: '/ap-eapcet/college-wise-allotments/', label: 'AP College-Wise Allotments' },
+              { href: '/tg-eapcet/college-predictor/', label: 'TG EAPCET College Predictor' },
+              { href: '/tg-eapcet/name-wise-allotments/', label: 'TG Name-Wise Allotments' }
+            ]}
+          />
+        ) : getSeoLandingPath() === 'tgPredictor' ? (
+          <SeoLandingPage
+            eyebrow="TG EAPCET 2026 · College Prediction"
+            title="TG EAPCET College Predictor 2026"
+            description="Use the Man of Study Telangana EAPCET College Predictor to explore college and branch options based on rank, category, gender, preferred branch, district and other supported preferences."
+            tool={<TgCollegePredictor />}
+            toolIntro="Enter your TG EAPCET rank and preferences, then use the interactive predictor to explore matching Telangana colleges and branches."
+            howTo={[
+              'Enter your TG EAPCET rank and select your category and gender.',
+              'Choose a preferred branch and optionally narrow the results by district or college.',
+              'Run the prediction to review matching Telangana colleges, branches and rank-based information.',
+              'Use the results as an exploration aid and verify current counselling rules and official allotments before making decisions.'
+            ]}
+            faqs={[
+              { question: 'What is the TG EAPCET College Predictor?', answer: 'It is an interactive Man of Study tool that uses the project’s available Telangana EAPCET allotment data to explore college and branch options for an entered rank and selected preferences.' },
+              { question: 'Can I predict Telangana colleges based on my TG EAPCET rank?', answer: 'Yes. Enter your rank, category, gender and preferred branch to explore the matching colleges returned by the predictor.' },
+              { question: 'Can I filter TG EAPCET college predictions by branch or district?', answer: 'Yes. The predictor supports branch selection and additional filters such as district and college search where available in the tool.' },
+              { question: 'Is the TG EAPCET College Predictor a guaranteed allotment?', answer: 'No. Predictions are informational and based on the available dataset and selected inputs. Actual counselling rules, seat availability and official allotments determine admission.' }
+            ]}
+            relatedLinks={[
+              { href: '/tg-eapcet/college-predictor/', label: 'TG EAPCET College Predictor' },
+              { href: '/tg-eapcet/name-wise-allotments/', label: 'TG Name-Wise Allotments' },
+              { href: '/ap-eapcet/college-predictor/', label: 'AP EAPCET College Predictor' },
+              { href: '/ap-eapcet/college-wise-allotments/', label: 'AP College-Wise Allotments' }
             ]}
           />
         ) : activeWorkspace === 'hub' ? (
