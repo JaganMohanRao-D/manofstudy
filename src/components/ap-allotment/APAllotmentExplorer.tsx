@@ -19,6 +19,7 @@ import APCollegeSelector from './APCollegeSelector';
 import APBranchSelector, { BranchOption } from './APBranchSelector';
 import ApTopColleges from '../ApTopColleges';
 import ApOverallRankInsights from '../ApOverallRankInsights';
+import { AP_EAPCET_GLOBAL_STATS, AP_EAPCET_CATEGORY_INSIGHTS } from '../../data/apEapcetCollegeManifest';
 
 export interface APAllotmentExplorerProps {
   initialCollegeCode?: string;
@@ -208,6 +209,26 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
 
   const bestRank = selectedCollegeCode === 'ALL' ? Number(datasetSummary?.minRank ?? 0) : (visibleRecords.length ? Math.min(...visibleRecords.map((r) => r.rank)) : 0);
   const lastRank = selectedCollegeCode === 'ALL' ? Number(datasetSummary?.maxRank ?? 0) : (visibleRecords.length ? Math.max(...visibleRecords.map((r) => r.rank)) : 0);
+
+
+  const featuredColleges = useMemo(() => (
+    [...collegesList]
+      .sort((a, b) => (b.recordCount ?? 0) - (a.recordCount ?? 0))
+      .slice(0, 15)
+  ), [collegesList]);
+
+  const popularBranches = useMemo(() => (
+    [...datasetBranches]
+      .sort((a, b) => (b.recordCount ?? 0) - (a.recordCount ?? 0))
+      .slice(0, 12)
+  ), [datasetBranches]);
+
+  const statewideCategoryBars = useMemo(() => (
+    (AP_EAPCET_CATEGORY_INSIGHTS?.byAllottedQuota ?? [])
+      .filter((item: any) => item.totalRecords > 0)
+      .sort((a: any, b: any) => b.totalRecords - a.totalRecords)
+      .slice(0, 8)
+  ), []);
 
   const currentCollege = selectedCollegeCode !== 'ALL' ? collegeData : null;
   const branchLabel = selectedBranchCode === 'ALL'
@@ -422,26 +443,172 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
             {activeTab === 'student-search' || activeTab === 'rank-search' ? (
               <APStudentSearch year={selectedYear} collegeCode={selectedCollegeCode} branchCode={selectedBranchCode} phase={selectedPhase} initialName={studentSearch} />
             ) : selectedCollegeCode === 'ALL' ? (
-              <section className="space-y-4">
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                  {datasetCards.map(({ label, value, icon: Icon }) => (
-                    <div key={label} className="mos-fade-up mos-stat-card rounded-2xl border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/80 p-4 shadow-xl backdrop-blur-xl">
-                      <div className="flex items-center justify-between"><span className="text-[10px] uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400">{label}</span><Icon className="h-4 w-4 text-cyan-400" /></div>
-                      <div className="mt-2 text-lg sm:text-2xl font-black text-slate-950 dark:text-white">{typeof value === 'number' ? value.toLocaleString() : value}</div>
+              <section className="space-y-4 animate-in fade-in duration-300">
+                {/* AP statewide intelligence hub */}
+                <div className="mos-ap-statewide-hero relative overflow-hidden rounded-[1.75rem] border border-cyan-400/15 bg-gradient-to-br from-cyan-50 via-white to-indigo-50 dark:from-slate-900 dark:via-slate-950 dark:to-indigo-950/60 p-5 sm:p-7 shadow-2xl">
+                  <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-cyan-400/15 blur-3xl mos-float" />
+                  <div className="absolute -bottom-24 left-1/3 h-52 w-52 rounded-full bg-indigo-500/10 blur-3xl" />
+                  <div className="relative">
+                    <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
+                      <div>
+                        <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.15em] text-cyan-700 dark:text-cyan-300">
+                          <Sparkles className="h-3.5 w-3.5" />
+                          AP EAPCET {selectedYear} · All phases
+                        </div>
+                        <h2 className="mt-3 text-2xl sm:text-4xl font-black tracking-[-0.04em] text-slate-950 dark:text-white">
+                          AP Allotments <span className="text-cyan-700 dark:text-cyan-300">Explorer</span>
+                        </h2>
+                        <p className="mt-2 max-w-2xl text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                          Explore Andhra Pradesh engineering allotment records by college, branch, student, rank, category and phase — all from the selected AP dataset.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setActiveTab('student-search')}
+                        className="self-start lg:self-auto inline-flex items-center gap-2 rounded-xl bg-cyan-600 px-4 py-2.5 text-xs font-black text-white shadow-lg shadow-cyan-600/20 hover:bg-cyan-700 transition-all"
+                      >
+                        <Search className="h-4 w-4" />
+                        Search a Student
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Statewide key numbers */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
+                  {[
+                    { label: 'Engineering Colleges', value: AP_EAPCET_GLOBAL_STATS.totalColleges, suffix: ' Colleges', icon: Building2, tone: 'text-cyan-600 dark:text-cyan-300' },
+                    { label: 'Allotment Records', value: AP_EAPCET_GLOBAL_STATS.totalRecords, suffix: '', icon: Users, tone: 'text-emerald-600 dark:text-emerald-300' },
+                    { label: 'Engineering Branches', value: AP_EAPCET_GLOBAL_STATS.totalBranches, suffix: ' Streams', icon: BookOpen, tone: 'text-indigo-600 dark:text-indigo-300' },
+                    { label: 'Observed Rank Range', value: '#' + AP_EAPCET_GLOBAL_STATS.minRank.toLocaleString() + ' → #' + AP_EAPCET_GLOBAL_STATS.maxRank.toLocaleString(), suffix: '', icon: Target, tone: 'text-amber-600 dark:text-amber-300' },
+                  ].map(({ label, value, suffix, icon: Icon, tone }) => (
+                    <div key={label} className="mos-ap-state-card rounded-2xl p-3.5 sm:p-4">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[10px] uppercase tracking-[0.13em] text-slate-500 dark:text-slate-400">{label}</span>
+                        <Icon className={`h-4 w-4 ${tone}`} />
+                      </div>
+                      <div className={`mt-2 text-xl sm:text-2xl font-black ${tone}`}>
+                        {typeof value === 'number' ? value.toLocaleString() : value}{suffix}
+                      </div>
                     </div>
                   ))}
                 </div>
-                <section className="mos-fade-up rounded-[1.75rem] border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/80 p-5 sm:p-6 shadow-2xl backdrop-blur-xl">
+
+                {/* Quick search + branch shortcuts */}
+                <div className="grid grid-cols-1 lg:grid-cols-[1.25fr_1fr] gap-4">
+                  <section className="mos-ap-state-panel rounded-[1.5rem] p-4 sm:p-5">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-5 w-5 text-cyan-500" />
+                      <div>
+                        <h3 className="text-base sm:text-lg font-black text-slate-950 dark:text-white">Statewide Student Search</h3>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400">Search AP allotments without selecting a college first.</p>
+                      </div>
+                    </div>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {['CSE', 'ECE', 'VITAPU', 'RVRJC', 'SVCE', 'JNTUK'].map((query) => (
+                        <button
+                          key={query}
+                          type="button"
+                          onClick={() => {
+                            setStudentSearch(query);
+                            setSelectedCollegeCode('ALL');
+                            setSelectedBranchCode('ALL');
+                            setActiveTab('student-search');
+                          }}
+                          className="mos-ap-quick-chip"
+                        >
+                          <Search className="h-3 w-3 text-cyan-500" />
+                          {query}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="mt-4 rounded-xl border border-cyan-500/15 bg-cyan-500/5 p-3 text-[11px] leading-5 text-slate-600 dark:text-slate-400">
+                      Tip: enter a full student name or hall-ticket number in the search tab for the most precise result.
+                    </div>
+                  </section>
+
+                  <section className="mos-ap-state-panel rounded-[1.5rem] p-4 sm:p-5">
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-[10px] font-black uppercase tracking-[0.15em] text-indigo-500">Popular streams</p>
+                        <h3 className="mt-1 text-base font-black text-slate-950 dark:text-white">Explore branches</h3>
+                      </div>
+                      <BarChart3 className="h-5 w-5 text-indigo-500" />
+                    </div>
+                    <div className="mt-4 grid grid-cols-2 gap-2">
+                      {popularBranches.slice(0, 8).map((branch) => (
+                        <button
+                          key={branch.branchCode}
+                          type="button"
+                          onClick={() => { setSelectedCollegeCode('ALL'); setSelectedBranchCode(branch.branchCode); setActiveTab('college'); }}
+                          className="mos-ap-branch-chip text-left"
+                        >
+                          <span className="font-mono font-black text-indigo-600 dark:text-indigo-300">{branch.branchCode}</span>
+                          <span className="truncate text-[10px] text-slate-500 dark:text-slate-400">{branch.branchName}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </section>
+                </div>
+
+                {/* Category distribution visual */}
+                <section className="mos-ap-state-panel rounded-[1.5rem] p-4 sm:p-6">
                   <div className="flex items-start justify-between gap-4">
-                    <div><p className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-400">Dataset intelligence</p><h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-950 dark:text-white">Understand the allotment landscape</h2><p className="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400">Quick signals from the {selectedYear} source without loading every college file.</p></div>
-                    <BarChart3 className="hidden sm:block h-7 w-7 text-indigo-400" />
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-500">Allotment analytics</p>
+                      <h3 className="mt-1 text-xl font-black text-slate-950 dark:text-white">Category distribution</h3>
+                      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Visual summary of observed allotted-category records in the AP dataset.</p>
+                    </div>
+                    <BarChart3 className="hidden sm:block h-7 w-7 text-cyan-500" />
                   </div>
-                  <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <div className="rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-100/80 dark:bg-slate-950/60 p-4"><div className="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Best observed rank</div><div className="mt-2 text-2xl font-black text-cyan-700 dark:text-cyan-300">{bestRank ? bestRank.toLocaleString() : '—'}</div><div className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">Across the selected year</div></div>
-                    <div className="rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-100/80 dark:bg-slate-950/60 p-4"><div className="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Last observed rank</div><div className="mt-2 text-2xl font-black text-indigo-700 dark:text-indigo-300">{lastRank ? lastRank.toLocaleString() : '—'}</div><div className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">Observed in source records</div></div>
-                    <div className="rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-100/80 dark:bg-slate-950/60 p-4"><div className="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Available phases</div><div className="mt-2 flex flex-wrap gap-1.5">{(datasetSummary?.phases ?? []).map((p:number) => <span key={p} className="rounded-lg bg-amber-400/10 px-2 py-1 text-xs font-bold text-amber-700 dark:text-amber-300">Phase {p}</span>)}</div></div>
+                  <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                    {statewideCategoryBars.map((item: any) => {
+                      const max = statewideCategoryBars[0]?.totalRecords || 1;
+                      const pct = Math.max(3, Math.round((item.totalRecords / max) * 100));
+                      return (
+                        <div key={item.category}>
+                          <div className="flex items-center justify-between text-xs gap-3">
+                            <span className="font-bold text-slate-800 dark:text-slate-200">{item.displayLabel}</span>
+                            <span className="font-mono text-slate-500 dark:text-slate-400">{item.totalRecords.toLocaleString()}</span>
+                          </div>
+                          <div className="mt-1.5 h-2.5 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                            <div className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-indigo-500 transition-all duration-700" style={{ width: pct + '%' }} />
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </section>
+
+                {/* Popular colleges */}
+                <section className="mos-ap-state-panel rounded-[1.5rem] p-4 sm:p-5">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-[0.15em] text-emerald-500">Quick access</p>
+                      <h3 className="mt-1 text-base sm:text-lg font-black text-slate-950 dark:text-white">Popular AP Engineering Colleges</h3>
+                    </div>
+                    <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400">Sorted by observed allotment records</span>
+                  </div>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {featuredColleges.map((college) => (
+                      <button
+                        key={college.collegeCode}
+                        type="button"
+                        onClick={() => { setSelectedCollegeCode(college.collegeCode); setSelectedBranchCode('ALL'); setActiveTab('college'); window.scrollTo({ top: 120, behavior: 'smooth' }); }}
+                        className="mos-ap-college-chip"
+                        title={college.collegeName}
+                      >
+                        <span className="font-mono font-black text-emerald-600 dark:text-emerald-300">{college.collegeCode}</span>
+                        <span className="hidden sm:inline max-w-[190px] truncate text-slate-500 dark:text-slate-400">{college.collegeName}</span>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+
+                {/* Existing AP rank insights */}
+                <div className="mos-fade-up">
+                  <ApOverallRankInsights />
+                </div>
               </section>
             ) : (
               <section className="space-y-5">
