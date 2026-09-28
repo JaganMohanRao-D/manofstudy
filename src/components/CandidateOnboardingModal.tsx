@@ -66,7 +66,7 @@ export const CandidateOnboardingModal: React.FC<CandidateOnboardingModalProps> =
     e.preventDefault();
     const trimmedName = fullName.trim();
     if (!trimmedName || trimmedName.length < 2) {
-      setErrorMsg('Please enter your full name as it should appear on your official scorecard & certificate.');
+      setErrorMsg('Please enter your name (at least 2 characters).');
       return;
     }
 
@@ -103,9 +103,9 @@ export const CandidateOnboardingModal: React.FC<CandidateOnboardingModalProps> =
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[9999] flex min-h-[100dvh] items-center justify-center overflow-y-auto p-3 sm:p-4 bg-slate-950/75 backdrop-blur-sm animate-in fade-in duration-200">
       <div
-        className="w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden relative"
+        className="w-full max-w-lg max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2rem)] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden relative flex flex-col"
         role="dialog"
         aria-modal="true"
       >
@@ -122,18 +122,18 @@ export const CandidateOnboardingModal: React.FC<CandidateOnboardingModalProps> =
 
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/20 text-white backdrop-blur-xs">
-              Candidate Intake &amp; Verification
+              Candidate Details
             </span>
           </div>
 
           <h3 className="text-xl font-black tracking-tight">{examTitles[examType]}</h3>
           <p className="text-xs text-blue-100 mt-1">
-            Official candidate setup for verified scorecard, state rank estimation, and certificate generation.
+            Enter your name to personalize your practice test report. This mock test does not create an official examination certificate.
           </p>
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleStartExam} className="p-6 space-y-5">
+        <form onSubmit={handleStartExam} className="p-6 space-y-5 overflow-y-auto overscroll-contain">
           {errorMsg && (
             <div className="p-3 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/80 text-rose-700 dark:text-rose-300 text-xs font-semibold flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0 text-rose-500" />
@@ -149,7 +149,7 @@ export const CandidateOnboardingModal: React.FC<CandidateOnboardingModalProps> =
                 <span>Candidate Full Name</span>
                 <span className="text-rose-500 font-bold">*</span>
               </span>
-              <span className="text-[10px] text-slate-500 font-normal">Appears on Certificate &amp; Scorecard</span>
+              <span className="text-[10px] text-slate-500 font-normal">Appears on Practice Report</span>
             </label>
             <input
               type="text"
@@ -280,7 +280,7 @@ export const CandidateOnboardingModal: React.FC<CandidateOnboardingModalProps> =
               type="submit"
               className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white text-xs font-bold shadow-md shadow-blue-500/20 transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
             >
-              <span>Begin Examination Now</span>
+              <span>Start Practice Test</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
