@@ -18,8 +18,7 @@ const Detail = ({ label, value, icon: Icon }: { label: string; value?: React.Rea
         {label}
       </div>
       <div className="mt-1.5 break-words text-sm font-bold text-slate-900 dark:text-white">{value}</div>
-    </div>,
-    portalTarget
+    </div>
   );
 };
 
