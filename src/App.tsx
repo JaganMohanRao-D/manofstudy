@@ -25,7 +25,6 @@ import {
   Heart,
   BookOpen,
   ShieldAlert,
-  Users,
   Target,
 } from 'lucide-react';
 import { ToolTab, ToolMeta, WorkspaceView, LegalModalType } from './types';
