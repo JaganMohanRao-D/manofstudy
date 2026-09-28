@@ -4,4 +4,12 @@
     <loc>https://manofstudy.pages.dev/</loc>
     <priority>1.00</priority>
   </url>
+  <url>
+    <loc>https://manofstudy.pages.dev/ap-eapcet/college-wise-allotments/</loc>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://manofstudy.pages.dev/tg-eapcet/name-wise-allotments/</loc>
+    <priority>0.90</priority>
+  </url>
 </urlset>
