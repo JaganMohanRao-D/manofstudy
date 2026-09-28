@@ -47,9 +47,13 @@ export const SlideOverDrawer = ({
   onOpenFeedback,
 }) => {
   const [mounted, setMounted] = useState(false);
+  const [portalTarget, setPortalTarget] = useState(null);
 
   useEffect(() => {
+    if (typeof document === 'undefined') return;
     setMounted(true);
+    const target = document.getElementById('modal-root');
+    setPortalTarget(target || document.body);
   }, []);
 
   // Handle Escape key and disable background scrolling
@@ -72,7 +76,7 @@ export const SlideOverDrawer = ({
     };
   }, [isOpen, onClose]);
 
-  if (!mounted || !isOpen) return null;
+  if (!mounted || !isOpen || !portalTarget) return null;
 
   const handleNavigate = (workspace, subTab) => {
     if (onSelectWorkspace) {
@@ -681,7 +685,7 @@ export const SlideOverDrawer = ({
     </div>
   );
 
-  return createPortal(drawerContent, document.body);
+  return createPortal(drawerContent, portalTarget);
 };
 
 export default SlideOverDrawer;
