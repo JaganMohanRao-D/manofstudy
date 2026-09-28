@@ -525,6 +525,10 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
                     {r.alloted_category}
                   </span>
                 </div>
+
+                {expandedStudentKey === `res-${r.college_code}-${r.branch_code}-${r.rank}-${idx}` && (
+                  <APStudentInlineDetails student={r} year={year} />
+                )}
               </div>
             ))}
           </div>
