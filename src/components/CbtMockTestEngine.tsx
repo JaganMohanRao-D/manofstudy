@@ -1586,9 +1586,10 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-3 text-xs border border-slate-300 rounded-xl p-3 bg-white">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 text-xs border border-slate-300 rounded-xl p-3 bg-white">
           <div><span className="font-bold text-slate-500 uppercase text-[10px] block">Candidate Name</span><div className="font-black mt-0.5">{candidateProfile?.fullName || 'Candidate'}</div></div>
           <div><span className="font-bold text-slate-500 uppercase text-[10px] block">Roll Number</span><div className="font-mono font-bold mt-0.5">{candidateProfile?.rollNumber || 'MOS-RF-2026'}</div></div>
+          <div><span className="font-bold text-slate-500 uppercase text-[10px] block">Questions Attempted</span><div className="font-black mt-0.5">{scorecardMetrics.attemptedCount} / 60</div></div>
           <div><span className="font-bold text-slate-500 uppercase text-[10px] block">Evaluation Scheme</span><div className="font-semibold mt-0.5">60 MCQs (Verbal + Logical + Numerical)</div></div>
           <div><span className="font-bold text-slate-500 uppercase text-[10px] block">Result Status</span><div className="font-black mt-0.5 text-emerald-700">COMPLETED ({scorecardMetrics.percentage.toFixed(1)}%)</div></div>
         </div>
