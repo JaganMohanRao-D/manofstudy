@@ -510,7 +510,7 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-              <span>Official NTA / TCS iON Format Simulation</span>
+              <span>CBT-Style Practice Format</span>
             </div>
             <div className="text-xs font-mono font-semibold text-[var(--mos-text-muted)]">
               Paper Code: RF-UG-APT-2026
@@ -522,7 +522,7 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
               Reliance Foundation Undergraduate Scholarship Aptitude Test
             </h1>
             <p className="mt-1 text-sm sm:text-base text-[var(--mos-text-secondary)]">
-              Comprehensive 60-minute, 60-question computer-based mock examination replicating the official aptitude assessment.
+              A 60-minute, 60-question computer-based practice test designed to help you experience a structured aptitude-test environment.
             </p>
           </div>
 
@@ -649,7 +649,7 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
               className="mt-1 w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 cursor-pointer"
             />
             <label htmlFor="cbt-declaration-checkbox" className="text-xs sm:text-sm text-[var(--mos-text-secondary)] leading-relaxed cursor-pointer select-none">
-              I have read and understood all the instructions regarding the Reliance Foundation Undergraduate Scholarship Aptitude Test.
+              I have read and understood the instructions for this Reliance Foundation scholarship practice mock test.
               I understand that the test has a strict 60-minute countdown, contains 60 questions, and has NO negative marking.
               I am ready to begin my mock examination.
             </label>
@@ -1152,7 +1152,7 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
               </div>
 
               <p className="text-xs text-[var(--mos-text-muted)] leading-relaxed">
-                Are you sure you want to end your test? Once confirmed, you will be directed to your official Scorecard and question-by-question solution explorer.
+                Are you sure you want to end your test? Once confirmed, you will be directed to your practice scorecard and question-by-question solution explorer.
               </p>
 
               <div className="flex items-center justify-end gap-3 pt-2">
@@ -1188,7 +1188,7 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
             <Award className="w-3.5 h-3.5" />
-            <span>Official Examination Scorecard</span>
+            <span>Practice Mock Test Scorecard</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -1652,7 +1652,7 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
           <div>
             <span className="font-bold text-slate-500 uppercase text-[10px] block">Scholarship Readiness</span>
             <div className="font-black text-sm text-emerald-700 mt-0.5">
-              {scorecardMetrics.percentage >= 60 ? 'High Scholarship Aptitude' : 'Competitive Foundation'}
+              {scorecardMetrics.percentage >= 60 ? 'Strong Practice Performance' : 'Practice Foundation'}
             </div>
           </div>
         </div>
