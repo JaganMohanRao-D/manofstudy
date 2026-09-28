@@ -88,43 +88,37 @@ const getScholarshipVisualTheme = (s: IndianScholarship): ScholarshipVisualTheme
   return { scene: 'Indian university student studying with books and laptop in a modern campus, education opportunity and academic growth', accent: 'from-emerald-500/80 to-teal-700/80' };
 };
 
-const getScholarshipAiImageUrl = (s: IndianScholarship): string => {
-  const theme = getScholarshipVisualTheme(s);
-  const prompt = [
-    'premium editorial scholarship website hero illustration',
-    theme.scene,
-    'photorealistic but polished, natural Indian setting, cinematic soft lighting, sophisticated blue and emerald educational palette',
-    'clean composition with empty darker space around the lower-left area for a website text overlay',
-    'no logos, no brand marks, no seals, no government emblems, no watermarks, no readable text, no letters, no fake certificates',
-    '16:9 horizontal composition'
-  ].join(', ');
-  return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1200&height=675&nologo=true`;
-};
-
 const ScholarshipVisual: React.FC<{ scholarship: IndianScholarship; compact?: boolean }> = ({ scholarship, compact = false }) => {
   const theme = getScholarshipVisualTheme(scholarship);
-  const [failed, setFailed] = useState(false);
   const titleParts = scholarship.title.split(/[:—–]/).map(part => part.trim()).filter(Boolean);
+  const visualSeed = scholarship.id.split('').reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+  const rotate = visualSeed % 24;
 
   return (
-    <div className={`relative overflow-hidden ${compact ? 'h-44' : 'h-48'} w-full bg-slate-900`}>
-      {!failed ? (
-        <img
-          src={getScholarshipAiImageUrl(scholarship)}
-          alt=""
-          loading="lazy"
-          onError={() => setFailed(true)}
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-        />
-      ) : (
-        <div className={`absolute inset-0 bg-gradient-to-br ${theme.accent}`}>
-          <div className="absolute -right-10 -top-10 h-36 w-36 rounded-full border border-white/15 bg-white/10 blur-sm" />
-          <div className="absolute -left-8 bottom-[-50px] h-40 w-40 rounded-full border border-white/10 bg-black/10" />
-        </div>
-      )}
+    <div className={`relative overflow-hidden ${compact ? 'h-44' : 'h-48'} w-full bg-gradient-to-br ${theme.accent}`}>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_18%,rgba(255,255,255,.28),transparent_28%),radial-gradient(circle_at_15%_90%,rgba(0,0,0,.28),transparent_38%)]" />
+      <div className="absolute -right-14 -top-16 h-48 w-48 rounded-full border border-white/20 bg-white/10" />
+      <div className="absolute -left-16 bottom-[-72px] h-52 w-52 rounded-full border border-white/10 bg-black/10" />
+
+      <div className="absolute right-[13%] top-[16%] h-20 w-20 rounded-3xl border border-white/20 bg-white/10 backdrop-blur-sm rotate-6 shadow-2xl" />
+      <div className="absolute right-[18%] top-[25%] h-16 w-24 rounded-2xl border border-white/25 bg-slate-950/25 -rotate-6 shadow-xl">
+        <div className="absolute left-3 right-3 top-3 h-1 rounded-full bg-white/35" />
+        <div className="absolute left-3 right-8 top-6 h-1 rounded-full bg-white/20" />
+        <div className="absolute left-3 right-5 top-9 h-1 rounded-full bg-white/20" />
+      </div>
+
+      <div className="absolute right-[10%] bottom-[18%] flex h-14 w-14 items-center justify-center rounded-2xl border border-white/20 bg-slate-950/30 backdrop-blur-sm shadow-xl" style={{ transform: `rotate(${rotate}deg)` }}>
+        <GraduationCap className="h-7 w-7 text-white" />
+      </div>
+
+      <div className="absolute left-[8%] top-[18%] flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 backdrop-blur-md">
+        <Sparkles className="h-3.5 w-3.5 text-white" />
+        <span className="text-[9px] font-black uppercase tracking-[.18em] text-white/90">Education opportunity</span>
+      </div>
+
       <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-        <div className="max-w-[92%] text-white drop-shadow-lg">
+        <div className="max-w-[88%] text-white drop-shadow-lg">
           <div className="text-[9px] font-black uppercase tracking-[.18em] text-emerald-200/90">Scholarship opportunity</div>
           <div className="mt-1 text-base sm:text-lg font-black leading-tight">{titleParts[0]}</div>
           {titleParts[1] && <div className="text-xs sm:text-sm font-bold leading-tight text-white/90">{titleParts.slice(1).join(' — ')}</div>}
