@@ -10,7 +10,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
   const supportEmail = 'support.jamord@gmail.com';
 
   return (
-    <div id="about-us-view" className="max-w-4xl mx-auto space-y-8 py-6 animate-in fade-in duration-200">
+    <div id="about-us-view" className="mos-about-view max-w-4xl mx-auto space-y-8 py-6 animate-in fade-in duration-200">
       {onBack && (
         <button
           onClick={onBack}
@@ -43,7 +43,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
       </div>
 
       {/* Founder Story & Purpose */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-sm space-y-6 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+      <div className="mos-about-content bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-sm space-y-6 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
         <section className="space-y-3">
           <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
             <GraduationCap className="w-5 h-5 text-blue-600" />
