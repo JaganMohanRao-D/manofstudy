@@ -12,4 +12,12 @@
     <loc>https://manofstudy.pages.dev/tg-eapcet/name-wise-allotments/</loc>
     <priority>0.90</priority>
   </url>
+  <url>
+    <loc>https://manofstudy.pages.dev/ap-eapcet/college-predictor/</loc>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://manofstudy.pages.dev/tg-eapcet/college-predictor/</loc>
+    <priority>0.90</priority>
+  </url>
 </urlset>
