@@ -13,8 +13,8 @@ export const Footer = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         {/* Top Section: Dual-Column Hero Showcase */}
         <div className="flex flex-col items-center text-center md:flex-row md:items-center md:justify-between md:text-left gap-6 md:gap-8">
-          {/* Left Column: Medium-Sized Brand Identity Card */}
-          <div className="p-3 rounded-2xl bg-slate-900/60 border border-slate-800/80 shadow-inner flex items-center justify-center w-fit shrink-0">
+          {/* Left Column: Logo only — no card, border, background, ring or shadow */}
+          <div className="flex items-center justify-center w-fit shrink-0">
             <img
               src="https://i.ibb.co/zHPk2tv4/Chat-GPT-Image-Sep-13-2026-08-04-48-PM.png"
               alt="MAN OF STUDY (MOS) Logo"
@@ -22,7 +22,7 @@ export const Footer = ({
               height="96"
               loading="lazy"
               fetchPriority="auto"
-              className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl object-cover ring-2 ring-emerald-500/30 shadow-lg"
+              className="w-20 h-20 sm:w-24 sm:h-24 object-contain"
             />
           </div>
 
