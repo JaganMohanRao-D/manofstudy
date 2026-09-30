@@ -37,18 +37,26 @@ export function getScholarshipSummary(s: IndianScholarship): string {
 type Filter = 'all' | 'open' | 'government' | 'private' | 'state' | 'engineering' | 'girls';
 const isOpen = (s: IndianScholarship) => (s.status || '').toLowerCase().includes('open');
 
-// User-provided ImageBB hosted assets. These are direct image URLs so the browser
-// does not need to open an ImageBB page first.
+// Local scholarship artwork stored in /public/Scholorship_images.
+// Vite copies public assets to the deployed site root, so these remain
+// first-party static assets and do not depend on an external image host.
 const SCHOLARSHIP_IMAGE_URLS: Record<string, string> = {
-  'amazon-afe-2026': 'https://i.ibb.co/CKx2gD8M/IMG-20260930-WA8487.jpg',
-  'reliance-ug-2026': 'https://i.ibb.co/c7xDHVw/IMG-20260930-WA2709.jpg',
-  'tata-pankh-2026': 'https://i.ibb.co/N26B1CSS/IMG-20260930-WA8478.jpg',
-  'hdfc-ecss-2026': 'https://i.ibb.co/8DQ1jP6f/IMG-20260930-WA3059.jpg',
-  'lic-golden-jubilee-2026': 'https://i.ibb.co/byP6754/IMG-20260930-WA1694.jpg',
-  'sbi-asha-2026': 'https://i.ibb.co/d0MFF3G8/IMG-20260930-WA9988.jpg',
+  'central-sector-csss-2026': '/Scholorship_images/pm-usp_central_scholorship.jpg',
+  'top-class-sc-2026': '/Scholorship_images/central_top_class_education_for_sc_students.jpg',
+  'pm-yasasvi-top-class-college-2026': '/Scholorship_images/pm%20yasasvi_obc_ebc_dnt.jpg',
+  'aicte-pragati-2026': '/Scholorship_images/aicte_pragati_scholarship.jpg',
+  'aicte-saksham-2026': '/Scholorship_images/aicte_saksham_scholarship.jpg',
+  'aicte-swanath-2026': '/Scholorship_images/aicte_swanath_scholarship.jpg',
+  'pm-usp-pmsss-2026': '/Scholorship_images/pm-usp%20special%20scheme%20for%20jammu%20and%20ladakh.jpg',
+  'amazon-afe-2026': '/Scholorship_images/amazon_scholorship.jpg',
+  'reliance-ug-2026': '/Scholorship_images/reliance%20scholorship.jpg',
+  'tata-pankh-2026': '/Scholorship_images/tata_capital_pankh.jpg',
+  'hdfc-ecss-2026': '/Scholorship_images/Hdfc-parivarthanecss.jpg',
+  'lic-golden-jubilee-2026': '/Scholorship_images/lic_scholorship.jpg',
+  'sbi-asha-2026': '/Scholorship_images/sbi_scholorship.jpg',
 };
 
-const SCHOLARSHIP_HERO_IMAGE = 'https://i.ibb.co/BHmrBckm/file-00000000a1a88210b714d6f17401f781.png';
+const SCHOLARSHIP_HERO_IMAGE = '/Scholorship_images/manofstudy_scholorship%20_hero%20page.png';
 
 const categoryClass = (category: string) => {
   const c = category.toLowerCase();
@@ -60,9 +68,12 @@ const categoryClass = (category: string) => {
 type VisualTheme = { accent: string; fallbackLabel: string };
 const visualThemes: Record<string, VisualTheme> = {
   'central-sector-csss-2026': { accent: 'from-sky-600 to-indigo-800', fallbackLabel: 'Central Sector Scholarship' },
+  'top-class-sc-2026': { accent: 'from-blue-600 to-indigo-800', fallbackLabel: 'Top Class Education for SC Students' },
+  'pm-yasasvi-top-class-college-2026': { accent: 'from-violet-600 to-indigo-800', fallbackLabel: 'PM YASASVI Top Class Education' },
   'aicte-pragati-2026': { accent: 'from-fuchsia-600 to-rose-800', fallbackLabel: 'AICTE Pragati' },
   'aicte-saksham-2026': { accent: 'from-teal-600 to-cyan-800', fallbackLabel: 'AICTE Saksham' },
   'aicte-swanath-2026': { accent: 'from-emerald-600 to-teal-800', fallbackLabel: 'AICTE Swanath' },
+  'pm-usp-pmsss-2026': { accent: 'from-indigo-600 to-blue-900', fallbackLabel: 'PM-USP PMSSS' },
   'inspire-she-2026': { accent: 'from-violet-600 to-fuchsia-800', fallbackLabel: 'INSPIRE SHE' },
   'reliance-ug-2026': { accent: 'from-blue-600 to-cyan-800', fallbackLabel: 'Reliance Foundation' },
   'hdfc-ecss-2026': { accent: 'from-emerald-600 to-green-800', fallbackLabel: 'HDFC Parivartan ECSS' },
@@ -92,7 +103,7 @@ const ScholarshipVisual: React.FC<{ scholarship: IndianScholarship; compact?: bo
         <img
           src={imageUrl}
           alt={`${scholarship.title} scholarship`}
-          loading="lazy"
+          loading={compact ? 'eager' : 'lazy'}
           decoding="async"
           onError={() => setImageFailed(true)}
           className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
@@ -218,37 +229,17 @@ export const ScholarshipsHub: React.FC = () => {
               <BadgeCheck className="h-3.5 w-3.5" /> 2026 Scholarship Directory
             </div>
             <h1 className="mt-4 text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white">Find scholarships with the <span className="text-emerald-300">amount upfront.</span></h1>
-            <p className="mt-3 max-w-2xl text-sm sm:text-base leading-7 text-slate-200">Government, state and private/CSR opportunities — with award amounts, eligibility, deadlines, status and application sources clearly separated.</p>
-            <div className="mt-5 flex flex-wrap gap-2 text-[10px] sm:text-[11px]">
-              <span className="rounded-full border border-white/15 bg-slate-950/50 px-3 py-1.5 text-slate-200 backdrop-blur-md">No hidden reward amounts</span>
-              <span className="rounded-full border border-white/15 bg-slate-950/50 px-3 py-1.5 text-slate-200 backdrop-blur-md">Official-source first</span>
-              <span className="rounded-full border border-white/15 bg-slate-950/50 px-3 py-1.5 text-slate-200 backdrop-blur-md">Verified 22 Sep 2026</span>
+            <p className="mt-3 max-w-2xl text-sm sm:text-base leading-6 text-slate-200">Explore government, state, CSR and private scholarships with eligibility, published amounts and application sources in one student-friendly directory.</p>
+            <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-w-3xl">
+              {[[stats.total, 'Scholarships'], [stats.open, 'Open now'], [stats.government, 'Government'], [stats.engineering, 'Engineering']].map(([n, label]) => <div key={String(label)} className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md px-3 py-3"><div className="text-lg sm:text-xl font-black text-white">{n}</div><div className="mt-0.5 text-[10px] text-slate-300">{label}</div></div>)}
             </div>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        {[
-          ['Opportunities', stats.total, GraduationCap],
-          ['Open / active', stats.open, Clock3],
-          ['Government', stats.government, ShieldCheck],
-          ['Engineering-friendly', stats.engineering, Sparkles],
-        ].map(([label, value, Icon]) => (
-          <div key={String(label)} className="rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface)] p-4 shadow-xs">
-            <Icon className="h-4 w-4 text-emerald-500" />
-            <div className="mt-3 text-xl sm:text-2xl font-black text-[var(--mos-text-primary)]">{value}</div>
-            <div className="mt-1 text-[10px] uppercase tracking-wider text-[var(--mos-text-muted)]">{label}</div>
-          </div>
-        ))}
-      </div>
-
       {currentFeatured && (
-        <div className="rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface)] p-4 sm:p-5 shadow-xs">
-          <div className="flex items-center justify-between gap-3 mb-4">
-            <div><div className="text-[10px] uppercase tracking-[.18em] text-emerald-600 dark:text-emerald-400 font-bold">Featured opportunity</div><div className="mt-1 text-sm text-[var(--mos-text-muted)]">High-interest programmes in the current directory</div></div>
-            {featured.length > 1 && <div className="flex gap-2"><button onClick={() => setFeaturedIndex(i => (i - 1 + featured.length) % featured.length)} className="p-2 rounded-lg border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] cursor-pointer" aria-label="Previous featured scholarship">‹</button><button onClick={() => setFeaturedIndex(i => (i + 1) % featured.length)} className="p-2 rounded-lg border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] cursor-pointer" aria-label="Next featured scholarship">›</button></div>}
-          </div>
+        <div className="rounded-3xl border border-emerald-500/20 bg-[var(--mos-surface)] p-3 sm:p-4 shadow-xl">
+          <div className="flex items-center justify-between gap-3 px-1 pb-3"><div><div className="text-[10px] font-black uppercase tracking-[.16em] text-emerald-600 dark:text-emerald-400">Featured scholarship</div><p className="mt-1 text-xs text-[var(--mos-text-muted)]">Quick view • {featuredIndex + 1} / {featured.length}</p></div>{featured.length > 1 && <div className="flex gap-2"><button onClick={() => setFeaturedIndex(i => (i - 1 + featured.length) % featured.length)} className="p-2 rounded-lg border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] cursor-pointer" aria-label="Previous featured scholarship">‹</button><button onClick={() => setFeaturedIndex(i => (i + 1) % featured.length)} className="p-2 rounded-lg border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] cursor-pointer" aria-label="Next featured scholarship">›</button></div>}</div>
           <button onClick={() => setSelectedScholarship(currentFeatured)} className="group w-full text-left rounded-2xl border border-emerald-500/20 bg-emerald-500/[.04] hover:border-emerald-500/40 transition-colors cursor-pointer overflow-hidden">
             <ScholarshipVisual scholarship={currentFeatured} compact />
             <div className="p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center gap-5">
