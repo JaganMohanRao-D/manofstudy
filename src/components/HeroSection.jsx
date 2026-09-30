@@ -18,15 +18,14 @@ export const HeroSection = ({
   onSelectWorkspace,
 }) => {
   const handleHeroNavigation = (workspace, tabFallback) => {
+    if (tabFallback) {
+      window.location.hash = tabFallback;
+      return;
+    }
     if (workspace === 'scholarships') {
       window.location.hash = 'scholarships';
     }
     onSelectWorkspace?.(workspace);
-    if (tabFallback) {
-      // Preserve the existing utility navigation contract without requiring
-      // the header's secondary strip to remain visible.
-      window.dispatchEvent(new CustomEvent('mos:select-tool-tab', { detail: tabFallback }));
-    }
   };
 
   const heroModules = [
