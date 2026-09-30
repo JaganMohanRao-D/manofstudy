@@ -62,7 +62,19 @@ export const ScholarshipDetailsModal: React.FC<ScholarshipDetailsModalProps> = (
   };
 
   const handleShareWhatsApp = () => {
-    const text = `🎓 Check out this scholarship on Man of Study:\n\n*${scholarship.title}*\n💰 ${scholarship.amount}\n🎯 ${scholarship.target}\n📅 ${scholarship.deadline}\n\nExplore scholarship details: ${SCHOLARSHIPS_URL}`;
+    const text = [
+      'Man of Study | Scholarship Update',
+      '',
+      scholarship.title,
+      '',
+      `Scholarship support: ${scholarship.amount}`,
+      `For: ${scholarship.target}`,
+      `Application deadline: ${scholarship.deadline}`,
+      '',
+      `Explore eligibility and scholarship details on Man of Study:`,
+      SCHOLARSHIPS_URL,
+    ].join('\n');
+
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
   };
 
@@ -149,8 +161,8 @@ export const ScholarshipDetailsModal: React.FC<ScholarshipDetailsModalProps> = (
             <div className="flex items-center gap-2 text-xs font-bold text-[var(--mos-text-secondary)] uppercase tracking-wider"><CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /><span>Complete Eligibility Criteria</span></div>
             <p className="text-xs sm:text-sm text-[var(--mos-text-secondary)] leading-relaxed">{scholarship.eligibility}</p>
             <div className="pt-2 flex flex-wrap gap-2 text-[11px] font-medium text-[var(--mos-text-secondary)]">
-              <span className="px-2.5 py-1 rounded-lg bg-[var(--mos-surface)] border border-[var(--mos-border)]">👥 <strong>Gender:</strong> {genderTag}</span>
-              <span className="px-2.5 py-1 rounded-lg bg-[var(--mos-surface)] border border-[var(--mos-border)]">🇮🇳 <strong>Nationality:</strong> Indian Citizen</span>
+              <span className="px-2.5 py-1 rounded-lg bg-[var(--mos-surface)] border border-[var(--mos-border)]">Gender: <strong>{genderTag}</strong></span>
+              <span className="px-2.5 py-1 rounded-lg bg-[var(--mos-surface)] border border-[var(--mos-border)]">Nationality: <strong>Indian Citizen</strong></span>
             </div>
           </div>
 
