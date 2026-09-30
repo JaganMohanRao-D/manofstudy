@@ -1,12 +1,9 @@
 /*
  * MAN OF STUDY clean-route bridge.
  *
- * The app currently uses its existing hash-based workspace state internally.
- * This bridge keeps that behavior stable while exposing clean, shareable
- * pathname URLs such as /scholarships and /attendancedefender.
- *
- * Cloudflare Pages serves this React SPA shell for deep navigation paths, so
- * no server-side router dependency is required here.
+ * The React app still uses its existing hash-based workspace state internally.
+ * This bridge exposes clean pathname URLs without removing the hash until
+ * React has received the hashchange event and updated its workspace state.
  */
 (function () {
   'use strict';
@@ -139,12 +136,7 @@
       'survival': 'guides',
       'privacy-policy': 'privacy',
       'about-us': 'about',
-      'contact-us': 'contact',
-      'privacy': 'privacy',
-      'terms': 'terms',
-      'disclaimer': 'disclaimer',
-      'contact': 'contact',
-      'about': 'about'
+      'contact-us': 'contact'
     };
 
     var key = aliases[value] || value;
@@ -163,84 +155,56 @@
     var pathname = normalizePath(window.location.pathname);
     var search = window.location.search || '';
     if (pathname !== target || window.location.hash) {
-      window.history.replaceState(null, '', target + search);
+      // Critical: allow React's hashchange listener to run first. Removing the
+      // hash synchronously makes React read an empty hash and return to Home.
+      window.setTimeout(function () {
+        if (window.location.hash) {
+          window.history.replaceState(null, '', target + search);
+        }
+      }, 0);
     }
   }
 
-  /*
-   * Small informational note for the AP/TG Top B.Tech Colleges views.
-   * It is inserted only when those views exist, so it does not affect any
-   * other workspace, routing, data processing, or build-time code.
-   */
-  function addTopCollegeScopeNote(container, scopeLabel) {
+  function addTopCollegeScopeNote(container) {
     if (!container || container.querySelector('[data-mos-top-college-scope-note]')) return;
-
     var note = document.createElement('div');
     note.setAttribute('data-mos-top-college-scope-note', 'true');
     note.setAttribute('role', 'note');
-    note.style.cssText = [
-      'margin: 0 auto 1rem',
-      'max-width: 80rem',
-      'padding: 0.65rem 0.9rem',
-      'border: 1px solid rgba(148,163,184,.22)',
-      'border-radius: 0.75rem',
-      'background: rgba(148,163,184,.06)',
-      'color: #64748b',
-      'font-size: 11px',
-      'line-height: 1.55',
-      'text-align: center'
-    ].join(';');
+    note.style.cssText = 'margin:0 auto 1rem;max-width:80rem;padding:.65rem .9rem;border:1px solid rgba(148,163,184,.22);border-radius:.75rem;background:rgba(148,163,184,.06);color:#64748b;font-size:11px;line-height:1.55;text-align:center;';
     note.textContent = 'Note: Only colleges covered by the respective EAPCET counselling/allotment data are included. Deemed universities and institutions outside the EAPCET counselling process are excluded.';
-
     container.appendChild(note);
   }
 
   function watchTopCollegeViews() {
-    var ap = document.querySelector('.mos-ap-top');
-    var tg = document.querySelector('#top-btech-colleges-telangana');
-    if (ap) addTopCollegeScopeNote(ap, 'AP');
-    if (tg) addTopCollegeScopeNote(tg, 'TG');
+    addTopCollegeScopeNote(document.querySelector('.mos-ap-top'));
+    addTopCollegeScopeNote(document.querySelector('#top-btech-colleges-telangana'));
   }
 
   var currentPath = normalizePath(window.location.pathname);
   var initialHash = window.location.hash;
 
-  // Direct clean URLs need to be visible to the existing app's initial state
-  // reader before the React bundle executes. Do not touch the already-clean
-  // SEO landing paths because App.tsx handles those directly.
+  // For a direct clean workspace URL, temporarily provide the legacy hash to
+  // the existing React state reader. It is removed after React has mounted.
   if (!initialHash && currentPath !== '/' && !seoPaths[currentPath]) {
-    var initialRoute = Object.keys(routes).some(function (key) {
-      return normalizePath(routes[key]) === currentPath;
-    });
-    if (initialRoute) {
-      var hashKey = null;
-      Object.keys(routes).some(function (key) {
-        if (normalizePath(routes[key]) === currentPath) {
-          hashKey = key;
-          return true;
-        }
-        return false;
-      });
-      if (hashKey) {
-        window.history.replaceState(null, '', currentPath + (window.location.search || '') + '#' + hashKey);
+    var initialKey = null;
+    Object.keys(routes).some(function (key) {
+      if (normalizePath(routes[key]) === currentPath) {
+        initialKey = key;
+        return true;
       }
+      return false;
+    });
+    if (initialKey) {
+      window.history.replaceState(null, '', currentPath + (window.location.search || '') + '#' + initialKey);
     }
   }
 
-  // App.tsx installs its own hash listener during React startup. Waiting for
-  // DOMContentLoaded ensures this cleanup listener runs after it, so the app
-  // consumes the legacy hash internally while users only see the clean path.
   window.addEventListener('DOMContentLoaded', function () {
     cleanCurrentHash();
     window.addEventListener('hashchange', cleanCurrentHash);
-
     watchTopCollegeViews();
-    var observer = new MutationObserver(function () {
-      watchTopCollegeViews();
-    });
-    observer.observe(document.getElementById('root') || document.body, {
-      childList: true,
-      subtree: true
-    });
+    var root = document.getElementById('root') || document.body;
+    var observer = new MutationObserver(watchTopCollegeViews);
+    observer.observe(root, { childList: true, subtree: true });
   });
 })();
