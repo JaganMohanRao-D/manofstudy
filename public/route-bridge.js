@@ -167,6 +167,41 @@
     }
   }
 
+  /*
+   * Small informational note for the AP/TG Top B.Tech Colleges views.
+   * It is inserted only when those views exist, so it does not affect any
+   * other workspace, routing, data processing, or build-time code.
+   */
+  function addTopCollegeScopeNote(container, scopeLabel) {
+    if (!container || container.querySelector('[data-mos-top-college-scope-note]')) return;
+
+    var note = document.createElement('div');
+    note.setAttribute('data-mos-top-college-scope-note', 'true');
+    note.setAttribute('role', 'note');
+    note.style.cssText = [
+      'margin: 0 auto 1rem',
+      'max-width: 80rem',
+      'padding: 0.65rem 0.9rem',
+      'border: 1px solid rgba(148,163,184,.22)',
+      'border-radius: 0.75rem',
+      'background: rgba(148,163,184,.06)',
+      'color: #64748b',
+      'font-size: 11px',
+      'line-height: 1.55',
+      'text-align: center'
+    ].join(';');
+    note.textContent = 'Note: Only colleges covered by the respective EAPCET counselling/allotment data are included. Deemed universities and institutions outside the EAPCET counselling process are excluded.';
+
+    container.appendChild(note);
+  }
+
+  function watchTopCollegeViews() {
+    var ap = document.querySelector('.mos-ap-top');
+    var tg = document.querySelector('#top-btech-colleges-telangana');
+    if (ap) addTopCollegeScopeNote(ap, 'AP');
+    if (tg) addTopCollegeScopeNote(tg, 'TG');
+  }
+
   var currentPath = normalizePath(window.location.pathname);
   var initialHash = window.location.hash;
 
@@ -198,5 +233,14 @@
   window.addEventListener('DOMContentLoaded', function () {
     cleanCurrentHash();
     window.addEventListener('hashchange', cleanCurrentHash);
+
+    watchTopCollegeViews();
+    var observer = new MutationObserver(function () {
+      watchTopCollegeViews();
+    });
+    observer.observe(document.getElementById('root') || document.body, {
+      childList: true,
+      subtree: true
+    });
   });
 })();
