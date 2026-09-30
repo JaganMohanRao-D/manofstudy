@@ -186,7 +186,16 @@ export const ScholarshipsHub: React.FC = () => {
   };
 
   const share = (s: IndianScholarship) => {
-    const text = `🎓 ${s.title}\n💰 ${s.amount}\n🎯 ${s.target}\n📅 ${s.deadline}\n\nApply: ${s.apply_link}`;
+    const text = [
+      'MAN OF STUDY | SCHOLARSHIP UPDATE',
+      '',
+      `🎓 ${s.title}`,
+      `💰 ${s.amount}`,
+      `🎯 ${s.target}`,
+      `📅 ${s.deadline}`,
+      '',
+      `Apply: https://manofstudy.pages.dev/scholarships`,
+    ].join('\n');
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
   };
 
