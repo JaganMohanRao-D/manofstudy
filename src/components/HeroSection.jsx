@@ -8,6 +8,8 @@ import {
   Award,
   BookOpen,
   FileText,
+  Sparkles,
+  Image as ImageIcon,
 } from 'lucide-react';
 import { FeaturesHub } from './FeaturesHub';
 
@@ -15,11 +17,104 @@ export const HeroSection = ({
   activeWorkspace = 'hub',
   onSelectWorkspace,
 }) => {
-  const handleHeroNavigation = (workspace) => {
+  const handleHeroNavigation = (workspace, tabFallback) => {
     if (workspace === 'scholarships') {
       window.location.hash = 'scholarships';
     }
     onSelectWorkspace?.(workspace);
+    if (tabFallback) {
+      // Preserve the existing utility navigation contract without requiring
+      // the header's secondary strip to remain visible.
+      window.dispatchEvent(new CustomEvent('mos:select-tool-tab', { detail: tabFallback }));
+    }
+  };
+
+  const heroModules = [
+    {
+      id: 'hero-feature-hub-btn',
+      workspace: 'hub',
+      label: 'Feature Hub',
+      icon: Home,
+    },
+    {
+      id: 'hero-scholarships-btn',
+      workspace: 'scholarships',
+      label: 'Scholarships',
+      icon: GraduationCap,
+      badge: '2026',
+    },
+    {
+      id: 'hero-mock-test-btn',
+      workspace: 'mock-tests',
+      label: 'Mock Test Series',
+      icon: Award,
+      badge: '160 Qs CBT',
+      primary: true,
+      matchWorkspaces: ['mock-tests', 'eapcet-cbt', 'cbt-mock-test'],
+    },
+    {
+      id: 'hero-ap-allotments-btn',
+      workspace: 'ap-allotments',
+      label: 'AP Allotments',
+      icon: Award,
+      badge: 'Namewise',
+    },
+    {
+      id: 'hero-tg-allotments-btn',
+      workspace: 'tg-allotments',
+      label: 'TG EAPCET Allotments',
+      icon: Award,
+      badge: '2026',
+    },
+    {
+      id: 'hero-gap-analyzer-btn',
+      workspace: 'gap-analyzer',
+      label: 'AI Gap Analyzer',
+      icon: Sparkles,
+      badge: 'AI Diagnostic',
+    },
+    {
+      id: 'hero-academics-btn',
+      workspace: 'academics',
+      label: 'Academics',
+      icon: ShieldCheck,
+      matchWorkspaces: ['academics', 'gpa', 'backlog'],
+    },
+    {
+      id: 'hero-attendance-btn',
+      workspace: 'attendance',
+      label: 'Attendance Defender',
+      icon: ShieldCheck,
+      badge: '75%',
+    },
+    {
+      id: 'hero-guides-btn',
+      workspace: 'guides',
+      label: 'Study Guides',
+      icon: BookOpen,
+      badge: '9 Ch',
+    },
+    {
+      id: 'hero-pdf-tools-btn',
+      workspace: 'utilities',
+      label: 'PDF Tools',
+      icon: FileText,
+      badge: '30+',
+      tabFallback: 'pdf-tools',
+    },
+    {
+      id: 'hero-image-tools-btn',
+      workspace: 'utilities',
+      label: 'Image Compressor',
+      icon: ImageIcon,
+      badge: '20KB',
+      tabFallback: 'resizer',
+    },
+  ];
+
+  const isModuleActive = (item) => {
+    if (item.matchWorkspaces?.includes(activeWorkspace)) return true;
+    return activeWorkspace === item.workspace;
   };
 
   return (
@@ -27,6 +122,9 @@ export const HeroSection = ({
       id="hero-banner"
       className="relative overflow-hidden mos-hero-premium bg-white dark:bg-slate-950 text-slate-900 dark:text-white py-8 sm:py-12 lg:py-14 px-3 sm:px-6 lg:px-8 border border-slate-200/90 dark:border-slate-800/80 rounded-3xl shadow-lg dark:shadow-2xl space-y-8 sm:space-y-10 min-h-fit break-words transition-colors duration-200"
     >
+      {/* The old header secondary strip is intentionally hidden: all of its destinations live here. */}
+      <style>{`#tier2-secondary-feature-strip{display:none!important}`}</style>
+
       {/* Premium ambient motion — decorative only, content remains fully static/readable. */}
       <div className="mos-hero-ambient" aria-hidden="true">
         <span className="mos-hero-grid" />
@@ -60,69 +158,46 @@ export const HeroSection = ({
           Admissions, academics, career roadmaps, AI guidance, PDF tools and everyday student utilities — all in one place.
         </p>
 
-        {/* Primary navigation moved here from the desktop header to reduce header density. */}
+        {/* Complete workspace navigation: every item formerly in the header's secondary strip is available here. */}
         <nav
-          aria-label="Primary student workspaces"
-          className="pt-1 grid grid-cols-2 sm:flex sm:flex-wrap items-stretch justify-center gap-2.5 sm:gap-3 max-w-3xl mx-auto"
+          aria-label="All student workspaces"
+          className="pt-1 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 items-stretch justify-center gap-2 sm:gap-2.5 max-w-5xl mx-auto"
         >
-          <button
-            type="button"
-            id="hero-feature-hub-btn"
-            onClick={() => handleHeroNavigation('hub')}
-            className={`group min-h-[58px] sm:min-h-[52px] flex items-center justify-center gap-2 px-3 sm:px-5 py-3 rounded-2xl border text-sm font-bold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
-              activeWorkspace === 'hub'
-                ? 'bg-emerald-500 text-white border-emerald-400 shadow-lg shadow-emerald-500/20'
-                : 'bg-white/90 dark:bg-slate-900/90 text-slate-800 dark:text-slate-100 border-slate-200 dark:border-slate-700 hover:border-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40'
-            }`}
-          >
-            <Home className="w-4 h-4 shrink-0" />
-            <span>Feature Hub</span>
-          </button>
+          {heroModules.map((item) => {
+            const Icon = item.icon;
+            const active = isModuleActive(item);
+            const primary = item.primary;
 
-          <button
-            type="button"
-            id="hero-scholarships-btn"
-            onClick={() => handleHeroNavigation('scholarships')}
-            className={`group min-h-[58px] sm:min-h-[52px] flex items-center justify-center gap-2 px-3 sm:px-5 py-3 rounded-2xl border text-sm font-bold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
-              activeWorkspace === 'scholarships'
-                ? 'bg-emerald-500 text-white border-emerald-400 shadow-lg shadow-emerald-500/20'
-                : 'bg-white/90 dark:bg-slate-900/90 text-slate-800 dark:text-slate-100 border-slate-200 dark:border-slate-700 hover:border-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40'
-            }`}
-          >
-            <GraduationCap className="w-4 h-4 shrink-0" />
-            <span>Scholarships</span>
-            <span className="hidden sm:inline-flex text-[9px] font-black uppercase px-1.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-500/30">2026</span>
-          </button>
-
-          <button
-            type="button"
-            id="hero-mock-test-btn"
-            onClick={() => handleHeroNavigation('mock-tests')}
-            className={`group min-h-[58px] sm:min-h-[52px] flex items-center justify-center gap-2 px-3 sm:px-5 py-3 rounded-2xl border text-sm font-bold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
-              activeWorkspace === 'mock-tests' || activeWorkspace === 'eapcet-cbt' || activeWorkspace === 'cbt-mock-test'
-                ? 'bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-600/20'
-                : 'bg-blue-600 hover:bg-blue-500 text-white border-blue-600 shadow-lg shadow-blue-600/20 hover:shadow-blue-600/30'
-            }`}
-          >
-            <Award className="w-4 h-4 shrink-0" />
-            <span>Mock Test Series</span>
-            <span className="hidden sm:inline-flex text-[9px] font-black uppercase px-1.5 py-0.5 rounded-full bg-white/15 text-white border border-white/20">160 Qs CBT</span>
-          </button>
-
-          <button
-            type="button"
-            id="hero-ap-allotments-btn"
-            onClick={() => handleHeroNavigation('ap-allotments')}
-            className={`group min-h-[58px] sm:min-h-[52px] flex items-center justify-center gap-2 px-3 sm:px-5 py-3 rounded-2xl border text-sm font-bold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
-              activeWorkspace === 'ap-allotments'
-                ? 'bg-emerald-500 text-white border-emerald-400 shadow-lg shadow-emerald-500/20'
-                : 'bg-white/90 dark:bg-slate-900/90 text-slate-800 dark:text-slate-100 border-slate-200 dark:border-slate-700 hover:border-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40'
-            }`}
-          >
-            <Award className="w-4 h-4 shrink-0" />
-            <span>AP Allotments</span>
-            <span className="hidden sm:inline-flex text-[9px] font-black uppercase px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30">Namewise</span>
-          </button>
+            return (
+              <button
+                key={item.id}
+                type="button"
+                id={item.id}
+                onClick={() => handleHeroNavigation(item.workspace, item.tabFallback)}
+                className={`group min-h-[54px] sm:min-h-[52px] flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-2.5 rounded-2xl border text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
+                  primary
+                    ? 'bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-600/20 hover:bg-blue-500 hover:shadow-blue-600/30'
+                    : active
+                      ? 'bg-emerald-500 text-white border-emerald-400 shadow-lg shadow-emerald-500/20'
+                      : 'bg-white/90 dark:bg-slate-900/90 text-slate-800 dark:text-slate-100 border-slate-200 dark:border-slate-700 hover:border-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40'
+                }`}
+              >
+                <Icon className="w-4 h-4 shrink-0" />
+                <span className="truncate">{item.label}</span>
+                {item.badge && (
+                  <span className={`hidden sm:inline-flex shrink-0 text-[9px] font-black uppercase px-1.5 py-0.5 rounded-full border ${
+                    primary
+                      ? 'bg-white/15 text-white border-white/20'
+                      : active
+                        ? 'bg-white/15 text-white border-white/20'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700'
+                  }`}>
+                    {item.badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </nav>
 
         <div className="pt-1 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 sm:gap-x-6 text-xs text-slate-600 dark:text-slate-400 font-medium">
