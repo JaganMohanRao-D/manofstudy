@@ -21,6 +21,8 @@ interface ScholarshipDetailsModalProps {
   onClose: () => void;
 }
 
+const SCHOLARSHIPS_URL = 'https://manofstudy.pages.dev/scholarships';
+
 export const ScholarshipDetailsModal: React.FC<ScholarshipDetailsModalProps> = ({
   scholarship,
   onClose,
@@ -31,7 +33,9 @@ export const ScholarshipDetailsModal: React.FC<ScholarshipDetailsModalProps> = (
     if (!scholarship) return;
 
     const previousOverflow = document.body.style.overflow;
+    const previousTouchAction = document.body.style.touchAction;
     document.body.style.overflow = 'hidden';
+    document.body.style.touchAction = 'none';
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose();
@@ -40,6 +44,7 @@ export const ScholarshipDetailsModal: React.FC<ScholarshipDetailsModalProps> = (
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.body.style.overflow = previousOverflow;
+      document.body.style.touchAction = previousTouchAction;
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [scholarship, onClose]);
@@ -48,7 +53,7 @@ export const ScholarshipDetailsModal: React.FC<ScholarshipDetailsModalProps> = (
 
   const handleCopyLink = async () => {
     try {
-      await navigator.clipboard.writeText(scholarship.apply_link || window.location.href);
+      await navigator.clipboard.writeText(SCHOLARSHIPS_URL);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -57,7 +62,7 @@ export const ScholarshipDetailsModal: React.FC<ScholarshipDetailsModalProps> = (
   };
 
   const handleShareWhatsApp = () => {
-    const text = `Check out this scholarship: *${scholarship.title}* offering *${scholarship.amount}*.\n\nTarget: ${scholarship.target}\nDeadline: ${scholarship.deadline}\nApply here: ${scholarship.apply_link}`;
+    const text = `🎓 Check out this scholarship on Man of Study:\n\n*${scholarship.title}*\n💰 ${scholarship.amount}\n🎯 ${scholarship.target}\n📅 ${scholarship.deadline}\n\nExplore scholarship details: ${SCHOLARSHIPS_URL}`;
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
   };
 
@@ -79,7 +84,7 @@ export const ScholarshipDetailsModal: React.FC<ScholarshipDetailsModalProps> = (
     <div
       id="scholarship-details-backdrop"
       onClick={onClose}
-      className="fixed inset-0 z-[9999] bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 md:p-6"
+      className="fixed inset-0 z-[9999] bg-slate-950/60 backdrop-blur-lg flex items-center justify-center p-2.5 sm:p-4 md:p-6"
       role="dialog"
       aria-modal="true"
       aria-labelledby="scholarship-modal-title"
@@ -87,37 +92,38 @@ export const ScholarshipDetailsModal: React.FC<ScholarshipDetailsModalProps> = (
       <div
         id="scholarship-details-card"
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-2xl max-h-[calc(100dvh-1.5rem)] sm:max-h-[90dvh] bg-[var(--mos-surface)] rounded-3xl shadow-2xl border border-[var(--mos-border)] overflow-hidden flex flex-col text-[var(--mos-text-primary)]"
+        className="relative w-full max-w-3xl max-h-[calc(100dvh-1rem)] sm:max-h-[92dvh] bg-[var(--mos-surface)] rounded-[28px] shadow-[0_24px_80px_rgba(0,0,0,.35)] border border-emerald-500/20 overflow-hidden flex flex-col text-[var(--mos-text-primary)]"
       >
-        <div className="p-4 sm:p-6 border-b border-[var(--mos-border)] bg-[var(--mos-surface)] flex items-start justify-between gap-4 shrink-0">
-          <div className="space-y-2 min-w-0 flex-1">
+        <div className="h-1 shrink-0 bg-gradient-to-r from-emerald-400 via-cyan-400 to-indigo-500" />
+        <div className="p-4 sm:p-6 border-b border-[var(--mos-border)] bg-[var(--mos-surface)]/95 backdrop-blur-xl flex items-start justify-between gap-4 shrink-0">
+          <div className="space-y-2.5 min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-[var(--mos-surface-muted)] text-emerald-600 dark:text-emerald-400 border border-[var(--mos-border)]">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 border border-emerald-500/20">
                 <Building2 className="w-3 h-3" /> {scholarship.provider}
               </span>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-[var(--mos-surface-muted)] text-[var(--mos-text-secondary)] border border-[var(--mos-border)]">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-semibold bg-[var(--mos-surface-muted)] text-[var(--mos-text-secondary)] border border-[var(--mos-border)]">
                 {scholarship.category}
               </span>
-              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-bold border ${isExclusiveGirls ? 'bg-pink-500/10 text-pink-600 dark:text-pink-300 border-pink-500/30' : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 border-emerald-500/30'}`}>
+              <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold border ${isExclusiveGirls ? 'bg-pink-500/10 text-pink-600 dark:text-pink-300 border-pink-500/30' : 'bg-sky-500/10 text-sky-600 dark:text-sky-300 border-sky-500/30'}`}>
                 {genderTag}
               </span>
             </div>
-            <h2 id="scholarship-modal-title" className="text-lg sm:text-xl md:text-2xl font-bold tracking-tight leading-snug">
+            <h2 id="scholarship-modal-title" className="text-lg sm:text-2xl md:text-3xl font-black tracking-tight leading-tight">
               {scholarship.title}
             </h2>
           </div>
-          <button onClick={onClose} className="p-2 rounded-xl bg-[var(--mos-surface-muted)] hover:bg-[var(--mos-border)] text-[var(--mos-text-secondary)] hover:text-[var(--mos-text-primary)] transition-colors shrink-0 cursor-pointer border border-[var(--mos-border)]" aria-label="Close scholarship details modal">
+          <button onClick={onClose} className="p-2.5 rounded-xl bg-[var(--mos-surface-muted)] hover:bg-[var(--mos-border)] text-[var(--mos-text-secondary)] hover:text-[var(--mos-text-primary)] transition-colors shrink-0 cursor-pointer border border-[var(--mos-border)]" aria-label="Close scholarship details modal">
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="p-4 sm:p-6 overflow-y-auto overscroll-contain space-y-4 text-[var(--mos-text-secondary)] text-xs sm:text-sm leading-relaxed">
-          <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="p-3.5 sm:p-6 overflow-y-auto overscroll-contain space-y-4 text-[var(--mos-text-secondary)] text-xs sm:text-sm leading-relaxed">
+          <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-emerald-500/12 via-cyan-500/8 to-transparent border border-emerald-500/25 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/30"><IndianRupee className="w-5 h-5" /></div>
+              <div className="w-11 h-11 rounded-2xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/25"><IndianRupee className="w-5 h-5" /></div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 block">Scholarship Reward / Financial Grant</span>
-                <span className="text-base sm:text-lg font-black text-[var(--mos-text-primary)] font-mono">{scholarship.amount}</span>
+                <span className="text-base sm:text-xl font-black text-[var(--mos-text-primary)]">{scholarship.amount}</span>
               </div>
             </div>
             <div className="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-xl self-start sm:self-center">
@@ -161,11 +167,11 @@ export const ScholarshipDetailsModal: React.FC<ScholarshipDetailsModalProps> = (
           </div>
         </div>
 
-        <div className="p-4 sm:p-5 border-t border-[var(--mos-border)] bg-[var(--mos-surface)] flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+        <div className="p-3.5 sm:p-5 border-t border-[var(--mos-border)] bg-[var(--mos-surface)]/95 backdrop-blur-xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-2 w-full sm:w-auto">
-            <button onClick={handleShareWhatsApp} className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 py-2.5 px-3.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 font-bold text-xs transition-colors cursor-pointer"><Share2 className="w-3.5 h-3.5 text-emerald-500" /><span>Share WhatsApp</span></button>
+            <button onClick={handleShareWhatsApp} className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 py-2.5 px-3.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 font-bold text-xs transition-colors cursor-pointer"><Share2 className="w-3.5 h-3.5 text-emerald-500" /><span>Share</span></button>
             <button onClick={handleCopyLink} className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 py-2.5 px-3.5 rounded-xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] hover:bg-[var(--mos-border)] text-[var(--mos-text-secondary)] hover:text-[var(--mos-text-primary)] font-bold text-xs transition-colors cursor-pointer">
-              {copied ? <><Check className="w-3.5 h-3.5 text-emerald-500" /><span className="text-emerald-600 dark:text-emerald-400">Link Copied!</span></> : <><Copy className="w-3.5 h-3.5 text-[var(--mos-text-muted)]" /><span>Copy Link</span></>}
+              {copied ? <><Check className="w-3.5 h-3.5 text-emerald-500" /><span className="text-emerald-600 dark:text-emerald-400">Link Copied!</span></> : <><Copy className="w-3.5 h-3.5 text-[var(--mos-text-muted)]" /><span>Copy Scholarship Link</span></>}
             </button>
           </div>
           <a href={scholarship.apply_link} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white dark:text-slate-950 font-bold text-xs sm:text-sm shadow-md transition-all cursor-pointer"><span>Apply on Official Portal</span><ExternalLink className="w-4 h-4" /></a>
