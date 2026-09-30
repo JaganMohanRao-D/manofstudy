@@ -175,6 +175,41 @@
     container.appendChild(note);
   }
 
+  function injectScholarshipPolish() {
+    if (document.getElementById('mos-scholarship-polish')) return;
+    var style = document.createElement('style');
+    style.id = 'mos-scholarship-polish';
+    style.textContent = `
+      .mos-scholarships-hub { position: relative; isolation: isolate; }
+      .mos-scholarships-hub::before { content:""; position:absolute; inset:2rem 0 auto; height:34rem; z-index:-1; pointer-events:none; background:radial-gradient(circle at 15% 15%, rgba(16,185,129,.10), transparent 32%), radial-gradient(circle at 85% 10%, rgba(59,130,246,.10), transparent 30%); }
+      .mos-scholarship-hero { box-shadow:0 18px 60px rgba(15,23,42,.10); }
+      .mos-scholarship-hero > div:first-child { background:linear-gradient(135deg,#07111f,#0f172a); }
+      .mos-scholarship-hero > div:first-child img { max-height:none !important; aspect-ratio:16/5; object-fit:cover !important; object-position:center; }
+      .mos-scholarships-hub article { box-shadow:0 8px 28px rgba(15,23,42,.06); transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease; }
+      .mos-scholarships-hub article:hover { transform:translateY(-4px); box-shadow:0 18px 42px rgba(15,23,42,.12); }
+      .mos-scholarships-hub article img { transition:transform .35s ease; }
+      .mos-scholarships-hub article:hover img { transform:scale(1.025); }
+      .mos-scholarships-hub article > div:first-child { background:#f8fafc; }
+      .dark .mos-scholarships-hub article > div:first-child { background:#020617; }
+      .mos-scholarships-hub .sticky { box-shadow:0 12px 34px rgba(15,23,42,.10); }
+      #scholarship-details-backdrop { animation:mosScholarshipBackdrop .18s ease-out both; }
+      #scholarship-details-card { animation:mosScholarshipModal .22s cubic-bezier(.2,.8,.2,1) both; }
+      @keyframes mosScholarshipBackdrop { from { opacity:0; } to { opacity:1; } }
+      @keyframes mosScholarshipModal { from { opacity:0; transform:translateY(12px) scale(.985); } to { opacity:1; transform:translateY(0) scale(1); } }
+      @media (max-width:640px) {
+        .mos-scholarships-hub { padding-left:.75rem !important; padding-right:.75rem !important; }
+        .mos-scholarship-hero { border-radius:22px !important; }
+        .mos-scholarship-hero > div:first-child img { aspect-ratio:16/7; }
+        .mos-scholarships-hub article:hover { transform:none; }
+        #scholarship-details-card { border-radius:22px !important; max-height:calc(100dvh - .75rem) !important; }
+      }
+      @media (prefers-reduced-motion:reduce) {
+        .mos-scholarships-hub article, .mos-scholarships-hub article img, #scholarship-details-backdrop, #scholarship-details-card { animation:none !important; transition:none !important; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
   function watchTopCollegeViews() {
     addTopCollegeScopeNote(document.querySelector('.mos-ap-top'));
     addTopCollegeScopeNote(document.querySelector('#top-btech-colleges-telangana'));
@@ -202,9 +237,13 @@
   window.addEventListener('DOMContentLoaded', function () {
     cleanCurrentHash();
     window.addEventListener('hashchange', cleanCurrentHash);
+    injectScholarshipPolish();
     watchTopCollegeViews();
     var root = document.getElementById('root') || document.body;
-    var observer = new MutationObserver(watchTopCollegeViews);
+    var observer = new MutationObserver(function () {
+      watchTopCollegeViews();
+      injectScholarshipPolish();
+    });
     observer.observe(root, { childList: true, subtree: true });
   });
 })();
