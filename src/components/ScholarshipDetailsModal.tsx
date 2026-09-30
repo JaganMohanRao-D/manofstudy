@@ -63,16 +63,14 @@ export const ScholarshipDetailsModal: React.FC<ScholarshipDetailsModalProps> = (
 
   const handleShareWhatsApp = () => {
     const text = [
-      'Man of Study | Scholarship Update',
+      'MAN OF STUDY | SCHOLARSHIP UPDATE',
       '',
-      scholarship.title,
+      `🎓 ${scholarship.title}`,
+      `💰 ${scholarship.amount}`,
+      `🎯 ${scholarship.target}`,
+      `📅 ${scholarship.deadline}`,
       '',
-      `Scholarship support: ${scholarship.amount}`,
-      `For: ${scholarship.target}`,
-      `Application deadline: ${scholarship.deadline}`,
-      '',
-      `Explore eligibility and scholarship details on Man of Study:`,
-      SCHOLARSHIPS_URL,
+      `Apply: ${SCHOLARSHIPS_URL}`,
     ].join('\n');
 
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
