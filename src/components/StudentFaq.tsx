@@ -38,7 +38,7 @@ const FAQ_ITEMS: FaqItem[] = [
     icon: Sparkles,
     question: 'Why was MAN OF STUDY built, and who is behind it?',
     answer:
-      'MAN OF STUDY was founded by an engineering scholar (Jagan Mohan Rao / @jamord) who experienced firsthand how fragmented, ad-cluttered, and overwhelming engineering academic resources were. The mission is simple: provide Indian engineering students with a clean, high-performance, ad-free digital sanctuary with zero paywalls, complete data privacy, and curated academic clarity.',
+      'MAN OF STUDY was founded by an engineering scholar (Dunna Jagan Mohan Rao) who experienced firsthand how fragmented, ad-cluttered, and overwhelming engineering academic resources were. The mission is simple: provide Indian engineering students with a clean, high-performance, ad-free digital sanctuary with zero paywalls, complete data privacy, and curated academic clarity.',
     actionText: 'Learn About the Vision',
     actionTarget: { type: 'workspace', target: 'about' },
   },
