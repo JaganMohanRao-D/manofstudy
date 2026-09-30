@@ -74,52 +74,11 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   /**
-   * High-contrast secondary strip navigation items:
-   * 1. Feature Hub
-   * 2. 🎓 Scholarships (PROMINENT TAB)
-   * 3. 🎯 Mock Test Series (NEW)
-   * 4. AP Allotments (Namewise)
-   * 5. TG EAPCET Allotments (Namewise)
-   * 6. AI Gap Analyzer
-   * 7. Academics
-   * 8. Attendance Defender
-   * 9. Study Guides
+   * Secondary feature strip items.
+   * The four highest-priority destinations are intentionally promoted into
+   * the hero action area to reduce header density and improve mobile usability.
    */
   const primaryModules: NavModuleItem[] = [
-    {
-      id: 'tier2-hub',
-      workspace: 'hub',
-      label: 'Feature Hub',
-      icon: Home,
-    },
-    {
-      id: 'tier2-scholarships',
-      workspace: 'scholarships',
-      label: '🎓 Scholarships',
-      shortLabel: 'Scholarships',
-      icon: GraduationCap,
-      badge: '2026 Live',
-      badgeColor: 'bg-amber-500/20 text-amber-600 dark:text-amber-300 border-amber-500/30',
-    },
-    {
-      id: 'tier2-mock-tests',
-      workspace: 'mock-tests',
-      label: '🎯 Mock Test Series',
-      shortLabel: 'Mock Tests',
-      icon: Award,
-      badge: 'NEW',
-      badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-      matchWorkspaces: ['mock-tests', 'eapcet-cbt', 'cbt-mock-test'],
-    },
-    {
-      id: 'tier2-ap-allotments',
-      workspace: 'ap-allotments',
-      label: 'AP Allotments (Namewise)',
-      shortLabel: 'AP Allotments',
-      icon: Award,
-      badge: 'Namewise',
-      badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-    },
     {
       id: 'tier2-tg-allotments',
       workspace: 'tg-allotments',
@@ -127,7 +86,7 @@ export const Header: React.FC<HeaderProps> = ({
       shortLabel: 'TG Allotments',
       icon: Award,
       badge: '2026',
-      badgeColor: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
+      badgeColor: 'bg-rose-500/20 text-rose-600 dark:text-rose-300 border-rose-500/30',
     },
     {
       id: 'tier2-gap-analyzer',
@@ -136,7 +95,7 @@ export const Header: React.FC<HeaderProps> = ({
       shortLabel: 'Gap Analyzer',
       icon: Sparkles,
       badge: 'AI Diagnostic',
-      badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+      badgeColor: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30',
     },
     {
       id: 'tier2-academics',
@@ -151,7 +110,7 @@ export const Header: React.FC<HeaderProps> = ({
       label: 'Attendance Defender',
       icon: ShieldCheck,
       badge: '75%',
-      badgeColor: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+      badgeColor: 'bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border-cyan-500/30',
     },
     {
       id: 'tier2-guides',
@@ -159,7 +118,7 @@ export const Header: React.FC<HeaderProps> = ({
       label: 'Study Guides',
       icon: BookOpen,
       badge: '9 Ch',
-      badgeColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
+      badgeColor: 'bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border-indigo-500/30',
     },
     {
       id: 'tier2-pdf-tools',
@@ -169,7 +128,7 @@ export const Header: React.FC<HeaderProps> = ({
       tabFallback: 'pdf-tools',
       icon: FileText,
       badge: '30+',
-      badgeColor: 'bg-sky-500/20 text-sky-300 border-sky-500/30',
+      badgeColor: 'bg-sky-500/20 text-sky-700 dark:text-sky-300 border-sky-500/30',
     },
     {
       id: 'tier2-image-tools',
@@ -179,7 +138,7 @@ export const Header: React.FC<HeaderProps> = ({
       tabFallback: 'resizer',
       icon: ImageIcon,
       badge: '20KB',
-      badgeColor: 'bg-violet-500/20 text-violet-300 border-violet-500/30',
+      badgeColor: 'bg-violet-500/20 text-violet-700 dark:text-violet-300 border-violet-500/30',
     },
   ];
 
@@ -197,13 +156,7 @@ export const Header: React.FC<HeaderProps> = ({
       id="main-header"
       className="sticky top-0 z-50 backdrop-blur-md transition-colors duration-200 bg-white/95 dark:bg-slate-950/95 text-slate-900 dark:text-slate-100 shadow-xs dark:shadow-md w-full border-b border-slate-200 dark:border-slate-800/80"
     >
-      {/* ========================================================================= */}
-      {/* TIER 1: Top Primary Bar                                                  */}
-      {/* Left: Brand Logo + MAN OF STUDY                                          */}
-      {/* Right: Quick Search, Support MOS, Theme Toggle, Hamburger Drawer Trigger */}
-      {/* ========================================================================= */}
       <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 h-16">
-        {/* Brand Logo & Platform Title (Zero truncation, No PRO badge) */}
         <a
           href="https://manofstudy.com"
           id="brand-logo"
@@ -229,28 +182,18 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
           <div className="flex flex-col min-w-0 leading-none">
             <div className="flex items-baseline gap-1.5 sm:gap-2 whitespace-nowrap">
-              <span className="text-[10px] sm:text-[11px] font-extrabold tracking-[0.24em] text-slate-500 dark:text-slate-400 uppercase transition-colors">
-                MAN
-              </span>
-              <span className="text-[8px] sm:text-[9px] font-bold tracking-[0.16em] text-slate-400 dark:text-slate-500 uppercase">
-                OF
-              </span>
-              <span className="text-[17px] sm:text-[18px] md:text-[19px] font-black tracking-[-0.035em] uppercase bg-gradient-to-r from-slate-950 via-blue-600 to-emerald-500 dark:from-white dark:via-sky-300 dark:to-emerald-300 bg-clip-text text-transparent transition-all duration-200 group-hover:tracking-[-0.02em]">
-                STUDY
-              </span>
+              <span className="text-[10px] sm:text-[11px] font-extrabold tracking-[0.24em] text-slate-500 dark:text-slate-400 uppercase transition-colors">MAN</span>
+              <span className="text-[8px] sm:text-[9px] font-bold tracking-[0.16em] text-slate-400 dark:text-slate-500 uppercase">OF</span>
+              <span className="text-[17px] sm:text-[18px] md:text-[19px] font-black tracking-[-0.035em] uppercase bg-gradient-to-r from-slate-950 via-blue-600 to-emerald-500 dark:from-white dark:via-sky-300 dark:to-emerald-300 bg-clip-text text-transparent transition-all duration-200 group-hover:tracking-[-0.02em]">STUDY</span>
             </div>
             <div className="mt-1.5 hidden sm:flex items-center gap-1.5">
               <span className="h-px w-4 bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full shrink-0" />
-              <span className="text-[9px] md:text-[10px] font-medium tracking-[0.055em] text-slate-500 dark:text-slate-400 whitespace-nowrap">
-                Engineering &amp; Academic Launchpad
-              </span>
+              <span className="text-[9px] md:text-[10px] font-medium tracking-[0.055em] text-slate-500 dark:text-slate-400 whitespace-nowrap">Engineering &amp; Academic Launchpad</span>
             </div>
           </div>
         </a>
 
-        {/* Right Navigation Controls */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          {/* AI Gap Analyzer Direct Trigger */}
           <button
             type="button"
             id="header-gap-analyzer-trigger"
@@ -264,12 +207,9 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
             <span>AI Gap Analyzer</span>
-            <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-500/20 border border-emerald-300 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-200 uppercase font-mono font-bold">
-              AI
-            </span>
+            <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-500/20 border border-emerald-300 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-200 uppercase font-mono font-bold">AI</span>
           </button>
 
-          {/* Universal Search Bar / Command Palette Trigger */}
           <button
             type="button"
             id="header-command-palette-trigger"
@@ -279,15 +219,10 @@ export const Header: React.FC<HeaderProps> = ({
             aria-label="Open Man of Study quick search"
           >
             <Search className="w-3.5 h-3.5 text-sky-600 dark:text-cyan-400 shrink-0" />
-            <span className="hidden md:inline font-medium text-slate-700 dark:text-slate-300">
-              Quick Search...
-            </span>
-            <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[9px] font-mono font-bold text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded">
-              ⌘K
-            </kbd>
+            <span className="hidden md:inline font-medium text-slate-700 dark:text-slate-300">Quick Search...</span>
+            <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[9px] font-mono font-bold text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded">⌘K</kbd>
           </button>
 
-          {/* High-Visibility Heart-Themed Support Button */}
           <button
             type="button"
             id="header-support-btn"
@@ -300,7 +235,6 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="sm:hidden font-bold text-[11px]">Support</span>
           </button>
 
-          {/* Subtle Dark / Light Mode Toggle */}
           <button
             type="button"
             onClick={toggleTheme}
@@ -308,14 +242,9 @@ export const Header: React.FC<HeaderProps> = ({
             title={isDarkMode ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
             aria-label="Toggle Theme"
           >
-            {isDarkMode ? (
-              <Sun className="w-4 h-4 text-amber-400" />
-            ) : (
-              <Moon className="w-4 h-4 text-slate-700" />
-            )}
+            {isDarkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
           </button>
 
-          {/* Top-Right Hamburger Slide-Over Mega Drawer Trigger */}
           <div className="shrink-0 z-50">
             <button
               type="button"
@@ -331,12 +260,6 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* ========================================================================= */}
-      {/* TIER 2: Secondary Feature Strip (Desktop & Tablet)                        */}
-      {/* Renders all key tools as sleek interactive pills with zero horizontal     */}
-      {/* scrolling, wrapping naturally into a centered row.                         */}
-      {/* On mobile screens, hidden to preserve screen real estate for the drawer.  */}
-      {/* ========================================================================= */}
       <div
         id="tier2-secondary-feature-strip"
         className="hidden md:block border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/95 dark:bg-slate-950/90 backdrop-blur-md px-4 sm:px-6 lg:px-8 py-2 transition-colors duration-200"
@@ -382,7 +305,6 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Top-Right Hamburger Slide-Over Mega Drawer for Mobile & Full Workspace Hierarchy */}
       <NavigationDrawer
         isOpen={isMegaDrawerOpen}
         onClose={() => setIsMegaDrawerOpen(false)}
