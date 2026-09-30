@@ -18,11 +18,11 @@ export const Footer = ({
             <img
               src="https://i.ibb.co/zHPk2tv4/Chat-GPT-Image-Sep-13-2026-08-04-48-PM.png"
               alt="MAN OF STUDY (MOS) Logo"
-              width="96"
-              height="96"
+              width="112"
+              height="112"
               loading="lazy"
               fetchPriority="auto"
-              className="w-20 h-20 sm:w-24 sm:h-24 object-contain"
+              className="w-24 h-24 sm:w-28 sm:h-28 object-contain rounded-2xl"
             />
           </div>
 
