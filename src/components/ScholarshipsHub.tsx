@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import {
   Search, GraduationCap, ExternalLink, Calendar, IndianRupee, Share2,
   Copy, Check, ShieldCheck, Sparkles, ArrowUpRight, SlidersHorizontal,
-  Clock3, BadgeCheck, RefreshCw, X
+  BadgeCheck, RefreshCw, X
 } from 'lucide-react';
 import { ScholarshipDetailsModal } from './ScholarshipDetailsModal';
 
@@ -19,6 +19,7 @@ export interface IndianScholarship {
   status?: string;
   source_note?: string;
   last_verified?: string;
+  gender?: string;
 }
 
 export function isExclusivelyForGirls(s: IndianScholarship): boolean {
@@ -37,9 +38,6 @@ export function getScholarshipSummary(s: IndianScholarship): string {
 type Filter = 'all' | 'open' | 'government' | 'private' | 'state' | 'engineering' | 'girls';
 const isOpen = (s: IndianScholarship) => (s.status || '').toLowerCase().includes('open');
 
-// Local scholarship artwork stored in /public/Scholorship_images.
-// Vite copies public assets to the deployed site root, so these remain
-// first-party static assets and do not depend on an external image host.
 const SCHOLARSHIP_IMAGE_URLS: Record<string, string> = {
   'central-sector-csss-2026': '/Scholorship_images/pm-usp_central_scholorship.jpg',
   'top-class-sc-2026': '/Scholorship_images/central_top_class_education_for_sc_students.jpg',
@@ -92,10 +90,9 @@ const ScholarshipVisual: React.FC<{ scholarship: IndianScholarship; compact?: bo
   const imageUrl = SCHOLARSHIP_IMAGE_URLS[scholarship.id];
   const theme = getVisualTheme(scholarship);
   const [imageFailed, setImageFailed] = useState(false);
-  const titleParts = scholarship.title.split(/[:—–]/).map(p => p.trim()).filter(Boolean);
 
   return (
-    <div className={`relative overflow-hidden ${compact ? 'h-44 sm:h-52' : 'h-48'} w-full bg-gradient-to-br ${theme.accent}`}>
+    <div className={`relative w-full overflow-hidden bg-slate-950 ${compact ? 'aspect-[16/7] sm:aspect-[16/6]' : 'aspect-video'}`}>
       {imageUrl && !imageFailed ? (
         <img
           src={imageUrl}
@@ -103,32 +100,21 @@ const ScholarshipVisual: React.FC<{ scholarship: IndianScholarship; compact?: bo
           loading={compact ? 'eager' : 'lazy'}
           decoding="async"
           onError={() => setImageFailed(true)}
-          className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
+          className="block h-full w-full object-contain object-center"
         />
       ) : (
-        <>
+        <div className={`relative h-full w-full bg-gradient-to-br ${theme.accent}`}>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_18%,rgba(255,255,255,.28),transparent_28%),radial-gradient(circle_at_15%_90%,rgba(0,0,0,.28),transparent_38%)]" />
           <div className="absolute -right-14 -top-16 h-48 w-48 rounded-full border border-white/20 bg-white/10" />
           <div className="absolute -left-16 bottom-[-72px] h-52 w-52 rounded-full border border-white/10 bg-black/10" />
-          <div className="absolute right-[13%] top-[18%] h-20 w-24 rounded-3xl border border-white/20 bg-white/10 backdrop-blur-sm rotate-6" />
-          <div className="absolute right-[16%] bottom-[20%] flex h-14 w-14 items-center justify-center rounded-2xl border border-white/20 bg-slate-950/30 backdrop-blur-sm">
-            <GraduationCap className="h-7 w-7 text-white" />
+          <div className="absolute right-[16%] bottom-[20%] flex h-14 w-14 items-center justify-center rounded-2xl border border-white/20 bg-slate-950/30 backdrop-blur-sm"><GraduationCap className="h-7 w-7 text-white" /></div>
+          <div className="absolute left-[7%] top-[16%] flex max-w-[82%] items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 backdrop-blur-md"><Sparkles className="h-3.5 w-3.5 text-white" /><span className="text-[9px] font-black uppercase tracking-[.16em] text-white/90">Education opportunity</span></div>
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/85 to-transparent p-4 sm:p-5 text-white">
+            <div className="text-[9px] font-black uppercase tracking-[.18em] text-emerald-200/90">Scholarship opportunity</div>
+            <div className="mt-1 text-base sm:text-lg font-black leading-tight">{theme.fallbackLabel}</div>
           </div>
-          <div className="absolute left-[8%] top-[18%] flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 backdrop-blur-md">
-            <Sparkles className="h-3.5 w-3.5 text-white" />
-            <span className="text-[9px] font-black uppercase tracking-[.16em] text-white/90">Education opportunity</span>
-          </div>
-        </>
-      )}
-
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-        <div className="max-w-[92%] text-white drop-shadow-lg">
-          <div className="text-[9px] font-black uppercase tracking-[.18em] text-emerald-200/90">Scholarship opportunity</div>
-          <div className="mt-1 text-base sm:text-lg font-black leading-tight">{titleParts[0] || theme.fallbackLabel}</div>
-          {titleParts[1] && <div className="text-xs sm:text-sm font-bold leading-tight text-white/90">{titleParts.slice(1).join(' — ')}</div>}
         </div>
-      </div>
+      )}
     </div>
   );
 };
@@ -216,20 +202,16 @@ export const ScholarshipsHub: React.FC = () => {
 
   return (
     <section className="mos-scholarships-hub w-full max-w-7xl mx-auto px-3 sm:px-5 lg:px-8 py-6 sm:py-8 space-y-6 text-[var(--mos-text-primary)]">
-      <div className="mos-scholarship-hero relative overflow-hidden rounded-[28px] border border-slate-700/70 bg-slate-950 shadow-2xl min-h-[420px] sm:min-h-[460px]">
-        <img src={SCHOLARSHIP_HERO_IMAGE} alt="Man of Study scholarship portal" fetchPriority="high" decoding="async" className="absolute inset-0 h-full w-full object-cover object-center" />
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/70 to-slate-950/30" />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/10" />
-        <div className="relative min-h-[420px] sm:min-h-[460px] flex items-end p-5 sm:p-8 lg:p-10">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/25 bg-emerald-400/10 px-3 py-1.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-[.16em] text-emerald-200 backdrop-blur-md">
-              <BadgeCheck className="h-3.5 w-3.5" /> 2026 Scholarship Directory
-            </div>
-            <h1 className="mt-4 text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white">Find scholarships with the <span className="text-emerald-300">amount upfront.</span></h1>
-            <p className="mt-3 max-w-2xl text-sm sm:text-base leading-6 text-slate-200">Explore government, state, CSR and private scholarships with eligibility, published amounts and application sources in one student-friendly directory.</p>
-            <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-w-3xl">
-              {[[stats.total, 'Scholarships'], [stats.open, 'Open now'], [stats.government, 'Government'], [stats.engineering, 'Engineering']].map(([n, label]) => <div key={String(label)} className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md px-3 py-3"><div className="text-lg sm:text-xl font-black text-white">{n}</div><div className="mt-0.5 text-[10px] text-slate-300">{label}</div></div>)}
-            </div>
+      <div className="mos-scholarship-hero overflow-hidden rounded-[28px] border border-[var(--mos-border)] bg-[var(--mos-surface)] shadow-xl">
+        <div className="w-full bg-slate-950">
+          <img src={SCHOLARSHIP_HERO_IMAGE} alt="Man of Study scholarship portal" fetchPriority="high" decoding="async" className="block h-auto max-h-[280px] sm:max-h-[340px] w-full object-contain object-center" />
+        </div>
+        <div className="p-5 sm:p-7 lg:p-9">
+          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-[.16em] text-emerald-700 dark:text-emerald-300"><BadgeCheck className="h-3.5 w-3.5" /> 2026 Scholarship Directory</div>
+          <h1 className="mt-4 text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[var(--mos-text-primary)]">Find scholarships with the <span className="text-emerald-600 dark:text-emerald-300">amount upfront.</span></h1>
+          <p className="mt-3 max-w-3xl text-sm sm:text-base leading-6 text-[var(--mos-text-secondary)]">Explore government, state, CSR and private scholarships with eligibility, published amounts and application sources in one student-friendly directory.</p>
+          <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-w-3xl">
+            {[[stats.total, 'Scholarships'], [stats.open, 'Open now'], [stats.government, 'Government'], [stats.engineering, 'Engineering']].map(([n, label]) => <div key={String(label)} className="rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-3 py-3"><div className="text-lg sm:text-xl font-black text-[var(--mos-text-primary)]">{n}</div><div className="mt-0.5 text-[10px] text-[var(--mos-text-muted)]">{label}</div></div>)}
           </div>
         </div>
       </div>
