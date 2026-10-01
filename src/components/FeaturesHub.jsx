@@ -11,7 +11,6 @@ import {
   Layers,
   GraduationCap,
   FileText,
-  Users,
   ShoppingBag,
   Database,
   ChevronRight,
@@ -19,7 +18,6 @@ import {
   MapPin,
   Target
 } from 'lucide-react';
-import { MockTestSeriesHub } from './MockTestSeriesHub';
 
 /**
  * Flagship Features (The Two Most Strategic Entry Points)
@@ -278,17 +276,6 @@ export const WORKSPACES = [
     iconBg: 'bg-pink-500/10 border-pink-500/30 text-pink-400',
   },
   {
-    id: 'ws-campus-connect',
-    workspace: 'campus-connect',
-    category: 'tools',
-    title: 'MOS CampusConnect',
-    badge: 'COMMUNITY',
-    description: 'Connect with seniors and peers across colleges for academic guidance and campus updates.',
-    actionText: 'Join Network',
-    icon: Users,
-    iconBg: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
-  },
-  {
     id: 'ws-essentials',
     workspace: 'essentials',
     category: 'tools',
@@ -355,24 +342,17 @@ export const FeaturesHub = ({
 
   return (
     <div className="space-y-6 sm:space-y-8">
-      
-      {/* 1. Section Header: Human-oriented, non-technical */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200 dark:border-slate-800/80 pb-3">
         <div>
           <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
             <span>Student Tools &amp; Workspaces</span>
           </h2>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-0.5">
-            Clear, outcome-focused tools built to solve practical college challenges.
-          </p>
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-0.5">Clear, outcome-focused tools built to solve practical college challenges.</p>
         </div>
-        <span className="text-xs font-mono text-slate-500 dark:text-slate-400 font-medium">
-          14 Student Tools
-        </span>
+        <span className="text-xs font-mono text-slate-500 dark:text-slate-400 font-medium">14 Student Tools</span>
       </div>
 
-      {/* AP & Telangana admission hubs — primary hero entry points */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {regionalGroups.map((group) => (
           <section key={group.title} className="relative overflow-hidden rounded-[1.75rem] border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 p-4 sm:p-5 shadow-lg">
@@ -407,34 +387,15 @@ export const FeaturesHub = ({
         ))}
       </section>
 
-      {/* 2.5 Centralized Mock Test Series Hub Section */}
-      <MockTestSeriesHub
-        isEmbedded={true}
-        onSelectWorkspace={onSelectWorkspace}
-      />
-
-      {/* 3. Category Filter Tabs */}
       <div className="space-y-3 pt-2">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-1">
-            Browse by Category
-          </span>
+          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-1">Browse by Category</span>
         </div>
-
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
           {CATEGORIES.map((cat) => {
             const isSelected = selectedCategory === cat.id;
             return (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
-                  isSelected
-                    ? 'bg-slate-900 dark:bg-slate-800 text-white border border-slate-800 dark:border-slate-700 shadow-xs'
-                    : 'bg-white dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900 border border-slate-200 dark:border-slate-800/60'
-                }`}
-              >
+              <button key={cat.id} type="button" onClick={() => setSelectedCategory(cat.id)} className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${isSelected ? 'bg-slate-900 dark:bg-slate-800 text-white border border-slate-800 dark:border-slate-700 shadow-xs' : 'bg-white dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900 border border-slate-200 dark:border-slate-800/60'}`}>
                 {cat.label}
               </button>
             );
@@ -442,60 +403,25 @@ export const FeaturesHub = ({
         </div>
       </div>
 
-      {/* 4. Compact Secondary Tools Grid (Calm, scannable cards) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {filteredWorkspaces.map((item) => {
           const Icon = item.icon;
           const isActive = item.workspace === activeWorkspace && item.id !== 'ws-guides';
-
           return (
-            <div
-              key={item.id}
-              id={item.id}
-              onClick={() => handleLaunchWorkspace(item)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  handleLaunchWorkspace(item);
-                }
-              }}
-              tabIndex={0}
-              role="button"
-              className={`flex items-start sm:items-center gap-3.5 p-3.5 rounded-xl bg-white dark:bg-slate-900/75 border border-slate-200/90 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900 transition-all cursor-pointer group shadow-2xs dark:shadow-xs active:scale-[0.99] select-none focus:outline-none focus:ring-1 focus:ring-slate-400 dark:focus:ring-slate-700 ${
-                isActive ? 'ring-1 ring-emerald-500 border-emerald-500/80 bg-slate-50 dark:bg-slate-900' : ''
-              }`}
-            >
-              {/* Left: Purposeful Icon (36px x 36px) */}
-              <div
-                className={`w-9 h-9 min-w-9 min-h-9 rounded-lg border flex items-center justify-center shrink-0 mt-0.5 sm:mt-0 transition-transform group-hover:scale-105 shadow-2xs ${item.iconBg}`}
-              >
-                <Icon className="w-4 h-4" />
-              </div>
-
-              {/* Center: Title & Outcome-oriented description */}
+            <div key={item.id} id={item.id} onClick={() => handleLaunchWorkspace(item)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleLaunchWorkspace(item); } }} tabIndex={0} role="button" className={`flex items-start sm:items-center gap-3.5 p-3.5 rounded-xl bg-white dark:bg-slate-900/75 border border-slate-200/90 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900 transition-all cursor-pointer group shadow-2xs dark:shadow-xs active:scale-[0.99] select-none focus:outline-none focus:ring-1 focus:ring-slate-400 dark:focus:ring-slate-700 ${isActive ? 'ring-1 ring-emerald-500 border-emerald-500/80 bg-slate-50 dark:bg-slate-900' : ''}`}>
+              <div className={`w-9 h-9 min-w-9 min-h-9 rounded-lg border flex items-center justify-center shrink-0 mt-0.5 sm:mt-0 transition-transform group-hover:scale-105 shadow-2xs ${item.iconBg}`}><Icon className="w-4 h-4" /></div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-2">
-                  <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors truncate">
-                    {item.title}
-                  </h3>
-                  <span className="hidden sm:inline-block px-1.5 py-0.2 text-[9px] font-bold uppercase tracking-wider rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/80 shrink-0">
-                    {item.badge}
-                  </span>
+                  <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors truncate">{item.title}</h3>
+                  <span className="hidden sm:inline-block px-1.5 py-0.2 text-[9px] font-bold uppercase tracking-wider rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/80 shrink-0">{item.badge}</span>
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 mt-0.5">
-                  {item.description}
-                </p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 mt-0.5">{item.description}</p>
               </div>
-
-              {/* Right: Subtle navigation indicator */}
-              <div className="shrink-0 text-slate-400 dark:text-slate-500 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-              </div>
+              <div className="shrink-0 text-slate-400 dark:text-slate-500 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors"><ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" /></div>
             </div>
           );
         })}
       </div>
-
     </div>
   );
 };
