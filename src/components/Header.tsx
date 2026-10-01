@@ -1,29 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Flame,
-  Compass,
-  GraduationCap,
-  FileText,
-  Image as ImageIcon,
-  Code2,
-  Sparkles,
-  Search,
-  Menu,
-  X,
-  Sun,
-  Moon,
-  Home,
-  ShieldCheck,
-  ChevronRight,
-  Terminal,
-  ShoppingBag,
-  Heart,
-  BookOpen,
-  Award,
-} from 'lucide-react';
+import React, { useState } from 'react';
+import { Search, Menu, X, ChevronDown, Home, GraduationCap, Map, Trophy, Sparkles, BookOpen, ShieldCheck, FileText, Image as ImageIcon, Heart, Wrench, Brain, BriefcaseBusiness, Route, Calculator, ClipboardCheck } from 'lucide-react';
 import { ToolTab, WorkspaceView, LegalModalType } from '../types';
-import { NavigationDrawer } from './NavigationDrawer';
-import { useTheme } from '../context/ThemeContext';
 
 export interface HeaderProps {
   activeWorkspace?: WorkspaceView;
@@ -36,286 +13,122 @@ export interface HeaderProps {
   onOpenSupport?: () => void;
 }
 
-interface NavModuleItem {
-  id: string;
-  workspace: WorkspaceView;
-  label: string;
-  shortLabel?: string;
-  icon: React.ComponentType<{ className?: string }>;
-  badge?: string;
-  badgeColor?: string;
-  matchWorkspaces?: WorkspaceView[];
-  tabFallback?: ToolTab;
-}
+type NavItem = { label: string; workspace: WorkspaceView; tab?: ToolTab; icon: React.ComponentType<{ className?: string }> };
 
-export const Header: React.FC<HeaderProps> = ({
-  activeWorkspace = 'hub',
-  onSelectWorkspace,
-  activeTab = 'eapcet-radar',
-  setActiveTab,
-  onSelectEapcetPhase,
-  onOpenLegal,
-  onOpenCommandPalette,
-  onOpenSupport,
-}) => {
-  const [isMegaDrawerOpen, setIsMegaDrawerOpen] = useState<boolean>(false);
-  const { isDarkMode, toggleTheme } = useTheme();
+const AP_TOOLS: NavItem[] = [
+  { label: 'AP EAPCET College Predictor', workspace: 'ap-predictor', icon: Map },
+  { label: 'AP Top B.Tech Colleges', workspace: 'ap-top-colleges', icon: Trophy },
+  { label: 'AP Allotments — Namewise', workspace: 'ap-allotments', icon: ClipboardCheck },
+  { label: 'AP EAPCET Vacancy Radar', workspace: 'eapcet-radar', icon: Search },
+];
+const TG_TOOLS: NavItem[] = [
+  { label: 'TG EAPCET College Predictor', workspace: 'tg-predictor', icon: Map },
+  { label: 'TG Top B.Tech Colleges', workspace: 'tg-top-colleges', icon: Trophy },
+  { label: 'TG EAPCET Allotments — Namewise', workspace: 'tg-allotments', icon: ClipboardCheck },
+];
+const OTHER_TOOLS: NavItem[] = [
+  { label: 'AI Student Gap Analyzer', workspace: 'gap-analyzer', icon: Sparkles },
+  { label: 'Attendance Defender', workspace: 'attendance', icon: ShieldCheck },
+  { label: 'Study Guides', workspace: 'guides', icon: BookOpen },
+  { label: 'PDF Tools', workspace: 'utilities', tab: 'pdf-tools', icon: FileText },
+  { label: 'Image Compressor', workspace: 'utilities', tab: 'resizer', icon: ImageIcon },
+  { label: 'ATS Resume Matcher', workspace: 'resume-checker', icon: BriefcaseBusiness },
+  { label: 'Engineering Roadmaps', workspace: 'roadmaps', icon: Route },
+  { label: 'Internships Radar', workspace: 'internships', icon: GraduationCap },
+  { label: 'Major Projects Hub', workspace: 'projects', icon: Wrench },
+  { label: 'GPA Hub', workspace: 'gpa', icon: Calculator },
+  { label: 'Academics', workspace: 'academics', icon: BookOpen },
+  { label: 'AI Text Humanizer', workspace: 'humanizer', icon: Brain },
+];
 
-  const handleNavClick = (ws: WorkspaceView, tabFallback?: ToolTab) => {
-    if (ws === 'scholarships') {
-      window.location.hash = 'scholarships';
-    }
-    if (onSelectWorkspace) {
-      onSelectWorkspace(ws);
-    }
-    if (tabFallback && setActiveTab) {
-      setActiveTab(tabFallback);
-    }
+export const Header: React.FC<HeaderProps> = ({ activeWorkspace = 'hub', onSelectWorkspace, setActiveTab, onOpenCommandPalette, onOpenSupport }) => {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<'ap' | 'tg' | 'other' | null>(null);
+
+  const navigate = (item: NavItem) => {
+    if (item.tab && setActiveTab) setActiveTab(item.tab);
+    onSelectWorkspace?.(item.workspace);
+    setMobileOpen(false);
+    setOpenMenu(null);
+  };
+  const goHome = () => {
+    onSelectWorkspace?.('hub');
+    setMobileOpen(false);
+    setOpenMenu(null);
+    window.history.pushState(null, '', '/');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  /**
-   * Secondary feature strip items.
-   * The four highest-priority destinations are intentionally promoted into
-   * the hero action area to reduce header density and improve mobile usability.
-   */
-  const primaryModules: NavModuleItem[] = [
-    {
-      id: 'tier2-tg-allotments',
-      workspace: 'tg-allotments',
-      label: 'TG EAPCET Allotments (Namewise)',
-      shortLabel: 'TG Allotments',
-      icon: Award,
-      badge: '2026',
-      badgeColor: 'bg-rose-500/20 text-rose-600 dark:text-rose-300 border-rose-500/30',
-    },
-    {
-      id: 'tier2-gap-analyzer',
-      workspace: 'gap-analyzer',
-      label: 'AI Gap Analyzer',
-      shortLabel: 'Gap Analyzer',
-      icon: Sparkles,
-      badge: 'AI Diagnostic',
-      badgeColor: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30',
-    },
-    {
-      id: 'tier2-academics',
-      workspace: 'academics',
-      label: 'Academics',
-      icon: ShieldCheck,
-      matchWorkspaces: ['academics', 'gpa', 'backlog'],
-    },
-    {
-      id: 'tier2-attendance',
-      workspace: 'attendance',
-      label: 'Attendance Defender',
-      icon: ShieldCheck,
-      badge: '75%',
-      badgeColor: 'bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border-cyan-500/30',
-    },
-    {
-      id: 'tier2-guides',
-      workspace: 'guides',
-      label: 'Study Guides',
-      icon: BookOpen,
-      badge: '9 Ch',
-      badgeColor: 'bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border-indigo-500/30',
-    },
-    {
-      id: 'tier2-pdf-tools',
-      workspace: 'utilities',
-      label: 'PDF Tools',
-      shortLabel: 'PDF Tools',
-      tabFallback: 'pdf-tools',
-      icon: FileText,
-      badge: '30+',
-      badgeColor: 'bg-sky-500/20 text-sky-700 dark:text-sky-300 border-sky-500/30',
-    },
-    {
-      id: 'tier2-image-tools',
-      workspace: 'utilities',
-      label: 'Image Compressor',
-      shortLabel: 'Image Tools',
-      tabFallback: 'resizer',
-      icon: ImageIcon,
-      badge: '20KB',
-      badgeColor: 'bg-violet-500/20 text-violet-700 dark:text-violet-300 border-violet-500/30',
-    },
-  ];
-
-  const isModuleActive = (item: NavModuleItem) => {
-    if (item.matchWorkspaces && activeWorkspace) {
-      if (item.matchWorkspaces.some((ws) => ws === activeWorkspace)) {
-        return true;
-      }
-    }
-    return activeWorkspace === item.workspace;
-  };
+  const Dropdown = ({ label, menu, items }: { label: string; menu: 'ap' | 'tg' | 'other'; items: NavItem[] }) => (
+    <div className="relative">
+      <button type="button" onClick={() => setOpenMenu(openMenu === menu ? null : menu)} className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/8 transition-colors" aria-expanded={openMenu === menu}>
+        {label}<ChevronDown className={`w-3.5 h-3.5 transition-transform ${openMenu === menu ? 'rotate-180' : ''}`} />
+      </button>
+      {openMenu === menu && (
+        <div className="absolute left-0 top-full mt-2 w-80 rounded-2xl border border-cyan-400/15 bg-[#07101d]/98 p-2 shadow-2xl shadow-black/40 backdrop-blur-xl z-[80]">
+          {items.map((item) => { const Icon = item.icon; return (
+            <button key={`${menu}-${item.label}`} type="button" onClick={() => navigate(item)} className="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-left text-sm text-slate-300 hover:bg-cyan-400/10 hover:text-white transition-colors">
+              <span className="w-8 h-8 rounded-lg bg-cyan-400/10 border border-cyan-300/10 flex items-center justify-center shrink-0"><Icon className="w-4 h-4 text-cyan-300" /></span>
+              <span className="leading-tight">{item.label}</span>
+            </button>
+          ); })}
+        </div>
+      )}
+    </div>
+  );
 
   return (
-    <header
-      id="main-header"
-      className="sticky top-0 z-50 backdrop-blur-md transition-colors duration-200 bg-white/95 dark:bg-slate-950/95 text-slate-900 dark:text-slate-100 shadow-xs dark:shadow-md w-full border-b border-slate-200 dark:border-slate-800/80"
-    >
-      <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 h-16">
-        <a
-          href="https://manofstudy.com"
-          id="brand-logo"
-          onClick={(e) => {
-            if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
-              e.preventDefault();
-              handleNavClick('hub');
-              window.history.pushState(null, '', '/');
-            }
-          }}
-          className="flex items-center gap-2.5 sm:gap-3 select-none shrink-0 cursor-pointer group no-underline min-w-0"
-          title="MAN OF STUDY — The Definitive Engineering & Academic Launchpad for Pan-Indian Students"
-        >
-          <div className="relative w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-xl overflow-hidden shadow-xs dark:shadow-md border border-slate-200 dark:border-slate-700/60 bg-slate-50 dark:bg-slate-900 flex items-center justify-center p-0.5 shrink-0">
-            <img
-              src="https://i.ibb.co/zHPk2tv4/Chat-GPT-Image-Sep-13-2026-08-04-48-PM.png"
-              alt="MAN OF STUDY Logo"
-              width="40"
-              height="40"
-              className="w-full h-full object-contain transform scale-95 transition-transform duration-200 group-hover:scale-105"
-              loading="eager"
-            />
-          </div>
-          <div className="flex flex-col min-w-0 leading-none">
-            <div className="flex items-baseline gap-1.5 sm:gap-2 whitespace-nowrap">
-              <span className="text-[10px] sm:text-[11px] font-extrabold tracking-[0.24em] text-slate-500 dark:text-slate-400 uppercase transition-colors">MAN</span>
-              <span className="text-[8px] sm:text-[9px] font-bold tracking-[0.16em] text-slate-400 dark:text-slate-500 uppercase">OF</span>
-              <span className="text-[17px] sm:text-[18px] md:text-[19px] font-black tracking-[-0.035em] uppercase bg-gradient-to-r from-slate-950 via-blue-600 to-emerald-500 dark:from-white dark:via-sky-300 dark:to-emerald-300 bg-clip-text text-transparent transition-all duration-200 group-hover:tracking-[-0.02em]">STUDY</span>
-            </div>
-            <div className="mt-1.5 hidden sm:flex items-center gap-1.5">
-              <span className="h-px w-4 bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full shrink-0" />
-              <span className="text-[9px] md:text-[10px] font-medium tracking-[0.055em] text-slate-500 dark:text-slate-400 whitespace-nowrap">Engineering &amp; Academic Launchpad</span>
-            </div>
-          </div>
-        </a>
+    <header id="main-header" className="sticky top-0 z-50 w-full border-b border-cyan-300/10 bg-[#040b16]/92 backdrop-blur-xl text-white shadow-lg shadow-black/20">
+      <div className="mx-auto flex h-[68px] max-w-7xl items-center gap-3 px-3 sm:px-5 lg:px-7">
+        <button type="button" id="brand-logo" onClick={goHome} className="group flex min-w-0 shrink-0 items-center gap-2.5 text-left" aria-label="Man of Study home">
+          <span className="relative flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-cyan-300/15 bg-[#07101d] p-0.5 shadow-lg">
+            <img src="https://i.ibb.co/zHPk2tv4/Chat-GPT-Image-Sep-13-2026-08-04-48-PM.png" alt="Man of Study logo" width="40" height="40" className="h-full w-full object-contain transition-transform duration-200 group-hover:scale-105" loading="eager" />
+          </span>
+          <span className="hidden min-w-0 sm:block">
+            <span className="block whitespace-nowrap text-[17px] font-black tracking-[-0.03em] text-white sm:text-[19px]">Man Of Study</span>
+            <span className="block whitespace-nowrap text-[9px] font-medium tracking-[0.08em] text-slate-500 uppercase">Student utility platform</span>
+          </span>
+        </button>
 
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          <button
-            type="button"
-            id="header-gap-analyzer-trigger"
-            onClick={() => handleNavClick('gap-analyzer')}
-            className={`hidden md:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs shrink-0 border ${
-              activeWorkspace === 'gap-analyzer'
-                ? 'bg-emerald-500 text-white dark:text-slate-950 border-emerald-400 font-extrabold'
-                : 'bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700/60 hover:border-emerald-500'
-            }`}
-            title="AI Student Gap Analyzer"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-            <span>AI Gap Analyzer</span>
-            <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-500/20 border border-emerald-300 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-200 uppercase font-mono font-bold">AI</span>
-          </button>
+        <nav className="hidden flex-1 items-center justify-center gap-1 lg:flex" aria-label="Primary navigation">
+          <button type="button" onClick={goHome} className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${activeWorkspace === 'hub' ? 'bg-cyan-400/15 text-cyan-200' : 'text-slate-300 hover:bg-white/8 hover:text-white'}`}><Home className="w-4 h-4" /> Home</button>
+          <Dropdown label="For AP" menu="ap" items={AP_TOOLS} />
+          <Dropdown label="For TG" menu="tg" items={TG_TOOLS} />
+          <button type="button" onClick={() => navigate({ label: 'Scholarships', workspace: 'scholarships', icon: GraduationCap })} className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${activeWorkspace === 'scholarships' ? 'bg-cyan-400/15 text-cyan-200' : 'text-slate-300 hover:bg-white/8 hover:text-white'}`}>Scholarships</button>
+          <button type="button" onClick={() => navigate({ label: 'Mock Tests', workspace: 'mock-tests', icon: GraduationCap })} className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${['mock-tests','cbt-mock-test','eapcet-cbt'].includes(activeWorkspace) ? 'bg-cyan-400/15 text-cyan-200' : 'text-slate-300 hover:bg-white/8 hover:text-white'}`}>Mock Tests</button>
+          <Dropdown label="Other Tools" menu="other" items={OTHER_TOOLS} />
+        </nav>
 
-          <button
-            type="button"
-            id="header-command-palette-trigger"
-            onClick={onOpenCommandPalette}
-            className="w-9 h-9 sm:w-auto sm:h-auto flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 bg-slate-100/90 hover:bg-slate-200/90 dark:bg-slate-900/90 dark:hover:bg-slate-800 text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 rounded-xl text-xs transition-all cursor-pointer shadow-2xs shrink-0"
-            title="Open Quick Search & Command Palette (Ctrl/Cmd+K)"
-            aria-label="Open Man of Study quick search"
-          >
-            <Search className="w-3.5 h-3.5 text-sky-600 dark:text-cyan-400 shrink-0" />
-            <span className="hidden md:inline font-medium text-slate-700 dark:text-slate-300">Quick Search...</span>
-            <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[9px] font-mono font-bold text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded">⌘K</kbd>
-          </button>
-
-          <button
-            type="button"
-            id="header-support-btn"
-            onClick={onOpenSupport}
-            className="bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/50 dark:hover:bg-rose-900/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800/80 hover:border-rose-300 dark:hover:border-rose-700 font-semibold px-2.5 sm:px-3.5 py-1.5 rounded-full text-xs flex items-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
-            title="Support MAN OF STUDY & Keep It 100% Free Forever"
-          >
-            <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 animate-pulse shrink-0" />
-            <span className="hidden sm:inline font-bold">☕ Support MOS</span>
-            <span className="sm:hidden font-bold text-[11px]">Support</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="p-1.5 sm:p-2 text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white bg-slate-100 hover:bg-slate-200 dark:bg-slate-900/80 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 rounded-xl transition-colors cursor-pointer shrink-0"
-            title={isDarkMode ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
-            aria-label="Toggle Theme"
-          >
-            {isDarkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
-          </button>
-
-          <div className="shrink-0 z-50">
-            <button
-              type="button"
-              id="header-hamburger-drawer-btn"
-              onClick={() => setIsMegaDrawerOpen(true)}
-              className="p-1.5 sm:p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 active:scale-95 transition-all flex items-center justify-center cursor-pointer shadow-xs"
-              title="Open MAN OF STUDY Mega Menu & All Hubs"
-              aria-label="Open Navigation Mega Drawer"
-            >
-              <Menu className="w-4 h-4 sm:w-5 sm:h-5 text-slate-700 dark:text-white" />
-            </button>
-          </div>
+        <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
+          <button type="button" id="header-command-palette-trigger" onClick={onOpenCommandPalette} className="inline-flex h-9 items-center gap-2 rounded-xl border border-cyan-300/10 bg-white/5 px-2.5 text-slate-300 hover:border-cyan-300/25 hover:bg-cyan-400/10 hover:text-white transition-colors sm:px-3" title="Search tools" aria-label="Search Man of Study tools"><Search className="h-4 w-4 text-cyan-300" /><span className="hidden xl:inline text-xs font-medium">Search tools</span></button>
+          <button type="button" id="header-support-btn" onClick={onOpenSupport} className="hidden sm:inline-flex h-9 items-center gap-1.5 rounded-xl border border-cyan-300/15 bg-cyan-400/8 px-3 text-xs font-bold text-cyan-200 hover:bg-cyan-400/15 hover:text-white transition-colors"><Heart className="h-3.5 w-3.5" /> Support</button>
+          <button type="button" onClick={() => setMobileOpen((v) => !v)} className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-cyan-300/10 bg-white/5 text-slate-200 hover:bg-cyan-400/10 lg:hidden" aria-label={mobileOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={mobileOpen}>{mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</button>
         </div>
       </div>
 
-      <div
-        id="tier2-secondary-feature-strip"
-        className="hidden md:block border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/95 dark:bg-slate-950/90 backdrop-blur-md px-4 sm:px-6 lg:px-8 py-2 transition-colors duration-200"
-      >
-        <div className="max-w-7xl mx-auto flex items-center justify-start lg:justify-center gap-1 sm:gap-2 flex-wrap">
-          {primaryModules.map((item) => {
-            const Icon = item.icon;
-            const active = isModuleActive(item);
-
-            return (
-              <button
-                key={item.id}
-                type="button"
-                id={item.id}
-                onClick={() => handleNavClick(item.workspace, item.tabFallback)}
-                className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 cursor-pointer whitespace-nowrap select-none ${
-                  active
-                    ? 'bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-500/30 shadow-2xs font-bold'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white dark:hover:bg-slate-900/60 border border-transparent hover:border-slate-200 dark:hover:border-slate-800'
-                }`}
-                title={`Open ${item.label}`}
-              >
-                <Icon
-                  className={`w-3.5 h-3.5 transition-colors shrink-0 ${
-                    active ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300'
-                  }`}
-                />
-                <span className="tracking-tight">{item.label}</span>
-                {item.badge && (
-                  <span
-                    className={`text-[9px] font-bold px-1.5 py-0.2 rounded-full border ${
-                      active
-                        ? 'bg-emerald-100 dark:bg-emerald-400/20 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-400/40'
-                        : item.badgeColor || 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700'
-                    }`}
-                  >
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+      {mobileOpen && (
+        <div className="border-t border-cyan-300/10 bg-[#040b16] px-3 pb-4 pt-2 lg:hidden">
+          <div className="mx-auto max-w-7xl space-y-1">
+            <button type="button" onClick={goHome} className="w-full rounded-xl px-3 py-3 text-left text-sm font-semibold text-slate-200 hover:bg-cyan-400/10">Home</button>
+            <MobileGroup title="For AP" items={AP_TOOLS} onSelect={navigate} />
+            <MobileGroup title="For TG" items={TG_TOOLS} onSelect={navigate} />
+            <button type="button" onClick={() => navigate({ label: 'Scholarships', workspace: 'scholarships', icon: GraduationCap })} className="w-full rounded-xl px-3 py-3 text-left text-sm font-semibold text-slate-200 hover:bg-cyan-400/10">Scholarships</button>
+            <button type="button" onClick={() => navigate({ label: 'Mock Tests', workspace: 'mock-tests', icon: GraduationCap })} className="w-full rounded-xl px-3 py-3 text-left text-sm font-semibold text-slate-200 hover:bg-cyan-400/10">Mock Tests</button>
+            <MobileGroup title="Other Tools" items={OTHER_TOOLS} onSelect={navigate} />
+            <button type="button" onClick={onOpenSupport} className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-cyan-300/15 bg-cyan-400/8 px-3 py-3 text-sm font-bold text-cyan-200"><Heart className="h-4 w-4" /> Support Man of Study</button>
+          </div>
         </div>
-      </div>
-
-      <NavigationDrawer
-        isOpen={isMegaDrawerOpen}
-        onClose={() => setIsMegaDrawerOpen(false)}
-        onSelectWorkspace={(ws: WorkspaceView, subTab?: string) => {
-          handleNavClick(ws, subTab as ToolTab);
-        }}
-        onOpenSupport={onOpenSupport}
-        onOpenFeedback={() => onOpenLegal?.('contact')}
-      />
+      )}
     </header>
   );
+};
+
+const MobileGroup: React.FC<{ title: string; items: NavItem[]; onSelect: (item: NavItem) => void }> = ({ title, items, onSelect }) => {
+  const [expanded, setExpanded] = useState(false);
+  return <div className="rounded-xl border border-cyan-300/8 bg-white/[0.02]">
+    <button type="button" onClick={() => setExpanded((v) => !v)} className="flex w-full items-center justify-between px-3 py-3 text-left text-sm font-semibold text-slate-200">{title}<ChevronDown className={`h-4 w-4 text-cyan-300 transition-transform ${expanded ? 'rotate-180' : ''}`} /></button>
+    {expanded && <div className="border-t border-cyan-300/8 p-1">{items.map((item) => { const Icon = item.icon; return <button key={`${title}-${item.label}`} type="button" onClick={() => onSelect(item)} className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-xs text-slate-300 hover:bg-cyan-400/10 hover:text-white"><Icon className="h-4 w-4 shrink-0 text-cyan-300" />{item.label}</button>; })}</div>}
+  </div>;
 };
 
 export default Header;
