@@ -226,6 +226,54 @@ const addNavigationListener = () => {
   return () => document.removeEventListener('click', onClick, true);
 };
 
+const REGIONAL_WORKSPACES = {
+  ap: new Set(['/ap-eapcet/college-predictor', '/ap-eapcet/college-wise-allotments', '/ap-eapcet/top-colleges', '/ap-eapcet/phase-2-vacancy-radar']),
+  tg: new Set(['/tg-eapcet/college-predictor', '/tg-eapcet/name-wise-allotments', '/tg-eapcet/top-colleges']),
+} as const;
+
+const getRegionalWorkspace = (): 'ap' | 'tg' | null => {
+  if (typeof window === 'undefined') return null;
+  const path = window.location.pathname.replace(/\/$/, '') || '/';
+  if (REGIONAL_WORKSPACES.ap.has(path) || path.startsWith('/ap-eapcet/')) return 'ap';
+  if (REGIONAL_WORKSPACES.tg.has(path) || path.startsWith('/tg-eapcet/')) return 'tg';
+  return null;
+};
+
+const addRegionalWorkspaceVisual = () => {
+  const viewport = document.getElementById('workspace-viewport');
+  const region = getRegionalWorkspace();
+  if (!viewport || !region) {
+    document.getElementById('mos-regional-workspace-visual')?.remove();
+    return;
+  }
+
+  const existing = document.getElementById('mos-regional-workspace-visual');
+  if (existing) {
+    existing.dataset.region = region;
+    return;
+  }
+
+  const visual = document.createElement('div');
+  visual.id = 'mos-regional-workspace-visual';
+  visual.dataset.region = region;
+  visual.setAttribute('role', 'img');
+  visual.setAttribute('aria-label', region === 'tg' ? 'Telangana landmark representation' : 'Andhra Pradesh landmark representation');
+  visual.innerHTML = `
+    <div class="mos-regional-visual-frame">
+      <img class="mos-regional-visual-image" alt="" loading="lazy" decoding="async" />
+    </div>
+  `;
+
+  const image = visual.querySelector<HTMLImageElement>('.mos-regional-visual-image');
+  if (image) {
+    image.src = region === 'tg'
+      ? '/AP%26TG_photos/Charminar%20and%20Kakatiya%20Gateway.webp'
+      : '/AP%26TG_photos/ambedkar%26budha.webp';
+  }
+
+  viewport.insertBefore(visual, viewport.firstChild);
+};
+
 const SiteUxFixes: React.FC = () => {
   useEffect(() => {
     document.documentElement.classList.add('dark');
@@ -308,6 +356,19 @@ const SiteUxFixes: React.FC = () => {
       .mos-fh-mock-copy small { font-size:11px; color:#94a3b8; }
       .mos-fh-mock-arrow { font-size:20px; color:#60a5fa; flex:none; }
 
+      /* Regional context visual: a quiet landmark strip at the top of AP/TG tool workspaces. */
+      #mos-regional-workspace-visual {
+        width:100%; margin:0 0 18px; border:1px solid rgba(34,211,238,.12); border-radius:20px;
+        background:rgba(7,16,29,.68); overflow:hidden; box-shadow:0 12px 30px rgba(2,6,23,.18);
+      }
+      .mos-regional-visual-frame { width:100%; aspect-ratio:5 / 1; min-height:72px; max-height:150px; overflow:hidden; }
+      .mos-regional-visual-image { width:100%; height:100%; display:block; object-fit:cover; object-position:center; opacity:.88; }
+      @media (max-width:760px) {
+        #mos-regional-workspace-visual { margin-bottom:14px; border-radius:16px; }
+        .mos-regional-visual-frame { aspect-ratio:4 / 1; min-height:64px; max-height:105px; }
+        .mos-regional-visual-image { opacity:.84; }
+      }
+
       #student-faq-section button { min-height:52px !important; padding-top:11px !important; padding-bottom:11px !important; }
       #student-faq-section h2 { font-size:clamp(1.35rem,2.5vw,1.8rem) !important; }
       #student-faq-section p { line-height:1.45 !important; }
@@ -355,6 +416,7 @@ const SiteUxFixes: React.FC = () => {
 
     hideMockTestCards();
     addMockTestShortcut();
+    addRegionalWorkspaceVisual();
     const removeNavigationListener = addNavigationListener();
 
     const pendingRegionalTarget = sessionStorage.getItem('mos-header-scroll-target');
@@ -366,7 +428,8 @@ const SiteUxFixes: React.FC = () => {
     const observer = new MutationObserver(() => {
       hideMockTestCards();
       addMockTestShortcut();
-      });
+      addRegionalWorkspaceVisual();
+    });
     observer.observe(document.getElementById('root') || document.body, { childList:true, subtree:true });
 
     return () => {
@@ -374,6 +437,7 @@ const SiteUxFixes: React.FC = () => {
       removeNavigationListener();
       style.remove();
       document.getElementById('mos-compact-header-nav')?.remove();
+      document.getElementById('mos-regional-workspace-visual')?.remove();
     };
   }, []);
 
