@@ -84,7 +84,6 @@ const addCompactHeaderNav = () => {
   nav.id = 'mos-compact-header-nav';
   nav.setAttribute('aria-label', 'Primary navigation');
   nav.innerHTML = `
-    <a href="/" data-mos-nav="home">Feature Hub</a>
     <button type="button" data-mos-regional="FOR AP STUDENTS" aria-label="Go to For AP Students section">FOR AP</button>
     <button type="button" data-mos-regional="FOR TELANGANA STUDENTS" aria-label="Go to For Telangana Students section">FOR TG</button>
     <a href="/scholarships" data-mos-nav="scholarships">Scholarships</a>
