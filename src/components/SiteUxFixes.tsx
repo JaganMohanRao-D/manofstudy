@@ -96,7 +96,12 @@ const styleBrand = () => {
 
   brand.dataset.mosBrandStyled = 'true';
   brand.setAttribute('aria-label', 'MAN OF STUDY home');
-  brand.innerHTML = '<span class="mos-brand-wordmark">Man Of Study</span>';
+  brand.innerHTML = `
+    <span class="mos-brand-mark" aria-hidden="true">
+      <img src="https://i.ibb.co/zHPk2tv4/Chat-GPT-Image-Sep-13-2026-08-04-48-PM.png" alt="" width="36" height="36" loading="eager" />
+    </span>
+    <span class="mos-brand-wordmark">Man Of Study</span>
+  `;
 };
 
 const addCompactHeaderNav = () => {
@@ -237,24 +242,29 @@ const SiteUxFixes: React.FC = () => {
       html.light .dark\\:bg-slate-950 { background-color:#020617 !important; }
       [title^="Switch to "] { display:none !important; }
 
-      /* Clean desktop/mobile header: MAN OF STUDY + AP + TG + Other Tools. */
+      /* Header: existing MOS logo + compact cyan AP/TG/tools navigation. */
       #mos-compact-header-nav {
-        display:flex; align-items:center; gap:3px; min-width:0; flex:1 1 auto;
+        display:flex; align-items:center; justify-content:center; gap:4px; min-width:0; flex:1 1 auto;
         overflow:visible; padding:0 8px; position:relative;
       }
+      .mos-brand-mark {
+        width:36px; height:36px; display:grid; place-items:center; flex:none; overflow:hidden;
+        border-radius:10px; background:#0b1220; border:1px solid rgba(71,85,105,.6);
+      }
+      .mos-brand-mark img { width:100%; height:100%; object-fit:contain; display:block; }
       .mos-brand-wordmark {
         display:block; font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-        font-size:clamp(15px,1.5vw,20px); line-height:1; font-weight:900; letter-spacing:-0.045em;
-        white-space:nowrap; color:#f8fafc; text-shadow:0 0 20px rgba(56,189,248,.10);
+        font-size:clamp(15px,1.55vw,21px); line-height:1; font-weight:900; letter-spacing:-0.055em;
+        white-space:nowrap; color:#f8fafc; text-shadow:0 0 20px rgba(34,211,238,.12);
       }
-      #brand-logo { text-decoration:none !important; flex:none !important; min-width:max-content; }
+      #brand-logo { text-decoration:none !important; flex:none !important; min-width:max-content; display:flex !important; align-items:center !important; gap:9px !important; }
       #brand-logo:hover .mos-brand-wordmark { color:#67e8f9; }
       .mos-header-link {
-        appearance:none; border:0; background:transparent; color:#cbd5e1; font:inherit;
-        font-size:12px; line-height:1; font-weight:800; white-space:nowrap; padding:9px 10px;
-        border-radius:10px; cursor:pointer; transition:background .16s ease,color .16s ease;
+        appearance:none; border:0; background:transparent; color:#22d3ee; font:inherit;
+        font-size:12px; line-height:1; font-weight:850; white-space:nowrap; padding:9px 10px;
+        border-radius:10px; cursor:pointer; transition:background .16s ease,color .16s ease,transform .16s ease;
       }
-      .mos-header-link:hover { color:#67e8f9; background:rgba(34,211,238,.09); }
+      .mos-header-link:hover { color:#a5f3fc; background:rgba(34,211,238,.10); transform:translateY(-1px); }
       .mos-header-link:focus-visible { outline:2px solid #22d3ee; outline-offset:2px; }
       .mos-tools-menu { position:relative; flex:none; }
       .mos-tools-trigger { display:inline-flex; align-items:center; gap:5px; }
@@ -262,19 +272,23 @@ const SiteUxFixes: React.FC = () => {
       .mos-tools-menu.is-open .mos-tools-chevron { transform:rotate(180deg); }
       .mos-tools-dropdown {
         position:absolute; z-index:100; top:calc(100% + 8px); right:0; width:245px; max-height:min(70vh,520px);
-        overflow-y:auto; padding:7px; border:1px solid rgba(71,85,105,.75); border-radius:15px;
-        background:rgba(9,15,28,.98); box-shadow:0 20px 50px rgba(0,0,0,.45); backdrop-filter:blur(16px);
+        overflow-y:auto; padding:7px; border:1px solid rgba(34,211,238,.30); border-radius:15px;
+        background:rgba(6,11,22,.98); box-shadow:0 20px 50px rgba(0,0,0,.45); backdrop-filter:blur(16px);
         opacity:0; visibility:hidden; transform:translateY(-5px); pointer-events:none;
         transition:opacity .14s ease,transform .14s ease,visibility .14s ease;
       }
       .mos-tools-menu.is-open .mos-tools-dropdown { opacity:1; visibility:visible; transform:translateY(0); pointer-events:auto; }
       .mos-tools-dropdown a {
-        display:block; padding:10px 11px; border-radius:10px; color:#cbd5e1; text-decoration:none;
-        font-size:12px; line-height:1.25; font-weight:700;
+        display:block; padding:10px 11px; border-radius:10px; color:#a5f3fc; text-decoration:none;
+        font-size:12px; line-height:1.25; font-weight:750;
       }
-      .mos-tools-dropdown a:hover { color:#f8fafc; background:rgba(34,211,238,.10); }
+      .mos-tools-dropdown a:hover { color:#ecfeff; background:rgba(34,211,238,.11); }
       .mos-tools-dropdown a:focus-visible { outline:2px solid #22d3ee; outline-offset:-2px; }
-      .mos-header-secondary-controls { display:none !important; }
+
+      /* Keep the original Search and Support controls. Hide only the duplicate gap-analyzer control. */
+      .mos-header-secondary-controls { display:flex !important; align-items:center; gap:6px; }
+      #header-gap-analyzer-trigger { display:none !important; }
+      #header-command-palette-trigger, #header-support-btn { display:flex !important; }
       #tier2-secondary-feature-strip { display:none !important; }
 
       #ws-mock-tests[data-mos-hidden-mock-test="true"],
@@ -302,20 +316,36 @@ const SiteUxFixes: React.FC = () => {
       .mos-hero-ambient, .mos-hero-grid, .mos-hero-orb, .mos-hero-dot, .mos-hero-book { pointer-events:none !important; }
       .mos-hero-content, .mos-hero-title, .mos-hero-subtitle, #features-hub { position:relative; z-index:2; }
 
-      @media (max-width:900px) {
+      @media (max-width:1100px) {
         #mos-compact-header-nav { gap:1px; padding:0 4px; }
         .mos-header-link { font-size:11px; padding:8px 7px; }
-        .mos-tools-dropdown { width:225px; }
+        .mos-brand-wordmark { font-size:16px; }
+        .mos-brand-mark { width:34px; height:34px; }
       }
-      @media (max-width:640px) {
-        #brand-logo { max-width:125px; }
-        .mos-brand-wordmark { font-size:15px; letter-spacing:-0.055em; }
-        #mos-compact-header-nav { gap:0; padding:0 2px; }
+      @media (max-width:760px) {
+        #main-header > div:first-child { min-height:60px !important; height:auto !important; padding-top:7px !important; padding-bottom:7px !important; }
+        #brand-logo { gap:6px !important; max-width:132px; }
+        .mos-brand-mark { width:30px; height:30px; border-radius:8px; }
+        .mos-brand-wordmark { font-size:14px; letter-spacing:-0.06em; }
+        #mos-compact-header-nav { justify-content:flex-start; gap:0; padding:0 2px; }
         .mos-header-link { font-size:10px; padding:8px 5px; }
         .mos-tools-dropdown { position:fixed; top:58px; right:8px; width:min(270px,calc(100vw - 16px)); max-height:65vh; }
+        #header-command-palette-trigger { width:34px !important; height:34px !important; padding:7px !important; }
+        #header-support-btn { padding:7px 8px !important; }
+        #header-support-btn .sm\\:hidden { display:inline !important; }
+        #header-hamburger-drawer-btn { padding:7px !important; }
         #mos-featurehub-mock-shortcut { margin-bottom:12px; padding:12px 13px; border-radius:16px; }
         .mos-fh-mock-copy strong { font-size:13px; }
         #student-faq-section button { min-height:48px !important; }
+      }
+      @media (max-width:520px) {
+        #brand-logo { max-width:112px; }
+        .mos-brand-wordmark { font-size:13px; }
+        .mos-brand-mark { width:28px; height:28px; }
+        #mos-compact-header-nav { flex:1 1 auto; min-width:0; }
+        .mos-header-link { font-size:9px; padding:7px 4px; }
+        #header-command-palette-trigger { display:flex !important; }
+        #header-support-btn { display:flex !important; }
       }
       @media (prefers-reduced-motion:reduce) {
         #mos-featurehub-mock-shortcut,.mos-header-link,.mos-tools-dropdown { transition:none !important; }
