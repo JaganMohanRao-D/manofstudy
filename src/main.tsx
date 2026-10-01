@@ -6,6 +6,7 @@ import { ThemeProvider } from './context/ThemeContext.tsx';
 import { AuthProvider } from './context/AuthContext.tsx';
 import { GoogleAuthModal } from './components/GoogleAuthModal.tsx';
 import { MosStudentExperience } from './components/MosStudentExperience.tsx';
+import SiteUxFixes from './components/SiteUxFixes.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -13,6 +14,7 @@ createRoot(document.getElementById('root')!).render(
       <ThemeProvider>
         <App />
         <MosStudentExperience />
+        <SiteUxFixes />
         <GoogleAuthModal />
       </ThemeProvider>
     </AuthProvider>
