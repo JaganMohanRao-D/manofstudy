@@ -41,6 +41,73 @@ const pushCleanRoute = (path: string) => {
   if (current !== path) window.history.pushState({ mosRoute: path }, '', path);
 };
 
+const navigateToRoute = (path: string) => {
+  if (typeof window === 'undefined') return;
+  window.location.assign(path);
+};
+
+const findRegionalHeading = (label: string): HTMLElement | null => {
+  const nodes = document.querySelectorAll<HTMLElement>('h1,h2,h3,h4,p,div,span');
+  for (const node of nodes) {
+    if (node.textContent?.trim() === label) return node;
+  }
+  return null;
+};
+
+const scrollToRegionalSection = (label: string) => {
+  const heading = findRegionalHeading(label);
+  if (!heading) return false;
+  heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  return true;
+};
+
+const goToRegionalSection = (label: string) => {
+  if (typeof window === 'undefined') return;
+  if (window.location.pathname !== '/') {
+    sessionStorage.setItem('mos-header-scroll-target', label);
+    window.location.assign('/');
+    return;
+  }
+  if (!scrollToRegionalSection(label)) {
+    window.setTimeout(() => scrollToRegionalSection(label), 150);
+  }
+};
+
+const addCompactHeaderNav = () => {
+  const header = document.getElementById('main-header');
+  const headerRow = header?.firstElementChild as HTMLElement | null;
+  const brand = document.getElementById('brand-logo');
+  if (!header || !headerRow || !brand) return;
+  if (document.getElementById('mos-compact-header-nav')) return;
+
+  const nav = document.createElement('nav');
+  nav.id = 'mos-compact-header-nav';
+  nav.setAttribute('aria-label', 'Primary navigation');
+  nav.innerHTML = `
+    <a href="/" data-mos-nav="home">Feature Hub</a>
+    <button type="button" data-mos-regional="FOR AP STUDENTS" aria-label="Go to For AP Students section">FOR AP</button>
+    <button type="button" data-mos-regional="FOR TELANGANA STUDENTS" aria-label="Go to For Telangana Students section">FOR TG</button>
+    <a href="/scholarships" data-mos-nav="scholarships">Scholarships</a>
+    <a href="/pdftools" data-mos-nav="pdf">PDF Tools</a>
+    <a href="/imagecompressor" data-mos-nav="image">Image Compressor</a>
+    <a href="/mock-tests" data-mos-nav="mock">Mock Test</a>
+  `;
+
+  headerRow.insertBefore(nav, headerRow.children[1] || null);
+
+  const rightControls = headerRow.children[2] as HTMLElement | undefined;
+  if (rightControls) rightControls.classList.add('mos-header-secondary-controls');
+
+  nav.addEventListener('click', (event) => {
+    const target = event.target as HTMLElement | null;
+    const regionalButton = target?.closest<HTMLButtonElement>('[data-mos-regional]');
+    if (regionalButton) {
+      event.preventDefault();
+      goToRegionalSection(regionalButton.dataset.mosRegional || '');
+    }
+  });
+};
+
 const hideMockTestCards = () => {
   const ids = ['ws-mock-tests', 'ws-eapcet-cbt'];
   ids.forEach((id) => {
@@ -71,7 +138,7 @@ const addMockTestShortcut = () => {
   shortcut.addEventListener('click', () => {
     const launcher = document.getElementById('hero-mock-test-btn') as HTMLButtonElement | null;
     if (launcher) launcher.click();
-    pushCleanRoute('/mock-tests');
+    navigateToRoute('/mock-tests');
   });
 
   hub.insertBefore(shortcut, hub.firstChild);
@@ -116,11 +183,57 @@ const SiteUxFixes: React.FC = () => {
       html.light, html.light body { background:#060b16 !important; color:#f8fafc !important; }
       html.light .dark\\:bg-slate-950 { background-color:#020617 !important; }
       [title^="Switch to "] { display:none !important; }
-      
+
+      /* Compact cyan primary navigation beside the MAN OF STUDY brand. */
+      #mos-compact-header-nav {
+        display:flex;
+        align-items:center;
+        gap:4px;
+        min-width:0;
+        flex:1 1 auto;
+        overflow-x:auto;
+        overflow-y:hidden;
+        scrollbar-width:none;
+        padding:0 8px;
+        -webkit-overflow-scrolling:touch;
+      }
+      #mos-compact-header-nav::-webkit-scrollbar { display:none; }
+      #mos-compact-header-nav a,
+      #mos-compact-header-nav button {
+        appearance:none;
+        border:0;
+        background:transparent;
+        color:#67e8f9;
+        font:inherit;
+        font-size:11px;
+        line-height:1;
+        font-weight:800;
+        letter-spacing:-0.01em;
+        white-space:nowrap;
+        text-decoration:none;
+        padding:8px 7px;
+        border-radius:9px;
+        cursor:pointer;
+        transition:background .16s ease,color .16s ease,transform .16s ease;
+        flex:none;
+      }
+      #mos-compact-header-nav a:hover,
+      #mos-compact-header-nav button:hover {
+        color:#a5f3fc;
+        background:rgba(34,211,238,.10);
+      }
+      #mos-compact-header-nav a:focus-visible,
+      #mos-compact-header-nav button:focus-visible {
+        outline:2px solid #22d3ee;
+        outline-offset:1px;
+      }
+      .mos-header-secondary-controls { display:none !important; }
+      #tier2-secondary-feature-strip { display:none !important; }
+
       /* Keep mock-test execution out of the long homepage scroll. */
       #ws-mock-tests[data-mos-hidden-mock-test="true"],
       #ws-eapcet-cbt[data-mos-hidden-mock-test="true"] { display:none !important; }
-      
+
       /* Compact Feature Hub shortcut for Mock Tests. */
       #mos-featurehub-mock-shortcut {
         width:100%; display:flex; align-items:center; gap:12px; margin:0 0 16px;
@@ -135,35 +248,55 @@ const SiteUxFixes: React.FC = () => {
       .mos-fh-mock-copy strong { font-size:14px; font-weight:800; }
       .mos-fh-mock-copy small { font-size:11px; color:#94a3b8; }
       .mos-fh-mock-arrow { font-size:20px; color:#60a5fa; flex:none; }
-      
+
       /* Reduce FAQ vertical density without making answers unreadable. */
       #student-faq-section button { min-height:52px !important; padding-top:11px !important; padding-bottom:11px !important; }
       #student-faq-section h2 { font-size:clamp(1.35rem,2.5vw,1.8rem) !important; }
       #student-faq-section p { line-height:1.45 !important; }
       #student-faq-section .text-sm { font-size:.82rem !important; }
-      
+
       /* Prevent decorative layers from ever sitting above readable content. */
       .mos-hero-ambient, .mos-hero-grid, .mos-hero-orb, .mos-hero-dot, .mos-hero-book { pointer-events:none !important; }
       .mos-hero-content, .mos-hero-title, .mos-hero-subtitle, #features-hub { position:relative; z-index:2; }
-      
+
+      @media (max-width:900px) {
+        #mos-compact-header-nav { gap:2px; padding:0 4px; }
+        #mos-compact-header-nav a,
+        #mos-compact-header-nav button { font-size:10px; padding:7px 6px; }
+      }
       @media (max-width:640px) {
         #mos-featurehub-mock-shortcut { margin-bottom:12px; padding:12px 13px; border-radius:16px; }
         .mos-fh-mock-copy strong { font-size:13px; }
         #student-faq-section button { min-height:48px !important; }
+        #brand-logo { max-width:118px; }
+        #brand-logo > div:last-child > div:first-child span:first-child { font-size:8px !important; }
+        #brand-logo > div:last-child > div:first-child span:nth-child(2) { font-size:7px !important; }
+        #brand-logo > div:last-child > div:first-child span:last-child { font-size:15px !important; }
+        #brand-logo > div:last-child > div:last-child { display:none !important; }
       }
       @media (prefers-reduced-motion:reduce) {
         #mos-featurehub-mock-shortcut { transition:none !important; }
+        #mos-compact-header-nav a,
+        #mos-compact-header-nav button { transition:none !important; }
       }
     `;
     document.head.appendChild(style);
 
     hideMockTestCards();
     addMockTestShortcut();
+    addCompactHeaderNav();
     const removeNavigationListener = addNavigationListener();
+
+    const pendingRegionalTarget = sessionStorage.getItem('mos-header-scroll-target');
+    if (pendingRegionalTarget) {
+      sessionStorage.removeItem('mos-header-scroll-target');
+      window.setTimeout(() => scrollToRegionalSection(pendingRegionalTarget), 500);
+    }
 
     const observer = new MutationObserver(() => {
       hideMockTestCards();
       addMockTestShortcut();
+      addCompactHeaderNav();
     });
     observer.observe(document.getElementById('root') || document.body, { childList:true, subtree:true });
 
@@ -171,6 +304,7 @@ const SiteUxFixes: React.FC = () => {
       observer.disconnect();
       removeNavigationListener();
       style.remove();
+      document.getElementById('mos-compact-header-nav')?.remove();
     };
   }, []);
 
