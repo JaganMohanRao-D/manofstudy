@@ -35,6 +35,23 @@ const WORKSPACE_ROUTES: Record<string, string> = {
   'ws-essentials': '/student-essentials',
 };
 
+const OTHER_TOOLS = [
+  ['AI Gap Analyzer', '/ai-gap-analyzer'],
+  ['Scholarships', '/scholarships'],
+  ['Mock Test Series', '/mock-tests'],
+  ['Attendance Defender', '/attendancedefender'],
+  ['GPA Hub', '/gpa-hub'],
+  ['Backlog Planner', '/backlog-planner'],
+  ['Roadmaps', '/roadmaps'],
+  ['Placement Viva & Code Vault', '/placement-code-vault'],
+  ['Major Projects Hub', '/major-projects'],
+  ['Internships', '/internships'],
+  ['PDF Tools', '/pdftools'],
+  ['Image Compressor', '/imagecompressor'],
+  ['Student Essentials', '/student-essentials'],
+  ['Study Guides', '/study-guides'],
+] as const;
+
 const pushCleanRoute = (path: string) => {
   if (typeof window === 'undefined' || !path) return;
   const current = `${window.location.pathname}${window.location.search}`;
@@ -73,23 +90,38 @@ const goToRegionalSection = (label: string) => {
   }
 };
 
+const styleBrand = () => {
+  const brand = document.getElementById('brand-logo') as HTMLAnchorElement | null;
+  if (!brand || brand.dataset.mosBrandStyled === 'true') return;
+
+  brand.dataset.mosBrandStyled = 'true';
+  brand.setAttribute('aria-label', 'MAN OF STUDY home');
+  brand.innerHTML = '<span class="mos-brand-wordmark">Man Of Study</span>';
+};
+
 const addCompactHeaderNav = () => {
   const header = document.getElementById('main-header');
   const headerRow = header?.firstElementChild as HTMLElement | null;
   const brand = document.getElementById('brand-logo');
   if (!header || !headerRow || !brand) return;
+
+  styleBrand();
   if (document.getElementById('mos-compact-header-nav')) return;
 
   const nav = document.createElement('nav');
   nav.id = 'mos-compact-header-nav';
   nav.setAttribute('aria-label', 'Primary navigation');
   nav.innerHTML = `
-    <button type="button" data-mos-regional="FOR AP STUDENTS" aria-label="Go to For AP Students section">FOR AP</button>
-    <button type="button" data-mos-regional="FOR TELANGANA STUDENTS" aria-label="Go to For Telangana Students section">FOR TG</button>
-    <a href="/scholarships" data-mos-nav="scholarships">Scholarships</a>
-    <a href="/pdftools" data-mos-nav="pdf">PDF Tools</a>
-    <a href="/imagecompressor" data-mos-nav="image">Image Compressor</a>
-    <a href="/mock-tests" data-mos-nav="mock">Mock Test</a>
+    <button type="button" class="mos-header-link" data-mos-regional="FOR AP STUDENTS">For AP</button>
+    <button type="button" class="mos-header-link" data-mos-regional="FOR TELANGANA STUDENTS">For TG</button>
+    <div class="mos-tools-menu">
+      <button type="button" class="mos-header-link mos-tools-trigger" aria-haspopup="true" aria-expanded="false">
+        Other Tools <span class="mos-tools-chevron" aria-hidden="true">⌄</span>
+      </button>
+      <div class="mos-tools-dropdown" role="menu" aria-label="Other tools">
+        ${OTHER_TOOLS.map(([label, route]) => `<a href="${route}" data-mos-tool-route="${route}" role="menuitem">${label}</a>`).join('')}
+      </div>
+    </div>
   `;
 
   headerRow.insertBefore(nav, headerRow.children[1] || null);
@@ -97,14 +129,42 @@ const addCompactHeaderNav = () => {
   const rightControls = headerRow.children[2] as HTMLElement | undefined;
   if (rightControls) rightControls.classList.add('mos-header-secondary-controls');
 
-  nav.addEventListener('click', (event) => {
-    const target = event.target as HTMLElement | null;
-    const regionalButton = target?.closest<HTMLButtonElement>('[data-mos-regional]');
-    if (regionalButton) {
+  const regionalButtons = nav.querySelectorAll<HTMLButtonElement>('[data-mos-regional]');
+  regionalButtons.forEach((button) => {
+    button.addEventListener('click', (event) => {
       event.preventDefault();
-      goToRegionalSection(regionalButton.dataset.mosRegional || '');
-    }
+      goToRegionalSection(button.dataset.mosRegional || '');
+    });
   });
+
+  const menu = nav.querySelector('.mos-tools-menu') as HTMLElement | null;
+  const trigger = nav.querySelector('.mos-tools-trigger') as HTMLButtonElement | null;
+  if (menu && trigger) {
+    const closeMenu = () => {
+      menu.classList.remove('is-open');
+      trigger.setAttribute('aria-expanded', 'false');
+    };
+
+    trigger.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const open = menu.classList.toggle('is-open');
+      trigger.setAttribute('aria-expanded', String(open));
+    });
+
+    nav.querySelectorAll<HTMLAnchorElement>('[data-mos-tool-route]').forEach((link) => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const route = link.dataset.mosToolRoute;
+        closeMenu();
+        if (route) navigateToRoute(route);
+      });
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!menu.contains(event.target as Node)) closeMenu();
+    });
+  }
 };
 
 const hideMockTestCards = () => {
@@ -134,12 +194,7 @@ const addMockTestShortcut = () => {
     </span>
     <span class="mos-fh-mock-arrow" aria-hidden="true">→</span>
   `;
-  shortcut.addEventListener('click', () => {
-    const launcher = document.getElementById('hero-mock-test-btn') as HTMLButtonElement | null;
-    if (launcher) launcher.click();
-    navigateToRoute('/mock-tests');
-  });
-
+  shortcut.addEventListener('click', () => navigateToRoute('/mock-tests'));
   hub.insertBefore(shortcut, hub.firstChild);
 };
 
@@ -177,68 +232,59 @@ const SiteUxFixes: React.FC = () => {
     const style = document.createElement('style');
     style.id = 'mos-site-ux-fixes';
     style.textContent = `
-      /* Dark-only presentation */
       html.light { color-scheme: dark !important; }
       html.light, html.light body { background:#060b16 !important; color:#f8fafc !important; }
       html.light .dark\\:bg-slate-950 { background-color:#020617 !important; }
       [title^="Switch to "] { display:none !important; }
 
-      /* Compact cyan primary navigation beside the MAN OF STUDY brand. */
+      /* Clean desktop/mobile header: MAN OF STUDY + AP + TG + Other Tools. */
       #mos-compact-header-nav {
-        display:flex;
-        align-items:center;
-        gap:4px;
-        min-width:0;
-        flex:1 1 auto;
-        overflow-x:auto;
-        overflow-y:hidden;
-        scrollbar-width:none;
-        padding:0 8px;
-        -webkit-overflow-scrolling:touch;
+        display:flex; align-items:center; gap:3px; min-width:0; flex:1 1 auto;
+        overflow:visible; padding:0 8px; position:relative;
       }
-      #mos-compact-header-nav::-webkit-scrollbar { display:none; }
-      #mos-compact-header-nav a,
-      #mos-compact-header-nav button {
-        appearance:none;
-        border:0;
-        background:transparent;
-        color:#67e8f9;
-        font:inherit;
-        font-size:11px;
-        line-height:1;
-        font-weight:800;
-        letter-spacing:-0.01em;
-        white-space:nowrap;
-        text-decoration:none;
-        padding:8px 7px;
-        border-radius:9px;
-        cursor:pointer;
-        transition:background .16s ease,color .16s ease,transform .16s ease;
-        flex:none;
+      .mos-brand-wordmark {
+        display:block; font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+        font-size:clamp(15px,1.5vw,20px); line-height:1; font-weight:900; letter-spacing:-0.045em;
+        white-space:nowrap; color:#f8fafc; text-shadow:0 0 20px rgba(56,189,248,.10);
       }
-      #mos-compact-header-nav a:hover,
-      #mos-compact-header-nav button:hover {
-        color:#a5f3fc;
-        background:rgba(34,211,238,.10);
+      #brand-logo { text-decoration:none !important; flex:none !important; min-width:max-content; }
+      #brand-logo:hover .mos-brand-wordmark { color:#67e8f9; }
+      .mos-header-link {
+        appearance:none; border:0; background:transparent; color:#cbd5e1; font:inherit;
+        font-size:12px; line-height:1; font-weight:800; white-space:nowrap; padding:9px 10px;
+        border-radius:10px; cursor:pointer; transition:background .16s ease,color .16s ease;
       }
-      #mos-compact-header-nav a:focus-visible,
-      #mos-compact-header-nav button:focus-visible {
-        outline:2px solid #22d3ee;
-        outline-offset:1px;
+      .mos-header-link:hover { color:#67e8f9; background:rgba(34,211,238,.09); }
+      .mos-header-link:focus-visible { outline:2px solid #22d3ee; outline-offset:2px; }
+      .mos-tools-menu { position:relative; flex:none; }
+      .mos-tools-trigger { display:inline-flex; align-items:center; gap:5px; }
+      .mos-tools-chevron { font-size:14px; line-height:10px; transition:transform .16s ease; }
+      .mos-tools-menu.is-open .mos-tools-chevron { transform:rotate(180deg); }
+      .mos-tools-dropdown {
+        position:absolute; z-index:100; top:calc(100% + 8px); right:0; width:245px; max-height:min(70vh,520px);
+        overflow-y:auto; padding:7px; border:1px solid rgba(71,85,105,.75); border-radius:15px;
+        background:rgba(9,15,28,.98); box-shadow:0 20px 50px rgba(0,0,0,.45); backdrop-filter:blur(16px);
+        opacity:0; visibility:hidden; transform:translateY(-5px); pointer-events:none;
+        transition:opacity .14s ease,transform .14s ease,visibility .14s ease;
       }
+      .mos-tools-menu.is-open .mos-tools-dropdown { opacity:1; visibility:visible; transform:translateY(0); pointer-events:auto; }
+      .mos-tools-dropdown a {
+        display:block; padding:10px 11px; border-radius:10px; color:#cbd5e1; text-decoration:none;
+        font-size:12px; line-height:1.25; font-weight:700;
+      }
+      .mos-tools-dropdown a:hover { color:#f8fafc; background:rgba(34,211,238,.10); }
+      .mos-tools-dropdown a:focus-visible { outline:2px solid #22d3ee; outline-offset:-2px; }
       .mos-header-secondary-controls { display:none !important; }
       #tier2-secondary-feature-strip { display:none !important; }
 
-      /* Keep mock-test execution out of the long homepage scroll. */
       #ws-mock-tests[data-mos-hidden-mock-test="true"],
       #ws-eapcet-cbt[data-mos-hidden-mock-test="true"] { display:none !important; }
 
-      /* Compact Feature Hub shortcut for Mock Tests. */
       #mos-featurehub-mock-shortcut {
-        width:100%; display:flex; align-items:center; gap:12px; margin:0 0 16px;
-        padding:14px 16px; border:1px solid rgba(96,165,250,.28); border-radius:18px;
-        background:linear-gradient(135deg,rgba(30,64,175,.28),rgba(15,23,42,.88));
-        color:#f8fafc; text-align:left; cursor:pointer; box-shadow:0 10px 30px rgba(2,6,23,.22);
+        width:100%; display:flex; align-items:center; gap:12px; margin:0 0 16px; padding:14px 16px;
+        border:1px solid rgba(96,165,250,.28); border-radius:18px;
+        background:linear-gradient(135deg,rgba(30,64,175,.28),rgba(15,23,42,.88)); color:#f8fafc;
+        text-align:left; cursor:pointer; box-shadow:0 10px 30px rgba(2,6,23,.22);
         transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
       }
       #mos-featurehub-mock-shortcut:hover { transform:translateY(-1px); border-color:rgba(96,165,250,.55); box-shadow:0 14px 36px rgba(2,6,23,.32); }
@@ -248,35 +294,31 @@ const SiteUxFixes: React.FC = () => {
       .mos-fh-mock-copy small { font-size:11px; color:#94a3b8; }
       .mos-fh-mock-arrow { font-size:20px; color:#60a5fa; flex:none; }
 
-      /* Reduce FAQ vertical density without making answers unreadable. */
       #student-faq-section button { min-height:52px !important; padding-top:11px !important; padding-bottom:11px !important; }
       #student-faq-section h2 { font-size:clamp(1.35rem,2.5vw,1.8rem) !important; }
       #student-faq-section p { line-height:1.45 !important; }
       #student-faq-section .text-sm { font-size:.82rem !important; }
 
-      /* Prevent decorative layers from ever sitting above readable content. */
       .mos-hero-ambient, .mos-hero-grid, .mos-hero-orb, .mos-hero-dot, .mos-hero-book { pointer-events:none !important; }
       .mos-hero-content, .mos-hero-title, .mos-hero-subtitle, #features-hub { position:relative; z-index:2; }
 
       @media (max-width:900px) {
-        #mos-compact-header-nav { gap:2px; padding:0 4px; }
-        #mos-compact-header-nav a,
-        #mos-compact-header-nav button { font-size:10px; padding:7px 6px; }
+        #mos-compact-header-nav { gap:1px; padding:0 4px; }
+        .mos-header-link { font-size:11px; padding:8px 7px; }
+        .mos-tools-dropdown { width:225px; }
       }
       @media (max-width:640px) {
+        #brand-logo { max-width:125px; }
+        .mos-brand-wordmark { font-size:15px; letter-spacing:-0.055em; }
+        #mos-compact-header-nav { gap:0; padding:0 2px; }
+        .mos-header-link { font-size:10px; padding:8px 5px; }
+        .mos-tools-dropdown { position:fixed; top:58px; right:8px; width:min(270px,calc(100vw - 16px)); max-height:65vh; }
         #mos-featurehub-mock-shortcut { margin-bottom:12px; padding:12px 13px; border-radius:16px; }
         .mos-fh-mock-copy strong { font-size:13px; }
         #student-faq-section button { min-height:48px !important; }
-        #brand-logo { max-width:118px; }
-        #brand-logo > div:last-child > div:first-child span:first-child { font-size:8px !important; }
-        #brand-logo > div:last-child > div:first-child span:nth-child(2) { font-size:7px !important; }
-        #brand-logo > div:last-child > div:first-child span:last-child { font-size:15px !important; }
-        #brand-logo > div:last-child > div:last-child { display:none !important; }
       }
       @media (prefers-reduced-motion:reduce) {
-        #mos-featurehub-mock-shortcut { transition:none !important; }
-        #mos-compact-header-nav a,
-        #mos-compact-header-nav button { transition:none !important; }
+        #mos-featurehub-mock-shortcut,.mos-header-link,.mos-tools-dropdown { transition:none !important; }
       }
     `;
     document.head.appendChild(style);
