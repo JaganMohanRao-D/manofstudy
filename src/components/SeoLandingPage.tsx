@@ -28,34 +28,53 @@ export const SeoLandingPage: React.FC<SeoLandingPageProps> = ({
     }
   };
 
-  return (
-    <div className="space-y-8 animate-in fade-in duration-200">
-      <header className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-600 dark:text-blue-400">{eyebrow}</p>
-            <h1 className="mt-2 text-3xl sm:text-4xl font-black tracking-tight text-slate-950 dark:text-white">{title}</h1>
-            <p className="mt-4 max-w-3xl text-sm sm:text-base leading-7 text-slate-600 dark:text-slate-300">{description}</p>
-          </div>
-          <button
-            type="button"
-            onClick={goToFeatureHub}
-            className="inline-flex items-center justify-center gap-2 shrink-0 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 px-3.5 py-2 text-xs font-bold text-slate-800 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-            title="Return to MAN OF STUDY Feature Hub"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            Back to Feature Hub
-          </button>
-        </div>
-      </header>
+  // The allotment landing pages are search-first pages. Keep the live explorer
+  // immediately visible so users can search colleges/candidates without first
+  // scrolling through SEO copy. Other landing pages keep the normal structure.
+  const searchFirst = /allotments/i.test(title);
 
-      <section aria-labelledby="mos-live-tool" className="space-y-4">
+  const header = (
+    <header className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-600 dark:text-blue-400">{eyebrow}</p>
+          <h1 className="mt-2 text-3xl sm:text-4xl font-black tracking-tight text-slate-950 dark:text-white">{title}</h1>
+          <p className="mt-4 max-w-3xl text-sm sm:text-base leading-7 text-slate-600 dark:text-slate-300">{description}</p>
+        </div>
+        <button
+          type="button"
+          onClick={goToFeatureHub}
+          className="inline-flex items-center justify-center gap-2 shrink-0 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 px-3.5 py-2 text-xs font-bold text-slate-800 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+          title="Return to MAN OF STUDY Feature Hub"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" />
+          Back to Feature Hub
+        </button>
+      </div>
+    </header>
+  );
+
+  const liveTool = (
+    <section aria-labelledby="mos-live-tool" className="space-y-4">
+      {!searchFirst && (
         <div>
           <h2 id="mos-live-tool" className="text-xl sm:text-2xl font-black text-slate-950 dark:text-white">Use the Man of Study tool</h2>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{toolIntro || 'Use the interactive Man of Study tool directly below.'}</p>
         </div>
-        {tool}
-      </section>
+      )}
+      {searchFirst && (
+        <div className="sr-only" aria-hidden="true">
+          <h2 id="mos-live-tool">Live allotment explorer</h2>
+        </div>
+      )}
+      {tool}
+    </section>
+  );
+
+  return (
+    <div className="space-y-8 animate-in fade-in duration-200">
+      {searchFirst ? liveTool : header}
+      {searchFirst ? header : liveTool}
 
       <section className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8">
         <h2 className="text-xl font-black text-slate-950 dark:text-white">How to use it</h2>
