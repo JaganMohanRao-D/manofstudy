@@ -1,0 +1,43 @@
+/* Man of Study — regional workspace visual fix */
+#mos-regional-workspace-visual {
+  width: 100% !important;
+  margin: 0 0 18px !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+}
+
+#mos-regional-workspace-visual .mos-regional-visual-frame {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  aspect-ratio: auto !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #07101d !important;
+}
+
+#mos-regional-workspace-visual .mos-regional-visual-image {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100% !important;
+  max-height: 190px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  opacity: .9 !important;
+}
+
+@media (max-width: 760px) {
+  #mos-regional-workspace-visual {
+    margin-bottom: 14px !important;
+    border-radius: 16px !important;
+  }
+
+  #mos-regional-workspace-visual .mos-regional-visual-image {
+    max-height: 125px !important;
+    opacity: .88 !important;
+  }
+}
