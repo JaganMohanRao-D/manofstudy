@@ -236,6 +236,12 @@ const getRegionalWorkspace = (): 'ap' | 'tg' | null => {
   const path = window.location.pathname.replace(/\/$/, '') || '/';
   if (REGIONAL_WORKSPACES.ap.has(path) || path.startsWith('/ap-eapcet/')) return 'ap';
   if (REGIONAL_WORKSPACES.tg.has(path) || path.startsWith('/tg-eapcet/')) return 'tg';
+
+  // Header/feature navigation can switch workspaces without leaving the SPA root.
+  // Inspect only the workspace viewport so the home-page copy cannot trigger a false match.
+  const viewportText = document.getElementById('workspace-viewport')?.textContent?.toLowerCase() || '';
+  if (viewportText.includes('tg eapcet') || viewportText.includes('telangana')) return 'tg';
+  if (viewportText.includes('ap eapcet') || viewportText.includes('andhra pradesh')) return 'ap';
   return null;
 };
 
@@ -249,7 +255,17 @@ const addRegionalWorkspaceVisual = () => {
 
   const existing = document.getElementById('mos-regional-workspace-visual');
   if (existing) {
+    const previousRegion = existing.dataset.region;
     existing.dataset.region = region;
+    if (previousRegion !== region) {
+      const image = existing.querySelector<HTMLImageElement>('.mos-regional-visual-image');
+      if (image) {
+        image.src = region === 'tg'
+          ? '/AP%26TG_photos/Charminar%20and%20Kakatiya%20Gateway.webp'
+          : '/AP%26TG_photos/ambedkar%26budha.webp';
+      }
+      existing.setAttribute('aria-label', region === 'tg' ? 'Telangana landmark representation' : 'Andhra Pradesh landmark representation');
+    }
     return;
   }
 
