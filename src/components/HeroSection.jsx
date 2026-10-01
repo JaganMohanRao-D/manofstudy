@@ -119,7 +119,7 @@ export const HeroSection = ({
   return (
     <section
       id="hero-banner"
-      className="relative overflow-hidden mos-hero-premium bg-white dark:bg-slate-950 text-slate-900 dark:text-white py-8 sm:py-12 lg:py-14 px-3 sm:px-6 lg:px-8 border border-slate-200/90 dark:border-slate-800/80 rounded-3xl shadow-lg dark:shadow-2xl space-y-8 sm:space-y-10 min-h-fit break-words transition-colors duration-200"
+      className="relative w-full overflow-hidden mos-hero-premium bg-white dark:bg-slate-950 text-slate-900 dark:text-white py-8 sm:py-12 lg:py-14 px-0 space-y-8 sm:space-y-10 min-h-fit break-words transition-colors duration-200"
     >
       {/* The old header secondary strip is intentionally hidden: all of its destinations live here. */}
       <style>{`#tier2-secondary-feature-strip{display:none!important}`}</style>
@@ -141,7 +141,7 @@ export const HeroSection = ({
         <span className="mos-hero-book mos-hero-book-3"><FileText /></span>
       </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto text-center space-y-5 sm:space-y-6 mos-hero-content">
+      <div className="relative z-10 max-w-4xl mx-auto text-center space-y-5 sm:space-y-6 mos-hero-content px-4 sm:px-6 lg:px-8">
         <div className="mos-hero-kicker inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide bg-slate-100 dark:bg-slate-900/90 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 shadow-xs">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 shrink-0" />
           <span>Of the student, by the student, for the student</span>
@@ -217,7 +217,7 @@ export const HeroSection = ({
         </div>
       </div>
 
-      <div id="features-hub" className="relative z-10 max-w-7xl mx-auto pt-6 sm:pt-8 border-t border-slate-200 dark:border-slate-800/80">
+      <div id="features-hub" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 border-t border-slate-200 dark:border-slate-800/80">
         <FeaturesHub
           activeWorkspace={activeWorkspace}
           onSelectWorkspace={onSelectWorkspace}
