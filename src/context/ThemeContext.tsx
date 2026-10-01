@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 
-export type Theme = 'dark' | 'light';
+export type Theme = 'dark';
 
 interface ThemeContextType {
   theme: Theme;
@@ -10,70 +10,34 @@ interface ThemeContextType {
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: 'light',
-  isDarkMode: false,
+  theme: 'dark',
+  isDarkMode: true,
   toggleTheme: () => {},
   setTheme: () => {},
 });
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Light mode is the primary presentation for the redesigned MOS experience.
-  const [theme, setThemeState] = useState<Theme>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved =
-          localStorage.getItem('mos_theme') ||
-          localStorage.getItem('javisak_theme') ||
-          localStorage.getItem('studymacha_theme');
-        if (saved === 'dark') return 'dark';
-        return 'light';
-      } catch {
-        return 'light';
-      }
-    }
-    return 'light';
-  });
-
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
-      root.classList.remove('light');
-      root.setAttribute('data-theme', 'dark');
-      root.style.colorScheme = 'dark';
-    } else {
-      root.classList.remove('dark');
-      root.classList.add('light');
-      root.setAttribute('data-theme', 'light');
-      root.style.colorScheme = 'light';
-    }
+    root.classList.add('dark');
+    root.classList.remove('light');
+    root.setAttribute('data-theme', 'dark');
+    root.style.colorScheme = 'dark';
 
     try {
-      localStorage.setItem('mos_theme', theme);
-      localStorage.setItem('javisak_theme', theme);
-      localStorage.setItem('studymacha_theme', theme);
+      localStorage.setItem('mos_theme', 'dark');
+      localStorage.setItem('javisak_theme', 'dark');
+      localStorage.setItem('studymacha_theme', 'dark');
     } catch {
-      // ignore
+      // Ignore storage restrictions.
     }
-  }, [theme]);
+  }, []);
 
-  const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
-  };
-
-  const toggleTheme = () => {
-    setThemeState((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  };
+  const setTheme = (_theme: Theme) => {};
+  const toggleTheme = () => {};
 
   return (
-    <ThemeContext.Provider
-      value={{
-        theme,
-        isDarkMode: theme === 'dark',
-        toggleTheme,
-        setTheme,
-      }}
-    >
+    <ThemeContext.Provider value={{ theme: 'dark', isDarkMode: true, toggleTheme, setTheme }}>
       {children}
     </ThemeContext.Provider>
   );
