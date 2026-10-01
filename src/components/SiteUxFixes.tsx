@@ -355,7 +355,6 @@ const SiteUxFixes: React.FC = () => {
 
     hideMockTestCards();
     addMockTestShortcut();
-    addCompactHeaderNav();
     const removeNavigationListener = addNavigationListener();
 
     const pendingRegionalTarget = sessionStorage.getItem('mos-header-scroll-target');
@@ -367,8 +366,7 @@ const SiteUxFixes: React.FC = () => {
     const observer = new MutationObserver(() => {
       hideMockTestCards();
       addMockTestShortcut();
-      addCompactHeaderNav();
-    });
+      });
     observer.observe(document.getElementById('root') || document.body, { childList:true, subtree:true });
 
     return () => {
