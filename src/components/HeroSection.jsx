@@ -182,7 +182,7 @@ export const HeroSection = ({
                 }`}
               >
                 <Icon className="w-4 h-4 shrink-0" />
-                <span className="truncate">{item.label}</span>
+                <span className="whitespace-normal leading-tight text-center break-words">{item.label}</span>
                 {item.badge && (
                   <span className={`hidden sm:inline-flex shrink-0 text-[9px] font-black uppercase px-1.5 py-0.5 rounded-full border ${
                     primary
