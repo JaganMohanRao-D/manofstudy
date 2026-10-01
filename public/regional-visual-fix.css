@@ -2,8 +2,11 @@
 #mos-regional-workspace-visual {
   width: 100% !important;
   margin: 0 0 18px !important;
+  border: 1px solid rgba(34, 211, 238, .12) !important;
   border-radius: 20px !important;
+  background: rgba(7, 16, 29, .68) !important;
   overflow: hidden !important;
+  box-shadow: 0 12px 30px rgba(2, 6, 23, .18) !important;
 }
 
 #mos-regional-workspace-visual .mos-regional-visual-frame {
@@ -27,7 +30,17 @@
   max-height: 190px !important;
   object-fit: contain !important;
   object-position: center !important;
-  opacity: .9 !important;
+  opacity: .92 !important;
+}
+
+/* Use the real public asset paths as a fallback so special characters in the
+   original folder name cannot make the dynamically assigned src disappear. */
+#mos-regional-workspace-visual[data-region="tg"] .mos-regional-visual-image {
+  content: url("/AP&TG_photos/Charminar%20and%20Kakatiya%20Gateway.webp") !important;
+}
+
+#mos-regional-workspace-visual[data-region="ap"] .mos-regional-visual-image {
+  content: url("/AP&TG_photos/ambedkar%26budha.webp") !important;
 }
 
 @media (max-width: 760px) {
