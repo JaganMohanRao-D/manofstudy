@@ -1,15 +1,35 @@
-/* Man of Study — compact AP/TG landmark card beside workspace title */
+/* Man of Study — AP/TG workspace layout
+   Paper-sketch layout: Back button top-left, title/content left, regional image right. */
+
 #workspace-viewport { position: relative !important; }
 
-.mos-regional-title-block {
+/* The SEO landing header is the visual title card used by all AP/TG tools. */
+#workspace-viewport:has(#mos-regional-workspace-visual) header {
   position: relative !important;
-  padding-right: 190px !important;
-  min-height: 150px !important;
+  overflow: visible !important;
 }
 
-#mos-regional-workspace-visual {
+#workspace-viewport:has(#mos-regional-workspace-visual) .mos-regional-title-block {
+  position: relative !important;
+  min-height: 150px !important;
+  padding-right: 178px !important;
+  padding-top: 42px !important;
+  box-sizing: border-box !important;
+}
+
+/* Back to Feature Hub — deliberately top-left, above the regional heading. */
+#workspace-viewport:has(#mos-regional-workspace-visual) header button[title="Return to MAN OF STUDY Feature Hub"] {
   position: absolute !important;
-  z-index: 3 !important;
+  top: 20px !important;
+  left: 24px !important;
+  z-index: 6 !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+}
+
+#workspace-viewport:has(#mos-regional-workspace-visual) #mos-regional-workspace-visual {
+  position: absolute !important;
+  z-index: 5 !important;
   top: 50% !important;
   right: 0 !important;
   transform: translateY(-50%) !important;
@@ -18,70 +38,113 @@
   margin: 0 !important;
   padding: 8px !important;
   box-sizing: border-box !important;
-  border: 1px solid rgba(34, 211, 238, .24) !important;
-  border-radius: 18px !important;
-  background: rgba(7, 16, 29, .84) !important;
+  border: 1px solid rgba(34,211,238,.24) !important;
+  border-radius: 20px !important;
+  background: rgba(7,16,29,.88) !important;
   overflow: hidden !important;
-  box-shadow: 0 12px 32px rgba(2, 6, 23, .24), inset 0 0 0 1px rgba(255,255,255,.025) !important;
+  box-shadow: 0 16px 38px rgba(2,6,23,.30), inset 0 0 0 1px rgba(255,255,255,.025) !important;
   backdrop-filter: blur(10px) !important;
   pointer-events: none !important;
 }
 
-#mos-regional-workspace-visual[data-region="ap"] { border-color: rgba(34, 211, 238, .28) !important; }
-#mos-regional-workspace-visual[data-region="tg"] { border-color: rgba(244, 63, 94, .28) !important; }
+#workspace-viewport:has(#mos-regional-workspace-visual) #mos-regional-workspace-visual[data-region="ap"] {
+  border-color: rgba(34,211,238,.30) !important;
+}
 
-#mos-regional-workspace-visual .mos-regional-visual-frame {
+#workspace-viewport:has(#mos-regional-workspace-visual) #mos-regional-workspace-visual[data-region="tg"] {
+  border-color: rgba(244,63,94,.30) !important;
+}
+
+#workspace-viewport:has(#mos-regional-workspace-visual) .mos-regional-visual-frame {
   width: 100% !important;
   height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
   overflow: hidden !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  border-radius: 12px !important;
-  background: linear-gradient(145deg, rgba(15, 23, 42, .96), rgba(2, 6, 23, .96)) !important;
+  border-radius: 13px !important;
+  background: linear-gradient(145deg, rgba(15,23,42,.98), rgba(2,6,23,.98)) !important;
 }
 
-#mos-regional-workspace-visual .mos-regional-visual-image {
+#workspace-viewport:has(#mos-regional-workspace-visual) .mos-regional-visual-image {
   display: block !important;
   width: 100% !important;
   height: 100% !important;
-  max-width: none !important;
-  max-height: none !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
   object-fit: contain !important;
   object-position: center !important;
-  opacity: .96 !important;
-  border-radius: 10px !important;
+  opacity: .97 !important;
+  border-radius: 11px !important;
 }
 
-@media (max-width: 900px) and (min-width: 641px) {
-  .mos-regional-title-block { padding-right: 145px !important; min-height: 120px !important; }
-  #mos-regional-workspace-visual {
-    width: 120px !important;
-    height: 120px !important;
-    border-radius: 16px !important;
-    padding: 7px !important;
+/* Keep the actual interactive workspace full-width below the intro card. */
+#workspace-viewport:has(#mos-regional-workspace-visual) > section,
+#workspace-viewport:has(#mos-regional-workspace-visual) > div {
+  max-width: 100% !important;
+}
+
+/* Tablet / smaller laptop */
+@media (max-width: 1000px) and (min-width: 641px) {
+  #workspace-viewport:has(#mos-regional-workspace-visual) .mos-regional-title-block {
+    min-height: 130px !important;
+    padding-right: 140px !important;
+    padding-top: 40px !important;
+  }
+
+  #workspace-viewport:has(#mos-regional-workspace-visual) #mos-regional-workspace-visual {
+    width: 116px !important;
+    height: 116px !important;
+    padding: 6px !important;
+    border-radius: 17px !important;
+  }
+
+  #workspace-viewport:has(#mos-regional-workspace-visual) header button[title="Return to MAN OF STUDY Feature Hub"] {
+    top: 18px !important;
+    left: 20px !important;
   }
 }
 
+/* Mobile: preserve the sketch hierarchy without squeezing the heading. */
 @media (max-width: 640px) {
-  .mos-regional-title-block {
-    padding-right: 0 !important;
+  #workspace-viewport:has(#mos-regional-workspace-visual) .mos-regional-title-block {
     min-height: 0 !important;
-    padding-bottom: 108px !important;
+    padding-right: 0 !important;
+    padding-top: 42px !important;
+    padding-bottom: 112px !important;
   }
-  #mos-regional-workspace-visual {
-    width: 96px !important;
-    height: 96px !important;
-    right: 50% !important;
+
+  #workspace-viewport:has(#mos-regional-workspace-visual) header button[title="Return to MAN OF STUDY Feature Hub"] {
+    top: 14px !important;
+    left: 16px !important;
+    max-width: calc(100% - 32px) !important;
+    padding: 8px 11px !important;
+    font-size: 11px !important;
+  }
+
+  #workspace-viewport:has(#mos-regional-workspace-visual) #mos-regional-workspace-visual {
     top: auto !important;
     bottom: 0 !important;
-    transform: translateX(50%) !important;
-    border-radius: 14px !important;
-    padding: 6px !important;
+    right: 0 !important;
+    transform: none !important;
+    width: 94px !important;
+    height: 94px !important;
+    padding: 5px !important;
+    border-radius: 16px !important;
   }
 }
 
 @media (max-width: 390px) {
-  .mos-regional-title-block { padding-bottom: 90px !important; }
-  #mos-regional-workspace-visual { width: 80px !important; height: 80px !important; padding: 5px !important; }
+  #workspace-viewport:has(#mos-regional-workspace-visual) .mos-regional-title-block {
+    padding-bottom: 94px !important;
+  }
+
+  #workspace-viewport:has(#mos-regional-workspace-visual) #mos-regional-workspace-visual {
+    width: 78px !important;
+    height: 78px !important;
+    padding: 4px !important;
+    border-radius: 14px !important;
+  }
 }
