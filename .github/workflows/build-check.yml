@@ -19,5 +19,21 @@ jobs:
         run: npm install --no-audit --no-fund --progress=false
       - name: Verify Cloudflare prebuild scripts
         run: node scripts/patchAppNavigation.cjs && node scripts/generateApAllotmentIndexes.cjs && node scripts/generateManifest.cjs && node scripts/patchRegionalHeader.cjs && node scripts/patchAllotmentUx.cjs && node scripts/brandPdfExports.cjs && node scripts/fixScholarshipPortalVisuals.cjs
-      - name: Production build
-        run: npm run build
+      - name: Production build with captured log
+        shell: bash
+        run: |
+          set +e
+          npm run build > build.log 2>&1
+          status=$?
+          cat build.log
+          echo "$status" > build.status
+          exit "$status"
+      - name: Upload build diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manofstudy-build-diagnostics
+          path: |
+            build.log
+            build.status
+          if-no-files-found: warn
