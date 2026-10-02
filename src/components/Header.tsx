@@ -81,12 +81,12 @@ export const Header: React.FC<HeaderProps> = ({ activeWorkspace = 'hub', onSelec
     <header id="main-header" className="sticky top-0 z-50 w-full border-b border-cyan-300/10 bg-[#040b16]/92 backdrop-blur-xl text-white shadow-lg shadow-black/20">
       <div className="mx-auto flex h-[68px] max-w-7xl items-center gap-3 px-3 sm:px-5 lg:px-7">
         <button type="button" id="brand-logo" onClick={goHome} className="group flex min-w-0 shrink-0 items-center gap-2.5 text-left" aria-label="Man of Study home">
-          <span className="relative flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-cyan-300/15 bg-[#07101d] p-0.5 shadow-lg">
-            <img src="https://i.ibb.co/zHPk2tv4/Chat-GPT-Image-Sep-13-2026-08-04-48-PM.png" alt="Man of Study logo" width="40" height="40" className="h-full w-full object-contain transition-transform duration-200 group-hover:scale-105" loading="eager" />
+          <span className="mos-brand-mark relative flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-cyan-300/15 bg-[#07101d] p-0.5 shadow-lg" aria-hidden="true">
+            <img src="/MANOFSTUDY_LOGO.png" alt="" width="40" height="40" className="h-full w-full object-contain transition-transform duration-200 group-hover:scale-105" loading="eager" />
           </span>
-          <span className="hidden min-w-0 sm:block">
-            <span className="block whitespace-nowrap text-[17px] font-black tracking-[-0.03em] text-white sm:text-[19px]">Man Of Study</span>
-            <span className="block whitespace-nowrap text-[9px] font-medium tracking-[0.08em] text-slate-500 uppercase">Student utility platform</span>
+          <span className="min-w-0 sm:block">
+            <span className="mos-brand-wordmark block whitespace-nowrap text-[17px] font-black tracking-[-0.03em] text-white sm:text-[19px]">Man Of Study</span>
+            <span className="mos-brand-tagline block whitespace-nowrap text-[9px] font-medium tracking-[0.08em] text-slate-500 uppercase">Student utility platform</span>
           </span>
         </button>
 
