@@ -42,7 +42,10 @@ patchFile(
       const raw = String(record.alloted_category || '').trim().toUpperCase().replace(/[()]/g, '_');
       const ordered = ['SC_III', 'SC_II', 'SC_I', 'BC_A', 'BC_B', 'BC_C', 'BC_D', 'BC_E', 'EWS', 'OC', 'ST', 'SC', 'MUS'];
       const match = ordered.find((key) => raw === key || raw.startsWith(key + '_'));
-      return match || String(record.category || 'OTHER').trim().toUpperCase();
+      if (match) return match;
+      const numericSc = raw.match(/^SC[_-]?([123])(?:_|$)/);
+      if (numericSc) return `SC_${['I', 'II', 'III'][Number(numericSc[1]) - 1]}`;
+      return String(record.category || 'OTHER').trim().toUpperCase();
     };
 
     const rows = new Map<string, {
@@ -79,11 +82,9 @@ patchFile(
       .map((row) => ({ ...row, label: CATEGORY_LABELS[row.category] || row.category, total: row.boys.count + row.girls.count }));
   }, [visibleRecords]);`;
 
-      // IMPORTANT: preserve the existing categoryInsights calculation.
-      // The previous patch replaced it entirely, but APAllotmentExplorer still
-      // renders categoryInsights in the legacy Candidate Categories card. That
-      // caused a production runtime ReferenceError: categoryInsights is not defined.
-      // Insert the new enrollment calculation immediately after the existing one.
+      // Keep the existing categoryInsights calculation. The enrollment table
+      // is inserted beside it rather than replacing it, preventing runtime
+      // ReferenceErrors in the legacy Candidate Categories card.
       next = next.slice(0, end) + '\n\n' + replacement + next.slice(end);
     }
 
@@ -101,8 +102,8 @@ patchFile(
                 <section id="ap-category-enrollment-summary" className="mt-4 rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-5 shadow-sm" aria-labelledby="ap-category-enrollment-title">
                   <div className="flex flex-col gap-2 border-b border-slate-200 pb-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-700">Category-wise student enrollments</p>
-                      <h2 id="ap-category-enrollment-title" className="mt-1 text-sm sm:text-base font-black text-slate-900">Who joined under each allotted category?</h2>
+                      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-700">Category-wise student allotments</p>
+                      <h2 id="ap-category-enrollment-title" className="mt-1 text-sm sm:text-base font-black text-slate-900">Students allotted under each seat category</h2>
                       <p className="mt-1 text-[11px] sm:text-xs leading-5 text-slate-500">AP EAPCET {selectedYear} · {selectedPhase === 'ALL' ? 'All selected phases' : 'Phase ' + selectedPhase}. AU, SVU and non-local variants are combined. CAP, NCC, Sports and other special-seat variants are counted under their parent allotted category.</p>
                     </div>
                     <div className="shrink-0 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-[10px] font-bold text-slate-600">{visibleRecords.length.toLocaleString()} total allotments in view</div>
@@ -221,4 +222,60 @@ patchFile(
     return next;
   },
   'TG category percentages'
+);
+
+// AP legacy "Candidate categories" analytics must use the allotted seat
+// category, not the candidate's social/category field. The latter can be BC/SC
+// while an allotted seat is EWS/OC or a special quota variant, which is why EWS
+// was missing from the UI. Keep this scoped to APAllotmentExplorer only.
+patchFile(
+  'src/components/ap-allotment/APAllotmentExplorer.tsx',
+  (source) => {
+    let next = source;
+    const start = next.indexOf('  const categoryInsights = useMemo(() => {');
+    const end = next.indexOf('\n\n  const categoryEnrollmentRows = useMemo(() => {', start);
+    if (start < 0 || end < 0) {
+      throw new Error('[allotment-ux] AP category mix source markers not found; refusing to modify the file.');
+    }
+
+    const replacement = `  const categoryInsights = useMemo(() => {
+    const CATEGORY_ORDER = ['OC', 'EWS', 'BC_A', 'BC_B', 'BC_C', 'BC_D', 'BC_E', 'SC_I', 'SC_II', 'SC_III', 'SC', 'ST', 'MUS'];
+    const getSeatCategory = (record: AllotmentRecord) => {
+      const raw = String(record.alloted_category || '').trim().toUpperCase().replace(/[()]/g, '_');
+      const ordered = ['SC_III', 'SC_II', 'SC_I', 'BC_A', 'BC_B', 'BC_C', 'BC_D', 'BC_E', 'EWS', 'OC', 'ST', 'SC', 'MUS'];
+      const match = ordered.find((key) => raw === key || raw.startsWith(key + '_'));
+      if (match) return match;
+      const numericSc = raw.match(/^SC[_-]?([123])(?:_|$)/);
+      if (numericSc) return \`SC_\${['I', 'II', 'III'][Number(numericSc[1]) - 1]}\`;
+      return String(record.category || 'OTHER').trim().toUpperCase();
+    };
+
+    const map = new Map<string, { min: number; max: number; count: number }>();
+    visibleRecords.forEach((record) => {
+      const key = getSeatCategory(record);
+      const item = map.get(key) || { min: Infinity, max: 0, count: 0 };
+      item.min = Math.min(item.min, record.rank);
+      item.max = Math.max(item.max, record.rank);
+      item.count += 1;
+      map.set(key, item);
+    });
+
+    return Array.from(map.entries()).sort((a, b) => {
+      const ai = CATEGORY_ORDER.indexOf(a[0]);
+      const bi = CATEGORY_ORDER.indexOf(b[0]);
+      if (ai === -1 && bi === -1) return a[0].localeCompare(b[0]);
+      if (ai === -1) return 1;
+      if (bi === -1) return -1;
+      return ai - bi;
+    });
+  }, [visibleRecords]);`;
+
+    next = next.slice(0, start) + replacement + next.slice(end);
+    next = next.replace(
+      '<p className="text-[10px] font-black uppercase tracking-[0.14em] text-cyan-400">Category mix</p><h3 className="mt-1 font-black text-slate-950 dark:text-white">Candidate categories</h3>',
+      '<p className="text-[10px] font-black uppercase tracking-[0.14em] text-cyan-400">Allotted category mix</p><h3 className="mt-1 font-black text-slate-950 dark:text-white">Seat categories</h3>'
+    );
+    return next;
+  },
+  'AP allotted category mix'
 );
