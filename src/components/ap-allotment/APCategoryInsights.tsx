@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ShieldCheck,
   TrendingUp,
@@ -9,6 +9,7 @@ import {
   ChevronDown,
   ChevronUp,
   Layers,
+  BarChart3,
 } from 'lucide-react';
 import {
   CategoryRankInsight,
@@ -43,6 +44,7 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
   onSelectCategoryFilter,
 }) => {
   const [isAllottedCatExpanded, setIsAllottedCatExpanded] = useState(false);
+  const [animateGenderGraph, setAnimateGenderGraph] = useState(false);
 
   const getCategoryColor = (cat: string) => {
     const c = (cat || '').toUpperCase();
@@ -63,6 +65,21 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
   const malePct = (analytics as any)?.genderDistribution?.malePct ?? 0;
   const femaleCount = (analytics as any)?.genderDistribution?.female ?? 0;
   const femalePct = (analytics as any)?.genderDistribution?.femalePct ?? 0;
+  const otherCount = (analytics as any)?.genderDistribution?.other ?? 0;
+
+  // Recalculate the displayed gender ratio from the actual M/F counts so the
+  // graph always matches the currently selected year, phase, college and branch.
+  // Percentages are calculated only across records with a known M/F gender.
+  const genderKnownTotal = maleCount + femaleCount;
+  const maleRatioPct = genderKnownTotal > 0 ? Number(((maleCount / genderKnownTotal) * 100).toFixed(1)) : 0;
+  const femaleRatioPct = genderKnownTotal > 0 ? Number(((femaleCount / genderKnownTotal) * 100).toFixed(1)) : 0;
+
+  useEffect(() => {
+    setAnimateGenderGraph(false);
+    const frame = window.requestAnimationFrame(() => setAnimateGenderGraph(true));
+    return () => window.cancelAnimationFrame(frame);
+  }, [maleCount, femaleCount]);
+
   const medianRank = analytics?.medianRank ?? (analytics as any)?.medianAllotmentRank ?? 0;
   const bestRank = analytics?.bestOverallRank ?? 0;
   const lastRank = analytics?.lastOverallRank ?? 0;
@@ -128,6 +145,72 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
             Last admitted student in this pool
           </div>
         </div>
+      </div>
+
+      {/* Animated Gender Ratio */}
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm overflow-hidden">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+          <div>
+            <div className="flex items-center gap-2">
+              <BarChart3 className="w-4 h-4 text-cyan-500" />
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white">Gender Ratio of Allotted Students</h4>
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+              Boys vs girls among gender-labelled allotment records for this selected dataset and filters.
+            </p>
+          </div>
+          <span className="shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+            {genderKnownTotal.toLocaleString()} gender-labelled allotments
+          </span>
+        </div>
+
+        <div className="mt-4 grid grid-cols-2 gap-3">
+          <div className="rounded-xl border border-sky-200 dark:border-sky-900/60 bg-sky-50/70 dark:bg-sky-950/20 p-3">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-xs font-bold text-sky-700 dark:text-sky-300">Boys</span>
+              <span className="text-base sm:text-lg font-black text-sky-700 dark:text-sky-300">{maleRatioPct}%</span>
+            </div>
+            <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+              {maleCount.toLocaleString()} students
+            </div>
+          </div>
+          <div className="rounded-xl border border-pink-200 dark:border-pink-900/60 bg-pink-50/70 dark:bg-pink-950/20 p-3">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-xs font-bold text-pink-700 dark:text-pink-300">Girls</span>
+              <span className="text-base sm:text-lg font-black text-pink-700 dark:text-pink-300">{femaleRatioPct}%</span>
+            </div>
+            <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+              {femaleCount.toLocaleString()} students
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-4 h-5 w-full rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden flex shadow-inner" aria-label={`Gender ratio: boys ${maleRatioPct} percent, girls ${femaleRatioPct} percent`}>
+          <div
+            className="h-full bg-sky-500 origin-left"
+            style={{
+              width: `${maleRatioPct}%`,
+              transform: animateGenderGraph ? 'scaleX(1)' : 'scaleX(0)',
+              transition: 'transform 900ms cubic-bezier(0.22, 1, 0.36, 1)',
+            }}
+            title={`Boys: ${maleRatioPct}%`}
+          />
+          <div
+            className="h-full bg-pink-500 origin-left"
+            style={{
+              width: `${femaleRatioPct}%`,
+              transform: animateGenderGraph ? 'scaleX(1)' : 'scaleX(0)',
+              transition: 'transform 900ms cubic-bezier(0.22, 1, 0.36, 1) 100ms',
+            }}
+            title={`Girls: ${femaleRatioPct}%`}
+          />
+        </div>
+
+        {otherCount > 0 && (
+          <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-2">
+            {otherCount.toLocaleString()} records have an unclassified/other gender value and are excluded from the M/F ratio.
+          </p>
+        )}
       </div>
 
       {/* Category-Wise Rank Insights (Observed Best & Last Ranks) */}
@@ -232,7 +315,7 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
               className="text-xs font-semibold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-1 cursor-pointer"
             >
               <span>{isAllottedCatExpanded ? 'Collapse Quotas' : 'Expand Quotas'}</span>
-              {isAllottedCatExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+              {isAllottedCatExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5' />}
             </button>
           </div>
 
