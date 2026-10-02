@@ -155,8 +155,6 @@
     var pathname = normalizePath(window.location.pathname);
     var search = window.location.search || '';
     if (pathname !== target || window.location.hash) {
-      // Critical: allow React's hashchange listener to run first. Removing the
-      // hash synchronously makes React read an empty hash and return to Home.
       window.setTimeout(function () {
         if (window.location.hash) {
           window.history.replaceState(null, '', target + search);
@@ -215,11 +213,231 @@
     addTopCollegeScopeNote(document.querySelector('#top-btech-colleges-telangana'));
   }
 
+  /* ================================================================
+     MAN OF STUDY BRAND SYSTEM
+     Use only public/MANOFSTUDY_LOGO.png as the canonical brand asset.
+     ================================================================ */
+  var MOS_LOGO_PATH = '/MANOFSTUDY_LOGO.png';
+  var MOS_SITE_URL = 'https://manofstudy.pages.dev';
+
+  function replaceLegacyLogoImages(root) {
+    var scope = root || document;
+    var images = scope.querySelectorAll ? scope.querySelectorAll('img') : [];
+    Array.prototype.forEach.call(images, function (img) {
+      var src = img.getAttribute('src') || '';
+      var alt = (img.getAttribute('alt') || '').toLowerCase();
+      if (src.indexOf('Chat-GPT-Image-Sep-13-2026-08-04-48-PM.png') !== -1 || alt.indexOf('man of study') !== -1 || alt.indexOf('mos logo') !== -1) {
+        if (img.getAttribute('src') !== MOS_LOGO_PATH) img.setAttribute('src', MOS_LOGO_PATH);
+        img.setAttribute('data-mos-canonical-logo', 'true');
+        img.setAttribute('decoding', 'async');
+        img.style.objectFit = 'contain';
+      }
+    });
+
+    var brand = document.getElementById('brand-logo');
+    if (brand) {
+      brand.setAttribute('href', MOS_SITE_URL);
+      brand.setAttribute('target', '_self');
+      brand.setAttribute('aria-label', 'MAN OF STUDY home');
+      brand.onclick = function (event) {
+        event.preventDefault();
+        window.location.assign(MOS_SITE_URL);
+      };
+    }
+  }
+
+  function makeStandaloneLogoClickable() {
+    var images = document.querySelectorAll('img[data-mos-canonical-logo]');
+    Array.prototype.forEach.call(images, function (img) {
+      if (img.closest('a')) return;
+      var parent = img.parentElement;
+      if (!parent || parent.getAttribute('data-mos-logo-link') === 'true') return;
+      parent.setAttribute('data-mos-logo-link', 'true');
+      parent.style.cursor = 'pointer';
+      parent.addEventListener('click', function () {
+        window.location.assign(MOS_SITE_URL);
+      });
+    });
+  }
+
+  function removeWebOptionsCsvExport() {
+    var buttons = document.querySelectorAll('button');
+    Array.prototype.forEach.call(buttons, function (button) {
+      var text = (button.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+      if (text === 'export official csv' || text.indexOf('export official csv') !== -1) {
+        button.remove();
+      }
+    });
+  }
+
+  function createPrintStyles() {
+    if (document.getElementById('mos-brand-print-styles')) return;
+    var style = document.createElement('style');
+    style.id = 'mos-brand-print-styles';
+    style.textContent = `
+      #mos-print-root { display:none; }
+      @media print {
+        body.mos-print-document > *:not(#mos-print-root) { display:none !important; }
+        body.mos-print-document #mos-print-root { display:block !important; position:static !important; width:100% !important; min-height:100vh !important; background:#fff !important; color:#0f172a !important; padding:14mm !important; box-sizing:border-box !important; }
+        body.mos-print-document #mos-print-root * { box-sizing:border-box !important; }
+        body.mos-print-document #mos-print-root table { width:100% !important; border-collapse:collapse !important; font-size:10px !important; }
+        body.mos-print-document #mos-print-root th, body.mos-print-document #mos-print-root td { border:1px solid #cbd5e1 !important; padding:7px 6px !important; color:#0f172a !important; background:#fff !important; }
+        body.mos-print-document #mos-print-root th { background:#f1f5f9 !important; font-weight:800 !important; }
+        body.mos-print-document #mos-print-root .mos-print-logo { width:42px !important; height:42px !important; object-fit:contain !important; display:block !important; }
+        body.mos-print-document #mos-print-root .mos-print-title { font-size:20px !important; font-weight:900 !important; margin:0 !important; }
+        body.mos-print-document #mos-print-root .mos-print-muted { color:#475569 !important; font-size:10px !important; }
+        body.mos-print-document #mos-print-root .mos-print-card { border:1px solid #e2e8f0 !important; border-radius:12px !important; padding:14px !important; margin-bottom:14px !important; }
+        body.mos-print-document #mos-print-root a { color:#0f172a !important; text-decoration:none !important; }
+        @page { size:A4; margin:10mm; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function getPrintRoot() {
+    var root = document.getElementById('mos-print-root');
+    if (!root) {
+      root = document.createElement('div');
+      root.id = 'mos-print-root';
+      document.body.appendChild(root);
+    }
+    return root;
+  }
+
+  function addPrintBrandHeader(root, title, subtitle) {
+    var header = document.createElement('div');
+    header.className = 'mos-print-card';
+    header.innerHTML = `
+      <a href="${MOS_SITE_URL}" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:#0f172a;">
+        <img class="mos-print-logo" src="${MOS_LOGO_PATH}" alt="MAN OF STUDY logo" />
+        <div>
+          <div style="font-size:11px;font-weight:900;letter-spacing:.12em;color:#0284c7;">MAN OF STUDY</div>
+          <h1 class="mos-print-title">${title}</h1>
+          <div class="mos-print-muted">${subtitle || 'Student utility generated by Man of Study'}</div>
+        </div>
+      </a>
+    `;
+    root.appendChild(header);
+  }
+
+  function prepareWebOptionsPrint() {
+    var heading = null;
+    var nodes = document.querySelectorAll('h1,h2,h3');
+    Array.prototype.some.call(nodes, function (node) {
+      var text = (node.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+      if (text === 'web options preference list') {
+        heading = node;
+        return true;
+      }
+      return false;
+    });
+    if (!heading) return false;
+
+    var builder = heading.closest('.space-y-5') || heading.closest('div');
+    if (!builder) return false;
+    var table = builder.querySelector('table');
+    if (!table) return false;
+
+    createPrintStyles();
+    var root = getPrintRoot();
+    root.innerHTML = '';
+    addPrintBrandHeader(root, 'Web Options Preference List', 'Prepared from the selected AP/TG College Predictor results. Final submission must be completed on the official counselling portal.');
+
+    var tableCard = document.createElement('div');
+    tableCard.className = 'mos-print-card';
+    tableCard.appendChild(table.cloneNode(true));
+    root.appendChild(tableCard);
+
+    var footer = document.createElement('div');
+    footer.className = 'mos-print-muted';
+    footer.textContent = 'Generated by Man of Study • manofstudy.pages.dev • For student planning and reference only.';
+    root.appendChild(footer);
+
+    document.body.classList.add('mos-print-document');
+    window.setTimeout(function () {
+      window.print();
+      window.setTimeout(function () {
+        document.body.classList.remove('mos-print-document');
+        root.innerHTML = '';
+      }, 500);
+    }, 80);
+    return true;
+  }
+
+  function addWebOptionsPdfButton() {
+    var headings = document.querySelectorAll('h1,h2,h3');
+    Array.prototype.forEach.call(headings, function (heading) {
+      var text = (heading.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+      if (text !== 'web options preference list') return;
+      var card = heading.closest('.bg-slate-900') || heading.closest('div');
+      if (!card || card.querySelector('[data-mos-web-options-pdf]')) return;
+      var controls = card.querySelector('div.flex.items-center.gap-2');
+      if (!controls) return;
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.setAttribute('data-mos-web-options-pdf', 'true');
+      button.className = 'px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-xs';
+      button.innerHTML = '<span aria-hidden="true">▣</span><span>Download PDF</span>';
+      button.addEventListener('click', function () { prepareWebOptionsPrint(); });
+      controls.insertBefore(button, controls.firstChild);
+    });
+  }
+
+  function addScorecardBrand() {
+    var container = document.getElementById('cbt-scorecard-container');
+    if (!container || container.querySelector('[data-mos-scorecard-brand]')) return;
+    var card = container.firstElementChild;
+    if (!card) return;
+    var brand = document.createElement('div');
+    brand.setAttribute('data-mos-scorecard-brand', 'true');
+    brand.style.cssText = 'display:flex;align-items:center;gap:12px;padding:4px 0 12px;border-bottom:1px solid #e2e8f0;margin-bottom:2px;';
+    brand.innerHTML = `
+      <a href="${MOS_SITE_URL}" aria-label="MAN OF STUDY home" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;">
+        <img src="${MOS_LOGO_PATH}" alt="MAN OF STUDY logo" width="48" height="48" style="width:48px;height:48px;object-fit:contain;display:block;" />
+        <span><strong style="display:block;font-size:14px;letter-spacing:.02em;">MAN OF STUDY</strong><small style="display:block;color:#64748b;font-size:10px;">Student Practice Scorecard</small></span>
+      </a>
+    `;
+    card.insertBefore(brand, card.firstChild);
+  }
+
+  function addRoadmapPrintBranding() {
+    if (!window.location.pathname.startsWith('/roadmaps')) return;
+    var buttons = document.querySelectorAll('button');
+    Array.prototype.forEach.call(buttons, function (button) {
+      var text = (button.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+      if (text.indexOf('download') === -1 || text.indexOf('pdf') === -1) return;
+      if (button.getAttribute('data-mos-roadmap-brand-listener') === 'true') return;
+      button.setAttribute('data-mos-roadmap-brand-listener', 'true');
+      /* The real jsPDF roadmap generator remains authoritative. The print-only
+         brand is also applied to any roadmap preview/print surface. */
+      var preview = document.getElementById('roadmap-modal-container');
+      if (preview && !preview.querySelector('[data-mos-roadmap-brand]')) {
+        var brand = document.createElement('a');
+        brand.setAttribute('data-mos-roadmap-brand', 'true');
+        brand.href = MOS_SITE_URL;
+        brand.style.cssText = 'display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:14px;color:#0f172a;';
+        brand.innerHTML = `<img src="${MOS_LOGO_PATH}" alt="MAN OF STUDY logo" width="46" height="46" style="width:46px;height:46px;object-fit:contain;" /><strong style="font-size:14px;">MAN OF STUDY</strong>`;
+        preview.insertBefore(brand, preview.firstChild);
+      }
+    });
+  }
+
+  function handleBrandClicks(event) {
+    var target = event.target;
+    if (!target || !target.closest) return;
+    var button = target.closest('button');
+    if (!button) return;
+    var text = (button.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    if (text.indexOf('download pdf') !== -1 && text.indexOf('web options') !== -1) {
+      event.preventDefault();
+      event.stopPropagation();
+      prepareWebOptionsPrint();
+    }
+  }
+
   var currentPath = normalizePath(window.location.pathname);
   var initialHash = window.location.hash;
 
-  // For a direct clean workspace URL, temporarily provide the legacy hash to
-  // the existing React state reader. It is removed after React has mounted.
   if (!initialHash && currentPath !== '/' && !seoPaths[currentPath]) {
     var initialKey = null;
     Object.keys(routes).some(function (key) {
@@ -239,11 +457,27 @@
     window.addEventListener('hashchange', cleanCurrentHash);
     injectScholarshipPolish();
     watchTopCollegeViews();
+    createPrintStyles();
+    document.addEventListener('click', handleBrandClicks, true);
+
     var root = document.getElementById('root') || document.body;
     var observer = new MutationObserver(function () {
       watchTopCollegeViews();
       injectScholarshipPolish();
+      replaceLegacyLogoImages(root);
+      makeStandaloneLogoClickable();
+      removeWebOptionsCsvExport();
+      addWebOptionsPdfButton();
+      addScorecardBrand();
+      addRoadmapPrintBranding();
     });
     observer.observe(root, { childList: true, subtree: true });
+
+    replaceLegacyLogoImages(root);
+    makeStandaloneLogoClickable();
+    removeWebOptionsCsvExport();
+    addWebOptionsPdfButton();
+    addScorecardBrand();
+    addRoadmapPrintBranding();
   });
 })();
