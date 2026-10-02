@@ -79,7 +79,12 @@ patchFile(
       .map((row) => ({ ...row, label: CATEGORY_LABELS[row.category] || row.category, total: row.boys.count + row.girls.count }));
   }, [visibleRecords]);`;
 
-      next = next.slice(0, start) + replacement + next.slice(end);
+      // IMPORTANT: preserve the existing categoryInsights calculation.
+      // The previous patch replaced it entirely, but APAllotmentExplorer still
+      // renders categoryInsights in the legacy Candidate Categories card. That
+      // caused a production runtime ReferenceError: categoryInsights is not defined.
+      // Insert the new enrollment calculation immediately after the existing one.
+      next = next.slice(0, end) + '\n\n' + replacement + next.slice(end);
     }
 
     if (!next.includes('id="ap-category-enrollment-summary"')) {
