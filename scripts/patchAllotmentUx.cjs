@@ -15,92 +15,169 @@ function patchFile(relativePath, transform, label) {
   console.log(`[allotment-ux] ${label}: patched`);
 }
 
-// AP/TG category analytics are intentionally kept as small, deterministic
-// build-time source patches. Do not inject runtime DOM nodes or use global CSS.
-// Every insertion has an explicit source marker and fails closed if the source
-// structure changes, preventing a silent malformed production build.
+// AP/TG category analytics are deterministic build-time source patches.
+// No runtime DOM injection or global CSS is used. Every transformation is
+// idempotent so Cloudflare prebuild/build execution remains safe.
 
 patchFile(
   'src/components/ap-allotment/APAllotmentExplorer.tsx',
   (source) => {
     let next = source;
 
-    // The user-facing breakdown must use the exact allotted-seat code
-    // (for example OC_GEN_AU / OC_GIRLS_AU / EWS_GEN_AU / SC_II_GEN_AU),
-    // not the broader social-category field.
-    if (!next.includes("const key = record.alloted_category || 'Unknown';")) {
-      const oldCategoryKey = "const key = record.category || 'Unknown';";
-      if (!next.includes(oldCategoryKey)) {
-        throw new Error('[allotment-ux] AP category source marker not found; refusing to modify the file.');
+    if (!next.includes('const categoryEnrollmentRows = useMemo(() => {')) {
+      const start = next.indexOf('  const categoryInsights = useMemo(() => {');
+      const end = next.indexOf('\n\n  const genderMix', start);
+      if (start < 0 || end < 0) {
+        throw new Error('[allotment-ux] AP category analytics source marker not found; refusing to modify the file.');
       }
-      next = next.replace(oldCategoryKey, "const key = record.alloted_category || 'Unknown';");
+
+      const replacement = `  const categoryEnrollmentRows = useMemo(() => {
+    const CATEGORY_ORDER = ['OC', 'EWS', 'BC_A', 'BC_B', 'BC_C', 'BC_D', 'BC_E', 'SC_I', 'SC_II', 'SC_III', 'SC', 'ST', 'MUS'];
+    const CATEGORY_LABELS: Record<string, string> = {
+      OC: 'OC', EWS: 'EWS', BC_A: 'BC-A', BC_B: 'BC-B', BC_C: 'BC-C', BC_D: 'BC-D', BC_E: 'BC-E',
+      SC_I: 'SC-I', SC_II: 'SC-II', SC_III: 'SC-III', SC: 'SC', ST: 'ST', MUS: 'MUS',
+    };
+
+    const getSeatCategory = (record: AllotmentRecord) => {
+      const raw = String(record.alloted_category || '').trim().toUpperCase().replace(/[()]/g, '_');
+      const ordered = ['SC_III', 'SC_II', 'SC_I', 'BC_A', 'BC_B', 'BC_C', 'BC_D', 'BC_E', 'EWS', 'OC', 'ST', 'SC', 'MUS'];
+      const match = ordered.find((key) => raw === key || raw.startsWith(key + '_'));
+      return match || String(record.category || 'OTHER').trim().toUpperCase();
+    };
+
+    const rows = new Map<string, {
+      category: string;
+      boys: { count: number; min: number; max: number };
+      girls: { count: number; min: number; max: number };
+    }>();
+
+    visibleRecords.forEach((record) => {
+      const category = getSeatCategory(record);
+      const gender = String(record.gender || '').trim().toUpperCase() === 'F' ? 'girls' : 'boys';
+      const current = rows.get(category) || {
+        category,
+        boys: { count: 0, min: Infinity, max: 0 },
+        girls: { count: 0, min: Infinity, max: 0 },
+      };
+      const bucket = current[gender];
+      bucket.count += 1;
+      bucket.min = Math.min(bucket.min, record.rank);
+      bucket.max = Math.max(bucket.max, record.rank);
+      rows.set(category, current);
+    });
+
+    return Array.from(rows.values())
+      .filter((row) => row.boys.count + row.girls.count > 0)
+      .sort((a, b) => {
+        const ai = CATEGORY_ORDER.indexOf(a.category);
+        const bi = CATEGORY_ORDER.indexOf(b.category);
+        if (ai === -1 && bi === -1) return a.category.localeCompare(b.category);
+        if (ai === -1) return 1;
+        if (bi === -1) return -1;
+        return ai - bi;
+      })
+      .map((row) => ({ ...row, label: CATEGORY_LABELS[row.category] || row.category, total: row.boys.count + row.girls.count }));
+  }, [visibleRecords]);`;
+
+      next = next.slice(0, start) + replacement + next.slice(end);
     }
 
-    // Keep the existing AP summary component, but make it explicitly about
-    // exact allotted-seat categories and show the percentage beside each count.
-    if (!next.includes('id="ap-category-cutoff-summary"')) {
-      const marker = /(?<selector>\s+<APBranchSelector[\s\S]*?totalCollegeRecords=\{collegeData\?\.recordCount \?\? 0\}\n\s+\/>\n\s+<\/div>\n)(?<next>\s+<div className="mt-3 flex flex-wrap items-center gap-2 text-\[11px\] text-slate-600 dark:text-slate-400">)/;
-      const match = next.match(marker);
-      if (!match || !match.groups) {
-        throw new Error('[allotment-ux] AP branch selector insertion point not found; refusing to modify the file.');
+    if (!next.includes('id="ap-category-enrollment-summary"')) {
+      const branchSelectorIndex = next.indexOf('<APBranchSelector');
+      const tagsMarker = '\n              <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] text-slate-600 dark:text-slate-400">';
+      const tagsIndex = branchSelectorIndex >= 0 ? next.indexOf(tagsMarker, branchSelectorIndex) : -1;
+      if (tagsIndex < 0) {
+        throw new Error('[allotment-ux] AP category summary insertion point not found; refusing to modify the file.');
       }
 
       const block = `
 
-              {selectedCollegeCode !== 'ALL' && selectedBranchCode !== 'ALL' && categoryInsights.length > 0 && (
-                <section id="ap-category-cutoff-summary" className="mt-4 rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-5 shadow-sm" aria-labelledby="ap-category-cutoff-title">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-200 pb-3">
+              {selectedCollegeCode !== 'ALL' && selectedBranchCode !== 'ALL' && (
+                <section id="ap-category-enrollment-summary" className="mt-4 rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-5 shadow-sm" aria-labelledby="ap-category-enrollment-title">
+                  <div className="flex flex-col gap-2 border-b border-slate-200 pb-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                      <h2 id="ap-category-cutoff-title" className="text-sm sm:text-base font-black text-slate-900">Allotted Seat Category Breakdown</h2>
-                      <p className="mt-1 text-[11px] sm:text-xs text-slate-500 leading-5">Exact AP allotment category codes · {currentCollege?.college_name || 'Selected college'} · {branchLabel}</p>
+                      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-700">Category-wise student enrollments</p>
+                      <h2 id="ap-category-enrollment-title" className="mt-1 text-sm sm:text-base font-black text-slate-900">Who joined under each allotted category?</h2>
+                      <p className="mt-1 text-[11px] sm:text-xs leading-5 text-slate-500">AP EAPCET {selectedYear} · {selectedPhase === 'ALL' ? 'All selected phases' : 'Phase ' + selectedPhase}. AU, SVU and non-local variants are combined. CAP, NCC, Sports and other special-seat variants are counted under their parent allotted category.</p>
                     </div>
-                    <span className="text-[10px] sm:text-xs text-slate-500">Best = smallest observed rank · Last = largest observed rank</span>
+                    <div className="shrink-0 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-[10px] font-bold text-slate-600">{visibleRecords.length.toLocaleString()} total allotments in view</div>
                   </div>
 
-                  <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
-                    {categoryInsights.map(([category, insight]) => (
-                      <div key={category} className="rounded-xl border border-slate-200 bg-slate-50 p-3 min-w-0">
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="truncate text-[11px] sm:text-xs font-black font-mono text-slate-900" title={category}>{category}</span>
-                          <span className="shrink-0 rounded-full bg-cyan-50 border border-cyan-200 px-1.5 py-0.5 text-[9px] font-bold text-cyan-700">{insight.count}</span>
-                        </div>
-                        <div className="mt-1 text-[10px] font-mono text-slate-500">{visibleRecords.length ? ((insight.count / visibleRecords.length) * 100).toFixed(1) : '0.0'}% of selected allotments</div>
-                        <div className="mt-2 grid grid-cols-2 gap-1.5">
-                          <div className="rounded-lg bg-emerald-50 border border-emerald-200 px-2 py-1.5">
-                            <div className="text-[9px] font-bold uppercase tracking-wide text-emerald-700">Best Rank</div>
-                            <div className="mt-0.5 text-xs font-black text-slate-900">{insight.min.toLocaleString()}</div>
-                          </div>
-                          <div className="rounded-lg bg-amber-50 border border-amber-200 px-2 py-1.5">
-                            <div className="text-[9px] font-bold uppercase tracking-wide text-amber-700">Last Rank</div>
-                            <div className="mt-0.5 text-xs font-black text-slate-900">{insight.max.toLocaleString()}</div>
-                          </div>
-                        </div>
+                  {categoryEnrollmentRows.length > 0 ? (
+                    <>
+                      <div className="mt-4 hidden md:block overflow-x-auto rounded-xl border border-slate-200">
+                        <table className="w-full min-w-[760px] border-collapse text-left">
+                          <thead>
+                            <tr className="bg-slate-50 text-[10px] font-black uppercase tracking-[0.12em] text-slate-500">
+                              <th className="px-4 py-3">Allotted category</th>
+                              <th className="px-4 py-3">Boys</th>
+                              <th className="px-4 py-3">Girls</th>
+                              <th className="px-4 py-3">Total</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-200 bg-white">
+                            {categoryEnrollmentRows.map((row) => {
+                              const totalPct = visibleRecords.length ? (row.total / visibleRecords.length) * 100 : 0;
+                              const boysPct = visibleRecords.length ? (row.boys.count / visibleRecords.length) * 100 : 0;
+                              const girlsPct = visibleRecords.length ? (row.girls.count / visibleRecords.length) * 100 : 0;
+                              const cells = [
+                                { label: 'Boys', item: row.boys, percentage: boysPct },
+                                { label: 'Girls', item: row.girls, percentage: girlsPct },
+                                { label: 'Total', item: { count: row.total, min: Math.min(row.boys.min, row.girls.min), max: Math.max(row.boys.max, row.girls.max) }, percentage: totalPct },
+                              ];
+                              return (
+                                <tr key={row.category} className="align-top hover:bg-slate-50/80">
+                                  <td className="px-4 py-3"><div className="font-black text-slate-900">{row.label}</div><div className="mt-0.5 text-[10px] text-slate-500">All regional variants combined</div></td>
+                                  {cells.map((cell) => (
+                                    <td key={cell.label} className="px-4 py-3">
+                                      <div className="flex items-baseline gap-2"><span className="text-base font-black text-slate-900">{cell.item.count.toLocaleString()}</span><span className="text-[10px] font-bold text-cyan-700">{cell.percentage.toFixed(1)}%</span></div>
+                                      {cell.item.count > 0 ? <div className="mt-1 text-[10px] font-mono text-slate-500">Rank {cell.item.min.toLocaleString()} → {cell.item.max.toLocaleString()}</div> : <div className="mt-1 text-[10px] text-slate-400">No allotments</div>}
+                                    </td>
+                                  ))}
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
                       </div>
-                    ))}
-                  </div>
-                </section>
-              )}`;
 
-      next = next.replace(marker, `${match.groups.selector}${block}\n${match.groups.next}`);
+                      <div className="mt-3 space-y-2 md:hidden">
+                        {categoryEnrollmentRows.map((row) => {
+                          const totalPct = visibleRecords.length ? (row.total / visibleRecords.length) * 100 : 0;
+                          const renderBucket = (label: string, bucket: { count: number; min: number; max: number }, percentage: number) => (
+                            <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                              <div className="flex items-center justify-between gap-2"><span className="text-[10px] font-black uppercase tracking-wide text-slate-500">{label}</span><span className="text-sm font-black text-slate-900">{bucket.count.toLocaleString()} <span className="text-[10px] font-bold text-cyan-700">({percentage.toFixed(1)}%)</span></span></div>
+                              {bucket.count > 0 ? <div className="mt-1 text-[10px] font-mono text-slate-500">Rank {bucket.min.toLocaleString()} → {bucket.max.toLocaleString()}</div> : <div className="mt-1 text-[10px] text-slate-400">No allotments</div>}
+                            </div>
+                          );
+                          return (
+                            <article key={row.category} className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+                              <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2"><div><div className="text-sm font-black text-slate-900">{row.label}</div><div className="text-[10px] text-slate-500">Total {row.total.toLocaleString()} · {totalPct.toFixed(1)}% of allotments</div></div></div>
+                              <div className="mt-2 grid grid-cols-1 gap-2">{renderBucket('Boys', row.boys, visibleRecords.length ? (row.boys.count / visibleRecords.length) * 100 : 0)}{renderBucket('Girls', row.girls, visibleRecords.length ? (row.girls.count / visibleRecords.length) * 100 : 0)}</div>
+                            </article>
+                          );
+                        })}
+                      </div>
+                    </>
+                  ) : (
+                    <div className="mt-4 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center text-xs text-slate-500">No category allotments are available for the selected year, phase, college and branch.</div>
+                  )}
+                </section>`;
+
+      next = next.slice(0, tagsIndex) + block + next.slice(tagsIndex);
     }
 
     return next;
   },
-  'AP exact allotted-category summary'
+  'AP category enrollment summary'
 );
 
-// TG already has the exact seat-category grouping in categoryCutoffs. Add only
-// the percentage metric; preserve its existing best/last rank calculation and
-// card layout so the TG experience remains unchanged.
 patchFile(
   'src/components/TgAllotmentExplorer.jsx',
   (source) => {
     let next = source;
     const tgPercentageMarker = 'percentage: total > 0 ? ((item.count / total) * 100) : 0';
 
-    // Idempotent: npm run build invokes prebuild, and our verification workflow
-    // may invoke the same prebuild sequence once before npm run build invokes it
-    // again. Always detect the already-generated form, not the original marker.
     if (!next.includes(tgPercentageMarker)) {
       const oldReturn = '    return Object.values(map).sort((a, b) => a.openingRank - b.openingRank);';
       const newReturn = `    const total = currentBundle.records.length;
