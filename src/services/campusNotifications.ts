@@ -3,24 +3,27 @@ import {
   addDoc,
   serverTimestamp,
 } from 'firebase/firestore';
-import { db } from './firebase';
+import { auth, db } from './firebase';
 
 export interface CampusNotification {
   id: string;
-  recipientEmail?: string;      // Email of the student who posted the question
-  recipientUid?: string;        // UID of the student who posted the question
-  senderName: string;           // Name of the user who answered
-  questionId: string;           // ID of the post
-  questionTitle: string;        // Title of the question
-  replySnippet: string;         // First 80 chars of the answer
-  createdAt: any;               // Firestore serverTimestamp
+  recipientUid: string;
+  senderUid: string;
+  senderName: string;
+  questionId: string;
+  questionTitle: string;
+  replySnippet: string;
+  createdAt: any;
   isRead: boolean;
 }
 
 /**
- * Create the in-app answer notification.
- * Email delivery is handled server-side by the Firestore trigger so a reply
- * cannot accidentally leak private email addresses or generate spam.
+ * Create an in-app answer notification.
+ *
+ * Security is enforced again in Firestore rules: the authenticated sender must
+ * be the senderUid, and recipientUid must be the author of questionId. Email
+ * addresses are deliberately excluded from this client-created document.
+ * Transactional email delivery remains server-side in the Firebase trigger.
  */
 export async function dispatchAnswerNotificationFlow(params: {
   recipientEmail?: string;
@@ -32,26 +35,26 @@ export async function dispatchAnswerNotificationFlow(params: {
   answerText: string;
   emailNotificationsEnabled?: boolean;
 }): Promise<void> {
-  if (!params.recipientEmail && !params.recipientUid) {
+  const currentUser = auth.currentUser;
+  if (!currentUser || !params.recipientUid || !params.questionId) {
+    return;
+  }
+
+  if (currentUser.uid === params.recipientUid) {
     return;
   }
 
   try {
-    const payload: Record<string, any> = {
-      senderName: params.senderName || 'A Fellow Student',
+    const payload = {
+      senderUid: currentUser.uid,
+      recipientUid: params.recipientUid,
+      senderName: String(params.senderName || 'A Fellow Student').slice(0, 120),
       questionId: params.questionId,
-      questionTitle: params.questionTitle,
-      replySnippet: String(params.answerText || '').slice(0, 80),
+      questionTitle: String(params.questionTitle || 'Your Question').slice(0, 300),
+      replySnippet: String(params.answerText || '').slice(0, 500),
       createdAt: serverTimestamp(),
       isRead: false,
-    };
-
-    if (params.recipientUid) {
-      payload.recipientUid = params.recipientUid;
-    }
-    if (params.recipientEmail) {
-      payload.recipientEmail = params.recipientEmail;
-    }
+    } satisfies Record<string, unknown>;
 
     await addDoc(collection(db, 'notifications'), payload);
   } catch (err: any) {
