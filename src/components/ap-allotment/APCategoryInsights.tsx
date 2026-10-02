@@ -67,9 +67,7 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
   const femalePct = (analytics as any)?.genderDistribution?.femalePct ?? 0;
   const otherCount = (analytics as any)?.genderDistribution?.other ?? 0;
 
-  // Recalculate the displayed gender ratio from the actual M/F counts so the
-  // graph always matches the currently selected year, phase, college and branch.
-  // Percentages are calculated only across records with a known M/F gender.
+  // Recalculate the displayed ratio from the actual M/F counts for the current dataset and filters.
   const genderKnownTotal = maleCount + femaleCount;
   const maleRatioPct = genderKnownTotal > 0 ? Number(((maleCount / genderKnownTotal) * 100).toFixed(1)) : 0;
   const femaleRatioPct = genderKnownTotal > 0 ? Number(((femaleCount / genderKnownTotal) * 100).toFixed(1)) : 0;
@@ -90,21 +88,17 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
     <div className="space-y-4">
       {/* 4 Summary Metric Strips */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
-        {/* Metric 1: Total Allotted */}
         <div className="bg-slate-900/80 dark:bg-slate-900/80 bg-white border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 shadow-sm">
           <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1">
             <Users className="w-3.5 h-3.5 text-cyan-500" />
             Total Seats Allotted
           </span>
-          <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1">
-            {totalStudents}
-          </div>
+          <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1">{totalStudents}</div>
           <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
             Boys: {maleCount} ({malePct}%) | Girls: {femaleCount} ({femalePct}%)
           </div>
         </div>
 
-        {/* Metric 2: Median Rank */}
         <div className="bg-slate-900/80 dark:bg-slate-900/80 bg-white border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 shadow-sm">
           <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1">
             <TrendingUp className="w-3.5 h-3.5 text-indigo-500" />
@@ -113,12 +107,9 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
           <div className="text-xl sm:text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-1">
             {medianRank > 0 ? `#${medianRank.toLocaleString()}` : '—'}
           </div>
-          <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
-            50th percentile rank admitted
-          </div>
+          <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">50th percentile rank admitted</div>
         </div>
 
-        {/* Metric 3: Opening Rank (Best) */}
         <div className="bg-slate-900/80 dark:bg-slate-900/80 bg-white border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 shadow-sm">
           <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1">
             <Award className="w-3.5 h-3.5 text-emerald-500" />
@@ -127,12 +118,9 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
           <div className="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1">
             {bestRank > 0 ? `#${bestRank.toLocaleString()}` : '—'}
           </div>
-          <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
-            First admitted student in this pool
-          </div>
+          <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">First admitted student in this pool</div>
         </div>
 
-        {/* Metric 4: Closing Cutoff Rank */}
         <div className="bg-slate-900/80 dark:bg-slate-900/80 bg-white border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 shadow-sm">
           <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1">
             <Flame className="w-3.5 h-3.5 text-rose-500" />
@@ -141,9 +129,7 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
           <div className="text-xl sm:text-2xl font-black text-rose-600 dark:text-rose-400 mt-1">
             {lastRank > 0 ? `#${lastRank.toLocaleString()}` : '—'}
           </div>
-          <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
-            Last admitted student in this pool
-          </div>
+          <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Last admitted student in this pool</div>
         </div>
       </div>
 
@@ -156,7 +142,7 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
               <h4 className="text-sm font-bold text-slate-900 dark:text-white">Gender Ratio of Allotted Students</h4>
             </div>
             <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
-              Boys vs girls among gender-labelled allotment records for this selected dataset and filters.
+              Boys vs girls among gender-labelled allotment records for the selected year, phase, college and branch filters.
             </p>
           </div>
           <span className="shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
@@ -170,18 +156,14 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
               <span className="text-xs font-bold text-sky-700 dark:text-sky-300">Boys</span>
               <span className="text-base sm:text-lg font-black text-sky-700 dark:text-sky-300">{maleRatioPct}%</span>
             </div>
-            <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
-              {maleCount.toLocaleString()} students
-            </div>
+            <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">{maleCount.toLocaleString()} students</div>
           </div>
           <div className="rounded-xl border border-pink-200 dark:border-pink-900/60 bg-pink-50/70 dark:bg-pink-950/20 p-3">
             <div className="flex items-center justify-between gap-2">
               <span className="text-xs font-bold text-pink-700 dark:text-pink-300">Girls</span>
               <span className="text-base sm:text-lg font-black text-pink-700 dark:text-pink-300">{femaleRatioPct}%</span>
             </div>
-            <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
-              {femaleCount.toLocaleString()} students
-            </div>
+            <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">{femaleCount.toLocaleString()} students</div>
           </div>
         </div>
 
@@ -213,7 +195,7 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
         )}
       </div>
 
-      {/* Category-Wise Rank Insights (Observed Best & Last Ranks) */}
+      {/* Category-Wise Rank Insights */}
       <div className="bg-slate-900/90 dark:bg-slate-900/90 bg-white border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm backdrop-blur-xl space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 border-b border-slate-200 dark:border-slate-800 pb-3">
           <div>
@@ -225,19 +207,16 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
               Observed allotment ranks in this dataset (Minimum &amp; Maximum numerical rank per student category)
             </p>
           </div>
-
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-[11px] text-slate-600 dark:text-slate-300 font-medium self-start sm:self-auto">
             <Info className="w-3.5 h-3.5 text-cyan-500" />
             <span>Click category card to filter students</span>
           </div>
         </div>
 
-        {/* Category Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 pt-1">
           {categoryInsights.map((item) => {
             const colors = getCategoryColor(item.category);
             const isSelected = selectedCategoryFilter === item.category;
-
             return (
               <div
                 key={item.category}
@@ -249,35 +228,27 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span
-                    className={`px-2 py-0.5 rounded-md font-mono font-bold text-xs border ${colors.bg} ${colors.text} ${colors.border}`}
-                  >
+                  <span className={`px-2 py-0.5 rounded-md font-mono font-bold text-xs border ${colors.bg} ${colors.text} ${colors.border}`}>
                     {item.category}
                   </span>
                   <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono font-medium">
                     {item.studentCount} {item.studentCount === 1 ? 'seat' : 'seats'}
                   </span>
                 </div>
-
                 <div className="grid grid-cols-2 gap-2 text-xs pt-1.5 border-t border-slate-200 dark:border-slate-800/60">
                   <div>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">
-                      Best Rank
-                    </span>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">Best Rank</span>
                     <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
                       {item.bestRank > 0 ? `#${item.bestRank.toLocaleString()}` : '—'}
                     </span>
                   </div>
                   <div className="text-right">
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">
-                      Last Rank
-                    </span>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">Last Rank</span>
                     <span className="font-mono font-bold text-rose-600 dark:text-rose-400">
                       {item.lastRank > 0 ? `#${item.lastRank.toLocaleString()}` : '—'}
                     </span>
                   </div>
                 </div>
-
                 <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 pt-1.5 mt-1 border-t border-dashed border-slate-200 dark:border-slate-800/40">
                   <span>Boys: {item.maleCount ?? 0}</span>
                   <span>Girls: {item.femaleCount ?? 0}</span>
@@ -288,7 +259,7 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
         </div>
       </div>
 
-      {/* Distinction Note: Allotted Category vs Candidate Category */}
+      {/* Distinction Note */}
       <div className="bg-blue-500/10 border border-blue-500/25 rounded-xl p-3 sm:p-3.5 text-xs text-blue-800 dark:text-blue-300 flex items-start gap-2.5">
         <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
         <div className="space-y-0.5">
@@ -315,7 +286,7 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
               className="text-xs font-semibold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-1 cursor-pointer"
             >
               <span>{isAllottedCatExpanded ? 'Collapse Quotas' : 'Expand Quotas'}</span>
-              {isAllottedCatExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5' />}
+              {isAllottedCatExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
             </button>
           </div>
 
@@ -346,4 +317,5 @@ export const APCategoryInsights: React.FC<APCategoryInsightsProps> = ({
     </div>
   );
 };
+
 export default APCategoryInsights;
