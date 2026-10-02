@@ -162,7 +162,8 @@ patchFile(
                   ) : (
                     <div className="mt-4 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center text-xs text-slate-500">No category allotments are available for the selected year, phase, college and branch.</div>
                   )}
-                </section>`;
+                </section>
+              )}`;
 
       next = next.slice(0, tagsIndex) + block + next.slice(tagsIndex);
     }
