@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node scripts/patchAppNavigation.cjs && node scripts/generateApAllotmentIndexes.cjs && node scripts/generateManifest.cjs && node scripts/patchAllotmentUx.cjs && vite --port=3000 --host=0.0.0.0",
-    "prebuild": "node scripts/patchAppNavigation.cjs && node scripts/generateApAllotmentIndexes.cjs && node scripts/generateManifest.cjs && node scripts/patchAllotmentUx.cjs",
+    "dev": "node scripts/patchAppNavigation.cjs && node scripts/generateApAllotmentIndexes.cjs && node scripts/generateManifest.cjs && node scripts/patchAllotmentUx.cjs && node scripts/brandPdfExports.cjs && vite --port=3000 --host=0.0.0.0",
+    "prebuild": "node scripts/patchAppNavigation.cjs && node scripts/generateApAllotmentIndexes.cjs && node scripts/generateManifest.cjs && node scripts/patchAllotmentUx.cjs && node scripts/brandPdfExports.cjs",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
