@@ -1,18 +1,20 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    // CampusConnect peer attachments (strictly scoped to authenticated user path)
+    // CampusConnect peer attachments are scoped to the authenticated owner path.
+    // Reads require sign-in so attachment URLs cannot be used as an anonymous
+    // public data bucket. Create/delete remain limited to the owning UID.
     match /campusconnect/{userId}/{postId}/{fileName} {
-      allow read: if true;
+      allow read: if request.auth != null;
       allow create: if request.auth != null
         && request.auth.uid == userId
         && request.resource.size <= 25 * 1024 * 1024
         && request.resource.contentType.matches('(application/pdf|image/(jpeg|png|webp))');
-      allow update: if false; // Disallow overwriting existing files
+      allow update: if false;
       allow delete: if request.auth != null && request.auth.uid == userId;
     }
 
-    // Default deny for all other storage paths
+    // Default deny for all other storage paths.
     match /{allPaths=**} {
       allow read, write: if false;
     }
