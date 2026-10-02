@@ -17,5 +17,7 @@ jobs:
           node-version: 22
       - name: Install dependencies
         run: npm install --no-audit --no-fund --progress=false
+      - name: Verify Cloudflare prebuild scripts
+        run: node scripts/patchAppNavigation.cjs && node scripts/generateApAllotmentIndexes.cjs && node scripts/generateManifest.cjs && node scripts/patchRegionalHeader.cjs && node scripts/patchAllotmentUx.cjs && node scripts/brandPdfExports.cjs && node scripts/fixScholarshipPortalVisuals.cjs
       - name: Production build
         run: npm run build
