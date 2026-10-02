@@ -117,11 +117,15 @@ patchFile(
     }
 
     if (!next.includes('{item.percentage.toFixed(1)}% of branch allotments')) {
-      const oldCard = `                              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-300">
+      const oldCard = `<div className="flex items-center justify-between mb-1.5">
+                              <span className={\`text-[11px] font-mono font-bold px-1.5 py-0.5 rounded \${colors.lightBg} \${colors.text} border \${colors.border} truncate max-w-[150px]\`}>
+                                {item.category}
+                              </span>
+                              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-300">
                                 {item.count} {item.count === 1 ? 'seat' : 'seats'}
-                              </span>`;
+                              </span>
+                            </div>`;
       const newCard = `${oldCard}
-                            </div>
                             <div className="text-[10px] font-mono text-slate-400 mb-1.5">
                               {item.percentage.toFixed(1)}% of branch allotments
                             </div>`;
