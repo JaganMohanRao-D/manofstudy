@@ -96,8 +96,12 @@ patchFile(
   'src/components/TgAllotmentExplorer.jsx',
   (source) => {
     let next = source;
+    const tgPercentageMarker = 'percentage: total > 0 ? ((item.count / total) * 100) : 0';
 
-    if (!next.includes('percentage: total > 0 ? ((count / total) * 100) : 0')) {
+    // Idempotent: npm run build invokes prebuild, and our verification workflow
+    // may invoke the same prebuild sequence once before npm run build invokes it
+    // again. Always detect the already-generated form, not the original marker.
+    if (!next.includes(tgPercentageMarker)) {
       const oldReturn = '    return Object.values(map).sort((a, b) => a.openingRank - b.openingRank);';
       const newReturn = `    const total = currentBundle.records.length;
     return Object.values(map)
