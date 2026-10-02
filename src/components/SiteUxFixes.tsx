@@ -90,18 +90,15 @@ const goToRegionalSection = (label: string) => {
   }
 };
 
+/* The React Header is the single source of truth for branding. This helper only
+   normalizes its existing nodes; it never replaces the Header's JSX/DOM. */
 const styleBrand = () => {
-  const brand = document.getElementById('brand-logo') as HTMLAnchorElement | null;
-  if (!brand || brand.dataset.mosBrandStyled === 'true') return;
-
+  const brand = document.getElementById('brand-logo') as HTMLButtonElement | null;
+  if (!brand) return;
   brand.dataset.mosBrandStyled = 'true';
   brand.setAttribute('aria-label', 'MAN OF STUDY home');
-  brand.innerHTML = `
-    <span class="mos-brand-mark" aria-hidden="true">
-      <img src="https://i.ibb.co/zHPk2tv4/Chat-GPT-Image-Sep-13-2026-08-04-48-PM.png" alt="" width="36" height="36" loading="eager" />
-    </span>
-    <span class="mos-brand-wordmark">Man Of Study</span>
-  `;
+  brand.querySelector('.mos-brand-wordmark')?.setAttribute('data-mos-brand-source', 'react');
+  brand.querySelector('.mos-brand-tagline')?.setAttribute('data-mos-tagline-source', 'react');
 };
 
 const addCompactHeaderNav = () => {
@@ -236,10 +233,6 @@ const getRegionalWorkspace = (): 'ap' | 'tg' | null => {
   const path = window.location.pathname.replace(/\/$/, '') || '/';
   if (REGIONAL_WORKSPACES.ap.has(path) || path.startsWith('/ap-eapcet/')) return 'ap';
   if (REGIONAL_WORKSPACES.tg.has(path) || path.startsWith('/tg-eapcet/')) return 'tg';
-
-  const viewportText = document.getElementById('workspace-viewport')?.textContent?.toLowerCase() || '';
-  if (viewportText.includes('tg eapcet') || viewportText.includes('telangana')) return 'tg';
-  if (viewportText.includes('ap eapcet') || viewportText.includes('andhra pradesh')) return 'ap';
   return null;
 };
 
@@ -286,20 +279,27 @@ const addRegionalWorkspaceVisual = () => {
   }
 };
 
+const syncRegionalTheme = () => {
+  if (typeof window === 'undefined') return null;
+  const region = getRegionalWorkspace();
+  const regional = region !== null;
+  document.documentElement.classList.toggle('dark', !regional);
+  document.documentElement.classList.toggle('light', regional);
+  document.documentElement.setAttribute('data-theme', regional ? 'light' : 'dark');
+  document.documentElement.style.colorScheme = regional ? 'light' : 'dark';
+  document.body.classList.toggle('mos-regional-light', regional);
+  document.body.classList.toggle('mos-dark-only', !regional);
+  return region;
+};
+
 const SiteUxFixes: React.FC = () => {
   useEffect(() => {
-    document.documentElement.classList.add('dark');
-    document.documentElement.classList.remove('light');
-    document.documentElement.setAttribute('data-theme', 'dark');
-    document.documentElement.style.colorScheme = 'dark';
-    document.body.classList.add('mos-dark-only');
+    syncRegionalTheme();
 
     const style = document.createElement('style');
     style.id = 'mos-site-ux-fixes';
     style.textContent = `
-      html.light { color-scheme: dark !important; }
-      html.light, html.light body { background:#060b16 !important; color:#f8fafc !important; }
-      html.light .dark\\:bg-slate-950 { background-color:#020617 !important; }
+      html.light { color-scheme: light !important; }
       [title^="Switch to "] { display:none !important; }
 
       #mos-compact-header-nav {
@@ -315,6 +315,10 @@ const SiteUxFixes: React.FC = () => {
         display:block; font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
         font-size:clamp(15px,1.55vw,21px); line-height:1; font-weight:900; letter-spacing:-0.055em;
         white-space:nowrap; color:#f8fafc; text-shadow:0 0 20px rgba(34,211,238,.12);
+      }
+      .mos-brand-tagline {
+        display:block; white-space:nowrap; font-size:9px; line-height:1; font-weight:600;
+        letter-spacing:.08em; text-transform:uppercase; color:#94a3b8;
       }
       #brand-logo { text-decoration:none !important; flex:none !important; min-width:max-content; display:flex !important; align-items:center !important; gap:9px !important; }
       #brand-logo:hover .mos-brand-wordmark { color:#67e8f9; }
@@ -359,25 +363,84 @@ const SiteUxFixes: React.FC = () => {
       .mos-fh-mock-copy small { font-size:11px; color:#94a3b8; }
       .mos-fh-mock-arrow { font-size:20px; color:#60a5fa; flex:none; }
 
-      /* AP/TG landmark: compact square card beside the workspace title, never a full-width banner. */
-      .mos-regional-title-block { position:relative !important; padding-right:190px !important; min-height:150px !important; }
-      #mos-regional-workspace-visual {
-        position:absolute !important; right:0 !important; top:50% !important; transform:translateY(-50%) !important;
-        width:150px !important; height:150px !important; margin:0 !important; padding:8px !important;
-        box-sizing:border-box !important; border:1px solid rgba(34,211,238,.24) !important;
-        border-radius:18px !important; background:rgba(7,16,29,.82) !important;
-        overflow:hidden !important; box-shadow:0 12px 32px rgba(2,6,23,.24) !important;
+      /* Regional artwork stays beside the heading and uses the asset's natural aspect ratio. */
+      body.mos-regional-light #workspace-viewport { background:#fff !important; color:#172033 !important; }
+      body.mos-regional-light #main-header { background:rgba(255,255,255,.96) !important; color:#172033 !important; border-bottom-color:#e2e8f0 !important; box-shadow:0 4px 18px rgba(15,23,42,.06) !important; }
+      body.mos-regional-light #brand-logo { color:#172033 !important; }
+      body.mos-regional-light #brand-logo .mos-brand-mark { background:#fff !important; border-color:#dbe3ec !important; box-shadow:0 2px 8px rgba(15,23,42,.06) !important; }
+      body.mos-regional-light #brand-logo .mos-brand-mark img { content:url('/MANOFSTUDY_LOGO.png') !important; }
+      body.mos-regional-light #brand-logo .mos-brand-wordmark { color:#0f172a !important; text-shadow:none !important; }
+      body.mos-regional-light #brand-logo .mos-brand-tagline { color:#64748b !important; opacity:1 !important; }
+      body.mos-regional-light #brand-logo:hover .mos-brand-wordmark { color:#0e7490 !important; }
+      body.mos-regional-light #mos-compact-header-nav .mos-header-link { color:#334155 !important; }
+      body.mos-regional-light #mos-compact-header-nav .mos-header-link:hover { color:#0e7490 !important; background:rgba(14,116,144,.08) !important; }
+      body.mos-regional-light .mos-tools-dropdown { background:#fff !important; border-color:#d7dee8 !important; box-shadow:0 18px 42px rgba(15,23,42,.12) !important; }
+      body.mos-regional-light .mos-tools-dropdown a { color:#334155 !important; }
+      body.mos-regional-light .mos-tools-dropdown a:hover { color:#0e7490 !important; background:rgba(14,116,144,.08) !important; }
+      body.mos-regional-light #header-command-palette-trigger,
+      body.mos-regional-light #header-support-btn { color:#334155 !important; background:#fff !important; border-color:#d7dee8 !important; }
+      body.mos-regional-light #header-command-palette-trigger:hover,
+      body.mos-regional-light #header-support-btn:hover { color:#0e7490 !important; background:#f0f9ff !important; }
+      body.mos-regional-light #workspace-viewport:has(#mos-regional-workspace-visual) header { position:relative !important; overflow:visible !important; background:#fff !important; color:#172033 !important; }
+      body.mos-regional-light #workspace-viewport:has(#mos-regional-workspace-visual) .mos-regional-title-block { position:relative !important; min-height:184px !important; padding-right:250px !important; padding-top:42px !important; box-sizing:border-box !important; }
+      body.mos-regional-light #workspace-viewport:has(#mos-regional-workspace-visual) #mos-regional-workspace-visual {
+        position:absolute !important; z-index:5 !important; top:50% !important; right:0 !important; transform:translateY(-50%) !important;
+        width:228px !important; max-width:30vw !important; height:auto !important; margin:0 !important; padding:0 !important;
+        box-sizing:border-box !important; border:0 !important; border-radius:0 !important; background:#fff !important;
+        overflow:visible !important; box-shadow:none !important; backdrop-filter:none !important; pointer-events:none !important;
       }
-      .mos-regional-visual-frame { width:100% !important; height:100% !important; overflow:hidden !important; border-radius:12px !important; display:flex !important; align-items:center !important; justify-content:center !important; background:#07101d !important; }
-      .mos-regional-visual-image { display:block !important; width:100% !important; height:100% !important; max-width:none !important; max-height:none !important; object-fit:contain !important; object-position:center !important; opacity:.96 !important; }
+      body.mos-regional-light #workspace-viewport:has(#mos-regional-workspace-visual) .mos-regional-visual-frame { width:100% !important; height:auto !important; min-height:0 !important; overflow:visible !important; display:block !important; border-radius:0 !important; background:#fff !important; }
+      body.mos-regional-light #workspace-viewport:has(#mos-regional-workspace-visual) .mos-regional-visual-image { display:block !important; width:100% !important; height:auto !important; max-width:100% !important; max-height:none !important; object-fit:contain !important; object-position:center !important; opacity:1 !important; border-radius:0 !important; filter:none !important; }
 
-      @media (max-width:900px) {
-        .mos-regional-title-block { padding-right:145px !important; min-height:120px !important; }
-        #mos-regional-workspace-visual { width:120px !important; height:120px !important; border-radius:16px !important; padding:7px !important; }
+      body.mos-regional-light #workspace-viewport [class*="bg-slate-950"],
+      body.mos-regional-light #workspace-viewport [class*="bg-slate-900"],
+      body.mos-regional-light #workspace-viewport [class*="bg-slate-800"],
+      body.mos-regional-light #workspace-viewport [class*="bg-slate-700"],
+      body.mos-regional-light #workspace-viewport [class*="bg-gray-950"],
+      body.mos-regional-light #workspace-viewport [class*="bg-gray-900"],
+      body.mos-regional-light #workspace-viewport [class*="bg-gray-800"],
+      body.mos-regional-light #workspace-viewport [class*="bg-black"] { background:#fff !important; }
+      body.mos-regional-light #workspace-viewport [class*="text-white"],
+      body.mos-regional-light #workspace-viewport [class*="text-slate-50"],
+      body.mos-regional-light #workspace-viewport [class*="text-slate-100"],
+      body.mos-regional-light #workspace-viewport [class*="text-slate-200"],
+      body.mos-regional-light #workspace-viewport [class*="text-slate-300"],
+      body.mos-regional-light #workspace-viewport [class*="text-gray-50"],
+      body.mos-regional-light #workspace-viewport [class*="text-gray-100"],
+      body.mos-regional-light #workspace-viewport [class*="text-gray-200"],
+      body.mos-regional-light #workspace-viewport [class*="text-gray-300"] { color:#172033 !important; }
+      body.mos-regional-light #workspace-viewport [class*="text-slate-400"],
+      body.mos-regional-light #workspace-viewport [class*="text-slate-500"],
+      body.mos-regional-light #workspace-viewport [class*="text-gray-400"],
+      body.mos-regional-light #workspace-viewport [class*="text-gray-500"] { color:#526071 !important; }
+      body.mos-regional-light #workspace-viewport [class*="border-slate-"],
+      body.mos-regional-light #workspace-viewport [class*="border-gray-"],
+      body.mos-regional-light #workspace-viewport [class*="border-white"] { border-color:#d7dee8 !important; }
+      body.mos-regional-light #workspace-viewport input,
+      body.mos-regional-light #workspace-viewport select,
+      body.mos-regional-light #workspace-viewport textarea { background:#fff !important; color:#172033 !important; border-color:#cbd5e1 !important; caret-color:#172033 !important; }
+      body.mos-regional-light #workspace-viewport input::placeholder,
+      body.mos-regional-light #workspace-viewport textarea::placeholder { color:#64748b !important; opacity:1 !important; }
+      body.mos-regional-light #workspace-viewport select option { background:#fff !important; color:#172033 !important; }
+      body.mos-regional-light #workspace-viewport button { color:#172033; }
+      body.mos-regional-light #workspace-viewport a { color:#075985; }
+      body.mos-regional-light #workspace-viewport [aria-selected="false"] { color:#334155 !important; }
+      body.mos-regional-light #workspace-viewport [aria-selected="true"] { color:#0f172a !important; }
+      body.mos-regional-light #workspace-viewport table { color:#172033 !important; }
+      body.mos-regional-light #workspace-viewport th,
+      body.mos-regional-light #workspace-viewport td { border-color:#e2e8f0 !important; }
+
+      @media (max-width:1000px) and (min-width:641px) {
+        body.mos-regional-light #workspace-viewport:has(#mos-regional-workspace-visual) .mos-regional-title-block { min-height:165px !important; padding-right:195px !important; }
+        body.mos-regional-light #workspace-viewport:has(#mos-regional-workspace-visual) #mos-regional-workspace-visual { width:175px !important; max-width:32vw !important; }
       }
       @media (max-width:640px) {
-        .mos-regional-title-block { padding-right:0 !important; min-height:0 !important; padding-bottom:108px !important; }
-        #mos-regional-workspace-visual { width:96px !important; height:96px !important; right:50% !important; top:auto !important; bottom:0 !important; transform:translateX(50%) !important; border-radius:14px !important; padding:6px !important; }
+        body.mos-regional-light #workspace-viewport:has(#mos-regional-workspace-visual) .mos-regional-title-block { min-height:0 !important; padding-right:0 !important; padding-top:42px !important; padding-bottom:132px !important; }
+        body.mos-regional-light #workspace-viewport:has(#mos-regional-workspace-visual) #mos-regional-workspace-visual { top:auto !important; bottom:0 !important; right:50% !important; transform:translateX(50%) !important; width:132px !important; max-width:52vw !important; height:auto !important; }
+      }
+      @media (max-width:390px) {
+        body.mos-regional-light #workspace-viewport:has(#mos-regional-workspace-visual) .mos-regional-title-block { padding-bottom:122px !important; }
+        body.mos-regional-light #workspace-viewport:has(#mos-regional-workspace-visual) #mos-regional-workspace-visual { width:112px !important; max-width:48vw !important; }
       }
 
       #student-faq-section button { min-height:52px !important; padding-top:11px !important; padding-bottom:11px !important; }
@@ -394,9 +457,10 @@ const SiteUxFixes: React.FC = () => {
       }
       @media (max-width:760px) {
         #main-header > div:first-child { min-height:60px !important; height:auto !important; padding-top:7px !important; padding-bottom:7px !important; }
-        #brand-logo { gap:6px !important; max-width:132px; }
+        #brand-logo { gap:6px !important; max-width:180px; }
         .mos-brand-mark { width:30px; height:30px; border-radius:8px; }
         .mos-brand-wordmark { font-size:14px; letter-spacing:-0.06em; }
+        .mos-brand-tagline { font-size:7px; }
         #mos-compact-header-nav { justify-content:flex-start; gap:0; padding:0 2px; }
         .mos-header-link { font-size:10px; padding:8px 5px; }
         .mos-tools-dropdown { position:fixed; top:58px; right:8px; width:min(270px,calc(100vw - 16px)); max-height:65vh; }
@@ -409,7 +473,7 @@ const SiteUxFixes: React.FC = () => {
         #student-faq-section button { min-height:48px !important; }
       }
       @media (max-width:520px) {
-        #brand-logo { max-width:112px; }
+        #brand-logo { max-width:180px; }
         .mos-brand-wordmark { font-size:13px; }
         .mos-brand-mark { width:28px; height:28px; }
         #mos-compact-header-nav { flex:1 1 auto; min-width:0; }
@@ -423,8 +487,10 @@ const SiteUxFixes: React.FC = () => {
     `;
     document.head.appendChild(style);
 
+    styleBrand();
     hideMockTestCards();
     addMockTestShortcut();
+    addCompactHeaderNav();
     addRegionalWorkspaceVisual();
     const removeNavigationListener = addNavigationListener();
 
@@ -435,8 +501,11 @@ const SiteUxFixes: React.FC = () => {
     }
 
     const observer = new MutationObserver(() => {
+      syncRegionalTheme();
+      styleBrand();
       hideMockTestCards();
       addMockTestShortcut();
+      addCompactHeaderNav();
       addRegionalWorkspaceVisual();
     });
     observer.observe(document.getElementById('root') || document.body, { childList:true, subtree:true });
@@ -447,6 +516,7 @@ const SiteUxFixes: React.FC = () => {
       style.remove();
       document.getElementById('mos-compact-header-nav')?.remove();
       document.getElementById('mos-regional-workspace-visual')?.remove();
+      document.body.classList.remove('mos-regional-light', 'mos-dark-only');
     };
   }, []);
 
