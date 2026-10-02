@@ -15,32 +15,50 @@ function writeIfChanged(file, next) {
   if (current !== next) fs.writeFileSync(file, next, 'utf8');
 }
 
-// Add one stable scope class to the dedicated support page. The replacement is
-// intentionally exact so this build-time patch cannot affect unrelated pages.
+// Keep the page scope in the actual JSX. This regex tolerates harmless class
+// ordering changes and never touches unrelated pages.
 let page = read(supportPage);
 page = page.replace(
-  'className="min-h-screen bg-[var(--mos-page-bg)] text-[var(--mos-text-primary)] tech-grid-pattern-light"',
-  'className="support-page-root min-h-screen bg-[var(--mos-page-bg)] text-[var(--mos-text-primary)] tech-grid-pattern-light"'
+  /className="([^"]*min-h-screen[^"]*tech-grid-pattern-light[^"]*)"/,
+  (_, classes) => classes.includes('support-page-root')
+    ? `className="${classes}"`
+    : `className="support-page-root ${classes}"`
 );
-page = page.replace('Support Man of Study.</h1>', 'Support Man of Study. 🫶</h1>');
-page = page.replace('Keep student tools moving.</span>', 'Keep student tools moving. 💗</span>');
-page = page.replace('Your support is gratitude — not a subscription.', 'Your support is kindness — not a subscription. 🫶');
-page = page.replace('This support does not unlock paid features or create a recurring subscription.', 'This support does not unlock paid features or create a recurring subscription. ❤️');
+
+// Add the requested warm, caring language once. These replacements are
+// idempotent so repeated Cloudflare/Vite builds do not duplicate emojis.
+page = page.replace(/Support Man of Study\.((?!🫶)[\s\S]{0,4})/, 'Support Man of Study. 🫶');
+page = page.replace(/Keep student tools moving\.((?!💗)[\s\S]{0,4})/, 'Keep student tools moving. 💗');
+page = page.replace(
+  'Your support is gratitude — not a subscription.',
+  'Your support is kindness — not a subscription. 🫶'
+);
+page = page.replace(
+  'This support does not unlock paid features or create a recurring subscription.',
+  'This support does not unlock paid features or create a recurring subscription. ❤️'
+);
 writeIfChanged(supportPage, page);
 
-// Keep the existing modal behavior and structure; only add the requested emotional
-// wording/emoji and let the scoped CSS below handle the visual theme.
 let modal = read(supportModal);
-modal = modal.replace('Support MAN OF STUDY Development</h2>', 'Support MAN OF STUDY Development 🫶</h2>');
-modal = modal.replace('Every dataset, rank predictor, and student tool on this platform is built independently.', 'Every dataset, rank predictor, and student tool on this platform is built independently. Your kindness helps keep it going. 💗');
-modal = modal.replace('మా website మీకు ఉపయోగపడితే, మీ ఇష్టపూర్వకంగా support చేయవచ్చు. ❤️', 'మా website మీకు ఉపయోగపడితే, మీ ఇష్టపూర్వకంగా support చేయవచ్చు. 🫶💗');
+modal = modal.replace(
+  'Support MAN OF STUDY Development</h2>',
+  'Support MAN OF STUDY Development 🫶</h2>'
+);
+modal = modal.replace(
+  'Every dataset, rank predictor, and student tool on this platform is built independently. Voluntary contributions help cover practical technical costs.',
+  'Every dataset, rank predictor, and student tool on this platform is built independently. Your kindness helps keep it going. 💗 Voluntary contributions help cover practical technical costs.'
+);
+modal = modal.replace(
+  'మా website మీకు ఉపయోగపడితే, మీ ఇష్టపూర్వకంగా support చేయవచ్చు. ❤️',
+  'మా website మీకు ఉపయోగపడితే, మీ ఇష్టపూర్వకంగా support చేయవచ్చు. 🫶💗'
+);
 writeIfChanged(supportModal, modal);
 
-const marker = '/* MOS SUPPORT RASPBERRY THEME — scoped */';
+const marker = '/* MOS SUPPORT RASPBERRY THEME — scoped v2 */';
 let css = read(indexCss);
 if (!css.includes(marker)) {
-  css += `\n\n${marker}\n/* Dedicated support-page palette. Nothing here changes global MOS theme tokens. */\n.support-page-root {\n  --support-pink-50: #fff1f7;\n  --support-pink-100: #ffe4ef;\n  --support-pink-200: #fecddf;\n  --support-pink-400: #f472a8;\n  --support-pink-500: #db2777;\n  --support-pink-600: #c21868;\n  --support-pink-700: #a31557;\n  --support-pink-900: #641033;\n}\n\n.support-page-root > header {\n  border-color: var(--support-pink-200);\n  background: color-mix(in srgb, #ffffff 92%, var(--support-pink-100));\n}\n\n.support-page-root main section:first-child {\n  background: linear-gradient(135deg, #8f124d 0%, #be185d 48%, #db2777 100%);\n  border-color: rgba(255, 255, 255, .20);\n}\n\n.support-page-root main section:first-child .bg-emerald-500\\/20 { background-color: rgba(244, 114, 168, .24); }\n.support-page-root main section:first-child .bg-blue-500\\/20 { background-color: rgba(251, 207, 232, .18); }\n.support-page-root main section:first-child .text-emerald-300 { color: #ffd1e5; }\n.support-page-root main section:first-child .border-emerald-400\\/30 { border-color: rgba(255, 209, 229, .40); }\n.support-page-root main section:first-child .bg-emerald-400\\/10 { background-color: rgba(255, 209, 229, .12); }\n\n.support-page-root main section:not(:first-child) [class*="bg-emerald-50"],\n.support-page-root main section:not(:first-child) [class*="bg-emerald-950"] {\n  background-color: var(--support-pink-50);\n}\n\n.support-page-root main section:not(:first-child) [class*="text-emerald-600"],\n.support-page-root main section:not(:first-child) [class*="text-emerald-700"],\n.support-page-root main section:not(:first-child) [class*="text-emerald-400"],\n.support-page-root main section:not(:first-child) [class*="text-emerald-300"] {\n  color: var(--support-pink-600);\n}\n\n.support-page-root main section:not(:first-child) [class*="border-emerald-200"],\n.support-page-root main section:not(:first-child) [class*="border-emerald-500"],\n.support-page-root main section:not(:first-child) [class*="border-emerald-900"] {\n  border-color: var(--support-pink-200);\n}\n\n.support-page-root main section:not(:first-child) [class*="bg-emerald-600"] {\n  background-color: var(--support-pink-600);\n}\n.support-page-root main section:not(:first-child) [class*="bg-emerald-600"]:hover {\n  background-color: var(--support-pink-700);\n}\n\n.support-page-root main section:not(:first-child) [class*="text-blue-600"],\n.support-page-root main section:not(:first-child) [class*="text-blue-400"] {\n  color: var(--support-pink-600);\n}\n\n/* Support modal: scoped by its existing stable ID. */\n#support-donation-modal-overlay {\n  background: rgba(64, 5, 35, .76);\n}\n#support-donation-modal-card {\n  border-color: var(--support-pink-200);\n  box-shadow: 0 24px 70px rgba(190, 24, 93, .28);\n}\n#support-donation-modal-card > .absolute.top-0 {\n  background-image: linear-gradient(to right, #be185d, #db2777, #f472a8);\n}\n#support-donation-modal-card [class*="bg-emerald-50"],\n#support-donation-modal-card [class*="bg-emerald-950"] {\n  background-color: var(--support-pink-50);\n}\n#support-donation-modal-card [class*="text-emerald-700"],\n#support-donation-modal-card [class*="text-emerald-600"],\n#support-donation-modal-card [class*="text-emerald-400"],\n#support-donation-modal-card [class*="text-emerald-300"] {\n  color: var(--support-pink-600);\n}\n#support-donation-modal-card [class*="border-emerald-500"],\n#support-donation-modal-card [class*="border-emerald-200"],\n#support-donation-modal-card [class*="border-emerald-800"] {\n  border-color: var(--support-pink-400);\n}\n#support-donation-modal-card [class*="ring-emerald-500"] {\n  --tw-ring-color: rgba(219, 39, 119, .20);\n}\n#support-donation-modal-card [class*="bg-gradient-to-r from-emerald-600"] {\n  background-image: linear-gradient(to right, #be185d, #db2777);\n}\n#support-donation-modal-card [class*="bg-gradient-to-r from-emerald-600"]:hover {\n  background-image: linear-gradient(to right, #a31557, #be185d);\n}\n\n@media (prefers-reduced-motion: reduce) {\n  #support-donation-modal-card .animate-pulse { animation: none !important; }\n}\n`;
+  css += `\n\n${marker}\n/* Only SupportPage and SupportModal are affected. No global MOS palette changes. */\n.support-page-root {\n  --support-raspberry-50: #fff0f6;\n  --support-raspberry-100: #ffd9e8;\n  --support-raspberry-200: #ffb8d2;\n  --support-raspberry-300: #ff8fba;\n  --support-raspberry-500: #e83e8c;\n  --support-raspberry-600: #d62972;\n  --support-raspberry-700: #b91f60;\n}\n\n/* Bright raspberry hero — deliberately different from the old dark theme. */\n.support-page-root main > section:first-child {\n  background: linear-gradient(135deg, #fff0f6 0%, #ffd9e8 48%, #ffc1d9 100%) !important;\n  color: #5a1232 !important;\n  border-color: #ffb8d2 !important;\n  box-shadow: 0 24px 60px rgba(214, 41, 114, .14) !important;\n}\n.support-page-root main > section:first-child .text-white { color: #5a1232 !important; }\n.support-page-root main > section:first-child .text-slate-300,\n.support-page-root main > section:first-child .text-slate-400 { color: #7d3a57 !important; }\n.support-page-root main > section:first-child .text-emerald-300 { color: #c21f68 !important; }\n.support-page-root main > section:first-child .border-emerald-400\\/30 { border-color: rgba(194, 31, 104, .28) !important; }\n.support-page-root main > section:first-child .bg-emerald-400\\/10,\n.support-page-root main > section:first-child .bg-emerald-500\\/20,\n.support-page-root main > section:first-child .bg-blue-500\\/20 { background-color: rgba(232, 62, 140, .12) !important; }\n.support-page-root main > section:first-child .bg-white\\/\\[0\.06\\] { background-color: rgba(255, 255, 255, .62) !important; }\n.support-page-root main > section:first-child .border-white\\/10 { border-color: rgba(185, 31, 96, .15) !important; }\n\n/* Raspberry accents throughout the dedicated support page. */\n.support-page-root main > section:not(:first-child) [class*="bg-emerald-50"],\n.support-page-root main > section:not(:first-child) [class*="bg-emerald-950"] { background-color: var(--support-raspberry-50) !important; }\n.support-page-root main > section:not(:first-child) [class*="text-emerald-600"],\n.support-page-root main > section:not(:first-child) [class*="text-emerald-700"],\n.support-page-root main > section:not(:first-child) [class*="text-emerald-400"],\n.support-page-root main > section:not(:first-child) [class*="text-emerald-300"] { color: var(--support-raspberry-600) !important; }\n.support-page-root main > section:not(:first-child) [class*="border-emerald-200"],\n.support-page-root main > section:not(:first-child) [class*="border-emerald-500"],\n.support-page-root main > section:not(:first-child) [class*="border-emerald-900"] { border-color: var(--support-raspberry-200) !important; }\n.support-page-root main > section:not(:first-child) [class*="bg-emerald-600"] { background-color: var(--support-raspberry-600) !important; }\n.support-page-root main > section:not(:first-child) [class*="bg-emerald-600"]:hover { background-color: var(--support-raspberry-700) !important; }\n.support-page-root main > section:not(:first-child) [class*="text-blue-600"],\n.support-page-root main > section:not(:first-child) [class*="text-blue-400"] { color: var(--support-raspberry-600) !important; }\n\n/* Support popup. These selectors use its existing stable IDs only. */\n#support-donation-modal-overlay { background: rgba(76, 8, 40, .64) !important; }\n#support-donation-modal-card { border-color: var(--support-raspberry-200) !important; box-shadow: 0 24px 70px rgba(214, 41, 114, .25) !important; }\n#support-donation-modal-card > .absolute.top-0 { background-image: linear-gradient(to right, #d62972, #e83e8c, #ff8fba) !important; }\n#support-donation-modal-card [class*="bg-emerald-50"],\n#support-donation-modal-card [class*="bg-emerald-950"] { background-color: var(--support-raspberry-50) !important; }\n#support-donation-modal-card [class*="text-emerald-700"],\n#support-donation-modal-card [class*="text-emerald-600"],\n#support-donation-modal-card [class*="text-emerald-400"],\n#support-donation-modal-card [class*="text-emerald-300"] { color: var(--support-raspberry-600) !important; }\n#support-donation-modal-card [class*="border-emerald-500"],\n#support-donation-modal-card [class*="border-emerald-200"],\n#support-donation-modal-card [class*="border-emerald-800"] { border-color: var(--support-raspberry-200) !important; }\n#support-donation-modal-card [class*="ring-emerald-500"] { --tw-ring-color: rgba(232, 62, 140, .20) !important; }\n#support-donation-modal-card [class*="bg-gradient-to-r from-emerald-600"] { background-image: linear-gradient(to right, #d62972, #e83e8c) !important; }\n#support-donation-modal-card [class*="bg-gradient-to-r from-emerald-600"]:hover { background-image: linear-gradient(to right, #b91f60, #d62972) !important; }\n\n@media (prefers-reduced-motion: reduce) {\n  #support-donation-modal-card .animate-pulse { animation: none !important; }\n}\n`;
   fs.writeFileSync(indexCss, css, 'utf8');
 }
 
-console.log('[MOS] Scoped raspberry support theme patch applied.');
+console.log('[MOS] Support raspberry theme v2 applied safely.');
