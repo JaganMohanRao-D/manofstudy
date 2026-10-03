@@ -12,9 +12,7 @@ let source = fs.readFileSync(target, 'utf8');
 let changed = false;
 
 const replaceOnce = (from, to, label) => {
-  if (!source.includes(from)) {
-    return;
-  }
+  if (!source.includes(from)) return;
   source = source.replace(from, to);
   changed = true;
   console.log(`[ap-top-ranking] ${label}`);
@@ -44,7 +42,7 @@ if (start >= 0 && end >= 0) {
             </div>
 
             <span className="text-[11px] text-slate-500 dark:text-slate-400">
-              Showing <strong className="text-slate-800 dark:text-slate-200">{rows.length}</strong> matching institutions
+              Showing <strong className="text-slate-800 dark:text-slate-200">\${rows.length}</strong> matching institutions
             </span>
           </div>
         </section>
