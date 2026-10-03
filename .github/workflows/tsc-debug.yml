@@ -17,8 +17,10 @@ jobs:
         with:
           node-version: 22
       - run: npm install --no-audit --no-fund
-      - name: Apply build syntax repair before diagnostics
-        run: node scripts/fixAllotmentUxSyntax.cjs
+      - name: Apply production source repairs before diagnostics
+        run: |
+          node scripts/fixAllotmentUxSyntax.cjs
+          node scripts/fixTypeScriptIssues.cjs
       - name: Capture TypeScript diagnostics
         shell: bash
         run: |
