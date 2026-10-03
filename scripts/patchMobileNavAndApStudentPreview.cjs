@@ -18,19 +18,16 @@ function patchFile(relativePath, transform, label) {
 patchFile('src/components/Header.tsx', (source) => {
   let next = source;
 
-  // Explicit hook so regional CSS cannot accidentally re-show desktop nav on compact layouts.
   next = next.replace(
     '<nav className="hidden flex-1 items-center justify-center gap-1 lg:flex" aria-label="Primary navigation">',
     '<nav id="mos-desktop-primary-nav" className="hidden flex-1 items-center justify-center gap-1 lg:flex" aria-label="Primary navigation">'
   );
 
-  // Search + Support + hamburger must remain visible on phones and tablets.
   next = next.replace(
     'className="hidden sm:inline-flex h-9 items-center gap-1.5 rounded-xl border border-cyan-300/15 bg-cyan-400/8 px-3 text-xs font-bold text-cyan-200 hover:bg-cyan-400/15 hover:text-white transition-colors"><Heart className="h-3.5 w-3.5" /> Support</button>',
     'className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-cyan-300/15 bg-cyan-400/8 px-2.5 sm:px-3 text-xs font-bold text-cyan-200 hover:bg-cyan-400/15 hover:text-white transition-colors"><Heart className="h-3.5 w-3.5" /><span>Support</span></button>'
   );
 
-  // Compact menu: exactly Search Tools, For AP, For TG and Other Tools.
   if (!next.includes('id="mobile-search-tools"')) {
     const mobileNavPattern = /      \{mobileOpen && \(\n        <div className="border-t border-cyan-300\/10 bg-\[#040b16\] px-3 pb-4 pt-2 lg:hidden">[\s\S]*?        <\/div>\n      \)\}/;
     if (!mobileNavPattern.test(next)) {
@@ -57,7 +54,6 @@ patchFile('src/components/Header.tsx', (source) => {
     next = next.replace(mobileNavPattern, mobileNav);
   }
 
-  // Hard CSS guard: <=1023px is compact/mobile/tablet; >=1024px stays desktop.
   if (!next.includes('id="mos-responsive-header-fix"')) {
     const styleBlock = `
 const RESPONSIVE_HEADER_STYLE = (
@@ -95,60 +91,53 @@ const RESPONSIVE_HEADER_STYLE = (
   return next;
 }, 'responsive mobile/tablet navigation');
 
+// The old build patch used to inject a "Selected branch students" preview.
+// That subset was removed intentionally. The neutral, paginated student table
+// is now the single student-list presentation, so this script must never
+// recreate the old preview on future Cloudflare/Vite builds.
 patchFile('src/components/ap-allotment/APAllotmentExplorer.tsx', (source) => {
   let next = source;
-
-  // Show exactly five names from the already selected year/phase/college/branch records.
-  if (!next.includes('const selectedStudentPreview = useMemo(() => {')) {
-    const marker = '  const genderMix = useMemo(() => {\n';
-    const start = next.indexOf(marker);
-    const end = next.indexOf('\n\n  const bestRank =', start);
-    if (start < 0 || end < 0) {
-      throw new Error('[mobile-ap-ux] genderMix insertion marker not found; refusing to modify APAllotmentExplorer.tsx.');
+  const legacyStart = next.indexOf('                    {selectedStudentPreview.length > 0 && (');
+  if (legacyStart >= 0) {
+    const legacyEnd = next.indexOf('                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">', legacyStart);
+    if (legacyEnd < 0) {
+      throw new Error('[mobile-ap-ux] legacy student preview boundary not found; refusing to modify APAllotmentExplorer.tsx.');
     }
-
-    const block = `  const selectedStudentPreview = useMemo(() => {
-    if (selectedCollegeCode === 'ALL' || selectedBranchCode === 'ALL') return [];
-    return visibleRecords
-      .map((record) => String(record.cand_name ?? '').trim())
-      .filter(Boolean)
-      .slice(0, 5);
-  }, [visibleRecords, selectedCollegeCode, selectedBranchCode]);
-`;
-    next = next.slice(0, end) + '\n\n' + block + next.slice(end);
+    next = next.slice(0, legacyStart) + next.slice(legacyEnd);
   }
+  const stateStart = next.indexOf('  const selectedStudentPreview = useMemo(() => {');
+  if (stateStart >= 0) {
+    const stateEnd = next.indexOf('\n\n  const bestRank =', stateStart);
+    if (stateEnd < 0) {
+      throw new Error('[mobile-ap-ux] legacy student preview state boundary not found; refusing to modify APAllotmentExplorer.tsx.');
+    }
+    next = next.slice(0, stateStart) + next.slice(stateEnd + 2);
+  }
+  return next;
+}, 'retire selected-student preview');
 
-  if (!next.includes('id="ap-selected-student-preview"')) {
-    const marker = '                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">';
+patchFile('src/components/ap-allotment/APAllotmentTable.tsx', (source) => {
+  let next = source;
+  next = next.replace(
+    "import React, { useState, useMemo, useCallback } from 'react';",
+    "import React, { useState, useMemo, useCallback, useEffect } from 'react';"
+  );
+  next = next.replace('  const pageSize = 25;', '  const pageSize = 10;');
+  if (!next.includes('setCurrentPage(1);\n    setExpandedStudentKey(null);')) {
+    const marker = '  const paginatedRecords = useMemo(() => {\n';
     const index = next.indexOf(marker);
     if (index < 0) {
-      throw new Error('[mobile-ap-ux] AP stats insertion marker not found; refusing to modify APAllotmentExplorer.tsx.');
+      throw new Error('[mobile-ap-ux] APAllotmentTable pagination marker not found; refusing to modify the table.');
     }
-
-    const block = `                    {selectedStudentPreview.length > 0 && (
-                      <section id="ap-selected-student-preview" className="rounded-3xl border border-cyan-500/15 bg-gradient-to-br from-cyan-50/80 via-white to-indigo-50/70 dark:from-cyan-950/30 dark:via-slate-900/80 dark:to-indigo-950/30 p-4 sm:p-5 shadow-xl">
-                        <div className="flex flex-col gap-1.5 sm:flex-row sm:items-end sm:justify-between">
-                          <div>
-                            <p className="text-[10px] font-black uppercase tracking-[0.15em] text-cyan-600 dark:text-cyan-300">Selected branch students</p>
-                            <h3 className="mt-1 text-base sm:text-lg font-black text-slate-950 dark:text-white">Student names</h3>
-                            <p className="mt-1 text-[11px] leading-5 text-slate-500 dark:text-slate-400">First 5 names from the selected {branchLabel} allotment records. More students remain available in the full allotment table below.</p>
-                          </div>
-                          <span className="shrink-0 rounded-full border border-cyan-500/15 bg-cyan-500/10 px-3 py-1.5 text-[10px] font-bold text-cyan-700 dark:text-cyan-300">Showing {selectedStudentPreview.length} names</span>
-                        </div>
-                        <ol className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
-                          {selectedStudentPreview.map((name, index) => (
-                            <li key={name + index} className="flex min-w-0 items-center gap-2.5 rounded-2xl border border-slate-200/80 bg-white/80 px-3 py-3 dark:border-white/10 dark:bg-slate-950/40">
-                              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-cyan-500/10 text-[10px] font-black text-cyan-700 dark:text-cyan-300">{index + 1}</span>
-                              <span className="min-w-0 truncate text-xs font-bold text-slate-800 dark:text-slate-200" title={name}>{name}</span>
-                            </li>
-                          ))}
-                        </ol>
-                      </section>
-                    )}
-
-`;
-    next = next.slice(0, index) + block + next.slice(index);
+    const effect = `  useEffect(() => {\n    setCurrentPage(1);\n    setExpandedStudentKey(null);\n  }, [records]);\n\n`;
+    next = next.slice(0, index) + effect + next.slice(index);
   }
-
   return next;
-}, 'AP student-name preview');
+}, 'neutral 10-record AP pagination');
+
+patchFile('src/components/ap-allotment/APAllotmentExplorer.tsx', (source) => {
+  return source.replace(
+    '<h3 className="font-bold text-slate-950 dark:text-white">Allotted students</h3>',
+    '<h3 className="font-bold text-slate-950 dark:text-white">All Allotted Students</h3>'
+  );
+}, 'neutral AP student-list heading');
