@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node scripts/patchAppNavigation.cjs && node scripts/generateApAllotmentIndexes.cjs && node scripts/generateManifest.cjs && node scripts/patchRegionalHeader.cjs && node scripts/fixAllotmentUxSyntax.cjs && node scripts/patchAllotmentUx.cjs && node scripts/patchMobileNavAndApStudentPreview.cjs && node scripts/patchRoadmapModalPortal.cjs && node scripts/patchSupportRaspberryTheme.cjs && node scripts/disableSearchSupportPrompt.cjs && node scripts/brandPdfExports.cjs && node scripts/fixScholarshipPortalVisuals.cjs && vite --port=3000 --host=0.0.0.0",
-    "prebuild": "node scripts/patchAppNavigation.cjs && node scripts/generateApAllotmentIndexes.cjs && node scripts/generateManifest.cjs && node scripts/patchRegionalHeader.cjs && node scripts/fixAllotmentUxSyntax.cjs && node scripts/patchAllotmentUx.cjs && node scripts/patchMobileNavAndApStudentPreview.cjs && node scripts/patchRoadmapModalPortal.cjs && node scripts/patchSupportRaspberryTheme.cjs && node scripts/disableSearchSupportPrompt.cjs && node scripts/brandPdfExports.cjs && node scripts/fixScholarshipPortalVisuals.cjs",
+    "dev": "node scripts/patchAppNavigation.cjs && node scripts/generateApAllotmentIndexes.cjs && node scripts/generateManifest.cjs && node scripts/patchRegionalHeader.cjs && node scripts/fixAllotmentUxSyntax.cjs && node scripts/patchAllotmentUx.cjs && node scripts/patchMobileNavAndApStudentPreview.cjs && node scripts/patchRoadmapModalPortal.cjs && node scripts/patchSupportRaspberryTheme.cjs && node scripts/disableSearchSupportPrompt.cjs && node scripts/finalizeApAllotmentUx.cjs && node scripts/brandPdfExports.cjs && node scripts/fixScholarshipPortalVisuals.cjs && vite --port=3000 --host=0.0.0.0",
+    "prebuild": "node scripts/patchAppNavigation.cjs && node scripts/generateApAllotmentIndexes.cjs && node scripts/generateManifest.cjs && node scripts/patchRegionalHeader.cjs && node scripts/fixAllotmentUxSyntax.cjs && node scripts/patchAllotmentUx.cjs && node scripts/patchMobileNavAndApStudentPreview.cjs && node scripts/patchRoadmapModalPortal.cjs && node scripts/patchSupportRaspberryTheme.cjs && node scripts/disableSearchSupportPrompt.cjs && node scripts/finalizeApAllotmentUx.cjs && node scripts/brandPdfExports.cjs && node scripts/fixScholarshipPortalVisuals.cjs",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
@@ -27,8 +27,6 @@
     "motion": "^12.23.24",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^6.3.289",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "xlsx": "^0.18.5",
     "vite": "^6.2.3"
   },
