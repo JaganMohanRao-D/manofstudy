@@ -34,10 +34,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          # The repository intentionally carries a build-time syntax repairer
-          # for the legacy AP/TG analytics patcher. Run it before syntax-checking
-          # that patcher so CI validates the same safe state used by prebuild.
+          # Apply the same deterministic source compatibility patches used by
+          # the production prebuild before checking every build-time script.
           node scripts/fixAllotmentUxSyntax.cjs
+          node scripts/fixTypeScriptIssues.cjs
           for file in scripts/*.cjs; do
             node --check "$file"
           done
