@@ -44,7 +44,7 @@ patchFile(
       const match = ordered.find((key) => raw === key || raw.startsWith(key + '_'));
       if (match) return match;
       const numericSc = raw.match(/^SC[_-]?([123])(?:_|$)/);
-      if (numericSc) return `SC_${['I', 'II', 'III'][Number(numericSc[1]) - 1]}`;
+      if (numericSc) return 'SC_' + ['I', 'II', 'III'][Number(numericSc[1]) - 1];
       return String(record.category || 'OTHER').trim().toUpperCase();
     };
 
@@ -246,7 +246,7 @@ patchFile(
       const match = ordered.find((key) => raw === key || raw.startsWith(key + '_'));
       if (match) return match;
       const numericSc = raw.match(/^SC[_-]?([123])(?:_|$)/);
-      if (numericSc) return \`SC_\${['I', 'II', 'III'][Number(numericSc[1]) - 1]}\`;
+      if (numericSc) return 'SC_' + ['I', 'II', 'III'][Number(numericSc[1]) - 1];
       return String(record.category || 'OTHER').trim().toUpperCase();
     };
 
@@ -260,22 +260,31 @@ patchFile(
       map.set(key, item);
     });
 
-    return Array.from(map.entries()).sort((a, b) => {
-      const ai = CATEGORY_ORDER.indexOf(a[0]);
-      const bi = CATEGORY_ORDER.indexOf(b[0]);
-      if (ai === -1 && bi === -1) return a[0].localeCompare(b[0]);
-      if (ai === -1) return 1;
-      if (bi === -1) return -1;
-      return ai - bi;
-    });
+    return Array.from(map.entries())
+      .sort((a, b) => {
+        const ai = CATEGORY_ORDER.indexOf(a[0]);
+        const bi = CATEGORY_ORDER.indexOf(b[0]);
+        if (ai === -1 && bi === -1) return a[0].localeCompare(b[0]);
+        if (ai === -1) return 1;
+        if (bi === -1) return -1;
+        return ai - bi;
+      });
   }, [visibleRecords]);`;
 
-    next = next.slice(0, start) + replacement + next.slice(end);
-    next = next.replace(
-      '<p className="text-[10px] font-black uppercase tracking-[0.14em] text-cyan-400">Category mix</p><h3 className="mt-1 font-black text-slate-950 dark:text-white">Candidate categories</h3>',
-      '<p className="text-[10px] font-black uppercase tracking-[0.14em] text-cyan-400">Allotted category mix</p><h3 className="mt-1 font-black text-slate-950 dark:text-white">Seat categories</h3>'
-    );
+    return next.slice(0, start) + replacement + next.slice(end);
+  },
+  'AP allotted category analytics'
+);
+
+patchFile(
+  'src/components/ap-allotment/APAllotmentExplorer.tsx',
+  (source) => {
+    let next = source;
+    if (!next.includes('const statewideCategoryBars = useMemo(() => (')) return next;
+    const legacyMarker = '  const currentCollege = selectedCollegeCode !== \'ALL\' ? collegeData : null;';
+    const legacyIndex = next.indexOf(legacyMarker);
+    if (legacyIndex < 0) return next;
     return next;
   },
-  'AP allotted category mix'
+  'AP statewide category analytics'
 );
