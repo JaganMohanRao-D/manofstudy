@@ -24,13 +24,28 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
 
   return (
     <section id="hero-banner" className="relative overflow-hidden bg-[#030914] text-white">
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+        >
+          <source src="/hero-mobile.webm" type="video/webm" media="(max-width: 767px)" />
+          <source src="/hero-desktop.webm" type="video/webm" />
+        </video>
+        <div className="absolute inset-0 bg-[#030914]/65" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#030914]/90 via-[#030914]/65 to-[#030914]/78" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#030914]/35 via-transparent to-[#030914]/90" />
         <div className="absolute -left-28 top-10 h-72 w-72 rounded-full bg-cyan-500/10 blur-3xl" />
         <div className="absolute right-0 top-0 h-96 w-96 rounded-full bg-blue-500/10 blur-3xl" />
         <div className="absolute inset-0 opacity-[0.18]" style={{ backgroundImage: 'linear-gradient(rgba(34,211,238,.18) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,.18) 1px, transparent 1px)', backgroundSize: '44px 44px' }} />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 pb-14 pt-10 sm:px-6 sm:pb-20 sm:pt-14 lg:px-8 lg:pb-24 lg:pt-16">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 pb-14 pt-10 sm:px-6 sm:pb-20 sm:pt-14 lg:px-8 lg:pb-24 lg:pt-16">
         <div className="grid items-center gap-10 lg:grid-cols-[1.02fr_.98fr] lg:gap-14">
           <div className="max-w-2xl">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-300/15 bg-cyan-400/8 px-3.5 py-1.5 text-xs font-bold text-cyan-200">
@@ -104,7 +119,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         </div>
       </div>
 
-      <div id="features-hub" className="relative border-t border-white/8 bg-[#050d18]">
+      <div id="features-hub" className="relative z-10 border-t border-white/8 bg-[#050d18]">
         <FeaturesHub activeWorkspace={activeWorkspace} onSelectWorkspace={onSelectWorkspace} />
       </div>
     </section>
