@@ -1,4 +1,5 @@
 import React from 'react';
+import './heroStraightening.css';
 import { ShieldCheck, Database, Lock, ArrowRight, Map, Trophy, ClipboardCheck, GraduationCap, Sparkles, FileText } from 'lucide-react';
 import { FeaturesHub } from './FeaturesHub';
 
