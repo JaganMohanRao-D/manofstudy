@@ -12,9 +12,6 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Homepage regional CTA behavior: keep the user on the homepage and
-  // smoothly scroll to the matching AP/TG tools group instead of launching
-  // a specific predictor workspace.
   const scrollToRegionalTools = (regionTitle) => {
     onSelectWorkspace?.('hub');
 
