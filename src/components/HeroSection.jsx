@@ -23,21 +23,31 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
   ];
 
   return (
-    <section id="hero-banner" className="relative z-[1] overflow-visible bg-transparent text-white">
+    <section
+      id="hero-banner"
+      className="relative z-[1] w-full max-w-none origin-center rotate-0 skew-x-0 skew-y-0 overflow-visible bg-transparent text-white transform-none"
+      style={{ transform: 'none', rotate: '0deg', skewX: '0deg', skewY: '0deg' }}
+    >
       {/*
         IMPORTANT: Keep the video INSIDE the homepage stacking context.
         The app root has a page background, so a body-level z-0 video can be
         hidden behind that background. This root-level section keeps the video
         above the page background while the foreground content stays above it.
         Because this element is fixed, it does not move when the page scrolls.
+
+        MOBILE ALIGNMENT SAFETY:
+        Keep the hero and its visual layer explicitly untransformed. This
+        prevents inherited/accidental rotate, skew, or transform styles from
+        making the mobile hero appear diagonally tilted. Desktop styling and
+        the existing visual asset are otherwise left unchanged.
       */}
       <div
-        className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-[#020711]"
-        style={{ width: '100vw', height: '100dvh' }}
+        className="pointer-events-none fixed inset-0 z-0 w-full max-w-none origin-center rotate-0 skew-x-0 skew-y-0 transform-none overflow-hidden bg-[#020711]"
+        style={{ width: '100vw', height: '100dvh', transform: 'none', rotate: '0deg', skewX: '0deg', skewY: '0deg' }}
         aria-hidden="true"
       >
         <video
-          className="absolute inset-0 h-full w-full object-contain object-center"
+          className="absolute inset-0 h-full w-full max-w-none origin-center rotate-0 skew-x-0 skew-y-0 transform-none object-contain object-center"
           autoPlay
           muted
           loop
@@ -47,6 +57,10 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
           style={{
             opacity: 0.94,
             filter: 'brightness(1.12) saturate(1.08) contrast(1.04)',
+            transform: 'none',
+            rotate: '0deg',
+            skewX: '0deg',
+            skewY: '0deg',
           }}
         >
           <source src="/hero-mobile.webm" type="video/webm" media="(max-width: 767px)" />
