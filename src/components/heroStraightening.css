@@ -41,7 +41,7 @@
 }
 
 /* The navigator must visually belong to the hero background, not look like a floating card. */
-#hero-banner .lg\\:pl-2 > div {
+#hero-banner .lg\:pl-2 > div {
   border: 0 !important;
   border-radius: 0 !important;
   background: transparent !important;
@@ -51,7 +51,7 @@
   padding: 0 !important;
 }
 
-#hero-banner .lg\\:pl-2 > div > div {
+#hero-banner .lg\:pl-2 > div > div {
   border-radius: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
@@ -60,7 +60,7 @@
 }
 
 /* Keep the individual navigator rows subtle; only the outer panel/card is removed. */
-#hero-banner .lg\\:pl-2 button {
+#hero-banner .lg\:pl-2 button {
   transform: none !important;
   rotate: 0deg !important;
   skew: 0deg !important;
