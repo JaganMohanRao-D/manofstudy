@@ -11,6 +11,27 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Homepage regional CTA behavior: keep the user on the homepage and
+  // smoothly scroll to the matching AP/TG tools group instead of launching
+  // a specific predictor workspace.
+  const scrollToRegionalTools = (regionTitle) => {
+    onSelectWorkspace?.('hub');
+
+    window.requestAnimationFrame(() => {
+      const sections = Array.from(document.querySelectorAll('#features-hub section'));
+      const target = sections.find((section) => {
+        const text = section.textContent?.replace(/\s+/g, ' ').trim() || '';
+        return text.includes(regionTitle);
+      });
+
+      if (!target) return;
+
+      const headerOffset = 88;
+      const top = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    });
+  };
+
   const navigatorItems = [
     { label: 'AP EAPCET College Predictor', note: 'Explore colleges around your rank', workspace: 'ap-predictor', icon: Map },
     { label: 'TG EAPCET College Predictor', note: 'Filter Telangana options by rank', workspace: 'tg-predictor', icon: Map },
@@ -28,19 +49,6 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
       className="relative z-[1] w-full max-w-none origin-center rotate-0 skew-x-0 skew-y-0 overflow-visible bg-transparent text-white transform-none"
       style={{ transform: 'none', rotate: '0deg', skewX: '0deg', skewY: '0deg' }}
     >
-      {/*
-        IMPORTANT: Keep the video INSIDE the homepage stacking context.
-        The app root has a page background, so a body-level z-0 video can be
-        hidden behind that background. This root-level section keeps the video
-        above the page background while the foreground content stays above it.
-        Because this element is fixed, it does not move when the page scrolls.
-
-        MOBILE ALIGNMENT SAFETY:
-        Keep the hero and its visual layer explicitly untransformed. This
-        prevents inherited/accidental rotate, skew, or transform styles from
-        making the mobile hero appear diagonally tilted. Desktop styling and
-        the existing visual asset are otherwise left unchanged.
-      */}
       <div
         className="pointer-events-none fixed inset-0 z-0 w-full max-w-none origin-center rotate-0 skew-x-0 skew-y-0 transform-none overflow-hidden bg-[#020711]"
         style={{ width: '100vw', height: '100dvh', transform: 'none', rotate: '0deg', skewX: '0deg', skewY: '0deg' }}
@@ -78,7 +86,6 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         />
       </div>
 
-      {/* Foreground content: z-10 guarantees the video can never cover the UI. */}
       <div className="relative z-10 mx-auto max-w-7xl px-4 pb-14 pt-10 sm:px-6 sm:pb-20 sm:pt-14 lg:px-8 lg:pb-24 lg:pt-16">
         <div className="grid items-center gap-10 lg:grid-cols-[1.02fr_.98fr] lg:gap-14">
           <div className="max-w-2xl">
@@ -97,10 +104,10 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
-              <button type="button" onClick={() => go('ap-predictor')} className="group inline-flex items-center gap-2 rounded-xl bg-cyan-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-cyan-500/15 transition hover:bg-cyan-300">
+              <button type="button" onClick={() => scrollToRegionalTools('FOR AP STUDENTS')} className="group inline-flex items-center gap-2 rounded-xl bg-cyan-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-cyan-500/15 transition hover:bg-cyan-300">
                 Explore AP tools <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </button>
-              <button type="button" onClick={() => go('tg-predictor')} className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-[#030914]/45 px-5 py-3 text-sm font-bold text-slate-100 backdrop-blur-sm transition hover:border-cyan-300/25 hover:bg-cyan-400/10 hover:text-white">
+              <button type="button" onClick={() => scrollToRegionalTools('FOR TELANGANA STUDENTS')} className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-[#030914]/45 px-5 py-3 text-sm font-bold text-slate-100 backdrop-blur-sm transition hover:border-cyan-300/25 hover:bg-cyan-400/10 hover:text-white">
                 Explore TG tools
               </button>
             </div>
