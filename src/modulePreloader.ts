@@ -82,15 +82,25 @@ if (typeof window !== 'undefined') {
 
   // Keep the loading message student-friendly without touching the workspace
   // implementation or its Suspense/error handling.
-  const replaceLoadingMessage = () => {
-    document.querySelectorAll('span').forEach((span) => {
+  const updateLoadingText = (root: ParentNode) => {
+    root.querySelectorAll('span').forEach((span) => {
       if (span.textContent?.trim() === 'Loading module...') {
         span.textContent = "Hold on student, it's loading";
       }
     });
   };
 
-  const observer = new MutationObserver(replaceLoadingMessage);
+  const observer = new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      mutation.addedNodes.forEach((node) => {
+        if (node.nodeType !== Node.ELEMENT_NODE) return;
+        const element = node as Element;
+        if (element.matches('span')) updateLoadingText(element.parentNode || element);
+        else updateLoadingText(element);
+      });
+    }
+  });
+
   observer.observe(document.body, { childList: true, subtree: true });
-  replaceLoadingMessage();
+  updateLoadingText(document.body);
 }
