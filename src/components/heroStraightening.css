@@ -151,6 +151,47 @@
     font-size: 0.78rem !important;
   }
 
+  /* Mobile-only info bars: place them on the solid page background rather
+     than over the video, and make the three steps compact and scannable. */
+  #hero-banner .hero-info-bars {
+    position: relative !important;
+    z-index: 20 !important;
+    margin-top: 1.5rem !important;
+    margin-left: -1rem !important;
+    margin-right: -1rem !important;
+    padding: 1.15rem 1rem 0 !important;
+    border-top: 0 !important;
+    background: #050d18 !important;
+    gap: 0.65rem !important;
+  }
+
+  #hero-banner .hero-info-bars > div {
+    min-height: 0 !important;
+    padding: 0.75rem 0.8rem !important;
+    border-radius: 0.9rem !important;
+    background: #07111d !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    gap: 0.65rem !important;
+  }
+
+  #hero-banner .hero-info-bars svg {
+    width: 1rem !important;
+    height: 1rem !important;
+    margin-top: 0.1rem !important;
+  }
+
+  #hero-banner .hero-info-bars p:first-child {
+    font-size: 0.78rem !important;
+    line-height: 1.15rem !important;
+  }
+
+  #hero-banner .hero-info-bars p:last-child {
+    margin-top: 0.15rem !important;
+    font-size: 0.68rem !important;
+    line-height: 1.05rem !important;
+  }
+
   /* Explicitly lock every interactive hero control and the mobile video. */
   #hero-banner button,
   #hero-banner a,
