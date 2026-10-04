@@ -1,5 +1,4 @@
 import React from 'react';
-import { createPortal } from 'react-dom';
 import { ShieldCheck, Database, Lock, ArrowRight, Map, Trophy, ClipboardCheck, GraduationCap, Sparkles, FileText } from 'lucide-react';
 import { FeaturesHub } from './FeaturesHub';
 
@@ -23,131 +22,127 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
     { label: 'Student Utility Toolkit', note: 'PDF, image, resume and study tools', workspace: 'utilities', tab: 'pdf-tools', icon: FileText },
   ];
 
-  // Keep the video at the document body level so it can remain fixed to the viewport.
-  // Do not create a stacking context on #root: that would place the entire app above
-  // the video and can make the video disappear completely on some browsers.
-  const viewportVideo = typeof document !== 'undefined'
-    ? createPortal(
-        <div
-          className="pointer-events-none fixed inset-0 overflow-hidden bg-[#020711]"
-          style={{ zIndex: 0, width: '100vw', height: '100dvh' }}
-          aria-hidden="true"
-        >
-          <video
-            className="absolute inset-0 h-full w-full object-contain object-center"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            aria-hidden="true"
-            style={{ opacity: 0.9, filter: 'brightness(1.14) saturate(1.1) contrast(1.04)' }}
-          >
-            <source src="/hero-mobile.webm" type="video/webm" media="(max-width: 767px)" />
-            <source src="/hero-desktop.webm" type="video/webm" />
-          </video>
-
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#020711]/58 via-[#020711]/10 to-[#020711]/28" />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#020711]/18 via-transparent to-[#020711]/42" />
-          <div
-            className="pointer-events-none absolute inset-0 opacity-[0.045]"
-            style={{
-              backgroundImage:
-                'linear-gradient(rgba(34,211,238,.18) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,.18) 1px, transparent 1px)',
-              backgroundSize: '44px 44px',
-            }}
-          />
-        </div>,
-        document.body
-      )
-    : null;
-
   return (
-    <>
-      {viewportVideo}
+    <section id="hero-banner" className="relative z-[1] overflow-visible bg-transparent text-white">
+      {/*
+        IMPORTANT: Keep the video INSIDE the homepage stacking context.
+        The app root has a page background, so a body-level z-0 video can be
+        hidden behind that background. This root-level section keeps the video
+        above the page background while the foreground content stays above it.
+        Because this element is fixed, it does not move when the page scrolls.
+      */}
+      <div
+        className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-[#020711]"
+        style={{ width: '100vw', height: '100dvh' }}
+        aria-hidden="true"
+      >
+        <video
+          className="absolute inset-0 h-full w-full object-contain object-center"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+          style={{
+            opacity: 0.94,
+            filter: 'brightness(1.12) saturate(1.08) contrast(1.04)',
+          }}
+        >
+          <source src="/hero-mobile.webm" type="video/webm" media="(max-width: 767px)" />
+          <source src="/hero-desktop.webm" type="video/webm" />
+        </video>
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#020711]/42 via-[#020711]/6 to-[#020711]/20" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#020711]/12 via-transparent to-[#020711]/30" />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.035]"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(34,211,238,.18) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,.18) 1px, transparent 1px)',
+            backgroundSize: '44px 44px',
+          }}
+        />
+      </div>
 
-      {/* The video is z-0 and this content is z-10. The section stays in normal
-          document flow, so the foreground scrolls while the fixed video stays put. */}
-      <section id="hero-banner" className="relative z-[1] bg-transparent text-white">
-        <div className="relative z-10 mx-auto max-w-7xl px-4 pb-14 pt-10 sm:px-6 sm:pb-20 sm:pt-14 lg:px-8 lg:pb-24 lg:pt-16">
-          <div className="grid items-center gap-10 lg:grid-cols-[1.02fr_.98fr] lg:gap-14">
-            <div className="max-w-2xl">
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-300/15 bg-[#030914]/45 px-3.5 py-1.5 text-xs font-bold text-cyan-200 backdrop-blur-sm">
-                <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(103,232,249,.8)]" />
-                Built around real student workflows
-              </div>
-
-              <h1 className="text-[2.55rem] font-black leading-[1.02] tracking-[-0.045em] text-white drop-shadow-[0_3px_18px_rgba(0,0,0,.45)] sm:text-6xl lg:text-[4.35rem]">
-                Your student journey,
-                <span className="block bg-gradient-to-r from-cyan-300 via-sky-300 to-white bg-clip-text text-transparent">in one place.</span>
-              </h1>
-
-              <p className="mt-6 max-w-xl text-base leading-7 text-slate-200 drop-shadow-[0_2px_10px_rgba(0,0,0,.65)] sm:text-lg sm:leading-8">
-                Man of Study brings admissions data, college discovery, scholarships, mock tests and everyday academic utilities into one focused student platform.
-              </p>
-
-              <div className="mt-7 flex flex-wrap gap-3">
-                <button type="button" onClick={() => go('ap-predictor')} className="group inline-flex items-center gap-2 rounded-xl bg-cyan-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-cyan-500/15 transition hover:bg-cyan-300">
-                  Explore AP tools <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </button>
-                <button type="button" onClick={() => go('tg-predictor')} className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-[#030914]/45 px-5 py-3 text-sm font-bold text-slate-100 backdrop-blur-sm transition hover:border-cyan-300/25 hover:bg-cyan-400/10 hover:text-white">
-                  Explore TG tools
-                </button>
-              </div>
-
-              <div className="mt-8 grid max-w-xl grid-cols-3 border-y border-white/12 bg-[#030914]/18 py-5 backdrop-blur-[2px]">
-                <div className="pr-4"><p className="text-2xl font-black text-white">247</p><p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-300">AP colleges</p></div>
-                <div className="border-l border-white/12 px-4"><p className="text-2xl font-black text-white">151</p><p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-300">TG colleges</p></div>
-                <div className="border-l border-white/12 pl-4"><p className="text-2xl font-black text-white">Free</p><p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-300">Student tools</p></div>
-              </div>
+      {/* Foreground content: z-10 guarantees the video can never cover the UI. */}
+      <div className="relative z-10 mx-auto max-w-7xl px-4 pb-14 pt-10 sm:px-6 sm:pb-20 sm:pt-14 lg:px-8 lg:pb-24 lg:pt-16">
+        <div className="grid items-center gap-10 lg:grid-cols-[1.02fr_.98fr] lg:gap-14">
+          <div className="max-w-2xl">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-300/15 bg-[#030914]/45 px-3.5 py-1.5 text-xs font-bold text-cyan-200 backdrop-blur-sm">
+              <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(103,232,249,.8)]" />
+              Built around real student workflows
             </div>
 
-            <div className="relative lg:pl-2">
-              <div className="rounded-[26px] border border-cyan-300/20 bg-[#081321]/68 p-2 shadow-2xl shadow-black/45 backdrop-blur-md">
-                <div className="rounded-[20px] border border-white/10 bg-[#0b1726]/72">
-                  <div className="flex items-center justify-between border-b border-white/10 px-4 py-4 sm:px-5">
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-300">Man of Study Navigator</p>
-                      <h2 className="mt-1 text-base font-extrabold text-white sm:text-lg">Choose what you need today</h2>
-                    </div>
-                    <div className="rounded-lg border border-cyan-300/10 bg-cyan-400/10 px-2.5 py-1 text-[10px] font-bold text-cyan-200">FREE</div>
-                  </div>
+            <h1 className="text-[2.55rem] font-black leading-[1.02] tracking-[-0.045em] text-white drop-shadow-[0_3px_18px_rgba(0,0,0,.45)] sm:text-6xl lg:text-[4.35rem]">
+              Your student journey,
+              <span className="block bg-gradient-to-r from-cyan-300 via-sky-300 to-white bg-clip-text text-transparent">in one place.</span>
+            </h1>
 
-                  <div className="space-y-1.5 p-2 sm:p-3">
-                    {navigatorItems.map((item) => {
-                      const Icon = item.icon;
-                      return (
-                        <button key={item.label} type="button" onClick={() => go(item.workspace, item.tab)} className="group flex w-full items-center gap-3 rounded-xl border border-transparent px-3 py-3 text-left transition hover:border-cyan-300/10 hover:bg-cyan-400/10">
-                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-cyan-300/10 bg-cyan-400/10"><Icon className="h-4 w-4 text-cyan-300" /></span>
-                          <span className="min-w-0 flex-1"><span className="block truncate text-sm font-bold text-slate-100 group-hover:text-white">{item.label}</span><span className="mt-0.5 block truncate text-[11px] text-slate-300">{item.note}</span></span>
-                          <ArrowRight className="h-4 w-4 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-cyan-300" />
-                        </button>
-                      );
-                    })}
-                  </div>
+            <p className="mt-6 max-w-xl text-base leading-7 text-slate-200 drop-shadow-[0_2px_10px_rgba(0,0,0,.65)] sm:text-lg sm:leading-8">
+              Man of Study brings admissions data, college discovery, scholarships, mock tests and everyday academic utilities into one focused student platform.
+            </p>
 
-                  <div className="grid grid-cols-3 border-t border-white/10">
-                    <div className="px-3 py-4 text-center"><p className="text-lg font-black text-cyan-300">AP</p><p className="text-[9px] uppercase tracking-wider text-slate-300">Admissions</p></div>
-                    <div className="border-l border-white/10 px-3 py-4 text-center"><p className="text-lg font-black text-cyan-300">TG</p><p className="text-[9px] uppercase tracking-wider text-slate-300">Admissions</p></div>
-                    <div className="border-l border-white/10 px-3 py-4 text-center"><p className="text-lg font-black text-cyan-300">24/7</p><p className="text-[9px] uppercase tracking-wider text-slate-300">Browser tools</p></div>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <button type="button" onClick={() => go('ap-predictor')} className="group inline-flex items-center gap-2 rounded-xl bg-cyan-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-cyan-500/15 transition hover:bg-cyan-300">
+                Explore AP tools <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </button>
+              <button type="button" onClick={() => go('tg-predictor')} className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-[#030914]/45 px-5 py-3 text-sm font-bold text-slate-100 backdrop-blur-sm transition hover:border-cyan-300/25 hover:bg-cyan-400/10 hover:text-white">
+                Explore TG tools
+              </button>
+            </div>
+
+            <div className="mt-8 grid max-w-xl grid-cols-3 border-y border-white/12 bg-[#030914]/18 py-5 backdrop-blur-[2px]">
+              <div className="pr-4"><p className="text-2xl font-black text-white">247</p><p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-300">AP colleges</p></div>
+              <div className="border-l border-white/12 px-4"><p className="text-2xl font-black text-white">151</p><p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-300">TG colleges</p></div>
+              <div className="border-l border-white/12 pl-4"><p className="text-2xl font-black text-white">Free</p><p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-300">Student tools</p></div>
+            </div>
+          </div>
+
+          <div className="relative lg:pl-2">
+            <div className="rounded-[26px] border border-cyan-300/20 bg-[#081321]/68 p-2 shadow-2xl shadow-black/45 backdrop-blur-md">
+              <div className="rounded-[20px] border border-white/10 bg-[#0b1726]/72">
+                <div className="flex items-center justify-between border-b border-white/10 px-4 py-4 sm:px-5">
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-300">Man of Study Navigator</p>
+                    <h2 className="mt-1 text-base font-extrabold text-white sm:text-lg">Choose what you need today</h2>
                   </div>
+                  <div className="rounded-lg border border-cyan-300/10 bg-cyan-400/10 px-2.5 py-1 text-[10px] font-bold text-cyan-200">FREE</div>
+                </div>
+
+                <div className="space-y-1.5 p-2 sm:p-3">
+                  {navigatorItems.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <button key={item.label} type="button" onClick={() => go(item.workspace, item.tab)} className="group flex w-full items-center gap-3 rounded-xl border border-transparent px-3 py-3 text-left transition hover:border-cyan-300/10 hover:bg-cyan-400/10">
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-cyan-300/10 bg-cyan-400/10"><Icon className="h-4 w-4 text-cyan-300" /></span>
+                        <span className="min-w-0 flex-1"><span className="block truncate text-sm font-bold text-slate-100 group-hover:text-white">{item.label}</span><span className="mt-0.5 block truncate text-[11px] text-slate-300">{item.note}</span></span>
+                        <ArrowRight className="h-4 w-4 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-cyan-300" />
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="grid grid-cols-3 border-t border-white/10">
+                  <div className="px-3 py-4 text-center"><p className="text-lg font-black text-cyan-300">AP</p><p className="text-[9px] uppercase tracking-wider text-slate-300">Admissions</p></div>
+                  <div className="border-l border-white/10 px-3 py-4 text-center"><p className="text-lg font-black text-cyan-300">TG</p><p className="text-[9px] uppercase tracking-wider text-slate-300">Admissions</p></div>
+                  <div className="border-l border-white/10 px-3 py-4 text-center"><p className="text-lg font-black text-cyan-300">24/7</p><p className="text-[9px] uppercase tracking-wider text-slate-300">Browser tools</p></div>
                 </div>
               </div>
             </div>
           </div>
-
-          <div className="mt-12 grid gap-3 border-t border-white/10 pt-7 sm:grid-cols-3">
-            <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-[#030914]/35 p-4 backdrop-blur-sm"><ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-cyan-300" /><div><p className="text-sm font-bold text-slate-100">Student-first access</p><p className="mt-1 text-xs leading-5 text-slate-300">Keep the common tasks simple, visible and easy to reach.</p></div></div>
-            <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-[#030914]/35 p-4 backdrop-blur-sm"><Database className="mt-0.5 h-5 w-5 shrink-0 text-cyan-300" /><div><p className="text-sm font-bold text-slate-100">Counselling-focused data</p><p className="mt-1 text-xs leading-5 text-slate-300">AP and Telangana admission tools are grouped by the student journey.</p></div></div>
-            <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-[#030914]/35 p-4 backdrop-blur-sm"><Lock className="mt-0.5 h-5 w-5 shrink-0 text-cyan-300" /><div><p className="text-sm font-bold text-slate-100">Useful beyond admissions</p><p className="mt-1 text-xs leading-5 text-slate-300">Academic, career and document utilities stay one click away.</p></div></div>
-          </div>
         </div>
 
-        <div id="features-hub" className="relative z-10 border-t border-white/8 bg-[#050d18]/88">
-          <FeaturesHub activeWorkspace={activeWorkspace} onSelectWorkspace={onSelectWorkspace} />
+        <div className="mt-12 grid gap-3 border-t border-white/10 pt-7 sm:grid-cols-3">
+          <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-[#030914]/35 p-4 backdrop-blur-sm"><ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-cyan-300" /><div><p className="text-sm font-bold text-slate-100">Student-first access</p><p className="mt-1 text-xs leading-5 text-slate-300">Keep the common tasks simple, visible and easy to reach.</p></div></div>
+          <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-[#030914]/35 p-4 backdrop-blur-sm"><Database className="mt-0.5 h-5 w-5 shrink-0 text-cyan-300" /><div><p className="text-sm font-bold text-slate-100">Counselling-focused data</p><p className="mt-1 text-xs leading-5 text-slate-300">AP and Telangana admission tools are grouped by the student journey.</p></div></div>
+          <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-[#030914]/35 p-4 backdrop-blur-sm"><Lock className="mt-0.5 h-5 w-5 shrink-0 text-cyan-300" /><div><p className="text-sm font-bold text-slate-100">Useful beyond admissions</p><p className="mt-1 text-xs leading-5 text-slate-300">Academic, career and document utilities stay one click away.</p></div></div>
         </div>
-      </section>
-    </>
+      </div>
+
+      <div id="features-hub" className="relative z-10 border-t border-white/8 bg-[#050d18]/55 backdrop-blur-[1px]">
+        <FeaturesHub activeWorkspace={activeWorkspace} onSelectWorkspace={onSelectWorkspace} />
+      </div>
+    </section>
   );
 };
 
