@@ -23,9 +23,8 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
     { label: 'Student Utility Toolkit', note: 'PDF, image, resume and study tools', workspace: 'utilities', tab: 'pdf-tools', icon: FileText },
   ];
 
-  // Render the video directly under <body>. This deliberately avoids placing a
-  // fixed element inside a transformed/stacked ancestor, which can make a
-  // supposedly fixed background move with the page on some browsers.
+  // Render the video directly under <body>. This avoids placing a fixed element
+  // inside a transformed/stacked ancestor, so it remains stationary on scroll.
   const viewportVideo = typeof document !== 'undefined'
     ? createPortal(
         <div
@@ -65,7 +64,10 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
     <>
       {viewportVideo}
 
-      <section id="hero-banner" className="relative overflow-hidden bg-transparent text-white">
+      {/* z-[1] is intentional: the fixed video is a root-level z-index 0 layer.
+          Elevating this section as a whole guarantees every heading, button,
+          navigator card and feature remains above the video. */}
+      <section id="hero-banner" className="relative z-[1] bg-transparent text-white">
         <div className="relative z-10 mx-auto max-w-7xl px-4 pb-14 pt-10 sm:px-6 sm:pb-20 sm:pt-14 lg:px-8 lg:pb-24 lg:pt-16">
           <div className="grid items-center gap-10 lg:grid-cols-[1.02fr_.98fr] lg:gap-14">
             <div className="max-w-2xl">
