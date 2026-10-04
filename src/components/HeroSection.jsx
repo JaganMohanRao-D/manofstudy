@@ -104,12 +104,12 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
               Man of Study brings admissions data, college discovery, scholarships, mock tests and everyday academic utilities into one focused student platform.
             </p>
 
-            <div className="mt-7 flex flex-wrap gap-3">
-              <button type="button" onClick={() => scrollToRegionalTools('FOR AP STUDENTS')} className="group inline-flex items-center gap-2 rounded-xl bg-cyan-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-cyan-500/15 transition hover:bg-cyan-300">
+            <div className="hero-regional-ctas mt-7 flex flex-wrap gap-3">
+              <button type="button" onClick={() => scrollToRegionalTools('FOR AP STUDENTS')} className="group inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-cyan-500/15 transition hover:bg-cyan-300">
                 Explore AP tools <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </button>
-              <button type="button" onClick={() => scrollToRegionalTools('FOR TELANGANA STUDENTS')} className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-[#030914]/45 px-5 py-3 text-sm font-bold text-slate-100 backdrop-blur-sm transition hover:border-cyan-300/25 hover:bg-cyan-400/10 hover:text-white">
-                Explore TG tools
+              <button type="button" onClick={() => scrollToRegionalTools('FOR TELANGANA STUDENTS')} className="group inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-cyan-500/15 transition hover:bg-cyan-300">
+                Explore TG tools <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </button>
             </div>
 
