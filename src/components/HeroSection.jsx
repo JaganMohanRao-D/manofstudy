@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { ShieldCheck, Database, Lock, ArrowRight, Map, Trophy, ClipboardCheck, GraduationCap, Sparkles, FileText } from 'lucide-react';
 import { FeaturesHub } from './FeaturesHub';
@@ -23,8 +23,30 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
     { label: 'Student Utility Toolkit', note: 'PDF, image, resume and study tools', workspace: 'utilities', tab: 'pdf-tools', icon: FileText },
   ];
 
-  // Render the video directly under <body>. This avoids placing a fixed element
-  // inside a transformed/stacked ancestor, so it remains stationary on scroll.
+  // Keep the fixed media layer outside transformed page content. The root app is
+  // explicitly lifted above this layer so animations/stacking contexts elsewhere
+  // cannot accidentally paint the video over the homepage content.
+  useEffect(() => {
+    const root = document.getElementById('root');
+    if (!root) return undefined;
+
+    const previous = {
+      position: root.style.position,
+      zIndex: root.style.zIndex,
+      isolation: root.style.isolation,
+    };
+
+    root.style.position = 'relative';
+    root.style.zIndex = '1';
+    root.style.isolation = 'isolate';
+
+    return () => {
+      root.style.position = previous.position;
+      root.style.zIndex = previous.zIndex;
+      root.style.isolation = previous.isolation;
+    };
+  }, []);
+
   const viewportVideo = typeof document !== 'undefined'
     ? createPortal(
         <div
@@ -39,16 +61,17 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
             loop
             playsInline
             preload="metadata"
+            aria-hidden="true"
             style={{ opacity: 0.9, filter: 'brightness(1.14) saturate(1.1) contrast(1.04)' }}
           >
             <source src="/hero-mobile.webm" type="video/webm" media="(max-width: 767px)" />
             <source src="/hero-desktop.webm" type="video/webm" />
           </video>
 
-          <div className="absolute inset-0 bg-gradient-to-r from-[#020711]/58 via-[#020711]/10 to-[#020711]/28" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#020711]/18 via-transparent to-[#020711]/42" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#020711]/58 via-[#020711]/10 to-[#020711]/28" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#020711]/18 via-transparent to-[#020711]/42" />
           <div
-            className="absolute inset-0 opacity-[0.045]"
+            className="pointer-events-none absolute inset-0 opacity-[0.045]"
             style={{
               backgroundImage:
                 'linear-gradient(rgba(34,211,238,.18) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,.18) 1px, transparent 1px)',
@@ -64,10 +87,9 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
     <>
       {viewportVideo}
 
-      {/* z-[1] is intentional: the fixed video is a root-level z-index 0 layer.
-          Elevating this section as a whole guarantees every heading, button,
-          navigator card and feature remains above the video. */}
-      <section id="hero-banner" className="relative z-[1] bg-transparent text-white">
+      {/* The app root is above the fixed video. Keep this section in normal page
+          flow so all homepage content scrolls normally while the video stays put. */}
+      <section id="hero-banner" className="relative z-[10] bg-transparent text-white">
         <div className="relative z-10 mx-auto max-w-7xl px-4 pb-14 pt-10 sm:px-6 sm:pb-20 sm:pt-14 lg:px-8 lg:pb-24 lg:pt-16">
           <div className="grid items-center gap-10 lg:grid-cols-[1.02fr_.98fr] lg:gap-14">
             <div className="max-w-2xl">
