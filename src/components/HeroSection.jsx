@@ -154,7 +154,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
           </div>
         </div>
 
-        <div className="mt-12 grid gap-3 border-t border-white/10 pt-7 sm:grid-cols-3">
+        <div className="hero-info-bars mt-12 grid gap-3 border-t border-white/10 pt-7 sm:grid-cols-3">
           <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-[#030914]/35 p-4 backdrop-blur-sm"><ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-cyan-300" /><div><p className="text-sm font-bold text-slate-100">Student-first access</p><p className="mt-1 text-xs leading-5 text-slate-300">Keep the common tasks simple, visible and easy to reach.</p></div></div>
           <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-[#030914]/35 p-4 backdrop-blur-sm"><Database className="mt-0.5 h-5 w-5 shrink-0 text-cyan-300" /><div><p className="text-sm font-bold text-slate-100">Counselling-focused data</p><p className="mt-1 text-xs leading-5 text-slate-300">AP and Telangana admission tools are grouped by the student journey.</p></div></div>
           <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-[#030914]/35 p-4 backdrop-blur-sm"><Lock className="mt-0.5 h-5 w-5 shrink-0 text-cyan-300" /><div><p className="text-sm font-bold text-slate-100">Useful beyond admissions</p><p className="mt-1 text-xs leading-5 text-slate-300">Academic, career and document utilities stay one click away.</p></div></div>
