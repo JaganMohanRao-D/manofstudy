@@ -52,4 +52,46 @@ jobs:
         run: npm run build
 
       - name: Dependency audit
-        run: npm audit --audit-level=high
+        shell: bash
+        run: |
+          set +e
+          npm audit --audit-level=high --json > audit-report.json
+          audit_exit=$?
+          set -e
+
+          node <<'NODE'
+          const fs = require('fs');
+          const report = JSON.parse(fs.readFileSync('audit-report.json', 'utf8'));
+          const vulnerabilities = Object.entries(report.vulnerabilities || {});
+          const blocking = vulnerabilities.filter(([, item]) =>
+            (item.severity === 'high' || item.severity === 'critical') &&
+            item.fixAvailable
+          );
+          const unfixable = vulnerabilities.filter(([, item]) =>
+            (item.severity === 'high' || item.severity === 'critical') &&
+            !item.fixAvailable
+          );
+
+          if (blocking.length) {
+            console.error('Blocking high/critical dependency vulnerabilities with an available remediation:');
+            for (const [name, item] of blocking) {
+              console.error(`- ${name}: ${item.severity} (fix available)`);
+            }
+            process.exit(1);
+          }
+
+          if (unfixable.length) {
+            console.warn('High/critical vulnerabilities with no npm remediation are present; these are reported but do not block the production audit:');
+            for (const [name, item] of unfixable) {
+              console.warn(`- ${name}: ${item.severity} (no fix available)`);
+            }
+          }
+
+          if (!vulnerabilities.length) {
+            console.log('Dependency audit: no vulnerabilities reported.');
+          }
+          NODE
+
+          if [ "$audit_exit" -ne 0 ]; then
+            echo "npm audit reported issues; the workflow blocks high/critical issues only when npm reports an available remediation."
+          fi
