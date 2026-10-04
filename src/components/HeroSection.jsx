@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { createPortal } from 'react-dom';
 import { ShieldCheck, Database, Lock, ArrowRight, Map, Trophy, ClipboardCheck, GraduationCap, Sparkles, FileText } from 'lucide-react';
 import { FeaturesHub } from './FeaturesHub';
@@ -23,30 +23,9 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
     { label: 'Student Utility Toolkit', note: 'PDF, image, resume and study tools', workspace: 'utilities', tab: 'pdf-tools', icon: FileText },
   ];
 
-  // Keep the fixed media layer outside transformed page content. The root app is
-  // explicitly lifted above this layer so animations/stacking contexts elsewhere
-  // cannot accidentally paint the video over the homepage content.
-  useEffect(() => {
-    const root = document.getElementById('root');
-    if (!root) return undefined;
-
-    const previous = {
-      position: root.style.position,
-      zIndex: root.style.zIndex,
-      isolation: root.style.isolation,
-    };
-
-    root.style.position = 'relative';
-    root.style.zIndex = '1';
-    root.style.isolation = 'isolate';
-
-    return () => {
-      root.style.position = previous.position;
-      root.style.zIndex = previous.zIndex;
-      root.style.isolation = previous.isolation;
-    };
-  }, []);
-
+  // Keep the video at the document body level so it can remain fixed to the viewport.
+  // Do not create a stacking context on #root: that would place the entire app above
+  // the video and can make the video disappear completely on some browsers.
   const viewportVideo = typeof document !== 'undefined'
     ? createPortal(
         <div
@@ -87,9 +66,9 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
     <>
       {viewportVideo}
 
-      {/* The app root is above the fixed video. Keep this section in normal page
-          flow so all homepage content scrolls normally while the video stays put. */}
-      <section id="hero-banner" className="relative z-[10] bg-transparent text-white">
+      {/* The video is z-0 and this content is z-10. The section stays in normal
+          document flow, so the foreground scrolls while the fixed video stays put. */}
+      <section id="hero-banner" className="relative z-[1] bg-transparent text-white">
         <div className="relative z-10 mx-auto max-w-7xl px-4 pb-14 pt-10 sm:px-6 sm:pb-20 sm:pt-14 lg:px-8 lg:pb-24 lg:pt-16">
           <div className="grid items-center gap-10 lg:grid-cols-[1.02fr_.98fr] lg:gap-14">
             <div className="max-w-2xl">
