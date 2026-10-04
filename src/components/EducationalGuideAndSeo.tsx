@@ -6,7 +6,6 @@ import {
   Calculator,
   FileText,
   Bot,
-  Sparkles,
 } from 'lucide-react';
 
 export const EducationalGuideAndSeo: React.FC = () => {
@@ -21,106 +20,106 @@ export const EducationalGuideAndSeo: React.FC = () => {
       category: 'Counselling Tools',
       question: 'How does the AP EAPCET Phase 2 Vacancy Radar track leftover seats?',
       answer:
-        'The Radar processes institutional seat matrices across Andhra Pradesh universities, autonomous colleges, and affiliated institutions following Phase 1 reporting. It tracks branch-wise intake, leftover vacant seats, and official government-notified annual fee structures, enabling students to plan optimal Phase 2 web options.',
+        'The Radar uses available college and seat information to show branch-wise vacant seats, fee details, and useful Phase 2 web-option information so students can make better choices.',
     },
     {
-      category: 'Academic Tools',
+      category: 'Study Tools',
       question: 'How does the Attendance Defender calculate bunkable and required classes?',
       answer:
-        'The engine applies strict percentage threshold inequalities: for safe attendance (Attendance > Min Required), bunkable classes B = floor((Attended - (MinReq/100) * Conducted) / (MinReq/100)). For deficit status, required consecutive classes R = ceil(((MinReq/100) * Conducted - Attended) / (1 - (MinReq/100))). It dynamically updates as upcoming schedules shift.',
+        'It uses your attendance percentage and the required minimum to show how many classes you can safely miss or how many you need to attend to reach the required percentage.',
     },
     {
-      category: 'Academic Tools',
+      category: 'Study Tools',
       question: 'How is the Internal Exam Cutoff & External Marks calculated?',
       answer:
-        'Internals are consolidated based on your university guideline (e.g. 80:20 weighted average of two midterms: 0.8 * High + 0.2 * Low, or Best-of-2) plus Assignment and Attendance marks. Required External Score = Target Total Marks Required - Consolidated Internal Scored. It also checks university external passing criteria (typically 35% or 40% minimum in semester finals).',
+        'The calculator uses the marks and evaluation rules you select, including internal exams, assignments, attendance, and the required final-exam score, to estimate what you need to reach your target.',
     },
     {
-      category: 'Academic Tools',
-      question: 'What conversion formula is used in Global GPA Hub for Indian Universities?',
+      category: 'Marks & GPA',
+      question: 'What conversion rules are used in Global GPA Hub for Indian Universities?',
       answer:
-        'Global GPA Hub supports JNTU, Anna University, VTU Karnataka [Percentage = (CGPA - 0.75) * 10], Osmania OU, Andhra AU, VIT, SRM, Amrita, CBSE Standard [Percentage = CGPA * 9.5], and AICTE Standard [Percentage = (CGPA - 0.75) * 10]. It also translates marks into First Class with Distinction (FCD) and 4.0 US Equivalents.',
+        'Global GPA Hub supports common university and education-board conversion rules for CGPA, percentage, and related grade calculations. Always check your university rules before using a converted value for an official application.',
     },
     {
-      category: 'Career & Documents',
-      question: 'How does the ATS Resume Keyword Matcher & 1-Click Builder work?',
+      category: 'Career Tools',
+      question: 'How does the resume keyword matcher and builder work?',
       answer:
-        'The parser performs client-side tokenization of uploaded PDF, DOCX, or TXT files, extracts technical n-grams and soft skills, and evaluates quantifiable metrics and weak action verbs. The 1-Click Builder restructures your content into a clean single-column ATS layout with missing target keywords integrated and exports to clean PDF.',
+        'You can upload your resume, check how well it matches a target role, find useful missing keywords, and create a cleaner ATS-friendly version of your resume.',
     },
     {
       category: 'Writing & AI',
-      question: 'How does the AI Text Humanizer & Pattern Scanner analyze and rewrite text?',
+      question: 'How does the AI writing helper improve text?',
       answer:
-        'The scanner evaluates statistical sentence burstiness (variance in sentence length), lexical perplexity, passive voice markers, and robotic transition cliches. The deep humanizer engine converts monotonous AI paragraphs into dynamic human cadences across Academic, Casual, or Professional tones.',
+        'It looks at sentence structure, tone, and readability and can help rewrite text in a more natural style for academic, casual, or professional use.',
     },
     {
       category: 'Privacy & Security',
-      question: 'Is my data secure when using Client-Side PDF Quick Tools and Image Resizer?',
+      question: 'Is my data secure when using the PDF and image tools?',
       answer:
-        'Yes, 100% private. All PDF merging, page splitting, document parsing, image resizing, and AI humanization happen entirely inside your browser memory. No documents, resumes, or photos are ever uploaded to any remote server.',
+        'These browser-based tools are designed to process supported files locally in your browser. Files used by these tools are not intentionally uploaded to a remote server for processing.',
     },
   ];
 
   return (
-    <div className="space-y-8 pt-8 border-t border-slate-200">
-      {/* Guide Header */}
+    <div className="space-y-8 pt-8 border-t border-white/10 text-slate-200">
+      {/* Student-friendly guide header */}
       <div className="text-center max-w-3xl mx-auto space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-200">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-400/10 text-cyan-200 border border-cyan-300/15">
           <BookOpen className="w-3.5 h-3.5" />
-          <span>METHODOLOGY, FORMULAS & DOCUMENTATION</span>
+          <span>HOW OUR STUDENT TOOLS WORK</span>
         </div>
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
-          Engine Specifications & Academic Formula Guide
+        <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+          Simple tools, explained clearly
         </h2>
-        <p className="text-xs sm:text-sm text-slate-500">
-          Understand the mathematical models, formulas, and client-side processing algorithms powering MAN OF STUDY.
+        <p className="text-xs sm:text-sm text-slate-300">
+          A quick look at how Man of Study helps with admissions, marks, documents, careers, and everyday student tasks.
         </p>
       </div>
 
-      {/* Technical Specifications Grid */}
+      {/* Student-friendly feature cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Academic Card */}
-        <div className="rounded-2xl bg-white border border-slate-200 p-5 space-y-3 shadow-sm">
-          <div className="flex items-center gap-2 text-sky-600">
+        {/* Study & Marks */}
+        <div className="rounded-2xl bg-[#0b1728]/90 border border-white/10 p-5 space-y-3 shadow-lg shadow-black/10">
+          <div className="flex items-center gap-2 text-cyan-300">
             <Calculator className="w-4 h-4" />
-            <h3 className="text-xs font-bold uppercase tracking-wider">Academic Engine</h3>
+            <h3 className="text-xs font-bold uppercase tracking-wider">Study & Marks Tools</h3>
           </div>
-          <p className="text-xs text-slate-600 leading-relaxed">
-            Implements official university formulas (AICTE, VTU, JNTU, Anna University, OU, VIT) for SGPA/CGPA percentage conversions, 80:20 weighted mid evaluations, and 75% attendance bunk thresholds.
+          <p className="text-xs text-slate-300 leading-relaxed">
+            Helpful calculators for CGPA, percentage, internal marks, attendance, and other common college calculations using relevant university rules.
           </p>
         </div>
 
-        {/* Document Card */}
-        <div className="rounded-2xl bg-white border border-slate-200 p-5 space-y-3 shadow-sm">
-          <div className="flex items-center gap-2 text-emerald-600">
+        {/* Documents */}
+        <div className="rounded-2xl bg-[#0b1728]/90 border border-white/10 p-5 space-y-3 shadow-lg shadow-black/10">
+          <div className="flex items-center gap-2 text-emerald-300">
             <FileText className="w-4 h-4" />
-            <h3 className="text-xs font-bold uppercase tracking-wider">Document Processing</h3>
+            <h3 className="text-xs font-bold uppercase tracking-wider">PDF & Document Tools</h3>
           </div>
-          <p className="text-xs text-slate-600 leading-relaxed">
-            Zero-server WebAssembly PDF merging, page extraction, bicubic image resizing, and exact KB binary size budgeting for official exam portals (UPSC, GATE, SSC).
+          <p className="text-xs text-slate-300 leading-relaxed">
+            Work with PDFs, images, and documents in your browser — including merging, extracting pages, resizing images, and preparing files for student applications.
           </p>
         </div>
 
-        {/* AI & Career Card */}
-        <div className="rounded-2xl bg-white border border-slate-200 p-5 space-y-3 shadow-sm">
-          <div className="flex items-center gap-2 text-sky-600">
+        {/* Career & AI */}
+        <div className="rounded-2xl bg-[#0b1728]/90 border border-white/10 p-5 space-y-3 shadow-lg shadow-black/10">
+          <div className="flex items-center gap-2 text-cyan-300">
             <Bot className="w-4 h-4" />
-            <h3 className="text-xs font-bold uppercase tracking-wider">Career & AI Diagnostics</h3>
+            <h3 className="text-xs font-bold uppercase tracking-wider">Career & Writing Tools</h3>
           </div>
-          <p className="text-xs text-slate-600 leading-relaxed">
-            Client-side PDF/DOCX resume parsing, ATS keyword matching, 1-click ATS builder, and linguistic AI burstiness pattern scanning & deep humanization.
+          <p className="text-xs text-slate-300 leading-relaxed">
+            Improve resumes, check job-related keywords, build cleaner resume layouts, and get help making academic or professional writing easier to read.
           </p>
         </div>
       </div>
 
       {/* Interactive FAQ Accordion */}
-      <div className="rounded-2xl bg-white border border-slate-200 p-6 space-y-4 shadow-sm">
-        <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-          <HelpCircle className="w-4 h-4 text-sky-600" />
-          Frequently Asked Questions (FAQs)
+      <div className="rounded-2xl bg-[#0b1728]/90 border border-white/10 p-6 space-y-4 shadow-lg shadow-black/10">
+        <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+          <HelpCircle className="w-4 h-4 text-cyan-300" />
+          Frequently Asked Questions
         </h3>
 
-        <div className="divide-y divide-slate-200">
+        <div className="divide-y divide-white/10">
           {faqs.map((faq, index) => {
             const isOpen = openFaqIndex === index;
             return (
@@ -130,22 +129,22 @@ export const EducationalGuideAndSeo: React.FC = () => {
                   className="w-full flex items-center justify-between text-left gap-4 group cursor-pointer transition-colors"
                 >
                   <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-                    <span className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-slate-100 text-sky-700 border border-slate-200 shrink-0">
+                    <span className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-cyan-400/10 text-cyan-200 border border-cyan-300/10 shrink-0">
                       {faq.category}
                     </span>
-                    <span className="text-xs sm:text-sm font-semibold text-slate-900 group-hover:text-sky-600 transition-colors">
+                    <span className="text-xs sm:text-sm font-semibold text-slate-200 group-hover:text-white transition-colors">
                       {faq.question}
                     </span>
                   </div>
                   <ChevronDown
                     className={`w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0 ${
-                      isOpen ? 'transform rotate-180 text-sky-600' : ''
+                      isOpen ? 'transform rotate-180 text-cyan-300' : ''
                     }`}
                   />
                 </button>
 
                 {isOpen && (
-                  <div className="mt-3 pl-3 pr-4 text-xs text-slate-600 leading-relaxed border-l-2 border-sky-500">
+                  <div className="mt-3 pl-3 pr-4 text-xs text-slate-300 leading-relaxed border-l-2 border-cyan-400">
                     {faq.answer}
                   </div>
                 )}
