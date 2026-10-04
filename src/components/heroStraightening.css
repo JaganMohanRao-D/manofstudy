@@ -41,7 +41,7 @@
 }
 
 /* The navigator must visually belong to the hero background, not look like a floating card. */
-#hero-banner .lg\:pl-2 > div {
+#hero-banner .lg\\:pl-2 > div {
   border: 0 !important;
   border-radius: 0 !important;
   background: transparent !important;
@@ -51,7 +51,7 @@
   padding: 0 !important;
 }
 
-#hero-banner .lg\:pl-2 > div > div {
+#hero-banner .lg\\:pl-2 > div > div {
   border-radius: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
@@ -60,7 +60,7 @@
 }
 
 /* Keep the individual navigator rows subtle; only the outer panel/card is removed. */
-#hero-banner .lg\:pl-2 button {
+#hero-banner .lg\\:pl-2 button {
   transform: none !important;
   rotate: 0deg !important;
   skew: 0deg !important;
@@ -79,11 +79,16 @@
     overflow: hidden !important;
   }
 
+  /* Mobile-only video framing: slightly oversize and crop the source edges so
+     there is no straight empty strip beside the logo/header side of the hero. */
   #hero-banner video {
-    width: 100vw !important;
+    width: 110vw !important;
     max-width: none !important;
     height: 100dvh !important;
+    left: -5vw !important;
+    right: auto !important;
     object-fit: cover !important;
+    object-position: center center !important;
   }
 
   /* HARD MOBILE GEOMETRY LOCK:
@@ -118,6 +123,26 @@
     margin-left: auto !important;
     margin-right: auto !important;
     box-sizing: border-box !important;
+  }
+
+  /* Mobile regional CTAs share equal visual priority and sit side-by-side,
+     reducing their vertical footprint so they do not sit over the character
+     in the background video. */
+  #hero-banner .hero-regional-ctas {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.65rem !important;
+    width: 100% !important;
+    max-width: 34rem !important;
+  }
+
+  #hero-banner .hero-regional-ctas button {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+    white-space: nowrap !important;
+    font-size: 0.78rem !important;
   }
 
   /* Explicitly lock every interactive hero control and the mobile video. */
