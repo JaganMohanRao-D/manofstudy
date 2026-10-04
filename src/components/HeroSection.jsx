@@ -23,25 +23,31 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
   ];
 
   return (
-    <section id="hero-banner" className="relative overflow-hidden bg-[#030914] text-white">
-      {/* Cinematic hero video: visible enough to establish the visual identity, while layered gradients keep all UI readable. */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
+    <section id="hero-banner" className="relative overflow-hidden bg-transparent text-white">
+      {/*
+        Homepage-wide cinematic background.
+        The video is fixed to the viewport so it stays stationary while the homepage
+        content scrolls. object-contain is intentional: the complete source frame is
+        always visible and is never cropped or stretched.
+      */}
+      <div className="pointer-events-none fixed inset-0 z-0 h-[100dvh] w-screen overflow-hidden bg-[#020711]" aria-hidden="true">
         <video
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-contain object-center"
           autoPlay
           muted
           loop
           playsInline
           preload="metadata"
-          style={{ opacity: 0.82, filter: 'brightness(1.18) saturate(1.12) contrast(1.06)' }}
+          style={{ opacity: 0.9, filter: 'brightness(1.14) saturate(1.1) contrast(1.04)' }}
         >
           <source src="/hero-mobile.webm" type="video/webm" media="(max-width: 767px)" />
           <source src="/hero-desktop.webm" type="video/webm" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-r from-[#030914]/62 via-[#030914]/18 to-[#030914]/48" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#030914]/20 via-transparent to-[#030914]/58" />
-        <div className="absolute inset-0 bg-[#030914]/8" />
-        <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: 'linear-gradient(rgba(34,211,238,.18) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,.18) 1px, transparent 1px)', backgroundSize: '44px 44px' }} />
+
+        {/* Lightweight readability treatment; deliberately softer than the previous full-screen overlay. */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#020711]/58 via-[#020711]/10 to-[#020711]/28" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#020711]/18 via-transparent to-[#020711]/42" />
+        <div className="absolute inset-0 opacity-[0.045]" style={{ backgroundImage: 'linear-gradient(rgba(34,211,238,.18) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,.18) 1px, transparent 1px)', backgroundSize: '44px 44px' }} />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 pb-14 pt-10 sm:px-6 sm:pb-20 sm:pt-14 lg:px-8 lg:pb-24 lg:pt-16">
@@ -118,7 +124,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         </div>
       </div>
 
-      <div id="features-hub" className="relative z-10 border-t border-white/8 bg-[#050d18]">
+      <div id="features-hub" className="relative z-10 border-t border-white/8 bg-[#050d18]/88">
         <FeaturesHub activeWorkspace={activeWorkspace} onSelectWorkspace={onSelectWorkspace} />
       </div>
     </section>
