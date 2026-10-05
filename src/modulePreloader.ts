@@ -1,6 +1,6 @@
 // Lightweight module preloading for faster tool navigation.
-// The app keeps code-splitting, but starts fetching a tool chunk before React
-// switches the workspace whenever the user presses/touches a tool control.
+// Keep code-splitting, but start fetching a tool chunk before React switches
+// the workspace when the student presses/touches a tool control.
 
 const loaders: Record<string, () => Promise<unknown>> = {
   'AP EAPCET College Predictor': () => import('./components/ApCollegePredictor'),
@@ -9,7 +9,6 @@ const loaders: Record<string, () => Promise<unknown>> = {
   'Top B.Tech Colleges in Telangana': () => import('./components/TgTopColleges'),
   'AP Allotments (Namewise)': () => import('./components/ApEapcet2025AllotmentExplorer'),
   'TG EAPCET 2026 Final Phase Seat Allotments Name Wise': () => import('./components/TgAllotmentExplorer'),
-  'AP EAPCET Phase 2 Vacancy Radar': () => import('./components/ApEapcetRadar'),
   'Scholarships Radar': () => import('./components/ScholarshipsHub'),
   'Engineering Branch Roadmaps': () => import('./components/EngineeringRoadmaps'),
   'Attendance Defender': () => import('./components/AttendanceDefender'),
@@ -29,15 +28,11 @@ const loaders: Record<string, () => Promise<unknown>> = {
 };
 
 const started = new Set<string>();
-
 const preload = (key: string) => {
   const loader = loaders[key];
   if (!loader || started.has(key)) return;
   started.add(key);
-  void loader().catch(() => {
-    // The real lazyWithRetry loader remains the source of truth if prefetch fails.
-    started.delete(key);
-  });
+  void loader().catch(() => started.delete(key));
 };
 
 const findLoaderKey = (target: Element | null) => {
@@ -48,59 +43,38 @@ const findLoaderKey = (target: Element | null) => {
 };
 
 if (typeof window !== 'undefined') {
-  const startPreload = (event: Event) => {
-    preload(findLoaderKey(event.target as Element | null) || '');
-  };
-
-  // pointerdown/touchstart happens before React's click handler, giving the
-  // browser a head start on the exact chunk the student is about to open.
+  const startPreload = (event: Event) => preload(findLoaderKey(event.target as Element | null) || '');
   document.addEventListener('pointerdown', startPreload, { capture: true, passive: true });
   document.addEventListener('touchstart', startPreload, { capture: true, passive: true });
 
-  // Also warm up the most common counselling tools after the initial page has
-  // become idle. Skip this on Save-Data connections so the homepage stays fast.
   const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
   const canWarm = !connection?.saveData && connection?.effectiveType !== 'slow-2g' && connection?.effectiveType !== '2g';
   if (canWarm) {
-    const warm = () => {
-      [
-        'AP EAPCET College Predictor',
-        'TG EAPCET College Predictor',
-        'AP EAPCET Top B.Tech Colleges',
-        'Top B.Tech Colleges in Telangana',
-        'AP Allotments (Namewise)',
-        'TG EAPCET 2026 Final Phase Seat Allotments Name Wise',
-      ].forEach(preload);
-    };
-
+    const warm = () => [
+      'AP EAPCET College Predictor',
+      'TG EAPCET College Predictor',
+      'AP EAPCET Top B.Tech Colleges',
+      'Top B.Tech Colleges in Telangana',
+      'AP Allotments (Namewise)',
+      'TG EAPCET 2026 Final Phase Seat Allotments Name Wise',
+    ].forEach(preload);
     if ('requestIdleCallback' in window) {
       (window as Window & { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback(warm, { timeout: 3500 });
-    } else {
-      window.setTimeout(warm, 1800);
-    }
+    } else window.setTimeout(warm, 1800);
   }
 
-  // Keep the loading message student-friendly without touching the workspace
-  // implementation or its Suspense/error handling.
   const updateLoadingText = (root: ParentNode) => {
     root.querySelectorAll('span').forEach((span) => {
-      if (span.textContent?.trim() === 'Loading module...') {
-        span.textContent = "Hold on student, it's loading";
-      }
+      if (span.textContent?.trim() === 'Loading module...') span.textContent = "Hold on student, it's loading";
     });
   };
-
   const observer = new MutationObserver((mutations) => {
-    for (const mutation of mutations) {
-      mutation.addedNodes.forEach((node) => {
-        if (node.nodeType !== Node.ELEMENT_NODE) return;
-        const element = node as Element;
-        if (element.matches('span')) updateLoadingText(element.parentNode || element);
-        else updateLoadingText(element);
-      });
-    }
+    for (const mutation of mutations) mutation.addedNodes.forEach((node) => {
+      if (node.nodeType !== Node.ELEMENT_NODE) return;
+      const element = node as Element;
+      updateLoadingText(element.matches('span') ? element.parentNode || element : element);
+    });
   });
-
   observer.observe(document.body, { childList: true, subtree: true });
   updateLoadingText(document.body);
 }
