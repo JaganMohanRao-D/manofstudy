@@ -1,14 +1,26 @@
-/* Scholarship portal UI polish: keep the existing data/logic, fix presentation only. */
-.mos-scholarships-hub article {
-  min-width: 0 !important;
-  overflow: hidden !important;
+/* Scholarship portal UX polish — presentation only. */
+.mos-scholarships-hub,
+.mos-scholarships-hub * {
+  box-sizing: border-box;
 }
 
-/* Images should fill their media frame instead of leaving black letterbox bars. */
+.mos-scholarships-hub article {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  border-radius: 22px !important;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+/* Every scholarship artwork gets a predictable frame and fills it completely.
+   This removes the black side-bars caused by object-contain. */
 .mos-scholarships-hub article > div:first-child {
   width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16 / 9 !important;
   flex: 0 0 auto !important;
-  background: var(--mos-surface-muted) !important;
+  overflow: hidden !important;
+  background: var(--mos-surface-muted, #0b1724) !important;
 }
 
 .mos-scholarships-hub article > div:first-child img {
@@ -19,34 +31,48 @@
   object-position: center !important;
 }
 
-/* Keep the scholarship information in one clean, full-width column. */
+/* Keep scholarship information as a normal vertical flow. Nothing is allowed
+   to create a narrow title column beside a stretched amount panel. */
 .mos-scholarships-hub article > div:nth-child(2) {
   width: 100% !important;
   min-width: 0 !important;
+  max-width: 100% !important;
   display: block !important;
   flex: 1 1 auto !important;
 }
 
-.mos-scholarships-hub article > div:nth-child(2) > div:first-child {
-  min-width: 0 !important;
+.mos-scholarships-hub article > div:nth-child(2) > div:first-child,
+.mos-scholarships-hub article > div:nth-child(2) > div:first-child > div,
+.mos-scholarships-hub article h3 {
   width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
 }
 
 .mos-scholarships-hub article h3 {
   display: block !important;
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
   white-space: normal !important;
+  overflow: visible !important;
   overflow-wrap: anywhere !important;
   word-break: normal !important;
+  text-wrap: balance;
+  line-height: 1.35 !important;
 }
 
-/* The award/benefit panel must also use the full content width. */
 .mos-scholarships-hub article h3 + div {
   width: 100% !important;
-  max-width: none !important;
+  max-width: 100% !important;
   min-width: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.mos-scholarships-hub article p,
+.mos-scholarships-hub article a,
+.mos-scholarships-hub article button,
+.mos-scholarships-hub article span,
+.mos-scholarships-hub article div {
+  overflow-wrap: anywhere;
 }
 
 .mos-scholarships-hub article > div:last-child {
@@ -54,43 +80,55 @@
   flex: 0 0 auto !important;
 }
 
-/* Better reading rhythm for long eligibility/amount text. */
-.mos-scholarships-hub article p,
-.mos-scholarships-hub article .text-sm {
-  max-width: 100% !important;
-  overflow-wrap: anywhere;
-}
-
-/* Hero artwork should also fill its designed frame without black side bars. */
+/* Featured scholarship gets a clean, responsive media frame. */
 .mos-scholarships-hub .mos-scholarship-hero > div:first-child {
-  background: var(--mos-surface-muted) !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  background: var(--mos-surface-muted, #0b1724) !important;
 }
 
 .mos-scholarships-hub .mos-scholarship-hero > div:first-child img {
   width: 100% !important;
-  aspect-ratio: 16 / 5 !important;
+  height: auto !important;
   max-height: none !important;
+  display: block !important;
   object-fit: cover !important;
   object-position: center !important;
 }
 
-@media (max-width: 640px) {
-  .mos-scholarships-hub article h3 {
-    font-size: 1rem !important;
-    line-height: 1.35 !important;
+/* Featured amount panel stays inside the content column instead of becoming
+   an oversized horizontal block. */
+.mos-scholarships-hub .mos-scholarship-hero button > div:last-child {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+@media (min-width: 1024px) {
+  .mos-scholarships-hub article:hover {
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 767px) {
+  .mos-scholarships-hub {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .mos-scholarships-hub article > div:first-child {
+    aspect-ratio: 16 / 9 !important;
   }
 
   .mos-scholarships-hub article > div:nth-child(2) {
-    padding: 1rem !important;
+    padding: 14px !important;
   }
 
-  .mos-scholarships-hub article h3 + div {
-    margin-top: .75rem !important;
-    padding: .75rem !important;
+  .mos-scholarships-hub article h3 {
+    font-size: 15px !important;
   }
 
-  .mos-scholarships-hub .mos-scholarship-hero > div:first-child img {
-    aspect-ratio: 16 / 7 !important;
+  .mos-scholarships-hub .mos-scholarship-hero {
+    border-radius: 20px !important;
   }
 }
 
