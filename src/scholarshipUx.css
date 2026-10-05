@@ -1,141 +1,40 @@
 /* Scholarship portal UX polish — presentation only. */
 .mos-scholarships-hub,
-.mos-scholarships-hub * {
-  box-sizing: border-box;
+.mos-scholarships-hub * { box-sizing: border-box; }
+
+.mos-scholarships-hub article { min-width:0!important; max-width:100%!important; overflow:hidden!important; border-radius:22px!important; transition:transform 180ms ease,border-color 180ms ease,box-shadow 180ms ease; }
+.mos-scholarships-hub article > div:first-child { width:100%!important; height:auto!important; aspect-ratio:16/9!important; flex:0 0 auto!important; overflow:hidden!important; background:var(--mos-surface-muted,#0b1724)!important; }
+.mos-scholarships-hub article > div:first-child img { width:100%!important; height:100%!important; display:block!important; object-fit:cover!important; object-position:center!important; }
+.mos-scholarships-hub article > div:nth-child(2) { width:100%!important; min-width:0!important; max-width:100%!important; display:block!important; flex:1 1 auto!important; }
+.mos-scholarships-hub article h3 { display:block!important; width:100%!important; min-width:0!important; max-width:100%!important; white-space:normal!important; overflow:visible!important; overflow-wrap:anywhere!important; word-break:normal!important; line-height:1.35!important; }
+.mos-scholarships-hub article h3 + div { width:100%!important; max-width:100%!important; min-width:0!important; margin-left:0!important; margin-right:0!important; }
+.mos-scholarships-hub article p,.mos-scholarships-hub article a,.mos-scholarships-hub article button,.mos-scholarships-hub article span,.mos-scholarships-hub article div { overflow-wrap:anywhere; }
+
+/* Featured scholarship: the artwork and content are explicitly separated. */
+.mos-scholarships-hub .mos-scholarship-hero button.group.w-full.text-left > div:first-child { width:100%!important; height:auto!important; aspect-ratio:16/9!important; overflow:hidden!important; background:var(--mos-surface-muted,#0b1724)!important; }
+.mos-scholarships-hub .mos-scholarship-hero button.group.w-full.text-left > div:first-child img { width:100%!important; height:100%!important; max-height:none!important; display:block!important; object-fit:cover!important; object-position:center!important; }
+.mos-scholarships-hub .mos-scholarship-hero button.group.w-full.text-left > div:last-child { display:grid!important; grid-template-columns:minmax(0,1fr) minmax(280px,360px) auto!important; align-items:center!important; gap:20px!important; width:100%!important; min-width:0!important; }
+.mos-scholarships-hub .mos-scholarship-hero button.group.w-full.text-left > div:last-child > div:first-child { min-width:0!important; width:100%!important; }
+.mos-scholarships-hub .mos-scholarship-hero button.group.w-full.text-left > div:last-child h2 { width:100%!important; max-width:none!important; min-width:0!important; white-space:normal!important; overflow-wrap:anywhere!important; line-height:1.25!important; }
+.mos-scholarships-hub .mos-scholarship-hero button.group.w-full.text-left > div:last-child > div:nth-child(2) { min-width:0!important; width:100%!important; }
+
+/* Page hero artwork also fills its frame without letterboxing. */
+.mos-scholarships-hub .mos-scholarship-hero > div:first-child { width:100%!important; overflow:hidden!important; background:var(--mos-surface-muted,#0b1724)!important; }
+.mos-scholarships-hub .mos-scholarship-hero > div:first-child img { width:100%!important; height:clamp(210px,32vw,340px)!important; max-height:none!important; display:block!important; object-fit:cover!important; object-position:center!important; }
+
+@media (min-width:1024px) { .mos-scholarships-hub article:hover { transform:translateY(-2px); } }
+@media (max-width:1023px) {
+  .mos-scholarships-hub .mos-scholarship-hero button.group.w-full.text-left > div:last-child { grid-template-columns:minmax(0,1fr)!important; gap:12px!important; }
+  .mos-scholarships-hub .mos-scholarship-hero button.group.w-full.text-left > div:last-child > div:nth-child(2) { width:100%!important; }
+  .mos-scholarships-hub .mos-scholarship-hero button.group.w-full.text-left > div:last-child > svg { display:none!important; }
 }
-
-.mos-scholarships-hub article {
-  min-width: 0 !important;
-  max-width: 100% !important;
-  overflow: hidden !important;
-  border-radius: 22px !important;
-  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+@media (max-width:767px) {
+  .mos-scholarships-hub { padding-left:12px!important; padding-right:12px!important; }
+  .mos-scholarships-hub article > div:first-child { aspect-ratio:16/9!important; }
+  .mos-scholarships-hub article > div:nth-child(2) { padding:14px!important; }
+  .mos-scholarships-hub article h3 { font-size:15px!important; }
+  .mos-scholarships-hub .mos-scholarship-hero { border-radius:20px!important; }
+  .mos-scholarships-hub .mos-scholarship-hero button.group.w-full.text-left > div:first-child { aspect-ratio:16/9!important; }
+  .mos-scholarships-hub .mos-scholarship-hero > div:first-child img { height:clamp(170px,56vw,260px)!important; }
 }
-
-/* Every scholarship artwork gets a predictable frame and fills it completely.
-   This removes the black side-bars caused by object-contain. */
-.mos-scholarships-hub article > div:first-child {
-  width: 100% !important;
-  height: auto !important;
-  aspect-ratio: 16 / 9 !important;
-  flex: 0 0 auto !important;
-  overflow: hidden !important;
-  background: var(--mos-surface-muted, #0b1724) !important;
-}
-
-.mos-scholarships-hub article > div:first-child img {
-  width: 100% !important;
-  height: 100% !important;
-  display: block !important;
-  object-fit: cover !important;
-  object-position: center !important;
-}
-
-/* Keep scholarship information as a normal vertical flow. Nothing is allowed
-   to create a narrow title column beside a stretched amount panel. */
-.mos-scholarships-hub article > div:nth-child(2) {
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: 100% !important;
-  display: block !important;
-  flex: 1 1 auto !important;
-}
-
-.mos-scholarships-hub article > div:nth-child(2) > div:first-child,
-.mos-scholarships-hub article > div:nth-child(2) > div:first-child > div,
-.mos-scholarships-hub article h3 {
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: 100% !important;
-}
-
-.mos-scholarships-hub article h3 {
-  display: block !important;
-  white-space: normal !important;
-  overflow: visible !important;
-  overflow-wrap: anywhere !important;
-  word-break: normal !important;
-  text-wrap: balance;
-  line-height: 1.35 !important;
-}
-
-.mos-scholarships-hub article h3 + div {
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
-
-.mos-scholarships-hub article p,
-.mos-scholarships-hub article a,
-.mos-scholarships-hub article button,
-.mos-scholarships-hub article span,
-.mos-scholarships-hub article div {
-  overflow-wrap: anywhere;
-}
-
-.mos-scholarships-hub article > div:last-child {
-  width: 100% !important;
-  flex: 0 0 auto !important;
-}
-
-/* Featured scholarship gets a clean, responsive media frame. */
-.mos-scholarships-hub .mos-scholarship-hero > div:first-child {
-  width: 100% !important;
-  overflow: hidden !important;
-  background: var(--mos-surface-muted, #0b1724) !important;
-}
-
-.mos-scholarships-hub .mos-scholarship-hero > div:first-child img {
-  width: 100% !important;
-  height: auto !important;
-  max-height: none !important;
-  display: block !important;
-  object-fit: cover !important;
-  object-position: center !important;
-}
-
-/* Featured amount panel stays inside the content column instead of becoming
-   an oversized horizontal block. */
-.mos-scholarships-hub .mos-scholarship-hero button > div:last-child {
-  min-width: 0 !important;
-  max-width: 100% !important;
-}
-
-@media (min-width: 1024px) {
-  .mos-scholarships-hub article:hover {
-    transform: translateY(-2px);
-  }
-}
-
-@media (max-width: 767px) {
-  .mos-scholarships-hub {
-    padding-left: 12px !important;
-    padding-right: 12px !important;
-  }
-
-  .mos-scholarships-hub article > div:first-child {
-    aspect-ratio: 16 / 9 !important;
-  }
-
-  .mos-scholarships-hub article > div:nth-child(2) {
-    padding: 14px !important;
-  }
-
-  .mos-scholarships-hub article h3 {
-    font-size: 15px !important;
-  }
-
-  .mos-scholarships-hub .mos-scholarship-hero {
-    border-radius: 20px !important;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .mos-scholarships-hub article,
-  .mos-scholarships-hub article img {
-    transition: none !important;
-    animation: none !important;
-  }
-}
+@media (prefers-reduced-motion:reduce) { .mos-scholarships-hub article,.mos-scholarships-hub article img { transition:none!important; animation:none!important; } }
