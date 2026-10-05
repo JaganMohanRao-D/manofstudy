@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node scripts/patchAppNavigation.cjs && node scripts/normalizeAp2026CollegeFiles.cjs && node scripts/generateApAllotmentIndexes.cjs && node scripts/generateManifest.cjs && node scripts/patchRegionalHeader.cjs && node scripts/fixAllotmentUxSyntax.cjs && node scripts/fixTypeScriptIssues.cjs && node scripts/patchAllotmentUx.cjs && node scripts/patchMobileNavAndApStudentPreview.cjs && node scripts/patchRoadmapModalPortal.cjs && node scripts/patchSupportRaspberryTheme.cjs && node scripts/disableSearchSupportPrompt.cjs && node scripts/finalizeApAllotmentUx.cjs && node scripts/cleanupApEmptyAnalyticsWrapper.cjs && node scripts/patchApNeutralStudentNames.cjs && node scripts/patchApTopCollegeMedianRanking.cjs && node scripts/brandPdfExports.cjs && node scripts/fixScholarshipPortalVisuals.cjs && vite --port=3000 --host=0.0.0.0",
-    "prebuild": "node scripts/patchAppNavigation.cjs && node scripts/normalizeAp2026CollegeFiles.cjs && node scripts/generateApAllotmentIndexes.cjs && node scripts/generateManifest.cjs && node scripts/patchRegionalHeader.cjs && node scripts/fixAllotmentUxSyntax.cjs && node scripts/fixTypeScriptIssues.cjs && node scripts/patchAllotmentUx.cjs && node scripts/patchMobileNavAndApStudentPreview.cjs && node scripts/patchRoadmapModalPortal.cjs && node scripts/patchSupportRaspberryTheme.cjs && node scripts/disableSearchSupportPrompt.cjs && node scripts/finalizeApAllotmentUx.cjs && node scripts/cleanupApEmptyAnalyticsWrapper.cjs && node scripts/patchApNeutralStudentNames.cjs && node scripts/patchApTopCollegeMedianRanking.cjs && node scripts/brandPdfExports.cjs && node scripts/fixScholarshipPortalVisuals.cjs",
+    "dev": "node scripts/patchAppNavigation.cjs && node scripts/normalizeAp2026CollegeFiles.cjs && node scripts/generateApAllotmentIndexes.cjs && node scripts/generateManifest.cjs && node scripts/fixEapcetBranchSelectors.cjs && node scripts/patchRegionalHeader.cjs && node scripts/fixAllotmentUxSyntax.cjs && node scripts/fixTypeScriptIssues.cjs && node scripts/patchAllotmentUx.cjs && node scripts/patchMobileNavAndApStudentPreview.cjs && node scripts/patchRoadmapModalPortal.cjs && node scripts/patchSupportRaspberryTheme.cjs && node scripts/disableSearchSupportPrompt.cjs && node scripts/finalizeApAllotmentUx.cjs && node scripts/cleanupApEmptyAnalyticsWrapper.cjs && node scripts/patchApNeutralStudentNames.cjs && node scripts/patchApTopCollegeMedianRanking.cjs && node scripts/brandPdfExports.cjs && node scripts/fixScholarshipPortalVisuals.cjs && vite --port=3000 --host=0.0.0.0",
+    "prebuild": "node scripts/patchAppNavigation.cjs && node scripts/normalizeAp2026CollegeFiles.cjs && node scripts/generateApAllotmentIndexes.cjs && node scripts/generateManifest.cjs && node scripts/fixEapcetBranchSelectors.cjs && node scripts/patchRegionalHeader.cjs && node scripts/fixAllotmentUxSyntax.cjs && node scripts/patchAllotmentUx.cjs && node scripts/patchMobileNavAndApStudentPreview.cjs && node scripts/patchRoadmapModalPortal.cjs && node scripts/patchSupportRaspberryTheme.cjs && node scripts/disableSearchSupportPrompt.cjs && node scripts/finalizeApAllotmentUx.cjs && node scripts/cleanupApEmptyAnalyticsWrapper.cjs && node scripts/patchApNeutralStudentNames.cjs && node scripts/patchApTopCollegeMedianRanking.cjs && node scripts/brandPdfExports.cjs && node scripts/fixScholarshipPortalVisuals.cjs",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
-    "@pdfsmaller/pdf-encrypt": "^1.2.0",
+    "@pdfsmaller/pdf-encrypt": "^1.2.1",
     "@tailwindcss/vite": "^4.1.14",
     "@vitejs/plugin-react": "^5.0.4",
     "dotenv": "^17.2.3",
@@ -27,8 +27,6 @@
     "motion": "^12.23.24",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^6.3.289",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
     "xlsx": "^0.18.5",
     "vite": "^6.2.3"
   },
@@ -43,7 +41,6 @@
     "autoprefixer": "^10.4.21",
     "tailwindcss": "^4.1.14",
     "esbuild": "^0.25.0",
-    "tsx": "^4.21.0",
     "typescript": "5.8.3"
   }
 }
