@@ -8,6 +8,7 @@ import { ThemeProvider } from './context/ThemeContext.tsx';
 import { AuthProvider } from './context/AuthContext.tsx';
 import { GoogleAuthModal } from './components/GoogleAuthModal.tsx';
 import { MosStudentExperience } from './components/MosStudentExperience.tsx';
+import MockTestAccountControl from './components/MockTestAccountControl.tsx';
 import SiteUxFixes from './components/SiteUxFixes.tsx';
 
 createRoot(document.getElementById('root')!).render(
@@ -16,6 +17,7 @@ createRoot(document.getElementById('root')!).render(
       <ThemeProvider>
         <App />
         <MosStudentExperience />
+        <MockTestAccountControl />
         <SiteUxFixes />
         <GoogleAuthModal />
       </ThemeProvider>
