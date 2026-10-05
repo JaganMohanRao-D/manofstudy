@@ -1,0 +1,51 @@
+name: MOS Security Scan
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '17 2 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mos-security-scan-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  secret-scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Scan repository and git history for verified secrets
+        uses: trufflesecurity/trufflehog@v3.90.8
+        with:
+          extra_args: --results=verified,unknown
+          path: ./
+
+  dependency-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Audit production dependencies
+        run: npm audit --audit-level=high
