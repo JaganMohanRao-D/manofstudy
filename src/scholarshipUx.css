@@ -1,0 +1,103 @@
+/* Scholarship portal UI polish: keep the existing data/logic, fix presentation only. */
+.mos-scholarships-hub article {
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Images should fill their media frame instead of leaving black letterbox bars. */
+.mos-scholarships-hub article > div:first-child {
+  width: 100% !important;
+  flex: 0 0 auto !important;
+  background: var(--mos-surface-muted) !important;
+}
+
+.mos-scholarships-hub article > div:first-child img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+/* Keep the scholarship information in one clean, full-width column. */
+.mos-scholarships-hub article > div:nth-child(2) {
+  width: 100% !important;
+  min-width: 0 !important;
+  display: block !important;
+  flex: 1 1 auto !important;
+}
+
+.mos-scholarships-hub article > div:nth-child(2) > div:first-child {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+.mos-scholarships-hub article h3 {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+}
+
+/* The award/benefit panel must also use the full content width. */
+.mos-scholarships-hub article h3 + div {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+}
+
+.mos-scholarships-hub article > div:last-child {
+  width: 100% !important;
+  flex: 0 0 auto !important;
+}
+
+/* Better reading rhythm for long eligibility/amount text. */
+.mos-scholarships-hub article p,
+.mos-scholarships-hub article .text-sm {
+  max-width: 100% !important;
+  overflow-wrap: anywhere;
+}
+
+/* Hero artwork should also fill its designed frame without black side bars. */
+.mos-scholarships-hub .mos-scholarship-hero > div:first-child {
+  background: var(--mos-surface-muted) !important;
+}
+
+.mos-scholarships-hub .mos-scholarship-hero > div:first-child img {
+  width: 100% !important;
+  aspect-ratio: 16 / 5 !important;
+  max-height: none !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+@media (max-width: 640px) {
+  .mos-scholarships-hub article h3 {
+    font-size: 1rem !important;
+    line-height: 1.35 !important;
+  }
+
+  .mos-scholarships-hub article > div:nth-child(2) {
+    padding: 1rem !important;
+  }
+
+  .mos-scholarships-hub article h3 + div {
+    margin-top: .75rem !important;
+    padding: .75rem !important;
+  }
+
+  .mos-scholarships-hub .mos-scholarship-hero > div:first-child img {
+    aspect-ratio: 16 / 7 !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mos-scholarships-hub article,
+  .mos-scholarships-hub article img {
+    transition: none !important;
+    animation: none !important;
+  }
+}
