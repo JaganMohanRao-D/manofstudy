@@ -64,6 +64,8 @@
   transform: none !important;
   rotate: 0deg !important;
   skew: 0deg !important;
+  skew-x: 0deg !important;
+  skew-y: 0deg !important;
 }
 
 @media (max-width: 767px) {
@@ -71,12 +73,17 @@
     width: 100vw !important;
     max-width: 100vw !important;
     overflow: hidden !important;
+    background: #050d18 !important;
   }
 
   #hero-banner > div:first-of-type {
     width: 100vw !important;
     max-width: 100vw !important;
+    height: min(700px, 82svh) !important;
+    max-height: 700px !important;
     overflow: hidden !important;
+    position: absolute !important;
+    inset: 0 0 auto 0 !important;
   }
 
   /* Mobile-only video framing: slightly oversize and crop the source edges so
@@ -84,7 +91,7 @@
   #hero-banner video {
     width: 110vw !important;
     max-width: none !important;
-    height: 100dvh !important;
+    height: 100% !important;
     left: -5vw !important;
     right: auto !important;
     object-fit: cover !important;
@@ -149,6 +156,43 @@
     padding-right: 0.75rem !important;
     white-space: nowrap !important;
     font-size: 0.78rem !important;
+  }
+
+  /* Mobile-only stats: remove the large glass card completely. The video
+     ends before this section, so the numbers sit cleanly on the solid hero
+     background instead of hiding the background artwork. */
+  #hero-banner .hero-mobile-stats,
+  #hero-banner .mt-8.grid.max-w-xl {
+    max-width: none !important;
+    margin-top: 1.25rem !important;
+    margin-left: -1rem !important;
+    margin-right: -1rem !important;
+    padding: 1rem 1rem 1.15rem !important;
+    border: 0 !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
+
+  #hero-banner .hero-mobile-stats > div,
+  #hero-banner .mt-8.grid.max-w-xl > div {
+    padding-top: 0.15rem !important;
+    padding-bottom: 0.15rem !important;
+  }
+
+  #hero-banner .hero-mobile-stats p:first-child,
+  #hero-banner .mt-8.grid.max-w-xl p:first-child {
+    font-size: 1.75rem !important;
+    line-height: 1 !important;
+  }
+
+  #hero-banner .hero-mobile-stats p:last-child,
+  #hero-banner .mt-8.grid.max-w-xl p:last-child {
+    margin-top: 0.35rem !important;
+    font-size: 0.62rem !important;
+    line-height: 0.9rem !important;
+    letter-spacing: 0.1em !important;
   }
 
   /* Mobile-only info bars: place them on the solid page background rather
