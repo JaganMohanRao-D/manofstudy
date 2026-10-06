@@ -22,6 +22,7 @@ const Detail = ({ label, value, icon: Icon }: { label: string; value?: React.Rea
 
 export const APStudentInlineDetails: React.FC<APStudentInlineDetailsProps> = ({ student, year }) => {
   const fee = (value?: number) => value === undefined ? undefined : '₹' + value.toLocaleString('en-IN');
+  const hallTicket = student.roll_no || undefined;
 
   return (
     <div className="mt-3 border-t border-cyan-500/20 pt-3">
@@ -30,12 +31,20 @@ export const APStudentInlineDetails: React.FC<APStudentInlineDetailsProps> = ({ 
           <p className="text-[10px] font-black uppercase tracking-[0.14em] text-cyan-600 dark:text-cyan-300">Student allotment details</p>
           <p className="mt-0.5 text-[11px] text-slate-500 dark:text-slate-400">Complete details from AP EAPCET {year} selected dataset</p>
         </div>
-        <span className="shrink-0 rounded-lg bg-amber-500/10 px-2 py-1 font-mono text-xs font-black text-amber-600 dark:text-amber-300">
-          {student.rank && student.rank > 0 ? `#${student.rank.toLocaleString()}` : 'Rank —'}
-        </span>
+        <div className="flex flex-wrap justify-end gap-1.5">
+          <span className="shrink-0 rounded-lg bg-amber-500/10 px-2 py-1 font-mono text-xs font-black text-amber-600 dark:text-amber-300">
+            {student.rank && student.rank > 0 ? `#${student.rank.toLocaleString()}` : 'Rank —'}
+          </span>
+          {hallTicket && (
+            <span className="shrink-0 rounded-lg bg-cyan-500/10 px-2 py-1 font-mono text-[11px] font-bold text-cyan-700 dark:text-cyan-300">
+              HT: {hallTicket}
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+        <Detail label="Hall ticket number" value={hallTicket || '—'} icon={Database} />
         <Detail label="Candidate category" value={student.category || '—'} icon={UserRound} />
         <Detail label="Gender" value={student.gender === 'M' ? 'Boys (M)' : student.gender === 'F' ? 'Girls (F)' : student.gender || '—'} icon={UserRound} />
         <Detail label="Region" value={student.region || '—'} icon={MapPin} />
