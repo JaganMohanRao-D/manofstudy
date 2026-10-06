@@ -46,8 +46,6 @@ export const APGlobalStudentSearch: React.FC<APGlobalStudentSearchProps> = ({ ye
       const records = await searchAllotments(year, {
         nameQuery: mode === 'name' ? value : undefined,
         exactRank: mode === 'rank' ? Number(rank) : undefined,
-        // Intentionally search the complete selected-year AP dataset.
-        // The college and branch selectors above must not restrict this tool.
         collegeCode: 'ALL',
         branchCode: 'ALL',
         phase,
@@ -156,7 +154,7 @@ export const APGlobalStudentSearch: React.FC<APGlobalStudentSearchProps> = ({ ye
                       <span className="shrink-0 rounded-lg bg-cyan-500/10 px-2 py-1 font-mono text-[11px] font-bold text-cyan-700 dark:text-cyan-300">#{record.rank.toLocaleString()}</span>
                     </div>
                     <div className="mt-2 space-y-1 text-[10px] text-slate-500 dark:text-slate-400">
-                      <p className="truncate"><span className="font-semibold text-slate-700 dark:text-slate-300">Hall Ticket:</span> <span className="font-mono font-bold text-slate-800 dark:text-slate-200">{record.hallTicket || '—'}</span></p>
+                      <p className="truncate"><span className="font-semibold text-slate-700 dark:text-slate-300">Hall Ticket:</span> <span className="font-mono font-bold text-slate-800 dark:text-slate-200">{record.roll_no || record.hallTicket || '—'}</span></p>
                       <p className="truncate"><span className="font-semibold text-slate-700 dark:text-slate-300">Branch:</span> {record.branch_name || record.branch_code}</p>
                       <div className="flex flex-wrap gap-1.5">
                         <span className="rounded-md bg-white px-1.5 py-1 dark:bg-slate-900">{record.category || '—'}</span>
