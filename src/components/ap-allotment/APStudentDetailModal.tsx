@@ -46,6 +46,7 @@ export const APStudentDetailModal: React.FC<APStudentDetailModalProps> = ({ stud
 
   if (!student || !portalTarget) return null;
   const fee = (value?: number) => value === undefined ? undefined : '₹' + value.toLocaleString('en-IN');
+  const hallTicket = student.roll_no || student.hallTicket || undefined;
 
   return createPortal(
     <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4">
@@ -71,15 +72,15 @@ export const APStudentDetailModal: React.FC<APStudentDetailModalProps> = ({ stud
               {student.rank && student.rank > 0 ? `Rank #${student.rank.toLocaleString()}` : 'Rank: — (N/A)'}
             </span>
             <span className="rounded-xl bg-indigo-500/10 px-3 py-2 font-mono text-xs font-bold text-indigo-600 dark:text-indigo-300">{student.alloted_category || 'Quota not listed'}</span>
-            {student.hallTicket && (
-              <span className="rounded-xl bg-cyan-500/10 px-3 py-2 font-mono text-xs font-bold text-cyan-700 dark:text-cyan-300">HT: {student.hallTicket}</span>
+            {hallTicket && (
+              <span className="rounded-xl bg-cyan-500/10 px-3 py-2 font-mono text-xs font-bold text-cyan-700 dark:text-cyan-300">HT: {hallTicket}</span>
             )}
           </div>
         </div>
 
         <div className="max-h-[calc(92vh-190px)] overflow-y-auto p-4 sm:p-6">
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            <Detail label="Hall ticket number" value={student.hallTicket || '—'} icon={Database} />
+            <Detail label="Hall ticket number" value={hallTicket || '—'} icon={Database} />
             <Detail label="Candidate category" value={student.category || '—'} icon={UserRound} />
             <Detail label="Gender" value={student.gender === 'M' ? 'Boys (M)' : student.gender === 'F' ? 'Girls (F)' : student.gender || '—'} icon={UserRound} />
             <Detail label="Region" value={student.region || '—'} icon={MapPin} />
