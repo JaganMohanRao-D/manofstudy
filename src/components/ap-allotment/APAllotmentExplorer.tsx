@@ -1,25 +1,32 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Users, Search, Award, BookOpen, SlidersHorizontal, AlertCircle, GraduationCap, Sparkles, Loader2, Database, ChevronRight, TrendingUp, BarChart3, Target, Building2, Flame } from 'lucide-react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  Award,
+  Building2,
+  ChevronLeft,
+  ChevronRight,
+  Flame,
+  Loader2,
+  Search,
+  Sparkles,
+  Target,
+  TrendingUp,
+  Users,
+} from 'lucide-react';
 import {
   AllotmentYear,
-  PhaseFilter,
-  CollegeDetailData,
-  CollegeListItem,
   AllotmentRecord,
-  getCollegeList,
+  PhaseFilter,
+  getAvailableBranches,
   getAvailableDistricts,
   getCollegeDetails,
-  searchAllotments,
+  getCollegeList,
   getDatasetSummary,
-  getAvailableBranches,
+  searchAllotments,
 } from '../../services/apEapcetAllotmentService';
-import APAllotmentTable from './APAllotmentTable';
-import APStudentSearch from './APStudentSearch';
 import APCollegeSelector from './APCollegeSelector';
 import APBranchSelector, { BranchOption } from './APBranchSelector';
 import ApTopColleges from '../ApTopColleges';
 import ApOverallRankInsights from '../ApOverallRankInsights';
-import { AP_EAPCET_GLOBAL_STATS, AP_EAPCET_CATEGORY_INSIGHTS } from '../../data/apEapcetCollegeManifest';
 
 export interface APAllotmentExplorerProps {
   initialCollegeCode?: string;
@@ -38,634 +45,369 @@ const PHASE_OPTIONS: Array<{ value: string; label: string }> = [
   { value: '2025:2', label: '2025 2nd Phase' },
 ];
 
+const SEAT_CATEGORY_OPTIONS = [
+  'OC_GEN_UR', 'OC_GEN_OU', 'OC_GIRLS_UR', 'OC_GIRLS_OU',
+  'BC_A_GEN_OU', 'BC_B_GEN_OU', 'BC_C_GEN_OU', 'BC_D_GEN_OU', 'BC_E_GEN_OU',
+  'SC_GEN_OU', 'ST_GEN_OU', 'EWS_GEN_OU',
+];
+
+const PAGE_SIZE = 30;
+
+function normalizeText(value: unknown) {
+  return String(value ?? '').toUpperCase().replace(/[^A-Z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function formatRank(value: number) {
+  return value > 0 ? value.toLocaleString() : '—';
+}
+
+function ResultCard({ record, index }: { record: AllotmentRecord; index: number }) {
+  const genderLabel = record.gender === 'F' ? 'Girls' : record.gender === 'M' ? 'Boys' : record.gender || '—';
+  const genderClass = record.gender === 'F'
+    ? 'bg-fuchsia-50 text-fuchsia-700 border-fuchsia-200 dark:bg-fuchsia-500/10 dark:text-fuchsia-300 dark:border-fuchsia-500/20'
+    : 'bg-sky-50 text-sky-700 border-sky-200 dark:bg-sky-500/10 dark:text-sky-300 dark:border-sky-500/20';
+
+  return (
+    <article className="group rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900/90">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-black text-slate-400">#{index}</span>
+            <h3 className="truncate text-sm font-black uppercase tracking-tight text-slate-900 dark:text-white" title={record.cand_name}>
+              {record.cand_name || 'Unknown Candidate'}
+            </h3>
+          </div>
+          <div className="mt-1 text-[10px] text-slate-500 dark:text-slate-400">HT: {record.roll_no || '—'}</div>
+        </div>
+        <span className="shrink-0 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 font-mono text-[11px] font-black text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300">
+          #{formatRank(record.rank)}
+        </span>
+      </div>
+
+      <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 dark:border-slate-800 dark:bg-slate-950/70">
+        <div className="flex items-start gap-2 text-[11px] font-semibold text-slate-800 dark:text-slate-200">
+          <span className="shrink-0 font-mono font-black text-sky-600 dark:text-sky-300">[{record.college_code}]</span>
+          <span className="truncate" title={record.college_name}>{record.college_name || 'College unavailable'}</span>
+        </div>
+        <div className="mt-1 truncate text-[10px] text-slate-500 dark:text-slate-400" title={record.branch_name}>
+          {record.branch_code} · {record.branch_name || 'Branch unavailable'}
+        </div>
+      </div>
+
+      <div className="mt-3 flex flex-wrap items-center gap-1.5">
+        <span className={`rounded-full border px-2 py-1 text-[10px] font-bold ${genderClass}`}>{genderLabel}</span>
+        <span className="rounded-full border border-slate-200 bg-white px-2 py-1 text-[10px] font-bold text-slate-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300">{record.category || '—'}</span>
+        <span className="rounded-full border border-slate-200 bg-white px-2 py-1 text-[10px] font-bold text-slate-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300">{record.region || '—'}</span>
+        <span className="rounded-full border border-sky-200 bg-sky-50 px-2 py-1 font-mono text-[9px] font-bold text-sky-700 dark:border-sky-500/20 dark:bg-sky-500/10 dark:text-sky-300">{record.alloted_category || '—'}</span>
+        <span className="ml-auto rounded-lg border border-slate-200 bg-white px-2 py-1 text-[9px] font-bold text-slate-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-400">Phase {record.phase || '—'}</span>
+      </div>
+    </article>
+  );
+}
+
 export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
   initialCollegeCode = 'ALL',
   initialBranchCode = 'ALL',
-  initialTab = 'college',
 }) => {
   const [activeExplorerTab, setActiveExplorerTab] = useState<'explorer' | 'top-colleges' | 'insights'>('explorer');
-  const [activeTab, setActiveTab] = useState(initialTab);
   const [selectedYear, setSelectedYear] = useState<AllotmentYear>('2026');
   const [selectedPhase, setSelectedPhase] = useState<PhaseFilter>('ALL');
   const [selectedDistrict, setSelectedDistrict] = useState('ALL');
-  const [selectedCollegeCode, setSelectedCollegeCode] = useState('ALL');
-  const [selectedBranchCode, setSelectedBranchCode] = useState('ALL');
-  const [collegesList, setCollegesList] = useState<CollegeListItem[]>([]);
-  const [collegeData, setCollegeData] = useState<CollegeDetailData | null>(null);
-  const [allColleges, setAllColleges] = useState<CollegeDetailData[]>([]);
+  const [selectedCollegeCode, setSelectedCollegeCode] = useState(initialCollegeCode || 'ALL');
+  const [selectedBranchCode, setSelectedBranchCode] = useState(initialBranchCode || 'ALL');
+  const [collegesList, setCollegesList] = useState<any[]>([]);
+  const [collegeData, setCollegeData] = useState<any>(null);
   const [datasetSummary, setDatasetSummary] = useState<any>(null);
   const [datasetBranches, setDatasetBranches] = useState<BranchOption[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [studentSearch, setStudentSearch] = useState('');
-  const [filters, setFilters] = useState({
-    category: 'ALL',
-    allottedCategory: 'ALL',
-    gender: 'ALL',
-    region: 'ALL',
-    minRank: '',
-    maxRank: '',
-  });
 
-  const phaseValue = selectedYear + ':' + selectedPhase;
+  const [query, setQuery] = useState('');
+  const [genderFilter, setGenderFilter] = useState('ALL');
+  const [casteFilter, setCasteFilter] = useState('ALL');
+  const [seatCategoryFilter, setSeatCategoryFilter] = useState('ALL');
+  const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('ASC');
+  const [results, setResults] = useState<AllotmentRecord[]>([]);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const phaseValue = `${selectedYear}:${selectedPhase}`;
   const districtOptions = useMemo(() => getAvailableDistricts(collegesList), [collegesList]);
-  const filteredColleges = useMemo(() => selectedDistrict === 'ALL' ? collegesList : collegesList.filter((c) => String(c.district ?? '').toUpperCase() === selectedDistrict.toUpperCase()), [collegesList, selectedDistrict]);
 
-  const resetFilters = useCallback(() => {
-    setFilters({ category: 'ALL', allottedCategory: 'ALL', gender: 'ALL', region: 'ALL', minRank: '', maxRank: '' });
+  const filteredColleges = useMemo(() => {
+    if (selectedDistrict === 'ALL') return collegesList;
+    return collegesList.filter((college) => normalizeText(college.district) === normalizeText(selectedDistrict));
+  }, [collegesList, selectedDistrict]);
+
+  const collegeSelectorItems = useMemo(() => filteredColleges.map((college) => ({
+    collegeCode: college.collegeCode,
+    collegeName: college.collegeName,
+    file: college.file,
+    hasData: true,
+    recordCount: college.recordCount,
+    minRank: 0,
+    maxRank: 0,
+    branchCount: 0,
+    branches: [],
+  })), [filteredColleges]);
+
+  const resetSearch = useCallback(() => {
+    setResults([]);
+    setHasSearched(false);
+    setSearchError(null);
+    setCurrentPage(1);
   }, []);
 
-  const applyYearPhase = useCallback((value: string) => {
-    const [year, phase] = value.split(':') as [AllotmentYear, PhaseFilter];
-    setSelectedYear(year);
-    setSelectedPhase(phase);
-    setSelectedDistrict('ALL');
-    setSelectedCollegeCode('ALL');
-    setSelectedBranchCode('ALL');
-    setStudentSearch('');
-    resetFilters();
-  }, [resetFilters]);
-
-  useEffect(() => {
-    let cancelled = false;
-    // Hard year boundary: never render records cached from the previous dataset.
-    setAllColleges([]);
-    setCollegeData(null);
-    setDatasetSummary(null);
-    setCollegesList([]);
-    setDatasetBranches([]);
-    setSelectedDistrict('ALL');
-    setLoadError(null);
+  const loadDataset = useCallback(async (year: AllotmentYear) => {
     setIsLoading(true);
-    Promise.all([getCollegeList(selectedYear), getDatasetSummary(selectedYear), getAvailableBranches(selectedYear)])
-      .then(([list, summary, branches]) => {
-        if (cancelled) return;
-        setCollegesList(list);
-        setDatasetSummary(summary);
-        setDatasetBranches(branches.map((branch) => ({ ...branch, recordCount: 0 })));
-      })
-      .catch((error) => {
-        if (cancelled) return;
-        setCollegesList([]);
-        setDatasetSummary(null);
-        setLoadError(error instanceof Error ? error.message : 'Unable to load AP allotment data.');
-      })
-      .finally(() => {
-        if (!cancelled) setIsLoading(false);
-      });
-    return () => { cancelled = true; };
-  }, [selectedYear]);
+    setLoadError(null);
+    setCollegeData(null);
+    resetSearch();
+    try {
+      const [list, summary, branches] = await Promise.all([
+        getCollegeList(year),
+        getDatasetSummary(year),
+        getAvailableBranches(year),
+      ]);
+      setCollegesList(list);
+      setDatasetSummary(summary);
+      setDatasetBranches(branches.map((branch) => ({ ...branch, recordCount: 0 })));
+    } catch (error) {
+      setLoadError(error instanceof Error ? error.message : 'Unable to load AP EAPCET allotment data.');
+      setCollegesList([]);
+      setDatasetSummary(null);
+      setDatasetBranches([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [resetSearch]);
 
   useEffect(() => {
-    if (!initialCollegeCode || initialCollegeCode === 'ALL') return;
-    // External navigation can request a college, but never override the clean default.
-    const exists = collegesList.some((c) => c.collegeCode === initialCollegeCode);
-    if (exists && selectedCollegeCode === 'ALL') setSelectedCollegeCode(initialCollegeCode);
-  }, [initialCollegeCode, collegesList, selectedCollegeCode]);
+    void loadDataset(selectedYear);
+  }, [loadDataset, selectedYear]);
 
   useEffect(() => {
     let cancelled = false;
     if (selectedCollegeCode === 'ALL') {
       setCollegeData(null);
-      setIsLoading(false);
-      return;
+      return () => { cancelled = true; };
     }
+
     setIsLoading(true);
     getCollegeDetails(selectedYear, selectedCollegeCode)
-      .then((data) => { if (!cancelled) setCollegeData(data); })
+      .then((data) => {
+        if (cancelled) return;
+        setCollegeData(data);
+        if (data && selectedBranchCode !== 'ALL' && !data.branches.some((branch: any) => branch.branch_code === selectedBranchCode)) {
+          setSelectedBranchCode('ALL');
+        }
+      })
       .catch((error) => {
         if (!cancelled) {
           setCollegeData(null);
-          setLoadError(error instanceof Error ? error.message : 'Unable to load selected college.');
+          setLoadError(error instanceof Error ? error.message : 'Unable to load selected AP college.');
         }
       })
-      .finally(() => { if (!cancelled) setIsLoading(false); });
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+
     return () => { cancelled = true; };
   }, [selectedYear, selectedCollegeCode]);
 
-  const visibleRecords = useMemo(() => {
-    const source = selectedCollegeCode === 'ALL' ? [] : (collegeData?.allRecords ?? []);
-
-    return source.filter((record) => {
-      if (selectedPhase !== 'ALL' && record.phase !== Number(selectedPhase)) return false;
-      if (selectedBranchCode !== 'ALL' && record.branch_code !== selectedBranchCode) return false;
-      if (filters.category !== 'ALL' && record.category !== filters.category) return false;
-      if (filters.allottedCategory !== 'ALL' && record.alloted_category !== filters.allottedCategory) return false;
-      if (filters.gender !== 'ALL' && record.gender !== filters.gender) return false;
-      if (filters.region !== 'ALL' && record.region !== filters.region) return false;
-      if (filters.minRank && record.rank < Number(filters.minRank)) return false;
-      if (filters.maxRank && record.rank > Number(filters.maxRank)) return false;
-      return true;
-    });
-  }, [allColleges, collegeData, selectedCollegeCode, selectedPhase, selectedBranchCode, filters]);
-
-  useEffect(() => {
-    const available = new Set((collegeData?.branches ?? []).map((branch) => branch.branch_code));
-    if (selectedBranchCode !== 'ALL' && !available.has(selectedBranchCode)) setSelectedBranchCode('ALL');
-  }, [collegeData, selectedBranchCode]);
-
-  const branchOptions: BranchOption[] = useMemo(() => {
+  const branchOptions = useMemo<BranchOption[]>(() => {
     if (selectedCollegeCode === 'ALL') return datasetBranches;
-    return (collegeData?.branches ?? []).map((branch) => ({
+    return (collegeData?.branches ?? []).map((branch: any) => ({
       branchCode: branch.branch_code,
       branchName: branch.branch_name,
       recordCount: branch.recordCount,
     }));
   }, [collegeData, datasetBranches, selectedCollegeCode]);
 
-  const filteredCollegeBranches = useMemo(() => {
-    if (!collegeData) return [];
-    return collegeData.branches.map((branch) => ({
-      ...branch,
-      records: branch.records.filter((record) => selectedPhase === 'ALL' || record.phase === Number(selectedPhase)),
-    }));
-  }, [collegeData, selectedPhase]);
+  const categoryOptions = useMemo(() => {
+    const categories = Array.isArray(datasetSummary?.categories) ? datasetSummary.categories.map(String) : [];
+    return Array.from(new Set(categories)).filter(Boolean).sort((a, b) => a.localeCompare(b));
+  }, [datasetSummary]);
 
-  const phaseDistribution = useMemo(() => {
-    const counts: Record<string, number> = {};
-    visibleRecords.forEach((record) => { if (record.phase) counts[String(record.phase)] = (counts[String(record.phase)] || 0) + 1; });
-    return counts;
-  }, [visibleRecords]);
+  const localRecords = useMemo(() => {
+    if (!collegeData?.allRecords) return [] as AllotmentRecord[];
+    return collegeData.allRecords.filter((record: AllotmentRecord) => {
+      if (selectedPhase !== 'ALL' && record.phase !== Number(selectedPhase)) return false;
+      if (selectedBranchCode !== 'ALL' && record.branch_code !== selectedBranchCode) return false;
+      if (genderFilter !== 'ALL' && record.gender !== genderFilter) return false;
+      if (casteFilter !== 'ALL' && record.category !== casteFilter) return false;
+      if (seatCategoryFilter !== 'ALL' && record.alloted_category !== seatCategoryFilter) return false;
+      return true;
+    }).sort((a: AllotmentRecord, b: AllotmentRecord) => sortOrder === 'ASC' ? a.rank - b.rank : b.rank - a.rank);
+  }, [collegeData, selectedPhase, selectedBranchCode, genderFilter, casteFilter, seatCategoryFilter, sortOrder]);
 
-  const categoryInsights = useMemo(() => {
-    const map = new Map<string, { min: number; max: number; count: number }>();
-    visibleRecords.forEach((record) => {
-      const key = record.category || 'Unknown';
-      const item = map.get(key) || { min: Infinity, max: 0, count: 0 };
-      item.min = Math.min(item.min, record.rank);
-      item.max = Math.max(item.max, record.rank);
-      item.count += 1;
-      map.set(key, item);
-    });
-    return Array.from(map.entries()).sort((a, b) => a[0].localeCompare(b[0]));
-  }, [visibleRecords]);
-
-  const genderMix = useMemo(() => {
-    const boys = visibleRecords.filter((record) => record.gender === 'M').length;
-    const girls = visibleRecords.filter((record) => record.gender === 'F').length;
-    const total = boys + girls;
-    return { boys, girls, total, boysPct: total ? Math.round((boys / total) * 100) : 0, girlsPct: total ? Math.round((girls / total) * 100) : 0 };
-  }, [visibleRecords]);
-
-  const bestRank = selectedCollegeCode === 'ALL' ? Number(datasetSummary?.minRank ?? 0) : (visibleRecords.length ? Math.min(...visibleRecords.map((r) => r.rank)) : 0);
-  const lastRank = selectedCollegeCode === 'ALL' ? Number(datasetSummary?.maxRank ?? 0) : (visibleRecords.length ? Math.max(...visibleRecords.map((r) => r.rank)) : 0);
-
-
-  const featuredColleges = useMemo(() => (
-    [...collegesList]
-      .sort((a, b) => (b.recordCount ?? 0) - (a.recordCount ?? 0))
-      .slice(0, 15)
-  ), [collegesList]);
-
-  const popularBranches = useMemo(() => (
-    [...datasetBranches]
-      .sort((a, b) => (b.recordCount ?? 0) - (a.recordCount ?? 0))
-      .slice(0, 12)
-  ), [datasetBranches]);
-
-  const statewideCategoryBars = useMemo(() => (
-    (AP_EAPCET_CATEGORY_INSIGHTS?.byAllottedQuota ?? [])
-      .filter((item: any) => item.totalRecords > 0)
-      .sort((a: any, b: any) => b.totalRecords - a.totalRecords)
-      .slice(0, 8)
-  ), []);
-
-  const currentCollege = selectedCollegeCode !== 'ALL' ? collegeData : null;
-  const branchLabel = selectedBranchCode === 'ALL'
-    ? 'All Branches'
-    : branchOptions.find((branch) => branch.branchCode === selectedBranchCode)?.branchName || selectedBranchCode;
-
-  const runStudentSearch = useCallback(async () => {
-    if (!studentSearch.trim()) return;
-    setIsLoading(true);
-    try {
-      const results = await searchAllotments(selectedYear, {
-        nameQuery: studentSearch.trim(),
-        collegeCode: selectedCollegeCode,
-        branchCode: selectedBranchCode,
-        phase: selectedPhase,
-        limit: 500,
-      });
-      setStudentSearch(studentSearch);
-      setActiveTab('student-search');
-      // The dedicated search tab is rendered below and owns its detailed result state.
-      return results;
-    } finally {
-      setIsLoading(false);
+  const runGlobalSearch = useCallback(async () => {
+    const trimmed = query.trim();
+    if (!trimmed) {
+      resetSearch();
+      return;
     }
-  }, [selectedYear, selectedCollegeCode, selectedBranchCode, selectedPhase, studentSearch]);
 
-  const onDistrictChange = (district: string) => {
-    setSelectedDistrict(district);
-    setSelectedCollegeCode('ALL');
-    setSelectedBranchCode('ALL');
-    resetFilters();
-  };
+    setIsSearching(true);
+    setSearchError(null);
+    setHasSearched(true);
+    setCurrentPage(1);
 
-  const onCollegeChange = (code: string) => {
+    try {
+      const numericQuery = /^\d+$/.test(trimmed.replace(/,/g, ''));
+      const filtered = await searchAllotments(selectedYear, {
+        nameQuery: numericQuery ? undefined : trimmed,
+        exactRank: numericQuery ? Number(trimmed.replace(/,/g, '')) : undefined,
+        collegeCode: 'ALL',
+        branchCode: selectedBranchCode,
+        category: casteFilter,
+        allottedCategory: seatCategoryFilter,
+        gender: genderFilter,
+        phase: selectedPhase,
+        limit: 1000,
+      });
+      const ordered = [...filtered].sort((a, b) => sortOrder === 'ASC' ? a.rank - b.rank : b.rank - a.rank);
+      setResults(ordered);
+      if (!ordered.length) setSearchError('No AP allotment records matched this search.');
+    } catch (error) {
+      setResults([]);
+      setSearchError(error instanceof Error ? error.message : 'AP student search is temporarily unavailable.');
+    } finally {
+      setIsSearching(false);
+    }
+  }, [query, selectedYear, selectedBranchCode, casteFilter, seatCategoryFilter, genderFilter, selectedPhase, sortOrder, resetSearch]);
+
+  const displayRecords = useMemo(() => {
+    if (hasSearched) return results;
+    if (selectedCollegeCode !== 'ALL') return localRecords;
+    return [] as AllotmentRecord[];
+  }, [hasSearched, results, selectedCollegeCode, localRecords]);
+
+  const totalPages = Math.max(1, Math.ceil(displayRecords.length / PAGE_SIZE));
+  const paginatedRecords = useMemo(() => {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    return displayRecords.slice(start, start + PAGE_SIZE);
+  }, [displayRecords, currentPage]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) setCurrentPage(1);
+  }, [currentPage, totalPages]);
+
+  const selectedCollegeName = selectedCollegeCode === 'ALL'
+    ? 'All Colleges (Statewide)'
+    : collegesList.find((college) => college.collegeCode === selectedCollegeCode)?.collegeName || selectedCollegeCode;
+
+  const handleCollegeChange = (code: string) => {
     setSelectedCollegeCode(code);
     setSelectedBranchCode('ALL');
-    setAllColleges([]);
-    resetFilters();
+    resetSearch();
+  };
+
+  const handlePhaseChange = (value: string) => {
+    const [year, phase] = value.split(':') as [AllotmentYear, PhaseFilter];
+    setSelectedYear(year);
+    setSelectedPhase(phase);
+    setSelectedCollegeCode('ALL');
+    setSelectedBranchCode('ALL');
+    resetSearch();
   };
 
   const handleJumpToCollegeBranch = (collegeCode: string, branchCode?: string) => {
-    if (collegeCode) {
-      setSelectedCollegeCode(collegeCode);
-      if (branchCode) setSelectedBranchCode(branchCode);
-      setActiveExplorerTab('explorer');
-      setActiveTab('college');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    setSelectedCollegeCode(collegeCode || 'ALL');
+    setSelectedBranchCode(branchCode || 'ALL');
+    setActiveExplorerTab('explorer');
+    resetSearch();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const datasetCards: Array<{ label: string; value: string | number; icon: React.ElementType }> = [
-    { label: 'Total allotments', value: datasetSummary?.totalRecords ?? 0, icon: Database },
-    { label: 'AP colleges', value: collegesList.length, icon: GraduationCap },
-    { label: 'Branches', value: datasetSummary?.branches ?? 0, icon: BookOpen },
-    { label: 'Observed rank span', value: bestRank && lastRank ? bestRank.toLocaleString() + ' – ' + lastRank.toLocaleString() : '—', icon: Target },
-  ];
+  const pageStart = displayRecords.length ? (currentPage - 1) * PAGE_SIZE + 1 : 0;
+  const pageEnd = Math.min(currentPage * PAGE_SIZE, displayRecords.length);
 
   return (
-    <div className="mos-ap-explorer min-h-screen bg-[var(--mos-page-bg)] text-[var(--mos-text-primary)] py-4 sm:py-8 px-3 sm:px-6 font-sans transition-colors duration-200">
-      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
-        {/* 1. BRANDING & TITLE */}
-        <div className="text-center space-y-2 sm:space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-700 dark:text-cyan-400 text-xs font-semibold tracking-wide shadow-sm">
-            <Flame className="w-4 h-4 text-cyan-600 dark:text-cyan-500 fill-cyan-500 animate-pulse" />
+    <div className="mos-ap-explorer min-h-screen bg-[var(--mos-page-bg)] px-3 py-5 font-sans text-[var(--mos-text-primary)] transition-colors duration-200 sm:px-6 sm:py-8">
+      <div className="mx-auto max-w-7xl space-y-4 sm:space-y-6">
+        <div className="space-y-2 text-center sm:space-y-3">
+          <div className="inline-flex items-center gap-2 rounded-full border border-sky-300 bg-sky-50 px-3 py-1.5 text-xs font-semibold tracking-wide text-sky-700 shadow-sm dark:border-sky-500/30 dark:bg-sky-500/10 dark:text-sky-300">
+            <Flame className="h-4 w-4 fill-sky-500 text-sky-600" />
             <span>🔥 AP EAPCET 2026 Final Phase Seat Allotments Name Wise</span>
           </div>
-          <h1 className="text-xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            AP EAPCET 2026 Final Phase Seat Allotments Name Wise
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed px-1">
-            ఆంధ్రప్రదేశ్ ఇంజనీరింగ్ కాలేజీల వారీగా, బ్రాంచ్ వారీగా విద్యార్థుల అలాట్‌మెంట్ జాబితా &amp; కట్-ఆఫ్ ర్యాంకులు (260+ కాలేజీలు, 1,00,000+ సీట్లు)
-          </p>
+          <h1 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-3xl lg:text-4xl">AP EAPCET 2026 Final Phase Seat Allotments Name Wise</h1>
+          <p className="mx-auto max-w-3xl px-1 text-xs leading-relaxed text-slate-600 dark:text-slate-400 sm:text-sm">ఆంధ్రప్రదేశ్ ఇంజనీరింగ్ కాలేజీల వారీగా, బ్రాంచ్ వారీగా విద్యార్థుల అలాట్‌మెంట్ జాబితా &amp; కట్-ఆఫ్ ర్యాంకులు (260+ కాలేజీలు, 1,00,000+ సీట్లు)</p>
         </div>
 
-        {/* Primary View Switcher */}
         <div className="flex justify-center pt-1">
-          <div className="inline-flex flex-wrap justify-center p-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl gap-1">
-            <button
-              type="button"
-              id="ap-tab-allotment-explorer"
-              onClick={() => setActiveExplorerTab('explorer')}
-              className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
-                activeExplorerTab === 'explorer'
-                  ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800/60'
-              }`}
-            >
-              <Building2 className="w-4 h-4" />
-              <span>College &amp; Candidate Explorer</span>
-            </button>
-            
-            <button
-              type="button"
-              id="ap-tab-top-colleges"
-              onClick={() => setActiveExplorerTab('top-colleges')}
-              className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
-                activeExplorerTab === 'top-colleges'
-                  ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800/60'
-              }`}
-            >
-              <Award className="w-4 h-4" />
-              <span>Top B.Tech Colleges</span>
-              <span className="px-1.5 py-0.5 rounded-full text-[10px] font-mono font-extrabold bg-amber-500/20 text-amber-950 dark:text-amber-300 border border-amber-500/40">
-                OC Ranks
-              </span>
-            </button>
-
-            <button
-              type="button"
-              id="ap-tab-overall-rank-insights"
-              onClick={() => setActiveExplorerTab('insights')}
-              className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
-                activeExplorerTab === 'insights'
-                  ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/20'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800/60'
-              }`}
-            >
-              <TrendingUp className="w-4 h-4" />
-              <span>Overall Rank Insights</span>
-              <span className="px-1.5 py-0.5 rounded-full text-[10px] font-mono font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                NEW
-              </span>
-            </button>
+          <div className="inline-flex flex-wrap justify-center gap-1 rounded-2xl border border-slate-200 bg-white p-1 shadow-xl dark:border-slate-800 dark:bg-slate-900">
+            <button type="button" onClick={() => setActiveExplorerTab('explorer')} className={`flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition-all sm:px-4 sm:text-sm ${activeExplorerTab === 'explorer' ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/20' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'}`}><Building2 className="h-4 w-4" /><span>College &amp; Candidate Explorer</span></button>
+            <button type="button" onClick={() => setActiveExplorerTab('top-colleges')} className={`flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition-all sm:px-4 sm:text-sm ${activeExplorerTab === 'top-colleges' ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'}`}><Award className="h-4 w-4" /><span>Top B.Tech Colleges</span><span className="rounded-full border border-amber-500/40 bg-amber-500/15 px-1.5 py-0.5 text-[10px] font-extrabold text-amber-700 dark:text-amber-300">OC Ranks</span></button>
+            <button type="button" onClick={() => setActiveExplorerTab('insights')} className={`flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition-all sm:px-4 sm:text-sm ${activeExplorerTab === 'insights' ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/20' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'}`}><TrendingUp className="h-4 w-4" /><span>Overall Rank Insights</span><span className="rounded-full border border-emerald-500/40 bg-emerald-500/15 px-1.5 py-0.5 text-[10px] font-extrabold text-emerald-700 dark:text-emerald-300">NEW</span></button>
           </div>
         </div>
 
-        {activeExplorerTab === 'top-colleges' ? (
-          <div className="space-y-6 animate-in fade-in duration-200">
-            <ApTopColleges onSelectCollegeBranch={handleJumpToCollegeBranch} />
-          </div>
-        ) : activeExplorerTab === 'insights' ? (
-          <div className="space-y-6 animate-in fade-in duration-200">
-            <ApOverallRankInsights />
-          </div>
-        ) : (
-          <div className="space-y-5 sm:space-y-6 animate-in fade-in duration-200">
-            <header className="mos-ap-hero relative overflow-hidden rounded-[2rem] border border-cyan-400/10 bg-gradient-to-br from-cyan-50 via-white to-indigo-50 dark:from-slate-900 dark:via-slate-950 dark:to-indigo-950/50 p-5 sm:p-8 shadow-2xl shadow-cyan-950/20">
-              <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-cyan-400/10 blur-3xl mos-float" />
-              <div className="absolute -bottom-24 left-1/3 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl" />
+        {activeExplorerTab === 'top-colleges' ? <ApTopColleges onSelectCollegeBranch={handleJumpToCollegeBranch} /> : activeExplorerTab === 'insights' ? <ApOverallRankInsights /> : (
+          <div className="space-y-5 sm:space-y-6">
+            <section className="relative overflow-hidden rounded-[2rem] border border-sky-400/20 bg-gradient-to-br from-sky-50 via-white to-cyan-50 p-5 shadow-2xl shadow-sky-950/10 dark:from-slate-900 dark:via-slate-950 dark:to-sky-950/50 sm:p-8">
+              <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-sky-400/15 blur-3xl" /><div className="absolute -bottom-24 left-1/3 h-48 w-48 rounded-full bg-cyan-500/10 blur-3xl" />
               <div className="relative grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
                 <div>
-                  <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-cyan-700 dark:text-cyan-300">
-                    <Sparkles className="h-3.5 w-3.5" /> AP EAPCET {selectedYear} · {selectedPhase === 'ALL' ? 'All phases' : 'Phase ' + selectedPhase}
-                  </div>
-                  <h2 className="mt-4 text-2xl sm:text-4xl font-black tracking-[-0.04em] text-slate-950 dark:text-white">AP Allotments <span className="text-cyan-700 dark:text-cyan-300">Explorer</span></h2>
-                  <p className="mt-2 max-w-2xl text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-slate-400">Find colleges, branches and allotted students from the selected AP EAPCET source dataset — without mixing years.</p>
+                  <div className="inline-flex items-center gap-2 rounded-full border border-sky-400/25 bg-sky-400/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-sky-700 dark:text-sky-300"><Sparkles className="h-3.5 w-3.5" /> AP EAPCET {selectedYear} · {selectedPhase === 'ALL' ? 'All phases' : `Phase ${selectedPhase}`}</div>
+                  <h2 className="mt-4 text-2xl font-black tracking-[-0.04em] text-slate-950 dark:text-white sm:text-4xl">AP Allotments <span className="text-sky-600 dark:text-sky-300">Explorer</span></h2>
+                  <p className="mt-2 max-w-2xl text-xs leading-relaxed text-slate-600 dark:text-slate-400 sm:text-sm">Find colleges, branches and allotted students from the selected AP EAPCET source dataset — without mixing years.</p>
                 </div>
-                <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                  <div className="mos-stat-card rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03] p-3 sm:p-4"><div className="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Records</div><div className="mt-1 text-xl sm:text-2xl font-black text-slate-950 dark:text-white">{(datasetSummary?.totalRecords ?? 0).toLocaleString()}</div></div>
-                  <div className="mos-stat-card rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03] p-3 sm:p-4"><div className="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Colleges</div><div className="mt-1 text-xl sm:text-2xl font-black text-cyan-700 dark:text-cyan-300">{collegesList.length}</div></div>
-                </div>
-              </div>
-            </header>
-
-            <section className="mos-ap-controls mos-fade-up rounded-[1.75rem] border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/80 p-3 sm:p-5 shadow-2xl shadow-cyan-950/20 backdrop-blur-xl">
-              <div className="mb-3 flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-cyan-400">Explore the dataset</p>
-                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Choose year → district → college → branch. Every view stays inside the selected AP dataset.</p>
-                </div>
-                <div className="hidden sm:flex items-center gap-2 rounded-full border border-emerald-400/15 bg-emerald-400/5 px-3 py-1.5 text-[10px] font-bold text-emerald-300">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" /> Live dataset view
-                </div>
-              </div>
-              <div className="grid grid-cols-1 gap-3 lg:grid-cols-4">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                  Allotment year & phase
-                  <select value={phaseValue} onChange={(e) => applyYearPhase(e.target.value)} className="mos-ap-control mt-1.5 w-full rounded-2xl px-3.5 py-3.5 text-sm font-bold text-slate-950 dark:text-white outline-none">
-                    {PHASE_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-                  </select>
-                </label>
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">District
-                  <select value={selectedDistrict} onChange={(e) => onDistrictChange(e.target.value)} className="mos-ap-control mt-1.5 w-full rounded-2xl px-3.5 py-3.5 text-sm font-bold outline-none">
-                    <option value="ALL">All Districts</option>
-                    {districtOptions.map((district) => <option key={district} value={district}>{district}</option>)}
-                  </select>
-                </label>
-                <APCollegeSelector
-                  colleges={filteredColleges.map((college) => ({ collegeCode: college.collegeCode, collegeName: college.collegeName, file: college.file, hasData: true, recordCount: college.recordCount, minRank: 0, maxRank: 0, branchCount: 0, branches: [] }))}
-                  selectedCollegeCode={selectedCollegeCode}
-                  onSelectCollege={onCollegeChange}
-                  isLoading={isLoading}
-                />
-                <APBranchSelector
-                  branches={branchOptions}
-                  selectedBranchCode={selectedBranchCode}
-                  onSelectBranch={(code) => { setSelectedBranchCode(code); resetFilters(); }}
-                  totalCollegeRecords={collegeData?.recordCount ?? 0}
-                />
-              </div>
-              <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] text-slate-600 dark:text-slate-400">
-                <span className="rounded-full border border-slate-200 dark:border-white/10 bg-slate-100/90 dark:bg-slate-950/70 px-2.5 py-1">Dataset: AP EAPCET {selectedYear}</span>
-                {selectedPhase !== 'ALL' && <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2.5 py-1 text-cyan-700 dark:text-cyan-300">Phase {selectedPhase}</span>}
-                <span className="rounded-full border border-slate-200 dark:border-white/10 bg-slate-100/90 dark:bg-slate-950/70 px-2.5 py-1">{filteredColleges.length} colleges in view</span>
-                {selectedCollegeCode !== 'ALL' && <span className="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2.5 py-1 text-indigo-700 dark:text-indigo-300">{branchOptions.length} branches</span>}
+                <div className="grid grid-cols-2 gap-2 sm:gap-3"><div className="rounded-2xl border border-slate-200 bg-white/80 p-3 dark:border-white/10 dark:bg-white/[0.03] sm:p-4"><div className="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Records</div><div className="mt-1 text-xl font-black text-slate-950 dark:text-white">{Number(datasetSummary?.totalRecords ?? 0).toLocaleString()}</div></div><div className="rounded-2xl border border-slate-200 bg-white/80 p-3 dark:border-white/10 dark:bg-white/[0.03] sm:p-4"><div className="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Colleges</div><div className="mt-1 text-xl font-black text-sky-600 dark:text-sky-300">{collegesList.length}</div></div></div>
               </div>
             </section>
 
-            <nav className="flex justify-center">
-              <div className="inline-flex flex-wrap justify-center gap-1 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-1 shadow-xl">
-                {[
-                  ['college', 'Explore Colleges'],
-                  ['student-search', 'Search Student Name'],
-                  ['rank-search', 'Search by Rank'],
-                ].map(([id, label]) => (
-                  <button key={id} type="button" onClick={() => setActiveTab(id as typeof activeTab)} className={'rounded-xl px-4 py-2 text-xs font-bold transition-all ' + (activeTab === id ? 'bg-cyan-600 text-slate-950 dark:text-white shadow-lg' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-slate-800 hover:text-slate-950 dark:text-white')}>{label}</button>
-                ))}
+            <section className="rounded-[1.75rem] border border-slate-200 bg-white/95 p-3 shadow-2xl shadow-sky-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/80 sm:p-5">
+              <div className="mb-3 flex items-center justify-between gap-3"><div><p className="text-[10px] font-black uppercase tracking-[0.18em] text-sky-600 dark:text-sky-400">Explore the dataset</p><p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Choose college → branch, then search a student name or rank across AP.</p></div><div className="hidden items-center gap-2 rounded-full border border-emerald-400/15 bg-emerald-400/5 px-3 py-1.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-300 sm:flex"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" /> Live dataset view</div></div>
+              <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+                <APCollegeSelector colleges={collegeSelectorItems} selectedCollegeCode={selectedCollegeCode} onSelectCollege={handleCollegeChange} isLoading={isLoading} />
+                <APBranchSelector branches={branchOptions} selectedBranchCode={selectedBranchCode} onSelectBranch={(code) => { setSelectedBranchCode(code); resetSearch(); }} totalCollegeRecords={collegeData?.recordCount ?? 0} />
               </div>
-            </nav>
 
-            {activeTab === 'student-search' || activeTab === 'rank-search' ? (
-              <APStudentSearch year={selectedYear} collegeCode={selectedCollegeCode} branchCode={selectedBranchCode} phase={selectedPhase} initialName={studentSearch} />
-            ) : selectedCollegeCode === 'ALL' ? (
-              <section className="space-y-4 animate-in fade-in duration-300">
-                {/* AP statewide intelligence hub */}
-                <div className="mos-ap-statewide-hero relative overflow-hidden rounded-[1.75rem] border border-cyan-400/15 bg-gradient-to-br from-cyan-50 via-white to-indigo-50 dark:from-slate-900 dark:via-slate-950 dark:to-indigo-950/60 p-5 sm:p-7 shadow-2xl">
-                  <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-cyan-400/15 blur-3xl mos-float" />
-                  <div className="absolute -bottom-24 left-1/3 h-52 w-52 rounded-full bg-indigo-500/10 blur-3xl" />
-                  <div className="relative">
-                    <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
-                      <div>
-                        <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.15em] text-cyan-700 dark:text-cyan-300">
-                          <Sparkles className="h-3.5 w-3.5" />
-                          AP EAPCET {selectedYear} · All phases
-                        </div>
-                        <h2 className="mt-3 text-2xl sm:text-4xl font-black tracking-[-0.04em] text-slate-950 dark:text-white">
-                          AP Allotments <span className="text-cyan-700 dark:text-cyan-300">Explorer</span>
-                        </h2>
-                        <p className="mt-2 max-w-2xl text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                          Explore Andhra Pradesh engineering allotment records by college, branch, student, rank, category and phase — all from the selected AP dataset.
-                        </p>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setActiveTab('student-search')}
-                        className="self-start lg:self-auto inline-flex items-center gap-2 rounded-xl bg-cyan-600 px-4 py-2.5 text-xs font-black text-white shadow-lg shadow-cyan-600/20 hover:bg-cyan-700 transition-all"
-                      >
-                        <Search className="h-4 w-4" />
-                        Search a Student
-                      </button>
-                    </div>
-                  </div>
-                </div>
+              <div className="mt-3 grid grid-cols-1 gap-2 lg:grid-cols-[1fr_auto_auto]">
+                <div className="relative"><Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" /><input value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter') void runGlobalSearch(); }} placeholder="Search candidate name or rank..." className="w-full rounded-xl border border-slate-300 bg-white py-2.5 pl-9 pr-3 text-sm text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 dark:border-slate-700 dark:bg-slate-950 dark:text-white" /></div>
+                <button type="button" onClick={() => void runGlobalSearch()} disabled={isSearching || !query.trim()} className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-500 px-4 py-2.5 text-xs font-black text-white shadow-lg shadow-sky-500/20 transition hover:bg-sky-600 disabled:cursor-not-allowed disabled:opacity-50">{isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />} Global Search</button>
+                <button type="button" onClick={() => { setSortOrder((value) => value === 'ASC' ? 'DESC' : 'ASC'); setCurrentPage(1); }} className="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 transition hover:border-sky-400 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">↕ Rank: {sortOrder === 'ASC' ? 'Low-High' : 'High-Low'}</button>
+              </div>
 
-                {/* Statewide key numbers */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
-                  {[
-                    { label: 'Engineering Colleges', value: AP_EAPCET_GLOBAL_STATS.totalColleges, suffix: ' Colleges', icon: Building2, tone: 'text-cyan-600 dark:text-cyan-300' },
-                    { label: 'Allotment Records', value: AP_EAPCET_GLOBAL_STATS.totalRecords, suffix: '', icon: Users, tone: 'text-emerald-600 dark:text-emerald-300' },
-                    { label: 'Engineering Branches', value: AP_EAPCET_GLOBAL_STATS.totalBranches, suffix: ' Streams', icon: BookOpen, tone: 'text-indigo-600 dark:text-indigo-300' },
-                    { label: 'Observed Rank Range', value: '#' + AP_EAPCET_GLOBAL_STATS.minRank.toLocaleString() + ' → #' + AP_EAPCET_GLOBAL_STATS.maxRank.toLocaleString(), suffix: '', icon: Target, tone: 'text-amber-600 dark:text-amber-300' },
-                  ].map(({ label, value, suffix, icon: Icon, tone }) => (
-                    <div key={label} className="mos-ap-state-card rounded-2xl p-3.5 sm:p-4">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-[10px] uppercase tracking-[0.13em] text-slate-500 dark:text-slate-400">{label}</span>
-                        <Icon className={`h-4 w-4 ${tone}`} />
-                      </div>
-                      <div className={`mt-2 text-xl sm:text-2xl font-black ${tone}`}>
-                        {typeof value === 'number' ? value.toLocaleString() : value}{suffix}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+              <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                <select value={genderFilter} onChange={(event) => { setGenderFilter(event.target.value); resetSearch(); }} className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-700 outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200"><option value="ALL">All Genders</option><option value="M">Boys (M)</option><option value="F">Girls (F)</option></select>
+                <select value={casteFilter} onChange={(event) => { setCasteFilter(event.target.value); resetSearch(); }} className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-700 outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200"><option value="ALL">All Castes</option>{categoryOptions.map((category) => <option key={category} value={category}>{category}</option>)}</select>
+                <select value={seatCategoryFilter} onChange={(event) => { setSeatCategoryFilter(event.target.value); resetSearch(); }} className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-700 outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200"><option value="ALL">All Seat Categories / Quotas</option>{SEAT_CATEGORY_OPTIONS.map((category) => <option key={category} value={category}>{category}</option>)}</select>
+                <select value={selectedDistrict} onChange={(event) => { setSelectedDistrict(event.target.value); setSelectedCollegeCode('ALL'); setSelectedBranchCode('ALL'); resetSearch(); }} className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-700 outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200"><option value="ALL">All Districts</option>{districtOptions.map((district) => <option key={district} value={district}>{district}</option>)}</select>
+              </div>
 
-                {/* Quick search + branch shortcuts */}
-                <div className="grid grid-cols-1 lg:grid-cols-[1.25fr_1fr] gap-4">
-                  <section className="mos-ap-state-panel rounded-[1.5rem] p-4 sm:p-5">
-                    <div className="flex items-center gap-2">
-                      <Sparkles className="h-5 w-5 text-cyan-500" />
-                      <div>
-                        <h3 className="text-base sm:text-lg font-black text-slate-950 dark:text-white">Statewide Student Search</h3>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400">Search AP allotments without selecting a college first.</p>
-                      </div>
-                    </div>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {['CSE', 'ECE', 'VITAPU', 'RVRJC', 'SVCE', 'JNTUK'].map((query) => (
-                        <button
-                          key={query}
-                          type="button"
-                          onClick={() => {
-                            setStudentSearch(query);
-                            setSelectedCollegeCode('ALL');
-                            setSelectedBranchCode('ALL');
-                            setActiveTab('student-search');
-                          }}
-                          className="mos-ap-quick-chip"
-                        >
-                          <Search className="h-3 w-3 text-cyan-500" />
-                          {query}
-                        </button>
-                      ))}
-                    </div>
-                    <div className="mt-4 rounded-xl border border-cyan-500/15 bg-cyan-500/5 p-3 text-[11px] leading-5 text-slate-600 dark:text-slate-400">
-                      Tip: enter a full student name or hall-ticket number in the search tab for the most precise result.
-                    </div>
-                  </section>
+              <div className="mt-3 flex flex-wrap items-center gap-2 text-[10px] text-slate-500 dark:text-slate-400"><span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 dark:border-white/10 dark:bg-slate-950/70">Dataset: AP EAPCET {selectedYear}</span><span className="rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-sky-700 dark:border-sky-500/20 dark:bg-sky-500/10 dark:text-sky-300">{selectedCollegeName}</span><span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 dark:border-white/10 dark:bg-slate-950/70">{filteredColleges.length} colleges</span><span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 dark:border-white/10 dark:bg-slate-950/70">{branchOptions.length} branches</span></div>
+            </section>
 
-                  <section className="mos-ap-state-panel rounded-[1.5rem] p-4 sm:p-5">
-                    <div className="flex items-center justify-between gap-3">
-                      <div>
-                        <p className="text-[10px] font-black uppercase tracking-[0.15em] text-indigo-500">Popular streams</p>
-                        <h3 className="mt-1 text-base font-black text-slate-950 dark:text-white">Explore branches</h3>
-                      </div>
-                      <BarChart3 className="h-5 w-5 text-indigo-500" />
-                    </div>
-                    <div className="mt-4 grid grid-cols-2 gap-2">
-                      {popularBranches.slice(0, 8).map((branch) => (
-                        <button
-                          key={branch.branchCode}
-                          type="button"
-                          onClick={() => { setSelectedCollegeCode('ALL'); setSelectedBranchCode(branch.branchCode); setActiveTab('college'); }}
-                          className="mos-ap-branch-chip text-left"
-                        >
-                          <span className="font-mono font-black text-indigo-600 dark:text-indigo-300">{branch.branchCode}</span>
-                          <span className="truncate text-[10px] text-slate-500 dark:text-slate-400">{branch.branchName}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </section>
-                </div>
+            <div className="flex justify-center"><div className="inline-flex flex-wrap justify-center gap-1 rounded-2xl border border-slate-200 bg-white p-1 shadow-xl dark:border-slate-800 dark:bg-slate-900">
+              <button type="button" onClick={() => { setHasSearched(false); setCurrentPage(1); }} className={`rounded-xl px-4 py-2 text-xs font-bold transition-all ${!hasSearched ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/20' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'}`}>Explore Colleges</button>
+              <button type="button" onClick={() => { if (query.trim()) void runGlobalSearch(); }} className={`rounded-xl px-4 py-2 text-xs font-bold transition-all ${hasSearched && !/^\d+$/.test(query.replace(/,/g, '')) ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/20' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'}`}>Search Student Name</button>
+              <button type="button" onClick={() => { if (query.trim()) void runGlobalSearch(); }} className={`rounded-xl px-4 py-2 text-xs font-bold transition-all ${hasSearched && /^\d+$/.test(query.replace(/,/g, '')) ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/20' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'}`}>Search by Rank</button>
+            </div></div>
 
-                {/* Category distribution visual */}
-                <section className="mos-ap-state-panel rounded-[1.5rem] p-4 sm:p-6">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-500">Allotment analytics</p>
-                      <h3 className="mt-1 text-xl font-black text-slate-950 dark:text-white">Category distribution</h3>
-                      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Visual summary of observed allotted-category records in the AP dataset.</p>
-                    </div>
-                    <BarChart3 className="hidden sm:block h-7 w-7 text-cyan-500" />
-                  </div>
-                  <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                    {statewideCategoryBars.map((item: any) => {
-                      const max = statewideCategoryBars[0]?.totalRecords || 1;
-                      const pct = Math.max(3, Math.round((item.totalRecords / max) * 100));
-                      return (
-                        <div key={item.category}>
-                          <div className="flex items-center justify-between text-xs gap-3">
-                            <span className="font-bold text-slate-800 dark:text-slate-200">{item.displayLabel}</span>
-                            <span className="font-mono text-slate-500 dark:text-slate-400">{item.totalRecords.toLocaleString()}</span>
-                          </div>
-                          <div className="mt-1.5 h-2.5 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
-                            <div className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-indigo-500 transition-all duration-700" style={{ width: pct + '%' }} />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </section>
-
-                {/* Popular colleges */}
-                <section className="mos-ap-state-panel rounded-[1.5rem] p-4 sm:p-5">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-[10px] font-black uppercase tracking-[0.15em] text-emerald-500">Quick access</p>
-                      <h3 className="mt-1 text-base sm:text-lg font-black text-slate-950 dark:text-white">Popular AP Engineering Colleges</h3>
-                    </div>
-                    <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400">Sorted by observed allotment records</span>
-                  </div>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {featuredColleges.map((college) => (
-                      <button
-                        key={college.collegeCode}
-                        type="button"
-                        onClick={() => { setSelectedCollegeCode(college.collegeCode); setSelectedBranchCode('ALL'); setActiveTab('college'); window.scrollTo({ top: 120, behavior: 'smooth' }); }}
-                        className="mos-ap-college-chip"
-                        title={college.collegeName}
-                      >
-                        <span className="font-mono font-black text-emerald-600 dark:text-emerald-300">{college.collegeCode}</span>
-                        <span className="hidden sm:inline max-w-[190px] truncate text-slate-500 dark:text-slate-400">{college.collegeName}</span>
-                      </button>
-                    ))}
-                  </div>
-                </section>
-
-                {/* Existing AP rank insights */}
-                <div className="mos-fade-up">
-                  <ApOverallRankInsights />
-                </div>
+            {isLoading && !collegesList.length ? (
+              <div className="rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-xl dark:border-slate-800 dark:bg-slate-900/80"><Loader2 className="mx-auto h-8 w-8 animate-spin text-sky-500" /><p className="mt-3 text-sm text-slate-600 dark:text-slate-400">Loading AP EAPCET {selectedYear} allotments…</p></div>
+            ) : hasSearched || selectedCollegeCode !== 'ALL' ? (
+              <section className="space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-800 dark:bg-slate-900/90"><div><p className="text-xs font-bold text-slate-700 dark:text-slate-200">Showing {pageStart || 0} – {pageEnd || 0} of {displayRecords.length.toLocaleString()} students</p><p className="mt-0.5 text-[10px] text-slate-500 dark:text-slate-400">{hasSearched ? 'Global AP student/rank search results' : `${selectedCollegeName} · ${selectedBranchCode === 'ALL' ? 'All branches' : selectedBranchCode}`}</p></div><div className="flex items-center gap-1"><button type="button" disabled={currentPage <= 1} onClick={() => setCurrentPage((page) => Math.max(1, page - 1))} className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 disabled:opacity-30 dark:hover:bg-slate-800"><ChevronLeft className="h-4 w-4" /></button><span className="px-2 text-[10px] font-bold text-slate-600 dark:text-slate-300">Page {currentPage} / {totalPages}</span><button type="button" disabled={currentPage >= totalPages} onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))} className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 disabled:opacity-30 dark:hover:bg-slate-800"><ChevronRight className="h-4 w-4" /></button></div></div>
+                {searchError && hasSearched && <div className="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-xs font-semibold text-amber-800 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-200">{searchError}</div>}
+                {paginatedRecords.length > 0 ? <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">{paginatedRecords.map((record, index) => <ResultCard key={`${record.college_code}-${record.branch_code}-${record.rank}-${record.cand_name}-${index}`} record={record} index={(currentPage - 1) * PAGE_SIZE + index + 1} />)}</div> : <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center dark:border-slate-700 dark:bg-slate-900/80"><Users className="mx-auto h-8 w-8 text-slate-400" /><p className="mt-3 text-sm font-bold text-slate-700 dark:text-slate-200">No allotment records found</p><p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Try another student name, rank, college, branch or filter.</p></div>}
               </section>
             ) : (
-              <section className="space-y-5">
-                {isLoading ? (
-                  <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 p-10 text-center"><Loader2 className="mx-auto h-8 w-8 animate-spin text-cyan-400" /><p className="mt-3 text-sm text-slate-600 dark:text-slate-400">Loading AP EAPCET {selectedYear} allotments…</p></div>
-                ) : currentCollege ? (
-                  <>
-                    <section className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 p-5 shadow-xl">
-                      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        <div><div className="text-xs font-bold uppercase tracking-wider text-cyan-400">AP College</div><h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-950 dark:text-white">{currentCollege.college_name}</h2><p className="mt-1 text-xs text-slate-500 dark:text-slate-400">College code: {currentCollege.college_code} · {currentCollege.recordCount.toLocaleString()} allotments</p></div>
-                        <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/10 px-4 py-3 text-right"><div className="text-[10px] uppercase tracking-wider text-cyan-700 dark:text-cyan-300">Selected view</div><div className="text-sm font-black text-slate-950 dark:text-white">{branchLabel}</div></div>
-                      </div>
-                    </section>
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                      {[
-                        ['Allotments', visibleRecords.length],
-                        ['Branches', currentCollege.branchCount],
-                        ['Observed best rank', bestRank || '—'],
-                        ['Observed last rank', lastRank || '—'],
-                      ].map(([label, value]) => <div key={label} className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 p-4 shadow-lg"><div className="text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400">{label}</div><div className="mt-1 text-xl font-black text-slate-950 dark:text-white">{value}</div></div>)}
-                    </div>
-                    <section className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 p-4 shadow-xl">
-                      <div className="mb-3 flex items-center justify-between"><div><h3 className="font-bold text-slate-950 dark:text-white">Allotted students</h3><p className="text-xs text-slate-500 dark:text-slate-400">{visibleRecords.length.toLocaleString()} records after active filters</p></div><span className="rounded-full bg-cyan-500/10 px-3 py-1 text-xs font-bold text-cyan-700 dark:text-cyan-300">AP EAPCET {selectedYear}</span></div>
-                      <APAllotmentTable records={visibleRecords} collegeCode={currentCollege.college_code} collegeName={currentCollege.college_name} branchCode={selectedBranchCode} branchName={branchLabel} year={selectedYear} />
-                    </section>
-                    <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                      <div className="mos-fade-up rounded-[1.75rem] border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/80 p-5 shadow-xl">
-                        <div className="flex items-center justify-between"><div><p className="text-[10px] font-black uppercase tracking-[0.14em] text-cyan-400">Category mix</p><h3 className="mt-1 font-black text-slate-950 dark:text-white">Candidate categories</h3></div><Users className="h-5 w-5 text-cyan-400" /></div>
-                        <div className="mt-4 space-y-3">{categoryInsights.map(([category, insight]) => {
-                          const pct = visibleRecords.length ? Math.round((insight.count / visibleRecords.length) * 100) : 0;
-                          return <div key={category}><div className="flex items-center justify-between text-xs"><span className="font-bold text-slate-800 dark:text-slate-200">{category}</span><span className="font-mono text-slate-500 dark:text-slate-400">{insight.count.toLocaleString()} · {pct}%</span></div><div className="mt-1.5 h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800"><div className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-indigo-500 transition-all duration-700" style={{width: pct + '%'}} /></div><div className="mt-1 text-[10px] text-slate-500 dark:text-slate-400">Rank {insight.min.toLocaleString()} → {insight.max.toLocaleString()}</div></div>;
-                        })}</div>
-                      </div>
-                      <div className="mos-fade-up rounded-[1.75rem] border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/80 p-5 shadow-xl">
-                        <div className="flex items-center justify-between"><div><p className="text-[10px] font-black uppercase tracking-[0.14em] text-indigo-400">Phase activity</p><h3 className="mt-1 font-black text-slate-950 dark:text-white">Allotment distribution</h3></div><TrendingUp className="h-5 w-5 text-indigo-400" /></div>
-                        <div className="mt-5 space-y-4">{Object.entries(phaseDistribution).map(([phase,count]) => {
-                          const max = Math.max(...(Object.values(phaseDistribution) as number[]), 1);
-                          const pct = Math.round((Number(count) / max) * 100);
-                          return <div key={phase}><div className="flex items-center justify-between text-xs"><span className="font-bold text-slate-800 dark:text-slate-200">Phase {phase}</span><span className="font-mono text-slate-600 dark:text-slate-400">{Number(count).toLocaleString()}</span></div><div className="mt-1.5 h-3 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800"><div className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-cyan-400 transition-all duration-700" style={{width: pct + '%'}} /></div></div>;
-                        })}</div>
-                      </div>
-                    </section>
-
-                  </>
-                ) : (
-                  <div className="rounded-3xl border border-amber-500/20 bg-amber-500/5 p-8 text-center text-sm text-amber-800 dark:text-amber-800 dark:text-amber-200">Unable to load the selected AP college.</div>
-                )}
+              <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                <div className="rounded-[1.5rem] border border-sky-400/15 bg-gradient-to-br from-sky-50 via-white to-cyan-50 p-5 dark:from-slate-900 dark:via-slate-950 dark:to-sky-950/50 sm:p-6"><div className="flex items-center gap-2"><Sparkles className="h-5 w-5 text-sky-500" /><div><h3 className="text-base font-black text-slate-950 dark:text-white">Statewide Student Search</h3><p className="text-[11px] text-slate-500 dark:text-slate-400">Search AP allotments across every available college.</p></div></div><div className="mt-4 flex flex-wrap gap-2">{['CSE', 'ECE', 'VITAPU', 'RVRJC', 'SVCE', 'JNTUK'].map((quick) => <button key={quick} type="button" onClick={() => { setQuery(quick); setSelectedCollegeCode('ALL'); setSelectedBranchCode('ALL'); }} className="inline-flex items-center gap-1.5 rounded-lg border border-sky-200 bg-white px-2.5 py-1.5 text-[10px] font-bold text-sky-700 shadow-sm transition hover:border-sky-400 dark:border-sky-500/20 dark:bg-slate-950 dark:text-sky-300"><Search className="h-3 w-3" /> {quick}</button>)}</div></div>
+                <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900/90 sm:p-6"><div className="flex items-center justify-between gap-3"><div><p className="text-[10px] font-black uppercase tracking-[0.15em] text-sky-600 dark:text-sky-400">Dataset snapshot</p><h3 className="mt-1 text-base font-black text-slate-950 dark:text-white">AP EAPCET {selectedYear}</h3></div><Target className="h-5 w-5 text-sky-500" /></div><div className="mt-4 grid grid-cols-3 gap-2"><div className="rounded-xl bg-slate-50 p-3 dark:bg-slate-950"><div className="text-[9px] uppercase text-slate-500">Colleges</div><div className="mt-1 text-lg font-black text-slate-900 dark:text-white">{collegesList.length}</div></div><div className="rounded-xl bg-slate-50 p-3 dark:bg-slate-950"><div className="text-[9px] uppercase text-slate-500">Records</div><div className="mt-1 text-lg font-black text-slate-900 dark:text-white">{Number(datasetSummary?.totalRecords ?? 0).toLocaleString()}</div></div><div className="rounded-xl bg-slate-50 p-3 dark:bg-slate-950"><div className="text-[9px] uppercase text-slate-500">Branches</div><div className="mt-1 text-lg font-black text-slate-900 dark:text-white">{Number(datasetSummary?.branches ?? 0)}</div></div></div></div>
               </section>
             )}
+
+            {loadError && <div className="rounded-2xl border border-amber-300 bg-amber-50 p-4 text-xs text-amber-800 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-200">{loadError}</div>}
           </div>
         )}
 
-        {loadError && <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 text-sm text-amber-200">{loadError}</div>}
-
-        <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/60 p-4 text-center text-[11px] leading-5 text-slate-500 dark:text-slate-400">
-          <strong className="text-slate-600 dark:text-slate-400">Data notice:</strong> This workspace displays observed AP EAPCET allotment records from the selected dataset. These records are informational and should not be treated as guaranteed cutoffs or admission predictions.
-        </div>
+        <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 text-center text-[11px] leading-5 text-slate-500 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-400"><strong className="text-slate-600 dark:text-slate-300">Data notice:</strong> This workspace displays observed AP EAPCET allotment records from the selected dataset. These records are informational and should not be treated as guaranteed cutoffs or admission predictions.</div>
       </div>
     </div>
   );
