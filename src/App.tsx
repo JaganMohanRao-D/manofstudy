@@ -560,11 +560,9 @@ export default function App() {
         hash === 'resizer' ||
         hash === 'image-tools' ||
         hash === 'photo-resizer' ||
-        hash === 'resume-checker'
       ) {
         setActiveWorkspace('utilities');
         if (hash === 'resizer' || hash === 'image-tools' || hash === 'photo-resizer') setUtilitySubTab('resizer');
-        else if (hash === 'resume-checker') setUtilitySubTab('resume-checker');
         else setUtilitySubTab('pdf-tools');
       } else if (hash === 'guides' || hash === 'editorial' || hash === 'survival' || hash.startsWith('guide-')) {
         setActiveWorkspace('guides');
@@ -1311,7 +1309,6 @@ export default function App() {
                           { id: 'pdf-tools' as ToolTab, label: 'free pdf tools for students', icon: FileText },
                           { id: 'vault' as ToolTab, label: 'Code & Viva Vault', icon: Terminal },
                           { id: 'resizer' as ToolTab, label: '20KB Image Resizer', icon: ImageIcon },
-                          { id: 'resume-checker' as ToolTab, label: 'ATS Resume Matcher', icon: FileCheck },
                           { id: 'gpa' as ToolTab, label: 'Global GPA Hub', icon: Award },
                           { id: 'internal-calc' as ToolTab, label: 'Internal Cutoff', icon: Calculator },
                           { id: 'attendance' as ToolTab, label: 'Attendance Defender', icon: ShieldCheck },
@@ -1342,7 +1339,6 @@ export default function App() {
                       {utilitySubTab === 'vault' && <PlacementCodeVault />}
                       {utilitySubTab === 'pdf-tools' && <PdfPowerTools />}
                       {utilitySubTab === 'resizer' && <ImageResizer />}
-                      {utilitySubTab === 'resume-checker' && <AtsResumeMatcher />}
                       {utilitySubTab === 'gpa' && (
                         <GlobalGpaHub onNavigateToStore={() => handleSelectWorkspace('essentials')} />
                       )}
