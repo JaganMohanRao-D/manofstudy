@@ -22,7 +22,6 @@
     'utilities': '/pdftools',
     'pdf-tools': '/pdftools',
     'resizer': '/imagecompressor',
-    'resume-checker': '/resume-checker',
     'vault': '/placement-code-vault',
     'backlog': '/backlog-planner',
     'compiler': '/code-studio',
