@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Menu, X, ChevronDown, Home, GraduationCap, Map, Trophy, Sparkles, BookOpen, ShieldCheck, FileText, Image as ImageIcon, Heart, Wrench, Brain, BriefcaseBusiness, Route, Calculator, ClipboardCheck } from 'lucide-react';
+import { Search, Menu, X, ChevronDown, Home, GraduationCap, Map, Trophy, Sparkles, BookOpen, ShieldCheck, FileText, Image as ImageIcon, Heart, Wrench, Brain, Route, Calculator, ClipboardCheck } from 'lucide-react';
 import { ToolTab, WorkspaceView, LegalModalType } from '../types';
 
 export interface HeaderProps {
@@ -32,7 +32,6 @@ const OTHER_TOOLS: NavItem[] = [
   { label: 'Study Guides', workspace: 'guides', icon: BookOpen },
   { label: 'PDF Tools', workspace: 'utilities', tab: 'pdf-tools', icon: FileText },
   { label: 'Image Compressor', workspace: 'utilities', tab: 'resizer', icon: ImageIcon },
-  { label: 'ATS Resume Matcher', workspace: 'resume-checker', icon: BriefcaseBusiness },
   { label: 'Engineering Roadmaps', workspace: 'roadmaps', icon: Route },
   { label: 'Internships Radar', workspace: 'internships', icon: GraduationCap },
   { label: 'Major Projects Hub', workspace: 'projects', icon: Wrench },
