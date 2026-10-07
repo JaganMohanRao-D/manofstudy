@@ -27,7 +27,7 @@ export interface PredictorVerdictResult {
 }
 
 /**
- * Computes bilingual dynamic verdict based on eligibility margin and student gender.
+ * Computes a descriptive bilingual verdict from observed 2026 cutoff position and student gender.\n * This is historical classification only; it is not a probability or admission guarantee.
  *
  * @param isEligible User rank <= last admitted/observed closing rank
  * @param isBorderline User rank within 10% cutoff margin
@@ -45,11 +45,11 @@ export function getPredictorVerdict(
   const salutationEn: 'Bro' | 'Sister' = isFemale ? 'Sister' : 'Bro';
   const salutationTe: 'బ్రో' | 'సిస్టర్' = isFemale ? 'సిస్టర్' : 'బ్రో';
 
-  // 1. High Probability (User Rank <= Observed Last Rank)
+  // 1. Within the observed 2026 range
   if (isEligible) {
     return {
       level: 'HIGH',
-      badgeText: 'HIGH PROBABILITY 😎🔥',
+      badgeText: 'WITHIN OBSERVED RANGE',
       badgeStyle: {
         bg: 'bg-emerald-500/15 dark:bg-emerald-500/20',
         text: 'text-emerald-700 dark:text-emerald-300',
@@ -63,16 +63,16 @@ export function getPredictorVerdict(
       },
       salutationEn,
       salutationTe,
-      englishText: `Strong chance of seat allotment! All the best, ${salutationEn}! 😎✨`,
-      teluguText: `సీటు వచ్చే అవకాశం ఖచ్చితంగా ఉంది ${salutationTe}! ఆల్ ది బెస్ట్ 😎✨`,
+      englishText: `Your rank is within the observed 2026 closing-rank range for this option, ${salutationEn}. Treat this as historical guidance, not a guarantee.`,
+      teluguText: `ఈ ఎంపికకు సంబంధించిన 2026లో కనిపించిన క్లోజింగ్ ర్యాంక్ పరిధిలో మీ ర్యాంక్ ఉంది ${salutationTe}. ఇది చారిత్రక సమాచారం మాత్రమే, హామీ కాదు.`,
     };
   }
 
-  // 2. Moderate / Borderline Chance (User Rank within 10% cutoff margin)
+  // 2. Near the observed range
   if (isBorderline) {
     return {
       level: 'MODERATE',
-      badgeText: 'BORDERLINE / SLIDING ROUND CHANCE ⚡',
+      badgeText: 'NEAR OBSERVED RANGE',
       badgeStyle: {
         bg: 'bg-amber-500/15 dark:bg-amber-500/20',
         text: 'text-amber-800 dark:text-amber-300',
@@ -86,12 +86,12 @@ export function getPredictorVerdict(
       },
       salutationEn,
       salutationTe,
-      englishText: `Competitive margin! Tough fight, try in sliding rounds, ${salutationEn}! ⚡`,
-      teluguText: `పోటీ గట్టిగానే ఉంది ${salutationTe}! స్లైడింగ్ రౌండ్లలో ఖచ్చితంగా ప్రయత్నించండి ⚡`,
+      englishText: `Your rank is close to the observed 2026 closing rank, ${salutationEn}. Consider it a borderline historical match.`,
+      teluguText: `మీ ర్యాంక్ 2026లో కనిపించిన క్లోజింగ్ ర్యాంక్‌కు దగ్గరగా ఉంది ${salutationTe}. దీన్ని బోర్డర్‌లైన్ చారిత్రక మ్యాచ్‌గా మాత్రమే చూడండి.`,
     };
   }
 
-  // 3. Low / Unlikely Chance (User Rank significantly higher than Last Rank)
+  // 3. Outside the observed range
   return {
     level: 'LOW',
     badgeText: 'LOW PROBABILITY 🥺',
