@@ -101,18 +101,41 @@ function patchBranchSelect(file, stateName, optionName, placeholder, label) {
 
   if (source.includes('<SearchableBranchSelect') && source.includes(`options={${optionName}}`)) return;
 
-  const pattern = new RegExp(`<select\\b[\\s\\S]*?value=\\{${stateName}\\}[\\s\\S]*?\\{${optionName}\\.map[\\s\\S]*?<\\/select>`);
-  if (!pattern.test(source)) {
-    console.log(`[branch-selector] ${label}: existing selector markup not found; leaving it unchanged.`);
+  // Locate the selector by its exact state binding first. The old broad regex
+  // started at the first <select> on the page and could swallow the Category
+  // selector while looking for the Branch selector. This caused production UI
+  // corruption where Category displayed branch options.
+  const valueToken = `value={${stateName}}`;
+  const valueIndex = source.indexOf(valueToken);
+  if (valueIndex < 0) {
+    console.log(`[branch-selector] ${label}: state binding not found; leaving it unchanged.`);
     return;
   }
 
-  const replacement = `<SearchableBranchSelect\n                  options={${optionName}}\n                  value={${stateName}}\n                  onChange={setSelectedBranch}\n                  placeholder=${JSON.stringify(placeholder)}\n                />`;
-  source = source.replace(pattern, replacement);
-  fs.writeFileSync(file, source, 'utf8');
-  console.log(`[branch-selector] ${label}: searchable selector applied.`);
-}
+  const selectStart = source.lastIndexOf('<select', valueIndex);
+  const selectEnd = source.indexOf('</select>', valueIndex);
+  if (selectStart < 0 || selectEnd < 0 || selectEnd <= selectStart) {
+    console.log(`[branch-selector] ${label}: selector boundaries not found; leaving it unchanged.`);
+    return;
+  }
 
+  const selectorBlock = source.slice(selectStart, selectEnd + '</select>'.length);
+  if (!selectorBlock.includes(`{${optionName}.map`)) {
+    console.log(`[branch-selector] ${label}: expected branch option map not found; leaving it unchanged.`);
+    return;
+  }
+
+  const replacement = `<SearchableBranchSelect
+                  options={${optionName}}
+                  value={${stateName}}
+                  onChange={setSelectedBranch}
+                  placeholder=${JSON.stringify(placeholder)}
+                />`;
+
+  source = source.slice(0, selectStart) + replacement + source.slice(selectEnd + '</select>'.length);
+  fs.writeFileSync(file, source, 'utf8');
+  console.log(`[branch-selector] ${label}: searchable selector applied safely.`);
+}
 function patchApTopColleges() {
   const file = path.join(root, 'src/components/ApTopColleges.jsx');
   if (!fs.existsSync(file)) return;
