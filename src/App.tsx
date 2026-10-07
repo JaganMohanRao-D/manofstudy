@@ -20,7 +20,6 @@ import {
   Image as ImageIcon,
   Calculator,
   Award,
-  FileCheck,
   ShoppingBag,
   Heart,
   BookOpen,
@@ -331,13 +330,6 @@ export const TOOLS_CONFIG: ToolMeta[] = [
     badge: '100% Free',
   },
   {
-    id: 'resume-checker',
-    name: 'ATS Resume Matcher',
-    shortName: 'ATS Matcher',
-    category: 'document',
-    description: 'Direct PDF/DOCX parsing, ATS diagnostics & 1-click builder',
-    badge: 'Career • ATS',
-  },
   {
     id: 'resizer',
     name: 'Exam Image Resizer',
