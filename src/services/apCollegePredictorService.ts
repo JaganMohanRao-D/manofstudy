@@ -1,6 +1,6 @@
 /**
- * AP EAPCET 2026 Hyper-Accurate Deterministic College Predictor Engine
- * Grounded strictly in official 2026 AP EAPCET allotment JSON datasets (100,621+ records across 262 colleges).
+ * AP EAPCET 2026 Data-Grounded College Predictor Engine
+ * Grounded in the available 2026 AP EAPCET allotment JSON dataset. Results describe observed historical allotment ranges; they are not admission probabilities or guarantees.
  * Strict quota matching rules: gender isolation, regional reservation (AU / SVU / UR), and special quota filters.
  */
 
@@ -90,24 +90,24 @@ export interface CollegeOption {
 }
 
 export const AP_SOCIAL_CATEGORIES = [
-  { id: 'OC', label: 'OC (Open Competition / General Merit)' },
-  { id: 'EWS', label: 'EWS (Economically Weaker Section - 10%)' },
-  { id: 'BC_A', label: 'BC-A (Backward Class Group A - 7%)' },
-  { id: 'BC_B', label: 'BC-B (Backward Class Group B - 10%)' },
-  { id: 'BC_C', label: 'BC-C (Backward Class Group C - 1%)' },
-  { id: 'BC_D', label: 'BC-D (Backward Class Group D - 7%)' },
-  { id: 'BC_E', label: 'BC-E (Backward Class Group E - 4%)' },
+  { id: 'OC', label: 'OC (Open Competition)' },
+  { id: 'EWS', label: 'EWS (Economically Weaker Section)' },
+  { id: 'BC_A', label: 'BC-A (Backward Class Group A)' },
+  { id: 'BC_B', label: 'BC-B (Backward Class Group B)' },
+  { id: 'BC_C', label: 'BC-C (Backward Class Group C)' },
+  { id: 'BC_D', label: 'BC-D (Backward Class Group D)' },
+  { id: 'BC_E', label: 'BC-E (Backward Class Group E)' },
   { id: 'SC_I', label: 'SC-I (Scheduled Caste Group 1)' },
   { id: 'SC_II', label: 'SC-II (Scheduled Caste Group 2)' },
   { id: 'SC_III', label: 'SC-III (Scheduled Caste Group 3)' },
   { id: 'SC', label: 'SC (Scheduled Caste - General Pool)' },
-  { id: 'ST', label: 'ST (Scheduled Tribe - 6%)' },
+  { id: 'ST', label: 'ST (Scheduled Tribe)' },
 ];
 
 export const AP_REGION_OPTIONS = [
-  { id: 'AU', label: 'AU (Andhra University Region)' },
-  { id: 'SVU', label: 'SVU (Sri Venkateswara University Region)' },
-  { id: 'UR', label: 'Non-Local / Statewide Unreserved (UR)' },
+  { id: 'AU', label: 'AU (Andhra University Local Area)' },
+  { id: 'SVU', label: 'SVU (Sri Venkateswara University Local Area)' },
+  { id: 'UR', label: 'Non-Local / Unreserved (UR) Pool' },
 ];
 
 export const AP_SPECIAL_CATEGORIES = [
@@ -444,7 +444,7 @@ export async function runApPredictorAnalysis(
           border: 'border-slate-300 dark:border-slate-700',
           indicator: 'bg-slate-400',
         };
-        whyExplanation = `No verified 2026 allotment records were observed for this discipline matching ${category} (${gender}) in ${region} region.`;
+        whyExplanation = `No available 2026 allotment records were observed for this discipline matching ${category} (${gender}) in ${region} region.`;
         insufficientDataCount++;
       } else if (studentRank <= bestClosingRank) {
         // High Chance: Student rank is strictly within or better than last allotted rank
@@ -460,7 +460,7 @@ export async function runApPredictorAnalysis(
           indicator: 'bg-emerald-500',
         };
         const bufferStr = Math.abs(rankBuffer).toLocaleString('en-IN');
-        whyExplanation = `Your rank ${studentRank.toLocaleString('en-IN')} is comfortably within the 2026 closing rank of ${bestClosingRank.toLocaleString('en-IN')} (+${bufferStr} rank security cushion). High probability of allotment in early counseling rounds.`;
+        whyExplanation = `Your rank (${studentRank.toLocaleString('en-IN')}) is at or better than the observed 2026 closing rank (${bestClosingRank.toLocaleString('en-IN')}). Historical match: within the observed range; this does not guarantee future allotment.`;
         highChanceCount++;
       } else if (studentRank <= Math.round(bestClosingRank * 1.10)) {
         // Medium / Competitive Chance — mirror TG's 10% borderline window
@@ -476,7 +476,7 @@ export async function runApPredictorAnalysis(
           indicator: 'bg-amber-500',
         };
         const diffStr = Math.abs(rankBuffer).toLocaleString('en-IN');
-        whyExplanation = `Your rank is within ${Math.abs(percentDiffFromClosing)}% of the 2026 closing rank (${diffStr} ranks above last allotted ${bestClosingRank.toLocaleString('en-IN')}). Very viable in Round 2 / Round 3 sliding rounds.`;
+        whyExplanation = `Your rank is within ${Math.abs(percentDiffFromClosing)}% of the observed 2026 closing rank (${diffStr} ranks beyond the observed closing rank of ${bestClosingRank.toLocaleString('en-IN')}). Historical match: near the observed range; this does not guarantee future allotment.`;
         competitiveCount++;
       } else if (studentRank <= Math.round(bestClosingRank * 1.35)) {
         // Ambitious / Dream Shot
@@ -491,7 +491,7 @@ export async function runApPredictorAnalysis(
           border: 'border-violet-500/40 dark:border-violet-400/30',
           indicator: 'bg-violet-500',
         };
-        whyExplanation = `Aspirational option (${percentDiffFromClosing}% higher than 2026 cutoff). Recommended to place in top web options in case of sliding seat vacancies.`;
+        whyExplanation = `Aspirational historical option (${percentDiffFromClosing}% beyond the observed 2026 closing rank). Future allotment depends on the actual counselling process and seat availability.`;
         dreamCount++;
       } else {
         // Steep Reach
