@@ -139,11 +139,6 @@ const ImageResizer = lazyWithRetry(() =>
     default: m.ImageResizer || m.default,
   }))
 );
-const AtsResumeMatcher = lazyWithRetry(() =>
-  import('./components/AtsResumeMatcher').then((m: any) => ({
-    default: m.AtsResumeMatcher || m.default,
-  }))
-);
 const PlacementCodeVault = lazyWithRetry(() =>
   import('./components/PlacementCodeVault').then((m: any) => ({
     default: m.PlacementCodeVault || m.default,
