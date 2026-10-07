@@ -15,7 +15,6 @@ const loaders: Record<string, () => Promise<unknown>> = {
   'Global GPA Hub': () => import('./components/GlobalGpaHub'),
   'Internal Cutoff Estimator': () => import('./components/InternalExamEstimator'),
   'free pdf tools for students': () => import('./components/PdfPowerTools'),
-  'ATS Resume Matcher': () => import('./components/AtsResumeMatcher'),
   'Exam Image Resizer': () => import('./components/ImageResizer'),
   'Verified Student Internships Radar': () => import('./components/InternshipsRadar'),
   'Campus Placement Major Projects Hub': () => import('./components/MajorProjectsHub'),
