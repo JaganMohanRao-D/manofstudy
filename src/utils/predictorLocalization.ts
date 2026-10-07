@@ -63,8 +63,8 @@ export function getPredictorVerdict(
       },
       salutationEn,
       salutationTe,
-      englishText: `Your rank is within the observed 2026 closing-rank range for this option, ${salutationEn}. Treat this as historical guidance, not a guarantee.`,
-      teluguText: `ఈ ఎంపికకు సంబంధించిన 2026లో కనిపించిన క్లోజింగ్ ర్యాంక్ పరిధిలో మీ ర్యాంక్ ఉంది ${salutationTe}. ఇది చారిత్రక సమాచారం మాత్రమే, హామీ కాదు.`,
+      englishText: `Based on 2026 data, you have a good chance of getting this seat, ${salutationEn}. 😊`,
+      teluguText: `2026 డేటా ప్రకారం మీకు ఈ సీట్ వచ్చే ఛాన్స్ ఉంది ${salutationTe}. 😊`,
     };
   }
 
@@ -86,15 +86,15 @@ export function getPredictorVerdict(
       },
       salutationEn,
       salutationTe,
-      englishText: `Your rank is close to the observed 2026 closing rank, ${salutationEn}. Consider it a borderline historical match.`,
-      teluguText: `మీ ర్యాంక్ 2026లో కనిపించిన క్లోజింగ్ ర్యాంక్‌కు దగ్గరగా ఉంది ${salutationTe}. దీన్ని బోర్డర్‌లైన్ చారిత్రక మ్యాచ్‌గా మాత్రమే చూడండి.`,
+      englishText: `Based on 2026 data, you have a chance of getting this seat, ${salutationEn}, but your rank is in the borderline range. 🤔`,
+      teluguText: `2026 డేటా ప్రకారం ఈ సీట్ మీకు వచ్చే ఛాన్స్ ఉంది ${salutationTe}, కానీ మీ ర్యాంక్ బోర్డర్‌లైన్‌లో ఉంది. 🤔`,
     };
   }
 
   // 3. Outside the observed range
   return {
     level: 'LOW',
-    badgeText: 'LOW PROBABILITY 🥺',
+    badgeText: 'LOW CHANCE 😔😭',
     badgeStyle: {
       bg: 'bg-rose-500/10 dark:bg-rose-500/15',
       text: 'text-rose-700 dark:text-rose-400',
@@ -108,7 +108,7 @@ export function getPredictorVerdict(
     },
     salutationEn,
     salutationTe,
-    englishText: `Seat allotment unlikely. Don't lose hope, ${salutationEn}... let's explore other options! 🥺`,
-    teluguText: `ఈ కాలేజీలో సీటు రావడం కాస్త కష్టమే ${salutationTe}... బాధపడకండి, ఇతర మంచి ఆప్షన్లను చూద్దాం 🥺`,
+    englishText: `Based on 2026 data, your chance of getting this seat is low, ${salutationEn}. 😔😭`,
+    teluguText: `2026 డేటా ప్రకారం ఈ సీట్ వచ్చే ఛాన్స్ తక్కువగా ఉంది ${salutationTe}. 😔😭`,
   };
 }
