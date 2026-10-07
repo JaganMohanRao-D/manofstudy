@@ -204,7 +204,7 @@ export default function ApCollegePredictor({
                     </option>
                   ))}
                 </select>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">Official AP reservation categories</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Select the reservation category used for comparison</p>
               </div>
 
               {/* STEP 3: Gender */}
@@ -239,10 +239,10 @@ export default function ApCollegePredictor({
                     Female (+Girls Quota)
                   </button>
                 </div>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">Includes women reservation pool</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Used to apply gender-specific quota matching</p>
               </div>
 
-              {/* STEP 4: Local Region */}
+              {/* STEP 4: Local Status / Region */}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                   <span className="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30 flex items-center justify-center text-[10px] font-bold">4</span>
@@ -260,7 +260,7 @@ export default function ApCollegePredictor({
                   </select>
                   <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">Matches AP regional quota pools</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Select AU, SVU or Non-Local based on your AP local-status eligibility</p>
               </div>
 
               {/* STEP 5: Preferred Branch */}
@@ -282,7 +282,7 @@ export default function ApCollegePredictor({
                     </option>
                   ))}
                 </select>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">Filter by discipline</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Optional — choose a branch or keep All Branches</p>
               </div>
             </div>
           </div>
