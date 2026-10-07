@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   Search, GraduationCap, ExternalLink, Calendar, IndianRupee, Share2,
-  Copy, Check, ShieldCheck, Sparkles, ArrowUpRight, SlidersHorizontal,
+  Copy, Check, ShieldCheck, ArrowUpRight, SlidersHorizontal,
   BadgeCheck, RefreshCw, X
 } from 'lucide-react';
 import { ScholarshipDetailsModal } from './ScholarshipDetailsModal';
@@ -38,19 +38,6 @@ export function getScholarshipSummary(s: IndianScholarship): string {
 type Filter = 'all' | 'open' | 'government' | 'private' | 'state' | 'engineering' | 'girls';
 const isOpen = (s: IndianScholarship) => (s.status || '').toLowerCase().includes('open');
 
-const SCHOLARSHIP_IMAGE_URLS: Record<string, string> = {
-  'central-sector-csss-2026': '/Scholorship_images/pm-usp_central_scholorship.jpg',
-  'top-class-sc-2026': '/Scholorship_images/central_top_class_education_for_sc_students.jpg',
-  'pm-yasasvi-top-class-college-2026': '/Scholorship_images/pm%20yasasvi_obc_ebc_dnt.jpg',
-  'pm-usp-pmsss-2026': '/Scholorship_images/pm-usp%20special%20scheme%20for%20jammu%20and%20ladakh.jpg',
-  'amazon-afe-2026': '/Scholorship_images/amazon_scholorship.jpg',
-  'reliance-ug-2026': '/Scholorship_images/reliance%20scholorship.jpg',
-  'tata-pankh-2026': '/Scholorship_images/tata_capital_pankh.jpg',
-  'hdfc-ecss-2026': '/Scholorship_images/Hdfc-parivarthanecss.jpg',
-  'lic-golden-jubilee-2026': '/Scholorship_images/lic_scholorship.jpg',
-  'sbi-asha-2026': '/Scholorship_images/sbi_scholorship.jpg',
-};
-
 const SCHOLARSHIP_HERO_IMAGE = '/Scholorship_images/manofstudy_scholorship%20_hero%20page.png';
 
 const categoryClass = (category: string) => {
@@ -58,65 +45,6 @@ const categoryClass = (category: string) => {
   if (c.includes('state')) return 'border-violet-400/20 bg-violet-400/10 text-violet-300';
   if (c.includes('government')) return 'border-sky-400/20 bg-sky-400/10 text-sky-300';
   return 'border-amber-400/20 bg-amber-400/10 text-amber-300';
-};
-
-type VisualTheme = { accent: string; fallbackLabel: string };
-const visualThemes: Record<string, VisualTheme> = {
-  'central-sector-csss-2026': { accent: 'from-sky-600 to-indigo-800', fallbackLabel: 'Central Sector Scholarship' },
-  'top-class-sc-2026': { accent: 'from-blue-600 to-indigo-800', fallbackLabel: 'Top Class Education for SC Students' },
-  'pm-yasasvi-top-class-college-2026': { accent: 'from-violet-600 to-indigo-800', fallbackLabel: 'PM YASASVI Top Class Education' },
-  'aicte-pragati-2026': { accent: 'from-fuchsia-600 to-rose-800', fallbackLabel: 'AICTE Pragati' },
-  'aicte-saksham-2026': { accent: 'from-teal-600 to-cyan-800', fallbackLabel: 'AICTE Saksham' },
-  'aicte-swanath-2026': { accent: 'from-emerald-600 to-teal-800', fallbackLabel: 'AICTE Swanath' },
-  'pm-usp-pmsss-2026': { accent: 'from-indigo-600 to-blue-900', fallbackLabel: 'PM-USP PMSSS' },
-  'inspire-she-2026': { accent: 'from-violet-600 to-fuchsia-800', fallbackLabel: 'INSPIRE SHE' },
-  'reliance-ug-2026': { accent: 'from-blue-600 to-cyan-800', fallbackLabel: 'Reliance Foundation' },
-  'hdfc-ecss-2026': { accent: 'from-emerald-600 to-green-800', fallbackLabel: 'HDFC Parivartan ECSS' },
-  'tata-pankh-2026': { accent: 'from-orange-500 to-amber-800', fallbackLabel: 'Tata Capital Pankh' },
-  'lic-golden-jubilee-2026': { accent: 'from-yellow-500 to-amber-800', fallbackLabel: 'LIC Scholarship' },
-  'sbi-asha-2026': { accent: 'from-blue-600 to-indigo-800', fallbackLabel: 'SBI Asha Scholarship' },
-};
-
-const getVisualTheme = (s: IndianScholarship): VisualTheme => {
-  if (visualThemes[s.id]) return visualThemes[s.id];
-  const text = `${s.title} ${s.target} ${s.category}`.toLowerCase();
-  if (/girl|women|female/.test(text)) return { accent: 'from-fuchsia-600 to-rose-800', fallbackLabel: 'Women in Education' };
-  if (/science|research|stem|technology|engineering|computer/.test(text)) return { accent: 'from-cyan-600 to-blue-800', fallbackLabel: 'Education & Technology' };
-  if (/government|central|state/.test(text)) return { accent: 'from-sky-600 to-indigo-800', fallbackLabel: 'Government Scholarship' };
-  return { accent: 'from-emerald-600 to-teal-800', fallbackLabel: 'Education Opportunity' };
-};
-
-const ScholarshipVisual: React.FC<{ scholarship: IndianScholarship; compact?: boolean }> = ({ scholarship, compact = false }) => {
-  const imageUrl = SCHOLARSHIP_IMAGE_URLS[scholarship.id];
-  const theme = getVisualTheme(scholarship);
-  const [imageFailed, setImageFailed] = useState(false);
-
-  return (
-    <div className={`relative w-full overflow-hidden bg-slate-950 ${compact ? 'aspect-[16/7] sm:aspect-[16/6]' : 'aspect-video'}`}>
-      {imageUrl && !imageFailed ? (
-        <img
-          src={imageUrl}
-          alt={`${scholarship.title} scholarship`}
-          loading={compact ? 'eager' : 'lazy'}
-          decoding="async"
-          onError={() => setImageFailed(true)}
-          className="block h-full w-full object-contain object-center"
-        />
-      ) : (
-        <div className={`relative h-full w-full bg-gradient-to-br ${theme.accent}`}>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_18%,rgba(255,255,255,.28),transparent_28%),radial-gradient(circle_at_15%_90%,rgba(0,0,0,.28),transparent_38%)]" />
-          <div className="absolute -right-14 -top-16 h-48 w-48 rounded-full border border-white/20 bg-white/10" />
-          <div className="absolute -left-16 bottom-[-72px] h-52 w-52 rounded-full border border-white/10 bg-black/10" />
-          <div className="absolute right-[16%] bottom-[20%] flex h-14 w-14 items-center justify-center rounded-2xl border border-white/20 bg-slate-950/30 backdrop-blur-sm"><GraduationCap className="h-7 w-7 text-white" /></div>
-          <div className="absolute left-[7%] top-[16%] flex max-w-[82%] items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 backdrop-blur-md"><Sparkles className="h-3.5 w-3.5 text-white" /><span className="text-[9px] font-black uppercase tracking-[.16em] text-white/90">Education opportunity</span></div>
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/85 to-transparent p-4 sm:p-5 text-white">
-            <div className="text-[9px] font-black uppercase tracking-[.18em] text-emerald-200/90">Scholarship opportunity</div>
-            <div className="mt-1 text-base sm:text-lg font-black leading-tight">{theme.fallbackLabel}</div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
 };
 
 export const ScholarshipsHub: React.FC = () => {
@@ -229,7 +157,23 @@ export const ScholarshipsHub: React.FC = () => {
         <div className="rounded-3xl border border-emerald-500/20 bg-[var(--mos-surface)] p-3 sm:p-4 shadow-xl">
           <div className="flex items-center justify-between gap-3 px-1 pb-3"><div><div className="text-[10px] font-black uppercase tracking-[.16em] text-emerald-600 dark:text-emerald-400">Featured scholarship</div><p className="mt-1 text-xs text-[var(--mos-text-muted)]">Quick view • {featuredIndex + 1} / {featured.length}</p></div>{featured.length > 1 && <div className="flex gap-2"><button onClick={() => setFeaturedIndex(i => (i - 1 + featured.length) % featured.length)} className="p-2 rounded-lg border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] cursor-pointer" aria-label="Previous featured scholarship">‹</button><button onClick={() => setFeaturedIndex(i => (i + 1) % featured.length)} className="p-2 rounded-lg border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] cursor-pointer" aria-label="Next featured scholarship">›</button></div>}</div>
           <button onClick={() => setSelectedScholarship(currentFeatured)} className="group w-full text-left rounded-2xl border border-emerald-500/20 bg-emerald-500/[.04] hover:border-emerald-500/40 transition-colors cursor-pointer overflow-hidden">
-            <ScholarshipVisual scholarship={currentFeatured} compact />
+            <div className="p-4 sm:p-5">
+              <div className="flex flex-wrap gap-2">
+                <span className={`rounded-full border px-2.5 py-1 text-[10px] font-bold ${categoryClass(currentFeatured.category)}`}>{currentFeatured.category}</span>
+                <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-300">{currentFeatured.status || 'Cycle-based'}</span>
+              </div>
+              <div className="mt-3 grid lg:grid-cols-[1fr_auto] gap-5 items-center">
+                <div className="min-w-0">
+                  <h2 className="text-lg sm:text-xl font-bold text-[var(--mos-text-primary)]">{currentFeatured.title}</h2>
+                  <p className="mt-1 text-xs text-[var(--mos-text-muted)]">{currentFeatured.provider} • {currentFeatured.target}</p>
+                </div>
+                <div className="lg:min-w-[300px] rounded-xl border border-emerald-500/20 bg-[var(--mos-surface)] p-4 shadow-xs">
+                  <div className="text-[10px] uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-bold">Scholarship amount</div>
+                  <div className="mt-1 text-base sm:text-lg font-black text-[var(--mos-text-primary)]">{currentFeatured.amount}</div>
+                  <div className="mt-2 flex items-center gap-1.5 text-[11px] text-[var(--mos-text-muted)]"><Calendar className="h-3.5 w-3.5" /> {currentFeatured.deadline}</div>
+                </div>
+              </div>
+            </div>
             <div className="p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center gap-5">
               <div className="flex-1 min-w-0"><div className="flex flex-wrap gap-2"><span className={`rounded-full border px-2.5 py-1 text-[10px] font-bold ${categoryClass(currentFeatured.category)}`}>{currentFeatured.category}</span><span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-300">{currentFeatured.status || 'Cycle-based'}</span></div><h2 className="mt-3 text-lg sm:text-xl font-bold text-[var(--mos-text-primary)]">{currentFeatured.title}</h2><p className="mt-1 text-xs text-[var(--mos-text-muted)]">{currentFeatured.provider} • {currentFeatured.target}</p></div>
               <div className="lg:min-w-[300px] rounded-xl border border-emerald-500/20 bg-[var(--mos-surface)] p-4 shadow-xs"><div className="text-[10px] uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-bold">Scholarship amount</div><div className="mt-1 text-base sm:text-lg font-black text-[var(--mos-text-primary)]">{currentFeatured.amount}</div><div className="mt-2 flex items-center gap-1.5 text-[11px] text-[var(--mos-text-muted)]"><Calendar className="h-3.5 w-3.5" /> {currentFeatured.deadline}</div></div>
@@ -252,7 +196,6 @@ export const ScholarshipsHub: React.FC = () => {
 
       {loading ? <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">{Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-80 rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] animate-pulse" />)}</div> : <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">{filtered.map(s => { const girls = isExclusivelyForGirls(s); return (
         <article key={s.id} className="group flex flex-col rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface)] hover:border-emerald-500/40 transition-all overflow-hidden shadow-xs">
-          <ScholarshipVisual scholarship={s} />
           <div className="p-4 sm:p-5 flex-1">
             <div className="flex items-start justify-between gap-3"><div className="flex items-center gap-2 min-w-0"><div className="h-9 w-9 rounded-xl bg-[var(--mos-surface-muted)] border border-[var(--mos-border)] flex items-center justify-center shrink-0"><GraduationCap className="h-4 w-4 text-emerald-600 dark:text-emerald-300" /></div><div className="min-w-0"><div className="truncate text-[11px] font-bold text-[var(--mos-text-muted)]">{s.provider}</div><div className="mt-1 flex flex-wrap gap-1.5"><span className={`rounded-md border px-1.5 py-0.5 text-[9px] font-bold ${categoryClass(s.category)}`}>{s.category}</span>{girls && <span className="rounded-md border border-pink-400/20 bg-pink-400/10 px-1.5 py-0.5 text-[9px] font-bold text-pink-600 dark:text-pink-300">Girls</span>}</div></div></div><span className={`shrink-0 rounded-full px-2 py-1 text-[9px] font-bold ${isOpen(s) ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-300' : 'bg-[var(--mos-surface-muted)] text-[var(--mos-text-muted)]'}`}>{s.status || 'Cycle-based'}</span></div>
             <h3 className="mt-4 text-[15px] font-bold leading-6 text-[var(--mos-text-primary)] group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors">{s.title}</h3>
