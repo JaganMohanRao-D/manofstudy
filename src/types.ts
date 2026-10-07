@@ -46,7 +46,6 @@ export type ToolTab =
   | 'vault'
   | 'backlog'
   | 'compiler'
-  | 'resume-checker'
   | 'attendance' 
   | 'gpa' 
   | 'internal-calc'
@@ -307,89 +306,6 @@ export interface CompressedImageResult {
   compressionRatio: number;
   timeTakenMs: number;
   format: string;
-}
-
-// ----------------------------------------------------
-// Tool: ATS Resume Keyword Matcher & Diagnostics Types
-// ----------------------------------------------------
-export interface KeywordItem {
-  word: string;
-  frequencyInJd: number;
-  frequencyInResume: number;
-  isMatched: boolean;
-  importance: 'critical' | 'recommended' | 'optional';
-  category: 'technical' | 'tools' | 'soft_skills' | 'general';
-}
-
-export interface AtsDiagnosticFinding {
-  type: 'grammar' | 'skill' | 'structure' | 'metric';
-  severity: 'critical' | 'warning' | 'good';
-  title: string;
-  message: string;
-  snippet?: string;
-  suggestion: string;
-}
-
-export interface AtsScoreResult {
-  matchPercentage: number;
-  totalJdKeywords: number;
-  matchedCount: number;
-  missingCount: number;
-  matchedKeywords: KeywordItem[];
-  missingKeywords: KeywordItem[];
-  resumeWordCount: number;
-  jdWordCount: number;
-  criticalMissingCount: number;
-  weakVerbsCount: number;
-  quantifiableMetricsCount: number;
-  formattingFlags: string[];
-  findings: AtsDiagnosticFinding[];
-  categoryScores: {
-    technical: { matched: number; total: number; percent: number };
-    tools: { matched: number; total: number; percent: number };
-    soft_skills: { matched: number; total: number; percent: number };
-    general: { matched: number; total: number; percent: number };
-  };
-}
-
-export interface AtsResumeStructured {
-  fullName: string;
-  title: string;
-  contact: {
-    email: string;
-    phone: string;
-    location: string;
-    linkedin: string;
-    github: string;
-    portfolio: string;
-  };
-  summary: string;
-  skills: {
-    languages: string[];
-    frameworks: string[];
-    tools: string[];
-    concepts: string[];
-  };
-  experience: Array<{
-    role: string;
-    company: string;
-    duration: string;
-    location: string;
-    bullets: string[];
-  }>;
-  projects: Array<{
-    name: string;
-    technologies: string[];
-    link?: string;
-    bullets: string[];
-  }>;
-  education: Array<{
-    degree: string;
-    institution: string;
-    duration: string;
-    scoreOrGpa: string;
-  }>;
-  certifications?: string[];
 }
 
 // ----------------------------------------------------
