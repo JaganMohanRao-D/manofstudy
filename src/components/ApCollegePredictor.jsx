@@ -31,6 +31,7 @@ import {
   AP_SPECIAL_CATEGORIES
 } from '../services/apCollegePredictorService';
 import { getPredictorVerdict } from '../utils/predictorLocalization';
+import SearchableBranchSelect from './SearchableBranchSelect';
 
 export default function ApCollegePredictor({
   initialCollegeCode = 'ALL',
@@ -143,7 +144,7 @@ export default function ApCollegePredictor({
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         {/* INPUT FORM PANEL */}
-        <section className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl relative overflow-hidden">
+        <section className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl relative overflow-visible z-20">
           <div className="space-y-4">
             <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
               <div className="flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
@@ -271,17 +272,12 @@ export default function ApCollegePredictor({
                   </span>
                   Preferred Branch
                 </label>
-                <select
+                <SearchableBranchSelect
+                  options={AP_BRANCH_OPTIONS}
                   value={selectedBranch}
-                  onChange={(e) => setSelectedBranch(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white text-sm font-semibold outline-none focus:border-cyan-500"
-                >
-                  {AP_BRANCH_OPTIONS.map((b) => (
-                    <option key={b.code} value={b.code}>
-                      {b.name}
-                    </option>
-                  ))}
-                </select>
+                  onChange={setSelectedBranch}
+                  placeholder="Search AP branch name or code..."
+                />
                 <p className="text-[11px] text-slate-500 dark:text-slate-400">Optional — choose a branch or keep All Branches</p>
               </div>
             </div>
