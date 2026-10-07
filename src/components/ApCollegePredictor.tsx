@@ -250,25 +250,25 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
         <div className="relative z-10 max-w-3xl space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase bg-blue-500/20 text-blue-300 border border-blue-400/30">
             <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-            <span>APSCHE 2026 Deterministic Quota Engine</span>
+            <span>AP EAPCET 2026 • Data-Grounded Comparison</span>
           </div>
 
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-white leading-tight">
-            Next-Gen AP College Predictor 2026
+            AP EAPCET 2026 College Predictor
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 font-medium leading-relaxed">
-            Strict multi-tier quota matching (Gender isolation, AU/SVU regional seats, and special quotas) across 100,621+ verified 2026 AP EAPCET college allotment records.
+            Historical comparison using the available 2026 AP EAPCET allotment records, with category, gender, local-status/region and special-quota filters.
           </p>
 
           <div className="pt-2 flex flex-wrap items-center gap-2 text-xs">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-semibold">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Strict Quota Isolation: Male candidates never compared to Girls quotas</span>
+              <span>Quota matching: gender-specific and special-category records are filtered</span>
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-300 font-semibold">
               <Target className="w-3.5 h-3.5 text-blue-400" />
-              <span>262 Verified AP Colleges Indexed</span>
+              <span>Available 2026 allotment records • historical reference</span>
             </span>
           </div>
         </div>
@@ -337,7 +337,7 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
                 {rankError && <p className="text-[11px] font-bold text-rose-500">{rankError}</p>}
               </div>
 
-              {/* 2. Caste Category */}
+              {/* 2. Reservation Category */}
               <div className="space-y-1.5">
                 <label className="text-xs font-extrabold uppercase text-slate-600 dark:text-slate-300">
                   Caste Category
@@ -361,7 +361,7 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
               {/* 3. Gender */}
               <div className="space-y-1.5">
                 <label className="text-xs font-extrabold uppercase text-slate-600 dark:text-slate-300">
-                  Candidate Gender
+                  Gender
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
@@ -392,7 +392,7 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
               {/* 4. Region */}
               <div className="space-y-1.5">
                 <label className="text-xs font-extrabold uppercase text-slate-600 dark:text-slate-300">
-                  Local Region
+                  Local Status / Region
                 </label>
                 <div className="relative">
                   <select
@@ -629,11 +629,11 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
                     </span>
                     <span className="text-lg">🔥</span>
                   </div>
-                  <div className="text-xs font-bold text-slate-800 dark:text-slate-200 mt-1">Safe Bets / Top Shot</div>
-                  <div className="text-[10px] text-slate-500">Rank &lt;= 2026 Closing Rank</div>
+                  <div className="text-xs font-bold text-slate-800 dark:text-slate-200 mt-1">Within Observed Range</div>
+                  <div className="text-[10px] text-slate-500">Your rank is at or better than the observed 2026 closing rank</div>
                 </button>
 
-                {/* Target Reachable */}
+                {/* Near Observed Range */}
                 <button
                   type="button"
                   onClick={() => setActiveVerdictFilter(activeVerdictFilter === 'TARGET' ? 'ALL' : 'TARGET')}
@@ -650,10 +650,10 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
                     <span className="text-lg">⚡</span>
                   </div>
                   <div className="text-xs font-bold text-slate-800 dark:text-slate-200 mt-1">Target Reachable</div>
-                  <div className="text-[10px] text-slate-500">Within 10-15% of cutoff</div>
+                  <div className="text-[10px] text-slate-500">Close to the observed 2026 closing rank</div>
                 </button>
 
-                {/* Dream Shots */}
+                {/* Outside Observed Range */}
                 <button
                   type="button"
                   onClick={() => setActiveVerdictFilter(activeVerdictFilter === 'DREAM' ? 'ALL' : 'DREAM')}
@@ -670,10 +670,10 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
                     <span className="text-lg">🚀</span>
                   </div>
                   <div className="text-xs font-bold text-slate-800 dark:text-slate-200 mt-1">Dream Shots</div>
-                  <div className="text-[10px] text-slate-500">Aspirational option buffer</div>
+                  <div className="text-[10px] text-slate-500">Historical stretch option; not an admission prediction</div>
                 </button>
 
-                {/* Steep Reach */}
+                {/* Far Outside Observed Range */}
                 <button
                   type="button"
                   onClick={() => setActiveVerdictFilter(activeVerdictFilter === 'STEEP' ? 'ALL' : 'STEEP')}
@@ -690,7 +690,7 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
                     <span className="text-lg">🏔️</span>
                   </div>
                   <div className="text-xs font-bold text-slate-800 dark:text-slate-200 mt-1">Steep Reach</div>
-                  <div className="text-[10px] text-slate-500">Higher rank threshold</div>
+                  <div className="text-[10px] text-slate-500">Rank is materially beyond the observed 2026 range</div>
                 </button>
               </div>
 
@@ -698,7 +698,7 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
               <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-50 dark:bg-slate-900/60 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-slate-600 dark:text-slate-400">
-                    Showing {displayedMatches.length} Eligible College Allotment Options
+                    Showing {displayedMatches.length} observed college/branch options matching your selected profile
                   </span>
                   {activeVerdictFilter !== 'ALL' && (
                     <button
@@ -718,7 +718,7 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
                     onChange={(e) => setSortBy(e.target.value as any)}
                     className="px-2.5 py-1 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-slate-800 dark:text-slate-200 cursor-pointer"
                   >
-                    <option value="SELECTIVE">Selectivity &amp; Probability</option>
+                    <option value="SELECTIVE">Selectivity</option>
                     <option value="CLOSING_DESC">Closing Rank (Highest First)</option>
                     <option value="CLOSEST_TO_RANK">Closest to My Rank</option>
                     <option value="NAME_ASC">College Name (A-Z)</option>
@@ -805,9 +805,9 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
                               </div>
                             </div>
                             <div>
-                              <div className="text-[10px] uppercase font-bold text-slate-400">Probability</div>
+                              <div className="text-[10px] uppercase font-bold text-slate-400">Observed Position</div>
                               <div className="font-bold text-blue-600 dark:text-blue-400 mt-0.5">
-                                {m.probabilityPercent}%
+                                {m.closingRank > 0 ? (currentRank <= m.closingRank ? 'Within range' : currentRank <= Math.round(m.closingRank * 1.10) ? 'Near range' : 'Outside range') : 'No data'}
                               </div>
                             </div>
                           </div>
