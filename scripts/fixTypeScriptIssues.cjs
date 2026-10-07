@@ -30,7 +30,6 @@ patch('src/components/GlobalGpaHub.tsx', (source) => source.replace("useState<Gp
 
 patch('src/components/Header.tsx', (source) => source
   .replace("  { label: 'AP EAPCET Vacancy Radar', workspace: 'eapcet-radar', icon: Search },\n", '')
-  .replace("  { label: 'ATS Resume Matcher', workspace: 'resume-checker', icon: BriefcaseBusiness },\n", ''), 'remove retired header workspace ids');
 
 patch('src/components/MosStudentExperience.tsx', (source) => {
   let next = source;
