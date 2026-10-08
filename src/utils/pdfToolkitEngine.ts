@@ -41,6 +41,15 @@ export function formatBytes(bytes: number): string {
 /**
  * Load PDF.js document safely with multi-tiered worker fallback
  */
+export async function getPdfPageCount(file: File): Promise<number> {
+  const pdf = await loadPdfJsDoc(await file.arrayBuffer());
+  try {
+    return pdf.numPages;
+  } finally {
+    await pdf.destroy();
+  }
+}
+
 export async function loadPdfJsDoc(arrayBuffer: ArrayBuffer) {
   configurePdfWorker();
   const bufferCopy = arrayBuffer.slice(0);
@@ -350,14 +359,10 @@ export async function compressPdf(
     const pdf = await loadPdfJsDoc(buffer);
     const totalPages = pdf.numPages;
 
-    const doc = new jsPDF({
-      orientation: 'portrait',
-      unit: 'pt',
-      format: 'a4',
-    });
-
+    let doc: jsPDF | null = null;
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error('Unable to initialize the PDF compression canvas.');
 
     for (let i = 1; i <= totalPages; i++) {
       onProgress?.(
@@ -366,20 +371,31 @@ export async function compressPdf(
       );
 
       const page = await pdf.getPage(i);
-      // Render at scale 1.25 for crisp text with controlled jpeg quality
+      // Render at a controlled scale while preserving each source page's dimensions.
       const viewport = page.getViewport({ scale: 1.25 });
-      canvas.width = viewport.width;
-      canvas.height = viewport.height;
+      canvas.width = Math.ceil(viewport.width);
+      canvas.height = Math.ceil(viewport.height);
 
       await (page as any).render({ canvasContext: ctx, viewport }).promise;
 
       const imgData = canvas.toDataURL('image/jpeg', quality);
+      const orientation = viewport.width >= viewport.height ? 'landscape' : 'portrait';
 
-      if (i > 1) doc.addPage([viewport.width, viewport.height]);
-      else doc.setPage(1);
+      if (!doc) {
+        doc = new jsPDF({
+          orientation,
+          unit: 'pt',
+          format: [viewport.width, viewport.height],
+          compress: true,
+        });
+      } else {
+        doc.addPage([viewport.width, viewport.height], orientation);
+      }
 
-      doc.addImage(imgData, 'JPEG', 0, 0, viewport.width, viewport.height);
+      doc.addImage(imgData, 'JPEG', 0, 0, viewport.width, viewport.height, undefined, 'FAST');
     }
+
+    if (!doc) throw new Error('The PDF did not contain any renderable pages.');
 
     onProgress?.(95, 'Finalizing compressed document...');
     const outputBlob = doc.output('blob');
@@ -1717,11 +1733,17 @@ export async function signPdfDocument(
   const page = pdfDoc.getPage(pageIndex);
 
   onProgress?.(70, 'Stamping signature onto document...');
+  const signatureWidth = options.width || 140;
+  const signatureHeight = options.height || 50;
+  const pageSize = page.getSize();
+  const safeX = Math.max(12, Math.min(options.posX, pageSize.width - signatureWidth - 12));
+  const safeY = Math.max(12, Math.min(options.posY, pageSize.height - signatureHeight - 12));
+
   page.drawImage(signatureImage, {
-    x: options.posX,
-    y: options.posY,
-    width: options.width || 140,
-    height: options.height || 50,
+    x: safeX,
+    y: safeY,
+    width: signatureWidth,
+    height: signatureHeight,
   });
 
   onProgress?.(90, 'Saving signed PDF...');
@@ -1766,16 +1788,17 @@ export async function watermarkPdf(
       `Watermarking page ${idx + 1} of ${totalPages}...`
     );
     const { width, height } = page.getSize();
-    const textWidth = font.widthOfTextAtSize(watermarkText, options.fontSize || 40);
+    const watermarkFontSize = Math.max(12, Math.min(options.fontSize || 56, 160));
+    const textWidth = font.widthOfTextAtSize(watermarkText, watermarkFontSize);
 
     page.drawText(watermarkText, {
       x: (width - textWidth) / 2,
       y: height / 2,
-      size: options.fontSize || 40,
+      size: Math.max(12, Math.min(options.fontSize || 56, 160)),
       font,
       color: rgb(r, g, b),
-      opacity: options.opacity || 0.25,
-      rotate: degrees(options.angle || -45),
+      opacity: options.opacity ?? 0.25,
+      rotate: degrees(options.angle ?? -45),
     });
   });
 
@@ -1940,11 +1963,23 @@ export async function organizePdf(
   onProgress?.(20, 'Loading document structure for reorganization...');
   const buffer = await file.arrayBuffer();
   const srcDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+  const totalPages = srcDoc.getPageCount();
+  const validPageIndices = orderedPageIndices.filter(
+    (index, position, all) =>
+      Number.isInteger(index) &&
+      index >= 0 &&
+      index < totalPages &&
+      all.indexOf(index) === position
+  );
+
+  if (validPageIndices.length === 0) {
+    throw new Error('Select at least one valid page to organize the PDF.');
+  }
 
   const newDoc = await PDFDocument.create();
-  onProgress?.(60, 'Re-arranging pages into customized layout...');
+  onProgress?.(60, `Re-arranging ${validPageIndices.length} selected pages...`);
 
-  const copiedPages = await newDoc.copyPages(srcDoc, orderedPageIndices);
+  const copiedPages = await newDoc.copyPages(srcDoc, validPageIndices);
   for (const page of copiedPages) {
     newDoc.addPage(page);
   }
@@ -2303,10 +2338,24 @@ export async function cropPdf(
   onProgress?.(60, 'Applying mediaBox coordinate trimming...');
   pages.forEach((page) => {
     const { width, height } = page.getSize();
-    const newX = margins.left;
-    const newY = margins.bottom;
-    const newWidth = Math.max(100, width - margins.left - margins.right);
-    const newHeight = Math.max(100, height - margins.top - margins.bottom);
+    const safeMargins = {
+      top: Math.max(0, margins.top || 0),
+      bottom: Math.max(0, margins.bottom || 0),
+      left: Math.max(0, margins.left || 0),
+      right: Math.max(0, margins.right || 0),
+    };
+
+    if (safeMargins.left + safeMargins.right >= width - 20) {
+      throw new Error(`Left + right crop margins are too large for a ${Math.round(width)}pt-wide page.`);
+    }
+    if (safeMargins.top + safeMargins.bottom >= height - 20) {
+      throw new Error(`Top + bottom crop margins are too large for a ${Math.round(height)}pt-high page.`);
+    }
+
+    const newX = safeMargins.left;
+    const newY = safeMargins.bottom;
+    const newWidth = width - safeMargins.left - safeMargins.right;
+    const newHeight = height - safeMargins.top - safeMargins.bottom;
 
     page.setMediaBox(newX, newY, newWidth, newHeight);
   });
