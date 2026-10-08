@@ -325,7 +325,6 @@ export const TOOLS_CONFIG: ToolMeta[] = [
     badge: '100% Free',
   },
   {
-  {
     id: 'resizer',
     name: 'Exam Image Resizer',
     shortName: 'Image Resizer',
