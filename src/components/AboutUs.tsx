@@ -156,10 +156,14 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
           </div>
           {onOpenSupport && (
             <button
+              type="button"
               onClick={onOpenSupport}
-              className="w-full sm:w-auto px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-colors shadow-xs cursor-pointer whitespace-nowrap"
+              aria-label="Support Man of Study"
+              title="Support Man of Study"
+              className="inline-flex items-center justify-center gap-2 w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2 rounded-full sm:rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-colors shadow-xs cursor-pointer shrink-0"
             >
-              Support MOS ☕
+              <Heart className="w-4 h-4 fill-current sm:hidden" aria-hidden="true" />
+              <span className="hidden sm:inline">Support MOS ☕</span>
             </button>
           )}
         </section>
