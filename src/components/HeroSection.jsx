@@ -1,14 +1,66 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import './kineticMOS.css';
-import { ArrowDownRight, ArrowRight, Database, GraduationCap, Wrench } from 'lucide-react';
+import { ArrowDownRight, ArrowRight } from 'lucide-react';
 import { FeaturesHub } from './FeaturesHub';
 
 export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
-  const go = (workspace, tab) => {
-    if (tab) window.location.hash = tab;
+  const cursorRef = useRef(null);
+  const cursorDotRef = useRef(null);
+  const cursorRingRef = useRef(null);
+  const heroRef = useRef(null);
+
+  const go = (workspace) => {
     onSelectWorkspace?.(workspace);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    const cursor = cursorRef.current;
+    const dot = cursorDotRef.current;
+    const ring = cursorRingRef.current;
+    if (!hero || !cursor || !dot || !ring || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let raf = 0;
+    let targetX = window.innerWidth / 2;
+    let targetY = window.innerHeight / 2;
+    let currentX = targetX;
+    let currentY = targetY;
+    let visible = false;
+
+    const move = (event) => {
+      targetX = event.clientX;
+      targetY = event.clientY;
+      visible = true;
+      cursor.classList.add('is-active');
+      hero.style.setProperty('--mk-mouse-x', event.clientX + 'px');
+      hero.style.setProperty('--mk-mouse-y', event.clientY + 'px');
+    };
+    const leave = () => {
+      visible = false;
+      cursor.classList.remove('is-active');
+    };
+    const animate = () => {
+      currentX += (targetX - currentX) * 0.16;
+      currentY += (targetY - currentY) * 0.16;
+      const dx = targetX - currentX;
+      const dy = targetY - currentY;
+      const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+      dot.style.transform = 'translate3d(' + currentX + 'px, ' + currentY + 'px, 0)';
+      ring.style.transform = 'translate3d(' + currentX + 'px, ' + currentY + 'px, 0) rotate(' + angle + 'deg)';
+      cursor.style.opacity = visible ? '1' : '0';
+      raf = requestAnimationFrame(animate);
+    };
+
+    window.addEventListener('pointermove', move, { passive: true });
+    hero.addEventListener('pointerleave', leave);
+    raf = requestAnimationFrame(animate);
+    return () => {
+      window.removeEventListener('pointermove', move);
+      hero.removeEventListener('pointerleave', leave);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
 
   const scrollToTools = () => {
     document.getElementById('features-hub')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -16,7 +68,12 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
 
   return (
     <main className="mos-kinetic-home">
-      <section className="mos-k-hero" aria-labelledby="mos-k-title">
+      <section ref={heroRef} className="mos-k-hero" aria-labelledby="mos-k-title">
+        <div ref={cursorRef} className="mos-k-cursor" aria-hidden="true">
+          <span ref={cursorRingRef} className="mos-k-cursor-ring"><i /><i /><i /><i /></span>
+          <span ref={cursorDotRef} className="mos-k-cursor-dot" />
+          <span className="mos-k-cursor-label">MOVE / EXPLORE</span>
+        </div>
         <div className="mos-k-grid" aria-hidden="true" />
         <div className="mos-k-glow" aria-hidden="true" />
         <span className="mos-k-orb a" aria-hidden="true" />
