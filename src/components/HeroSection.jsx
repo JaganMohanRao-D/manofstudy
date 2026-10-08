@@ -25,7 +25,6 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
     const grip = stringGripRef.current;
     if (!root || !cursor || !dot || !ring || !path || !grip || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    document.body.classList.add('mos-kinetic-cursor-active');
     const boxes = Array.from(root.querySelectorAll('.mos-k-physics-box')).map((el) => ({ el, homeX: parseFloat(el.dataset.x || '50'), homeY: parseFloat(el.dataset.y || '50'), x: 0, y: 0, vx: 0, vy: 0, rot: 0 }));
     let raf = 0;
     let targetX = window.innerWidth / 2;
@@ -76,7 +75,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
     window.addEventListener('pointermove', updatePointer, { passive: true });
     window.addEventListener('pointerout', hidePointer);
     raf = requestAnimationFrame(animate);
-    return () => { document.body.classList.remove('mos-kinetic-cursor-active'); window.removeEventListener('pointermove', updatePointer); window.removeEventListener('pointerout', hidePointer); cancelAnimationFrame(raf); };
+    return () => { window.removeEventListener('pointermove', updatePointer); window.removeEventListener('pointerout', hidePointer); cancelAnimationFrame(raf); };
   }, []);
 
   const scrollToTools = () => {
