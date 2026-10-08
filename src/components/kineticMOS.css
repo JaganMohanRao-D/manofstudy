@@ -84,3 +84,28 @@
  .mos-k-tool-grid{grid-template-columns:1fr}.mos-k-section-head{display:block}.mos-k-section-label{margin-top:1rem}
 }
 @media(prefers-reduced-motion:reduce){.mos-k-glow,.mos-k-orb{animation:none!important}.mos-k-cta{transition:none}}
+
+/* Kinetic-style spring field and full-home cursor */
+.mos-kinetic-cursor-active,.mos-kinetic-cursor-active *{cursor:none!important}
+.mos-k-physics-field{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.mos-k-physics-box{position:absolute;width:28px;height:28px;margin:-14px 0 0 -14px;border:1px solid rgba(241,241,237,.22);will-change:transform}
+.mos-k-physics-box.acid{border-color:rgba(201,255,25,.55)}
+.mos-k-physics-box.warm{border-color:rgba(255,159,104,.6)}
+.mos-k-physics-box:nth-child(2n){width:18px;height:18px;margin:-9px 0 0 -9px}
+.mos-k-physics-box:nth-child(3n){width:42px;height:42px;margin:-21px 0 0 -21px}
+.mos-k-string{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;overflow:visible}
+.mos-k-string-path{fill:none;stroke:var(--mk-accent);stroke-width:2.5;stroke-linecap:round;filter:drop-shadow(0 0 9px rgba(201,255,25,.5))}
+.mos-k-string-anchor{fill:var(--mk-accent)}
+.mos-k-string-grip{fill:var(--mk-orange);filter:drop-shadow(0 0 9px rgba(255,159,104,.8))}
+.mos-k-cursor{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:0;transition:opacity .15s ease}
+.mos-k-cursor-ring{position:absolute;left:-18px;top:-18px;width:36px;height:36px;border:1px solid rgba(201,255,25,.85);border-radius:50%;display:block;will-change:transform}
+.mos-k-cursor-ring i{position:absolute;width:5px;height:1px;background:var(--mk-accent);left:50%;top:50%;transform-origin:0 0}
+.mos-k-cursor-ring i:nth-child(1){transform:translateX(14px)}
+.mos-k-cursor-ring i:nth-child(2){transform:rotate(90deg) translateX(14px)}
+.mos-k-cursor-ring i:nth-child(3){transform:rotate(180deg) translateX(14px)}
+.mos-k-cursor-ring i:nth-child(4){transform:rotate(270deg) translateX(14px)}
+.mos-k-cursor-dot{position:absolute;left:-3px;top:-3px;width:6px;height:6px;background:var(--mk-accent);border-radius:50%;box-shadow:0 0 18px rgba(201,255,25,.6);will-change:transform}
+.mos-k-cursor-label{position:absolute;left:25px;top:17px;font:700 8px/1 'JetBrains Mono',monospace;letter-spacing:.12em;color:#8e9299;white-space:nowrap}
+.mos-k-cursor.is-active .mos-k-cursor-ring{animation:mkCursorMechanical 1.35s steps(8,end) infinite}
+@keyframes mkCursorMechanical{0%,100%{margin-left:0;margin-top:0}25%{margin-left:2px;margin-top:-1px}50%{margin-left:-1px;margin-top:2px}75%{margin-left:1px;margin-top:1px}}
+@media(max-width:800px){.mos-k-physics-field,.mos-k-string,.mos-k-cursor{display:none}.mos-kinetic-cursor-active,.mos-kinetic-cursor-active *{cursor:auto!important}}
