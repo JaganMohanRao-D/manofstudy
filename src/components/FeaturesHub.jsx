@@ -341,7 +341,7 @@ export const FeaturesHub = ({
   ];
 
   return (
-    <div className="space-y-6 sm:space-y-8">
+    <div className="mos-k-feature-hub space-y-6 sm:space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200 dark:border-slate-800/80 pb-3">
         <div>
           <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
