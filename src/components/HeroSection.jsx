@@ -39,7 +39,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
     let active = false;
 
     const updatePointer = (event) => {
-      targetX = event.clientX; targetY = event.clientY; active = true; cursor.classList.add('is-active');
+      targetX = event.clientX; targetY = event.clientY; active = root.contains(event.target); cursor.classList.toggle('is-active', active);
       const rect = root.getBoundingClientRect();
       mouseX = event.clientX - rect.left; mouseY = event.clientY - rect.top;
       root.style.setProperty('--mk-mouse-x', event.clientX + 'px');
