@@ -77,7 +77,7 @@ export const Header: React.FC<HeaderProps> = ({ activeWorkspace = 'hub', onSelec
   );
 
   return (
-    <header id="main-header" className="sticky top-0 z-50 w-full border-b border-cyan-300/10 bg-[#040b16]/92 backdrop-blur-xl text-white shadow-lg shadow-black/20">
+    <header id="main-header" className="mos-k-nav sticky top-0 z-50 w-full text-white shadow-lg shadow-black/20">
       <div className="mx-auto flex h-[68px] max-w-7xl items-center gap-3 px-3 sm:px-5 lg:px-7">
         <button type="button" id="brand-logo" onClick={goHome} className="group flex min-w-0 shrink-0 items-center gap-2.5 text-left" aria-label="Man of Study home">
           <span className="mos-brand-mark relative flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-cyan-300/15 bg-[#07101d] p-0.5 shadow-lg" aria-hidden="true">
