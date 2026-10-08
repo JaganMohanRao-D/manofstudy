@@ -39,6 +39,7 @@ export const APStudentInlineDetails: React.FC<APStudentInlineDetailsProps> = ({ 
         <Detail label="Candidate category" value={student.category || '—'} icon={UserRound} />
         <Detail label="Gender" value={student.gender === 'M' ? 'Boys (M)' : student.gender === 'F' ? 'Girls (F)' : student.gender || '—'} icon={UserRound} />
         <Detail label="Region" value={student.region || '—'} icon={MapPin} />
+        <Detail label="Hall ticket number" value={student.roll_no} icon={Database} />
         <Detail label="College" value={student.college_name ? `${student.college_name}${student.college_code ? ` (${student.college_code})` : ''}` : '—'} icon={GraduationCap} />
         <Detail label="Branch" value={student.branch_name ? `${student.branch_name}${student.branch_code ? ` (${student.branch_code})` : ''}` : '—'} icon={GraduationCap} />
         <Detail label="Course type" value={student.course_type} icon={GraduationCap} />

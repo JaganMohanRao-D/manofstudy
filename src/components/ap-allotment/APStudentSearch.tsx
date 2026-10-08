@@ -436,20 +436,36 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
       {/* Results List: Clean Student Result Cards */}
       {!isSearching && searchResults.length > 0 && (
         <div className="space-y-3">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid min-w-0 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {paginatedRecords.map((r, idx) => (
               <div
                 key={`res-${r.college_code}-${r.branch_code}-${r.rank}-${idx}`}
-                className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 hover:border-cyan-500/40 rounded-2xl p-4 space-y-2.5 shadow-sm transition-all"
+                className="w-full min-w-0 max-w-full overflow-hidden bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 hover:border-cyan-500/40 rounded-2xl p-4 space-y-2.5 shadow-sm transition-all"
               >
+                {/* Clickable student summary: keeps the complete details panel separate from the summary layout. */}
+                <div
+                  className="min-w-0 max-w-full cursor-pointer"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setExpandedStudentKey((current) => current === `res-${r.college_code}-${r.branch_code}-${r.rank}-${idx}` ? null : `res-${r.college_code}-${r.branch_code}-${r.rank}-${idx}`)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      setExpandedStudentKey((current) => current === `res-${r.college_code}-${r.branch_code}-${r.rank}-${idx}` ? null : `res-${r.college_code}-${r.branch_code}-${r.rank}-${idx}`);
+                    }
+                  }}
+                >
                 {/* Header: Name & Rank */}
-                <div className="flex items-start justify-between gap-2">
+                <div className="flex min-w-0 max-w-full items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
                     <button
                       type="button"
-                      onClick={() => setExpandedStudentKey((current) => current === `res-${r.college_code}-${r.branch_code}-${r.rank}-${idx}` ? null : `res-${r.college_code}-${r.branch_code}-${r.rank}-${idx}`)}
-                      className="block max-w-full truncate text-left font-bold text-slate-900 dark:text-white text-sm hover:text-cyan-500 dark:hover:text-cyan-300 transition-colors"
-                      title="Show student allotment details"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setExpandedStudentKey((current) => current === `res-${r.college_code}-${r.branch_code}-${r.rank}-${idx}` ? null : `res-${r.college_code}-${r.branch_code}-${r.rank}-${idx}`);
+                      }}
+                      className="block min-w-0 max-w-full truncate text-left font-bold text-slate-900 dark:text-white text-sm hover:text-cyan-500 dark:hover:text-cyan-300 transition-colors"
+                      title="Show complete student allotment details"
                     >
                       {r.cand_name}
                     </button>
@@ -465,11 +481,11 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
                 {/* College & Branch Meta */}
                 <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 space-y-1 text-xs">
                   <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0">
+                    <div className="min-w-0 max-w-full">
                       <span className="font-mono font-bold text-cyan-700 dark:text-cyan-300 mr-1.5">
                         [{r.college_code}]
                       </span>
-                      <span className="text-slate-800 dark:text-slate-200 font-medium truncate inline-block max-w-[180px]" title={r.college_name}>
+                      <span className="min-w-0 max-w-[180px] text-slate-800 dark:text-slate-200 font-medium truncate inline-block break-words" title={r.college_name}>
                         {r.college_name}
                       </span>
                     </div>
@@ -477,7 +493,10 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
                     {onExploreCollegeBranch && (
                       <button
                         type="button"
-                        onClick={() => onExploreCollegeBranch(r.college_code, r.branch_code)}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          onExploreCollegeBranch(r.college_code, r.branch_code);
+                        }}
                         className="text-[10px] font-semibold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-0.5 shrink-0 cursor-pointer"
                         title="Open this college & branch explorer"
                       >
@@ -487,13 +506,13 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
                     )}
                   </div>
 
-                  <div className="flex items-center gap-1.5 text-[11px] text-slate-600 dark:text-slate-400">
+                  <div className="flex min-w-0 max-w-full items-center gap-1.5 text-[11px] text-slate-600 dark:text-slate-400">
                     <GitBranch className="w-3 h-3 text-indigo-500 shrink-0" />
                     <span className="font-mono font-semibold text-indigo-700 dark:text-indigo-300">
                       {r.branch_code}
                     </span>
                     <span>-</span>
-                    <span className="truncate">{r.branch_name}</span>
+                    <span className="min-w-0 truncate break-words">{r.branch_name}</span>
                   </div>
                 </div>
 
@@ -526,8 +545,12 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
                   </span>
                 </div>
 
+                </div>
+
                 {expandedStudentKey === `res-${r.college_code}-${r.branch_code}-${r.rank}-${idx}` && (
-                  <APStudentInlineDetails student={r} year={year} />
+                  <div className="min-w-0 max-w-full overflow-hidden" onClick={(event) => event.stopPropagation()}>
+                    <APStudentInlineDetails student={r} year={year} />
+                  </div>
                 )}
               </div>
             ))}
