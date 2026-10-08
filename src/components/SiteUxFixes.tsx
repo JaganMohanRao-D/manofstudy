@@ -465,8 +465,8 @@ const SiteUxFixes: React.FC = () => {
         .mos-header-link { font-size:10px; padding:8px 5px; }
         .mos-tools-dropdown { position:fixed; top:58px; right:8px; width:min(270px,calc(100vw - 16px)); max-height:65vh; }
         #header-command-palette-trigger { width:34px !important; height:34px !important; padding:7px !important; }
-        #header-support-btn { padding:7px 8px !important; }
-        #header-support-btn .sm\\:hidden { display:inline !important; }
+        #header-support-btn { width:34px !important; height:34px !important; padding:0 !important; display:inline-flex !important; align-items:center !important; justify-content:center !important; }
+        #header-support-btn span { display:none !important; }
         #header-hamburger-drawer-btn { padding:7px !important; }
         #mos-featurehub-mock-shortcut { margin-bottom:12px; padding:12px 13px; border-radius:16px; }
         .mos-fh-mock-copy strong { font-size:13px; }
@@ -479,7 +479,7 @@ const SiteUxFixes: React.FC = () => {
         #mos-compact-header-nav { flex:1 1 auto; min-width:0; }
         .mos-header-link { font-size:9px; padding:7px 4px; }
         #header-command-palette-trigger { display:flex !important; }
-        #header-support-btn { display:flex !important; }
+        #header-support-btn { display:flex !important; width:34px !important; height:34px !important; padding:0 !important; }
       }
       @media (prefers-reduced-motion:reduce) {
         #mos-featurehub-mock-shortcut,.mos-header-link,.mos-tools-dropdown { transition:none !important; }
