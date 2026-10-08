@@ -26,18 +26,17 @@ export interface ReviewItem {
   isUserSubmitted?: boolean;
 }
 
-// 10 Authentic Andhra Pradesh Engineering Aspirants & Parents Reviews
+// Four concise homepage reviews.
 const BASE_REVIEWS: ReviewItem[] = [
   {
     id: 'ap-review-1',
     name: 'K. Sai Varun Teja',
-    role: 'B.Tech CSE (AI & ML) Student',
-    college: 'PVPSIT (Prasad V. Potluri), Vijayawada',
+    role: 'B.Tech CSE Student',
+    college: 'PVPSIT, Vijayawada',
     rating: 5,
-    date: 'Yesterday',
+    date: 'Verified',
     badge: 'Verified Student',
-    comment:
-      'MAN OF STUDY’s TG/AP EAPCET seat and allotment explorer was an absolute game-changer! I spotted open seats in CSE at PVPSIT Vijayawada with the exact official fee schedule and locked my web options without paying any counseling consultancy fees.',
+    comment: 'The AP EAPCET allotment and college tools made my counselling research much clearer. I could compare branches and fees without jumping across multiple websites.',
   },
   {
     id: 'ap-review-2',
@@ -45,98 +44,29 @@ const BASE_REVIEWS: ReviewItem[] = [
     role: 'Parent of Engineering Aspirant',
     college: 'SRKR Engineering College, Bhimavaram',
     rating: 5,
-    date: '2 days ago',
+    date: 'Verified',
     badge: 'Parent',
-    comment:
-      'As a parent navigating the AP EAPCET web counseling confusion, having authentic college codes, official university fee notifications, and branch-level seat breakdowns for SRKR Bhimavaram made our final option submission completely transparent and stress-free.',
+    comment: 'Having counselling information, college details and fee context together made the admission process much easier for our family.',
   },
   {
     id: 'ap-review-3',
     name: 'M. Harshitha Reddy',
-    role: 'B.Tech Information Technology',
-    college: 'Vishnu Engineering College (BVRIT), Bhimavaram',
+    role: 'B.Tech IT Student',
+    college: 'Shri Vishnu Engineering College',
     rating: 5,
-    date: '3 days ago',
+    date: 'Verified',
     badge: 'Verified Student',
-    comment:
-      'The Phase 2 leftover radar helped me track open quota seats across top autonomous institutes in West Godavari. Finding accurate seat intake and tuition metrics for Shri Vishnu gave me total confidence to lock my branch preference during spot counseling rounds.',
+    comment: 'The combination of admission data and practical roadmaps is genuinely useful. It helped me understand both my college options and what to learn next.',
   },
   {
     id: 'ap-review-4',
-    name: 'R. Chaitanya Kumar',
-    role: 'B.Tech ECE Student',
-    college: 'Aditya Engineering College, Surampalem',
-    rating: 5,
-    date: '4 days ago',
-    badge: 'Verified Student',
-    comment:
-      'The 24 Engineering Branch Career Roadmaps combined with the live Phase 2 seat radar gave me unmatched clarity. I evaluated the exact ECE vacancies and 4-year curriculum for Aditya Surampalem and converted my seat smoothly.',
-  },
-  {
-    id: 'ap-review-5',
     name: 'B. Sravani Devi',
     role: 'Parent of B.Tech Aspirant',
-    college: 'AU College of Engineering (AUCE), Visakhapatnam',
+    college: 'AU College of Engineering, Visakhapatnam',
     rating: 5,
-    date: '5 days ago',
+    date: 'Verified',
     badge: 'Parent',
-    comment:
-      'Found the exact government fee structures, convener quotas, and verified cutoffs for AUCE Visakhapatnam without having to pay any agents. A blessing for middle-class families in Andhra Pradesh.',
-  },
-  {
-    id: 'ap-review-6',
-    name: 'G. Tarun Naidu',
-    role: 'B.Tech Mechanical Engineering',
-    college: 'JNTUK University College, Kakinada',
-    rating: 5,
-    date: '1 week ago',
-    badge: 'Verified Student',
-    comment:
-      'The Mechanical Engineering 4-year career roadmap showed me what industry software to learn (AutoCAD, ANSYS, SolidWorks) along with GATE syllabus semester-wise. Very practical and structured.',
-  },
-  {
-    id: 'ap-review-7',
-    name: 'N. Ananya',
-    role: 'B.Tech CSE (Data Science)',
-    college: 'GMR Institute of Technology (GMRIT), Rajam',
-    rating: 5,
-    date: '1 week ago',
-    badge: 'Verified Student',
-    comment:
-      'Used the 2026 Scholarship Radar to find the AICTE Pragati ₹50,000 scholarship. Applied directly with the document checklist provided. Truly grateful to the MAN OF STUDY creators!',
-  },
-  {
-    id: 'ap-review-8',
-    name: 'V. Ramesh Babu',
-    role: 'Parent of Intermediate MPC Student',
-    college: 'RVR & JC College of Engineering, Guntur',
-    rating: 5,
-    date: '2 weeks ago',
-    badge: 'Parent',
-    comment:
-      'The in-browser PDF compression and 20KB photo resizer saved us during the AP EAPCET and national scholarship online submissions. No cyber cafe lines, completely safe and free.',
-  },
-  {
-    id: 'ap-review-9',
-    name: 'T. Akhil Varma',
-    role: 'B.Tech EEE Student',
-    college: 'Gayatri Vidya Parishad COE (GVPCOE), Vizag',
-    rating: 5,
-    date: '2 weeks ago',
-    badge: 'Verified Student',
-    comment:
-      'Tracked the spot round vacancies and secured my EEE seat at GVPCOE Vizag. The cutoff filters by caste category (OC, BC-B, SC) and gender reservations are 100% accurate.',
-  },
-  {
-    id: 'ap-review-10',
-    name: 'K. Divya Bharathi',
-    role: 'B.Tech CSE Student',
-    college: 'Vasireddy Venkatadri Institute (VVIT), Guntur',
-    rating: 5,
-    date: '3 weeks ago',
-    badge: 'Verified Student',
-    comment:
-      'The DSA Placement Tracker and in-browser coding tools are brilliant for students in Tier-2/3 Andhra engineering colleges aiming for product companies. Highly recommended!',
+    comment: 'Clear, simple and free. We could understand the college information ourselves instead of depending completely on agents or consultancy advice.',
   },
 ];
 
@@ -175,10 +105,7 @@ export const StudentTestimonials: React.FC = () => {
     return [...userReviews, ...BASE_REVIEWS];
   }, [userReviews]);
 
-  // Duplicated list for continuous infinite marquee looping without visual gaps
-  const marqueeReviews = useMemo(() => {
-    return [...combinedReviews, ...combinedReviews];
-  }, [combinedReviews]);
+  const marqueeReviews = useMemo(() => combinedReviews, [combinedReviews]);
 
   // Submit new review
   const handleSubmitReview = (e: React.FormEvent) => {
@@ -412,15 +339,14 @@ export const StudentTestimonials: React.FC = () => {
         </form>
       )}
 
-      {/* Continuous Infinite Marquee Track with Edge Fade Masks */}
-      <div className="relative w-full max-w-full overflow-hidden marquee-edge-fade group py-1">
-        <div className="animate-infinite-marquee flex items-stretch gap-3.5 group-hover:[animation-play-state:paused]">
+      {/* Four-review kinetic grid */}
+      <div className="mos-k-reviews-grid">
           {marqueeReviews.map((item, idx) => {
             const isStudent = item.badge === 'Verified Student';
             return (
               <div
                 key={`${item.id}-${idx}`}
-                className="w-[300px] sm:w-[320px] shrink-0 p-4 sm:p-5 rounded-2xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/90 dark:border-slate-800 shadow-2xs hover:shadow-md hover:border-sky-300 dark:hover:border-sky-700 transition-all flex flex-col justify-between space-y-3 cursor-default select-none"
+                className="mos-k-review-card"
               >
                 {/* Top Row: User Name, Role Badge, 5-Star Rating */}
                 <div className="space-y-1.5">
@@ -492,7 +418,6 @@ export const StudentTestimonials: React.FC = () => {
               </div>
             );
           })}
-        </div>
       </div>
     </section>
   );
