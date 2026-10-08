@@ -227,19 +227,25 @@ function isQuotaEligible(
   const hasSports = q.includes('_sports_') || q.includes('_scg_') || q.includes('_sg_');
   const hasAnySpecial = hasPwd || hasNcc || hasCap || hasSports;
 
+  // Special-category reservation is additive: a candidate with a selected
+  // special category can compete for BOTH their normal category/open-merit
+  // seats and the matching special-category seats.
+  //
+  // Example: SC + CAP => SC regular + SC-CAP.
+  // Example: BC_D + NCC => BC_D regular + BC_D-NCC.
+  // Other special pools remain excluded.
+  const specialMatches =
+    userSpecial === 'PWD' ? hasPwd :
+    userSpecial === 'NCC' ? hasNcc :
+    userSpecial === 'CAP' ? hasCap :
+    userSpecial === 'SPORTS' ? hasSports :
+    false;
+
   if (userSpecial === 'NONE' && hasAnySpecial) {
     return { isEligible: false, isDirectCategory: false, isOpenMerit: false };
   }
-  if (userSpecial === 'PWD' && !hasPwd) {
-    return { isEligible: false, isDirectCategory: false, isOpenMerit: false };
-  }
-  if (userSpecial === 'NCC' && !hasNcc) {
-    return { isEligible: false, isDirectCategory: false, isOpenMerit: false };
-  }
-  if (userSpecial === 'CAP' && !hasCap) {
-    return { isEligible: false, isDirectCategory: false, isOpenMerit: false };
-  }
-  if (userSpecial === 'SPORTS' && !hasSports) {
+
+  if (userSpecial !== 'NONE' && hasAnySpecial && !specialMatches) {
     return { isEligible: false, isDirectCategory: false, isOpenMerit: false };
   }
 
