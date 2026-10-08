@@ -199,7 +199,7 @@ export const StudentFaq: React.FC<StudentFaqProps> = ({
   return (
     <section
       id="student-faq-section"
-      className="my-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24"
+      className="mos-k-faq my-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24"
       aria-labelledby="faq-section-heading"
     >
       {/* Container Card */}
