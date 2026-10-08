@@ -109,3 +109,16 @@
 .mos-k-cursor.is-active .mos-k-cursor-ring{animation:mkCursorMechanical 1.35s steps(8,end) infinite}
 @keyframes mkCursorMechanical{0%,100%{margin-left:0;margin-top:0}25%{margin-left:2px;margin-top:-1px}50%{margin-left:-1px;margin-top:2px}75%{margin-left:1px;margin-top:1px}}
 @media(max-width:800px){.mos-k-physics-field,.mos-k-string,.mos-k-cursor{display:none}.mos-kinetic-cursor-active,.mos-kinetic-cursor-active *{cursor:auto!important}}
+
+/* Kinetic-style testimonial grid */
+.mos-k-reviews-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--mk-line);border-left:1px solid var(--mk-line);overflow:hidden}
+.mos-k-review-card{position:relative;min-width:0;min-height:300px;padding:22px;border-right:1px solid var(--mk-line);border-bottom:1px solid var(--mk-line);background:#0c0d10;color:var(--mk-fg);display:flex;flex-direction:column;justify-content:space-between;gap:24px;transition:background .35s ease,transform .35s cubic-bezier(.2,.8,.2,1),border-color .35s ease}
+.mos-k-review-card::before{content:"";position:absolute;inset:0;background:var(--mk-accent);transform:translateY(101%);transition:transform .45s cubic-bezier(.2,.8,.2,1);z-index:0}
+.mos-k-review-card:hover{border-color:rgba(201,255,25,.55);transform:translateY(-3px)}
+.mos-k-review-card:hover::before{transform:translateY(0)}
+.mos-k-review-card > *{position:relative;z-index:1}
+.mos-k-review-card:hover .text-slate-900,.mos-k-review-card:hover .dark\:text-slate-100,.mos-k-review-card:hover .text-slate-600,.mos-k-review-card:hover .dark\:text-slate-300,.mos-k-review-card:hover .text-sky-700,.mos-k-review-card:hover .dark\:text-sky-400,.mos-k-review-card:hover .text-slate-400{color:#08090b!important}
+.mos-k-review-card:hover svg{color:#08090b!important}
+.mos-k-review-card:hover .fill-amber-400{fill:#08090b!important}
+@media(max-width:1050px){.mos-k-reviews-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.mos-k-reviews-grid{grid-template-columns:1fr}.mos-k-review-card{min-height:250px}}
