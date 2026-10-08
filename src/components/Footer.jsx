@@ -1,128 +1,42 @@
 import React from 'react';
-import { Heart } from 'lucide-react';
+import { Heart, ArrowUpRight } from 'lucide-react';
 
-export const Footer = ({
-  onOpenLegalModal,
-  onOpenSupportModal,
-}) => {
-  return (
-    <footer
-      id="app-footer"
-      className="w-full bg-slate-950 border-t border-slate-800/80 text-slate-400 mt-16"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
-        {/* Top Section: Dual-Column Hero Showcase */}
-        <div className="flex flex-col items-center text-center md:flex-row md:items-center md:justify-between md:text-left gap-6 md:gap-8">
-          {/* Left Column: Logo only — no card, border, background, ring or shadow */}
-          <div className="flex items-center justify-center w-fit shrink-0">
-            <img
-              src="https://i.ibb.co/zHPk2tv4/Chat-GPT-Image-Sep-13-2026-08-04-48-PM.png"
-              alt="MAN OF STUDY (MOS) Logo"
-              width="112"
-              height="112"
-              loading="lazy"
-              fetchPriority="auto"
-              className="w-24 h-24 sm:w-28 sm:h-28 object-contain rounded-2xl"
-            />
-          </div>
-
-          {/* Right Column: Brand Statement & Data Transparency Box */}
-          <div className="space-y-2.5 max-w-3xl">
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-2.5">
-              <span className="text-xl sm:text-2xl font-black tracking-tight text-white">
-                MAN OF STUDY
-              </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-[11px] font-bold tracking-wide">
-                MOS • 100% FREE &amp; OPEN
-              </span>
+export const Footer = ({ onOpenLegalModal, onOpenSupportModal }) => (
+  <footer id="app-footer" className="mos-k-footer w-full">
+    <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+      <div className="grid gap-10 md:grid-cols-[1.3fr_.7fr]">
+        <div>
+          <div className="flex items-center gap-3">
+            <img src="/MANOFSTUDY_LOGO.png" alt="Man of Study logo" width="56" height="56" className="h-14 w-14 object-contain" loading="lazy" />
+            <div>
+              <div className="font-['Syne'] text-2xl font-extrabold uppercase tracking-[-.04em]">Man of Study</div>
+              <div className="text-[9px] uppercase tracking-[.18em] text-[#777b82]">Student utility platform</div>
             </div>
-
-            <p className="text-sm sm:text-base font-semibold text-slate-200">
-              Your complete education &amp; study companion for Pan-Indian students.
-            </p>
-
-            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-              MAN OF STUDY provides direct, verified, and instant access to TG &amp; AP EAPCET counseling datasets, cutoffs, engineering career roadmaps, and student-first productivity engines. Zero paywalls, zero tracking, engineered strictly for student clarity.
-            </p>
           </div>
+          <p className="mt-7 max-w-2xl text-xs leading-7 text-[#858990]">A student-first platform for admissions, allotment data, academic utilities, career resources and practical tools. AP &amp; Telangana counselling data, student workspaces and browser-based utilities — all in one place.</p>
+          <div className="mt-6 text-[10px] uppercase tracking-[.14em] text-[#777b82]">Independent educational resource / Not affiliated with any government body</div>
         </div>
-
-        {/* Bottom Section: Legal, Safe Harbor & Compliance Strip */}
-        <div className="mt-10 pt-6 border-t border-slate-800/60 space-y-4">
-          {/* Quick Links Row */}
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-6 gap-y-2 text-xs text-slate-400 font-medium">
-            <button
-              type="button"
-              id="footer-privacy-link"
-              onClick={() => onOpenLegalModal?.('privacy')}
-              className="hover:text-emerald-400 transition-colors cursor-pointer"
-            >
-              Privacy Policy
-            </button>
-            <button
-              type="button"
-              id="footer-terms-link"
-              onClick={() => onOpenLegalModal?.('terms')}
-              className="hover:text-emerald-400 transition-colors cursor-pointer"
-            >
-              Terms of Service
-            </button>
-            <button
-              type="button"
-              id="footer-disclaimer-link"
-              onClick={() => onOpenLegalModal?.('disclaimer')}
-              className="hover:text-emerald-400 transition-colors cursor-pointer"
-            >
-              Legal Safe Harbor &amp; Disclaimers
-            </button>
-            <button
-              type="button"
-              id="footer-attribution-link"
-              onClick={() => onOpenLegalModal?.('about')}
-              className="hover:text-emerald-400 transition-colors cursor-pointer"
-            >
-              Attribution
-            </button>
-            <button
-              type="button"
-              id="footer-contact-link"
-              onClick={() => onOpenLegalModal?.('contact')}
-              className="hover:text-emerald-400 transition-colors cursor-pointer"
-            >
-              Contact Support
-            </button>
-            {onOpenSupportModal && (
-              <button
-                type="button"
-                id="footer-support-pill"
-                onClick={onOpenSupportModal}
-                className="inline-flex items-center gap-1.5 text-rose-400 hover:text-rose-300 font-semibold cursor-pointer"
-              >
-                <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
-                <span>Support MOS</span>
-              </button>
-            )}
-          </div>
-
-          {/* Disclaimer & Safe Harbor Statement */}
-          <p className="text-[11px] text-slate-500 leading-relaxed text-center md:text-left max-w-4xl">
-            Disclaimer: MAN OF STUDY (MOS) is an independent open educational and analytical resource. Seat allotment records, ranks, and cutoff matrices are compiled from publicly accessible state counseling portals for informational use only. MAN OF STUDY is not affiliated with APSCHE, TSCHE, or any government body.
-          </p>
-
-          {/* Copyright & Version Stamp */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 text-[11px] text-slate-500">
-            <p className="text-center sm:text-left">
-              © 2026 MAN OF STUDY (MOS). Engineered with zero bloat for Pan-Indian students.
-            </p>
-            <div className="flex items-center gap-2">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <span className="font-mono text-slate-400">100% In-Memory • Zero Tracking</span>
-            </div>
+        <div className="md:justify-self-end">
+          <div className="text-[10px] uppercase tracking-[.15em] text-[#777b82]">Navigate</div>
+          <div className="mt-4 grid gap-2 text-xs text-[#b8bbc0]">
+            <button type="button" onClick={() => onOpenLegalModal?.('privacy')} className="text-left hover:text-[#c9ff19]">Privacy Policy</button>
+            <button type="button" onClick={() => onOpenLegalModal?.('terms')} className="text-left hover:text-[#c9ff19]">Terms of Service</button>
+            <button type="button" onClick={() => onOpenLegalModal?.('disclaimer')} className="text-left hover:text-[#c9ff19]">Legal Safe Harbor &amp; Disclaimers</button>
+            <button type="button" onClick={() => onOpenLegalModal?.('about')} className="text-left hover:text-[#c9ff19]">About Man of Study</button>
+            <button type="button" onClick={() => onOpenLegalModal?.('contact')} className="text-left hover:text-[#c9ff19]">Contact Support</button>
+            {onOpenSupportModal && <button type="button" onClick={onOpenSupportModal} className="inline-flex items-center gap-2 text-left text-[#c9ff19]"><Heart size={12}/> Support MOS</button>}
           </div>
         </div>
       </div>
-    </footer>
-  );
-};
+      <div className="mt-12 border-t border-white/10 pt-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <div className="mk-built">Built by Jagan Mohan Rao Dunna</div>
+          <div className="mt-2 text-[11px] text-[#666a71]">© 2026 Man of Study (MOS). All rights reserved.</div>
+        </div>
+        <div className="text-right text-[10px] uppercase tracking-[.12em] text-[#666a71]">Built for students / Built to be useful <ArrowUpRight className="ml-1 inline" size={12}/></div>
+      </div>
+    </div>
+  </footer>
+);
 
 export default Footer;
