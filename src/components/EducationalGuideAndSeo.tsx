@@ -61,7 +61,7 @@ export const EducationalGuideAndSeo: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-8 pt-8 border-t border-white/10 text-slate-200">
+    <div className="mos-k-guide space-y-8 pt-8 border-t border-white/10 text-slate-200">
       {/* Student-friendly guide header */}
       <div className="text-center max-w-3xl mx-auto space-y-2">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-400/10 text-cyan-200 border border-cyan-300/15">
