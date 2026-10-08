@@ -56,7 +56,7 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
   const [hasSearched, setHasSearched] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [expandedStudentKey, setExpandedStudentKey] = useState<string | null>(null);
-  const pageSize = 25;
+  const pageSize = 10;
 
   useEffect(() => {
     setPhaseFilter(phase);
@@ -558,36 +558,50 @@ export const APStudentSearch: React.FC<APStudentSearchProps> = ({
 
           {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between gap-2 pt-3 pb-2 px-1 border-t border-slate-200 dark:border-slate-800">
-              <button
-                type="button"
-                disabled={currentPage <= 1}
-                onClick={() => {
-                  setCurrentPage((p) => Math.max(1, p - 1));
-                  window.scrollTo({ top: 250, behavior: 'smooth' });
-                }}
-                className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:bg-slate-200 dark:hover:bg-slate-800 disabled:opacity-30 text-xs font-semibold text-slate-700 dark:text-slate-200 cursor-pointer flex items-center gap-1"
-              >
-                <ChevronLeft className="w-3.5 h-3.5" />
-                <span>Previous</span>
-              </button>
+            <div
+              id="ap-student-search-pagination"
+              className="mt-3 rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-3 sm:p-4"
+            >
+              <div className="mb-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300">
+                  Showing {((currentPage - 1) * pageSize) + 1}–{Math.min(currentPage * pageSize, searchResults.length)} of {searchResults.length.toLocaleString()} matching records
+                </span>
+                <span className="text-[11px] font-mono font-semibold text-cyan-700 dark:text-cyan-300">
+                  Page {currentPage} of {totalPages}
+                </span>
+              </div>
 
-              <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">
-                Page {currentPage} of {totalPages}
-              </span>
+              <div className="flex items-center justify-between gap-2">
+                <button
+                  type="button"
+                  disabled={currentPage <= 1}
+                  onClick={() => {
+                    setCurrentPage((p) => Math.max(1, p - 1));
+                    window.scrollTo({ top: 250, behavior: 'smooth' });
+                  }}
+                  className="min-h-9 px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-30 text-xs font-semibold text-slate-700 dark:text-slate-200 cursor-pointer flex items-center gap-1"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                  <span>Previous</span>
+                </button>
 
-              <button
-                type="button"
-                disabled={currentPage >= totalPages}
-                onClick={() => {
-                  setCurrentPage((p) => Math.min(totalPages, p + 1));
-                  window.scrollTo({ top: 250, behavior: 'smooth' });
-                }}
-                className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:bg-slate-200 dark:hover:bg-slate-800 disabled:opacity-30 text-xs font-semibold text-slate-700 dark:text-slate-200 cursor-pointer flex items-center gap-1"
-              >
-                <span>Next</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </button>
+                <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                  {searchResults.length.toLocaleString()} results
+                </span>
+
+                <button
+                  type="button"
+                  disabled={currentPage >= totalPages}
+                  onClick={() => {
+                    setCurrentPage((p) => Math.min(totalPages, p + 1));
+                    window.scrollTo({ top: 250, behavior: 'smooth' });
+                  }}
+                  className="min-h-9 px-3 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 border border-cyan-600 text-white disabled:opacity-30 text-xs font-semibold cursor-pointer flex items-center gap-1 shadow-sm"
+                >
+                  <span>Next</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
           )}
         </div>
