@@ -276,19 +276,11 @@ const FaqList: React.FC = () => {
   );
 };
 
-const FooterCredit: React.FC = () => (
-  <div className="border-t border-[var(--mos-border)] px-4 py-4 text-center">
-    <span className="text-xs font-semibold text-[var(--mos-text-muted)]">Built by Jagan Mohan Rao Dunna</span>
-  </div>
-);
-
 export const MosStudentExperience: React.FC = () => {
   const [faqTarget, setFaqTarget] = useState<HTMLElement | null>(null);
-  const [footerTarget, setFooterTarget] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
     let faqAnchor: HTMLDivElement | null = null;
-    let footerAnchor: HTMLDivElement | null = null;
     let observer: MutationObserver | null = null;
     let attempts = 0;
 
@@ -299,14 +291,8 @@ export const MosStudentExperience: React.FC = () => {
         setFaqTarget(faqAnchor);
       }
 
-      const footer = document.querySelector('footer');
-      if (footer && !footerAnchor) {
-        footerAnchor = makeAnchor(footer);
-        setFooterTarget(footerAnchor);
-      }
-
       attempts += 1;
-      if (faqAnchor && footerAnchor && observer) observer.disconnect();
+      if (faqAnchor && observer) observer.disconnect();
     };
 
     mount();
@@ -318,16 +304,13 @@ export const MosStudentExperience: React.FC = () => {
       observer?.disconnect();
       window.clearTimeout(timeout);
       faqAnchor?.remove();
-      footerAnchor?.remove();
       setFaqTarget(null);
-      setFooterTarget(null);
     };
   }, []);
 
   return (
     <>
       {faqTarget && createPortal(<GuidanceBlock />, faqTarget)}
-      {footerTarget && createPortal(<FooterCredit />, footerTarget)}
     </>
   );
 };
