@@ -131,16 +131,16 @@ const ToolkitCard: React.FC<{ item: (typeof TOOLKIT)[number] }> = ({ item }) => 
 
 const GuidanceBlock: React.FC = () => (
   <>
-    <SectionShell className="pt-14 sm:pt-20">
+    <SectionShell className="mos-k-why-section pt-14 sm:pt-20">
       <div className="overflow-hidden rounded-[2rem] border border-[var(--mos-border)] bg-[var(--mos-surface)] shadow-sm">
         <div className="grid gap-8 p-6 sm:p-10 lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:p-12">
           <div>
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+            <div className="mos-k-eyebrow mb-4 inline-flex items-center gap-2 px-0 py-1.5 text-[10px] font-extrabold uppercase tracking-[.16em]">
               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
               Student-first platform
             </div>
             <h2 className="text-3xl font-black tracking-tight text-[var(--mos-text-primary)] sm:text-4xl">
-              Why <span className="text-blue-600 dark:text-blue-400">MAN OF STUDY</span>?
+              Why <span>MAN OF STUDY</span>?
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--mos-text-secondary)] sm:text-lg">
               Engineering students often have to jump between counselling pages, scholarship portals, study resources and small everyday utilities. MAN OF STUDY brings those student tasks into one focused workspace — built around practical use rather than a wall of information.
@@ -170,16 +170,16 @@ const GuidanceBlock: React.FC = () => (
       </div>
     </SectionShell>
 
-    <SectionShell className="pt-14 sm:pt-20">
+    <SectionShell className="mos-k-toolkit-section pt-14 sm:pt-20">
       <div className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-blue-600 dark:text-blue-400">The student toolkit</p>
+          <p className="mos-k-eyebrow text-[11px] font-extrabold uppercase tracking-[0.18em]">The student toolkit</p>
           <h2 className="mt-2 text-3xl font-black tracking-tight text-[var(--mos-text-primary)] sm:text-4xl">More than one predictor.</h2>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--mos-text-secondary)] sm:text-base">
             Admissions, scholarships, mock tests, academic planning, career preparation and private utilities — organized so students can find the right workspace quickly.
           </p>
         </div>
-        <div className="hidden shrink-0 items-center gap-2 rounded-full border border-[var(--mos-border)] bg-[var(--mos-surface)] px-3 py-2 text-xs font-bold text-[var(--mos-text-secondary)] sm:inline-flex">
+        <div className="hidden shrink-0 items-center gap-2 text-[10px] font-bold uppercase tracking-[.12em] text-[var(--mos-text-muted)] sm:inline-flex">
           <Search className="h-3.5 w-3.5" aria-hidden="true" />
           Start from the Feature Hub
         </div>
@@ -189,7 +189,7 @@ const GuidanceBlock: React.FC = () => (
       </div>
     </SectionShell>
 
-    <SectionShell className="pt-14 sm:pt-20">
+    <SectionShell className="mos-k-workflow-section pt-14 sm:pt-20">
       <div className="rounded-[2rem] border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] p-6 sm:p-10">
         <div className="text-center">
           <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-400">A simple workflow</p>
@@ -208,8 +208,8 @@ const GuidanceBlock: React.FC = () => (
             return (
               <div key={String(number)} className="rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface)] p-5">
                 <div className="flex items-center gap-3">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-xs font-black text-white">{number}</span>
-                  <StepIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" aria-hidden="true" />
+                  <span className="mos-k-step-number">{number}</span>
+                  <StepIcon className="h-4 w-4 text-[var(--mk-accent)]" aria-hidden="true" />
                 </div>
                 <h3 className="mt-4 text-sm font-extrabold text-[var(--mos-text-primary)]">{title}</h3>
                 <p className="mt-2 text-xs leading-5 text-[var(--mos-text-secondary)]">{text}</p>
@@ -220,11 +220,11 @@ const GuidanceBlock: React.FC = () => (
       </div>
     </SectionShell>
 
-    <SectionShell className="pt-14 sm:pt-20">
+    <SectionShell className="mos-k-experience-faq pt-14 sm:pt-20">
       <div className="rounded-[2rem] border border-[var(--mos-border)] bg-[var(--mos-surface)] p-6 shadow-sm sm:p-10">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+            <div className="mos-k-eyebrow inline-flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.16em]">
               <CircleHelp className="h-4 w-4" aria-hidden="true" />
               Student FAQs
             </div>
