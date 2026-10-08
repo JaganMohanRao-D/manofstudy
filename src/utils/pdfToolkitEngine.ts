@@ -43,11 +43,7 @@ export function formatBytes(bytes: number): string {
  */
 export async function getPdfPageCount(file: File): Promise<number> {
   const pdf = await loadPdfJsDoc(await file.arrayBuffer());
-  try {
-    return pdf.numPages;
-  } finally {
-    await pdf.destroy();
-  }
+  return pdf.numPages;
 }
 
 export async function loadPdfJsDoc(arrayBuffer: ArrayBuffer) {
