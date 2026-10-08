@@ -161,3 +161,11 @@
 @media(max-width:700px){
  .mos-k-homepage-flow .mos-k-feature-hub,.mos-k-homepage-flow .mos-k-guide,.mos-k-homepage-flow .mos-k-faq{padding-left:1rem;padding-right:1rem}
 }
+
+/* Testimonials continue the same kinetic editorial system */
+.mos-k-homepage-flow #student-testimonials-section{padding:clamp(4rem,8vw,8rem) clamp(1rem,4vw,4rem)!important;margin:0!important;background:#08090b;border-top:1px solid var(--mk-line);border-bottom:1px solid var(--mk-line)}
+.mos-k-homepage-flow #student-testimonials-section h2{font-family:'Syne',sans-serif!important;font-size:clamp(1.8rem,4vw,3.2rem)!important;letter-spacing:-.055em;color:var(--mk-fg)!important}
+.mos-k-homepage-flow #student-testimonials-section>div:first-child{padding:0 0 2rem!important;border-bottom:1px solid var(--mk-line)}
+.mos-k-homepage-flow #student-testimonials-section .rounded-full{border-radius:0!important;background:transparent!important;border:0!important;color:var(--mk-accent)!important;padding-left:0!important}
+.mos-k-homepage-flow #student-testimonials-section button{border-radius:0!important}
+.mos-k-homepage-flow #student-testimonials-section form{border-radius:0!important;background:#0c0d10!important;border-color:var(--mk-line)!important;box-shadow:none!important}
