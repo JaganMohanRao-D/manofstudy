@@ -1,5 +1,7 @@
 import { PdfToolDefinition } from '../types';
 
+// Phase 1 production-audit validation checkpoint.
+
 export const ALL_PDF_TOOLS: PdfToolDefinition[] = [
   // ==========================================================================
   // 1. DOCUMENT CONVERSION (category: 'convert')
