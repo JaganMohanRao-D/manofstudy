@@ -30,6 +30,7 @@ patch('src/components/GlobalGpaHub.tsx', (source) => source.replace("useState<Gp
 
 patch('src/components/Header.tsx', (source) => source
   .replace("  { label: 'AP EAPCET Vacancy Radar', workspace: 'eapcet-radar', icon: Search },\n", '')
+);
 
 patch('src/components/MosStudentExperience.tsx', (source) => {
   let next = source;
