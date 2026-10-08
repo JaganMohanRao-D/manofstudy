@@ -64,6 +64,7 @@ import {
   extractPagesPdf,
   pdfToText,
   editPdfMetadata,
+  getPdfPageCount,
 } from '../../utils/pdfToolkitEngine';
 import { formatPdfErrorMessage } from '../../utils/pdfErrorHelper';
 
@@ -93,6 +94,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
   const [watermarkText, setWatermarkText] = useState<string>('MAN OF STUDY');
   const [watermarkOpacity, setWatermarkOpacity] = useState<number>(0.25);
   const [watermarkAngle, setWatermarkAngle] = useState<number>(-45);
+  const [watermarkFontSize, setWatermarkFontSize] = useState<number>(56);
   const [watermarkColor, setWatermarkColor] = useState<string>('#475569');
 
   // Rotate
@@ -101,6 +103,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
   // Page numbers
   const [numPosition, setNumPosition] = useState<'bottom-center' | 'bottom-right' | 'top-right'>('bottom-right');
   const [numFormat, setNumFormat] = useState<'page-x-of-y' | 'x-of-y' | 'dash-x-dash'>('page-x-of-y');
+  const [numFontSize, setNumFontSize] = useState<number>(10);
 
   // Protect / Unlock Password
   const [passwordInput, setPasswordInput] = useState<string>('');
@@ -124,8 +127,10 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
   const [hasSignature, setHasSignature] = useState<boolean>(false);
   const [signPage, setSignPage] = useState<number>(1);
 
-  // Organize pages list (mock indices until loaded)
-  const [organizeIndices, setOrganizeIndices] = useState<number[]>([0, 1, 2, 3]);
+  // Organize PDF state
+  const [organizeIndices, setOrganizeIndices] = useState<number[]>([]);
+  const [pdfPageCount, setPdfPageCount] = useState<number | null>(null);
+  const [isReadingPdf, setIsReadingPdf] = useState<boolean>(false);
 
   // AI Summary & Markdown Results
   const [summaryData, setSummaryData] = useState<{
@@ -180,6 +185,67 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
       }
     }
   }, [tool.id]);
+
+  // Read the selected PDF's real page count for page-aware tools.
+  useEffect(() => {
+    const primaryFile = files[0]?.file;
+    const needsPageCount = tool.id === 'organize-pdf' || tool.id === 'sign-pdf';
+
+    if (!primaryFile || !needsPageCount) {
+      setPdfPageCount(null);
+      if (!primaryFile) setOrganizeIndices([]);
+      return;
+    }
+
+    let cancelled = false;
+    setIsReadingPdf(true);
+    setPdfPageCount(null);
+
+    getPdfPageCount(primaryFile)
+      .then((count) => {
+        if (cancelled) return;
+        setPdfPageCount(count);
+        setOrganizeIndices(Array.from({ length: count }, (_, index) => index));
+        setSignPage((current) => Math.min(Math.max(1, current), count));
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setPdfPageCount(null);
+        setOrganizeIndices([]);
+      })
+      .finally(() => {
+        if (!cancelled) setIsReadingPdf(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [tool.id, files[0]?.id]);
+
+  // Organize PDF controls
+  const moveOrganizePage = (index: number, direction: -1 | 1) => {
+    setOrganizeIndices((current) => {
+      const target = index + direction;
+      if (index < 0 || index >= current.length || target < 0 || target >= current.length) {
+        return current;
+      }
+      const next = [...current];
+      [next[index], next[target]] = [next[target], next[index]];
+      return next;
+    });
+  };
+
+  const deleteOrganizePage = (index: number) => {
+    setOrganizeIndices((current) => {
+      if (current.length <= 1) return current;
+      return current.filter((_, pageIndex) => pageIndex !== index);
+    });
+  };
+
+  const resetOrganizeOrder = () => {
+    if (!pdfPageCount) return;
+    setOrganizeIndices(Array.from({ length: pdfPageCount }, (_, index) => index));
+  };
 
   // Handle File Selection
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -568,7 +634,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
             {
               opacity: watermarkOpacity,
               angle: watermarkAngle,
-              fontSize: 38,
+              fontSize: watermarkFontSize,
               color: watermarkColor,
             },
             (pct, msg) => {
@@ -647,6 +713,9 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
         }
 
         case 'organize-pdf': {
+          if (organizeIndices.length === 0) {
+            throw new Error('Please upload a readable PDF and keep at least one page selected.');
+          }
           const res = await organizePdf(mainFile, organizeIndices, (pct, msg) => {
             setProgress((prev) => ({ ...prev, progressPercent: pct, statusMessage: msg }));
           });
@@ -697,7 +766,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
             {
               position: numPosition,
               format: numFormat,
-              fontSize: 10,
+              fontSize: numFontSize,
               startNumber: 1,
             },
             (pct, msg) => {
@@ -1328,7 +1397,23 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
                 />
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                <div>
+                  <label className="text-slate-600 block mb-1">Size: {watermarkFontSize} pt</label>
+                  <input
+                    type="range"
+                    min="24"
+                    max="120"
+                    step="2"
+                    value={watermarkFontSize}
+                    onChange={(e) => setWatermarkFontSize(parseInt(e.target.value, 10))}
+                    className="w-full accent-sky-500"
+                  />
+                  <div className="flex justify-between text-[10px] text-slate-400">
+                    <span>Small</span>
+                    <span>Large</span>
+                  </div>
+                </div>
                 <div>
                   <label className="text-slate-600 block mb-1">Opacity: {Math.round(watermarkOpacity * 100)}%</label>
                   <input
@@ -1372,12 +1457,16 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
               <div className="flex items-center justify-between">
                 <span className="font-semibold text-slate-800">Draw Signature</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-slate-500">Target Page:</span>
+                  <span className="text-slate-500">Target Page{pdfPageCount ? ' (1-' + pdfPageCount + ')' : ''}:</span>
                   <input
                     type="number"
                     min="1"
+                    max={pdfPageCount || undefined}
                     value={signPage}
-                    onChange={(e) => setSignPage(parseInt(e.target.value) || 1)}
+                    onChange={(e) => {
+                      const next = parseInt(e.target.value, 10) || 1;
+                      setSignPage(pdfPageCount ? Math.min(Math.max(1, next), pdfPageCount) : Math.max(1, next));
+                    }}
                     className="w-14 px-2 py-1 bg-white border border-slate-300 rounded text-center font-bold"
                   />
                   <button
@@ -1463,7 +1552,126 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
                     <option value="dash-x-dash">- 1 -</option>
                   </select>
                 </div>
+                <div className="col-span-2">
+                  <label className="font-semibold text-slate-800 block mb-1">Text Size: {numFontSize} pt</label>
+                  <input
+                    type="range"
+                    min="6"
+                    max="24"
+                    step="1"
+                    value={numFontSize}
+                    onChange={(e) => setNumFontSize(parseInt(e.target.value, 10))}
+                    className="w-full accent-sky-500"
+                  />
+                  <div className="flex justify-between text-[10px] text-slate-400">
+                    <span>Compact</span>
+                    <span>Large</span>
+                  </div>
+                </div>
               </div>
+            </div>
+          )}
+
+          {/* Organize PDF Controls */}
+          {tool.id === 'organize-pdf' && (
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3 text-xs">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <span className="font-semibold text-slate-800 block">Page Order</span>
+                  <span className="text-slate-500">
+                    {isReadingPdf ? 'Reading PDF pages…' : pdfPageCount ? organizeIndices.length + ' of ' + pdfPageCount + ' pages selected' : 'Upload a PDF to load its pages'}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={resetOrganizeOrder}
+                  disabled={!pdfPageCount || isReadingPdf}
+                  className="px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 disabled:opacity-40"
+                >
+                  Reset
+                </button>
+              </div>
+
+              {organizeIndices.length > 0 && (
+                <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+                  {organizeIndices.map((pageIndex, index) => (
+                    <div key={pageIndex} className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white p-2">
+                      <div className="flex-1 min-w-0">
+                        <span className="font-semibold text-slate-800">Position {index + 1}</span>
+                        <span className="ml-2 text-slate-500">Original Page {pageIndex + 1}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => moveOrganizePage(index, -1)}
+                        disabled={index === 0}
+                        className="p-1.5 rounded bg-slate-100 text-slate-700 disabled:opacity-30"
+                        aria-label="Move page up"
+                      >
+                        <ArrowUp className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => moveOrganizePage(index, 1)}
+                        disabled={index === organizeIndices.length - 1}
+                        className="p-1.5 rounded bg-slate-100 text-slate-700 disabled:opacity-30"
+                        aria-label="Move page down"
+                      >
+                        <ArrowDown className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => deleteOrganizePage(index)}
+                        disabled={organizeIndices.length <= 1}
+                        className="p-1.5 rounded bg-rose-50 text-rose-600 disabled:opacity-30"
+                        aria-label="Remove page"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <p className="text-[10px] text-slate-500">
+                Reorder pages with the arrows or remove pages before exporting. At least one page must remain.
+              </p>
+            </div>
+          )}
+
+          {/* Crop PDF Controls */}
+          {tool.id === 'crop-pdf' && (
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3 text-xs">
+              <div>
+                <span className="font-semibold text-slate-800 block">Crop Margins</span>
+                <span className="text-slate-500">Values are in PDF points and apply to every page.</span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {([
+                  ['top', 'Top'],
+                  ['bottom', 'Bottom'],
+                  ['left', 'Left'],
+                  ['right', 'Right'],
+                ] as const).map(([key, label]) => (
+                  <label key={key} className="space-y-1">
+                    <span className="text-slate-600 block">{label}</span>
+                    <input
+                      type="number"
+                      min="0"
+                      max="500"
+                      value={cropMargins[key]}
+                      onChange={(e) => setCropMargins((current) => ({ ...current, [key]: Math.max(0, Number(e.target.value) || 0) }))}
+                      className="w-full px-2.5 py-2 bg-white border border-slate-300 rounded-lg text-slate-900"
+                    />
+                  </label>
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => setCropMargins({ top: 30, bottom: 30, left: 30, right: 30 })}
+                className="px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700"
+              >
+                Reset to 30 pt
+              </button>
             </div>
           )}
 
