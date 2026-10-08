@@ -207,3 +207,148 @@
  .mos-k-homepage-flow .mos-k-faq>div>div:first-child h2{font-size:clamp(2.5rem,13vw,4rem)!important}
  .mos-k-homepage-flow .mos-k-faq>div>div:nth-child(3)>div>button{padding:18px 2px!important}
 }
+
+
+/* Unify the extended homepage experience with the Kinetic art direction */
+.mos-k-homepage-flow .mos-k-why-section,
+.mos-k-homepage-flow .mos-k-toolkit-section,
+.mos-k-homepage-flow .mos-k-workflow-section,
+.mos-k-homepage-flow .mos-k-experience-faq{
+  max-width:none!important;
+  padding-left:clamp(1rem,4vw,4rem)!important;
+  padding-right:clamp(1rem,4vw,4rem)!important;
+  background:#08090b!important;
+  color:var(--mk-fg);
+}
+.mos-k-homepage-flow .mos-k-why-section>div,
+.mos-k-homepage-flow .mos-k-toolkit-section>div,
+.mos-k-homepage-flow .mos-k-workflow-section>div,
+.mos-k-homepage-flow .mos-k-experience-faq>div{
+  max-width:none!important;
+}
+.mos-k-homepage-flow .mos-k-why-section>div{
+  border-radius:0!important;
+  border-color:var(--mk-line)!important;
+  background:#0c0d10!important;
+  box-shadow:none!important;
+}
+.mos-k-homepage-flow .mos-k-why-section h2,
+.mos-k-homepage-flow .mos-k-toolkit-section h2,
+.mos-k-homepage-flow .mos-k-workflow-section h2,
+.mos-k-homepage-flow .mos-k-experience-faq h2,
+.mos-k-homepage-flow .mos-k-why-section h3,
+.mos-k-homepage-flow .mos-k-toolkit-section h3,
+.mos-k-homepage-flow .mos-k-workflow-section h3{
+  font-family:'Syne',sans-serif!important;
+  color:var(--mk-fg)!important;
+  letter-spacing:-.045em;
+}
+.mos-k-homepage-flow .mos-k-eyebrow{
+  color:var(--mk-accent)!important;
+  font-family:'JetBrains Mono',monospace!important;
+}
+.mos-k-homepage-flow .mos-k-why-section [class*="rounded-2xl"],
+.mos-k-homepage-flow .mos-k-toolkit-section [class*="rounded-3xl"],
+.mos-k-homepage-flow .mos-k-toolkit-section [class*="rounded-2xl"],
+.mos-k-homepage-flow .mos-k-workflow-section [class*="rounded-[2rem]"],
+.mos-k-homepage-flow .mos-k-workflow-section [class*="rounded-2xl"],
+.mos-k-homepage-flow .mos-k-experience-faq [class*="rounded-[2rem]"]{
+  border-radius:0!important;
+  border-color:var(--mk-line)!important;
+  box-shadow:none!important;
+}
+.mos-k-homepage-flow .mos-k-why-section [class*="bg-slate-50"],
+.mos-k-homepage-flow .mos-k-toolkit-section [class*="bg-[var(--mos-surface)]"],
+.mos-k-homepage-flow .mos-k-workflow-section [class*="bg-[var(--mos-surface-muted)]"],
+.mos-k-homepage-flow .mos-k-experience-faq [class*="bg-[var(--mos-surface)]"]{
+  background:#0c0d10!important;
+}
+.mos-k-homepage-flow .mos-k-why-section [class*="bg-[var(--mos-surface-muted)]"]{
+  background:#101216!important;
+}
+.mos-k-homepage-flow .mos-k-why-section [class*="text-blue-"],
+.mos-k-homepage-flow .mos-k-toolkit-section [class*="text-blue-"]{
+  color:var(--mk-accent)!important;
+}
+.mos-k-homepage-flow .mos-k-why-section svg,
+.mos-k-homepage-flow .mos-k-toolkit-section svg{
+  color:var(--mk-accent)!important;
+}
+.mos-k-homepage-flow .mos-k-toolkit-section article{
+  border-radius:0!important;
+  border-color:var(--mk-line)!important;
+  background:#0c0d10!important;
+  box-shadow:none!important;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .35s ease,background .35s ease;
+}
+.mos-k-homepage-flow .mos-k-toolkit-section article:hover{
+  transform:translateY(-4px);
+  border-color:rgba(201,255,25,.5)!important;
+  background:#101216!important;
+  box-shadow:none!important;
+}
+.mos-k-homepage-flow .mos-k-toolkit-section article [class*="bg-blue-500/10"]{
+  background:transparent!important;
+  border:1px solid var(--mk-line);
+  border-radius:0!important;
+}
+.mos-k-homepage-flow .mos-k-toolkit-section article span[class*="rounded-full"]{
+  border-radius:0!important;
+  background:transparent!important;
+  border-color:var(--mk-line)!important;
+  color:#858990!important;
+  font-family:'JetBrains Mono',monospace!important;
+}
+.mos-k-homepage-flow .mos-k-toolkit-section article .inline-flex{
+  color:var(--mk-accent)!important;
+  font-family:'JetBrains Mono',monospace!important;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-size:9px;
+}
+.mos-k-homepage-flow .mos-k-workflow-section>div{
+  border-radius:0!important;
+  background:#0c0d10!important;
+  border-color:var(--mk-line)!important;
+}
+.mos-k-step-number{
+  display:inline-flex;
+  width:36px;
+  height:36px;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--mk-accent);
+  color:var(--mk-accent);
+  font:800 11px/1 'JetBrains Mono',monospace;
+  background:transparent;
+}
+.mos-k-homepage-flow .mos-k-workflow-section [class*="bg-blue-600"]{
+  background:transparent!important;
+}
+.mos-k-homepage-flow .mos-k-experience-faq>div{
+  background:#0c0d10!important;
+  border-color:var(--mk-line)!important;
+  box-shadow:none!important;
+}
+.mos-k-homepage-flow .mos-k-experience-faq .divide-y,
+.mos-k-homepage-flow .mos-k-experience-faq [class*="border-y"]{
+  border-color:var(--mk-line)!important;
+}
+.mos-k-homepage-flow .mos-k-experience-faq button:hover{
+  color:var(--mk-accent)!important;
+}
+.mos-k-homepage-flow .mos-k-experience-faq svg{
+  color:#777b82!important;
+}
+.mos-k-homepage-flow .mos-k-experience-faq button:hover svg{
+  color:var(--mk-accent)!important;
+}
+@media(max-width:700px){
+  .mos-k-homepage-flow .mos-k-why-section,
+  .mos-k-homepage-flow .mos-k-toolkit-section,
+  .mos-k-homepage-flow .mos-k-workflow-section,
+  .mos-k-homepage-flow .mos-k-experience-faq{
+    padding-left:1rem!important;
+    padding-right:1rem!important;
+  }
+}
