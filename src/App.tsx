@@ -553,7 +553,7 @@ export default function App() {
         hash === 'pdf' ||
         hash === 'resizer' ||
         hash === 'image-tools' ||
-        hash === 'photo-resizer' ||
+        hash === 'photo-resizer'
       ) {
         setActiveWorkspace('utilities');
         if (hash === 'resizer' || hash === 'image-tools' || hash === 'photo-resizer') setUtilitySubTab('resizer');
