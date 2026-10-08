@@ -150,14 +150,14 @@ export const ALL_PDF_TOOLS: PdfToolDefinition[] = [
   {
     id: 'compress-pdf',
     name: 'Compress PDF',
-    tagline: 'Reduce file size with high visual fidelity resampling',
+    tagline: 'Reduce PDF size with adjustable image quality',
     subtitle: 'Shrink upload size for college or exam portals',
     category: 'manage',
     badge: 'Popular',
     acceptedFileTypes: '.pdf',
     fileHint: '.pdf',
     keywords: ['compress', 'shrink', 'reduce size', 'mb to kb', 'size limit', 'portal', 'exam', 'admit card', 'compress pdf'],
-    description: 'Shrink large PDF file sizes by 40%–80% using smart vector and image resampling to pass upload limits.',
+    description: 'Reduce PDF size with adjustable JPEG quality. Best suited to image-heavy or scanned PDFs; text/vector pages may be rasterized.',
   },
   {
     id: 'page-numbers',
@@ -168,7 +168,7 @@ export const ALL_PDF_TOOLS: PdfToolDefinition[] = [
     acceptedFileTypes: '.pdf',
     fileHint: '.pdf',
     keywords: ['page numbers', 'numbering', 'footer', 'header', 'roll number', 'assignment', 'page numbering'],
-    description: 'Stamp professional page numbers with custom positioning, font sizes, roll numbers, and numbering styles.',
+    description: 'Stamp professional page numbers with selectable position, text size, and numbering style.',
   },
   {
     id: 'watermark-pdf',
@@ -190,7 +190,7 @@ export const ALL_PDF_TOOLS: PdfToolDefinition[] = [
     acceptedFileTypes: '.pdf',
     fileHint: '.pdf',
     keywords: ['organize', 'reorder', 'delete page', 'sort', 'layout', 'organize pdf'],
-    description: 'Re-arrange page order, remove unwanted pages, and compile an optimized layout.',
+    description: 'Reorder pages or remove unwanted pages before exporting a clean PDF.',
   },
   {
     id: 'crop-pdf',
@@ -213,7 +213,7 @@ export const ALL_PDF_TOOLS: PdfToolDefinition[] = [
     acceptedFileTypes: '.pdf',
     fileHint: '.pdf',
     keywords: ['sign', 'signature', 'undertaking', 'declaration', 'form', 'sign pdf'],
-    description: 'Draw your digital signature on a responsive touch/mouse canvas and stamp it onto any page at custom coordinates.',
+    description: 'Draw a digital signature on a responsive touch/mouse canvas and stamp it onto a selected page.',
   },
 
   // ==========================================================================
