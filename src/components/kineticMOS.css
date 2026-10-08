@@ -169,3 +169,41 @@
 .mos-k-homepage-flow #student-testimonials-section .rounded-full{border-radius:0!important;background:transparent!important;border:0!important;color:var(--mk-accent)!important;padding-left:0!important}
 .mos-k-homepage-flow #student-testimonials-section button{border-radius:0!important}
 .mos-k-homepage-flow #student-testimonials-section form{border-radius:0!important;background:#0c0d10!important;border-color:var(--mk-line)!important;box-shadow:none!important}
+
+/* Refined FAQ — structured editorial accordion instead of a single heavy card */
+.mos-k-homepage-flow .mos-k-faq{position:relative;isolation:isolate}
+.mos-k-homepage-flow .mos-k-faq:before{content:"05 / ANSWERS";display:block;font:700 9px/1 'JetBrains Mono',monospace;letter-spacing:.18em;color:var(--mk-accent);margin-bottom:1.5rem}
+.mos-k-homepage-flow .mos-k-faq>div{max-width:1180px;margin:0 auto!important;background:transparent!important;border:0!important;overflow:visible!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:first-child{padding:0 0 2.5rem!important;background:transparent!important;border:0!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:first-child h2{font-size:clamp(2.4rem,6vw,5.2rem)!important;line-height:.92!important;letter-spacing:-.065em!important;max-width:850px}
+.mos-k-homepage-flow .mos-k-faq>div>div:first-child p{max-width:680px;color:#858990!important;margin-top:1.25rem}
+.mos-k-homepage-flow .mos-k-faq>div>div:first-child .inline-flex{font:700 9px/1 'JetBrains Mono',monospace!important;letter-spacing:.14em;background:transparent!important;border:0!important;padding:0!important;color:var(--mk-accent)!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:first-child .mt-6{margin-top:2rem!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:first-child input{height:52px!important;padding-left:1rem!important;background:#0c0d10!important;border:1px solid var(--mk-line)!important;box-shadow:none!important;font:500 11px/1 'JetBrains Mono',monospace!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:first-child input:focus{border-color:rgba(201,255,25,.65)!important;box-shadow:0 0 0 1px rgba(201,255,25,.15)!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:first-child .mt-6 button{height:52px!important;border-radius:0!important;background:#0c0d10!important;border:1px solid var(--mk-line)!important;color:#aeb1b6!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:first-child .mt-6 button:hover{background:var(--mk-accent)!important;color:#08090b!important;border-color:var(--mk-accent)!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:nth-child(2){display:flex;flex-wrap:wrap;gap:6px!important;padding:0 0 1rem!important;background:transparent!important;border:0!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:nth-child(2) button{border-radius:0!important;background:#0c0d10!important;border:1px solid var(--mk-line)!important;color:#777b82!important;padding:9px 12px!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:nth-child(2) button:hover{border-color:rgba(201,255,25,.5)!important;color:var(--mk-fg)!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:nth-child(2) button.bg-blue-600{background:var(--mk-accent)!important;border-color:var(--mk-accent)!important;color:#08090b!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:nth-child(3){padding:0!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:nth-child(3)>div{margin:0!important;border:0!important;border-top:1px solid var(--mk-line)!important;border-radius:0!important;background:transparent!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:nth-child(3)>div:last-child{border-bottom:1px solid var(--mk-line)!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:nth-child(3)>div>button{padding:22px 8px!important;background:transparent!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:nth-child(3)>div>button:hover{background:#0c0d10!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:nth-child(3)>div>button h3{font-size:clamp(.9rem,1.5vw,1.1rem)!important;letter-spacing:-.02em}
+.mos-k-homepage-flow .mos-k-faq>div>div:nth-child(3)>div>button .w-8{width:38px!important;height:38px!important;border-radius:0!important;background:#101216!important;color:#858990!important;border:1px solid var(--mk-line)}
+.mos-k-homepage-flow .mos-k-faq>div>div:nth-child(3)>div>button .text-sky-600{color:var(--mk-accent)!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:nth-child(3)>div>div{background:#0c0d10!important;border-top:1px solid var(--mk-line)!important;color:#aeb1b6!important;padding:20px 8px 24px!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:nth-child(3)>div>div p{max-width:780px}
+.mos-k-homepage-flow .mos-k-faq>div>div:last-child{margin-top:3rem!important;padding:2rem 0!important;background:transparent!important;border:0!important;border-top:1px solid var(--mk-line)!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:last-child .w-10{border-radius:0!important;background:var(--mk-accent)!important;color:#08090b!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:last-child a{border-radius:0!important;background:#0c0d10!important;border-color:var(--mk-line)!important}
+.mos-k-homepage-flow .mos-k-faq>div>div:last-child a:hover{border-color:var(--mk-accent)!important;color:var(--mk-accent)!important}
+.mos-k-homepage-flow .mos-k-review-card{cursor:default!important}
+.mos-k-homepage-flow .mos-k-review-card:hover{cursor:default!important}
+@media(max-width:700px){
+ .mos-k-homepage-flow .mos-k-faq>div>div:first-child h2{font-size:clamp(2.5rem,13vw,4rem)!important}
+ .mos-k-homepage-flow .mos-k-faq>div>div:nth-child(3)>div>button{padding:18px 2px!important}
+}
