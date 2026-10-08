@@ -57,9 +57,14 @@ if (typeof window !== 'undefined') {
       'AP Allotments (Namewise)',
       'TG EAPCET 2026 Final Phase Seat Allotments Name Wise',
     ].forEach(preload);
-    if ('requestIdleCallback' in window) {
-      (window as Window & { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback(warm, { timeout: 3500 });
-    } else window.setTimeout(warm, 1800);
+    const idleWindow = window as Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+    };
+    if (typeof idleWindow.requestIdleCallback === 'function') {
+      idleWindow.requestIdleCallback(warm, { timeout: 3500 });
+    } else {
+      window.setTimeout(warm, 1800);
+    }
   }
 
   const updateLoadingText = (root: ParentNode) => {
