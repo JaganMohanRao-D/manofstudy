@@ -352,3 +352,49 @@
     padding-right:1rem!important;
   }
 }
+
+
+/* Remove the remaining legacy rainbow accents from the tool matrix */
+.mos-k-homepage-flow .mos-k-feature-hub [class*="text-blue-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="text-cyan-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="text-sky-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="text-amber-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="text-rose-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="text-indigo-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="text-purple-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="text-emerald-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="text-teal-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="text-pink-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="text-orange-"]{
+  color:var(--mk-accent)!important;
+}
+.mos-k-homepage-flow .mos-k-feature-hub [class*="bg-blue-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="bg-cyan-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="bg-sky-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="bg-amber-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="bg-rose-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="bg-indigo-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="bg-purple-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="bg-emerald-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="bg-teal-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="bg-pink-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="bg-orange-"]{
+  background:transparent!important;
+}
+.mos-k-homepage-flow .mos-k-feature-hub [class*="border-blue-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="border-cyan-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="border-sky-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="border-amber-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="border-rose-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="border-indigo-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="border-purple-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="border-emerald-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="border-teal-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="border-pink-"],
+.mos-k-homepage-flow .mos-k-feature-hub [class*="border-orange-"]{
+  border-color:var(--mk-line)!important;
+}
+.mos-k-homepage-flow .mos-k-workflow-section .text-emerald-600,
+.mos-k-homepage-flow .mos-k-workflow-section .dark\:text-emerald-400{
+  color:var(--mk-accent)!important;
+}
