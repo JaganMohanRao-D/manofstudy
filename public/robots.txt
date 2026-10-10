@@ -13,4 +13,4 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-Sitemap: https://manofstudy.pages.dev/sitemap.xml
+Sitemap: https://naacollege.in/sitemap.xml
