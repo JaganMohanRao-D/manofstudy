@@ -715,8 +715,8 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 flex items-center justify-center shrink-0 overflow-hidden">
               <img
-                src="https://i.ibb.co/zHPk2tv4/Chat-GPT-Image-Sep-13-2026-08-04-48-PM.png"
-                alt="Man of Study"
+                src="/Naa%20College%20logo.webp"
+                alt="Naa College logo"
                 className="w-full h-full object-contain"
                 loading="eager"
               />
@@ -730,7 +730,7 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
                   {user?.displayName || candidateProfile?.fullName || 'Candidate'}
                 </span>
                 <span>•</span>
-                <span className="font-mono">{candidateProfile?.rollNumber || 'MOS-2026-RF-7842'}</span>
+                <span className="font-mono">{candidateProfile?.rollNumber || 'NC-2026-RF-7842'}</span>
                 <span className="hidden sm:inline">•</span>
                 <span className="hidden sm:inline">60 MCQs / 60 Mins</span>
               </div>
@@ -1238,7 +1238,7 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
           <div>
             <div className="text-[10px] uppercase font-bold text-[var(--mos-text-muted)]">Candidate Roll No</div>
             <div className="font-mono font-bold text-[var(--mos-text-primary)] text-xs mt-0.5">
-              {candidateProfile?.rollNumber || 'MOS-2026-RF-7842'}
+              {candidateProfile?.rollNumber || 'NC-2026-RF-7842'}
             </div>
           </div>
           <div>
@@ -1580,12 +1580,10 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
       <div id="certificate-print-sheet" className="p-8 bg-white text-slate-900 border-4 border-slate-900 rounded-3xl space-y-6">
         <div className="flex items-center justify-between border-b-2 border-slate-800 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-xl">
-              MOS
-            </div>
+            <img src="/Naa%20College%20logo.webp" alt="Naa College logo" width="48" height="48" className="h-12 w-12 rounded-xl object-contain" />
             <div>
               <h1 className="text-xl font-black uppercase tracking-tight text-slate-950">
-                MAN OF STUDY - CBT SIMULATION PERFORMANCE REPORT
+                NAA COLLEGE - CBT SIMULATION PERFORMANCE REPORT
               </h1>
               <p className="text-xs font-semibold text-slate-600">
                 Reliance Foundation Undergraduate Scholarship — Practice Mock Test
@@ -1593,7 +1591,7 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
             </div>
           </div>
           <div className="text-right text-xs font-mono text-slate-600">
-            <div>Report ID: {candidateProfile?.rollNumber || 'MOS-2026-RF'}</div>
+            <div>Report ID: {candidateProfile?.rollNumber || 'NC-2026-RF'}</div>
             <div>Generated: {new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
           </div>
         </div>
