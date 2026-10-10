@@ -2,14 +2,14 @@ import { jsPDF } from 'jspdf';
 import { BranchRoadmap } from '../types';
 
 /**
- * MAN OF STUDY - Professional Career Roadmap PDF Document Generator
+ * Naa College - Professional Career Roadmap PDF Document Generator
  * 
  * Rebuilt from first principles as an authoritative, print-oriented A4 document:
  * - Fixed A4 Portrait Geometry: 210mm x 297mm
  * - Margins: Left/Right: 14mm, Content Width: 182mm (Safe printable area)
  * - Page 1: Dedicated Executive Cover Page with 4 structured direction blocks
  * - Pages 2+: Content sections with strict deterministic flow
- * - Subtle Watermark (5.5% visual intensity) on every page: "MAN OF STUDY"
+ * - Subtle Watermark (5.5% visual intensity) on every page: "Naa College"
  * - Running Header & Non-Colliding Footer (Page X of Y) on all content pages
  * - Atomic Semester Cards with Strict Orphan Prevention (break-inside: avoid)
  * - Dynamic Text Splitting & Pre-Measured Box Heights (No text clipping or collisions)
@@ -68,7 +68,7 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false
   const minY = 22; // Safe start below running header
   const maxY = 276; // Safe content cutoff, leaving buffer above footer line at 283mm
 
-  const BRAND_NAME = 'MAN OF STUDY';
+  const BRAND_NAME = 'Naa College';
   const TARGET_URL = 'https://manofstudy.com';
   const EXPLORE_URL = 'https://manofstudy.com/#career-blueprints';
 
@@ -341,7 +341,7 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8.2);
   doc.setTextColor(15, 23, 42);
-  doc.text('MAN OF STUDY • Student Career Planning Platform', marginLeft + 8, coverFooterY + 5.5);
+  doc.text('Naa College • Student Career Planning Platform', marginLeft + 8, coverFooterY + 5.5);
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(7.4);
@@ -394,7 +394,7 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false
     doc.setTextColor(67, 56, 202);
     // @ts-ignore
     doc.textWithLink(
-      'Click here to explore & download all 24+ Engineering & Degree Roadmaps on MAN OF STUDY',
+      'Click here to explore & download all 24+ Engineering & Degree Roadmaps on Naa College',
       105,
       currentY + 5.5,
       { url: EXPLORE_URL, align: 'center' }
@@ -876,7 +876,7 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false
     'Print & Pin: Keep a physical copy of this 8-semester roadmap near your primary study workstation.',
     'Version Control Audit: Initialize your professional GitHub account and push code daily following semester targets.',
     'Peer Study Group: Form a 3-4 member peer circle to tackle semester capstone projects and competitive challenges.',
-    'Explore More Disciplines: Access complementary engineering and degree roadmaps on the MAN OF STUDY platform.',
+    'Explore More Disciplines: Access complementary engineering and degree roadmaps on the Naa College platform.',
   ];
 
   nextSteps.forEach((step, idx) => {
@@ -923,7 +923,7 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(38);
     doc.setTextColor(148, 163, 184); // Slate 400
-    doc.text('MAN OF STUDY', 105, 148.5, {
+    doc.text('NAA COLLEGE', 105, 148.5, {
       align: 'center',
       angle: -45,
     });
@@ -976,7 +976,7 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7.2);
     doc.setTextColor(100, 116, 139);
-    doc.text('Man of Study • Student Career Planning Platform', marginLeft, pageHeight - 7.5);
+    doc.text('Naa College • Student Career Planning Platform', marginLeft, pageHeight - 7.5);
 
     // Center: Interactive Brand Link
     doc.setTextColor(2, 132, 199);
