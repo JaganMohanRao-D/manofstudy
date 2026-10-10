@@ -79,7 +79,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({ target, onClose, onSuc
               </div>
               <h3 className="text-base font-bold text-slate-900">Report Submitted</h3>
               <p className="text-xs text-slate-600 max-w-xs mx-auto">
-                Thank you for keeping MAN OF STUDY safe. If this content receives 3 reports, it will be automatically hidden from all feeds.
+                Thank you for helping keep Naa College safe. If this content receives 3 reports, it will be automatically hidden from all feeds.
               </p>
             </div>
           ) : (
