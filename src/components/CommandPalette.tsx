@@ -198,6 +198,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         action: () => onSelectTool('ap-predictor' as ToolTab),
       },
       {
+        id: 'tool-ap-rank-predictor',
+        title: 'AP EAPCET Rank Predictor',
+        subtitle: 'Estimate rank range from EAPCET subject marks and Intermediate/board marks',
+        category: 'Core Tools',
+        badge: 'AP Rank Estimate',
+        icon: <Calculator className="w-4 h-4 text-cyan-500" />,
+        keywords: ['ap rank predictor', 'ap eapcet rank', 'eapcet rank estimate', 'andhra pradesh', 'rank calculator', 'combined score', 'board marks'],
+        action: () => onSelectTool('ap-rank-predictor' as ToolTab),
+      },
+      {
         id: 'tool-tg-allotments',
         title: 'TG EAPCET 2026 Final Phase Allotments & Cutoffs',
         subtitle: 'Official candidate allotments, cutoff ranks & admission stats',

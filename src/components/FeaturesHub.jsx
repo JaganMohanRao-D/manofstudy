@@ -155,6 +155,17 @@ export const WORKSPACES = [
     iconBg: 'bg-sky-500/10 border-sky-500/30 text-sky-400',
   },
   {
+    id: 'ws-ap-rank-predictor',
+    workspace: 'ap-rank-predictor',
+    category: 'admissions',
+    title: 'AP EAPCET Rank Predictor',
+    badge: 'RANK ESTIMATE',
+    description: 'Estimate an AP EAPCET rank range using subject marks and Intermediate/board marks with the supplied weighting and rank anchors.',
+    actionText: 'Predict Rank',
+    icon: Award,
+    iconBg: 'bg-lime-500/10 border-lime-500/30 text-lime-400',
+  },
+  {
     id: 'ws-eapcet',
     workspace: 'eapcet',
     category: 'admissions',
@@ -335,6 +346,7 @@ export const FeaturesHub = ({
       tools: [
         { workspace: 'ap-allotments', title: 'AP Namewise Allotments', description: 'Choose 2025 or 2026, then explore districts, colleges, branches and candidates.', icon: Database },
         { workspace: 'ap-predictor', title: 'AP College Predictor', description: 'Match your rank against the available AP EAPCET 2026 allotment records.', icon: Compass },
+        { workspace: 'ap-rank-predictor', title: 'AP EAPCET Rank Predictor', description: 'Estimate a rank range from EAPCET subject marks and Intermediate/board marks.', icon: Award },
         { workspace: 'ap-top-colleges', title: 'AP Top B.Tech Colleges — Observed Ranks', description: 'Explore 2026 branch-wise highest, median and last observed OC ranks.', icon: Award },
       ],
     },

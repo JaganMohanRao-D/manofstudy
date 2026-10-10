@@ -17,6 +17,7 @@ type NavItem = { label: string; workspace: WorkspaceView; tab?: ToolTab; icon: R
 
 const AP_TOOLS: NavItem[] = [
   { label: 'AP EAPCET College Predictor', workspace: 'ap-predictor', icon: Map },
+  { label: 'AP EAPCET Rank Predictor', workspace: 'ap-rank-predictor', icon: Calculator },
   { label: 'AP Top B.Tech Colleges', workspace: 'ap-top-colleges', icon: Trophy },
   { label: 'AP Allotments — Namewise', workspace: 'ap-allotments', icon: ClipboardCheck },
   { label: 'AP EAPCET Vacancy Radar', workspace: 'eapcet-radar', icon: Search },
@@ -99,7 +100,7 @@ export const Header: React.FC<HeaderProps> = ({ activeWorkspace = 'hub', onSelec
         </nav>
 
         <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
-          <button type="button" id="header-command-palette-trigger" onClick={onOpenCommandPalette} className="inline-flex h-9 items-center gap-2 rounded-xl border border-cyan-300/10 bg-white/5 px-2.5 text-slate-300 hover:border-cyan-300/25 hover:bg-cyan-400/10 hover:text-white transition-colors sm:px-3" title="Search tools" aria-label="Search Man of Study tools"><Search className="h-4 w-4 text-cyan-300" /><span className="hidden xl:inline text-xs font-medium">Search tools</span></button>
+          <button type="button" id="header-command-palette-trigger" onClick={onOpenCommandPalette} className="hidden sm:inline-flex h-9 items-center gap-2 rounded-xl border border-cyan-300/10 bg-white/5 px-2.5 text-slate-300 hover:border-cyan-300/25 hover:bg-cyan-400/10 hover:text-white transition-colors sm:px-3" title="Search tools" aria-label="Search Man of Study tools"><Search className="h-4 w-4 text-cyan-300" /><span className="hidden xl:inline text-xs font-medium">Search tools</span></button>
           <button type="button" id="header-support-btn" onClick={onOpenSupport} className="inline-flex h-9 w-9 sm:w-auto items-center justify-center gap-1.5 rounded-xl border border-cyan-300/15 bg-cyan-400/8 px-0 sm:px-3 text-xs font-bold text-cyan-200 hover:bg-cyan-400/15 hover:text-white transition-colors" aria-label="Support Man of Study" title="Support Man of Study"><Heart className="h-3.5 w-3.5" /><span className="hidden sm:inline">Support</span></button>
           <button type="button" onClick={() => setMobileOpen((v) => !v)} className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-cyan-300/10 bg-white/5 text-slate-200 hover:bg-cyan-400/10 lg:hidden" aria-label={mobileOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={mobileOpen}>{mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</button>
         </div>

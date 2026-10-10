@@ -13,6 +13,7 @@
     'eapcet': '/ap-eapcet/phase-2-vacancy-radar',
     'ap-allotments': '/ap-eapcet/college-wise-allotments',
     'ap-predictor': '/ap-eapcet/college-predictor',
+    'ap-rank-predictor': '/ap-eapcet/rank-predictor',
     'ap-top-colleges': '/ap-eapcet/top-colleges',
     'tg-allotments': '/tg-eapcet/name-wise-allotments',
     'tg-top-colleges': '/tg-eapcet/top-colleges',
