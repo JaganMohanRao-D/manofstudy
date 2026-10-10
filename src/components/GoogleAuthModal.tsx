@@ -84,10 +84,10 @@ export const GoogleAuthModal: React.FC = () => {
               Verified Google Sign-In
             </span>
             <h2 className="text-xl font-extrabold text-[var(--mos-text-primary)] tracking-tight">
-              Sign in to Man of Study
+              Sign in to Naa College
             </h2>
             <p className="text-xs text-[var(--mos-text-secondary)] leading-relaxed max-w-xs mx-auto">
-              Use your Google Account to continue to the Man of Study Mock Test Series.
+              Use your Google Account to continue to the Naa College Mock Test Series.
             </p>
           </div>
 

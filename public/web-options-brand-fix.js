@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var LOGO = '/MANOFSTUDY_LOGO.png';
+  var LOGO = '/Naa%20College%20logo.webp';
   var SITE = 'https://manofstudy.pages.dev';
   var STYLE_ID = 'mos-web-options-brand-fix';
 
@@ -114,7 +114,7 @@
 
     var popup = window.open('', '_blank', 'noopener,noreferrer,width=1000,height=800');
     if (!popup) {
-      window.alert('Please allow pop-ups for Man of Study to download the PDF.');
+      window.alert('Please allow pop-ups for Naa College to download the PDF.');
       return;
     }
 
@@ -129,12 +129,12 @@
     }
 
     var region = isAp() ? 'AP EAPCET' : isTg() ? 'TG EAPCET' : 'EAPCET';
-    var html = '<!doctype html><html><head><meta charset="utf-8"><title>Man of Study - Web Options</title>' +
+    var html = '<!doctype html><html><head><meta charset="utf-8"><title>Naa College - Web Options</title>' +
       '<style>' +
       '@page{size:A4 landscape;margin:12mm}*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#0f172a;background:#fff}' +
       '.header{display:flex;align-items:center;gap:14px;border-bottom:2px solid #0f172a;padding-bottom:12px;margin-bottom:16px}.logo{width:54px;height:54px;object-fit:contain}.brand{font-size:11px;font-weight:800;letter-spacing:.12em;color:#0284c7}.title{font-size:22px;font-weight:800;margin:2px 0}.sub{font-size:10px;color:#64748b}.card{border:1px solid #cbd5e1;border-radius:10px;padding:12px}table{width:100%;border-collapse:collapse;font-size:9px}th,td{border:1px solid #cbd5e1;padding:7px 6px;text-align:left;vertical-align:top}th{background:#e2e8f0;font-weight:800}a{color:#0f172a;text-decoration:none}.footer{margin-top:14px;font-size:9px;color:#64748b}' +
       '</style></head><body>' +
-      '<div class="header"><a href="' + SITE + '"><img class="logo" src="' + LOGO + '" alt="MAN OF STUDY"></a><div><div class="brand">MAN OF STUDY</div><div class="title">' + region + ' Web Options Preference List</div><div class="sub">Prepared from your selected College Predictor options. Final submission must be completed on the official counselling portal.</div></div></div>' +
+      '<div class="header"><a href="' + SITE + '"><img class="logo" src="' + LOGO + '" alt="NAA COLLEGE"></a><div><div class="brand">NAA COLLEGE</div><div class="title">' + region + ' Web Options Preference List</div><div class="sub">Prepared from your selected College Predictor options. Final submission must be completed on the official counselling portal.</div></div></div>' +
       '<div class="card">' + clone.outerHTML + '</div>' +
       '<div class="footer"><a href="' + SITE + '">manofstudy.pages.dev</a> · Student planning/reference utility · Generated from the current Web Options Builder.</div>' +
       '<script>window.onload=function(){setTimeout(function(){window.print();},250)};<\/script>' +

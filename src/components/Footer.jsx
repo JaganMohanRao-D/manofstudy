@@ -7,9 +7,9 @@ export const Footer = ({ onOpenLegalModal, onOpenSupportModal }) => (
       <div className="grid gap-10 md:grid-cols-[1.3fr_.7fr]">
         <div>
           <div className="flex items-center gap-3">
-            <img src="/MANOFSTUDY_LOGO.png" alt="Man of Study logo" width="56" height="56" className="h-14 w-14 object-contain" loading="lazy" />
+            <img src="/Naa%20College%20logo.webp" alt="Naa College logo" width="56" height="56" className="h-14 w-14 object-contain" loading="lazy" />
             <div>
-              <div className="font-['Syne'] text-2xl font-extrabold uppercase tracking-[-.04em]">Man of Study</div>
+              <div className="font-['Syne'] text-2xl font-extrabold uppercase tracking-[-.04em]">Naa College</div>
               <div className="text-[9px] uppercase tracking-[.18em] text-[#777b82]">Student utility platform</div>
             </div>
           </div>
@@ -22,7 +22,7 @@ export const Footer = ({ onOpenLegalModal, onOpenSupportModal }) => (
             <button type="button" onClick={() => onOpenLegalModal?.('privacy')} className="text-left hover:text-[#22d3ee]">Privacy Policy</button>
             <button type="button" onClick={() => onOpenLegalModal?.('terms')} className="text-left hover:text-[#22d3ee]">Terms of Service</button>
             <button type="button" onClick={() => onOpenLegalModal?.('disclaimer')} className="text-left hover:text-[#22d3ee]">Legal Safe Harbor &amp; Disclaimers</button>
-            <button type="button" onClick={() => onOpenLegalModal?.('about')} className="text-left hover:text-[#22d3ee]">About Man of Study</button>
+            <button type="button" onClick={() => onOpenLegalModal?.('about')} className="text-left hover:text-[#22d3ee]">About Naa College</button>
             <button type="button" onClick={() => onOpenLegalModal?.('contact')} className="text-left hover:text-[#22d3ee]">Contact Support</button>
             {onOpenSupportModal && <button type="button" onClick={onOpenSupportModal} className="inline-flex items-center gap-2 text-left text-[#22d3ee]"><Heart size={12}/> Support MOS</button>}
           </div>
@@ -31,7 +31,7 @@ export const Footer = ({ onOpenLegalModal, onOpenSupportModal }) => (
       <div className="mt-12 border-t border-white/10 pt-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <div className="mk-built">Built by Jagan Mohan Rao Dunna</div>
-          <div className="mt-2 text-[11px] text-[#666a71]">© 2026 Man of Study (MOS). All rights reserved.</div>
+          <div className="mt-2 text-[11px] text-[#666a71]">© 2026 Naa College (MOS). All rights reserved.</div>
         </div>
         <div className="text-right text-[10px] uppercase tracking-[.12em] text-[#666a71]">Built for students / Built to be useful <ArrowUpRight className="ml-1 inline" size={12}/></div>
       </div>
