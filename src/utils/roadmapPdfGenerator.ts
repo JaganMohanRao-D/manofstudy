@@ -120,6 +120,25 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
     return false;
   };
 
+  // Measure wrapped text with the same font and size used when drawing it.
+  // jsPDF measures with the active font, so inheriting a previous font can
+  // underestimate line counts and produce cards that are too short.
+  const wrapText = (
+    value: string,
+    maxWidthMm: number,
+    fontSize: number,
+    fontStyle: 'normal' | 'bold' = 'normal'
+  ): string[] => {
+    const previousFont = doc.getFont();
+    const previousSize = doc.getFontSize();
+    doc.setFont('helvetica', fontStyle);
+    doc.setFontSize(fontSize);
+    const lines = doc.splitTextToSize(value || '—', maxWidthMm) as string[];
+    doc.setFont(previousFont.fontName, previousFont.fontStyle);
+    doc.setFontSize(previousSize);
+    return lines;
+  };
+
   // Helper: Clean card box with light background and subtle border
   const drawCardBox = (
     y: number,
@@ -173,11 +192,11 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
   doc.setFillColor(15, 23, 42); // Slate 900
   doc.setDrawColor(51, 65, 85);
   doc.setLineWidth(0.2);
-  doc.roundedRect(marginLeft, coverY, 48, 12.0, 2.2, 2.2, 'FD');
+  doc.roundedRect(marginLeft, coverY, 58, 15.0, 2.2, 2.2, 'FD');
 
   // Canonical Naa College logo. Preserve its intrinsic aspect ratio within the brand pill.
   if (naaCollegeLogo) {
-    const logoBox = 9.0;
+    const logoBox = 11.5;
     const scale = Math.min(logoBox / naaCollegeLogo.width, logoBox / naaCollegeLogo.height);
     const logoWidth = naaCollegeLogo.width * scale;
     const logoHeight = naaCollegeLogo.height * scale;
@@ -191,22 +210,22 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
       undefined,
       'FAST'
     );
-    doc.link(marginLeft + 1.0, coverY + 1.0, 10.0, 10.0, { url: TARGET_URL });
+    doc.link(marginLeft + 1.0, coverY + 1.0, 12.5, 12.5, { url: TARGET_URL });
   } else {
     doc.setFillColor(6, 182, 212);
-    doc.circle(marginLeft + 5.5, coverY + 6.0, 1.8, 'F');
+    doc.circle(marginLeft + 6.5, coverY + 7.5, 2.0, 'F');
   }
 
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(10.5);
+  doc.setFontSize(13);
   doc.setTextColor(255, 255, 255);
-  doc.text(BRAND_NAME, marginLeft + 12.5, coverY + 7.7);
+  doc.text(BRAND_NAME, marginLeft + 15.5, coverY + 9.6);
 
   // Series Label
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8.5);
   doc.setTextColor(71, 85, 105);
-  doc.text('CAREER ROADMAP SERIES', marginLeft + 53, coverY + 7.7);
+  doc.text('CAREER ROADMAP SERIES', marginLeft + 63, coverY + 9.6);
 
   // Verified Badge (Right)
   const verW = 42;
@@ -219,13 +238,13 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
   doc.setTextColor(2, 132, 199);
   doc.text('OFFICIAL BLUEPRINT', verX + verW / 2, coverY + 4.6, { align: 'center' });
 
-  coverY += 13;
+  coverY += 18;
 
   // Title Container Card
   const titleText = `${roadmap.name}`;
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(22);
-  const titleLines = doc.splitTextToSize(titleText, contentWidth - 14);
+  doc.setFontSize(20);
+  const titleLines = wrapText(titleText, contentWidth - 14, 20, 'bold');
   const titleBoxHeight = 25 + titleLines.length * 8.5;
 
   drawCardBox(coverY, titleBoxHeight, 255, 255, 255, 203, 213, 225);
@@ -266,10 +285,10 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
   coverY += titleBoxHeight + 5;
 
   // Executive Description Card
-  const taglineLines = doc.splitTextToSize(roadmap.tagline, contentWidth - 14);
+  const taglineLines = wrapText(roadmap.tagline, contentWidth - 14, 8.8, 'normal');
   const corpOverview = roadmap.strategicOverview?.corporateSummary || '';
   const corpLines = corpOverview
-    ? doc.splitTextToSize(`Industry Context: ${corpOverview}`, contentWidth - 14)
+    ? wrapText(`Industry Context: ${corpOverview}`, contentWidth - 14, 8.0, 'normal')
     : [];
   const descHeight = 10 + (taglineLines.length + corpLines.length) * 4.2 + (corpLines.length > 0 ? 3 : 0);
 
@@ -299,7 +318,7 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
   // Block 1: Career Direction & Target Roles
   const targetRoles = roadmap.strategicOverview?.targetRoles || [];
   const rolesPreview = targetRoles.slice(0, 5).join(' • ') || 'Core Technical Specialist • Systems Analyst';
-  const roleLines = doc.splitTextToSize(rolesPreview, gridW - 12);
+  const roleLines = wrapText(rolesPreview, gridW - 12, 7.5, 'normal');
 
   doc.setFillColor(255, 255, 255);
   doc.setDrawColor(226, 232, 240);
@@ -320,7 +339,7 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
   const foundationalSkills = roadmap.skillsMatrix.foundational.slice(0, 4).join(', ');
   const advancedSkills = roadmap.skillsMatrix.advanced.slice(0, 4).join(', ');
   const skillsText = `Core: ${foundationalSkills}\nSpecialization: ${advancedSkills}`;
-  const skillLines = doc.splitTextToSize(skillsText, gridW - 12);
+  const skillLines = wrapText(skillsText, gridW - 12, 7.5, 'normal');
 
   const col2X = marginLeft + gridW + gap;
   doc.setFillColor(255, 255, 255);
@@ -341,7 +360,7 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
   // Block 3: Major Project Path & Portfolio
   const year4Projects = roadmap.years[3]?.semesters[1]?.keyProjects || roadmap.years[2]?.semesters[1]?.keyProjects || [];
   const projectPreview = year4Projects.slice(0, 2).join('; ') || 'Production Capstone System with Full-Stack Deployment';
-  const projLines = doc.splitTextToSize(projectPreview, gridW - 12);
+  const projLines = wrapText(projectPreview, gridW - 12, 7.5, 'normal');
 
   doc.setFillColor(255, 255, 255);
   doc.setDrawColor(226, 232, 240);
@@ -365,7 +384,7 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
     `Entry Tier: ${formatSalary(sb?.entryTier, 'Competitive')}`,
     `Mid Tier: ${formatSalary(sb?.midTier, 'High Growth')} | Peak: ${formatSalary(sb?.peakTier, 'Tier-1')}`,
     gateInfo ? `Gateway: ${gateInfo.exam} (${gateInfo.topInstitutes.slice(0, 2).join(', ')})` : 'Gateway: Campus Drives & Off-Campus Hiring',
-  ];
+  ].map((line) => wrapText(line, gridW - 12, 7.5, 'normal'));
 
   doc.setFillColor(255, 255, 255);
   doc.setDrawColor(226, 232, 240);
@@ -381,9 +400,9 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
   doc.setFontSize(7.5);
   doc.setTextColor(30, 41, 59);
   let curCompY = row2Y + 12.5;
-  compLines.forEach((cl) => {
-    doc.text(cl, col2X + 6, curCompY);
-    curCompY += 4.5;
+  compLines.forEach((lines) => {
+    doc.text(lines, col2X + 6, curCompY);
+    curCompY += lines.length * 3.4 + 0.8;
   });
 
   // Cover Footer Banner at bottom of Page 1
@@ -525,13 +544,13 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
 
   // Target Roles & Corporate Outlook Card
   const rolesText = `Primary Industry Roles: ${targetRoles.join(' • ') || 'Core Technical Specialist • Systems Analyst'}`;
-  const rolesWrapped = doc.splitTextToSize(rolesText, contentWidth - 14);
+  const rolesWrapped = wrapText(rolesText, contentWidth - 14, 7.6, 'bold');
 
   const corpText = corpOverview ? `Corporate Viability & Scope: ${corpOverview}` : '';
-  const corpWrapped = corpText ? doc.splitTextToSize(corpText, contentWidth - 14) : [];
+  const corpWrapped = corpText ? wrapText(corpText, contentWidth - 14, 7.2, 'normal') : [];
 
   const govtSummary = roadmap.strategicOverview?.govtPsuSummary || '';
-  const govtWrapped = govtSummary ? doc.splitTextToSize(`Government & PSU Opportunities: ${govtSummary}`, contentWidth - 14) : [];
+  const govtWrapped = govtSummary ? wrapText(`Government & PSU Opportunities: ${govtSummary}`, contentWidth - 14, 7.2, 'normal') : [];
 
   const rolesCardH =
     8 +
@@ -571,11 +590,11 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
   if (tr) {
     const t1Text = `Apex / Tier-1 Campus Reality: ${tr.tier1Reality || ''}`;
     const t3Text = `Regional / Tier-3 Campus Reality: ${tr.tier3Reality || ''}`;
-    const t1Lines = doc.splitTextToSize(t1Text, contentWidth - 14);
-    const t3Lines = doc.splitTextToSize(t3Text, contentWidth - 14);
+    const t1Lines = wrapText(t1Text, contentWidth - 14, 7.4, 'bold');
+    const t3Lines = wrapText(t3Text, contentWidth - 14, 7.4, 'bold');
 
     const tactics = tr.offCampusTactics || [];
-    const tacticLines = tactics.map((t, idx) => doc.splitTextToSize(`${idx + 1}. ${t}`, contentWidth - 16));
+    const tacticLines = tactics.map((t, idx) => wrapText(`${idx + 1}. ${t}`, contentWidth - 16, 6.8, 'normal'));
     const totalTacticCount = tacticLines.reduce((acc, lines) => acc + lines.length, 0);
 
     const tierCardH =
@@ -630,9 +649,9 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
   const aText = `Advanced Specialization: ${roadmap.skillsMatrix.advanced.join(', ')}`;
   const tText = `Software, Tooling & DevOps: ${roadmap.skillsMatrix.industryTools.join(', ')}`;
 
-  const fLines = doc.splitTextToSize(fText, contentWidth - 14);
-  const aLines = doc.splitTextToSize(aText, contentWidth - 14);
-  const tLines = doc.splitTextToSize(tText, contentWidth - 14);
+  const fLines = wrapText(fText, contentWidth - 14, 7.4, 'normal');
+  const aLines = wrapText(aText, contentWidth - 14, 7.4, 'normal');
+  const tLines = wrapText(tText, contentWidth - 14, 7.4, 'normal');
 
   const skillsCardH = 8 + (fLines.length + aLines.length + tLines.length) * 3.8 + 4;
 
@@ -664,20 +683,20 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
 
   roadmap.years.forEach((yr, yrIdx) => {
     // Year Header Banner (Glued to first semester card)
-    ensureSpace(12 + 45); // Year banner + space for at least first semester card
-
-    doc.setFillColor(238, 242, 255);
-    doc.setDrawColor(199, 210, 254);
-    doc.setLineWidth(0.2);
-    doc.roundedRect(marginLeft, currentY, contentWidth, 8.0, 1.8, 1.8, 'FD');
-
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(8.2);
     doc.setTextColor(49, 46, 129);
     const yearTitleStr = `${yr.yearTitle.toUpperCase()} — ${yr.theme}`;
-    const yearTitleLines = doc.splitTextToSize(yearTitleStr, contentWidth - 10);
-    doc.text(yearTitleLines[0], marginLeft + 6, currentY + 5.5);
-    currentY += 10.5;
+    const yearTitleLines = wrapText(yearTitleStr, contentWidth - 10, 8.2, 'bold');
+    const yearBannerHeight = Math.max(8, 3.5 + yearTitleLines.length * 3.8);
+    ensureSpace(yearBannerHeight + 45);
+
+    doc.setFillColor(238, 242, 255);
+    doc.setDrawColor(199, 210, 254);
+    doc.setLineWidth(0.2);
+    doc.roundedRect(marginLeft, currentY, contentWidth, yearBannerHeight, 1.8, 1.8, 'FD');
+    doc.text(yearTitleLines, marginLeft + 6, currentY + 5.2);
+    currentY += yearBannerHeight + 2.5;
 
     yr.semesters.forEach((sem) => {
       // Clean up sem title so it doesn't say "Semester X: Semester X:"
@@ -697,11 +716,11 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
       const labelW = 38;
       const valueW = contentWidth - labelW - 14;
 
-      const semTitleLines = doc.splitTextToSize(`SEMESTER ${sem.semNumber} • ${cleanSemTitle}`, contentWidth - 14);
+      const semTitleLines = wrapText(`SEMESTER ${sem.semNumber} • ${cleanSemTitle}`, contentWidth - 14, 8.4, 'bold');
       let innerContentHeight = 6 + (semTitleLines.length > 1 ? (semTitleLines.length - 1) * 4.0 : 0);
 
       const formattedSubItems = subItems.map((item) => {
-        const lines = doc.splitTextToSize(item.val || '—', valueW);
+        const lines = wrapText(item.val || '—', valueW, 6.8, 'normal');
         const itemH = Math.max(3.8, lines.length * 3.4 + 1.0);
         innerContentHeight += itemH;
         return { label: item.label, lines, itemH };
@@ -775,7 +794,7 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
   ];
 
   portfolioGuidelines.forEach((g, idx) => {
-    const descLines = doc.splitTextToSize(g.desc, contentWidth - 18);
+    const descLines = wrapText(g.desc, contentWidth - 18, 7.0, 'normal');
     const cardH = 9 + descLines.length * 3.6;
 
     ensureSpace(cardH);
@@ -822,7 +841,7 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
   ];
 
   internshipTimeline.forEach((t) => {
-    const mLines = doc.splitTextToSize(t.milestone, contentWidth - 65);
+    const mLines = wrapText(t.milestone, contentWidth - 65, 7.0, 'normal');
     const cardH = 7 + mLines.length * 3.5;
 
     ensureSpace(cardH);
@@ -859,7 +878,7 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
     ];
 
     const gateLinesArr = gateItems.map((gi) => {
-      const lines = doc.splitTextToSize(gi.val, contentWidth - 48);
+      const lines = wrapText(gi.val, contentWidth - 48, 7.0, 'normal');
       return { label: gi.label, lines, h: Math.max(4.0, lines.length * 3.5 + 1.2) };
     });
 
@@ -895,7 +914,7 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
   );
 
   roadmap.proTips.forEach((tip, idx) => {
-    const tipLines = doc.splitTextToSize(tip, contentWidth - 18);
+    const tipLines = wrapText(tip, contentWidth - 18, 7.2, 'normal');
     const tipCardH = 6 + tipLines.length * 3.6;
 
     ensureSpace(tipCardH);
@@ -934,7 +953,7 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
   ];
 
   nextSteps.forEach((step, idx) => {
-    const sLines = doc.splitTextToSize(step, contentWidth - 18);
+    const sLines = wrapText(step, contentWidth - 18, 7.0, 'normal');
     const cardH = 6 + sLines.length * 3.5;
 
     ensureSpace(cardH);
@@ -1012,8 +1031,13 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
       doc.setFontSize(7.2);
       doc.setTextColor(71, 85, 105);
       const rightHeader = `${roadmap.code} — ${roadmap.name}`;
-      const rightLines = doc.splitTextToSize(rightHeader, 85);
-      doc.text(rightLines[0], pageWidth - marginRight, 9.5, { align: 'right' });
+      let rightHeaderSize = 7.2;
+      doc.setFontSize(rightHeaderSize);
+      while (doc.getTextWidth(rightHeader) > 85 && rightHeaderSize > 5.2) {
+        rightHeaderSize -= 0.2;
+        doc.setFontSize(rightHeaderSize);
+      }
+      doc.text(rightHeader, pageWidth - marginRight, 9.5, { align: 'right' });
 
       // Divider Line
       doc.setDrawColor(226, 232, 240);
