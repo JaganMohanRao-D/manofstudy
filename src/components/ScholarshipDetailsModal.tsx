@@ -63,7 +63,7 @@ export const ScholarshipDetailsModal: React.FC<ScholarshipDetailsModalProps> = (
 
   const handleShareWhatsApp = () => {
     const text = [
-      'MAN OF STUDY | SCHOLARSHIP UPDATE',
+      'NAA COLLEGE | SCHOLARSHIP UPDATE',
       '',
       `🎓 ${scholarship.title}`,
       `💰 ${scholarship.amount}`,
