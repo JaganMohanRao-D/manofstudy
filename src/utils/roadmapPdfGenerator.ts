@@ -79,7 +79,13 @@ export function getRoadmapPdfFilename(branch: BranchRoadmap): string {
     base = 'Career';
   }
 
-  return `${base}_Roadmap_by_Man_of_Study.pdf`;
+  const branchCode = (branch.code || base)
+    .toUpperCase()
+    .replace(/[^A-Z0-9_-]+/g, '_')
+    .replace(/_+/g, '_')
+    .replace(/^[_-]+|[_-]+$/g, '') || 'ENGINEERING';
+
+  return `naacollege-${branchCode}_ROADMAP.pdf`;
 }
 
 export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false): Promise<jsPDF> {
@@ -167,40 +173,40 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
   doc.setFillColor(15, 23, 42); // Slate 900
   doc.setDrawColor(51, 65, 85);
   doc.setLineWidth(0.2);
-  doc.roundedRect(marginLeft, coverY, 32, 7.0, 1.8, 1.8, 'FD');
+  doc.roundedRect(marginLeft, coverY, 48, 12.0, 2.2, 2.2, 'FD');
 
   // Canonical Naa College logo. Preserve its intrinsic aspect ratio within the brand pill.
   if (naaCollegeLogo) {
-    const logoBox = 5.5;
+    const logoBox = 9.0;
     const scale = Math.min(logoBox / naaCollegeLogo.width, logoBox / naaCollegeLogo.height);
     const logoWidth = naaCollegeLogo.width * scale;
     const logoHeight = naaCollegeLogo.height * scale;
     doc.addImage(
       naaCollegeLogo.dataUrl,
       'PNG',
-      marginLeft + 1.2 + (logoBox - logoWidth) / 2,
-      coverY + 0.75 + (logoBox - logoHeight) / 2,
+      marginLeft + 1.5 + (logoBox - logoWidth) / 2,
+      coverY + 1.5 + (logoBox - logoHeight) / 2,
       logoWidth,
       logoHeight,
       undefined,
       'FAST'
     );
-    doc.link(marginLeft + 1.0, coverY + 0.5, 6.0, 6.0, { url: TARGET_URL });
+    doc.link(marginLeft + 1.0, coverY + 1.0, 10.0, 10.0, { url: TARGET_URL });
   } else {
     doc.setFillColor(6, 182, 212);
-    doc.circle(marginLeft + 4.0, coverY + 3.5, 1.2, 'F');
+    doc.circle(marginLeft + 5.5, coverY + 6.0, 1.8, 'F');
   }
 
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(7.2);
+  doc.setFontSize(10.5);
   doc.setTextColor(255, 255, 255);
-  doc.text(BRAND_NAME, marginLeft + 7.2, coverY + 4.6);
+  doc.text(BRAND_NAME, marginLeft + 12.5, coverY + 7.7);
 
   // Series Label
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8.5);
   doc.setTextColor(71, 85, 105);
-  doc.text('CAREER ROADMAP SERIES', marginLeft + 36, coverY + 4.6);
+  doc.text('CAREER ROADMAP SERIES', marginLeft + 53, coverY + 7.7);
 
   // Verified Badge (Right)
   const verW = 42;
