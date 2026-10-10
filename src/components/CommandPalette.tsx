@@ -391,7 +391,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'tool-guides-hub',
-        title: 'MOS Student Knowledge HUB (9 Chapters)',
+        title: 'Naa College Student Knowledge Hub (9 Chapters)',
         subtitle: 'Chapter 9: Demystifying Engineering Seat Allotment, OC quota math & Phase-2 sliding rules',
         category: 'Core Tools',
         badge: '9 Chapters',
