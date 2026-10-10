@@ -20,7 +20,7 @@ interface SupportPageProps {
 }
 
 const SUPPORT_AMOUNTS = [49, 99, 299, 400] as const;
-const UPI_ID = '7842587883@ybl';
+const UPI_ID = 'jaganmohanraodj@okicici';
 const SUPPORT_URL = 'https://manofstudy.pages.dev/support/';
 
 export const SupportPage: React.FC<SupportPageProps> = ({ onBack }) => {

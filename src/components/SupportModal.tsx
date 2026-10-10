@@ -77,7 +77,7 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
   const [isToolResultPrompt, setIsToolResultPrompt] = useState<boolean>(false);
 
   const PLATFORM_URL = 'https://manofstudy.pages.dev';
-  const UPI_ID = '7842587883@ybl';
+  const UPI_ID = 'jaganmohanraodj@okicici';
 
   const selectedTier =
     CONTRIBUTION_TIERS.find((t) => t.id === selectedTierId) || CONTRIBUTION_TIERS[1];
