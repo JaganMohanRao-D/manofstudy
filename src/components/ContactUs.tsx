@@ -25,7 +25,7 @@ export const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     const mailtoUrl = `mailto:${supportEmail}?subject=${encodeURIComponent(
-      `[MAN OF STUDY ${subjectCategory}] from ${senderName || 'Student'} (${senderCollege || 'College'})`
+      `[NAA COLLEGE ${subjectCategory}] from ${senderName || 'Student'} (${senderCollege || 'College'})`
     )}&body=${encodeURIComponent(message)}`;
     window.location.href = mailtoUrl;
     setIsPrepared(true);
@@ -56,7 +56,7 @@ export const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
-            Contact MAN OF STUDY
+            Contact NAA COLLEGE
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-2xl leading-relaxed">
@@ -109,7 +109,7 @@ export const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
               Platform Operator
             </span>
             <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-              MAN OF STUDY is engineered and curated by <strong>JAGAN MOHAN RAO DUNNA</strong>. Your suggestions directly influence upcoming feature releases and academic tools.
+              NAA COLLEGE is engineered and curated by <strong>JAGAN MOHAN RAO DUNNA</strong>. Your suggestions directly influence upcoming feature releases and academic tools.
             </p>
             <div className="pt-1">
               <a
