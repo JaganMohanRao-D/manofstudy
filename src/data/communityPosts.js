@@ -1,5 +1,5 @@
 /**
- * MAN OF STUDY (MOS) - CampusConnect Seed Database
+ * Naa College - CampusConnect Seed Database
  * 32 authentic, ultra-relatable AP & TG engineering student dispatches and doubts.
  * Covering CBIT, JNTUH, PVP Siddhartha, OUCE, VNR VJIET, Vasavi, AUCE, SRKR, GMRIT, VR Siddhartha, GVPCE, KMIT.
  */
@@ -24,13 +24,13 @@ export const initialCommunityPosts = [
     replies: [
       {
         id: 'reply-admin-seed-welcome',
-        authorName: 'Man of Study Admin',
+        authorName: 'Naa College Admin',
         role: 'Community Moderator',
-        authorCollege: 'MAN OF STUDY Academic Network',
+        authorCollege: 'Naa College Academic Network',
         authorYear: 'Staff',
         isAnonymous: false,
         isAdmin: true,
-        content: `Welcome to MOS CampusConnect! 🎓 If you have a doubt, ask it here — and if you know the solution to someone else's question, share what you know. Let's build a helpful student community together. — Man of Study Admin`,
+        content: `Welcome to Naa College CampusConnect! 🎓 If you have a doubt, ask it here — and if you know the solution to someone else's question, share what you know. Let's build a helpful student community together. — Naa College Admin`,
         createdAt: 'Official Community Guide',
         timestamp: 'Official Community Guide',
         upvotes: 142,
