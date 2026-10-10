@@ -1,6 +1,35 @@
 import { jsPDF } from 'jspdf';
 import { BranchRoadmap } from '../types';
 
+async function loadNaaCollegeLogo(): Promise<{ dataUrl: string; width: number; height: number } | null> {
+  let objectUrl: string | null = null;
+  try {
+    const response = await fetch('/Naa%20College%20logo.webp');
+    if (!response.ok) return null;
+    objectUrl = URL.createObjectURL(await response.blob());
+    const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error('Naa College logo could not be loaded'));
+      img.src = objectUrl as string;
+    });
+    const width = image.naturalWidth || image.width;
+    const height = image.naturalHeight || image.height;
+    if (!width || !height) return null;
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext('2d');
+    if (!context) return null;
+    context.drawImage(image, 0, 0, width, height);
+    return { dataUrl: canvas.toDataURL('image/png'), width, height };
+  } catch {
+    return null;
+  } finally {
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
+  }
+}
+
 /**
  * Naa College - Professional Career Roadmap PDF Document Generator
  * 
@@ -14,7 +43,7 @@ import { BranchRoadmap } from '../types';
  * - Atomic Semester Cards with Strict Orphan Prevention (break-inside: avoid)
  * - Dynamic Text Splitting & Pre-Measured Box Heights (No text clipping or collisions)
  * - Sanitized currency symbols (Rs. / INR instead of broken Unicode glyphs)
- * - Safe Dynamic Filename: [BRANCH_NAME]_Roadmap_by_Man_of_Study.pdf
+ * - Safe Dynamic Filename: [BRANCH_NAME]_Roadmap_by_Naa_College.pdf
  */
 
 export function getRoadmapPdfFilename(branch: BranchRoadmap): string {
@@ -53,7 +82,7 @@ export function getRoadmapPdfFilename(branch: BranchRoadmap): string {
   return `${base}_Roadmap_by_Man_of_Study.pdf`;
 }
 
-export function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false): jsPDF {
+export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false): Promise<jsPDF> {
   const doc = new jsPDF({
     orientation: 'portrait',
     unit: 'mm',
@@ -71,6 +100,7 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false
   const BRAND_NAME = 'Naa College';
   const TARGET_URL = 'https://manofstudy.com';
   const EXPLORE_URL = 'https://manofstudy.com/#career-blueprints';
+  const naaCollegeLogo = await loadNaaCollegeLogo();
 
   let currentY = minY;
 
@@ -139,9 +169,27 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false
   doc.setLineWidth(0.2);
   doc.roundedRect(marginLeft, coverY, 32, 7.0, 1.8, 1.8, 'FD');
 
-  // Cyan dot
-  doc.setFillColor(6, 182, 212);
-  doc.circle(marginLeft + 4.0, coverY + 3.5, 1.2, 'F');
+  // Canonical Naa College logo. Preserve its intrinsic aspect ratio within the brand pill.
+  if (naaCollegeLogo) {
+    const logoBox = 5.5;
+    const scale = Math.min(logoBox / naaCollegeLogo.width, logoBox / naaCollegeLogo.height);
+    const logoWidth = naaCollegeLogo.width * scale;
+    const logoHeight = naaCollegeLogo.height * scale;
+    doc.addImage(
+      naaCollegeLogo.dataUrl,
+      'PNG',
+      marginLeft + 1.2 + (logoBox - logoWidth) / 2,
+      coverY + 0.75 + (logoBox - logoHeight) / 2,
+      logoWidth,
+      logoHeight,
+      undefined,
+      'FAST'
+    );
+    doc.link(marginLeft + 1.0, coverY + 0.5, 6.0, 6.0, { url: TARGET_URL });
+  } else {
+    doc.setFillColor(6, 182, 212);
+    doc.circle(marginLeft + 4.0, coverY + 3.5, 1.2, 'F');
+  }
 
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.2);
