@@ -1647,7 +1647,7 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
           <div>
             <div className="text-[10px] uppercase font-bold text-slate-500">Hall Ticket / Roll No</div>
             <div className="font-mono font-bold text-slate-900 dark:text-white text-xs mt-0.5">
-              {candidateProfile?.rollNumber || 'MOS-EAPCET-2026'}
+              {candidateProfile?.rollNumber || 'NC-EAPCET-2026'}
             </div>
           </div>
           <div>
