@@ -2140,7 +2140,7 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
         {/* Official Header */}
         <div className="flex items-center justify-between border-b-2 border-slate-800 pb-4">
           <div className="flex items-center gap-3">
-            <img src="/Naa%20College%20logo.webp" alt="Naa College logo" width="64" height="64" className="h-16 w-16 rounded-xl object-contain" />
+            <img src="/Naa%20College%20logo.webp" alt="Naa College logo" width="78" height="78" style={{ width: 78, height: 78 }} className="shrink-0 rounded-xl object-contain" />
             <div>
               <h1 className="text-xl font-black uppercase tracking-tight text-slate-950">
                 NAA COLLEGE - CBT SIMULATION PERFORMANCE REPORT
