@@ -630,24 +630,24 @@ export default function App() {
       ? {
           title: 'AP EAPCET 2026 College-Wise Allotments | Naa College',
           description: 'Explore AP EAPCET 2026 engineering allotment records by college and branch with the Naa College allotment explorer.',
-          canonical: 'https://manofstudy.pages.dev/ap-eapcet/college-wise-allotments/',
+          canonical: 'https://naacollege.in/ap-eapcet/college-wise-allotments/',
         }
       : seoPath === 'tgAllotments'
         ? {
             title: 'TG EAPCET 2026 Name-Wise Seat Allotments | Naa College',
             description: 'Search Telangana EAPCET 2026 final-phase engineering seat allotment records by student name, hall ticket, college and branch.',
-            canonical: 'https://manofstudy.pages.dev/tg-eapcet/name-wise-allotments/',
+            canonical: 'https://naacollege.in/tg-eapcet/name-wise-allotments/',
           }
         : seoPath === 'apPredictor'
           ? {
               title: 'AP EAPCET College Predictor 2026 | Naa College',
               description: 'Use the AP EAPCET 2026 College Predictor to explore college and branch options based on rank, category, gender, region and preferences.',
-              canonical: 'https://manofstudy.pages.dev/ap-eapcet/college-predictor/',
+              canonical: 'https://naacollege.in/ap-eapcet/college-predictor/',
             }
           : {
               title: 'TG EAPCET College Predictor 2026 | Naa College',
               description: 'Use the Telangana EAPCET 2026 College Predictor to explore college and branch options based on rank, category, gender, branch and preferences.',
-              canonical: 'https://manofstudy.pages.dev/tg-eapcet/college-predictor/',
+              canonical: 'https://naacollege.in/tg-eapcet/college-predictor/',
             };
 
     document.title = config.title;
