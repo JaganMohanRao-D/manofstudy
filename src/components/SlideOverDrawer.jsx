@@ -115,18 +115,18 @@ export const SlideOverDrawer = ({
                 }
               }}
               className="flex items-center gap-2.5 no-underline cursor-pointer group"
-              title="MAN OF STUDY"
+              title="NAA COLLEGE"
             >
               <div className="relative w-8 h-8 rounded-xl overflow-hidden shadow-xs border border-slate-200 dark:border-slate-700/60 bg-slate-100 dark:bg-slate-900 flex items-center justify-center p-0.5 shrink-0">
                 <img 
-                  src="https://i.ibb.co/zHPk2tv4/Chat-GPT-Image-Sep-13-2026-08-04-48-PM.png" 
-                  alt="MAN OF STUDY Logo" 
+                  src="https://i.ibb.co/zHPk2tv4/Naa%20College%20logo.webp" 
+                  alt="NAA COLLEGE Logo" 
                   className="w-full h-full object-contain"
                 />
               </div>
               <div>
                 <h2 className="text-sm font-black tracking-tight text-slate-900 dark:text-white uppercase font-mono group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                  MAN OF STUDY <span className="text-emerald-600 dark:text-emerald-400">Hubs</span>
+                  NAA COLLEGE <span className="text-emerald-600 dark:text-emerald-400">Hubs</span>
                 </h2>
                 <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
                   Engineering &amp; Academic Launchpad
@@ -307,7 +307,7 @@ export const SlideOverDrawer = ({
                   <BookOpen className="w-4 h-4 text-indigo-500 dark:text-indigo-400 shrink-0 mt-0.5" />
                   <div>
                     <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition-colors flex items-center gap-1.5">
-                      <span>MOS Student Knowledge HUB</span>
+                      <span>Naa College Student Knowledge Hub</span>
                       <span className="text-[9px] bg-indigo-100 text-indigo-800 dark:bg-indigo-500/20 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30 px-1.5 py-0.2 rounded font-mono font-semibold">9 Chapters</span>
                     </div>
                     <div className="text-[10px] text-slate-600 dark:text-slate-400 leading-normal mt-0.5">
@@ -674,7 +674,7 @@ export const SlideOverDrawer = ({
 
           <div className="p-3 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-400 shadow-2xs">
             <p className="font-semibold text-slate-800 dark:text-slate-300">
-              MAN OF STUDY (MOS) Launchpad
+              NAA COLLEGE (MOS) Launchpad
             </p>
             <p className="text-[10px] text-slate-500 dark:text-slate-500 mt-0.5">
               OF THE STUDENT, BY THE STUDENT, FOR THE STUDENT.
