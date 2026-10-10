@@ -388,6 +388,9 @@ const SEO_LANDING_PATHS = {
   tgAllotments: '/tg-eapcet/name-wise-allotments/',
   apPredictor: '/ap-eapcet/college-predictor/',
   tgPredictor: '/tg-eapcet/college-predictor/',
+  attendanceCalculator: '/tools/attendance-calculator/',
+  gpaCalculator: '/tools/gpa-calculator/',
+  roadmaps: '/engineering-roadmaps/',
 } as const;
 
 const getSeoLandingPath = () => {
@@ -397,6 +400,9 @@ const getSeoLandingPath = () => {
   if (path === SEO_LANDING_PATHS.tgAllotments.replace(/\/+$/, '')) return 'tgAllotments' as const;
   if (path === SEO_LANDING_PATHS.apPredictor.replace(/\/+$/, '')) return 'apPredictor' as const;
   if (path === SEO_LANDING_PATHS.tgPredictor.replace(/\/+$/, '')) return 'tgPredictor' as const;
+  if (path === SEO_LANDING_PATHS.attendanceCalculator.replace(/\/+$/, '')) return 'attendanceCalculator' as const;
+  if (path === SEO_LANDING_PATHS.gpaCalculator.replace(/\/+$/, '')) return 'gpaCalculator' as const;
+  if (path === SEO_LANDING_PATHS.roadmaps.replace(/\/+$/, '')) return 'roadmaps' as const;
   return null;
 };
 
@@ -407,6 +413,9 @@ export default function App() {
     if (seoPath === 'tgAllotments') return 'tg-allotments';
     if (seoPath === 'apPredictor') return 'ap-predictor';
     if (seoPath === 'tgPredictor') return 'tg-predictor';
+    if (seoPath === 'attendanceCalculator') return 'attendance';
+    if (seoPath === 'gpaCalculator') return 'gpa';
+    if (seoPath === 'roadmaps') return 'roadmaps';
     return 'hub';
   });
   const [utilitySubTab, setUtilitySubTab] = useState<ToolTab>('pdf-tools');
@@ -626,29 +635,45 @@ export default function App() {
     const seoPath = getSeoLandingPath();
     if (!seoPath) return;
 
-    const config = seoPath === 'apAllotments'
-      ? {
-          title: 'AP EAPCET 2026 College-Wise Allotments | Naa College',
-          description: 'Explore AP EAPCET 2026 engineering allotment records by college and branch with the Naa College allotment explorer.',
-          canonical: 'https://naacollege.in/ap-eapcet/college-wise-allotments/',
-        }
-      : seoPath === 'tgAllotments'
-        ? {
-            title: 'TG EAPCET 2026 Name-Wise Seat Allotments | Naa College',
-            description: 'Search Telangana EAPCET 2026 final-phase engineering seat allotment records by student name, hall ticket, college and branch.',
-            canonical: 'https://naacollege.in/tg-eapcet/name-wise-allotments/',
-          }
-        : seoPath === 'apPredictor'
-          ? {
-              title: 'AP EAPCET College Predictor 2026 | Naa College',
-              description: 'Use the AP EAPCET 2026 College Predictor to explore college and branch options based on rank, category, gender, region and preferences.',
-              canonical: 'https://naacollege.in/ap-eapcet/college-predictor/',
-            }
-          : {
-              title: 'TG EAPCET College Predictor 2026 | Naa College',
-              description: 'Use the Telangana EAPCET 2026 College Predictor to explore college and branch options based on rank, category, gender, branch and preferences.',
-              canonical: 'https://naacollege.in/tg-eapcet/college-predictor/',
-            };
+    const metadata: Record<string, { title: string; description: string; canonical: string }> = {
+      apAllotments: {
+        title: 'AP EAPCET 2026 College-Wise Allotments | Naa College',
+        description: 'Explore AP EAPCET 2026 engineering allotment records by college and branch with the Naa College allotment explorer.',
+        canonical: 'https://naacollege.in/ap-eapcet/college-wise-allotments/',
+      },
+      tgAllotments: {
+        title: 'TG EAPCET 2026 Name-Wise Seat Allotments | Naa College',
+        description: 'Search Telangana EAPCET 2026 final-phase engineering seat allotment records by student name, hall ticket, college and branch.',
+        canonical: 'https://naacollege.in/tg-eapcet/name-wise-allotments/',
+      },
+      apPredictor: {
+        title: 'AP EAPCET College Predictor 2026 | Naa College',
+        description: 'Use the AP EAPCET 2026 College Predictor to explore college and branch options based on rank, category, gender, region and preferences.',
+        canonical: 'https://naacollege.in/ap-eapcet/college-predictor/',
+      },
+      tgPredictor: {
+        title: 'TG EAPCET College Predictor 2026 | Naa College',
+        description: 'Use the Telangana EAPCET 2026 College Predictor to explore college and branch options based on rank, category, gender, branch and preferences.',
+        canonical: 'https://naacollege.in/tg-eapcet/college-predictor/',
+      },
+      attendanceCalculator: {
+        title: 'Attendance Calculator & Bunk Planner | Naa College',
+        description: 'Calculate your current attendance, estimate how many classes you can miss, and find how many classes you need to attend to reach your target.',
+        canonical: 'https://naacollege.in/tools/attendance-calculator/',
+      },
+      gpaCalculator: {
+        title: 'CGPA, SGPA & Percentage Calculator | Naa College',
+        description: 'Use the Naa College GPA Hub to explore CGPA and percentage conversions and plan a target SGPA. Check your university rules before using results officially.',
+        canonical: 'https://naacollege.in/tools/gpa-calculator/',
+      },
+      roadmaps: {
+        title: 'Engineering Branch Roadmaps for B.Tech Students | Naa College',
+        description: 'Explore semester-by-semester engineering branch roadmaps with learning topics, project direction and career preparation guidance for B.Tech students.',
+        canonical: 'https://naacollege.in/engineering-roadmaps/',
+      },
+    };
+    const config = metadata[seoPath];
+    if (!config) return;
 
     document.title = config.title;
     const setMeta = (selector: string, content: string) => {
@@ -1016,6 +1041,78 @@ export default function App() {
               { href: '/tg-eapcet/name-wise-allotments/', label: 'TG Name-Wise Allotments' },
               { href: '/ap-eapcet/college-predictor/', label: 'AP EAPCET College Predictor' },
               { href: '/ap-eapcet/college-wise-allotments/', label: 'AP College-Wise Allotments' }
+            ]}
+          />
+        ) : getSeoLandingPath() === 'attendanceCalculator' ? (
+          <SeoLandingPage
+            eyebrow="Free Student Utility · Attendance"
+            title="Attendance Calculator & Bunk Planner"
+            description="Check your current attendance and explore how upcoming classes affect your percentage. Use the planner to estimate classes you may miss or classes you need to attend to reach your target, based on the values you enter."
+            tool={<AttendanceDefender />}
+            toolIntro="Enter your class totals and attendance details in the calculator below. Confirm your college's attendance policy before relying on a target."
+            howTo={[
+              'Enter the classes held and the classes you have attended, using the fields provided by the tool.',
+              'Review your current attendance percentage and the calculator’s estimate for your chosen target.',
+              'Use the result to plan ahead; class schedules and attendance rules can change.',
+              'Confirm the minimum attendance requirement with your own college before making attendance decisions.'
+            ]}
+            faqs={[
+              { question: 'Can this attendance calculator tell me how many classes I can miss?', answer: 'The tool estimates your attendance position from the inputs you provide and the target you select. Check your college’s attendance policy and actual attendance records before deciding to miss a class.' },
+              { question: 'Can I calculate how many classes I need to attend to reach 75%?', answer: 'You can use the calculator to explore a target percentage such as 75%, provided the required class totals are entered correctly. Your college may apply additional rules.' },
+              { question: 'Is the result an official attendance record?', answer: 'No. It is a planning estimate, not an official college attendance record.' }
+            ]}
+            relatedLinks={[
+              { href: '/tools/gpa-calculator/', label: 'CGPA & SGPA Calculator' },
+              { href: '/engineering-roadmaps/', label: 'Engineering Roadmaps' },
+              { href: '/#attendance', label: 'Attendance Tool in Feature Hub' }
+            ]}
+          />
+        ) : getSeoLandingPath() === 'gpaCalculator' ? (
+          <SeoLandingPage
+            eyebrow="Free Student Utility · Marks & GPA"
+            title="CGPA, SGPA & Percentage Calculator"
+            description="Use the Naa College GPA Hub to explore CGPA-to-percentage conversions and plan future SGPA targets. Conversion rules differ between universities, so check your institution's official formula before using a result in an application."
+            tool={<GlobalGpaHub onNavigateToStore={() => handleSelectWorkspace('essentials')} />}
+            toolIntro="Choose the relevant GPA function and enter your values to explore the result."
+            howTo={[
+              'Choose the conversion or target-planning option that matches your task.',
+              'Enter your CGPA, SGPA or other requested values in the calculator.',
+              'Review the displayed result and the formula shown by the tool where available.',
+              'Verify the applicable conversion formula with your university before using a result officially.'
+            ]}
+            faqs={[
+              { question: 'Can I convert CGPA into percentage?', answer: 'The GPA Hub supports selected conversion formulas. The correct formula depends on your university or board, so confirm the applicable rule before using the result officially.' },
+              { question: 'Can I plan a target SGPA for a future semester?', answer: 'The GPA Hub includes target-planning functionality intended to help you explore the score needed for a selected academic goal.' },
+              { question: 'Is one CGPA conversion formula valid for every university?', answer: 'No. Institutions may prescribe different conversion rules. Use the official formula applicable to your course and university.' }
+            ]}
+            relatedLinks={[
+              { href: '/tools/attendance-calculator/', label: 'Attendance Calculator' },
+              { href: '/engineering-roadmaps/', label: 'Engineering Roadmaps' },
+              { href: '/#gpa', label: 'GPA Hub in Feature Hub' }
+            ]}
+          />
+        ) : getSeoLandingPath() === 'roadmaps' ? (
+          <SeoLandingPage
+            eyebrow="B.Tech Learning Guide · Branch Roadmaps"
+            title="Engineering Branch Roadmaps for B.Tech Students"
+            description="Explore semester-by-semester engineering branch roadmaps in Naa College. Use the available branch plans to organise learning topics, projects and career preparation alongside your college syllabus."
+            tool={<EngineeringRoadmaps />}
+            toolIntro="Select your engineering branch and explore the roadmap content available in the tool."
+            howTo={[
+              'Open the roadmap tool and select the engineering branch relevant to you.',
+              'Review the semester-wise topics and suggested learning sequence available for that branch.',
+              'Use project and skill suggestions to plan practical work alongside your college subjects.',
+              'Adapt the roadmap to your curriculum, available time and goals instead of treating it as a fixed guarantee.'
+            ]}
+            faqs={[
+              { question: 'Are the roadmaps suitable for B.Tech students?', answer: 'The roadmap hub is designed to help engineering students organise learning topics, projects and career preparation across their degree.' },
+              { question: 'Do all engineering branches use the same roadmap?', answer: 'No. The tool is organised around branch-specific roadmap options, so the available topics can differ by branch.' },
+              { question: 'Does following a roadmap guarantee an internship or placement?', answer: 'No. A roadmap is a planning aid. Outcomes depend on many factors, including practice, projects, eligibility, opportunities and hiring conditions.' }
+            ]}
+            relatedLinks={[
+              { href: '/tools/gpa-calculator/', label: 'CGPA & SGPA Calculator' },
+              { href: '/tools/attendance-calculator/', label: 'Attendance Calculator' },
+              { href: '/#roadmaps', label: 'Roadmaps in Feature Hub' }
             ]}
           />
         ) : activeWorkspace === 'hub' ? (
