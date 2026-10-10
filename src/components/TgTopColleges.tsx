@@ -168,7 +168,7 @@ function DetailsModal({ row, onClose }: { row: TgTopCollegeRow; onClose: () => v
         >
           <div className="flex items-start justify-between gap-4">
             <div>
-              <span className="text-[10px] font-black uppercase tracking-[0.18em] text-sky-600 dark:text-sky-300">Man of Study • Data Analysis</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.18em] text-sky-600 dark:text-sky-300">Naa College • Data Analysis</span>
               <h2 className="mt-2 text-xl font-black text-slate-950 dark:text-white">{row.collegeName}</h2>
               <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{row.collegeCode} • {row.branchName} • {row.district}</p>
             </div>
