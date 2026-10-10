@@ -2162,7 +2162,7 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
             Official Assessment Certificate
           </div>
           <div className="text-base text-slate-800 leading-relaxed">
-            This is to certify that <span className="font-black text-slate-950 underline decoration-slate-400 underline-offset-4">{candidateProfile?.fullName || 'Verified Candidate'}</span> has achieved <span className="font-black text-slate-950 text-xl">{scoreReport.totalScore}</span> / <span className="font-bold text-slate-700">{160} Marks</span> in the <span className="font-extrabold text-blue-900">{selectedExamId === 'ap-eapcet' ? 'AP EAPCET 2026' : 'TG EAPCET 2026'} Full-Length Grand Test</span> conducted by Man of Study.
+            This is to certify that <span className="font-black text-slate-950 underline decoration-slate-400 underline-offset-4">{candidateProfile?.fullName || 'Verified Candidate'}</span> has achieved <span className="font-black text-slate-950 text-xl">{scoreReport.totalScore}</span> / <span className="font-bold text-slate-700">{160} Marks</span> in the <span className="font-extrabold text-blue-900">{selectedExamId === 'ap-eapcet' ? 'AP EAPCET 2026' : 'TG EAPCET 2026'} Full-Length Grand Test</span> conducted by Naa College.
           </div>
         </div>
 
