@@ -71,29 +71,31 @@ function escapeAttribute(value) {
 function setMeta(html, attribute, key, content) {
   const safeContent = escapeAttribute(content);
   const tagPattern = new RegExp(
-    '<meta\\b(?=[^>]*\\b' + attribute + '=["\\']' + key.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&') + '["\\'])[^>]*>',
-    'i'
+    "<meta\\b(?=[^>]*\\b" + attribute + "=[\"']" + key + "[\"'])[^>]*>",
+    "i"
   );
   const existing = html.match(tagPattern);
   const replacement = existing
-    ? (existing[0].includes('content=')
-      ? existing[0].replace(/\\bcontent=(["'])[^"']*\\1/i, 'content="' + safeContent + '"')
-      : existing[0].replace(/\\s*\\/?>(?=$)/, ' content="' + safeContent + '">'))
+    ? existing[0].replace(/\bcontent=(["'])[^"']*\1/i, 'content="' + safeContent + '"')
     : '<meta ' + attribute + '="' + key + '" content="' + safeContent + '" />';
-  return existing ? html.replace(tagPattern, replacement) : html.replace('</head>', '    ' + replacement + '\\n  </head>');
+  return existing
+    ? html.replace(tagPattern, replacement)
+    : html.replace('</head>', '    ' + replacement + '\n  </head>');
 }
 
 function setCanonical(html, url) {
   const safeUrl = escapeAttribute(url);
-  const pattern = /<link\\b(?=[^>]*\\brel=["']canonical["'])[^>]*>/i;
+  const pattern = /<link\b(?=[^>]*\brel=["']canonical["'])[^>]*>/i;
   const replacement = '<link rel="canonical" href="' + safeUrl + '" />';
-  return pattern.test(html) ? html.replace(pattern, replacement) : html.replace('</head>', '    ' + replacement + '\\n  </head>');
+  return pattern.test(html)
+    ? html.replace(pattern, replacement)
+    : html.replace('</head>', '    ' + replacement + '\n  </head>');
 }
 
 function buildRouteHtml(route) {
   const canonical = 'https://naacollege.in' + route.path;
   let html = baseHtml;
-  html = html.replace(/<title>[^<]*<\\/title>/i, '<title>' + escapeAttribute(route.title) + '</title>');
+  html = html.replace(/<title>[^<]*<\/title>/i, '<title>' + escapeAttribute(route.title) + '</title>');
   html = setMeta(html, 'name', 'description', route.description);
   html = setMeta(html, 'property', 'og:title', route.title);
   html = setMeta(html, 'property', 'og:description', route.description);
@@ -103,7 +105,7 @@ function buildRouteHtml(route) {
   html = setMeta(html, 'name', 'twitter:url', canonical);
   html = setCanonical(html, canonical);
 
-  const routeDir = path.join(distDir, route.path.replace(/^\\/+|\\/+$/g, ''));
+  const routeDir = path.join(distDir, route.path.replace(/^\/+|\/+$/g, ''));
   fs.mkdirSync(routeDir, { recursive: true });
   fs.writeFileSync(path.join(routeDir, 'index.html'), html, 'utf8');
 
