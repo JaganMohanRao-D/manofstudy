@@ -118,7 +118,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
 
         <div className="mos-k-content">
           <div className="mos-k-meta">
-            <span><strong>MAN OF STUDY</strong> / STUDENT PLATFORM</span>
+            <span><strong>NAA COLLEGE</strong> / STUDENT PLATFORM</span>
             <span>AP + TG / 2026</span>
           </div>
 
@@ -138,7 +138,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
               </p>
 
               <button type="button" className="mos-k-cta" onClick={scrollToTools}>
-                Explore Man of Study <ArrowDownRight size={15} />
+                Explore Naa College <ArrowDownRight size={15} />
               </button>
 
               <div className="mos-k-index" aria-label="Homepage sections">
@@ -186,11 +186,11 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         <FeaturesHub activeWorkspace={activeWorkspace} onSelectWorkspace={onSelectWorkspace} />
       </div>
 
-      <section className="mos-k-section" aria-label="Man of Study principles">
+      <section className="mos-k-section" aria-label="Naa College principles">
         <div className="grid gap-10 md:grid-cols-3">
           <div><div className="mos-k-section-label">02 / Data</div><h2 className="mt-5 font-['Syne'] text-3xl font-bold">Useful data.<br/>Clear context.</h2><p className="mt-4 text-xs leading-6 text-[#858990]">AP and Telangana counselling tools are organised around the questions students actually ask.</p></div>
           <div><div className="mos-k-section-label">03 / Access</div><h2 className="mt-5 font-['Syne'] text-3xl font-bold">Built for<br/>students.</h2><p className="mt-4 text-xs leading-6 text-[#858990]">Most tools work directly in the browser, keeping common student tasks quick and accessible.</p></div>
-          <div><div className="mos-k-section-label">04 / Future</div><h2 className="mt-5 font-['Syne'] text-3xl font-bold">Keep<br/>building.</h2><p className="mt-4 text-xs leading-6 text-[#858990]">Man of Study keeps evolving as new student needs, data and practical resources become available.</p></div>
+          <div><div className="mos-k-section-label">04 / Future</div><h2 className="mt-5 font-['Syne'] text-3xl font-bold">Keep<br/>building.</h2><p className="mt-4 text-xs leading-6 text-[#858990]">Naa College keeps evolving as new student needs, data and practical resources become available.</p></div>
         </div>
       </section>
     </main>
