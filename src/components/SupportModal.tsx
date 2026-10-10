@@ -62,8 +62,8 @@ const CONTRIBUTION_TIERS: ContributionTier[] = [
     id: 'tier-any',
     amount: null,
     label: 'Any',
-    category: 'Keep MOS Growing',
-    description: 'Voluntary contribution to keep MAN OF STUDY open, ad-free & updated.',
+    category: 'Keep Naa College Growing',
+    description: 'Voluntary contribution to keep NAA COLLEGE open, ad-free & updated.',
     icon: Sparkles,
     tag: 'Open Support',
   },
@@ -215,7 +215,7 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
           </div>
 
           <h2 id="support-modal-title" className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight leading-snug">
-            Support MAN OF STUDY Development
+            Support NAA COLLEGE Development
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
             Every dataset, rank predictor, and student tool on this platform is built independently. Voluntary contributions help cover practical technical costs.
