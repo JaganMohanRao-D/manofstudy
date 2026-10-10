@@ -78,9 +78,19 @@
 .mos-k-cursor.is-active .mos-k-cursor-ring{animation:mkCursorMechanical 1.8s steps(8,end) infinite}
 @keyframes mkCursorMechanical{0%,100%{margin-left:0;margin-top:0}25%{margin-left:2px;margin-top:-1px}50%{margin-left:-1px;margin-top:2px}75%{margin-left:1px;margin-top:1px}}
 @media(max-width:800px){
- .mos-k-hero{min-height:calc(100svh - 60px);cursor:auto} .mos-k-hero button,.mos-k-hero a{cursor:pointer} .mos-k-cursor{display:none} .mos-k-content{min-height:calc(100svh - 60px);padding:1.5rem 1rem 1rem}
- .mos-k-meta{font-size:8px}.mos-k-title{font-size:clamp(3.4rem,15vw,6rem);margin:8vh 0}
- .mos-k-bottom{grid-template-columns:1fr;gap:1.5rem}.mos-k-cta{justify-self:start}.mos-k-index{display:none}
+ .mos-k-hero{min-height:0;cursor:auto}
+ .mos-k-hero button,.mos-k-hero a{cursor:pointer}
+ .mos-k-cursor{display:none}
+ .mos-k-content{min-height:0;justify-content:flex-start;gap:clamp(2.25rem,6vh,3.25rem);padding:1.25rem 1rem 1.5rem}
+ .mos-k-meta{display:flex;flex-wrap:wrap;align-items:flex-start;gap:.45rem 1rem;font-size:clamp(7px,2vw,9px);line-height:1.6;letter-spacing:.1em}
+ .mos-k-meta span{min-width:0;max-width:100%}
+ .mos-k-title{width:100%;max-width:100%;font-size:clamp(2.7rem,12.5vw,4.25rem);line-height:.86;letter-spacing:-.065em;margin:0;transform:none;overflow-wrap:normal}
+ .mos-k-title span{max-width:100%}
+ .mos-k-title .accent{white-space:nowrap}
+ .mos-k-bottom{grid-template-columns:minmax(0,1fr);gap:1.1rem;min-width:0}
+ .mos-k-copy{max-width:42rem;font-size:clamp(12px,3.2vw,13px);line-height:1.8}
+ .mos-k-cta{justify-self:start;display:inline-flex;max-width:100%;width:fit-content;flex-wrap:nowrap;gap:8px;padding:12px 14px;font-size:10px;letter-spacing:.06em}
+ .mos-k-index{display:none}
  .mos-k-tool-grid{grid-template-columns:1fr}.mos-k-section-head{display:block}.mos-k-section-label{margin-top:1rem}
 }
 @media(prefers-reduced-motion:reduce){.mos-k-glow,.mos-k-orb{animation:none!important}.mos-k-cta{transition:none}}
