@@ -358,7 +358,7 @@ export default function ApTopColleges({ onSelectCollegeBranch }) {
             Methodology note: College-level rank comparisons use observed OC-category allotment ranks as a standardized comparison cohort. This does not indicate that any category or community is better or worse than another. Category-specific allotment information remains available separately in the College Predictor using the category selected by the user. All figures are historical observations from the available 2026 allotment dataset and are not guarantees of future admission.
           </p>
           <p className="text-[11px] text-slate-500 dark:text-slate-400">
-            Data source: AP EAPCET 2026 allotment records available in the Man of Study dataset, based on official AP EAPCET/APSHE counselling information. An allotment record represents an observed allotment in the dataset and should not automatically be interpreted as confirmed joining/reporting.
+            Data source: AP EAPCET 2026 allotment records available in the Naa College dataset, based on official AP EAPCET/APSHE counselling information. An allotment record represents an observed allotment in the dataset and should not automatically be interpreted as confirmed joining/reporting.
           </p>
         </section>
       </div>

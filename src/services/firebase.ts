@@ -30,7 +30,7 @@ import {
 } from 'firebase/firestore';
 import firebaseAppletConfig from '../../firebase-applet-config.json';
 
-// Official dedicated Firebase credentials for Man of Study
+// Official dedicated Firebase credentials for Naa College
 export const firebaseConfig = {
   ...firebaseAppletConfig,
   apiKey: firebaseAppletConfig.apiKey || "AIzaSyAi1z2yWqdDXzeip3TUC37huvsChqK8Lqo",
@@ -508,7 +508,7 @@ export async function saveCampusPostToFirestore(postData: {
   const publicDisplayName = isAnon ? 'Anonymous Student' : actualGoogleName;
 
   // Strict anti-spoofing check
-  if (!isAnon && publicAuthorName.toLowerCase().includes('man of study admin')) {
+  if (!isAnon && publicAuthorName.toLowerCase().includes('Naa College admin')) {
     throw new Error('Reserved identity: You cannot use the admin name.');
   }
 
@@ -564,7 +564,7 @@ export async function saveCampusReplyToFirestore(
   const publicDisplayName = isAnon ? 'Anonymous Student' : actualGoogleName;
 
   // Anti-spoofing check
-  if (!isAnon && publicAuthorName.toLowerCase().includes('man of study admin')) {
+  if (!isAnon && publicAuthorName.toLowerCase().includes('Naa College admin')) {
     throw new Error('Reserved identity: You cannot use the admin name.');
   }
 
