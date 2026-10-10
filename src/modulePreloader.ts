@@ -4,6 +4,7 @@
 
 const loaders: Record<string, () => Promise<unknown>> = {
   'AP EAPCET College Predictor': () => import('./components/ApCollegePredictor'),
+  'AP EAPCET Rank Predictor': () => import('./components/ApEapcetRankPredictor'),
   'TG EAPCET College Predictor': () => import('./components/TgCollegePredictor'),
   'AP EAPCET Top B.Tech Colleges': () => import('./components/ApTopColleges'),
   'Top B.Tech Colleges in Telangana': () => import('./components/TgTopColleges'),
