@@ -97,7 +97,7 @@
     object-position: center center !important;
   }
 
-  /* Mobile: completely remove the desktop-only Man of Study Navigator.
+  /* Mobile: completely remove the desktop-only Naa College Navigator.
      Desktop layout is intentionally untouched. */
   #hero-banner [class*="lg:pl-2"] {
     display: none !important;
