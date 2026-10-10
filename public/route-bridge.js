@@ -218,7 +218,7 @@
      Use only public/Naa%20College%20logo.webp as the canonical brand asset.
      ================================================================ */
   var MOS_LOGO_PATH = '/Naa%20College%20logo.webp';
-  var MOS_SITE_URL = 'https://manofstudy.pages.dev';
+  var MOS_SITE_URL = '/';
 
   function replaceLegacyLogoImages(root) {
     var scope = root || document;
@@ -241,7 +241,7 @@
       brand.setAttribute('aria-label', 'NAA COLLEGE home');
       brand.onclick = function (event) {
         event.preventDefault();
-        window.location.assign(MOS_SITE_URL);
+        window.location.assign('/');
       };
     }
   }
@@ -255,7 +255,7 @@
       parent.setAttribute('data-mos-logo-link', 'true');
       parent.style.cursor = 'pointer';
       parent.addEventListener('click', function () {
-        window.location.assign(MOS_SITE_URL);
+        window.location.assign('/');
       });
     });
   }
