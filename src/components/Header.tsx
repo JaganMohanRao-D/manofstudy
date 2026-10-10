@@ -85,7 +85,7 @@ export const Header: React.FC<HeaderProps> = ({ activeWorkspace = 'hub', onSelec
             <img src="/Naa%20College%20logo.webp" alt="" width="40" height="40" className="h-full w-full object-contain transition-transform duration-200 group-hover:scale-105" loading="eager" />
           </span>
           <span className="min-w-0 sm:block">
-            <span className="mos-brand-wordmark block whitespace-nowrap text-[17px] font-black tracking-[-0.03em] text-white sm:text-[19px]">Man Of Study</span>
+            <span className="mos-brand-wordmark block whitespace-nowrap text-[17px] font-black tracking-[-0.03em] text-white sm:text-[19px]">Naa College</span>
             <span className="mos-brand-tagline block whitespace-nowrap text-[9px] font-medium tracking-[0.08em] text-slate-500 uppercase">Student utility platform</span>
           </span>
         </button>
