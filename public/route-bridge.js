@@ -390,11 +390,11 @@
     if (!card) return;
     var brand = document.createElement('div');
     brand.setAttribute('data-mos-scorecard-brand', 'true');
-    brand.style.cssText = 'display:flex;align-items:center;gap:12px;padding:4px 0 12px;border-bottom:1px solid #e2e8f0;margin-bottom:2px;';
+    brand.style.cssText = 'display:flex;align-items:center;gap:14px;padding:8px 0 16px;border-bottom:1px solid #e2e8f0;margin-bottom:4px;';
     brand.innerHTML = `
-      <a href="${MOS_SITE_URL}" aria-label="NAA COLLEGE home" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;">
-        <img src="${MOS_LOGO_PATH}" alt="NAA COLLEGE logo" width="48" height="48" style="width:48px;height:48px;object-fit:contain;display:block;" />
-        <span><strong style="display:block;font-size:14px;letter-spacing:.02em;">NAA COLLEGE</strong><small style="display:block;color:#64748b;font-size:10px;">Student Practice Scorecard</small></span>
+      <a href="${MOS_SITE_URL}" aria-label="NAA COLLEGE home" style="display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;">
+        <img src="${MOS_LOGO_PATH}" alt="NAA COLLEGE logo" width="64" height="64" style="width:64px;height:64px;object-fit:contain;display:block;" />
+        <span><strong style="display:block;font-size:19px;letter-spacing:.02em;">NAA COLLEGE</strong><small style="display:block;color:#64748b;font-size:11px;">Student Practice Scorecard · naacollege.in</small></span>
       </a>
     `;
     card.insertBefore(brand, card.firstChild);
@@ -428,6 +428,18 @@
     var button = target.closest('button');
     if (!button) return;
     var text = (button.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    /* Use the document title as the suggested PDF filename for both mock-test scorecards. */
+    if (text.indexOf('scorecard') !== -1 && text.indexOf('download pdf') !== -1) {
+      event.preventDefault();
+      event.stopPropagation();
+      if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+      var originalTitle = document.title;
+      document.title = 'naacollege-mocktest_scorecard';
+      window.print();
+      document.title = originalTitle;
+      return;
+    }
+
     if (text.indexOf('download pdf') !== -1 && text.indexOf('web options') !== -1) {
       event.preventDefault();
       event.stopPropagation();
