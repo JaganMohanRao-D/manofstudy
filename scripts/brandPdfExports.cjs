@@ -11,7 +11,7 @@ function patchRoadmapGenerator() {
 
   source = source.replace(
     "import { BranchRoadmap } from '../types';\n",
-    "import { BranchRoadmap } from '../types';\n\n/* MOS_BRANDED_ROADMAP_PDF_V1 */\nconst MOS_ROADMAP_LOGO_URL = '/MANOFSTUDY_LOGO.png';\nconst MOS_ROADMAP_SITE_URL = 'https://manofstudy.pages.dev';\n\nasync function loadMosRoadmapLogo(): Promise<string | null> {\n  try {\n    const response = await fetch(MOS_ROADMAP_LOGO_URL);\n    if (!response.ok) return null;\n    const blob = await response.blob();\n    return await new Promise((resolve) => {\n      const reader = new FileReader();\n      reader.onloadend = () => resolve(typeof reader.result === 'string' ? reader.result : null);\n      reader.onerror = () => resolve(null);\n      reader.readAsDataURL(blob);\n    });\n  } catch {\n    return null;\n  }\n}\n"
+    "import { BranchRoadmap } from '../types';\n\n/* MOS_BRANDED_ROADMAP_PDF_V1 */\nconst MOS_ROADMAP_LOGO_URL = '/Naa%20College%20logo.webp';\nconst MOS_ROADMAP_SITE_URL = 'https://manofstudy.pages.dev';\n\nasync function loadMosRoadmapLogo(): Promise<string | null> {\n  try {\n    const response = await fetch(MOS_ROADMAP_LOGO_URL);\n    if (!response.ok) return null;\n    const blob = await response.blob();\n    return await new Promise((resolve) => {\n      const reader = new FileReader();\n      reader.onloadend = () => resolve(typeof reader.result === 'string' ? reader.result : null);\n      reader.onerror = () => resolve(null);\n      reader.readAsDataURL(blob);\n    });\n  } catch {\n    return null;\n  }\n}\n"
   );
 
   source = source.replace(
@@ -31,7 +31,7 @@ function patchRoadmapGenerator() {
 
   source = source.replace(
     "  // Cyan dot\n  doc.setFillColor(6, 182, 212);\n  doc.circle(marginLeft + 4.0, coverY + 3.5, 1.2, 'F');",
-    "  // Canonical Man of Study logo — loaded from public/MANOFSTUDY_LOGO.png.\n  // The logo itself is a clickable PDF link to the live Man of Study website.\n  if (mosLogoDataUrl) {\n    doc.addImage(mosLogoDataUrl, 'PNG', marginLeft + 1.2, coverY + 0.75, 5.5, 5.5, undefined, 'FAST');\n    doc.link(marginLeft + 1.0, coverY + 0.5, 6.0, 6.0, { url: TARGET_URL });\n  } else {\n    doc.setFillColor(6, 182, 212);\n    doc.circle(marginLeft + 4.0, coverY + 3.5, 1.2, 'F');\n  }"
+    "  // Canonical Naa College logo — loaded from public/Naa%20College%20logo.webp.\n  // The logo itself is a clickable PDF link to the live Naa College website.\n  if (mosLogoDataUrl) {\n    doc.addImage(mosLogoDataUrl, 'PNG', marginLeft + 1.2, coverY + 0.75, 5.5, 5.5, undefined, 'FAST');\n    doc.link(marginLeft + 1.0, coverY + 0.5, 6.0, 6.0, { url: TARGET_URL });\n  } else {\n    doc.setFillColor(6, 182, 212);\n    doc.circle(marginLeft + 4.0, coverY + 3.5, 1.2, 'F');\n  }"
   );
 
   fs.writeFileSync(file, source, 'utf8');
