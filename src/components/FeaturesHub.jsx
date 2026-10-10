@@ -155,6 +155,17 @@ export const WORKSPACES = [
     iconBg: 'bg-sky-500/10 border-sky-500/30 text-sky-400',
   },
   {
+    id: 'ws-ap-rank-predictor',
+    workspace: 'ap-rank-predictor',
+    category: 'admissions',
+    title: 'AP EAPCET Rank Predictor',
+    badge: 'RANK ESTIMATE',
+    description: 'Estimate an AP EAPCET rank range using subject marks and Intermediate/board marks with the supplied weighting and rank anchors.',
+    actionText: 'Predict Rank',
+    icon: Award,
+    iconBg: 'bg-lime-500/10 border-lime-500/30 text-lime-400',
+  },
+  {
     id: 'ws-eapcet',
     workspace: 'eapcet',
     category: 'admissions',
