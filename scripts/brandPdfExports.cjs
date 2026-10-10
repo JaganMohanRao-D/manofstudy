@@ -11,7 +11,7 @@ function patchRoadmapGenerator() {
 
   source = source.replace(
     "import { BranchRoadmap } from '../types';\n",
-    "import { BranchRoadmap } from '../types';\n\n/* MOS_BRANDED_ROADMAP_PDF_V1 */\nconst MOS_ROADMAP_LOGO_URL = '/Naa%20College%20logo.webp';\nconst MOS_ROADMAP_SITE_URL = 'https://manofstudy.pages.dev';\n\nasync function loadMosRoadmapLogo(): Promise<string | null> {\n  try {\n    const response = await fetch(MOS_ROADMAP_LOGO_URL);\n    if (!response.ok) return null;\n    const blob = await response.blob();\n    return await new Promise((resolve) => {\n      const reader = new FileReader();\n      reader.onloadend = () => resolve(typeof reader.result === 'string' ? reader.result : null);\n      reader.onerror = () => resolve(null);\n      reader.readAsDataURL(blob);\n    });\n  } catch {\n    return null;\n  }\n}\n"
+    "import { BranchRoadmap } from '../types';\n\n/* MOS_BRANDED_ROADMAP_PDF_V1 */\nconst MOS_ROADMAP_LOGO_URL = '/Naa%20College%20logo.webp';\nconst MOS_ROADMAP_SITE_URL = 'https://naacollege.in/';\n\nasync function loadMosRoadmapLogo(): Promise<string | null> {\n  try {\n    const response = await fetch(MOS_ROADMAP_LOGO_URL);\n    if (!response.ok) return null;\n    const blob = await response.blob();\n    return await new Promise((resolve) => {\n      const reader = new FileReader();\n      reader.onloadend = () => resolve(typeof reader.result === 'string' ? reader.result : null);\n      reader.onerror = () => resolve(null);\n      reader.readAsDataURL(blob);\n    });\n  } catch {\n    return null;\n  }\n}\n"
   );
 
   source = source.replace(
@@ -20,7 +20,7 @@ function patchRoadmapGenerator() {
   );
 
   source = source.replace(
-    "  const TARGET_URL = 'https://manofstudy.com';",
+    "  const TARGET_URL = 'https://naacollege.in/';",
     "  const TARGET_URL = MOS_ROADMAP_SITE_URL;"
   );
 
