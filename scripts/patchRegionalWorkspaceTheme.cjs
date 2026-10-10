@@ -211,7 +211,7 @@ fs.writeFileSync(file, source, 'utf8');
 // Keep the standalone stylesheet consistent with the runtime-injected regional UI.
 const cssFile = path.join(root, 'public', 'regional-visual-fix.css');
 if (fs.existsSync(cssFile)) {
-  const css = `/* Man of Study — AP/TG regional workspace visual and light theme. */
+  const css = `/* Naa College — AP/TG regional workspace visual and light theme. */
 #workspace-viewport { position: relative !important; }
 
 body.mos-regional-light #workspace-viewport { background:#f5f7fb !important; color:#172033 !important; }
@@ -223,7 +223,7 @@ body.mos-regional-light #workspace-viewport:has(#mos-regional-workspace-visual) 
   padding-top:42px !important;
   box-sizing:border-box !important;
 }
-body.mos-regional-light #workspace-viewport:has(#mos-regional-workspace-visual) header button[title="Return to MAN OF STUDY Feature Hub"] {
+body.mos-regional-light #workspace-viewport:has(#mos-regional-workspace-visual) header button[title="Return to Naa College Feature Hub"] {
   position:absolute !important;
   top:20px !important;
   left:24px !important;
@@ -290,7 +290,7 @@ body.mos-regional-light #workspace-viewport:has(#mos-regional-workspace-visual) 
     padding-top:42px !important;
     padding-bottom:132px !important;
   }
-  body.mos-regional-light #workspace-viewport:has(#mos-regional-workspace-visual) header button[title="Return to MAN OF STUDY Feature Hub"] {
+  body.mos-regional-light #workspace-viewport:has(#mos-regional-workspace-visual) header button[title="Return to Naa College Feature Hub"] {
     top:14px !important;
     left:16px !important;
     max-width:calc(100% - 32px) !important;
