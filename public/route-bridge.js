@@ -428,15 +428,50 @@
     var button = target.closest('button');
     if (!button) return;
     var text = (button.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
-    /* Use the document title as the suggested PDF filename for both mock-test scorecards. */
+    /* Print a standalone copy of the dedicated scorecard sheet so the browser can
+       paginate the full report instead of clipping an absolutely positioned page. */
     if (text.indexOf('scorecard') !== -1 && text.indexOf('download pdf') !== -1) {
       event.preventDefault();
       event.stopPropagation();
       if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+
+      var sourceSheet = document.getElementById('certificate-print-sheet');
       var originalTitle = document.title;
       document.title = 'naacollege-mocktest_scorecard';
-      window.print();
-      document.title = originalTitle;
+
+      if (!sourceSheet) {
+        /* Keep the legacy browser-print fallback for scorecards without a dedicated sheet. */
+        window.print();
+        document.title = originalTitle;
+        return;
+      }
+
+      var printSheet = sourceSheet.cloneNode(true);
+      printSheet.id = 'certificate-print-sheet';
+      printSheet.setAttribute('data-mos-scorecard-print-clone', 'true');
+      printSheet.style.display = 'block';
+      document.body.classList.add('mos-scorecard-print-document');
+      document.body.appendChild(printSheet);
+
+      var cleanedUp = false;
+      var cleanupScorecardPrint = function () {
+        if (cleanedUp) return;
+        cleanedUp = true;
+        window.removeEventListener('afterprint', cleanupScorecardPrint);
+        if (printSheet.parentNode) printSheet.parentNode.removeChild(printSheet);
+        document.body.classList.remove('mos-scorecard-print-document');
+        document.title = originalTitle;
+      };
+
+      window.addEventListener('afterprint', cleanupScorecardPrint);
+      /* Fallback for browsers that do not dispatch afterprint reliably. */
+      window.setTimeout(cleanupScorecardPrint, 60000);
+      try {
+        window.print();
+      } catch (error) {
+        cleanupScorecardPrint();
+        throw error;
+      }
       return;
     }
 
