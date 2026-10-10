@@ -346,7 +346,11 @@ const SiteUxFixes: React.FC = () => {
       .mos-tools-dropdown a:focus-visible { outline:2px solid #22d3ee; outline-offset:-2px; }
       .mos-header-secondary-controls { display:flex !important; align-items:center; gap:6px; }
       #header-gap-analyzer-trigger { display:none !important; }
-      #header-command-palette-trigger, #header-support-btn { display:flex !important; }
+      #header-command-palette-trigger { display:none !important; }
+      #header-support-btn { display:flex !important; }
+      @media (min-width:1024px) {
+        #header-command-palette-trigger { display:flex !important; }
+      }
       #tier2-secondary-feature-strip { display:none !important; }
       #ws-mock-tests[data-mos-hidden-mock-test="true"], #ws-eapcet-cbt[data-mos-hidden-mock-test="true"] { display:none !important; }
       #mos-featurehub-mock-shortcut {
@@ -457,15 +461,16 @@ const SiteUxFixes: React.FC = () => {
       }
       @media (max-width:760px) {
         #main-header > div:first-child { min-height:60px !important; height:auto !important; padding-top:7px !important; padding-bottom:7px !important; }
-        #brand-logo { gap:6px !important; max-width:180px; }
+        #brand-logo { flex:0 1 auto !important; min-width:0 !important; max-width:calc(100% - 78px) !important; gap:6px !important; }
+        #brand-logo > span:last-child { min-width:0 !important; }
         .mos-brand-mark { width:30px; height:30px; border-radius:8px; }
-        .mos-brand-wordmark { font-size:14px; letter-spacing:-0.06em; }
-        .mos-brand-tagline { font-size:7px; }
-        #mos-compact-header-nav { justify-content:flex-start; gap:0; padding:0 2px; }
-        .mos-header-link { font-size:10px; padding:8px 5px; }
-        .mos-tools-dropdown { position:fixed; top:58px; right:8px; width:min(270px,calc(100vw - 16px)); max-height:65vh; }
-        #header-command-palette-trigger { width:34px !important; height:34px !important; padding:7px !important; }
-        #header-support-btn { width:34px !important; height:34px !important; padding:0 !important; display:inline-flex !important; align-items:center !important; justify-content:center !important; }
+        .mos-brand-wordmark { max-width:100%; overflow:hidden; text-overflow:ellipsis; font-size:clamp(11px,3.5vw,14px); letter-spacing:-0.06em; }
+        .mos-brand-tagline { max-width:100%; overflow:hidden; text-overflow:clip; font-size:clamp(6px,1.8vw,7px); letter-spacing:.06em; }
+        #mos-compact-header-nav { display:none !important; }
+        #main-header > div:first-child { gap:8px !important; }
+        #main-header > div:first-child > div:last-child { flex:0 0 auto !important; flex-shrink:0 !important; gap:6px !important; }
+        #header-hamburger-drawer-btn, #header-support-btn { width:34px !important; height:34px !important; min-width:34px !important; flex:0 0 34px !important; padding:0 !important; display:inline-flex !important; align-items:center !important; justify-content:center !important; }
+        #header-command-palette-trigger { display:none !important; }
         #header-support-btn span { display:none !important; }
         #header-hamburger-drawer-btn { padding:7px !important; }
         #mos-featurehub-mock-shortcut { margin-bottom:12px; padding:12px 13px; border-radius:16px; }
@@ -473,13 +478,10 @@ const SiteUxFixes: React.FC = () => {
         #student-faq-section button { min-height:48px !important; }
       }
       @media (max-width:520px) {
-        #brand-logo { max-width:180px; }
-        .mos-brand-wordmark { font-size:13px; }
+        #brand-logo { max-width:calc(100% - 78px) !important; }
         .mos-brand-mark { width:28px; height:28px; }
-        #mos-compact-header-nav { flex:1 1 auto; min-width:0; }
-        .mos-header-link { font-size:9px; padding:7px 4px; }
-        #header-command-palette-trigger { display:flex !important; }
-        #header-support-btn { display:flex !important; width:34px !important; height:34px !important; padding:0 !important; }
+        #header-command-palette-trigger { display:none !important; }
+        #header-support-btn { display:inline-flex !important; width:34px !important; height:34px !important; padding:0 !important; }
       }
       @media (prefers-reduced-motion:reduce) {
         #mos-featurehub-mock-shortcut,.mos-header-link,.mos-tools-dropdown { transition:none !important; }
