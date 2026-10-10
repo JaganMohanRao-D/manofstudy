@@ -1580,7 +1580,7 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
       <div id="certificate-print-sheet" className="p-8 bg-white text-slate-900 border-4 border-slate-900 rounded-3xl space-y-6">
         <div className="flex items-center justify-between border-b-2 border-slate-800 pb-4">
           <div className="flex items-center gap-3">
-            <img src="/Naa%20College%20logo.webp" alt="Naa College logo" width="48" height="48" className="h-12 w-12 rounded-xl object-contain" />
+            <img src="/Naa%20College%20logo.webp" alt="Naa College logo" width="78" height="78" style={{ width: 78, height: 78 }} className="shrink-0 rounded-xl object-contain" />
             <div>
               <h1 className="text-xl font-black uppercase tracking-tight text-slate-950">
                 NAA COLLEGE - CBT SIMULATION PERFORMANCE REPORT
