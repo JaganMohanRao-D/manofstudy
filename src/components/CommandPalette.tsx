@@ -59,6 +59,44 @@ interface CommandItem {
   action: () => void;
 }
 
+function editDistance(a: string, b: string): number {
+  const row = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    let diagonal = row[0];
+    row[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      const above = row[j];
+      row[j] = Math.min(row[j] + 1, row[j - 1] + 1, diagonal + (a[i - 1] === b[j - 1] ? 0 : 1));
+      diagonal = above;
+    }
+  }
+  return row[b.length];
+}
+
+function searchScore(item: CommandItem, query: string): number {
+  const q = query.toLowerCase().trim().replace(/[^a-z0-9]+/g, ' ');
+  if (!q) return 1;
+  const title = item.title.toLowerCase().replace(/[^a-z0-9]+/g, ' ');
+  const fields = [title, item.subtitle, item.badge, item.category, ...item.keywords]
+    .join(' ').toLowerCase().replace(/[^a-z0-9]+/g, ' ');
+  if (title.trim() === q.trim()) return 100;
+  if (title.includes(q)) return 85;
+  if (fields.includes(q)) return 70;
+  const queryTokens = q.split(/\s+/).filter(Boolean);
+  const words = [...new Set(fields.split(/\s+/).filter(Boolean))];
+  let score = 0;
+  for (const token of queryTokens) {
+    if (words.some((word) => word.startsWith(token))) score += 8;
+    else {
+      const bestDistance = Math.min(...words.map((word) => editDistance(token, word)));
+      const tolerance = token.length >= 8 ? 2 : token.length >= 5 ? 1 : 0;
+      if (bestDistance <= tolerance) score += 4 - bestDistance;
+      else return 0;
+    }
+  }
+  return score;
+}
+
 export const CommandPalette: React.FC<CommandPaletteProps> = ({
   isOpen,
   onClose,
@@ -500,18 +538,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   // Filter commands by search query
   const filteredCommands = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
-    if (!q) {
-      return allCommands;
-    }
-    return allCommands.filter((item) => {
-      return (
-        item.title.toLowerCase().includes(q) ||
-        item.subtitle.toLowerCase().includes(q) ||
-        item.badge.toLowerCase().includes(q) ||
-        item.category.toLowerCase().includes(q) ||
-        item.keywords.some((k) => k.includes(q))
-      );
-    });
+    if (!q) return allCommands;
+    return allCommands
+      .map((item, originalIndex) => ({ item, originalIndex, score: searchScore(item, q) }))
+      .filter((entry) => entry.score > 0)
+      .sort((a, b) => b.score - a.score || a.originalIndex - b.originalIndex)
+      .map((entry) => entry.item);
   }, [searchQuery, allCommands]);
 
   // Reset selected index when filtered list changes
