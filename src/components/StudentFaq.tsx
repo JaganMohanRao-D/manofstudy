@@ -36,9 +36,9 @@ const FAQ_ITEMS: FaqItem[] = [
     category: 'mission',
     categoryLabel: 'Mission & Vision',
     icon: Sparkles,
-    question: 'Why was MAN OF STUDY built, and who is behind it?',
+    question: 'Why was NAA COLLEGE built, and who is behind it?',
     answer:
-      'MAN OF STUDY was founded by an engineering scholar (Dunna Jagan Mohan Rao) who experienced firsthand how fragmented, ad-cluttered, and overwhelming engineering academic resources were. The mission is simple: provide Indian engineering students with a clean, high-performance, ad-free digital sanctuary with zero paywalls, complete data privacy, and curated academic clarity.',
+      'NAA COLLEGE was founded by an engineering scholar (Dunna Jagan Mohan Rao) who experienced firsthand how fragmented, ad-cluttered, and overwhelming engineering academic resources were. The mission is simple: provide Indian engineering students with a clean, high-performance, ad-free digital sanctuary with zero paywalls, complete data privacy, and curated academic clarity.',
     actionText: 'Learn About the Vision',
     actionTarget: { type: 'workspace', target: 'about' },
   },
@@ -91,10 +91,10 @@ const FAQ_ITEMS: FaqItem[] = [
     category: 'mission',
     categoryLabel: 'No Ads Policy',
     icon: UserCheck,
-    question: 'Is MAN OF STUDY really 100% free, and how do you sustain it without ads?',
+    question: 'Is NAA COLLEGE really 100% free, and how do you sustain it without ads?',
     answer:
-      'Yes, MAN OF STUDY is 100% free for all students. We deliberately reject noisy pop-up ads, affiliate trackers, and sponsored link farms to maintain an uncompromising academic learning environment. The platform is self-funded and sustained through voluntary community UPI contributions from students and alumni who value our work.',
-    actionText: 'Support MAN OF STUDY',
+      'Yes, NAA COLLEGE is 100% free for all students. We deliberately reject noisy pop-up ads, affiliate trackers, and sponsored link farms to maintain an uncompromising academic learning environment. The platform is self-funded and sustained through voluntary community UPI contributions from students and alumni who value our work.',
+    actionText: 'Support NAA COLLEGE',
     actionTarget: { type: 'workspace', target: 'support' },
   },
   {
@@ -102,7 +102,7 @@ const FAQ_ITEMS: FaqItem[] = [
     category: 'mission',
     categoryLabel: 'Data & Privacy',
     icon: FileCheck2,
-    question: 'What personal data does MAN OF STUDY collect from students?',
+    question: 'What personal data does NAA COLLEGE collect from students?',
     answer:
       'We do not require mandatory registration for public academic tools, counseling explorers, or PDF utilities. When using collaborative features like CampusConnect or Project Hubs, authentication is handled securely through Firebase. We never sell student data or academic history to third-party marketing companies.',
     actionText: 'Read Privacy Policy',
@@ -221,7 +221,7 @@ export const StudentFaq: React.FC<StudentFaqProps> = ({
 
             <p className="text-sm sm:text-base text-[var(--mos-text-secondary)] leading-relaxed">
               Transparent answers regarding our 4-year engineering roadmaps, 100% private browser PDF tools, verified
-              scholarships, data privacy policies, and the student mission behind MAN OF STUDY.
+              scholarships, data privacy policies, and the student mission behind NAA COLLEGE.
             </p>
           </div>
 
@@ -405,7 +405,7 @@ export const StudentFaq: React.FC<StudentFaqProps> = ({
                 Built by a B.Tech Student for Engineering Scholars
               </h4>
               <p className="text-xs text-[var(--mos-text-secondary)] max-w-2xl leading-relaxed">
-                MAN OF STUDY was created by an engineering student dedicated to helping his fellow peers excel academically,
+                NAA COLLEGE was created by an engineering student dedicated to helping his fellow peers excel academically,
                 demystify career roadmaps, discover life-changing scholarships, and protect their privacy with modern browser-first tools.
               </p>
             </div>
