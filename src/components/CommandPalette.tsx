@@ -507,7 +507,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         category: 'Quick Actions',
         badge: 'Support',
         icon: <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />,
-        keywords: ['support', 'donate', 'donation', 'upi', 'developer', 'fund', 'contribute', 'free forever', 'man of study', 'mos', 'hosting', 'research', 'server'],
+        keywords: ['support', 'donate', 'donation', 'upi', 'developer', 'fund', 'contribute', 'free forever', 'naa college', 'hosting', 'research', 'server'],
         action: () => onOpenSupport?.(),
       },
       {
@@ -595,7 +595,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         id="command-palette-modal"
         role="dialog"
         aria-modal="true"
-        aria-label="Man of Study quick search"
+        aria-label="Naa College quick search"
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[calc(100dvh-1rem)] sm:max-h-[82vh] transition-all transform scale-100"
       >
