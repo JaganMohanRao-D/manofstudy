@@ -163,7 +163,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 border-l border-t border-white/10">
           <button type="button" onClick={() => go('ap-predictor')} className="group min-h-[180px] border-r border-b border-white/10 p-6 text-left transition hover:bg-white/[.025]">
-            <div className="flex items-start justify-between"><span className="text-xs font-mono text-[#c9ff19]">01</span><ArrowRight className="text-white/40 transition group-hover:translate-x-1 group-hover:text-[#c9ff19]" size={17}/></div>
+            <div className="flex items-start justify-between"><span className="text-xs font-mono text-[#22d3ee]">01</span><ArrowRight className="text-white/40 transition group-hover:translate-x-1 group-hover:text-[#22d3ee]" size={17}/></div>
             <h3 className="mt-16 font-['Syne'] text-2xl font-bold tracking-tight">AP / TG Admissions</h3>
             <p className="mt-2 max-w-sm text-xs leading-6 text-[#858990]">Predict colleges, inspect allotments, compare ranks and explore counselling data.</p>
           </button>
@@ -175,7 +175,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
           </button>
 
           <button type="button" onClick={() => go('roadmaps')} className="group min-h-[180px] border-r border-b border-white/10 p-6 text-left transition hover:bg-white/[.025]">
-            <div className="flex items-start justify-between"><span className="text-xs font-mono text-[#c9ff19]">03</span><ArrowRight className="text-white/40 transition group-hover:translate-x-1 group-hover:text-[#c9ff19]" size={17}/></div>
+            <div className="flex items-start justify-between"><span className="text-xs font-mono text-[#22d3ee]">03</span><ArrowRight className="text-white/40 transition group-hover:translate-x-1 group-hover:text-[#22d3ee]" size={17}/></div>
             <h3 className="mt-16 font-['Syne'] text-2xl font-bold tracking-tight">Career &amp; Skills</h3>
             <p className="mt-2 max-w-sm text-xs leading-6 text-[#858990]">Roadmaps, internships, projects, placement preparation and practical guidance.</p>
           </button>

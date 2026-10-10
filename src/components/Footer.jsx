@@ -19,12 +19,12 @@ export const Footer = ({ onOpenLegalModal, onOpenSupportModal }) => (
         <div className="md:justify-self-end">
           <div className="text-[10px] uppercase tracking-[.15em] text-[#777b82]">Navigate</div>
           <div className="mt-4 grid gap-2 text-xs text-[#b8bbc0]">
-            <button type="button" onClick={() => onOpenLegalModal?.('privacy')} className="text-left hover:text-[#c9ff19]">Privacy Policy</button>
-            <button type="button" onClick={() => onOpenLegalModal?.('terms')} className="text-left hover:text-[#c9ff19]">Terms of Service</button>
-            <button type="button" onClick={() => onOpenLegalModal?.('disclaimer')} className="text-left hover:text-[#c9ff19]">Legal Safe Harbor &amp; Disclaimers</button>
-            <button type="button" onClick={() => onOpenLegalModal?.('about')} className="text-left hover:text-[#c9ff19]">About Man of Study</button>
-            <button type="button" onClick={() => onOpenLegalModal?.('contact')} className="text-left hover:text-[#c9ff19]">Contact Support</button>
-            {onOpenSupportModal && <button type="button" onClick={onOpenSupportModal} className="inline-flex items-center gap-2 text-left text-[#c9ff19]"><Heart size={12}/> Support MOS</button>}
+            <button type="button" onClick={() => onOpenLegalModal?.('privacy')} className="text-left hover:text-[#22d3ee]">Privacy Policy</button>
+            <button type="button" onClick={() => onOpenLegalModal?.('terms')} className="text-left hover:text-[#22d3ee]">Terms of Service</button>
+            <button type="button" onClick={() => onOpenLegalModal?.('disclaimer')} className="text-left hover:text-[#22d3ee]">Legal Safe Harbor &amp; Disclaimers</button>
+            <button type="button" onClick={() => onOpenLegalModal?.('about')} className="text-left hover:text-[#22d3ee]">About Man of Study</button>
+            <button type="button" onClick={() => onOpenLegalModal?.('contact')} className="text-left hover:text-[#22d3ee]">Contact Support</button>
+            {onOpenSupportModal && <button type="button" onClick={onOpenSupportModal} className="inline-flex items-center gap-2 text-left text-[#22d3ee]"><Heart size={12}/> Support MOS</button>}
           </div>
         </div>
       </div>
