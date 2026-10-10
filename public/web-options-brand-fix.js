@@ -2,7 +2,7 @@
   'use strict';
 
   var LOGO = '/Naa%20College%20logo.webp';
-  var SITE = 'https://manofstudy.pages.dev';
+  var SITE = 'https://naacollege.in/';
   var STYLE_ID = 'mos-web-options-brand-fix';
 
   function textOf(el) {

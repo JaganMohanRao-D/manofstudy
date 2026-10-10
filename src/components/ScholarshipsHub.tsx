@@ -121,7 +121,7 @@ export const ScholarshipsHub: React.FC = () => {
       `🎯 ${s.target}`,
       `📅 ${s.deadline}`,
       '',
-      `Apply: https://manofstudy.pages.dev/scholarships`,
+      `Apply: https://naacollege.in/scholarships`,
     ].join('\n');
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
   };

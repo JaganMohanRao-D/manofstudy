@@ -6,13 +6,13 @@ export const Footer = ({ onOpenLegalModal, onOpenSupportModal }) => (
     <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
       <div className="grid gap-10 md:grid-cols-[1.3fr_.7fr]">
         <div>
-          <div className="flex items-center gap-3">
+          <a href="/" aria-label="Naa College home" className="flex items-center gap-3">
             <img src="/Naa%20College%20logo.webp" alt="Naa College logo" width="56" height="56" className="h-14 w-14 object-contain" loading="lazy" />
             <div>
               <div className="font-['Syne'] text-2xl font-extrabold uppercase tracking-[-.04em]">Naa College</div>
               <div className="text-[9px] uppercase tracking-[.18em] text-[#777b82]">Student utility platform</div>
             </div>
-          </div>
+          </a>
           <p className="mt-7 max-w-2xl text-xs leading-7 text-[#858990]">A student-first platform for admissions, allotment data, academic utilities, career resources and practical tools. AP &amp; Telangana counselling data, student workspaces and browser-based utilities — all in one place.</p>
           <div className="mt-6 text-[10px] uppercase tracking-[.14em] text-[#777b82]">Independent educational resource / Not affiliated with any government body</div>
         </div>

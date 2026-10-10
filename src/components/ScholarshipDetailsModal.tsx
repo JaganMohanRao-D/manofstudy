@@ -21,7 +21,7 @@ interface ScholarshipDetailsModalProps {
   onClose: () => void;
 }
 
-const SCHOLARSHIPS_URL = 'https://manofstudy.pages.dev/scholarships';
+const SCHOLARSHIPS_URL = 'https://naacollege.in/scholarships';
 
 export const ScholarshipDetailsModal: React.FC<ScholarshipDetailsModalProps> = ({
   scholarship,
