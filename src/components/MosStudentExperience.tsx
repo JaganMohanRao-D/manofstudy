@@ -61,8 +61,8 @@ const TOOLKIT = [
 
 const FAQS = [
   {
-    q: 'Is MAN OF STUDY an official counselling website?',
-    a: 'No. MAN OF STUDY is an independent student utility platform. Official counselling portals and published authorities remain the final source for applications, eligibility, seat allotment and admission decisions.',
+    q: 'Is Naa College an official counselling website?',
+    a: 'No. Naa College is an independent student utility platform. Official counselling portals and published authorities remain the final source for applications, eligibility, seat allotment and admission decisions.',
   },
   {
     q: 'How should I use the AP or TG college predictor?',
@@ -74,14 +74,14 @@ const FAQS = [
   },
   {
     q: 'What are the AP and TG Top B.Tech Colleges sections based on?',
-    a: 'They are derived from the counselling/allotment data available to MAN OF STUDY for the respective state and reference group. They are not a universal ranking of every engineering institution. Deemed universities and institutions outside the respective EAPCET counselling/allotment data are excluded.',
+    a: 'They are derived from the counselling/allotment data available to Naa College for the respective state and reference group. They are not a universal ranking of every engineering institution. Deemed universities and institutions outside the respective EAPCET counselling/allotment data are excluded.',
   },
   {
     q: 'Can scholarship information change?',
     a: 'Yes. Deadlines, eligibility, award amounts and application windows can change. Use the source/application link shown for a scholarship and verify the latest conditions before applying.',
   },
   {
-    q: 'Are the PDF and image utilities designed to upload my files to MAN OF STUDY servers?',
+    q: 'Are the PDF and image utilities designed to upload my files to Naa College servers?',
     a: 'The private browser utilities are designed for client-side processing wherever the individual tool supports it. Always read the tool-specific privacy note before processing a sensitive document.',
   },
   {
@@ -89,7 +89,7 @@ const FAQS = [
     a: 'Google sign-in is used to identify a student for the mock-test experience. The interface can use the signed-in Google profile name and profile image for the test session instead of asking students to create another account.',
   },
   {
-    q: 'Can I rely on MAN OF STUDY alone for an admission decision?',
+    q: 'Can I rely on Naa College alone for an admission decision?',
     a: 'Use it as a planning and learning companion, not as a substitute for official notifications. Always verify final dates, eligibility, reservation rules, fees and allotment instructions with the relevant official authority.',
   },
 ];
@@ -140,10 +140,10 @@ const GuidanceBlock: React.FC = () => (
               Student-first platform
             </div>
             <h2 className="text-3xl font-black tracking-tight text-[var(--mos-text-primary)] sm:text-4xl">
-              Why <span>MAN OF STUDY</span>?
+              Why <span>Naa College</span>?
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--mos-text-secondary)] sm:text-lg">
-              Engineering students often have to jump between counselling pages, scholarship portals, study resources and small everyday utilities. MAN OF STUDY brings those student tasks into one focused workspace — built around practical use rather than a wall of information.
+              Engineering students often have to jump between counselling pages, scholarship portals, study resources and small everyday utilities. Naa College brings those student tasks into one focused workspace — built around practical use rather than a wall of information.
             </p>
             <p className="mt-4 text-sm font-bold leading-6 text-[var(--mos-text-primary)] sm:text-base">
               Come with a question, a rank, a deadline or a study task. Leave with clearer next steps.
@@ -230,7 +230,7 @@ const GuidanceBlock: React.FC = () => (
             </div>
             <h2 className="mt-2 text-2xl font-black text-[var(--mos-text-primary)] sm:text-3xl">Before you use a tool, know what it means.</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--mos-text-secondary)]">
-              Quick answers about admissions data, predictors, scholarships, privacy and how to use MAN OF STUDY responsibly.
+              Quick answers about admissions data, predictors, scholarships, privacy and how to use Naa College responsibly.
             </p>
           </div>
           <div className="hidden items-center gap-2 text-xs font-semibold text-[var(--mos-text-muted)] sm:flex">
