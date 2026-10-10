@@ -25,7 +25,7 @@ patchFile('src/components/Header.tsx', (source) => {
 
   next = next.replace(
     'className="hidden sm:inline-flex h-9 items-center gap-1.5 rounded-xl border border-cyan-300/15 bg-cyan-400/8 px-3 text-xs font-bold text-cyan-200 hover:bg-cyan-400/15 hover:text-white transition-colors"><Heart className="h-3.5 w-3.5" /> Support</button>',
-    'className="inline-flex h-9 w-9 sm:w-auto items-center justify-center gap-1.5 rounded-xl border border-cyan-300/15 bg-cyan-400/8 px-0 sm:px-3 text-xs font-bold text-cyan-200 hover:bg-cyan-400/15 hover:text-white transition-colors" aria-label="Support Man of Study" title="Support Man of Study"><Heart className="h-3.5 w-3.5" /><span className="hidden sm:inline">Support</span></button>'
+    'className="inline-flex h-9 w-9 sm:w-auto items-center justify-center gap-1.5 rounded-xl border border-cyan-300/15 bg-cyan-400/8 px-0 sm:px-3 text-xs font-bold text-cyan-200 hover:bg-cyan-400/15 hover:text-white transition-colors" aria-label="Support Naa College" title="Support Naa College"><Heart className="h-3.5 w-3.5" /><span className="hidden sm:inline">Support</span></button>'
   );
 
   if (!next.includes('id="mobile-search-tools"')) {
