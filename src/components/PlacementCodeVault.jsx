@@ -179,7 +179,7 @@ export const PlacementCodeVault = () => {
               <span>100% In-Browser Placement & Lab Suite</span>
             </div>
             <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-white">
-              MAN OF STUDY Placement Code Vault &amp; Viva Flashcards
+              NAA COLLEGE Placement Code Vault &amp; Viva Flashcards
             </h1>
             <p className="text-sm text-slate-300 max-w-2xl leading-relaxed">
               Technical interview viva flashcards and practical Python, C, and C++ placement code templates.
