@@ -314,7 +314,7 @@ export const StudentTestimonials: React.FC = () => {
               rows={2}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder="How did MAN OF STUDY help your college selection, seat allotment tracking, roadmap, or scholarship search?"
+              placeholder="How did Naa College help your college selection, seat allotment tracking, roadmap, or scholarship search?"
               className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500"
               required
             />
