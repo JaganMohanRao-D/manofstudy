@@ -20,4 +20,16 @@
     <loc>https://naacollege.in/tg-eapcet/college-predictor/</loc>
     <priority>0.90</priority>
   </url>
+  <url>
+    <loc>https://naacollege.in/tools/attendance-calculator/</loc>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://naacollege.in/tools/gpa-calculator/</loc>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://naacollege.in/engineering-roadmaps/</loc>
+    <priority>0.85</priority>
+  </url>
 </urlset>
