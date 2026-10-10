@@ -136,7 +136,7 @@
       '</style></head><body>' +
       '<div class="header"><a href="' + SITE + '"><img class="logo" src="' + LOGO + '" alt="NAA COLLEGE"></a><div><div class="brand">NAA COLLEGE</div><div class="title">' + region + ' Web Options Preference List</div><div class="sub">Prepared from your selected College Predictor options. Final submission must be completed on the official counselling portal.</div></div></div>' +
       '<div class="card">' + clone.outerHTML + '</div>' +
-      '<div class="footer"><a href="' + SITE + '">manofstudy.pages.dev</a> · Student planning/reference utility · Generated from the current Web Options Builder.</div>' +
+      '<div class="footer"><a href="' + SITE + '">Naa College</a> · Student planning/reference utility · Generated from the current Web Options Builder.</div>' +
       '<script>window.onload=function(){setTimeout(function(){window.print();},250)};<\/script>' +
       '</body></html>';
 
