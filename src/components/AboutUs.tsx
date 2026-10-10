@@ -163,7 +163,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
               className="inline-flex items-center justify-center gap-2 w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2 rounded-full sm:rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-colors shadow-xs cursor-pointer shrink-0"
             >
               <Heart className="w-4 h-4 fill-current sm:hidden" aria-hidden="true" />
-              <span className="hidden sm:inline">Support MOS ☕</span>
+              <span className="hidden sm:inline">Support Naa College ☕</span>
             </button>
           )}
         </section>

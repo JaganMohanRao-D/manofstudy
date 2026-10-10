@@ -294,7 +294,7 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
       setPdfErrorMessage(null);
       // Allow UI to render spinner
       await new Promise((resolve) => setTimeout(resolve, 80));
-      generateRoadmapPdf(branch);
+      await generateRoadmapPdf(branch);
       setPdfExportStatus('success');
       setTimeout(() => {
         setPdfExportStatus('idle');

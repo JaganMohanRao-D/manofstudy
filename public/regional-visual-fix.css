@@ -1,4 +1,4 @@
-/* Man of Study — AP/TG workspace layout
+/* Naa College — AP/TG workspace layout
    Paper-sketch layout: Back button top-left, title/content left, regional image right. */
 
 #workspace-viewport { position: relative !important; }
@@ -18,7 +18,7 @@
 }
 
 /* Back to Feature Hub — deliberately top-left, above the regional heading. */
-#workspace-viewport:has(#mos-regional-workspace-visual) header button[title="Return to MAN OF STUDY Feature Hub"] {
+#workspace-viewport:has(#mos-regional-workspace-visual) header button[title="Return to Naa College Feature Hub"] {
   position: absolute !important;
   top: 20px !important;
   left: 24px !important;
@@ -101,7 +101,7 @@
     border-radius: 19px !important;
   }
 
-  #workspace-viewport:has(#mos-regional-workspace-visual) header button[title="Return to MAN OF STUDY Feature Hub"] {
+  #workspace-viewport:has(#mos-regional-workspace-visual) header button[title="Return to Naa College Feature Hub"] {
     top: 18px !important;
     left: 20px !important;
   }
@@ -116,7 +116,7 @@
     padding-bottom: 138px !important;
   }
 
-  #workspace-viewport:has(#mos-regional-workspace-visual) header button[title="Return to MAN OF STUDY Feature Hub"] {
+  #workspace-viewport:has(#mos-regional-workspace-visual) header button[title="Return to Naa College Feature Hub"] {
     top: 14px !important;
     left: 16px !important;
     max-width: calc(100% - 32px) !important;

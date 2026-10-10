@@ -21,7 +21,7 @@ page = page.replace(
   /className="([^"]*min-h-screen[^"]*tech-grid-pattern-light[^"]*)"/,
   (_, classes) => classes.includes('support-page-root') ? `className="${classes}"` : `className="support-page-root ${classes}"`
 );
-page = page.replace(/Support Man of Study\.((?!🫶)[\s\S]{0,4})/, 'Support Man of Study. 🫶');
+page = page.replace(/Support Naa College\.((?!🫶)[\s\S]{0,4})/, 'Support Naa College. 🫶');
 page = page.replace(/Keep student tools moving\.((?!💗)[\s\S]{0,4})/, 'Keep student tools moving. 💗');
 page = page.replace('Your support is gratitude — not a subscription.', 'Your support is kindness — not a subscription. 🫶');
 page = page.replace(
@@ -31,7 +31,7 @@ page = page.replace(
 writeIfChanged(supportPage, page);
 
 let modal = read(supportModal);
-modal = modal.replace('Support MAN OF STUDY Development</h2>', 'Support MAN OF STUDY Development 🫶</h2>');
+modal = modal.replace('Support Naa College Development</h2>', 'Support Naa College Development 🫶</h2>');
 modal = modal.replace(
   'Every dataset, rank predictor, and student tool on this platform is built independently. Voluntary contributions help cover practical technical costs.',
   'Every dataset, rank predictor, and student tool on this platform is built independently. Your kindness helps keep it going. 💗 Voluntary contributions help cover practical technical costs.'
@@ -51,7 +51,7 @@ if (fs.existsSync(staticSupportPage)) {
     'linear-gradient(135deg,#c2185b 0%,#d81b60 48%,#ec407a 100%)'
   );
   staticPage = staticPage.replace('color:#f9a8d4', 'color:#ffd0e2');
-  staticPage = staticPage.replace('Support Man of Study.<span>', 'Support Man of Study. 🫶<span>');
+  staticPage = staticPage.replace('Support Naa College.<span>', 'Support Naa College. 🫶<span>');
   staticPage = staticPage.replace('Keep student tools moving.</span>', 'Keep student tools moving. 💗</span>');
   staticPage = staticPage.replace('Your support is a gesture of gratitude.', 'Your support is an act of kindness. 🫶');
   staticPage = staticPage.replace('♥ Student-built • Voluntary support', '🫶 Student-built • Voluntary support');

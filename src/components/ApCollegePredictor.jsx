@@ -548,7 +548,7 @@ export default function ApCollegePredictor({
             This deterministic predictor compares your entered rank against the observed 2026 AP EAPCET allotment cutoffs for your selected reservation category and preferred branch. It provides descriptive historical context and does not guarantee admission or predict future cutoffs.
           </p>
           <p className="text-[11px] text-slate-500 dark:text-slate-400">
-            Data source: AP EAPCET 2026 official allotment records in the Man of Study dataset.
+            Data source: AP EAPCET 2026 official allotment records in the Naa College dataset.
           </p>
         </section>
       </div>

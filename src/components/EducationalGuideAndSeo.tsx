@@ -72,7 +72,7 @@ export const EducationalGuideAndSeo: React.FC = () => {
           Simple tools, explained clearly
         </h2>
         <p className="text-xs sm:text-sm text-slate-300">
-          A quick look at how Man of Study helps with admissions, marks, documents, careers, and everyday student tasks.
+          A quick look at how Naa College helps with admissions, marks, documents, careers, and everyday student tasks.
         </p>
       </div>
 

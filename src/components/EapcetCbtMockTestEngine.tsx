@@ -1020,8 +1020,8 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-9 h-9 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 flex items-center justify-center shrink-0 overflow-hidden">
               <img
-                src="https://i.ibb.co/zHPk2tv4/Chat-GPT-Image-Sep-13-2026-08-04-48-PM.png"
-                alt="Man of Study"
+                src="/Naa%20College%20logo.webp"
+                alt="Naa College logo"
                 className="w-full h-full object-contain"
                 loading="eager"
               />
@@ -1037,7 +1037,7 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
                   {user?.displayName || candidateProfile?.fullName || 'Candidate'}
                 </span>
                 <span>•</span>
-                <span className="font-mono">{candidateProfile?.rollNumber || 'MOS-CBT-2026'}</span>
+                <span className="font-mono">{candidateProfile?.rollNumber || 'NC-CBT-2026'}</span>
               </div>
             </div>
           </div>
@@ -1602,7 +1602,7 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
                 Official Examination Scorecard
               </span>
               <span className="text-[10px] font-mono text-slate-500">
-                Verifiable Assessment ID: {candidateProfile?.rollNumber || 'MOS-CBT-2026-891042'}
+                Verifiable Assessment ID: {candidateProfile?.rollNumber || 'NC-CBT-2026-891042'}
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
@@ -1647,7 +1647,7 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
           <div>
             <div className="text-[10px] uppercase font-bold text-slate-500">Hall Ticket / Roll No</div>
             <div className="font-mono font-bold text-slate-900 dark:text-white text-xs mt-0.5">
-              {candidateProfile?.rollNumber || 'MOS-EAPCET-2026'}
+              {candidateProfile?.rollNumber || 'NC-EAPCET-2026'}
             </div>
           </div>
           <div>
@@ -1918,9 +1918,9 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
         <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[10px] text-slate-400">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-500" />
-            <span>Digital Certificate Verification Code: MOS-CBT-CERT-{Date.now().toString(36).toUpperCase()}</span>
+            <span>Digital Certificate Verification Code: NC-CBT-CERT-{Date.now().toString(36).toUpperCase()}</span>
           </div>
-          <div>Man of Study AI Curriculum &amp; Examination Division</div>
+          <div>Naa College AI Curriculum &amp; Examination Division</div>
         </div>
       </div>
 
@@ -2140,12 +2140,10 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
         {/* Official Header */}
         <div className="flex items-center justify-between border-b-2 border-slate-800 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-xl">
-              MOS
-            </div>
+            <img src="/Naa%20College%20logo.webp" alt="Naa College logo" width="48" height="48" className="h-12 w-12 rounded-xl object-contain" />
             <div>
               <h1 className="text-xl font-black uppercase tracking-tight text-slate-950">
-                MAN OF STUDY - CBT SIMULATION PERFORMANCE REPORT
+                NAA COLLEGE - CBT SIMULATION PERFORMANCE REPORT
               </h1>
               <p className="text-xs font-semibold text-slate-600">
                 State-Level Engineering Entrance Computer-Based Test Simulation (APSCHE / TGCHE Standards)
@@ -2153,7 +2151,7 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
             </div>
           </div>
           <div className="text-right text-xs font-mono text-slate-600">
-            <div>Report ID: {candidateProfile?.rollNumber || 'MOS-2026-CBT'}</div>
+            <div>Report ID: {candidateProfile?.rollNumber || 'NC-2026-CBT'}</div>
             <div>Generated: {new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
           </div>
         </div>
@@ -2164,14 +2162,14 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
             Official Assessment Certificate
           </div>
           <div className="text-base text-slate-800 leading-relaxed">
-            This is to certify that <span className="font-black text-slate-950 underline decoration-slate-400 underline-offset-4">{candidateProfile?.fullName || 'Verified Candidate'}</span> has achieved <span className="font-black text-slate-950 text-xl">{scoreReport.totalScore}</span> / <span className="font-bold text-slate-700">{160} Marks</span> in the <span className="font-extrabold text-blue-900">{selectedExamId === 'ap-eapcet' ? 'AP EAPCET 2026' : 'TG EAPCET 2026'} Full-Length Grand Test</span> conducted by Man of Study.
+            This is to certify that <span className="font-black text-slate-950 underline decoration-slate-400 underline-offset-4">{candidateProfile?.fullName || 'Verified Candidate'}</span> has achieved <span className="font-black text-slate-950 text-xl">{scoreReport.totalScore}</span> / <span className="font-bold text-slate-700">{160} Marks</span> in the <span className="font-extrabold text-blue-900">{selectedExamId === 'ap-eapcet' ? 'AP EAPCET 2026' : 'TG EAPCET 2026'} Full-Length Grand Test</span> conducted by Naa College.
           </div>
         </div>
 
         {/* Candidate & Exam Metadata Grid */}
         <div className="grid grid-cols-4 gap-3 text-xs border border-slate-300 rounded-xl p-3 bg-white">
           <div><span className="font-bold text-slate-500 uppercase text-[10px] block">Candidate Name</span><div className="font-black mt-0.5">{candidateProfile?.fullName || 'Candidate'}</div></div>
-          <div><span className="font-bold text-slate-500 uppercase text-[10px] block">Roll Number</span><div className="font-mono font-bold mt-0.5">{candidateProfile?.rollNumber || 'MOS-CBT-2026'}</div></div>
+          <div><span className="font-bold text-slate-500 uppercase text-[10px] block">Roll Number</span><div className="font-mono font-bold mt-0.5">{candidateProfile?.rollNumber || 'NC-CBT-2026'}</div></div>
           <div><span className="font-bold text-slate-500 uppercase text-[10px] block">Evaluation Scheme</span><div className="font-semibold mt-0.5">{selectedExamId === 'ap-eapcet' ? '75% CBT + 25% Inter IPE' : '100% CBT Merit'}</div></div>
           <div><span className="font-bold text-slate-500 uppercase text-[10px] block">Result Status</span><div className={`font-black mt-0.5 ${scoreReport.isQualified ? 'text-emerald-700' : 'text-rose-700'}`}>{scoreReport.isQualified ? 'QUALIFIED (≥40/160)' : 'NOT QUALIFIED (<40/160)'}</div></div>
         </div>
@@ -2250,13 +2248,13 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
             </div>
             <div>
               <div className="font-bold text-slate-900">VERIFIED ASSESSMENT RECORD</div>
-              <div className="text-[9px] text-slate-500">Man of Study Evaluation System (APSCHE & TGCHE Compliant)</div>
+              <div className="text-[9px] text-slate-500">Naa College Evaluation System (APSCHE & TGCHE Compliant)</div>
             </div>
           </div>
 
           <div className="text-right">
             <div className="font-serif italic font-bold text-slate-800 text-sm">Controller of Examinations</div>
-            <div className="text-[9px] text-slate-500">Man of Study CBT Simulation Council</div>
+            <div className="text-[9px] text-slate-500">Naa College CBT Simulation Council</div>
           </div>
         </div>
 

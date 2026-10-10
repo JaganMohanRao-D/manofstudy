@@ -96,7 +96,7 @@ const styleBrand = () => {
   const brand = document.getElementById('brand-logo') as HTMLButtonElement | null;
   if (!brand) return;
   brand.dataset.mosBrandStyled = 'true';
-  brand.setAttribute('aria-label', 'MAN OF STUDY home');
+  brand.setAttribute('aria-label', 'Naa College home');
   brand.querySelector('.mos-brand-wordmark')?.setAttribute('data-mos-brand-source', 'react');
   brand.querySelector('.mos-brand-tagline')?.setAttribute('data-mos-tagline-source', 'react');
 };

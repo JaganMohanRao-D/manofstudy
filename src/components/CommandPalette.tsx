@@ -391,7 +391,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'tool-guides-hub',
-        title: 'MOS Student Knowledge HUB (9 Chapters)',
+        title: 'Naa College Student Knowledge Hub (9 Chapters)',
         subtitle: 'Chapter 9: Demystifying Engineering Seat Allotment, OC quota math & Phase-2 sliding rules',
         category: 'Core Tools',
         badge: '9 Chapters',
@@ -502,12 +502,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'action-support-mos',
-        title: 'Support MAN OF STUDY / Keep it Open & Free',
+        title: 'Support Naa College / Keep it Open & Free',
         subtitle: 'Voluntary contributions help cover hosting, research and development costs',
         category: 'Quick Actions',
         badge: 'Support',
         icon: <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />,
-        keywords: ['support', 'donate', 'donation', 'upi', 'developer', 'fund', 'contribute', 'free forever', 'man of study', 'mos', 'hosting', 'research', 'server'],
+        keywords: ['support', 'donate', 'donation', 'upi', 'developer', 'fund', 'contribute', 'free forever', 'naa college', 'hosting', 'research', 'server'],
         action: () => onOpenSupport?.(),
       },
       {
@@ -595,7 +595,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         id="command-palette-modal"
         role="dialog"
         aria-modal="true"
-        aria-label="Man of Study quick search"
+        aria-label="Naa College quick search"
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[calc(100dvh-1rem)] sm:max-h-[82vh] transition-all transform scale-100"
       >
@@ -613,7 +613,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             className="min-w-0 flex-1 text-sm sm:text-base text-slate-900 placeholder:text-slate-400 bg-transparent focus:outline-none"
             autoComplete="off"
             spellCheck="false"
-            aria-label="Search Man of Study"
+            aria-label="Search Naa College"
           />
 
           {searchQuery && (

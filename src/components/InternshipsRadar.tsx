@@ -358,7 +358,7 @@ export const InternshipsRadar: React.FC = () => {
           <div>
             <h2 className="text-sm font-bold text-amber-200">Apply safely</h2>
             <p className="mt-1 text-xs sm:text-sm leading-6 text-amber-100/80">
-              Man of Study links to the official programme or platform. Always read the current listing before submitting documents.
+              Naa College links to the official programme or platform. Always read the current listing before submitting documents.
               Never pay a recruiter or unknown person to “guarantee” selection, and do not treat an opportunity platform as proof that every employer listing is genuine.
             </p>
           </div>
@@ -511,7 +511,7 @@ export const InternshipsRadar: React.FC = () => {
         <div className="flex items-start gap-3">
           <BookOpen className="mt-0.5 h-5 w-5 shrink-0 text-cyan-500 dark:text-cyan-400" />
           <div>
-            <h2 className="text-sm font-bold text-[var(--mos-text-primary)]">How Man of Study verifies this directory</h2>
+            <h2 className="text-sm font-bold text-[var(--mos-text-primary)]">How Naa College verifies this directory</h2>
             <p className="mt-1 text-xs sm:text-sm leading-6 text-[var(--mos-text-secondary)]">
               Entries are linked to an official government, company or programme website. For marketplaces such as Unstop and Prosple,
               the platform itself is separated from government/company programmes and each employer listing should still be checked independently.

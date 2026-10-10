@@ -389,7 +389,7 @@ html.light .mos-ap-explorer .bg-gradient-to-br {
 }
 
 /* ==========================================================
-   MAN OF STUDY — global theme contrast guard
+   NAA COLLEGE — global theme contrast guard
    Keeps legacy Tailwind utility classes readable when the user
    switches between the site-wide Light and Dark themes.
    ========================================================== */
@@ -1022,7 +1022,7 @@ html.dark .mos-ap-explorer select option {
 
 
 /* ==========================================================================
-   MAN OF STUDY — BRIGHT-FIRST DESIGN SYSTEM v2
+   NAA COLLEGE — BRIGHT-FIRST DESIGN SYSTEM v2
    Global visual layer: readability, hierarchy, motion and interaction polish.
    The data/business logic of existing tools is intentionally untouched.
    ========================================================================== */
@@ -1354,7 +1354,7 @@ html.light .mos-hero-subtitle {
 
 
 /* ==========================================================================
-   MAN OF STUDY — HERO MOTION + LIGHT-MODE CONTRAST HARDENING v3
+   NAA COLLEGE — HERO MOTION + LIGHT-MODE CONTRAST HARDENING v3
    Decorative motion is lightweight, pointer-safe and disabled for reduced
    motion users. Content remains the visual priority.
    ========================================================================== */

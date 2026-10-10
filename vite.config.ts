@@ -546,7 +546,7 @@ function tgAllotmentPlugin(): Plugin {
             const safeContent = String(replyContent || '').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br/>');
 
             const emailHtml = `<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: auto; padding: 24px; border: 1px solid #fbcfe8; border-radius: 16px; background-color: #fffafc;">
-  <h2 style="color: #be185d; margin-top: 0; margin-bottom: 8px; font-size: 20px;">🎓 New Answer on MOS CampusConnect!</h2>
+  <h2 style="color: #be185d; margin-top: 0; margin-bottom: 8px; font-size: 20px;">🎓 New Answer on Naa College CampusConnect!</h2>
   <p style="font-size: 15px; color: #334155; margin-top: 0; line-height: 1.5;">Hello! A fellow student from ${college || 'Campus'} just replied to your question:</p>
   <blockquote style="border-left: 4px solid #f43f5e; padding: 10px 14px; background-color: #ffffff; color: #0f172a; font-weight: 600; margin: 16px 0; border-radius: 4px;">
     "${safeTitle}"
@@ -557,12 +557,12 @@ function tgAllotmentPlugin(): Plugin {
   </div>
   <div style="text-align: center; margin: 24px 0 16px 0;">
     <a href="https://manofstudy.vercel.app/#campus-connect" style="display: inline-block; background-color: #ec4899; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 14px;">
-      View Full Discussion on Man of Study
+      View Full Discussion on Naa College
     </a>
   </div>
   <hr style="border: none; border-top: 1px solid #fce7f3; margin: 20px 0 16px 0;" />
   <p style="margin: 0; font-size: 12px; color: #94a3b8; line-height: 1.4;">
-    You received this email because you opted in for doubt resolution updates on Man of Study (MOS). Your email is 100% private and never visible to peers.
+    You received this email because you opted in for doubt resolution updates on Naa College. Your email is 100% private and never visible to peers.
   </p>
 </div>`;
 
@@ -573,9 +573,9 @@ function tgAllotmentPlugin(): Plugin {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                from: 'MOS CampusConnect <onboarding@resend.dev>',
+                from: 'Naa College CampusConnect <onboarding@resend.dev>',
                 to: [toEmail.trim()],
-                subject: '🎓 Someone just answered your question on Man of Study!',
+                subject: '🎓 Someone just answered your question on Naa College!',
                 html: emailHtml,
               }),
             });
@@ -694,10 +694,10 @@ function tgAllotmentPlugin(): Plugin {
               return;
             }
 
-            // 4. Construct professional MOS Email matching Requirement 8
+            // 4. Construct professional Naa College Email matching Requirement 8
             const safeTitle = String(questionTitle || 'Your Question').replace(/</g, '&lt;').replace(/>/g, '&gt;');
             const safeRecipient = String(targetName || 'Student').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            const emailSubject = 'Someone answered your question on MOS CampusConnect';
+            const emailSubject = 'Someone answered your question on Naa College CampusConnect';
             const emailHtml = `<!DOCTYPE html>
 <html>
 <head>
@@ -708,12 +708,12 @@ function tgAllotmentPlugin(): Plugin {
   <div style="max-width: 580px; margin: 0 auto; background-color: #ffffff; border: 1px solid #fce7f3; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(244, 63, 94, 0.06);">
     <div style="background-color: #be185d; padding: 20px 24px; text-align: left;">
       <h1 style="color: #ffffff; margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -0.02em;">
-        MAN OF STUDY <span style="font-weight: 400; font-size: 14px; opacity: 0.9;">| CampusConnect</span>
+        NAA COLLEGE <span style="font-weight: 400; font-size: 14px; opacity: 0.9;">| CampusConnect</span>
       </h1>
     </div>
     <div style="padding: 24px;">
       <p style="font-size: 15px; line-height: 1.6; margin-top: 0;">Hi ${safeRecipient},</p>
-      <p style="font-size: 15px; line-height: 1.6;">Someone has answered your question on Man of Study CampusConnect.</p>
+      <p style="font-size: 15px; line-height: 1.6;">Someone has answered your question on Naa College CampusConnect.</p>
       <div style="margin: 20px 0; padding: 14px 18px; background-color: #fdf2f8; border-left: 4px solid #ec4899; border-radius: 6px;">
         <p style="margin: 0 0 6px 0; font-size: 12px; font-weight: 700; color: #9d174d; text-transform: uppercase; letter-spacing: 0.05em;">Your question:</p>
         <p style="margin: 0; font-size: 15px; font-weight: 600; color: #0f172a; line-height: 1.5;">"${safeTitle}"</p>
@@ -728,10 +728,10 @@ function tgAllotmentPlugin(): Plugin {
       </div>
       <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 24px 0;" />
       <div style="text-align: center; color: #64748b; font-size: 12px; line-height: 1.6;">
-        <p style="margin: 0; font-weight: 600; color: #334155;">Man of Study</p>
+        <p style="margin: 0; font-weight: 600; color: #334155;">Naa College</p>
         <p style="margin: 2px 0 12px 0; color: #ec4899; font-style: italic;">Built for students. Built by a student.</p>
         <p style="margin: 0; font-size: 11px; color: #94a3b8;">
-          You received this email because you opted in for answer notifications on Man of Study CampusConnect.<br/>
+          You received this email because you opted in for answer notifications on Naa College CampusConnect.<br/>
           Your email address is 100% private and never visible to other students.
         </p>
       </div>
@@ -755,7 +755,7 @@ function tgAllotmentPlugin(): Plugin {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                from: 'MOS CampusConnect <onboarding@resend.dev>',
+                from: 'Naa College CampusConnect <onboarding@resend.dev>',
                 to: [targetEmail.trim()],
                 subject: emailSubject,
                 html: emailHtml,
@@ -949,7 +949,7 @@ Format the output cleanly in Markdown:
             const { GoogleGenAI } = await import('@google/genai');
             const ai = new GoogleGenAI({ apiKey });
 
-            const prompt = `You are an encouraging, realistic Senior Technical Career Advisor for Indian engineering students on the Man of Study portal.
+            const prompt = `You are an encouraging, realistic Senior Technical Career Advisor for Indian engineering students on the Naa College portal.
 The student completed an empirical skill assessment:
 - Branch: ${branchName}
 - Academic Stage: ${stage}

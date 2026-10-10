@@ -27,7 +27,7 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
   const origin = typeof window !== 'undefined' ? window.location.origin : '';
   const shareUrl = `${origin}/#roadmap-${branch.id}`;
 
-  const shareText = `Check out the comprehensive 4-Year Engineering Roadmap for ${branch.name} (${branch.code}) on MAN OF STUDY! Includes semester subjects, lab skills, certifications, open-source projects, and placement prep.`;
+  const shareText = `Check out the comprehensive 4-Year Engineering Roadmap for ${branch.name} (${branch.code}) on Naa College! Includes semester subjects, lab skills, certifications, open-source projects, and placement prep.`;
 
   const handleCopyLink = async () => {
     try {
@@ -66,7 +66,7 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
     if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
       try {
         await navigator.share({
-          title: `${branch.name} 4-Year Roadmap | MAN OF STUDY`,
+          title: `${branch.name} 4-Year Roadmap | Naa College`,
           text: shareText,
           url: shareUrl,
         });

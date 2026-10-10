@@ -1,20 +1,49 @@
 import { jsPDF } from 'jspdf';
 import { BranchRoadmap } from '../types';
 
+async function loadNaaCollegeLogo(): Promise<{ dataUrl: string; width: number; height: number } | null> {
+  let objectUrl: string | null = null;
+  try {
+    const response = await fetch('/Naa%20College%20logo.webp');
+    if (!response.ok) return null;
+    objectUrl = URL.createObjectURL(await response.blob());
+    const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error('Naa College logo could not be loaded'));
+      img.src = objectUrl as string;
+    });
+    const width = image.naturalWidth || image.width;
+    const height = image.naturalHeight || image.height;
+    if (!width || !height) return null;
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext('2d');
+    if (!context) return null;
+    context.drawImage(image, 0, 0, width, height);
+    return { dataUrl: canvas.toDataURL('image/png'), width, height };
+  } catch {
+    return null;
+  } finally {
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
+  }
+}
+
 /**
- * MAN OF STUDY - Professional Career Roadmap PDF Document Generator
+ * Naa College - Professional Career Roadmap PDF Document Generator
  * 
  * Rebuilt from first principles as an authoritative, print-oriented A4 document:
  * - Fixed A4 Portrait Geometry: 210mm x 297mm
  * - Margins: Left/Right: 14mm, Content Width: 182mm (Safe printable area)
  * - Page 1: Dedicated Executive Cover Page with 4 structured direction blocks
  * - Pages 2+: Content sections with strict deterministic flow
- * - Subtle Watermark (5.5% visual intensity) on every page: "MAN OF STUDY"
+ * - Subtle Watermark (5.5% visual intensity) on every page: "Naa College"
  * - Running Header & Non-Colliding Footer (Page X of Y) on all content pages
  * - Atomic Semester Cards with Strict Orphan Prevention (break-inside: avoid)
  * - Dynamic Text Splitting & Pre-Measured Box Heights (No text clipping or collisions)
  * - Sanitized currency symbols (Rs. / INR instead of broken Unicode glyphs)
- * - Safe Dynamic Filename: [BRANCH_NAME]_Roadmap_by_Man_of_Study.pdf
+ * - Safe Dynamic Filename: [BRANCH_NAME]_Roadmap_by_Naa_College.pdf
  */
 
 export function getRoadmapPdfFilename(branch: BranchRoadmap): string {
@@ -53,7 +82,7 @@ export function getRoadmapPdfFilename(branch: BranchRoadmap): string {
   return `${base}_Roadmap_by_Man_of_Study.pdf`;
 }
 
-export function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false): jsPDF {
+export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false): Promise<jsPDF> {
   const doc = new jsPDF({
     orientation: 'portrait',
     unit: 'mm',
@@ -68,9 +97,10 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false
   const minY = 22; // Safe start below running header
   const maxY = 276; // Safe content cutoff, leaving buffer above footer line at 283mm
 
-  const BRAND_NAME = 'MAN OF STUDY';
+  const BRAND_NAME = 'Naa College';
   const TARGET_URL = 'https://manofstudy.com';
   const EXPLORE_URL = 'https://manofstudy.com/#career-blueprints';
+  const naaCollegeLogo = await loadNaaCollegeLogo();
 
   let currentY = minY;
 
@@ -139,9 +169,27 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false
   doc.setLineWidth(0.2);
   doc.roundedRect(marginLeft, coverY, 32, 7.0, 1.8, 1.8, 'FD');
 
-  // Cyan dot
-  doc.setFillColor(6, 182, 212);
-  doc.circle(marginLeft + 4.0, coverY + 3.5, 1.2, 'F');
+  // Canonical Naa College logo. Preserve its intrinsic aspect ratio within the brand pill.
+  if (naaCollegeLogo) {
+    const logoBox = 5.5;
+    const scale = Math.min(logoBox / naaCollegeLogo.width, logoBox / naaCollegeLogo.height);
+    const logoWidth = naaCollegeLogo.width * scale;
+    const logoHeight = naaCollegeLogo.height * scale;
+    doc.addImage(
+      naaCollegeLogo.dataUrl,
+      'PNG',
+      marginLeft + 1.2 + (logoBox - logoWidth) / 2,
+      coverY + 0.75 + (logoBox - logoHeight) / 2,
+      logoWidth,
+      logoHeight,
+      undefined,
+      'FAST'
+    );
+    doc.link(marginLeft + 1.0, coverY + 0.5, 6.0, 6.0, { url: TARGET_URL });
+  } else {
+    doc.setFillColor(6, 182, 212);
+    doc.circle(marginLeft + 4.0, coverY + 3.5, 1.2, 'F');
+  }
 
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.2);
@@ -341,7 +389,7 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8.2);
   doc.setTextColor(15, 23, 42);
-  doc.text('MAN OF STUDY • Student Career Planning Platform', marginLeft + 8, coverFooterY + 5.5);
+  doc.text('Naa College • Student Career Planning Platform', marginLeft + 8, coverFooterY + 5.5);
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(7.4);
@@ -394,7 +442,7 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false
     doc.setTextColor(67, 56, 202);
     // @ts-ignore
     doc.textWithLink(
-      'Click here to explore & download all 24+ Engineering & Degree Roadmaps on MAN OF STUDY',
+      'Click here to explore & download all 24+ Engineering & Degree Roadmaps on Naa College',
       105,
       currentY + 5.5,
       { url: EXPLORE_URL, align: 'center' }
@@ -876,7 +924,7 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false
     'Print & Pin: Keep a physical copy of this 8-semester roadmap near your primary study workstation.',
     'Version Control Audit: Initialize your professional GitHub account and push code daily following semester targets.',
     'Peer Study Group: Form a 3-4 member peer circle to tackle semester capstone projects and competitive challenges.',
-    'Explore More Disciplines: Access complementary engineering and degree roadmaps on the MAN OF STUDY platform.',
+    'Explore More Disciplines: Access complementary engineering and degree roadmaps on the Naa College platform.',
   ];
 
   nextSteps.forEach((step, idx) => {
@@ -923,7 +971,7 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(38);
     doc.setTextColor(148, 163, 184); // Slate 400
-    doc.text('MAN OF STUDY', 105, 148.5, {
+    doc.text('NAA COLLEGE', 105, 148.5, {
       align: 'center',
       angle: -45,
     });
@@ -976,7 +1024,7 @@ export function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7.2);
     doc.setTextColor(100, 116, 139);
-    doc.text('Man of Study • Student Career Planning Platform', marginLeft, pageHeight - 7.5);
+    doc.text('Naa College • Student Career Planning Platform', marginLeft, pageHeight - 7.5);
 
     // Center: Interactive Brand Link
     doc.setTextColor(2, 132, 199);
