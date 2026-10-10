@@ -557,7 +557,7 @@ function tgAllotmentPlugin(): Plugin {
   </div>
   <div style="text-align: center; margin: 24px 0 16px 0;">
     <a href="https://manofstudy.vercel.app/#campus-connect" style="display: inline-block; background-color: #ec4899; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 14px;">
-      View Full Discussion on Man of Study
+      View Full Discussion on Naa College
     </a>
   </div>
   <hr style="border: none; border-top: 1px solid #fce7f3; margin: 20px 0 16px 0;" />
@@ -708,12 +708,12 @@ function tgAllotmentPlugin(): Plugin {
   <div style="max-width: 580px; margin: 0 auto; background-color: #ffffff; border: 1px solid #fce7f3; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(244, 63, 94, 0.06);">
     <div style="background-color: #be185d; padding: 20px 24px; text-align: left;">
       <h1 style="color: #ffffff; margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -0.02em;">
-        MAN OF STUDY <span style="font-weight: 400; font-size: 14px; opacity: 0.9;">| CampusConnect</span>
+        NAA COLLEGE <span style="font-weight: 400; font-size: 14px; opacity: 0.9;">| CampusConnect</span>
       </h1>
     </div>
     <div style="padding: 24px;">
       <p style="font-size: 15px; line-height: 1.6; margin-top: 0;">Hi ${safeRecipient},</p>
-      <p style="font-size: 15px; line-height: 1.6;">Someone has answered your question on Man of Study CampusConnect.</p>
+      <p style="font-size: 15px; line-height: 1.6;">Someone has answered your question on Naa College CampusConnect.</p>
       <div style="margin: 20px 0; padding: 14px 18px; background-color: #fdf2f8; border-left: 4px solid #ec4899; border-radius: 6px;">
         <p style="margin: 0 0 6px 0; font-size: 12px; font-weight: 700; color: #9d174d; text-transform: uppercase; letter-spacing: 0.05em;">Your question:</p>
         <p style="margin: 0; font-size: 15px; font-weight: 600; color: #0f172a; line-height: 1.5;">"${safeTitle}"</p>
