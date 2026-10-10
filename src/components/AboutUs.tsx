@@ -33,11 +33,11 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
-            About MAN OF STUDY
+            About NAA COLLEGE
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-3xl leading-relaxed">
-            Built from the ground up by <strong>JAGAN MOHAN RAO DUNNA</strong>, MAN OF STUDY is an open, client-side academic and career launchpad created to empower students across Andhra Pradesh, Telangana, and Pan-India to bridge the gap between tier-3 engineering classrooms and high-growth global technology careers.
+            Built from the ground up by <strong>JAGAN MOHAN RAO DUNNA</strong>, NAA COLLEGE is an open, client-side academic and career launchpad created to empower students across Andhra Pradesh, Telangana, and Pan-India to bridge the gap between tier-3 engineering classrooms and high-growth global technology careers.
           </p>
         </div>
       </div>
@@ -64,7 +64,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
             </li>
           </ul>
           <p>
-            MAN OF STUDY was created by <strong>JAGAN MOHAN RAO DUNNA</strong> to eliminate this chaos. We set out to build a clean, blazing-fast, and 100% private platform where students can calculate bunks with mathematical certainty, analyze live EAPCET vacancies, access 24+ semester-by-semester degree roadmaps, and convert exam documents without uploading a single byte to a server.
+            NAA COLLEGE was created by <strong>JAGAN MOHAN RAO DUNNA</strong> to eliminate this chaos. We set out to build a clean, blazing-fast, and 100% private platform where students can calculate bunks with mathematical certainty, analyze live EAPCET vacancies, access 24+ semester-by-semester degree roadmaps, and convert exam documents without uploading a single byte to a server.
           </p>
         </section>
 
@@ -116,7 +116,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
               <span className="font-bold text-slate-900 dark:text-white text-xs block">1. 100% Free Forever</span>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Education tools should never be gated behind paywalls. Every calculator, PDF tool, branch roadmap, and scholarship listing on MAN OF STUDY is free for every student.
+                Education tools should never be gated behind paywalls. Every calculator, PDF tool, branch roadmap, and scholarship listing on NAA COLLEGE is free for every student.
               </p>
             </div>
 
@@ -148,18 +148,18 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
           <div className="space-y-1">
             <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-1.5">
               <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
-              <span>Keep MAN OF STUDY Independent &amp; Ad-Clean</span>
+              <span>Keep NAA COLLEGE Independent &amp; Ad-Clean</span>
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-400">
-              MAN OF STUDY is maintained independently. If our tools saved your attendance or helped you plan admissions, consider buying a coffee.
+              NAA COLLEGE is maintained independently. If our tools saved your attendance or helped you plan admissions, consider buying a coffee.
             </p>
           </div>
           {onOpenSupport && (
             <button
               type="button"
               onClick={onOpenSupport}
-              aria-label="Support Man of Study"
-              title="Support Man of Study"
+              aria-label="Support Naa College"
+              title="Support Naa College"
               className="inline-flex items-center justify-center gap-2 w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2 rounded-full sm:rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-colors shadow-xs cursor-pointer shrink-0"
             >
               <Heart className="w-4 h-4 fill-current sm:hidden" aria-hidden="true" />
