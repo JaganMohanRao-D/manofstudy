@@ -94,6 +94,7 @@ const ApCollegePredictor = lazyWithRetry(() =>
   }))
 );
 const ApTopColleges = lazyWithRetry(() => import('./components/ApTopColleges'));
+const ApEapcetRankPredictor = lazyWithRetry(() => import('./components/ApEapcetRankPredictor'));
 const ApEapcet2025AllotmentExplorer = lazyWithRetry(() =>
   import('./components/ApEapcet2025AllotmentExplorer').then((m: any) => ({
     default: m.ApEapcet2025AllotmentExplorer || m.default,
@@ -267,6 +268,14 @@ export const TOOLS_CONFIG: ToolMeta[] = [
     category: 'counselling',
     description: 'Match AP EAPCET 2026 allotment records deterministically by rank, category, gender, region and branch.',
     badge: 'AI Intelligence',
+  },
+  {
+    id: 'ap-rank-predictor',
+    name: 'AP EAPCET Rank Predictor',
+    shortName: 'AP Rank Predictor',
+    category: 'counselling',
+    description: 'Estimate an AP EAPCET engineering rank range from subject and board marks using the supplied 75:25 weighting and anchor interpolation.',
+    badge: 'Rank Estimate',
   },
   {
     id: 'ap-top-colleges',
@@ -794,6 +803,11 @@ export default function App() {
           title: 'AP EAPCET 2026 College Intelligence & Allotment Data',
           icon: <Compass className="w-4 h-4 text-rose-500" />,
         };
+      case 'ap-rank-predictor':
+        return {
+          title: 'AP EAPCET Rank Predictor — Estimated Rank Range',
+          icon: <Calculator className="w-4 h-4 text-cyan-500" />,
+        };
       case 'ap-top-colleges':
         return {
           title: 'AP EAPCET Top B.Tech Colleges — Observed 2026 Ranks',
@@ -1179,6 +1193,10 @@ export default function App() {
 
                 {activeWorkspace === 'ap-top-colleges' && (
                   <ApTopColleges />
+                )}
+
+                {activeWorkspace === 'ap-rank-predictor' && (
+                  <ApEapcetRankPredictor />
                 )}
 
                 {activeWorkspace === 'tg-allotments' && (
