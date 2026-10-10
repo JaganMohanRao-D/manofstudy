@@ -562,7 +562,7 @@ function tgAllotmentPlugin(): Plugin {
   </div>
   <hr style="border: none; border-top: 1px solid #fce7f3; margin: 20px 0 16px 0;" />
   <p style="margin: 0; font-size: 12px; color: #94a3b8; line-height: 1.4;">
-    You received this email because you opted in for doubt resolution updates on Man of Study (MOS). Your email is 100% private and never visible to peers.
+    You received this email because you opted in for doubt resolution updates on Naa College. Your email is 100% private and never visible to peers.
   </p>
 </div>`;
 
@@ -575,7 +575,7 @@ function tgAllotmentPlugin(): Plugin {
               body: JSON.stringify({
                 from: 'MOS CampusConnect <onboarding@resend.dev>',
                 to: [toEmail.trim()],
-                subject: '🎓 Someone just answered your question on Man of Study!',
+                subject: '🎓 Someone just answered your question on Naa College!',
                 html: emailHtml,
               }),
             });
@@ -728,10 +728,10 @@ function tgAllotmentPlugin(): Plugin {
       </div>
       <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 24px 0;" />
       <div style="text-align: center; color: #64748b; font-size: 12px; line-height: 1.6;">
-        <p style="margin: 0; font-weight: 600; color: #334155;">Man of Study</p>
+        <p style="margin: 0; font-weight: 600; color: #334155;">Naa College</p>
         <p style="margin: 2px 0 12px 0; color: #ec4899; font-style: italic;">Built for students. Built by a student.</p>
         <p style="margin: 0; font-size: 11px; color: #94a3b8;">
-          You received this email because you opted in for answer notifications on Man of Study CampusConnect.<br/>
+          You received this email because you opted in for answer notifications on Naa College CampusConnect.<br/>
           Your email address is 100% private and never visible to other students.
         </p>
       </div>
@@ -949,7 +949,7 @@ Format the output cleanly in Markdown:
             const { GoogleGenAI } = await import('@google/genai');
             const ai = new GoogleGenAI({ apiKey });
 
-            const prompt = `You are an encouraging, realistic Senior Technical Career Advisor for Indian engineering students on the Man of Study portal.
+            const prompt = `You are an encouraging, realistic Senior Technical Career Advisor for Indian engineering students on the Naa College portal.
 The student completed an empirical skill assessment:
 - Branch: ${branchName}
 - Academic Stage: ${stage}
