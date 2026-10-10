@@ -192,7 +192,7 @@ export const StudentFaq: React.FC<StudentFaqProps> = ({
     } else if (item.actionTarget.type === 'legal' && onOpenLegal && item.actionTarget.modal) {
       onOpenLegal(item.actionTarget.modal);
     } else if (item.actionTarget.type === 'email') {
-      window.location.href = 'mailto:support.jamord@gmail.com?subject=[MAN%20OF%20STUDY%20Inquiry]%20Student%20Query';
+      window.location.href = 'mailto:support.jamord@gmail.com?subject=[Naa%20College%20Inquiry]%20Student%20Query';
     }
   };
 
