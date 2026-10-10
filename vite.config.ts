@@ -546,7 +546,7 @@ function tgAllotmentPlugin(): Plugin {
             const safeContent = String(replyContent || '').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br/>');
 
             const emailHtml = `<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: auto; padding: 24px; border: 1px solid #fbcfe8; border-radius: 16px; background-color: #fffafc;">
-  <h2 style="color: #be185d; margin-top: 0; margin-bottom: 8px; font-size: 20px;">🎓 New Answer on MOS CampusConnect!</h2>
+  <h2 style="color: #be185d; margin-top: 0; margin-bottom: 8px; font-size: 20px;">🎓 New Answer on Naa College CampusConnect!</h2>
   <p style="font-size: 15px; color: #334155; margin-top: 0; line-height: 1.5;">Hello! A fellow student from ${college || 'Campus'} just replied to your question:</p>
   <blockquote style="border-left: 4px solid #f43f5e; padding: 10px 14px; background-color: #ffffff; color: #0f172a; font-weight: 600; margin: 16px 0; border-radius: 4px;">
     "${safeTitle}"
@@ -573,7 +573,7 @@ function tgAllotmentPlugin(): Plugin {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                from: 'MOS CampusConnect <onboarding@resend.dev>',
+                from: 'Naa College CampusConnect <onboarding@resend.dev>',
                 to: [toEmail.trim()],
                 subject: '🎓 Someone just answered your question on Naa College!',
                 html: emailHtml,
@@ -694,10 +694,10 @@ function tgAllotmentPlugin(): Plugin {
               return;
             }
 
-            // 4. Construct professional MOS Email matching Requirement 8
+            // 4. Construct professional Naa College Email matching Requirement 8
             const safeTitle = String(questionTitle || 'Your Question').replace(/</g, '&lt;').replace(/>/g, '&gt;');
             const safeRecipient = String(targetName || 'Student').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            const emailSubject = 'Someone answered your question on MOS CampusConnect';
+            const emailSubject = 'Someone answered your question on Naa College CampusConnect';
             const emailHtml = `<!DOCTYPE html>
 <html>
 <head>
@@ -755,7 +755,7 @@ function tgAllotmentPlugin(): Plugin {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                from: 'MOS CampusConnect <onboarding@resend.dev>',
+                from: 'Naa College CampusConnect <onboarding@resend.dev>',
                 to: [targetEmail.trim()],
                 subject: emailSubject,
                 html: emailHtml,
