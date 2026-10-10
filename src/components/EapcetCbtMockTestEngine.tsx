@@ -1020,8 +1020,8 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-9 h-9 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 flex items-center justify-center shrink-0 overflow-hidden">
               <img
-                src="https://i.ibb.co/zHPk2tv4/Chat-GPT-Image-Sep-13-2026-08-04-48-PM.png"
-                alt="Man of Study"
+                src="/Naa%20College%20logo.webp"
+                alt="Naa College logo"
                 className="w-full h-full object-contain"
                 loading="eager"
               />
@@ -1602,7 +1602,7 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
                 Official Examination Scorecard
               </span>
               <span className="text-[10px] font-mono text-slate-500">
-                Verifiable Assessment ID: {candidateProfile?.rollNumber || 'MOS-CBT-2026-891042'}
+                Verifiable Assessment ID: {candidateProfile?.rollNumber || 'NC-CBT-2026-891042'}
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
@@ -2140,12 +2140,10 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
         {/* Official Header */}
         <div className="flex items-center justify-between border-b-2 border-slate-800 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-xl">
-              MOS
-            </div>
+            <img src="/Naa%20College%20logo.webp" alt="Naa College logo" width="48" height="48" className="h-12 w-12 rounded-xl object-contain" />
             <div>
               <h1 className="text-xl font-black uppercase tracking-tight text-slate-950">
-                MAN OF STUDY - CBT SIMULATION PERFORMANCE REPORT
+                NAA COLLEGE - CBT SIMULATION PERFORMANCE REPORT
               </h1>
               <p className="text-xs font-semibold text-slate-600">
                 State-Level Engineering Entrance Computer-Based Test Simulation (APSCHE / TGCHE Standards)
@@ -2153,7 +2151,7 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
             </div>
           </div>
           <div className="text-right text-xs font-mono text-slate-600">
-            <div>Report ID: {candidateProfile?.rollNumber || 'MOS-2026-CBT'}</div>
+            <div>Report ID: {candidateProfile?.rollNumber || 'NC-2026-CBT'}</div>
             <div>Generated: {new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
           </div>
         </div>
