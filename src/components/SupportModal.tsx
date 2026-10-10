@@ -76,7 +76,7 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
   const [showTechDetails, setShowTechDetails] = useState<boolean>(false);
   const [isToolResultPrompt, setIsToolResultPrompt] = useState<boolean>(false);
 
-  const PLATFORM_URL = 'https://manofstudy.pages.dev';
+  const PLATFORM_URL = 'https://naacollege.in/';
   const UPI_ID = 'jaganmohanraodj@okicici';
 
   const selectedTier =
@@ -344,7 +344,7 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
           <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60 flex items-center justify-between gap-2">
             <div className="min-w-0">
               <span className="text-[11px] font-bold text-slate-700 dark:text-slate-200 block truncate">Share with classmates &amp; peers</span>
-              <span className="text-[10px] text-slate-400 truncate block">manofstudy.pages.dev</span>
+              <span className="text-[10px] text-slate-400 truncate block">naacollege.in</span>
             </div>
             <button type="button" onClick={handleCopyPlatformUrl} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shrink-0 transition-colors cursor-pointer shadow-sm">
               {copiedUrl ? <><Check className="w-3 h-3" /><span>Copied!</span></> : <><Share2 className="w-3 h-3" /><span>Share Link</span></>}
