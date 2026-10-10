@@ -98,8 +98,8 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
   const maxY = 276; // Safe content cutoff, leaving buffer above footer line at 283mm
 
   const BRAND_NAME = 'Naa College';
-  const TARGET_URL = 'https://manofstudy.com';
-  const EXPLORE_URL = 'https://manofstudy.com/#career-blueprints';
+  const TARGET_URL = 'https://naacollege.in/';
+  const EXPLORE_URL = 'https://naacollege.in/#career-blueprints';
   const naaCollegeLogo = await loadNaaCollegeLogo();
 
   let currentY = minY;
