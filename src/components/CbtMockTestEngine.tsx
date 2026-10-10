@@ -1689,7 +1689,7 @@ export const CbtMockTestEngine: React.FC<CbtMockTestEngineProps> = ({
             </div>
             <div>
               <div className="font-bold text-slate-900">PRACTICE TEST RECORD</div>
-              <div className="text-[9px] text-slate-500">Man of Study Mock Test</div>
+              <div className="text-[9px] text-slate-500">Naa College Mock Test</div>
             </div>
           </div>
 
