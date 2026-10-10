@@ -30,7 +30,7 @@ export const Disclaimer: React.FC<DisclaimerProps> = ({ onBack }) => {
           Academic, Admissions &amp; Legal Disclaimer
         </h1>
         <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-          Please review these statutory notices regarding data sources, independent status, algorithm estimations, and institutional verification before utilizing MAN OF STUDY.
+          Please review these statutory notices regarding data sources, independent status, algorithm estimations, and institutional verification before utilizing NAA COLLEGE.
         </p>
       </div>
 
@@ -41,8 +41,8 @@ export const Disclaimer: React.FC<DisclaimerProps> = ({ onBack }) => {
           <span className="uppercase tracking-wider">Independent Educational Platform Notice</span>
         </div>
         <p className="text-xs sm:text-sm leading-relaxed">
-          <strong>MAN OF STUDY is an independent informational and utility engine.</strong> TG/AP EAPCET data, college vacancy counts, branch allotments, cutoffs, and scholarship listings displayed on this website are aggregated from publicly available government notifications, university circulars, and state counselling records for student guidance only. 
-          MAN OF STUDY is <strong>NOT affiliated with, authorized by, or associated with APSCHE (Andhra Pradesh State Council of Higher Education), TSCHE, APCFSS, National Scholarship Portal (NSP), JNTUK, JNTUA, Andhra University, Osmania University, or any governmental department</strong>.
+          <strong>NAA COLLEGE is an independent informational and utility engine.</strong> TG/AP EAPCET data, college vacancy counts, branch allotments, cutoffs, and scholarship listings displayed on this website are aggregated from publicly available government notifications, university circulars, and state counselling records for student guidance only. 
+          NAA COLLEGE is <strong>NOT affiliated with, authorized by, or associated with APSCHE (Andhra Pradesh State Council of Higher Education), TSCHE, APCFSS, National Scholarship Portal (NSP), JNTUK, JNTUA, Andhra University, Osmania University, or any governmental department</strong>.
         </p>
       </div>
 
@@ -53,7 +53,7 @@ export const Disclaimer: React.FC<DisclaimerProps> = ({ onBack }) => {
             1. TG / AP EAPCET Vacancies &amp; Seat Allotments
           </h2>
           <p>
-            Seat matrices, fee details, leftover category seat counts, and opening/closing ranks reflect public domain data released following state counselling phases. Because seat availability fluctuates dynamically during active sliding rounds and special category verifications, candidates must verify all choices directly on official state counselling portals prior to submitting final web options. MAN OF STUDY accepts no liability for admissions outcomes.
+            Seat matrices, fee details, leftover category seat counts, and opening/closing ranks reflect public domain data released following state counselling phases. Because seat availability fluctuates dynamically during active sliding rounds and special category verifications, candidates must verify all choices directly on official state counselling portals prior to submitting final web options. NAA COLLEGE accepts no liability for admissions outcomes.
           </p>
         </section>
 
@@ -75,7 +75,7 @@ export const Disclaimer: React.FC<DisclaimerProps> = ({ onBack }) => {
             3. Scholarship Databases &amp; External Portals
           </h2>
           <p>
-            Scholarship listings (such as Reliance Foundation, Tata Pankh, AICTE Pragati, and SBI Asha) are aggregated from publicly announced corporate CSR and government notices. Application deadlines, income thresholds, eligible categories, and grant disbursement schedules are governed solely by the respective granting foundations. MAN OF STUDY never collects application fees, never processes grant payouts, and cannot guarantee scholarship selection.
+            Scholarship listings (such as Reliance Foundation, Tata Pankh, AICTE Pragati, and SBI Asha) are aggregated from publicly announced corporate CSR and government notices. Application deadlines, income thresholds, eligible categories, and grant disbursement schedules are governed solely by the respective granting foundations. NAA COLLEGE never collects application fees, never processes grant payouts, and cannot guarantee scholarship selection.
           </p>
         </section>
 
