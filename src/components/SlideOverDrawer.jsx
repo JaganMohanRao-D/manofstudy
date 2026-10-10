@@ -107,7 +107,7 @@ export const SlideOverDrawer = ({
           {/* Header with Title and Prominent Close Button */}
           <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
             <a
-              href="https://manofstudy.com"
+              href="/"
               onClick={(e) => {
                 if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
                   e.preventDefault();
