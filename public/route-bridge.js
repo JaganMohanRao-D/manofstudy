@@ -392,9 +392,9 @@
     brand.setAttribute('data-mos-scorecard-brand', 'true');
     brand.style.cssText = 'display:flex;align-items:center;gap:14px;padding:8px 0 16px;border-bottom:1px solid #e2e8f0;margin-bottom:4px;';
     brand.innerHTML = `
-      <a href="${MOS_SITE_URL}" aria-label="NAA COLLEGE home" style="display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;">
-        <img src="${MOS_LOGO_PATH}" alt="NAA COLLEGE logo" width="64" height="64" style="width:64px;height:64px;object-fit:contain;display:block;" />
-        <span><strong style="display:block;font-size:19px;letter-spacing:.02em;">NAA COLLEGE</strong><small style="display:block;color:#64748b;font-size:11px;">Student Practice Scorecard · naacollege.in</small></span>
+      <a href="${MOS_SITE_URL}" aria-label="NAA COLLEGE home" style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;text-decoration:none;color:inherit;max-width:100%;">
+        <img src="${MOS_LOGO_PATH}" alt="NAA COLLEGE logo" width="78" height="78" style="width:78px;height:78px;object-fit:contain;display:block;flex:0 0 auto;" />
+        <span style="min-width:0;overflow-wrap:anywhere;"><strong style="display:block;font-size:22px;line-height:1.2;letter-spacing:.02em;">NAA COLLEGE</strong><small style="display:block;color:#64748b;font-size:12px;line-height:1.35;">Student Practice Scorecard · naacollege.in</small></span>
       </a>
     `;
     card.insertBefore(brand, card.firstChild);
