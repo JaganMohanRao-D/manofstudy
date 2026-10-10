@@ -80,9 +80,9 @@ export const Header: React.FC<HeaderProps> = ({ activeWorkspace = 'hub', onSelec
   return (
     <header id="main-header" className="mos-k-nav sticky top-0 z-50 w-full text-white shadow-lg shadow-black/20">
       <div className="mx-auto flex h-[68px] max-w-7xl items-center gap-3 px-3 sm:px-5 lg:px-7">
-        <button type="button" id="brand-logo" onClick={goHome} className="group flex min-w-0 shrink-0 items-center gap-2.5 text-left" aria-label="Man of Study home">
+        <button type="button" id="brand-logo" onClick={goHome} className="group flex min-w-0 shrink-0 items-center gap-2.5 text-left" aria-label="Naa College home">
           <span className="mos-brand-mark relative flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-cyan-300/15 bg-[#07101d] p-0.5 shadow-lg" aria-hidden="true">
-            <img src="/MANOFSTUDY_LOGO.png" alt="" width="40" height="40" className="h-full w-full object-contain transition-transform duration-200 group-hover:scale-105" loading="eager" />
+            <img src="/Naa%20College%20logo.webp" alt="" width="40" height="40" className="h-full w-full object-contain transition-transform duration-200 group-hover:scale-105" loading="eager" />
           </span>
           <span className="min-w-0 sm:block">
             <span className="mos-brand-wordmark block whitespace-nowrap text-[17px] font-black tracking-[-0.03em] text-white sm:text-[19px]">Man Of Study</span>
@@ -100,8 +100,8 @@ export const Header: React.FC<HeaderProps> = ({ activeWorkspace = 'hub', onSelec
         </nav>
 
         <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
-          <button type="button" id="header-command-palette-trigger" onClick={onOpenCommandPalette} className="hidden lg:inline-flex h-9 items-center gap-2 rounded-xl border border-cyan-300/10 bg-white/5 px-2.5 text-slate-300 hover:border-cyan-300/25 hover:bg-cyan-400/10 hover:text-white transition-colors sm:px-3" title="Search tools" aria-label="Search Man of Study tools"><Search className="h-4 w-4 text-cyan-300" /><span className="hidden xl:inline text-xs font-medium">Search tools</span></button>
-          <button type="button" id="header-support-btn" onClick={onOpenSupport} className="inline-flex h-9 w-9 sm:w-auto items-center justify-center gap-1.5 rounded-xl border border-cyan-300/15 bg-cyan-400/8 px-0 sm:px-3 text-xs font-bold text-cyan-200 hover:bg-cyan-400/15 hover:text-white transition-colors" aria-label="Support Man of Study" title="Support Man of Study"><Heart className="h-3.5 w-3.5" /><span className="hidden sm:inline">Support</span></button>
+          <button type="button" id="header-command-palette-trigger" onClick={onOpenCommandPalette} className="hidden lg:inline-flex h-9 items-center gap-2 rounded-xl border border-cyan-300/10 bg-white/5 px-2.5 text-slate-300 hover:border-cyan-300/25 hover:bg-cyan-400/10 hover:text-white transition-colors sm:px-3" title="Search tools" aria-label="Search Naa College tools"><Search className="h-4 w-4 text-cyan-300" /><span className="hidden xl:inline text-xs font-medium">Search tools</span></button>
+          <button type="button" id="header-support-btn" onClick={onOpenSupport} className="inline-flex h-9 w-9 sm:w-auto items-center justify-center gap-1.5 rounded-xl border border-cyan-300/15 bg-cyan-400/8 px-0 sm:px-3 text-xs font-bold text-cyan-200 hover:bg-cyan-400/15 hover:text-white transition-colors" aria-label="Support Naa College" title="Support Naa College"><Heart className="h-3.5 w-3.5" /><span className="hidden sm:inline">Support</span></button>
           <button type="button" onClick={() => setMobileOpen((v) => !v)} className="order-first inline-flex h-9 w-9 items-center justify-center rounded-xl border border-cyan-300/10 bg-white/5 text-slate-200 hover:bg-cyan-400/10 lg:hidden" aria-label={mobileOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={mobileOpen}>{mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</button>
         </div>
       </div>
@@ -110,9 +110,9 @@ export const Header: React.FC<HeaderProps> = ({ activeWorkspace = 'hub', onSelec
         <div className="border-t border-cyan-300/10 bg-[#040b16] px-3 pb-4 pt-2 lg:hidden">
           <div className="mx-auto max-w-7xl space-y-1">
             <button type="button" onClick={goHome} className="w-full rounded-xl px-3 py-3 text-left text-sm font-semibold text-slate-200 hover:bg-cyan-400/10">Home</button>
-            <button type="button" onClick={() => { setMobileOpen(false); onOpenCommandPalette?.(); }} className="group mb-2 flex min-h-12 w-full items-center gap-3 rounded-2xl border border-cyan-300/20 bg-gradient-to-r from-cyan-400/[0.10] to-cyan-300/[0.06] px-3.5 py-3 text-left shadow-lg shadow-cyan-950/10 transition hover:border-cyan-300/35 hover:bg-cyan-400/[0.14]" aria-label="Search Man of Study tools">
+            <button type="button" onClick={() => { setMobileOpen(false); onOpenCommandPalette?.(); }} className="group mb-2 flex min-h-12 w-full items-center gap-3 rounded-2xl border border-cyan-300/20 bg-gradient-to-r from-cyan-400/[0.10] to-cyan-300/[0.06] px-3.5 py-3 text-left shadow-lg shadow-cyan-950/10 transition hover:border-cyan-300/35 hover:bg-cyan-400/[0.14]" aria-label="Search Naa College tools">
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-cyan-300/15 bg-[#07101d] text-cyan-300"><Search className="h-4 w-4" /></span>
-              <span className="min-w-0 flex-1"><span className="block text-sm font-semibold text-white">Search Man of Study</span><span className="mt-0.5 block text-[11px] text-slate-400">Find tools by name or what you need</span></span>
+              <span className="min-w-0 flex-1"><span className="block text-sm font-semibold text-white">Search Naa College</span><span className="mt-0.5 block text-[11px] text-slate-400">Find tools by name or what you need</span></span>
               <span className="text-lg text-slate-500 transition group-hover:translate-x-0.5 group-hover:text-cyan-300">⌕</span>
             </button>
             <MobileGroup title="For AP" items={AP_TOOLS} onSelect={navigate} />
@@ -129,7 +129,7 @@ export const Header: React.FC<HeaderProps> = ({ activeWorkspace = 'hub', onSelec
                 <button type="button" onClick={() => { setMobileOpen(false); onOpenLegal?.('contact'); }} className="flex min-h-11 items-center gap-2 rounded-xl border border-white/8 bg-white/[0.03] px-3 py-2.5 text-left text-xs font-medium text-slate-300 hover:border-cyan-300/20 hover:bg-cyan-400/8 hover:text-white"><Mail className="h-4 w-4 shrink-0 text-cyan-300" />Contact Developer</button>
               </div>
             </div>
-            <button type="button" onClick={() => { setMobileOpen(false); onOpenSupport?.(); }} className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-cyan-300/15 bg-cyan-400/8 px-3 py-3 text-sm font-bold text-cyan-200"><Heart className="h-4 w-4" /> Support Man of Study</button>
+            <button type="button" onClick={() => { setMobileOpen(false); onOpenSupport?.(); }} className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-cyan-300/15 bg-cyan-400/8 px-3 py-3 text-sm font-bold text-cyan-200"><Heart className="h-4 w-4" /> Support Naa College</button>
           </div>
         </div>
       )}
