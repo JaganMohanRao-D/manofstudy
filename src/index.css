@@ -573,28 +573,110 @@ html.dark #campus-connect .shadow-pink-200\/50 {
     print-color-adjust: exact !important;
   }
 
-  /* Hide everything except the dedicated print sheet to ensure zero-fail, zero-blank exports */
-  body * {
-    visibility: hidden;
+  /*
+   * The print handler clones the scorecard sheet as a direct child of body.
+   * Hiding the application root this way avoids the hidden page consuming
+   * pagination space and lets the scorecard flow naturally across A4 pages.
+   */
+  body.mos-scorecard-print-document > *:not(#certificate-print-sheet) {
+    display: none !important;
   }
 
-  #certificate-print-sheet,
-  #certificate-print-sheet * {
-    visibility: visible;
-  }
-
-  #certificate-print-sheet {
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
+  body.mos-scorecard-print-document > #certificate-print-sheet {
+    position: static !important;
+    inset: auto !important;
     width: 100% !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    height: auto !important;
     display: block !important;
     margin: 0 !important;
-    padding: 16px !important;
+    padding: 6mm !important;
+    border: 1px solid #CBD5E1 !important;
+    border-radius: 0 !important;
     background: #FFFFFF !important;
     color: #0F172A !important;
     box-sizing: border-box !important;
-    page-break-inside: avoid !important;
+    overflow: visible !important;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body.mos-scorecard-print-document #certificate-print-sheet * {
+    box-sizing: border-box !important;
+    visibility: visible !important;
+    max-width: 100%;
+  }
+
+  #certificate-print-sheet h1 {
+    font-size: 16px !important;
+    line-height: 1.25 !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  #certificate-print-sheet p,
+  #certificate-print-sheet td,
+  #certificate-print-sheet th,
+  #certificate-print-sheet span,
+  #certificate-print-sheet div {
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+
+  #certificate-print-sheet > * {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  #certificate-print-sheet table {
+    width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+  }
+
+  #certificate-print-sheet thead {
+    display: table-header-group;
+  }
+
+  #certificate-print-sheet tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  #certificate-print-sheet th,
+  #certificate-print-sheet td {
+    padding: 4px !important;
+    vertical-align: top !important;
+  }
+
+  #certificate-print-sheet > div:first-child {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+  }
+
+  #certificate-print-sheet > div:first-child > div:first-child {
+    flex: 1 1 120mm;
+    min-width: 0 !important;
+  }
+
+  #certificate-print-sheet .grid-cols-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  #certificate-print-sheet .grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  #certificate-print-sheet img {
+    flex: 0 0 auto;
+    object-fit: contain;
   }
 }
 
