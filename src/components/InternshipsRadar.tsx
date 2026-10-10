@@ -358,7 +358,7 @@ export const InternshipsRadar: React.FC = () => {
           <div>
             <h2 className="text-sm font-bold text-amber-200">Apply safely</h2>
             <p className="mt-1 text-xs sm:text-sm leading-6 text-amber-100/80">
-              Man of Study links to the official programme or platform. Always read the current listing before submitting documents.
+              Naa College links to the official programme or platform. Always read the current listing before submitting documents.
               Never pay a recruiter or unknown person to “guarantee” selection, and do not treat an opportunity platform as proof that every employer listing is genuine.
             </p>
           </div>
