@@ -1031,7 +1031,7 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(7.5);
     // @ts-ignore
-    doc.textWithLink('manofstudy.com', 105, pageHeight - 7.5, {
+    doc.textWithLink('naacollege.in', 105, pageHeight - 7.5, {
       url: TARGET_URL,
       align: 'center',
     });
