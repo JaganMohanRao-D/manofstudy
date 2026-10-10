@@ -353,7 +353,7 @@ export const TgTopColleges: React.FC = () => {
               <div>
                 <h2 className="text-lg font-black">Compare branches separately</h2>
                 <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
-                  Different branches have different admission demand. Man of Study therefore does not mix CSE, ECE, Mechanical and other branches into one misleading median. Pick a branch above to see its college-by-college OC analysis.
+                  Different branches have different admission demand. Naa College therefore does not mix CSE, ECE, Mechanical and other branches into one misleading median. Pick a branch above to see its college-by-college OC analysis.
                 </p>
               </div>
             </div>
@@ -432,7 +432,7 @@ export const TgTopColleges: React.FC = () => {
             <div>
               <h2 className="text-sm font-black">How do we rank colleges?</h2>
               <p className="mt-2 text-xs leading-6 text-slate-600 dark:text-slate-300">
-                Man of Study does not publish an official or government college ranking. For a selected branch, colleges are ordered primarily by the median of valid OC-category allotment ranks in the available Telangana EAPCET 2026 dataset. The highest and lowest observed OC ranks are also shown. Reserved-category student ranks are not used in this analysis.
+                Naa College does not publish an official or government college ranking. For a selected branch, colleges are ordered primarily by the median of valid OC-category allotment ranks in the available Telangana EAPCET 2026 dataset. The highest and lowest observed OC ranks are also shown. Reserved-category student ranks are not used in this analysis.
               </p>
               <p className="mt-2 text-xs leading-6 text-slate-500 dark:text-slate-400">
                 Lower rank numbers represent stronger numerical ranks. These figures describe the available allotment records; they do not guarantee future cutoffs, admission chances, college quality, placements or student outcomes. Verify current official counselling information before making admission decisions.
