@@ -1918,9 +1918,9 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
         <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[10px] text-slate-400">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-500" />
-            <span>Digital Certificate Verification Code: MOS-CBT-CERT-{Date.now().toString(36).toUpperCase()}</span>
+            <span>Digital Certificate Verification Code: NC-CBT-CERT-{Date.now().toString(36).toUpperCase()}</span>
           </div>
-          <div>Man of Study AI Curriculum &amp; Examination Division</div>
+          <div>Naa College AI Curriculum &amp; Examination Division</div>
         </div>
       </div>
 
@@ -2248,13 +2248,13 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
             </div>
             <div>
               <div className="font-bold text-slate-900">VERIFIED ASSESSMENT RECORD</div>
-              <div className="text-[9px] text-slate-500">Man of Study Evaluation System (APSCHE & TGCHE Compliant)</div>
+              <div className="text-[9px] text-slate-500">Naa College Evaluation System (APSCHE & TGCHE Compliant)</div>
             </div>
           </div>
 
           <div className="text-right">
             <div className="font-serif italic font-bold text-slate-800 text-sm">Controller of Examinations</div>
-            <div className="text-[9px] text-slate-500">Man of Study CBT Simulation Council</div>
+            <div className="text-[9px] text-slate-500">Naa College CBT Simulation Council</div>
           </div>
         </div>
 
