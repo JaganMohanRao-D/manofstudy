@@ -173,40 +173,40 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
   doc.setFillColor(15, 23, 42); // Slate 900
   doc.setDrawColor(51, 65, 85);
   doc.setLineWidth(0.2);
-  doc.roundedRect(marginLeft, coverY, 48, 12.0, 2.2, 2.2, 'FD');
+  doc.roundedRect(marginLeft, coverY, 58, 15.0, 2.5, 2.5, 'FD');
 
   // Canonical Naa College logo. Preserve its intrinsic aspect ratio within the brand pill.
   if (naaCollegeLogo) {
-    const logoBox = 9.0;
+    const logoBox = 11.5;
     const scale = Math.min(logoBox / naaCollegeLogo.width, logoBox / naaCollegeLogo.height);
     const logoWidth = naaCollegeLogo.width * scale;
     const logoHeight = naaCollegeLogo.height * scale;
     doc.addImage(
       naaCollegeLogo.dataUrl,
       'PNG',
-      marginLeft + 1.5 + (logoBox - logoWidth) / 2,
-      coverY + 1.5 + (logoBox - logoHeight) / 2,
+      marginLeft + 1.8 + (logoBox - logoWidth) / 2,
+      coverY + 1.8 + (logoBox - logoHeight) / 2,
       logoWidth,
       logoHeight,
       undefined,
       'FAST'
     );
-    doc.link(marginLeft + 1.0, coverY + 1.0, 10.0, 10.0, { url: TARGET_URL });
+    doc.link(marginLeft + 1.0, coverY + 1.0, 13.0, 13.0, { url: TARGET_URL });
   } else {
     doc.setFillColor(6, 182, 212);
-    doc.circle(marginLeft + 5.5, coverY + 6.0, 1.8, 'F');
+    doc.circle(marginLeft + 6.8, coverY + 7.5, 2.2, 'F');
   }
 
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(10.5);
+  doc.setFontSize(13.0);
   doc.setTextColor(255, 255, 255);
-  doc.text(BRAND_NAME, marginLeft + 12.5, coverY + 7.7);
+  doc.text(BRAND_NAME, marginLeft + 15.5, coverY + 9.8);
 
   // Series Label
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8.5);
   doc.setTextColor(71, 85, 105);
-  doc.text('CAREER ROADMAP SERIES', marginLeft + 53, coverY + 7.7);
+  doc.text('CAREER ROADMAP SERIES', marginLeft + 63, coverY + 9.8);
 
   // Verified Badge (Right)
   const verW = 42;
