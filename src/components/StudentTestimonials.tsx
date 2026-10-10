@@ -228,7 +228,7 @@ export const StudentTestimonials: React.FC = () => {
           <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
             <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
               <GraduationCap className="w-4 h-4 text-sky-600" />
-              Share Your Experience on MAN OF STUDY
+              Share Your Experience on Naa College
             </h3>
             <span className="text-[10px] text-slate-400">Stored in browser &amp; instantly visible</span>
           </div>
