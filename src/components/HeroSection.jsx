@@ -123,10 +123,9 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
           </div>
 
           <div>
-            <h1 id="mos-k-title" className="mos-k-title">
-              <span>MAN</span>
-              <span className="accent">OF</span>
-              <span>STUDY<span className="orange">.</span></span>
+            <h1 id="mos-k-title" className="mos-k-title" aria-label="Naa College">
+              <span>NAA</span>
+              <span className="accent">COLLEGE<span className="orange">.</span></span>
             </h1>
 
             <div className="mos-k-bottom">
