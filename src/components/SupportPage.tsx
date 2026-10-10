@@ -40,8 +40,8 @@ export const SupportPage: React.FC<SupportPageProps> = ({ onBack }) => {
   const upiIntent = useMemo(() => {
     const params = new URLSearchParams({
       pa: UPI_ID,
-      pn: 'MAN OF STUDY Developer',
-      tn: 'Voluntary support for MAN OF STUDY',
+      pn: 'NAA COLLEGE Developer',
+      tn: 'Voluntary support for NAA COLLEGE',
       cu: 'INR',
     });
     if (effectiveAmount) params.set('am', String(effectiveAmount));
@@ -85,11 +85,11 @@ export const SupportPage: React.FC<SupportPageProps> = ({ onBack }) => {
             className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Back to Man of Study</span>
+            <span>Back to Naa College</span>
           </button>
           <div className="hidden sm:flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-400">
             <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
-            Support Man of Study
+            Support Naa College
           </div>
         </div>
       </header>
@@ -105,11 +105,11 @@ export const SupportPage: React.FC<SupportPageProps> = ({ onBack }) => {
                 Student-built • Voluntary support
               </div>
               <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.02]">
-                Support Man of Study.
+                Support Naa College.
                 <span className="block text-emerald-300">Keep student tools moving.</span>
               </h1>
               <p className="mt-5 text-base sm:text-lg leading-relaxed text-slate-300 max-w-2xl">
-                Man of Study is built to keep practical academic, admissions, scholarship and student utility tools accessible without a paywall.
+                Naa College is built to keep practical academic, admissions, scholarship and student utility tools accessible without a paywall.
               </p>
               <div className="mt-6 flex flex-wrap gap-2 text-xs font-semibold text-slate-300">
                 <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">100% free for everyone</span>
@@ -219,7 +219,7 @@ export const SupportPage: React.FC<SupportPageProps> = ({ onBack }) => {
                 ఇది subscription plan కాదు. ఇది మీరు ఇష్టపూర్వకంగా చేసే ఒక చిన్న support అంతే. ఈ website ఎప్పటికీ అందరికీ free గానే ఉంటుంది. ఇది మీరు మాకు ఇచ్చే ఒక పెద్ద support. Thanks ❤️
               </p>
               <p className="mt-2 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
-                This support does not unlock paid features or create a recurring subscription. Everyone can continue using Man of Study for free.
+                This support does not unlock paid features or create a recurring subscription. Everyone can continue using Naa College for free.
               </p>
             </div>
           </div>
@@ -236,7 +236,7 @@ export const SupportPage: React.FC<SupportPageProps> = ({ onBack }) => {
             </div>
 
             <div className="mt-5 flex justify-center rounded-2xl bg-white p-3 border border-slate-200">
-              <img src={qrCodeUrl} alt="UPI QR code for supporting Man of Study" width={220} height={220} className="w-[190px] h-[190px] sm:w-[220px] sm:h-[220px] object-contain" loading="eager" />
+              <img src={qrCodeUrl} alt="UPI QR code for supporting Naa College" width={220} height={220} className="w-[190px] h-[190px] sm:w-[220px] sm:h-[220px] object-contain" loading="eager" />
             </div>
 
             <a
@@ -293,9 +293,9 @@ export const SupportPage: React.FC<SupportPageProps> = ({ onBack }) => {
           <div className="rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white p-6 sm:p-8 shadow-xl">
             <p className="text-xs font-black uppercase tracking-[0.16em] text-blue-100">Built by a student</p>
             <h2 className="mt-3 text-3xl font-black">Dunna Jagan Mohan Rao</h2>
-            <p className="mt-2 text-blue-100 font-semibold">B.Tech CSE Student • Founder, Man of Study</p>
+            <p className="mt-2 text-blue-100 font-semibold">B.Tech CSE Student • Founder, Naa College</p>
             <p className="mt-5 text-sm leading-relaxed text-blue-50/90">
-              Man of Study began as a student-built project focused on making useful engineering, admissions, scholarship and academic resources easier to access in one place.
+              Naa College began as a student-built project focused on making useful engineering, admissions, scholarship and academic resources easier to access in one place.
             </p>
           </div>
 
@@ -325,7 +325,7 @@ export const SupportPage: React.FC<SupportPageProps> = ({ onBack }) => {
           <div>
             {[
               ['Is this a subscription?', 'No. Support is a one-time voluntary contribution. It does not create a recurring subscription or unlock paid features.'],
-              ['Will Man of Study become paid for everyone?', 'No. The support page clearly states that the website remains free for everyone, including students who do not contribute.'],
+              ['Will Naa College become paid for everyone?', 'No. The support page clearly states that the website remains free for everyone, including students who do not contribute.'],
               ['What does my support help with?', 'It can help with practical platform expenses such as hosting, maintenance, data curation, testing, development and new student utilities.'],
               ['Can I choose my own amount?', 'Yes. You can select ₹49, ₹99, ₹299, ₹400 or choose Any amount and enter the amount you personally wish to support.'],
             ].map(([question, answer], index) => (
@@ -359,7 +359,7 @@ export const SupportPage: React.FC<SupportPageProps> = ({ onBack }) => {
               <ArrowRight className="w-4 h-4" />
             </a>
             <button type="button" onClick={onBack} className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-5 py-3 font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-              Explore Man of Study
+              Explore Naa College
             </button>
           </div>
           <p className="mt-5 text-[11px] text-slate-400 dark:text-slate-500">{SUPPORT_URL}</p>
