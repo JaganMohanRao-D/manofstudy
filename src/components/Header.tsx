@@ -110,10 +110,10 @@ export const Header: React.FC<HeaderProps> = ({ activeWorkspace = 'hub', onSelec
         <div className="border-t border-cyan-300/10 bg-[#040b16] px-3 pb-4 pt-2 lg:hidden">
           <div className="mx-auto max-w-7xl space-y-1">
             <button type="button" onClick={goHome} className="w-full rounded-xl px-3 py-3 text-left text-sm font-semibold text-slate-200 hover:bg-cyan-400/10">Home</button>
-            <button type="button" onClick={() => { setMobileOpen(false); onOpenCommandPalette?.(); }} className="group mb-2 flex min-h-12 w-full items-center gap-3 rounded-2xl border border-cyan-300/20 bg-gradient-to-r from-cyan-400/[0.10] to-lime-300/[0.06] px-3.5 py-3 text-left shadow-lg shadow-cyan-950/10 transition hover:border-lime-300/35 hover:bg-cyan-400/[0.14]" aria-label="Search Man of Study tools">
+            <button type="button" onClick={() => { setMobileOpen(false); onOpenCommandPalette?.(); }} className="group mb-2 flex min-h-12 w-full items-center gap-3 rounded-2xl border border-cyan-300/20 bg-gradient-to-r from-cyan-400/[0.10] to-cyan-300/[0.06] px-3.5 py-3 text-left shadow-lg shadow-cyan-950/10 transition hover:border-cyan-300/35 hover:bg-cyan-400/[0.14]" aria-label="Search Man of Study tools">
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-cyan-300/15 bg-[#07101d] text-cyan-300"><Search className="h-4 w-4" /></span>
               <span className="min-w-0 flex-1"><span className="block text-sm font-semibold text-white">Search Man of Study</span><span className="mt-0.5 block text-[11px] text-slate-400">Find tools by name or what you need</span></span>
-              <span className="text-lg text-slate-500 transition group-hover:translate-x-0.5 group-hover:text-lime-300">⌕</span>
+              <span className="text-lg text-slate-500 transition group-hover:translate-x-0.5 group-hover:text-cyan-300">⌕</span>
             </button>
             <MobileGroup title="For AP" items={AP_TOOLS} onSelect={navigate} />
             <MobileGroup title="For TG" items={TG_TOOLS} onSelect={navigate} />
