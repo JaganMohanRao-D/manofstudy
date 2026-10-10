@@ -628,24 +628,24 @@ export default function App() {
 
     const config = seoPath === 'apAllotments'
       ? {
-          title: 'AP EAPCET 2026 College-Wise Allotments | Man of Study',
-          description: 'Explore AP EAPCET 2026 engineering allotment records by college and branch with the Man of Study allotment explorer.',
+          title: 'AP EAPCET 2026 College-Wise Allotments | Naa College',
+          description: 'Explore AP EAPCET 2026 engineering allotment records by college and branch with the Naa College allotment explorer.',
           canonical: 'https://manofstudy.pages.dev/ap-eapcet/college-wise-allotments/',
         }
       : seoPath === 'tgAllotments'
         ? {
-            title: 'TG EAPCET 2026 Name-Wise Seat Allotments | Man of Study',
+            title: 'TG EAPCET 2026 Name-Wise Seat Allotments | Naa College',
             description: 'Search Telangana EAPCET 2026 final-phase engineering seat allotment records by student name, hall ticket, college and branch.',
             canonical: 'https://manofstudy.pages.dev/tg-eapcet/name-wise-allotments/',
           }
         : seoPath === 'apPredictor'
           ? {
-              title: 'AP EAPCET College Predictor 2026 | Man of Study',
+              title: 'AP EAPCET College Predictor 2026 | Naa College',
               description: 'Use the AP EAPCET 2026 College Predictor to explore college and branch options based on rank, category, gender, region and preferences.',
               canonical: 'https://manofstudy.pages.dev/ap-eapcet/college-predictor/',
             }
           : {
-              title: 'TG EAPCET College Predictor 2026 | Man of Study',
+              title: 'TG EAPCET College Predictor 2026 | Naa College',
               description: 'Use the Telangana EAPCET 2026 College Predictor to explore college and branch options based on rank, category, gender, branch and preferences.',
               canonical: 'https://manofstudy.pages.dev/tg-eapcet/college-predictor/',
             };
@@ -875,7 +875,7 @@ export default function App() {
         };
       case 'guides':
         return {
-          title: 'MOS Student Knowledge HUB (9 Chapters)',
+          title: 'Naa College Student Knowledge Hub (9 Chapters)',
           icon: <BookOpen className="w-4 h-4 text-sky-500" />,
         };
       case 'gap-analyzer':
@@ -891,7 +891,7 @@ export default function App() {
         };
       default:
         return {
-          title: 'MAN OF STUDY Feature Hub',
+          title: 'NAA COLLEGE Feature Hub',
           icon: <Sparkles className="w-4 h-4 text-emerald-500" />,
         };
     }
@@ -924,7 +924,7 @@ export default function App() {
           <SeoLandingPage
             eyebrow="AP EAPCET 2026 · Engineering Admissions"
             title="AP EAPCET 2026 College-Wise Allotments"
-            description="Use the Man of Study AP allotment explorer to browse the available 2026 engineering allotment dataset by college, branch, rank and category. The page is built around the same interactive allotment tool available across Man of Study."
+            description="Use the Naa College AP allotment explorer to browse the available 2026 engineering allotment dataset by college, branch, rank and category. The page is built around the same interactive allotment tool available across Naa College."
             tool={<ApEapcet2025AllotmentExplorer />}
             howTo={[
               'Open the college selector and choose a specific AP engineering college, or use the statewide view.',
@@ -933,7 +933,7 @@ export default function App() {
               'Treat observed allotment records as historical dataset information and verify current counselling notices with official AP admissions sources.'
             ]}
             faqs={[
-              { question: 'What does this AP EAPCET page contain?', answer: 'It provides the Man of Study interactive explorer for the AP EAPCET engineering allotment dataset, including college, branch and candidate-level views available in the project data.' },
+              { question: 'What does this AP EAPCET page contain?', answer: 'It provides the Naa College interactive explorer for the AP EAPCET engineering allotment dataset, including college, branch and candidate-level views available in the project data.' },
               { question: 'Can I search by college and branch?', answer: 'Yes. The explorer supports college and branch selection and exposes the available records for the selected context.' },
               { question: 'Are these guaranteed future cutoffs?', answer: 'No. Allotment records describe the dataset available to the tool. They should not be treated as a guarantee of a future allotment or admission outcome.' }
             ]}
@@ -947,7 +947,7 @@ export default function App() {
           <SeoLandingPage
             eyebrow="TG EAPCET 2026 · Final Phase"
             title="TG EAPCET 2026 Name-Wise Seat Allotments"
-            description="Search the Man of Study Telangana EAPCET 2026 final-phase allotment explorer by candidate name, hall ticket, college and branch, with available category and rank information."
+            description="Search the Naa College Telangana EAPCET 2026 final-phase allotment explorer by candidate name, hall ticket, college and branch, with available category and rank information."
             tool={<TgAllotmentExplorer initialCollegeCode="ALL" initialBranchCode="ALL" initialTab="explorer" />}
             howTo={[
               'Keep All Colleges selected for a statewide search, or choose a specific college first.',
@@ -956,7 +956,7 @@ export default function App() {
               'Use the displayed allotment data as a reference and verify official Telangana counselling information before making decisions.'
             ]}
             faqs={[
-              { question: 'What is name-wise TG EAPCET allotment search?', answer: 'It is an interactive candidate search within the Telangana EAPCET 2026 final-phase allotment dataset available in Man of Study.' },
+              { question: 'What is name-wise TG EAPCET allotment search?', answer: 'It is an interactive candidate search within the Telangana EAPCET 2026 final-phase allotment dataset available in Naa College.' },
               { question: 'Can I search across colleges?', answer: 'Yes. The statewide explorer supports an All Colleges context, while individual college views can load the corresponding allotment data.' },
               { question: 'Does an allotment record guarantee admission?', answer: 'No. A dataset record is informational. Current counselling instructions, reporting requirements and official allotment notices remain authoritative.' }
             ]}
@@ -970,7 +970,7 @@ export default function App() {
           <SeoLandingPage
             eyebrow="AP EAPCET 2026 · College Prediction"
             title="AP EAPCET College Predictor 2026"
-            description="Use the Man of Study AP EAPCET College Predictor to explore colleges and branches that match your entered rank, category, gender, region and preferences. It is designed to help students explore available options using the project's 2026 allotment data."
+            description="Use the Naa College AP EAPCET College Predictor to explore colleges and branches that match your entered rank, category, gender, region and preferences. It is designed to help students explore available options using the project's 2026 allotment data."
             tool={<ApCollegePredictor initialCollegeCode="ALL" initialBranchCode="ALL" />}
             toolIntro="Enter your AP EAPCET rank and preferences, then use the interactive predictor to explore matching college and branch options."
             howTo={[
@@ -980,7 +980,7 @@ export default function App() {
               'Use the results as an exploration aid, not as a guarantee of future allotment or admission.'
             ]}
             faqs={[
-              { question: 'What is the AP EAPCET College Predictor?', answer: 'It is an interactive Man of Study tool that uses the project’s available AP EAPCET allotment data to explore college and branch options for an entered rank and selected preferences.' },
+              { question: 'What is the AP EAPCET College Predictor?', answer: 'It is an interactive Naa College tool that uses the project’s available AP EAPCET allotment data to explore college and branch options for an entered rank and selected preferences.' },
               { question: 'Can I predict colleges based on my AP EAPCET rank?', answer: 'Yes. Enter your rank and relevant preferences to explore the college and branch matches returned by the predictor.' },
               { question: 'Can I check AP EAPCET colleges and branches?', answer: 'Yes. The predictor lets you narrow results by college and branch while considering the supported candidate preferences.' },
               { question: 'Is the AP EAPCET College Predictor a guaranteed allotment?', answer: 'No. Predictions are informational and based on the available dataset and selected inputs. Actual counselling rules, seat availability and official allotments determine admission.' }
@@ -996,7 +996,7 @@ export default function App() {
           <SeoLandingPage
             eyebrow="TG EAPCET 2026 · College Prediction"
             title="TG EAPCET College Predictor 2026"
-            description="Use the Man of Study Telangana EAPCET College Predictor to explore college and branch options based on rank, category, gender, preferred branch, district and other supported preferences."
+            description="Use the Naa College Telangana EAPCET College Predictor to explore college and branch options based on rank, category, gender, preferred branch, district and other supported preferences."
             tool={<TgCollegePredictor />}
             toolIntro="Enter your TG EAPCET rank and preferences, then use the interactive predictor to explore matching Telangana colleges and branches."
             howTo={[
@@ -1006,7 +1006,7 @@ export default function App() {
               'Use the results as an exploration aid and verify current counselling rules and official allotments before making decisions.'
             ]}
             faqs={[
-              { question: 'What is the TG EAPCET College Predictor?', answer: 'It is an interactive Man of Study tool that uses the project’s available Telangana EAPCET allotment data to explore college and branch options for an entered rank and selected preferences.' },
+              { question: 'What is the TG EAPCET College Predictor?', answer: 'It is an interactive Naa College tool that uses the project’s available Telangana EAPCET allotment data to explore college and branch options for an entered rank and selected preferences.' },
               { question: 'Can I predict Telangana colleges based on my TG EAPCET rank?', answer: 'Yes. Enter your rank, category, gender and preferred branch to explore the matching colleges returned by the predictor.' },
               { question: 'Can I filter TG EAPCET college predictions by branch or district?', answer: 'Yes. The predictor supports branch selection and additional filters such as district and college search where available in the tool.' },
               { question: 'Is the TG EAPCET College Predictor a guaranteed allotment?', answer: 'No. Predictions are informational and based on the available dataset and selected inputs. Actual counselling rules, seat availability and official allotments determine admission.' }
@@ -1061,7 +1061,7 @@ export default function App() {
                   type="button"
                   onClick={() => handleSelectWorkspace('hub')}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer shadow-2xs group shrink-0 self-start sm:self-auto"
-                  title="Return to MAN OF STUDY Feature Hub"
+                  title="Return to NAA COLLEGE Feature Hub"
                 >
                   <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
                   <span>← Back to Feature Hub</span>
@@ -1376,7 +1376,7 @@ export default function App() {
               <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             </div>
             <p className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 text-left">
-              MAN OF STUDY — 100% Free &amp; Open-Source Educational Tooling for Students.
+              NAA COLLEGE — 100% Free &amp; Open-Source Educational Tooling for Students.
             </p>
           </div>
           <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 font-medium">
@@ -1403,7 +1403,7 @@ export default function App() {
         />
       )}
 
-      {/* Support & Keep MAN OF STUDY Free Modal */}
+      {/* Support & Keep NAA COLLEGE Free Modal */}
       {isSupportModalOpen && (
         <Suspense fallback={null}>
           <SupportModal
