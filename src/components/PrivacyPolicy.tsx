@@ -68,7 +68,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             No PII Tracking
           </h3>
           <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            We do not collect government Aadhaar numbers, biometric impressions, phone numbers, or academic credentials. You use MAN OF STUDY anonymously.
+            We do not collect government Aadhaar numbers, biometric impressions, phone numbers, or academic credentials. You use NAA COLLEGE anonymously.
           </p>
         </div>
       </div>
@@ -80,7 +80,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             1. Introduction &amp; Core Operating Philosophy
           </h2>
           <p>
-            MAN OF STUDY (the "Platform", accessible at <a href="https://manofstudy.com" target="_blank" rel="noopener noreferrer" className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">https://manofstudy.com</a> and preview mirrors) is an independent open-access educational launchpad developed to assist engineering and degree scholars across Andhra Pradesh, Telangana, and broader India. We believe that privacy is a foundational human right. Unlike predatory commercial websites that upload sensitive resumes, mark sheets, and national ID cards to remote databases for monetization, MAN OF STUDY is engineered with a strict <strong>client-side in-memory execution paradigm</strong>.
+            NAA COLLEGE (the "Platform", accessible at <a href="https://manofstudy.com" target="_blank" rel="noopener noreferrer" className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">https://manofstudy.com</a> and preview mirrors) is an independent open-access educational launchpad developed to assist engineering and degree scholars across Andhra Pradesh, Telangana, and broader India. We believe that privacy is a foundational human right. Unlike predatory commercial websites that upload sensitive resumes, mark sheets, and national ID cards to remote databases for monetization, NAA COLLEGE is engineered with a strict <strong>client-side in-memory execution paradigm</strong>.
           </p>
         </section>
 
@@ -103,7 +103,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             3. Browser Local Storage &amp; Session State
           </h2>
           <p>
-            MAN OF STUDY utilizes client-side <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-emerald-600 font-mono text-xs">localStorage</code> solely to save non-sensitive, convenience preferences across your visits. These settings include:
+            NAA COLLEGE utilizes client-side <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-emerald-600 font-mono text-xs">localStorage</code> solely to save non-sensitive, convenience preferences across your visits. These settings include:
           </p>
           <ul className="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-400">
             <li>UI visual theme mode (Light Mode / Dark Mode).</li>
@@ -121,14 +121,14 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             <span>4. Google AdSense &amp; Third-Party Advertising Cookies</span>
           </h2>
           <p>
-            To keep MAN OF STUDY 100% free forever for students without requiring subscription paywalls, this website may display advertisements served by Google AdSense and certified Google third-party advertising partners:
+            To keep NAA COLLEGE 100% free forever for students without requiring subscription paywalls, this website may display advertisements served by Google AdSense and certified Google third-party advertising partners:
           </p>
           <ul className="list-disc pl-5 space-y-1.5 text-slate-600 dark:text-slate-400">
             <li>
               Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites across the internet.
             </li>
             <li>
-              Google's use of advertising cookies enables it and its partners to serve ads to our users based on their visit to MAN OF STUDY and/or other sites on the Internet.
+              Google's use of advertising cookies enables it and its partners to serve ads to our users based on their visit to NAA COLLEGE and/or other sites on the Internet.
             </li>
             <li>
               Users may opt out of personalized advertising by visiting{' '}
@@ -169,7 +169,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             6. Children’s Online Privacy Protection (COPPA / DPDP Compliance)
           </h2>
           <p>
-            MAN OF STUDY does not knowingly collect personal data from individuals under 13 years of age. All interactive utilities operate without user accounts, sign-ups, or login walls, ensuring full compliance with child safety and digital student privacy directives.
+            NAA COLLEGE does not knowingly collect personal data from individuals under 13 years of age. All interactive utilities operate without user accounts, sign-ups, or login walls, ensuring full compliance with child safety and digital student privacy directives.
           </p>
         </section>
 
