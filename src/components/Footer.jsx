@@ -24,14 +24,14 @@ export const Footer = ({ onOpenLegalModal, onOpenSupportModal }) => (
             <button type="button" onClick={() => onOpenLegalModal?.('disclaimer')} className="text-left hover:text-[#22d3ee]">Legal Safe Harbor &amp; Disclaimers</button>
             <button type="button" onClick={() => onOpenLegalModal?.('about')} className="text-left hover:text-[#22d3ee]">About Naa College</button>
             <button type="button" onClick={() => onOpenLegalModal?.('contact')} className="text-left hover:text-[#22d3ee]">Contact Support</button>
-            {onOpenSupportModal && <button type="button" onClick={onOpenSupportModal} className="inline-flex items-center gap-2 text-left text-[#22d3ee]"><Heart size={12}/> Support MOS</button>}
+            {onOpenSupportModal && <button type="button" onClick={onOpenSupportModal} className="inline-flex items-center gap-2 text-left text-[#22d3ee]"><Heart size={12}/> Support Naa College</button>}
           </div>
         </div>
       </div>
       <div className="mt-12 border-t border-white/10 pt-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <div className="mk-built">Built by Jagan Mohan Rao Dunna</div>
-          <div className="mt-2 text-[11px] text-[#666a71]">© 2026 Naa College (MOS). All rights reserved.</div>
+          <div className="mt-2 text-[11px] text-[#666a71]">© 2026 Naa College. All rights reserved.</div>
         </div>
         <div className="text-right text-[10px] uppercase tracking-[.12em] text-[#666a71]">Built for students / Built to be useful <ArrowUpRight className="ml-1 inline" size={12}/></div>
       </div>
