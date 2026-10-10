@@ -473,6 +473,7 @@ const SiteUxFixes: React.FC = () => {
         #header-command-palette-trigger { display:none !important; }
         #header-support-btn span { display:none !important; }
         #header-hamburger-drawer-btn { padding:7px !important; }
+        #mos-mobile-navigation-panel { max-height:calc(100dvh - 60px) !important; overflow-y:auto !important; overflow-x:hidden !important; overscroll-behavior-y:contain; -webkit-overflow-scrolling:touch; touch-action:pan-y; }
         #mos-featurehub-mock-shortcut { margin-bottom:12px; padding:12px 13px; border-radius:16px; }
         .mos-fh-mock-copy strong { font-size:13px; }
         #student-faq-section button { min-height:48px !important; }
