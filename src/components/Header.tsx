@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Menu, X, ChevronDown, Home, GraduationCap, Map, Trophy, Sparkles, BookOpen, ShieldCheck, FileText, Image as ImageIcon, Heart, Wrench, Brain, Route, Calculator, ClipboardCheck } from 'lucide-react';
+import { Search, Menu, X, ChevronDown, Home, GraduationCap, Map, Trophy, Sparkles, BookOpen, ShieldCheck, FileText, Image as ImageIcon, Heart, Wrench, Brain, Route, Calculator, ClipboardCheck, Info, Mail } from 'lucide-react';
 import { ToolTab, WorkspaceView, LegalModalType } from '../types';
 
 export interface HeaderProps {
@@ -41,7 +41,7 @@ const OTHER_TOOLS: NavItem[] = [
   { label: 'AI Text Humanizer', workspace: 'humanizer', icon: Brain },
 ];
 
-export const Header: React.FC<HeaderProps> = ({ activeWorkspace = 'hub', onSelectWorkspace, setActiveTab, onOpenCommandPalette, onOpenSupport }) => {
+export const Header: React.FC<HeaderProps> = ({ activeWorkspace = 'hub', onSelectWorkspace, setActiveTab, onOpenCommandPalette, onOpenLegal, onOpenSupport }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<'ap' | 'tg' | 'other' | null>(null);
 
@@ -110,12 +110,26 @@ export const Header: React.FC<HeaderProps> = ({ activeWorkspace = 'hub', onSelec
         <div className="border-t border-cyan-300/10 bg-[#040b16] px-3 pb-4 pt-2 lg:hidden">
           <div className="mx-auto max-w-7xl space-y-1">
             <button type="button" onClick={goHome} className="w-full rounded-xl px-3 py-3 text-left text-sm font-semibold text-slate-200 hover:bg-cyan-400/10">Home</button>
+            <button type="button" onClick={() => { setMobileOpen(false); onOpenCommandPalette?.(); }} className="group mb-2 flex min-h-12 w-full items-center gap-3 rounded-2xl border border-cyan-300/20 bg-gradient-to-r from-cyan-400/[0.10] to-lime-300/[0.06] px-3.5 py-3 text-left shadow-lg shadow-cyan-950/10 transition hover:border-lime-300/35 hover:bg-cyan-400/[0.14]" aria-label="Search Man of Study tools">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-cyan-300/15 bg-[#07101d] text-cyan-300"><Search className="h-4 w-4" /></span>
+              <span className="min-w-0 flex-1"><span className="block text-sm font-semibold text-white">Search Man of Study</span><span className="mt-0.5 block text-[11px] text-slate-400">Find tools by name or what you need</span></span>
+              <span className="text-lg text-slate-500 transition group-hover:translate-x-0.5 group-hover:text-lime-300">⌕</span>
+            </button>
             <MobileGroup title="For AP" items={AP_TOOLS} onSelect={navigate} />
             <MobileGroup title="For TG" items={TG_TOOLS} onSelect={navigate} />
             <button type="button" onClick={() => navigate({ label: 'Scholarships', workspace: 'scholarships', icon: GraduationCap })} className="w-full rounded-xl px-3 py-3 text-left text-sm font-semibold text-slate-200 hover:bg-cyan-400/10">Scholarships</button>
             <button type="button" onClick={() => navigate({ label: 'Mock Tests', workspace: 'mock-tests', icon: GraduationCap })} className="w-full rounded-xl px-3 py-3 text-left text-sm font-semibold text-slate-200 hover:bg-cyan-400/10">Mock Tests</button>
             <MobileGroup title="Other Tools" items={OTHER_TOOLS} onSelect={navigate} />
-            <button type="button" onClick={onOpenSupport} className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-cyan-300/15 bg-cyan-400/8 px-3 py-3 text-sm font-bold text-cyan-200"><Heart className="h-4 w-4" /> Support Man of Study</button>
+            <div className="mt-3 border-t border-white/8 pt-3">
+              <p className="px-3 pb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">About & Information</p>
+              <div className="grid grid-cols-2 gap-2">
+                <button type="button" onClick={() => { setMobileOpen(false); onOpenLegal?.('about'); }} className="flex min-h-11 items-center gap-2 rounded-xl border border-white/8 bg-white/[0.03] px-3 py-2.5 text-left text-xs font-medium text-slate-300 hover:border-cyan-300/20 hover:bg-cyan-400/8 hover:text-white"><Info className="h-4 w-4 shrink-0 text-cyan-300" />About Us</button>
+                <button type="button" onClick={() => { setMobileOpen(false); onOpenLegal?.('privacy'); }} className="flex min-h-11 items-center gap-2 rounded-xl border border-white/8 bg-white/[0.03] px-3 py-2.5 text-left text-xs font-medium text-slate-300 hover:border-cyan-300/20 hover:bg-cyan-400/8 hover:text-white"><ShieldCheck className="h-4 w-4 shrink-0 text-cyan-300" />Privacy Policy</button>
+                <button type="button" onClick={() => { setMobileOpen(false); onOpenLegal?.('terms'); }} className="flex min-h-11 items-center gap-2 rounded-xl border border-white/8 bg-white/[0.03] px-3 py-2.5 text-left text-xs font-medium text-slate-300 hover:border-cyan-300/20 hover:bg-cyan-400/8 hover:text-white"><FileText className="h-4 w-4 shrink-0 text-cyan-300" />Terms of Service</button>
+                <button type="button" onClick={() => { setMobileOpen(false); onOpenLegal?.('contact'); }} className="flex min-h-11 items-center gap-2 rounded-xl border border-white/8 bg-white/[0.03] px-3 py-2.5 text-left text-xs font-medium text-slate-300 hover:border-cyan-300/20 hover:bg-cyan-400/8 hover:text-white"><Mail className="h-4 w-4 shrink-0 text-cyan-300" />Contact Developer</button>
+              </div>
+            </div>
+            <button type="button" onClick={() => { setMobileOpen(false); onOpenSupport?.(); }} className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-cyan-300/15 bg-cyan-400/8 px-3 py-3 text-sm font-bold text-cyan-200"><Heart className="h-4 w-4" /> Support Man of Study</button>
           </div>
         </div>
       )}
