@@ -1037,7 +1037,7 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
                   {user?.displayName || candidateProfile?.fullName || 'Candidate'}
                 </span>
                 <span>•</span>
-                <span className="font-mono">{candidateProfile?.rollNumber || 'MOS-CBT-2026'}</span>
+                <span className="font-mono">{candidateProfile?.rollNumber || 'NC-CBT-2026'}</span>
               </div>
             </div>
           </div>
@@ -2169,7 +2169,7 @@ export const EapcetCbtMockTestEngine: React.FC<EapcetCbtMockTestEngineProps> = (
         {/* Candidate & Exam Metadata Grid */}
         <div className="grid grid-cols-4 gap-3 text-xs border border-slate-300 rounded-xl p-3 bg-white">
           <div><span className="font-bold text-slate-500 uppercase text-[10px] block">Candidate Name</span><div className="font-black mt-0.5">{candidateProfile?.fullName || 'Candidate'}</div></div>
-          <div><span className="font-bold text-slate-500 uppercase text-[10px] block">Roll Number</span><div className="font-mono font-bold mt-0.5">{candidateProfile?.rollNumber || 'MOS-CBT-2026'}</div></div>
+          <div><span className="font-bold text-slate-500 uppercase text-[10px] block">Roll Number</span><div className="font-mono font-bold mt-0.5">{candidateProfile?.rollNumber || 'NC-CBT-2026'}</div></div>
           <div><span className="font-bold text-slate-500 uppercase text-[10px] block">Evaluation Scheme</span><div className="font-semibold mt-0.5">{selectedExamId === 'ap-eapcet' ? '75% CBT + 25% Inter IPE' : '100% CBT Merit'}</div></div>
           <div><span className="font-bold text-slate-500 uppercase text-[10px] block">Result Status</span><div className={`font-black mt-0.5 ${scoreReport.isQualified ? 'text-emerald-700' : 'text-rose-700'}`}>{scoreReport.isQualified ? 'QUALIFIED (≥40/160)' : 'NOT QUALIFIED (<40/160)'}</div></div>
         </div>
