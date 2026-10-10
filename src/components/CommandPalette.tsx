@@ -502,7 +502,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'action-support-mos',
-        title: 'Support MAN OF STUDY / Keep it Open & Free',
+        title: 'Support Naa College / Keep it Open & Free',
         subtitle: 'Voluntary contributions help cover hosting, research and development costs',
         category: 'Quick Actions',
         badge: 'Support',
@@ -613,7 +613,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             className="min-w-0 flex-1 text-sm sm:text-base text-slate-900 placeholder:text-slate-400 bg-transparent focus:outline-none"
             autoComplete="off"
             spellCheck="false"
-            aria-label="Search Man of Study"
+            aria-label="Search Naa College"
           />
 
           {searchQuery && (
