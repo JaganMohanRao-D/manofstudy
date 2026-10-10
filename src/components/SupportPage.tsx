@@ -21,7 +21,7 @@ interface SupportPageProps {
 
 const SUPPORT_AMOUNTS = [49, 99, 299, 400] as const;
 const UPI_ID = 'jaganmohanraodj@okicici';
-const SUPPORT_URL = 'https://manofstudy.pages.dev/support/';
+const SUPPORT_URL = 'https://naacollege.in/support/';
 
 export const SupportPage: React.FC<SupportPageProps> = ({ onBack }) => {
   const [selectedAmount, setSelectedAmount] = useState<number | 'any'>(99);
