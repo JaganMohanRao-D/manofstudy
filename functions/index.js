@@ -135,7 +135,7 @@ exports.notifyQuestionOwnerOnAnswer = onDocumentCreated(
     <!-- Brand Header -->
     <div style="background-color: #be185d; padding: 20px 24px; text-align: left;">
       <h1 style="color: #ffffff; margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -0.02em;">
-        MAN OF STUDY <span style="font-weight: 400; font-size: 14px; opacity: 0.9;">| CampusConnect</span>
+        NAA COLLEGE <span style="font-weight: 400; font-size: 14px; opacity: 0.9;">| CampusConnect</span>
       </h1>
     </div>
 
@@ -143,7 +143,7 @@ exports.notifyQuestionOwnerOnAnswer = onDocumentCreated(
     <div style="padding: 24px;">
       <p style="font-size: 15px; line-height: 1.6; margin-top: 0;">Hi ${safeRecipientName},</p>
       
-      <p style="font-size: 15px; line-height: 1.6;">Someone has answered your question on Man of Study CampusConnect.</p>
+      <p style="font-size: 15px; line-height: 1.6;">Someone has answered your question on Naa College CampusConnect.</p>
 
       <div style="margin: 20px 0; padding: 14px 18px; background-color: #fdf2f8; border-left: 4px solid #ec4899; border-radius: 6px;">
         <p style="margin: 0 0 6px 0; font-size: 12px; font-weight: 700; color: #9d174d; text-transform: uppercase; letter-spacing: 0.05em;">Your question:</p>
@@ -165,10 +165,10 @@ exports.notifyQuestionOwnerOnAnswer = onDocumentCreated(
 
       <!-- Footer (Requirement 8) -->
       <div style="text-align: center; color: #64748b; font-size: 12px; line-height: 1.6;">
-        <p style="margin: 0; font-weight: 600; color: #334155;">Man of Study</p>
+        <p style="margin: 0; font-weight: 600; color: #334155;">Naa College</p>
         <p style="margin: 2px 0 12px 0; color: #ec4899; font-style: italic;">Built for students. Built by a student.</p>
         <p style="margin: 0; font-size: 11px; color: #94a3b8;">
-          You received this email because you opted in for answer notifications on Man of Study CampusConnect.<br/>
+          You received this email because you opted in for answer notifications on Naa College CampusConnect.<br/>
           Your email address is 100% private and never visible to other students.
         </p>
       </div>
