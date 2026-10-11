@@ -36,6 +36,7 @@ import type { EapcetPhaseTab } from './components/ApEapcetRadar';
 import { ChunkErrorBoundary } from './components/ChunkErrorBoundary';
 import { GuidesHub } from './components/GuidesHub';
 import { SeoLandingPage } from './components/SeoLandingPage';
+import { BlogPage, isBlogPath } from './components/BlogPage';
 import { useAuth } from './context/AuthContext';
 
 // Resilient dynamic code splitting with retry logic for network or stale bundle resilience
@@ -712,7 +713,7 @@ export default function App() {
     }
     setActiveWorkspace(ws);
     const seoPath = getSeoLandingPath();
-    if (seoPath) {
+    if (seoPath || isBlogPath(window.location.pathname)) {
       history.replaceState(null, '', '/');
     }
     if (ws === 'eapcet-cbt' && targetSubTab) {
@@ -950,7 +951,9 @@ export default function App() {
           : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-6'
       }`}>
         
-        {getSeoLandingPath() === 'apAllotments' ? (
+        {isBlogPath(window.location.pathname) ? (
+          <BlogPage />
+        ) : getSeoLandingPath() === 'apAllotments' ? (
           <SeoLandingPage
             eyebrow="AP EAPCET 2026 · Engineering Admissions"
             title="AP EAPCET 2026 College-Wise Allotments"

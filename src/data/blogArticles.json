@@ -1,0 +1,411 @@
+[
+  {
+    "slug": "ap-eapcet-college-predictor-guide",
+    "title": "How to Use the AP EAPCET College Predictor",
+    "category": "Naa College Tools",
+    "tags": [
+      "AP EAPCET",
+      "college predictor",
+      "admissions"
+    ],
+    "status": "published",
+    "publishedAt": "2026-10-11",
+    "updatedAt": "2026-10-11",
+    "featured": true,
+    "summary": "A practical guide to entering your rank and preferences, interpreting predictor results, and checking official counselling information before making decisions.",
+    "content": "The AP EAPCET College Predictor on Naa College helps you explore college and branch options using the inputs and historical allotment data available in the tool. It is an exploration aid—not an official allotment system and not a promise of admission.\n\n## Before you start\nKeep your AP EAPCET rank and the details requested by the current form ready. Depending on the version of the tool, fields can include category, gender, region, college, and branch preferences. Use only the options actually shown on the page.\n\n## How to use the predictor\n1. Open the [AP EAPCET College Predictor](/ap-eapcet/college-predictor/).\n2. Enter your rank carefully. Check every digit before submitting.\n3. Select the category, gender, region, and branch or college filters that apply to you. Leave optional filters broad when you want to explore more matches.\n4. Run the prediction and read the result labels and any dataset notes shown by the tool.\n5. Make a shortlist, then compare it with official counselling notices, seat matrices, fee details, and eligibility rules.\n\n## How to interpret results\nA match means the available dataset and selected filters returned a result. It does not mean a seat is reserved for you. Historical closing ranks can change with applicant preferences, seat availability, reservation rules, and the counselling phase. A missing match also does not prove that no option exists in the current cycle.\n\n## Common mistakes\n- Entering a rank with a digit missing or using the wrong exam year.\n- Selecting the wrong category or region.\n- Treating a historical closing rank as a guaranteed cutoff.\n- Assuming tuition fees, reimbursement, or eligibility are identical across colleges.\n- Relying on a predictor instead of the official allotment result.\n\n## Verify with official sources\nUse the official [AP EAPCET counselling portal](https://cets.apsche.ap.gov.in/EAPCET/) for current notices and decisions. Check the year and phase attached to every data source before comparing results.\n\n> **Important:** Naa College predictions are informational. The counselling authority's current rules and official allotment are authoritative.",
+    "sources": [
+      {
+        "label": "AP EAPCET official portal",
+        "url": "https://cets.apsche.ap.gov.in/EAPCET/"
+      }
+    ],
+    "toolLinks": [
+      {
+        "label": "Open AP EAPCET College Predictor",
+        "href": "/ap-eapcet/college-predictor/"
+      }
+    ]
+  },
+  {
+    "slug": "telangana-eapcet-college-predictor-guide",
+    "title": "How to Use the Telangana EAPCET College Predictor",
+    "category": "Naa College Tools",
+    "tags": [
+      "Telangana EAPCET",
+      "TG EAPCET",
+      "college predictor"
+    ],
+    "status": "published",
+    "publishedAt": "2026-10-11",
+    "updatedAt": "2026-10-11",
+    "featured": true,
+    "summary": "Learn how to enter your Telangana EAPCET details, use available filters, and treat historical rank data responsibly.",
+    "content": "The Telangana EAPCET College Predictor helps you explore college and branch possibilities from the inputs and allotment data currently available in Naa College. It cannot make or guarantee an official seat allotment.\n\n## Get your details ready\nCheck your rank and identify the category and gender options that match your counselling application. The available filters can change with the current tool version, so follow the fields visible on the predictor rather than assuming every filter is supported.\n\n## Steps to explore options\n1. Open the [Telangana EAPCET College Predictor](/tg-eapcet/college-predictor/).\n2. Enter your rank and choose the relevant category and gender.\n3. Select a branch, college, or district filter if it is available and useful to your search.\n4. Run the prediction and inspect the colleges, branches, and rank information returned.\n5. Record a shortlist and verify it against the current official counselling schedule and seat matrix.\n\n## Reading the results carefully\nThe predictor uses the dataset incorporated into the website. Historical allotment ranks describe what happened in a particular cycle and phase; they are not a forecast with certainty. Changes in seat intake, candidate choices, category rules, and counselling rounds can change outcomes.\n\nIf a college is not displayed, check whether a filter is too narrow and review the dataset year. Do not infer current eligibility or fee reimbursement from a rank result.\n\n## Final checks\nUse the official Telangana EAPCET counselling website and current authority notices for application dates, certificates, seat allotment, reporting, and fee information. Confirm the exact academic year and phase before comparing datasets.\n\n> **Disclaimer:** Predictor results are estimates for exploration. Only the official counselling authority can confirm an allotment.",
+    "sources": [
+      {
+        "label": "Telangana EAPCET official website",
+        "url": "https://eapcet.tgche.ac.in/"
+      }
+    ],
+    "toolLinks": [
+      {
+        "label": "Open Telangana EAPCET College Predictor",
+        "href": "/tg-eapcet/college-predictor/"
+      }
+    ]
+  },
+  {
+    "slug": "understand-eapcet-seat-allotment-results",
+    "title": "How to Understand EAPCET Seat Allotment Results",
+    "category": "AP EAPCET Guides",
+    "tags": [
+      "seat allotment",
+      "cutoff ranks",
+      "counselling"
+    ],
+    "status": "published",
+    "publishedAt": "2026-10-11",
+    "updatedAt": "2026-10-11",
+    "featured": true,
+    "summary": "Understand common allotment-result fields, compare the correct counselling phase, and verify decisions through official portals.",
+    "content": "Seat-allotment data can be confusing because rank, category, branch, college, and counselling phase all affect how a record should be interpreted. Start with the official result for your own application; use third-party tools only to understand or explore data.\n\n## Know which record you are viewing\nBefore comparing two results, confirm the state, exam year, phase, college, branch, category, and gender fields where applicable. A rank from one phase or category should not be compared casually with a different group.\n\n## Terms students commonly see\n- **Rank:** The candidate's exam rank under the applicable process. It is not the same as a college cutoff.\n- **Closing rank:** The rank of the last candidate in a specified group who received a seat in that dataset and phase.\n- **Category or seat type:** The reservation or seat classification used by the relevant counselling process.\n- **Branch:** The engineering programme attached to the allotment.\n- **Phase or round:** The specific stage of counselling represented by the result.\n\nThe exact labels and rules depend on the official authority and year. Read the explanation published with the current result.\n\n## Check your official result\n1. Open the counselling authority's official website directly.\n2. Find the current allotment result or candidate-login link.\n3. Enter your own credentials only on the official website, not on an unverified third-party page.\n4. Read the reporting instructions, deadlines, fee details, and required documents.\n5. Save your official allotment order and follow the stated reporting process.\n\n## Using Naa College data\nThe [AP college-wise allotment explorer](/ap-eapcet/college-wise-allotments/) and [Telangana name-wise allotment explorer](/tg-eapcet/name-wise-allotments/) can help you explore the datasets they contain. Always check the displayed year and phase. A historical record is not an official decision for a new cycle.\n\n> **Important:** Never miss a counselling deadline or make a payment based only on a predictor, article, or historical cutoff. Verify all actions through the official counselling authority.",
+    "sources": [
+      {
+        "label": "AP EAPCET official portal",
+        "url": "https://cets.apsche.ap.gov.in/EAPCET/"
+      },
+      {
+        "label": "Telangana EAPCET official website",
+        "url": "https://eapcet.tgche.ac.in/"
+      }
+    ],
+    "toolLinks": [
+      {
+        "label": "AP allotment explorer",
+        "href": "/ap-eapcet/college-wise-allotments/"
+      },
+      {
+        "label": "Telangana name-wise allotments",
+        "href": "/tg-eapcet/name-wise-allotments/"
+      }
+    ]
+  },
+  {
+    "slug": "attendance-calculator-bunk-planner-guide",
+    "title": "How to Use the Attendance Calculator and Bunk Planner",
+    "category": "Naa College Tools",
+    "tags": [
+      "attendance",
+      "calculator",
+      "college life"
+    ],
+    "status": "published",
+    "publishedAt": "2026-10-11",
+    "updatedAt": "2026-10-11",
+    "featured": false,
+    "summary": "Use class totals and a target percentage to estimate attendance scenarios, then confirm the rules with your own college.",
+    "content": "The Naa College Attendance Calculator is a planning tool. It works from the numbers you enter, so the output is only as reliable as those inputs and the assumptions used by the calculator.\n\n## Understand the basic calculation\nAttendance percentage is commonly calculated as classes attended divided by classes held, multiplied by 100. For example, if you attended 36 of 45 classes, the calculation is 36 ÷ 45 × 100 = 80%. Your institution may calculate attendance by subject, session, lab, or another rule, so this simple formula may not match every official record.\n\n## Use the tool\n1. Open the [Attendance Calculator](/tools/attendance-calculator/).\n2. Enter the class totals requested by the tool.\n3. Choose the target percentage if the tool offers that option.\n4. Review the current percentage and any estimate for future classes.\n5. Recheck the inputs against your college portal or faculty record.\n\n## How to interpret an estimate\nA calculator can model a scenario, but it cannot know whether your timetable will change, whether a class is cancelled, or whether your college has condonation or minimum-subject rules. If attendance is tracked separately for theory and labs, one overall percentage may hide a shortage in a particular subject.\n\n## Avoid common errors\n- Entering classes attended greater than classes held.\n- Mixing subject-wise totals with semester totals.\n- Forgetting newly conducted classes or correcting an outdated count.\n- Treating a target percentage as a guarantee that your college will accept the result.\n\n## Plan responsibly\nUse the estimate to identify questions to ask your faculty adviser and to plan consistent attendance. Check the official rules that apply to your programme before making decisions.\n\n> **Disclaimer:** The calculator does not access or replace your college's official attendance record.",
+    "sources": [],
+    "toolLinks": [
+      {
+        "label": "Open Attendance Calculator",
+        "href": "/tools/attendance-calculator/"
+      }
+    ]
+  },
+  {
+    "slug": "compress-images-for-websites-and-college-work",
+    "title": "How to Compress Images for Websites and College Work",
+    "category": "Naa College Tools",
+    "tags": [
+      "image compressor",
+      "file size",
+      "web development"
+    ],
+    "status": "published",
+    "publishedAt": "2026-10-11",
+    "updatedAt": "2026-10-11",
+    "featured": false,
+    "summary": "Choose image dimensions and formats thoughtfully, balance file size against clarity, and verify the compressed file before uploading.",
+    "content": "Image compression reduces the storage or transfer size of a picture. The right settings depend on where the image will be used: an assignment upload, an online form, a website, or a presentation.\n\n## Start with the requirement\nCheck the destination's allowed file types, maximum file size, and dimension requirements first. A file-size limit is not the same as a pixel-dimension limit. If a portal specifies both, satisfy both.\n\n## Choose a suitable format\n- **JPEG/JPG:** Often useful for photographs; compression can reduce quality.\n- **PNG:** Useful for sharp graphics or transparency, but photographs may remain large.\n- **WebP:** Often efficient for websites, but confirm the destination accepts it.\n- **Other formats:** Keep the original if the receiving system specifies a format that the tool does not support.\n\n## Compress with Naa College\n1. Open the [Image Compressor](/#resizer) from the Naa College tools hub.\n2. Select the image and review the controls actually provided by the tool.\n3. Adjust the output size or quality within the supported options.\n4. Preview the result, especially small text, edges, and faces.\n5. Save the output and confirm its dimensions, format, and file size before uploading.\n\n## Understand the trade-off\nMore aggressive lossy compression usually creates a smaller file but can introduce blur, blocks, or colour artefacts. Resizing a large image to the dimensions actually needed can reduce file size without forcing excessive compression. Keep an untouched original in case you need to try again.\n\n## Privacy and safety\nFor sensitive documents, check whether processing happens locally in the browser and whether any external upload is involved. Do not assume every website processes files privately without inspecting its implementation or privacy information.\n\n> **Tip:** Always open the final compressed image before submitting it to an exam, scholarship, or college portal.",
+    "sources": [],
+    "toolLinks": [
+      {
+        "label": "Open Naa College tools hub",
+        "href": "/#resizer"
+      }
+    ]
+  },
+  {
+    "slug": "naa-college-pdf-tools-guide",
+    "title": "How to Use Naa College PDF Tools",
+    "category": "Naa College Tools",
+    "tags": [
+      "PDF",
+      "documents",
+      "student tools"
+    ],
+    "status": "published",
+    "publishedAt": "2026-10-11",
+    "updatedAt": "2026-10-11",
+    "featured": false,
+    "summary": "A checklist for choosing a PDF operation, reviewing the output, and handling important documents carefully.",
+    "content": "PDF tools can help with common document tasks, but the correct workflow depends on the specific operation. Before selecting a tool, decide whether you need to merge, split, convert, rotate, compress, or otherwise process a document—and confirm that the required operation is available in the current Naa College interface.\n\n## A safe workflow\n1. Open the [PDF Tools](/#pdf-tools) section from the website's tool hub.\n2. Choose the operation shown in the interface that matches your task.\n3. Read any file-type, file-size, or page-limit information displayed by the tool.\n4. Select your source document and check the selected filename before processing.\n5. Wait for the operation to finish and save the output with a new filename.\n6. Open the result and check page order, text, tables, images, fonts, and page orientation.\n\n## Check the result, not just the download\nA file can download successfully and still have layout problems. Compare the output with the original, especially when it contains scanned pages, complex tables, embedded fonts, forms, or signatures. Keep the original until you have confirmed the new document is correct.\n\n## Privacy considerations\nDocuments may contain names, addresses, marks, identification details, or other personal information. Before using any online tool, understand whether files are processed in the browser or uploaded to a server. Avoid processing highly sensitive documents on services whose handling practices you cannot verify.\n\n## Common troubleshooting\n- If processing fails, confirm the input is a valid PDF and try a smaller test file.\n- If pages are missing, inspect page selection and output settings.\n- If text looks different, compare fonts, spacing, and page dimensions.\n- If a file is password-protected, follow the document owner's legitimate access instructions.\n\n> **Important:** Do not submit a processed PDF to an official portal until you have opened it and checked every required page.",
+    "sources": [],
+    "toolLinks": [
+      {
+        "label": "Open Naa College PDF Tools",
+        "href": "/#pdf-tools"
+      }
+    ]
+  },
+  {
+    "slug": "find-scholarships-for-indian-students",
+    "title": "How to Find Scholarships for Indian Students",
+    "category": "Scholarships and Student Resources",
+    "tags": [
+      "scholarships",
+      "eligibility",
+      "student finance"
+    ],
+    "status": "published",
+    "publishedAt": "2026-10-11",
+    "updatedAt": "2026-10-11",
+    "featured": true,
+    "summary": "Find opportunities, check eligibility and deadlines, prepare documents, and avoid scholarship scams without relying on outdated lists.",
+    "content": "Scholarship opportunities differ by state, course, year of study, family circumstances, academic record, and scheme-specific requirements. A listing is a starting point—not proof that you qualify or that applications are currently open.\n\n## Start with reliable sources\nLook for government schemes on official government portals and state scholarship websites. For private scholarships, confirm the programme on the provider's official website. You can use the [Naa College Scholarships hub](/#scholarships) to discover resources, then verify every important detail at the source.\n\n## Verify each opportunity\nFor every scholarship, record:\n- The academic year and application window.\n- Eligible courses, institutions, states, and year of study.\n- Income limits and required certificates, if any.\n- Academic requirements and selection criteria.\n- Benefits, renewal conditions, and whether the amount is paid to the student or institution.\n- The official application link and contact information.\n\nRules can change between cycles. A page describing last year's scheme may remain online after applications close, so check the current notice and deadline.\n\n## Prepare documents carefully\nDepending on the scheme, applicants may need academic records, proof of identity, income or category certificates, bank details, admission information, or other documents. Submit only what the official application asks for. Make sure names and dates match across documents.\n\n## Avoid fraudulent offers\nBe cautious of messages promising guaranteed approval, asking for unexplained fees, or directing you to lookalike domains. Do not share passwords or one-time passcodes with someone claiming to process an application. Navigate to the official portal yourself and confirm the scheme details.\n\n## Keep a simple tracker\nMaintain a list of schemes, eligibility checks, deadlines, documents, submission status, and official application references. Save confirmation receipts and monitor official updates.\n\n> **Disclaimer:** This guide is general information, not an eligibility decision. The scheme provider's current guidelines determine eligibility and benefits.",
+    "sources": [
+      {
+        "label": "National Scholarship Portal",
+        "url": "https://scholarships.gov.in/"
+      }
+    ],
+    "toolLinks": [
+      {
+        "label": "Explore Naa College Scholarships",
+        "href": "/#scholarships"
+      }
+    ]
+  },
+  {
+    "slug": "vibe-coding-beginners-idea-to-working-website",
+    "title": "Vibe Coding for Beginners: From Idea to Working Website",
+    "category": "AI Tools and Vibe Coding",
+    "tags": [
+      "vibe coding",
+      "AI coding",
+      "web development"
+    ],
+    "status": "published",
+    "publishedAt": "2026-10-11",
+    "updatedAt": "2026-10-11",
+    "featured": true,
+    "summary": "Turn an idea into a maintainable project through clear requirements, staged prompts, code review, testing, Git, and careful deployment.",
+    "content": "Vibe coding uses natural-language instructions and AI coding tools to help create or modify software. It can make the first prototype easier to start, but generated code still needs human review, testing, and maintenance.\n\n## 1. Define the problem first\nWrite down who the website serves, what task it solves, the main screens, expected inputs and outputs, and what is out of scope. A clear requirement reduces the chance that an AI tool invents features you did not request.\n\n## 2. Inspect before changing code\nIf you are modifying an existing repository, ask the tool to inspect the framework, routes, shared components, data flow, and test commands before editing. Tell it to preserve unrelated functionality and identify files it plans to change.\n\n## 3. Build in small stages\nA useful sequence is:\n1. Create a minimal working layout.\n2. Implement one core user flow.\n3. Add validation and error states.\n4. Test keyboard and mobile behavior.\n5. Add SEO metadata and performance improvements.\n6. Review security, accessibility, and deployment settings.\n\nAsk for one coherent change at a time. Review the diff after each stage instead of accepting a large, unexplained rewrite.\n\n## 4. Test the real behavior\nCheck normal inputs, empty inputs, invalid values, slow or failed operations, missing routes, and mobile layouts. Run the repository's build, lint, type-check, and tests where available. A screenshot alone cannot prove that the feature works.\n\n## 5. Use Git and protect secrets\nCommit working checkpoints with clear messages. Never put passwords, private keys, service-account files, or secret API credentials in public repositories or frontend code. Anything bundled into browser JavaScript can potentially be inspected by visitors. Use a server-side secret-management design when a credential must remain secret.\n\n## 6. Deploy responsibly\nPreview the build, check logs, and test the deployed URL before announcing a release. Keep a way to revert a faulty change and maintain dependencies after launch.\n\n## A practical prompt structure\nDescribe the goal, current architecture, constraints, exact expected behavior, acceptance criteria, files that must not change, and commands to run. Ask the tool to report what it actually tested and to disclose failures.\n\n> **Remember:** AI can accelerate implementation, but it does not replace understanding the code, verifying claims, or owning the maintenance work.",
+    "sources": [
+      {
+        "label": "Google AI Studio Build mode documentation",
+        "url": "https://ai.google.dev/gemini-api/docs/aistudio-build-mode"
+      },
+      {
+        "label": "GitHub documentation",
+        "url": "https://docs.github.com/en"
+      }
+    ],
+    "toolLinks": []
+  },
+  {
+    "slug": "google-ai-studio-first-website",
+    "title": "How to Build Your First Website with Google AI Studio",
+    "category": "AI Tools and Vibe Coding",
+    "tags": [
+      "Google AI Studio",
+      "beginner",
+      "website"
+    ],
+    "status": "draft",
+    "publishedAt": "2026-10-11",
+    "updatedAt": "2026-10-11",
+    "featured": false,
+    "summary": "A beginner workflow for using Build mode, reviewing generated code, and deciding what must be checked before deployment.",
+    "content": "Google AI Studio includes a Build mode for creating and iterating on applications through natural-language prompts. Its available capabilities and interface can change, so use the current official documentation as the reference for your account and project.\n\n## Prepare a clear brief\nDescribe the intended audience, the core task, required pages, visual direction, data handling, and limitations. Start with the smallest useful version rather than requesting every possible feature at once.\n\n## Build and inspect\nUse Build mode to create a starting point, inspect the generated code, and iterate on one feature at a time. Check the Code view and understand the project structure before relying on it. If you import an existing repository, ask for an audit before requesting edits.\n\n## Before you publish\nTest forms, navigation, validation, responsive layouts, accessibility, and failure states. Confirm whether the project uses client-side code or server-side functions. Never expose private credentials in frontend code. Review the deployment destination, costs, privacy implications, and any APIs or services added by the tool.\n\n## Official reference\nRead the current [Google AI Studio Build mode documentation](https://ai.google.dev/gemini-api/docs/aistudio-build-mode) for supported workflows and capabilities.\n\nThis article remains a draft until its screenshots and step-by-step interface walkthrough are checked against the current product.",
+    "sources": [
+      {
+        "label": "Google AI Studio Build mode documentation",
+        "url": "https://ai.google.dev/gemini-api/docs/aistudio-build-mode"
+      }
+    ],
+    "toolLinks": []
+  },
+  {
+    "slug": "chatgpt-for-students-practical-uses-limitations",
+    "title": "ChatGPT for Students: Practical Uses and Limitations",
+    "category": "AI Tools and Vibe Coding",
+    "tags": [
+      "ChatGPT",
+      "study skills",
+      "AI literacy"
+    ],
+    "status": "draft",
+    "publishedAt": "2026-10-11",
+    "updatedAt": "2026-10-11",
+    "featured": false,
+    "summary": "Use AI to explain concepts, practise questions, plan projects, and debug code while checking accuracy and protecting personal information.",
+    "content": "ChatGPT can help students explore a topic, ask follow-up questions, practise explanations, brainstorm projects, or understand a programming error. Treat its output as a starting point that needs verification—not as an unquestionable answer.\n\n## Useful learning workflows\n- Ask for a concept to be explained at your current level, then request a worked example.\n- Try a problem yourself before asking for hints or a step-by-step explanation.\n- Ask for practice questions and check your answers against class notes or an authoritative source.\n- Share a small, non-sensitive code example and the exact error message when debugging.\n- Use AI to outline a project plan, then validate requirements and implementation independently.\n\n## Check answers\nModels can produce confident mistakes, outdated information, or code that appears plausible but fails. Verify important facts with course material, official documentation, and tests. For mathematics and code, independently reproduce the steps or run a test case.\n\n## Protect privacy and academic integrity\nDo not paste passwords, private keys, personal identification documents, or confidential records into a prompt. Review your account's current data controls before sharing information. Follow your institution's rules about AI-assisted work, citations, and assessments.\n\nOfficial reading: [ChatGPT Data Controls](https://help.openai.com/en/articles/7730893-how-to-export-your-chatgpt-data).\n\nThis article remains a draft pending a final review of current student-facing features and product-specific examples.",
+    "sources": [
+      {
+        "label": "OpenAI Help Center: Data Controls",
+        "url": "https://help.openai.com/en/articles/7730893-how-to-export-your-chatgpt-data"
+      }
+    ],
+    "toolLinks": []
+  },
+  {
+    "slug": "claude-ai-students-beginner-developers",
+    "title": "Claude AI for Students and Beginner Developers",
+    "category": "AI Tools and Vibe Coding",
+    "tags": [
+      "Claude",
+      "AI coding",
+      "code review"
+    ],
+    "status": "draft",
+    "publishedAt": "2026-10-11",
+    "updatedAt": "2026-10-11",
+    "featured": false,
+    "summary": "A framework for asking an AI assistant to explain code, review small changes, and help debug without blindly accepting generated edits.",
+    "content": "An AI assistant can help you reason about unfamiliar code, break a task into smaller steps, and review possible fixes. The exact tools and interface available in Claude can vary by plan and product version; verify current capabilities before following product-specific instructions.\n\n## A safer coding workflow\n1. Explain the goal and provide only the relevant, non-sensitive code.\n2. Ask for an explanation of the existing implementation before requesting changes.\n3. Specify expected behavior, constraints, and files that must remain untouched.\n4. Request a small change and an explanation of the diff.\n5. Run tests, inspect edge cases, and keep a Git checkpoint before applying further edits.\n\n## Ask for evidence\nAsk the assistant to distinguish facts from assumptions, name the files it changed, and suggest tests for the behavior. Then independently verify those claims in the repository.\n\n## Protect your project\nDo not paste credentials or private user data into prompts. Review dependencies and generated code, and avoid applying large edits you cannot explain. Follow your course's academic integrity rules.\n\nCheck the current official [Anthropic documentation](https://docs.anthropic.com/) for supported features and product-specific guidance.\n\nThis article remains a draft until its current Claude interface examples and documentation references are fully reviewed.",
+    "sources": [
+      {
+        "label": "Anthropic documentation",
+        "url": "https://docs.anthropic.com/"
+      }
+    ],
+    "toolLinks": []
+  },
+  {
+    "slug": "google-gemini-ai-for-students",
+    "title": "Google Gemini AI for Students",
+    "category": "AI Tools and Vibe Coding",
+    "tags": [
+      "Gemini",
+      "research",
+      "study skills"
+    ],
+    "status": "draft",
+    "publishedAt": "2026-10-11",
+    "updatedAt": "2026-10-11",
+    "featured": false,
+    "summary": "Use AI-assisted explanations and research workflows responsibly, distinguish products, and verify important claims against original sources.",
+    "content": "Google offers different Gemini experiences and developer tools. Before following a tutorial, check whether it describes the Gemini app, Google AI Studio, or the Gemini API; these are related but not interchangeable products.\n\n## Study with a verification habit\nAsk for an explanation, examples, a quiz, or a comparison of concepts. Use the answer to guide your learning, then check key facts in textbooks, official documentation, and primary sources. For research tasks, open cited sources and confirm that they support the claim.\n\n## Build projects carefully\nIf using a developer tool, define requirements first, inspect generated code, test the user flow, and review security and privacy. Do not assume a prototype is production-ready. Never place secret API credentials in client-side code.\n\n## Check current capabilities\nProduct names, plans, usage limits, and interface options can change. Start with the [official Google AI Studio documentation](https://ai.google.dev/aistudio) and confirm the documentation matches the specific Gemini product you are using.\n\nThis article remains a draft until the student workflows and current Gemini app instructions are verified against the relevant official product documentation.",
+    "sources": [
+      {
+        "label": "Google AI Studio official website",
+        "url": "https://ai.google.dev/aistudio"
+      }
+    ],
+    "toolLinks": []
+  },
+  {
+    "slug": "write-better-prompts-for-ai-coding-tools",
+    "title": "How to Write Better Prompts for AI Coding Tools",
+    "category": "AI Tools and Vibe Coding",
+    "tags": [
+      "prompt engineering",
+      "AI coding",
+      "software testing"
+    ],
+    "status": "draft",
+    "publishedAt": "2026-10-11",
+    "updatedAt": "2026-10-11",
+    "featured": false,
+    "summary": "Write prompts that specify the goal, repository context, constraints, acceptance criteria, and tests—without asking AI to rewrite everything.",
+    "content": "A useful coding prompt describes the outcome and the boundaries of the task. A vague request such as “make the website better” leaves the tool to guess what should change and what must stay the same.\n\n## Include five essentials\n1. **Goal:** What user problem should be solved?\n2. **Context:** Which framework, files, routes, and existing behavior matter?\n3. **Constraints:** What must not change? Are new dependencies or APIs allowed?\n4. **Acceptance criteria:** What exact behavior should be visible when the task is complete?\n5. **Verification:** Which build, type-check, tests, and manual checks should be run?\n\n## Example\n**Vague:** “Fix my college predictor.”\n\n**More useful:** “Inspect the existing predictor and identify how special-category seats are combined with the selected normal category. Preserve the current UI and data schema. Make the smallest change needed so results follow the stated rule. Add or update tests for normal category, special category, missing data, and empty results. Run the repository's existing checks and report the actual outcomes.”\n\n## Work in stages\nAsk the tool to audit first, propose a small implementation plan, change a limited set of files, show the diff, and test. If the result is wrong, provide the observed behavior and reproduction steps rather than asking for a complete rewrite.\n\n## Never skip review\nAI-generated code can introduce bugs, security issues, accessibility problems, or unwanted dependencies. Check the diff and run tests before committing or deploying.\n\nThis article remains a draft pending editorial review of the example prompts and a final check of linked product documentation.",
+    "sources": [
+      {
+        "label": "GitHub documentation",
+        "url": "https://docs.github.com/en"
+      }
+    ],
+    "toolLinks": []
+  },
+  {
+    "slug": "beginner-programming-roadmap",
+    "title": "A Beginner’s Roadmap to Learning Programming",
+    "category": "Programming and Web Development",
+    "tags": [
+      "programming",
+      "GitHub",
+      "DSA",
+      "beginner"
+    ],
+    "status": "published",
+    "publishedAt": "2026-10-11",
+    "updatedAt": "2026-10-11",
+    "featured": true,
+    "summary": "Learn fundamentals, practise small problems, build projects, use Git, and approach DSA and core computer science topics at a realistic pace.",
+    "content": "You do not need to learn every programming language at once. Pick one beginner-friendly path, practise regularly, and use small projects to turn concepts into working code.\n\n## Stage 1: Learn one language\nChoose a language that fits your course and goals. Learn variables, data types, conditions, loops, functions, collections, input/output, and basic debugging. Write short programs yourself instead of only watching tutorials.\n\n## Stage 2: Practise problem solving\nStart with simple problems about arithmetic, strings, arrays, loops, and functions. After solving a problem, explain the approach in your own words and test edge cases. Revisit problems you could not solve without help.\n\n## Stage 3: Build small projects\nTry a calculator, a quiz app, a personal study tracker, or a simple webpage. A project should have a clear purpose, working inputs, understandable code, and a README explaining how to run it. Extend one project after the basic version works.\n\n## Stage 4: Learn Git and GitHub\nLearn repositories, commits, branches, diffs, and how to revert a mistake. Keep credentials out of commits. Document what your project does, how to run it, and what you learned.\n\nOfficial starting points: [GitHub Skills](https://skills.github.com/) and [GitHub documentation](https://docs.github.com/en).\n\n## Stage 5: Add web development and DSA\nIf you want to build websites, learn HTML, CSS, and JavaScript fundamentals, then practise responsive layouts, forms, accessibility, and browser debugging. Learn data structures and algorithms gradually: arrays, strings, hash maps, stacks, queues, recursion, searching, sorting, trees, and graphs.\n\n## Stage 6: Keep core CS and coursework in view\nStudy programming fundamentals, data structures, databases, operating systems, networking, and software engineering as your curriculum reaches them. Build projects alongside coursework rather than ignoring college requirements.\n\n## A realistic weekly routine\nShort, consistent sessions are more sustainable than trying to study for many hours every day. Alternate between learning, coding without a tutorial, reviewing mistakes, and improving a project.\n\n> No roadmap guarantees an internship or job. Progress depends on practice, project quality, opportunities, and many factors beyond a checklist.",
+    "sources": [
+      {
+        "label": "GitHub Skills",
+        "url": "https://skills.github.com/"
+      },
+      {
+        "label": "GitHub documentation",
+        "url": "https://docs.github.com/en"
+      }
+    ],
+    "toolLinks": []
+  },
+  {
+    "slug": "google-search-seo-basics-for-student-projects",
+    "title": "SEO Basics for Student Websites",
+    "category": "Programming and Web Development",
+    "tags": [
+      "SEO",
+      "Google Search",
+      "websites"
+    ],
+    "status": "draft",
+    "publishedAt": "2026-10-11",
+    "updatedAt": "2026-10-11",
+    "featured": false,
+    "summary": "A checklist for unique page titles, useful content, crawlable links, canonical URLs, and accurate structured data.",
+    "content": "Search engine optimisation helps search engines understand a website and helps people decide whether a page answers their question. It does not guarantee a ranking or a specific amount of traffic.\n\n## Start with useful pages\nCreate pages that solve real user questions, use clear headings, and link to related resources. Avoid publishing thin pages only to target keywords. Keep navigation understandable and ensure every important page has a normal HTML link.\n\n## Technical checks\n- Give each important page a unique, descriptive title and useful meta description.\n- Use a canonical URL that matches the intended public version of the page.\n- Keep the sitemap aligned with real, published URLs.\n- Check robots.txt and make sure important content is not accidentally blocked.\n- Use structured data only when its values match visible page content.\n- Test mobile usability and page performance.\n\n## Measure, then improve\nUse Search Console to inspect indexing and understand search queries. A sitemap helps discovery but does not guarantee indexing. Fix technical errors and improve the page for readers rather than repeating keywords.\n\nRead the official [Google Search Central SEO Starter Guide](https://developers.google.com/search/docs/fundamentals/seo-starter-guide) and [Article structured data documentation](https://developers.google.com/search/docs/appearance/structured-data/article).\n\nThis article remains a draft until a practical Search Console walkthrough is reviewed and tested.",
+    "sources": [
+      {
+        "label": "Google Search Central SEO Starter Guide",
+        "url": "https://developers.google.com/search/docs/fundamentals/seo-starter-guide"
+      },
+      {
+        "label": "Google Article structured data",
+        "url": "https://developers.google.com/search/docs/appearance/structured-data/article"
+      }
+    ],
+    "toolLinks": []
+  },
+  {
+    "slug": "internship-preparation-for-beginners",
+    "title": "Preparing for Internships as a Beginner Developer",
+    "category": "Internships and Career Preparation",
+    "tags": [
+      "internships",
+      "projects",
+      "resume"
+    ],
+    "status": "draft",
+    "publishedAt": "2026-10-11",
+    "updatedAt": "2026-10-11",
+    "featured": false,
+    "summary": "Build evidence of your skills, maintain a clear project portfolio, check eligibility, and apply through verified official channels.",
+    "content": "There is no single checklist that guarantees an internship. A beginner can, however, improve their readiness by learning fundamentals, building projects they understand, and applying to opportunities that match their current skills and eligibility.\n\n## Build proof of learning\nComplete small projects with clear README files, setup instructions, screenshots or demos, and a short explanation of technical decisions. Be ready to explain your own code and the trade-offs you made.\n\n## Prepare your application\nKeep a concise resume with accurate education, skills, projects, and links. Do not claim experience or technical knowledge you cannot discuss. Tailor the application to the role and follow the employer's instructions.\n\n## Verify the opportunity\nPrefer the employer's official careers page or a recognised programme's official website. Check eligibility, dates, location, work expectations, compensation terms, and whether any fee is requested. Be cautious of guaranteed offers, payment demands, or requests for sensitive information before you can verify the organisation.\n\n## Learn continuously\nPractise programming fundamentals and basic data structures, review your project code, and prepare to discuss how you debugged a real problem. Use feedback to improve the next application.\n\nThis article remains a draft until the resource directory and any linked internship programmes are rechecked for current status.",
+    "sources": [
+      {
+        "label": "GitHub Skills",
+        "url": "https://skills.github.com/"
+      }
+    ],
+    "toolLinks": []
+  }
+]
