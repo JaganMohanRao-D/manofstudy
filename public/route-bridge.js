@@ -39,10 +39,10 @@
     'eapcet-cbt': '/eapcet-mock-test',
     'mock-tests': '/mock-tests',
     'gap-analyzer': '/ai-gap-analyzer',
-    'privacy': '/privacy',
-    'terms': '/terms',
-    'disclaimer': '/disclaimer',
-    'contact': '/contact',
+    'privacy': '/privacy-policy',
+    'terms': '/terms-of-service',
+    'disclaimer': '/legal-safe-harbor',
+    'contact': '/contact-us',
     'about': '/about'
   };
 
@@ -134,7 +134,9 @@
       'survival': 'guides',
       'privacy-policy': 'privacy',
       'about-us': 'about',
-      'contact-us': 'contact'
+      'contact-us': 'contact',
+      'terms-of-service': 'terms',
+      'legal-safe-harbor': 'disclaimer'
     };
 
     var key = aliases[value] || value;
