@@ -23,7 +23,6 @@ export type WorkspaceView =
   | 'guides'
   | 'projects'
   | 'internships'
-  | 'humanizer'
   | 'cbt-mock-test'
   | 'eapcet-cbt'
   | 'mock-tests'
