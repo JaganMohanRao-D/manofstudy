@@ -413,6 +413,55 @@ const getSeoLandingPath = () => {
   return null;
 };
 
+// Resolve clean pathname URLs directly. The legacy route bridge can remove a
+// temporary hash before React effects run, so direct loads must not depend
+// exclusively on observing a hashchange event.
+const getWorkspaceFromPath = (): WorkspaceView | null => {
+  if (typeof window === 'undefined') return null;
+  const path = window.location.pathname.replace(/\/+$/, '').toLowerCase() || '/';
+  const routes: Record<string, WorkspaceView> = {
+    '/ap-eapcet/phase-2-vacancy-radar': 'eapcet',
+    '/ap-eapcet/college-wise-allotments': 'ap-allotments',
+    '/ap-eapcet/college-predictor': 'ap-predictor',
+    '/ap-eapcet/rank-predictor': 'ap-rank-predictor',
+    '/ap-eapcet/top-colleges': 'ap-top-colleges',
+    '/tg-eapcet/name-wise-allotments': 'tg-allotments',
+    '/tg-eapcet/top-colleges': 'tg-top-colleges',
+    '/tg-eapcet/college-predictor': 'tg-predictor',
+    '/roadmaps': 'roadmaps',
+    '/scholarships': 'scholarships',
+    '/pdftools': 'utilities',
+    '/imagecompressor': 'utilities',
+    '/placement-code-vault': 'vault',
+    '/backlog-planner': 'backlog',
+    '/code-studio': 'compiler',
+    '/dsa-placement-tracker': 'dsa',
+    '/academics': 'academics',
+    '/attendancedefender': 'attendance',
+    '/gpa-hub': 'gpa',
+    '/student-essentials': 'essentials',
+    '/student-store': 'essentials',
+    '/study-guides': 'guides',
+    '/major-projects': 'projects',
+    '/internships': 'internships',
+    '/mocktests': 'mock-tests',
+    '/mocktest': 'mock-tests',
+    '/mock-tests': 'mock-tests',
+    '/mock-test': 'cbt-mock-test',
+    '/eapcet-mock-test': 'eapcet-cbt',
+    '/ai-gap-analyzer': 'gap-analyzer',
+  };
+  return routes[path] || null;
+};
+
+const isUnknownAppPath = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  const path = window.location.pathname.replace(/\/+$/, '').toLowerCase() || '/';
+  if (path === '/' || getSeoLandingPath() || getStandaloneLegalPage() || isBlogPath(path)) return false;
+  if (path === '/scholarships' || path.startsWith('/scholarships/')) return false;
+  return getWorkspaceFromPath() === null;
+};
+
 export default function App() {
   const [activeWorkspace, setActiveWorkspace] = useState<WorkspaceView>(() => {
     const seoPath = getSeoLandingPath();
@@ -423,7 +472,10 @@ export default function App() {
     if (seoPath === 'attendanceCalculator') return 'attendance';
     if (seoPath === 'gpaCalculator') return 'gpa';
     if (seoPath === 'roadmaps') return 'roadmaps';
-    return 'hub';
+    const pathWorkspace = getWorkspaceFromPath();
+    // Resolve protected destinations after authentication has initialized.
+    if (pathWorkspace === 'mock-tests' || pathWorkspace === 'cbt-mock-test' || pathWorkspace === 'eapcet-cbt') return 'hub';
+    return pathWorkspace || 'hub';
   });
   const [utilitySubTab, setUtilitySubTab] = useState<ToolTab>('pdf-tools');
   const [eapcetPhase, setEapcetPhase] = useState<EapcetPhaseTab>('phase2');
@@ -485,9 +537,25 @@ export default function App() {
     if (getSeoLandingPath() || authLoading) return;
     const handleHashChange = () => {
       const pathname = window.location.pathname.replace(/\/+$/, '') || '/';
-      if (pathname.startsWith('/scholarships/')) {
-        setActiveWorkspace('scholarships');
-        return;
+      if (!window.location.hash) {
+        const pathWorkspace = getWorkspaceFromPath();
+        if (pathWorkspace) {
+          if (pathWorkspace === 'mock-tests' || pathWorkspace === 'cbt-mock-test' || pathWorkspace === 'eapcet-cbt') {
+            if (user) {
+              setActiveWorkspace(pathWorkspace);
+            } else {
+              setPendingProtectedWorkspace({ workspace: pathWorkspace });
+              openAuthModal({ type: 'mock-test' });
+            }
+          } else {
+            setActiveWorkspace(pathWorkspace);
+          }
+          return;
+        }
+        if (pathname.startsWith('/scholarships/')) {
+          setActiveWorkspace('scholarships');
+          return;
+        }
       }
       const hash = window.location.hash.replace('#', '').toLowerCase();
       if (
@@ -962,6 +1030,13 @@ export default function App() {
         
         {isBlogPath(window.location.pathname) ? (
           <BlogPage />
+        ) : isUnknownAppPath() ? (
+          <section className="mx-auto flex min-h-[55vh] w-full max-w-3xl flex-col items-center justify-center px-4 py-16 text-center" role="status">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-500">404 · Page not found</p>
+            <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl">We couldn’t find that page</h1>
+            <p className="mt-4 max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-300">This link may be outdated or the address may be incorrect. Use the home page to explore Naa College.</p>
+            <a href="/" className="mt-7 inline-flex items-center justify-center rounded-xl bg-cyan-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-cyan-500">Go to Naa College Home</a>
+          </section>
         ) : getSeoLandingPath() === 'apAllotments' ? (
           <SeoLandingPage
             eyebrow="AP EAPCET 2026 · Engineering Admissions"
