@@ -478,7 +478,7 @@ export default function App() {
     return pathWorkspace || 'hub';
   });
   const [utilitySubTab, setUtilitySubTab] = useState<ToolTab>(() =>
-    typeof window !== 'undefined' && window.location.pathname.replace(/\/+$/, '')).toLowerCase() === '/imagecompressor'
+    typeof window !== 'undefined' && window.location.pathname.replace(/\/+$/, '').toLowerCase() === '/imagecompressor'
       ? 'resizer'
       : 'pdf-tools'
   );
