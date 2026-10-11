@@ -38,7 +38,7 @@ const FAQ_ITEMS: FaqItem[] = [
     icon: Sparkles,
     question: 'Why was NAA COLLEGE built, and who is behind it?',
     answer:
-      'NAA COLLEGE was founded by an engineering scholar (Dunna Jagan Mohan Rao) who experienced firsthand how fragmented, ad-cluttered, and overwhelming engineering academic resources were. The mission is simple: provide Indian engineering students with a clean, high-performance, ad-free digital sanctuary with zero paywalls, complete data privacy, and curated academic clarity.',
+      'NAA COLLEGE was created by engineering student Dunna Jagan Mohan Rao to bring useful academic resources and practical tools together for students in India.',
     actionText: 'Learn About the Vision',
     actionTarget: { type: 'workspace', target: 'about' },
   },
@@ -87,13 +87,13 @@ const FAQ_ITEMS: FaqItem[] = [
     actionTarget: { type: 'workspace', target: 'tg-eapcet' },
   },
   {
-    id: 'faq-zero-ads-revenue',
+    id: 'faq-platform-support',
     category: 'mission',
-    categoryLabel: 'No Ads Policy',
+    categoryLabel: 'Platform Support',
     icon: UserCheck,
-    question: 'Is NAA COLLEGE really 100% free, and how do you sustain it without ads?',
+    question: 'Is NAA COLLEGE free to use, and how is it supported?',
     answer:
-      'Yes, NAA COLLEGE is 100% free for all students. We deliberately reject noisy pop-up ads, affiliate trackers, and sponsored link farms to maintain an uncompromising academic learning environment. The platform is self-funded and sustained through voluntary community UPI contributions from students and alumni who value our work.',
+      'NAA COLLEGE provides free access to student tools and resources. Voluntary contributions help cover practical technical costs, and the website may display advertising to support ongoing development.',
     actionText: 'Support NAA COLLEGE',
     actionTarget: { type: 'workspace', target: 'support' },
   },
