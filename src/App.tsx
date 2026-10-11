@@ -367,14 +367,6 @@ export const TOOLS_CONFIG: ToolMeta[] = [
     badge: 'Academic 03',
   },
   {
-    id: 'humanizer',
-    name: 'AI Text Humanizer',
-    shortName: 'AI Humanizer',
-    category: 'writing',
-    description: 'Real-feel AI pattern scanner & natural conversational rewriter',
-    badge: 'AI Scanner',
-  },
-  {
     id: 'essentials',
     name: 'Student Essentials & Academic Gear Store',
     shortName: 'Student Gear',
