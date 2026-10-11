@@ -1,4 +1,4 @@
-import {StrictMode, useEffect} from 'react';
+import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
@@ -12,11 +12,6 @@ import MockTestAccountControl from './components/MockTestAccountControl.tsx';
 import SiteUxFixes from './components/SiteUxFixes.tsx';
 
 function AppBootstrap() {
-  useEffect(() => {
-    // Keep the formatted SEO article visible until the interactive app mounts.
-    document.getElementById('seo-prerender')?.remove();
-  }, []);
-
   return (
     <AuthProvider>
       <ThemeProvider>
