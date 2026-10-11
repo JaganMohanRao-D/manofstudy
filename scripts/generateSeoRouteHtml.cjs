@@ -67,7 +67,7 @@ if (fs.existsSync(scholarshipDataPath)) {
   const scholarshipRecords = JSON.parse(fs.readFileSync(scholarshipDataPath, 'utf8'));
   const slugify = (value) => String(value || '')
     .normalize('NFKD')
-    .replace(/[\\u0300-\\u036f]/g, '')
+    .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
@@ -152,6 +152,6 @@ const sitemap = [
   '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
   ...routes.map((route) => '  <url><loc>' + xmlEscape('https://naacollege.in' + route.path) + '</loc></url>'),
   '</urlset>',
-].join('\\n') + '\\n';
+].join('\n') + '\n';
 fs.writeFileSync(path.join(distDir, 'sitemap.xml'), sitemap, 'utf8');
 console.log('[SEO] Generated ' + routes.length + ' static SEO route entry points and refreshed sitemap.xml.');
