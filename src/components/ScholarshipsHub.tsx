@@ -5,6 +5,7 @@ import {
   BadgeCheck, RefreshCw, X
 } from 'lucide-react';
 import { ScholarshipDetailsModal } from './ScholarshipDetailsModal';
+import { ScholarshipDetailPage, scholarshipSlug } from './ScholarshipDetailPage';
 
 export interface IndianScholarship {
   id: string;
@@ -35,7 +36,16 @@ export function getScholarshipSummary(s: IndianScholarship): string {
 }
 
 type Filter = 'all' | 'open' | 'government' | 'private' | 'state' | 'engineering' | 'girls';
-const isOpen = (s: IndianScholarship) => (s.status || '').toLowerCase().includes('open');
+const effectiveStatus = (s: IndianScholarship) => {
+  const explicitDate = s.deadline.match(/\b(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(20\d{2})\b/i);
+  if (explicitDate && /open/i.test(s.status || '')) {
+    const monthIndex = ['january','february','march','april','may','june','july','august','september','october','november','december'].indexOf(explicitDate[2].toLowerCase());
+    const deadlineDate = new Date(Number(explicitDate[3]), monthIndex, Number(explicitDate[1]), 23, 59, 59);
+    if (!Number.isNaN(deadlineDate.getTime()) && deadlineDate.getTime() < Date.now()) return 'Closed — listed deadline passed';
+  }
+  return s.status || 'Check official source';
+};
+const isOpen = (s: IndianScholarship) => effectiveStatus(s).toLowerCase() === 'open';
 
 const SCHOLARSHIP_HERO_IMAGE = '/Scholorship_images/manofstudy_scholorship%20_hero%20page.png';
 
@@ -121,7 +131,8 @@ export const ScholarshipsHub: React.FC = () => {
       `🎯 ${s.target}`,
       `📅 ${s.deadline}`,
       '',
-      `Apply: https://naacollege.in/scholarships`,
+      `Details: https://naacollege.in/scholarships/${scholarshipSlug(s.title)}/`,
+      `Application/source: ${s.apply_link}`,
     ].join('\n');
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
   };
@@ -135,6 +146,8 @@ export const ScholarshipsHub: React.FC = () => {
     { id: 'engineering', label: 'Engineering', count: stats.engineering },
     { id: 'girls', label: 'For girls', count: scholarships.filter(isExclusivelyForGirls).length },
   ];
+
+  if (typeof window !== 'undefined' && window.location.pathname.replace(/\/+$/, '').startsWith('/scholarships/')) return <ScholarshipDetailPage />;
 
   return (
     <section className="mos-scholarships-hub w-full max-w-7xl mx-auto px-3 sm:px-5 lg:px-8 py-6 sm:py-8 space-y-6 text-[var(--mos-text-primary)]">
@@ -196,13 +209,13 @@ export const ScholarshipsHub: React.FC = () => {
       {loading ? <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">{Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-80 rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] animate-pulse" />)}</div> : <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">{filtered.map(s => { const girls = isExclusivelyForGirls(s); return (
         <article key={s.id} className="group flex flex-col rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface)] hover:border-emerald-500/40 transition-all overflow-hidden shadow-xs">
           <div className="p-4 sm:p-5 flex-1">
-            <div className="flex items-start justify-between gap-3"><div className="flex items-center gap-2 min-w-0"><div className="h-9 w-9 rounded-xl bg-[var(--mos-surface-muted)] border border-[var(--mos-border)] flex items-center justify-center shrink-0"><GraduationCap className="h-4 w-4 text-emerald-600 dark:text-emerald-300" /></div><div className="min-w-0"><div className="truncate text-[11px] font-bold text-[var(--mos-text-muted)]">{s.provider}</div><div className="mt-1 flex flex-wrap gap-1.5"><span className={`rounded-md border px-1.5 py-0.5 text-[9px] font-bold ${categoryClass(s.category)}`}>{s.category}</span>{girls && <span className="rounded-md border border-pink-400/20 bg-pink-400/10 px-1.5 py-0.5 text-[9px] font-bold text-pink-600 dark:text-pink-300">Girls</span>}</div></div></div><span className={`shrink-0 rounded-full px-2 py-1 text-[9px] font-bold ${isOpen(s) ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-300' : 'bg-[var(--mos-surface-muted)] text-[var(--mos-text-muted)]'}`}>{s.status || 'Cycle-based'}</span></div>
+            <div className="flex items-start justify-between gap-3"><div className="flex items-center gap-2 min-w-0"><div className="h-9 w-9 rounded-xl bg-[var(--mos-surface-muted)] border border-[var(--mos-border)] flex items-center justify-center shrink-0"><GraduationCap className="h-4 w-4 text-emerald-600 dark:text-emerald-300" /></div><div className="min-w-0"><div className="truncate text-[11px] font-bold text-[var(--mos-text-muted)]">{s.provider}</div><div className="mt-1 flex flex-wrap gap-1.5"><span className={`rounded-md border px-1.5 py-0.5 text-[9px] font-bold ${categoryClass(s.category)}`}>{s.category}</span>{girls && <span className="rounded-md border border-pink-400/20 bg-pink-400/10 px-1.5 py-0.5 text-[9px] font-bold text-pink-600 dark:text-pink-300">Girls</span>}</div></div></div><span className={`shrink-0 rounded-full px-2 py-1 text-[9px] font-bold ${isOpen(s) ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-300' : 'bg-[var(--mos-surface-muted)] text-[var(--mos-text-muted)]'}`}>{effectiveStatus(s)}</span></div>
             <h3 className="mt-4 text-[15px] font-bold leading-6 text-[var(--mos-text-primary)] group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors">{s.title}</h3>
             <div className="mt-4 rounded-xl border border-emerald-500/20 bg-emerald-500/[.05] p-3.5"><div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[.14em] text-emerald-600 dark:text-emerald-400"><IndianRupee className="h-3 w-3" /> Amount / benefit</div><div className="mt-1.5 text-sm font-black leading-5 text-[var(--mos-text-primary)]">{s.amount}</div></div>
             <div className="mt-3 grid grid-cols-2 gap-2 text-[10px]"><div className="rounded-xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] p-3"><div className="text-[var(--mos-text-muted)]">Who can apply</div><div className="mt-1 text-[var(--mos-text-secondary)]">{s.target}</div></div><div className="rounded-xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] p-3"><div className="text-[var(--mos-text-muted)]">Deadline</div><div className="mt-1 text-[var(--mos-text-secondary)]">{s.deadline}</div></div></div>
             <p className="mt-3 text-[11px] leading-5 text-[var(--mos-text-muted)]">{getScholarshipSummary(s)}</p>
           </div>
-          <div className="border-t border-[var(--mos-border)] p-3.5"><div className="grid grid-cols-2 gap-2"><button onClick={() => setSelectedScholarship(s)} className="rounded-xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-3 py-2.5 text-[11px] font-bold text-[var(--mos-text-primary)] cursor-pointer">View details</button><a href={s.apply_link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2.5 text-[11px] font-black cursor-pointer">Apply / source <ExternalLink className="h-3.5 w-3.5" /></a></div><div className="mt-2 flex items-center justify-between gap-2"><button onClick={() => share(s)} className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[var(--mos-text-muted)] hover:text-emerald-500 cursor-pointer"><Share2 className="h-3 w-3" /> Share</button><button onClick={() => copyLink(s)} className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[var(--mos-text-muted)] cursor-pointer">{copiedId === s.id ? <><Check className="h-3 w-3 text-emerald-500" /> Copied</> : <><Copy className="h-3 w-3" /> Copy source</>}</button></div></div>
+          <div className="border-t border-[var(--mos-border)] p-3.5"><div className="grid grid-cols-2 gap-2"><a href={'/scholarships/' + scholarshipSlug(s.title) + '/'} className="inline-flex items-center justify-center rounded-xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-3 py-2.5 text-[11px] font-bold text-[var(--mos-text-primary)] hover:border-emerald-500/40">View details</a><a href={s.apply_link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2.5 text-[11px] font-black cursor-pointer">Apply / source <ExternalLink className="h-3.5 w-3.5" /></a></div><div className="mt-2 flex items-center justify-between gap-2"><button onClick={() => share(s)} className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[var(--mos-text-muted)] hover:text-emerald-500 cursor-pointer"><Share2 className="h-3 w-3" /> Share</button><button onClick={() => copyLink(s)} className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[var(--mos-text-muted)] cursor-pointer">{copiedId === s.id ? <><Check className="h-3 w-3 text-emerald-500" /> Copied</> : <><Copy className="h-3 w-3" /> Copy source</>}</button></div></div>
         </article>
       ); })}</div>}
 
