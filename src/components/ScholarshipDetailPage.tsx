@@ -23,10 +23,12 @@ const slugify = (value: string) => value.toLowerCase()
 
 function effectiveStatus(s: ScholarshipRecord): string {
   const explicitDate = s.deadline.match(/\b(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(20\d{2})\b/i);
-  if (explicitDate && /open/i.test(s.status || '')) {
+  if (/open/i.test(s.status || '')) {
+    if (!explicitDate) return 'Cycle status not confirmed';
     const monthIndex = ['january','february','march','april','may','june','july','august','september','october','november','december'].indexOf(explicitDate[2].toLowerCase());
     const deadline = new Date(Number(explicitDate[3]), monthIndex, Number(explicitDate[1]), 23, 59, 59);
     if (!Number.isNaN(deadline.getTime()) && deadline.getTime() < Date.now()) return 'Closed — listed deadline passed';
+    return 'Listed as open — verify provider';
   }
   return s.status || 'Check official source';
 }
