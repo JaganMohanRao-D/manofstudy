@@ -60,6 +60,32 @@ const routes = [
   },
 ];
 
+// Generate one crawlable static HTML entry point per scholarship record.
+// The React detail page reads the same JSON dataset, keeping routes and content aligned.
+const scholarshipDataPath = path.resolve(process.cwd(), 'public/indian_scholarships.json');
+if (fs.existsSync(scholarshipDataPath)) {
+  const scholarshipRecords = JSON.parse(fs.readFileSync(scholarshipDataPath, 'utf8'));
+  const slugify = (value) => String(value || '')
+    .normalize('NFKD')
+    .replace(/[\\u0300-\\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  const usedSlugs = new Set();
+  scholarshipRecords.forEach((scholarship) => {
+    const slug = slugify(scholarship.title);
+    if (!slug || usedSlugs.has(slug)) {
+      throw new Error('[SEO] Missing or duplicate scholarship slug for: ' + (scholarship.title || scholarship.id));
+    }
+    usedSlugs.add(slug);
+    const title = scholarship.title + ': Eligibility, Benefits & Application | Naa College';
+    const description = (scholarship.title + ' — review the listed benefit, eligibility summary, application timeline and source links on Naa College. Confirm current rules with the scheme provider.').slice(0, 158);
+    routes.push({ path: '/scholarships/' + slug + '/', title, description });
+  });
+} else {
+  console.warn('[SEO] Scholarship JSON not found; individual scholarship HTML routes were not generated.');
+}
+
 function escapeAttribute(value) {
   return value
     .replace(/&/g, '&amp;')
