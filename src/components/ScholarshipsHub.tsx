@@ -83,20 +83,20 @@ function inferLevel(s: IndianScholarship): EducationFilter[] {
   if (s.level) {
     const text = s.level.toLowerCase();
     const found: EducationFilter[] = [];
-    if (/school|class 9|class 10/.test(text)) found.push('school');
-    if (/intermediate|class 11|class 12|12th/.test(text)) found.push('intermediate');
-    if (/diploma|polytechnic|iti/.test(text)) found.push('diploma');
-    if (/undergraduate|ug|bachelor|degree|b\\.tech|engineering/.test(text)) found.push('undergraduate');
-    if (/postgraduate|pg|master/.test(text)) found.push('postgraduate');
+    if (/\bschool\b|class 9|class 10/.test(text)) found.push('school');
+    if (/\bintermediate\b|class 11|class 12|12th/.test(text)) found.push('intermediate');
+    if (/\bdiploma\b|\bpolytechnic\b|\biti\b/.test(text)) found.push('diploma');
+    if (/\bundergraduate\b|\bug\b|\bbachelor\b|\bdegree\b|\bb\.tech\b|\bengineering\b/.test(text)) found.push('undergraduate');
+    if (/\bpostgraduate\b|\bpg\b|\bmaster\b/.test(text)) found.push('postgraduate');
     if (found.length) return found;
   }
   const t = (s.title + ' ' + s.target + ' ' + s.eligibility).toLowerCase();
   const levels: EducationFilter[] = [];
-  if (/class 1|class 9|class 10|school student|school students|nmmss/.test(t)) levels.push('school');
+  if (/\bclass\s*(?:[1-9]|1[0-2])\b|\bschool\b|\bnmmss\b/.test(t)) levels.push('school');
   if (/\bintermediate\b|\bclass\s*(?:11|12|xii)\b|\b12th\b/.test(t)) levels.push('intermediate');
   if (/\bdiploma\b|\bpolytechnic\b|\biti\b/.test(t)) levels.push('diploma');
-  if (/\bug\b|b\.tech|undergraduate|degree course|bachelor|engineering|college and university students/.test(t)) levels.push('undergraduate');
-  if (/postgraduate|\bpg\b|master|fellowship|research students/.test(t)) levels.push('postgraduate');
+  if (/\bundergraduate\b|\bug\b|\bb\.?tech\b|\bbachelor\b|\bengineering\b|\bdegree course\b|college and university students/.test(t)) levels.push('undergraduate');
+  if (/\bpostgraduate\b|\bpg\b|\bmaster'?s?\b|higher education of st students/.test(t)) levels.push('postgraduate');
   return levels.length ? levels : ['undergraduate'];
 }
 
