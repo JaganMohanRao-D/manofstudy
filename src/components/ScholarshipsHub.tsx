@@ -93,8 +93,8 @@ function inferLevel(s: IndianScholarship): EducationFilter[] {
   const t = (s.title + ' ' + s.target + ' ' + s.eligibility).toLowerCase();
   const levels: EducationFilter[] = [];
   if (/class 1|class 9|class 10|school student|school students|nmmss/.test(t)) levels.push('school');
-  if (/intermediate|class 11|class 12|class xii|12th/.test(t)) levels.push('intermediate');
-  if (/diploma|polytechnic|iti/.test(t)) levels.push('diploma');
+  if (/\bintermediate\b|\bclass\s*(?:11|12|xii)\b|\b12th\b/.test(t)) levels.push('intermediate');
+  if (/\bdiploma\b|\bpolytechnic\b|\biti\b/.test(t)) levels.push('diploma');
   if (/\bug\b|b\.tech|undergraduate|degree course|bachelor|engineering|college and university students/.test(t)) levels.push('undergraduate');
   if (/postgraduate|\bpg\b|master|fellowship|research students/.test(t)) levels.push('postgraduate');
   return levels.length ? levels : ['undergraduate'];
@@ -200,7 +200,7 @@ export const ScholarshipsHub: React.FC = () => {
       const response = await fetch('/indian_scholarships.json', { cache: 'no-store' });
       if (!response.ok) throw new Error('Scholarship data request failed');
       const data: unknown = await response.json();
-      if (!Array.isArray(data) || data.some((item: any) => !item || !item.id || !item.title || !item.provider || !item.apply_link)) {
+      if (!Array.isArray(data) || data.some((item: any) => !item || !item.id || !item.title || !item.provider || !externalUrl(item.official_source_url || item.apply_link))) {
         throw new Error('Scholarship data has an invalid structure');
       }
       setScholarships(data as IndianScholarship[]);
@@ -399,7 +399,7 @@ export const ScholarshipsHub: React.FC = () => {
               </div>
               <div className="grid grid-cols-2 gap-2 border-t border-[var(--mos-border)] p-3.5">
                 <button type="button" onClick={() => setSelectedScholarship(s)} className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-3 py-2.5 text-xs font-bold transition hover:border-emerald-500/40 hover:bg-emerald-500/5 focus-visible:outline-2 focus-visible:outline-emerald-500">View details <ChevronDown className="h-3.5 w-3.5" /></button>
-                {externalUrl(s.apply_link) ? <a href={s.apply_link} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-2.5 text-xs font-bold text-white transition hover:bg-emerald-500 active:scale-[.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500">Apply now <ExternalLink className="h-3.5 w-3.5" /></a> : <button type="button" disabled className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-[var(--mos-surface-muted)] px-3 py-2.5 text-xs font-bold text-[var(--mos-text-muted)]" title="No valid application URL is available">Apply unavailable</button>}
+                {externalUrl(s.official_source_url || s.apply_link) ? <a href={s.official_source_url || s.apply_link} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-2.5 text-xs font-bold text-white transition hover:bg-emerald-500 active:scale-[.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500">{s.official_source_url ? 'Apply now' : 'Open listing'} <ExternalLink className="h-3.5 w-3.5" /></a> : <button type="button" disabled className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-[var(--mos-surface-muted)] px-3 py-2.5 text-xs font-bold text-[var(--mos-text-muted)]" title="No valid application URL is available">Link unavailable</button>}
                 <button type="button" onClick={() => shareScholarship(s)} className="inline-flex items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-xs font-semibold text-[var(--mos-text-muted)] transition hover:bg-[var(--mos-surface-muted)] hover:text-[var(--mos-text-primary)] focus-visible:outline-2 focus-visible:outline-emerald-500"><Share2 className="h-3.5 w-3.5" /> Share</button>
                 <button type="button" onClick={() => copyText('https://naacollege.in/scholarships/' + scholarshipSlug(s.title) + '/', s)} className="inline-flex items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-xs font-semibold text-[var(--mos-text-muted)] transition hover:bg-[var(--mos-surface-muted)] hover:text-[var(--mos-text-primary)] focus-visible:outline-2 focus-visible:outline-emerald-500">{copiedId === s.id ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}{copiedId === s.id ? 'Copied link' : 'Copy link'}</button>
               </div>
