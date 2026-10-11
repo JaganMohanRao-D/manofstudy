@@ -15,6 +15,12 @@ type ScholarshipRecord = {
   source_note?: string;
   last_verified?: string;
   gender?: string;
+  description?: string;
+  documents?: string[];
+  level?: string;
+  state?: string;
+  official_source_url?: string;
+  guideline_url?: string;
 };
 
 const slugify = (value: string) => value.toLowerCase()
@@ -105,7 +111,7 @@ export const ScholarshipDetailPage: React.FC = () => {
           </div>
           <h1 className="mt-4 max-w-4xl text-2xl font-black tracking-tight sm:text-4xl">{record.title}</h1>
           <p className="mt-3 text-sm text-[var(--mos-text-secondary)]">{record.provider}</p>
-          <p className="mt-4 max-w-3xl text-sm leading-7 text-[var(--mos-text-secondary)]">{record.target}</p>
+          <p className="mt-4 max-w-3xl text-sm leading-7 text-[var(--mos-text-secondary)]">{record.description || record.target}</p>
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/[.05] p-4">
               <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-emerald-700 dark:text-emerald-300"><GraduationCap className="h-4 w-4" /> Listed benefit</div>
@@ -147,8 +153,10 @@ export const ScholarshipDetailPage: React.FC = () => {
             Renewal rules, academic progression, attendance, minimum marks, institution restrictions and restrictions on combining awards are scheme-specific. Confirm these in the current guidelines before relying on this listing.
           </Section>
           <Section title="Sources and verification" icon={<ShieldCheck className="h-5 w-5 text-emerald-500" />}>
-            {record.source_note && <p><strong>Existing dataset note (not independently re-verified during this implementation):</strong> {record.source_note}</p>}
-            <p className="mt-2 break-words">Source/application URL: <a className="font-semibold text-emerald-700 underline dark:text-emerald-300" href={record.apply_link} target="_blank" rel="noopener noreferrer">{record.apply_link}</a></p>
+            {record.source_note && <p><strong>Source note:</strong> {record.source_note}</p>}
+            {record.official_source_url && <p className="mt-2 break-words">Official source: <a className="font-semibold text-emerald-700 underline dark:text-emerald-300" href={record.official_source_url} target="_blank" rel="noopener noreferrer">{record.official_source_url}</a></p>}
+            {record.guideline_url && record.guideline_url !== record.official_source_url && <p className="mt-2 break-words">Scheme guidelines: <a className="font-semibold text-emerald-700 underline dark:text-emerald-300" href={record.guideline_url} target="_blank" rel="noopener noreferrer">{record.guideline_url}</a></p>}
+            <p className="mt-2 break-words">Application / source URL: <a className="font-semibold text-emerald-700 underline dark:text-emerald-300" href={record.apply_link} target="_blank" rel="noopener noreferrer">{record.apply_link}</a></p>
             <p className="mt-2">Last verification recorded in the dataset: <strong>{record.last_verified || 'Not recorded'}</strong>.</p>
             <p className="mt-2 text-xs">A recorded verification date does not guarantee that the deadline or scheme rules remain current. Confirm directly with the scheme provider.</p>
           </Section>
