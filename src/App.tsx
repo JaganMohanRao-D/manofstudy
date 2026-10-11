@@ -1478,7 +1478,7 @@ export default function App() {
           </div>
           <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 font-medium">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
-            <span>Zero Ads • Zero Data Collection • Direct Student Access</span>
+            <span>Student Resources • Direct Student Access</span>
           </div>
         </div>
       </div>
