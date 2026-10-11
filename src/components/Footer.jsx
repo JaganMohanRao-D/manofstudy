@@ -19,11 +19,11 @@ export const Footer = ({ onOpenLegalModal, onOpenSupportModal }) => (
         <div className="md:justify-self-end">
           <div className="text-[10px] uppercase tracking-[.15em] text-[#777b82]">Navigate</div>
           <div className="mt-4 grid gap-2 text-xs text-[#b8bbc0]">
-            <button type="button" onClick={() => onOpenLegalModal?.('privacy')} className="text-left hover:text-[#22d3ee]">Privacy Policy</button>
-            <button type="button" onClick={() => onOpenLegalModal?.('terms')} className="text-left hover:text-[#22d3ee]">Terms of Service</button>
-            <button type="button" onClick={() => onOpenLegalModal?.('disclaimer')} className="text-left hover:text-[#22d3ee]">Legal Safe Harbor &amp; Disclaimers</button>
-            <button type="button" onClick={() => onOpenLegalModal?.('about')} className="text-left hover:text-[#22d3ee]">About Naa College</button>
-            <button type="button" onClick={() => onOpenLegalModal?.('contact')} className="text-left hover:text-[#22d3ee]">Contact Support</button>
+            <a href="/privacy-policy" className="text-left hover:text-[#22d3ee]">Privacy Policy</a>
+            <a href="/terms-of-service" className="text-left hover:text-[#22d3ee]">Terms of Service</a>
+            <a href="/legal-safe-harbor" className="text-left hover:text-[#22d3ee]">Legal Safe Harbor &amp; Disclaimer</a>
+            <a href="/about" className="text-left hover:text-[#22d3ee]">About Naa College</a>
+            <a href="/contact-us" className="text-left hover:text-[#22d3ee]">Contact Developer</a>
             {onOpenSupportModal && <button type="button" onClick={onOpenSupportModal} className="inline-flex items-center gap-2 text-left text-[#22d3ee]"><Heart size={12}/> Support Naa College</button>}
           </div>
         </div>
