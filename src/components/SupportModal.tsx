@@ -63,7 +63,7 @@ const CONTRIBUTION_TIERS: ContributionTier[] = [
     amount: null,
     label: 'Any',
     category: 'Keep Naa College Growing',
-    description: 'Voluntary contribution to keep NAA COLLEGE open, ad-free & updated.',
+    description: 'Voluntary contribution to help keep NAA COLLEGE available and updated.',
     icon: Sparkles,
     tag: 'Open Support',
   },
@@ -210,7 +210,7 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
               <span>Independent Student Project</span>
             </span>
             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10.5px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-              100% Free &amp; Ad-Free
+              Free Student Tools
             </span>
           </div>
 
@@ -335,7 +335,7 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
                   <div>• AP/TG EAPCET counseling data curation</div>
                   <div>• UI/UX &amp; frontend feature development</div>
                   <div>• Testing, bug fixes &amp; maintenance</div>
-                  <div>• Keeping tools open &amp; 100% ad-free</div>
+                  <div>• Keeping tools available and updated</div>
                 </div>
               </div>
             )}
