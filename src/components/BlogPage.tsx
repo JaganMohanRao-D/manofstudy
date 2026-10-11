@@ -20,34 +20,61 @@ function InlineText({ value }: { value: string }) {
   return <>{tokens.map((token, index) => {
     const link = token.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
     if (link) {
-      const external = /^https?:\/\//i.test(link[2]);
-      return <a key={index} href={link[2]} className="font-semibold text-cyan-700 underline underline-offset-4 hover:text-cyan-600 dark:text-cyan-300" {...(external ? { target: '_blank', rel: 'noreferrer noopener' } : {})}>{link[1]}</a>;
+      const href = link[2].trim();
+      if (!/^(https?:\/\/|\/|#)/i.test(href) || /^javascript:/i.test(href)) return <React.Fragment key={index}>{link[1]}</React.Fragment>;
+      const external = /^https?:\/\//i.test(href);
+      return <a key={index} href={href} className="font-medium text-cyan-700 underline underline-offset-4 hover:text-cyan-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500 dark:text-cyan-300" {...(external ? { target: '_blank', rel: 'noreferrer noopener' } : {})}>{link[1]}</a>;
     }
-    if (token.startsWith('**') && token.endsWith('**')) return <strong key={index} className="font-bold text-slate-950 dark:text-white">{token.slice(2, -2)}</strong>;
+    if (token.startsWith('**') && token.endsWith('**')) return <strong key={index} className="font-semibold text-slate-900 dark:text-slate-100">{token.slice(2, -2)}</strong>;
     return <React.Fragment key={index}>{token}</React.Fragment>;
   })}</>;
 }
 
 function ArticleBody({ content }: { content: string }) {
-  return <div className="space-y-5">{content.trim().split(/\n\s*\n/).map((raw, index) => {
-    const block = raw.trim();
-    if (!block) return null;
-    if (block.startsWith('## ')) {
-      const heading = block.slice(3).trim();
-      return <h2 id={headingId(heading)} key={index} className="scroll-mt-24 pt-3 text-xl font-extrabold tracking-tight text-slate-950 dark:text-white sm:text-2xl">{heading}</h2>;
+  const lines = content.trim().split(/\r?\n/);
+  const blocks: { type: string; value: string[] }[] = [];
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i].trim();
+    if (!line) { i++; continue; }
+    if (line.startsWith('## ')) { blocks.push({ type: 'h2', value: [line.slice(3).trim()] }); i++; continue; }
+    if (line.startsWith('### ')) { blocks.push({ type: 'h3', value: [line.slice(4).trim()] }); i++; continue; }
+    if (line.startsWith('> ')) {
+      const quote: string[] = [];
+      while (i < lines.length && lines[i].trim().startsWith('> ')) quote.push(lines[i++].trim().replace(/^>\s?/, ''));
+      blocks.push({ type: 'quote', value: quote }); continue;
     }
-    if (block.startsWith('> ')) return <blockquote key={index} className="rounded-r-xl border-l-4 border-cyan-500 bg-cyan-50 px-4 py-3 text-sm leading-7 text-slate-700 dark:bg-cyan-950/30 dark:text-slate-200"><InlineText value={block.slice(2).replace(/\n> /g, '\n')} /></blockquote>;
-    const lines = block.split('\n').map((line) => line.trim()).filter(Boolean);
-    if (lines.every((line) => line.startsWith('- '))) return <ul key={index} className="list-disc space-y-2 pl-6 text-[15px] leading-7 text-slate-700 dark:text-slate-300">{lines.map((line, i) => <li key={i}><InlineText value={line.slice(2)} /></li>)}</ul>;
-    if (lines.every((line) => /^\d+\.\s/.test(line))) return <ol key={index} className="list-decimal space-y-2 pl-6 text-[15px] leading-7 text-slate-700 dark:text-slate-300">{lines.map((line, i) => <li key={i}><InlineText value={line.replace(/^\d+\.\s/, '')} /></li>)}</ol>;
-    return <p key={index} className="text-[15px] leading-8 text-slate-700 dark:text-slate-300"><InlineText value={block.replace(/\n/g, ' ')} /></p>;
-  })}</div>;
+    if (/^[-*]\s+/.test(line)) {
+      const items: string[] = [];
+      while (i < lines.length && /^[-*]\s+/.test(lines[i].trim())) items.push(lines[i++].trim().replace(/^[-*]\s+/, ''));
+      blocks.push({ type: 'ul', value: items }); continue;
+    }
+    if (/^\d+[.)]\s+/.test(line)) {
+      const items: string[] = [];
+      while (i < lines.length && /^\d+[.)]\s+/.test(lines[i].trim())) items.push(lines[i++].trim().replace(/^\d+[.)]\s+/, ''));
+      blocks.push({ type: 'ol', value: items }); continue;
+    }
+    const paragraph = [line]; i++;
+    while (i < lines.length && lines[i].trim() && !/^(#{2,3}\s|>\s|[-*]\s+|\d+[.)]\s+)/.test(lines[i].trim())) paragraph.push(lines[i++].trim());
+    blocks.push({ type: 'p', value: [paragraph.join(' ')] });
+  }
+  return <div className="blog-prose space-y-5">
+    {blocks.map((block, index) => {
+      if (block.type === 'h2') return <h2 id={headingId(block.value[0])} key={index} className="scroll-mt-24 pt-4 text-xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-2xl">{block.value[0]}</h2>;
+      if (block.type === 'h3') return <h3 key={index} className="pt-2 text-lg font-semibold tracking-tight text-slate-900 dark:text-white sm:text-xl">{block.value[0]}</h3>;
+      if (block.type === 'quote') return <blockquote key={index} className="rounded-r-xl border-l-4 border-cyan-500 bg-cyan-50 px-4 py-3 text-[15px] leading-7 text-slate-700 dark:bg-cyan-950/30 dark:text-slate-200"><InlineText value={block.value.join(' ')} /></blockquote>;
+      if (block.type === 'ul' || block.type === 'ol') {
+        const List = block.type === 'ul' ? 'ul' : 'ol';
+        return <List key={index} className={(block.type === 'ul' ? 'list-disc' : 'list-decimal') + ' space-y-2 pl-6 text-[16px] leading-7 text-slate-700 dark:text-slate-300'}>{block.value.map((item, j) => <li key={j} className="pl-1"><InlineText value={item} /></li>)}</List>;
+      }
+      return <p key={index} className="text-[16px] font-normal leading-[1.8] text-slate-700 dark:text-slate-300"><InlineText value={block.value[0]} /></p>;
+    })}
+  </div>;
 }
-
 function ArticleCard({ article }: { article: BlogArticle }) {
   return <article className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-cyan-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/80 sm:p-6">
     <div className="flex flex-wrap items-center gap-2 text-xs font-semibold"><span className="rounded-full bg-cyan-50 px-2.5 py-1 text-cyan-800 dark:bg-cyan-950/50 dark:text-cyan-200">{article.category}</span><span className="inline-flex items-center gap-1 text-slate-500"><Clock3 className="h-3.5 w-3.5" />{readTime(article)} min read</span></div>
-    <h2 className="mt-4 text-lg font-extrabold leading-snug tracking-tight text-slate-950 dark:text-white">{article.title}</h2>
+    <h2 className="mt-4 text-lg font-semibold leading-snug tracking-tight text-slate-950 dark:text-white">{article.title}</h2>
     <p className="mt-3 flex-1 text-sm leading-6 text-slate-600 dark:text-slate-300">{article.summary}</p>
     <a href={'/blog/' + article.slug + '/'} className="mt-5 inline-flex items-center gap-2 self-start text-sm font-bold text-cyan-800 dark:text-cyan-300">Read guide <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></a>
   </article>;
@@ -109,7 +136,7 @@ export const BlogPage: React.FC = () => {
 
   if (article) return <article className="mx-auto max-w-6xl">
     <a href="/blog/" className="inline-flex items-center gap-2 text-sm font-bold text-cyan-800 dark:text-cyan-300"><ArrowLeft className="h-4 w-4" />All articles</a>
-    <header className="mt-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-10"><p className="text-xs font-bold uppercase tracking-[0.16em] text-cyan-700 dark:text-cyan-300">{article.category}</p><h1 className="mt-3 max-w-4xl text-3xl font-black leading-tight tracking-tight text-slate-950 dark:text-white sm:text-5xl">{article.title}</h1><p className="mt-5 max-w-3xl text-base leading-7 text-slate-600 dark:text-slate-300">{article.summary}</p><div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs text-slate-500 dark:text-slate-400"><span className="inline-flex items-center gap-1.5"><CalendarDays className="h-4 w-4" />Updated {article.updatedAt}</span><span className="inline-flex items-center gap-1.5"><Clock3 className="h-4 w-4" />{readTime(article)} min read</span><span>By Naa College</span></div></header>
+    <header className="mt-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-10"><p className="text-xs font-bold uppercase tracking-[0.16em] text-cyan-700 dark:text-cyan-300">{article.category}</p><h1 className="mt-3 max-w-4xl text-3xl font-semibold leading-tight tracking-tight text-slate-950 dark:text-white sm:text-4xl">{article.title}</h1><p className="mt-5 max-w-3xl text-base leading-7 text-slate-600 dark:text-slate-300">{article.summary}</p><div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs text-slate-500 dark:text-slate-400"><span className="inline-flex items-center gap-1.5"><CalendarDays className="h-4 w-4" />Updated {article.updatedAt}</span><span className="inline-flex items-center gap-1.5"><Clock3 className="h-4 w-4" />{readTime(article)} min read</span><span>By TEAM NAA COLLEGE</span></div></header>
     <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_250px]"><div className="min-w-0 rounded-3xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900 sm:p-9"><ArticleBody content={article.content} />
       {article.sources.length > 0 && <section className="mt-10 border-t border-slate-200 pt-6 dark:border-slate-800"><h2 className="text-lg font-extrabold text-slate-950 dark:text-white">Official and reference sources</h2><ul className="mt-3 space-y-2">{article.sources.map((source) => <li key={source.url}><a href={source.url} target="_blank" rel="noreferrer noopener" className="text-sm font-semibold text-cyan-800 underline underline-offset-4 dark:text-cyan-300">{source.label}</a></li>)}</ul></section>}
       {article.toolLinks.length > 0 && <section className="mt-8 rounded-2xl border border-cyan-200 bg-cyan-50/70 p-5 dark:border-cyan-900 dark:bg-cyan-950/30"><h2 className="font-extrabold text-slate-950 dark:text-white">Open a related Naa College tool</h2><div className="mt-3 flex flex-wrap gap-2">{article.toolLinks.map((link) => <a key={link.href} href={link.href} className="inline-flex items-center gap-2 rounded-xl bg-cyan-800 px-3 py-2 text-sm font-bold text-white">{link.label}<ArrowRight className="h-4 w-4" /></a>)}</div></section>}
@@ -119,7 +146,7 @@ export const BlogPage: React.FC = () => {
   </article>;
 
   return <div className="mx-auto max-w-7xl space-y-8">
-    <header className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-white via-white to-cyan-50 p-6 dark:border-slate-800 dark:from-slate-950 dark:via-slate-900 dark:to-cyan-950/40 sm:p-10"><div className="pointer-events-none absolute -right-12 -top-20 h-64 w-64 rounded-full bg-cyan-400/10 blur-3xl" /><div className="relative max-w-3xl"><span className="inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-cyan-900 dark:border-cyan-900 dark:bg-cyan-950/50 dark:text-cyan-200"><BookOpen className="h-4 w-4" />Naa College Knowledge Hub</span><h1 className="mt-5 text-3xl font-black tracking-tight text-slate-950 dark:text-white sm:text-5xl">Practical guides for your next step.</h1><p className="mt-4 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-300">Straightforward student guides for EAPCET counselling, Naa College tools, scholarships, programming, and responsible AI-assisted development. Verify important decisions with official sources.</p><label className="mt-6 flex max-w-2xl items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-cyan-500 dark:border-slate-700 dark:bg-slate-950"><Search className="h-5 w-5 shrink-0 text-slate-400" /><span className="sr-only">Search published articles</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search guides, tools, scholarships..." className="min-w-0 flex-1 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400 dark:text-white" /></label></div></header>
+    <header className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-white via-white to-cyan-50 p-6 dark:border-slate-800 dark:from-slate-950 dark:via-slate-900 dark:to-cyan-950/40 sm:p-10"><div className="pointer-events-none absolute -right-12 -top-20 h-64 w-64 rounded-full bg-cyan-400/10 blur-3xl" /><div className="relative max-w-3xl"><span className="inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-cyan-900 dark:border-cyan-900 dark:bg-cyan-950/50 dark:text-cyan-200"><BookOpen className="h-4 w-4" />Naa College Knowledge Hub</span><h1 className="mt-5 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white sm:text-4xl">Practical guides for your next step.</h1><p className="mt-4 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-300">Straightforward student guides for EAPCET counselling, Naa College tools, scholarships, programming, and responsible AI-assisted development. Verify important decisions with official sources.</p><label className="mt-6 flex max-w-2xl items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-cyan-500 dark:border-slate-700 dark:bg-slate-950"><Search className="h-5 w-5 shrink-0 text-slate-400" /><span className="sr-only">Search published articles</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search guides, tools, scholarships..." className="min-w-0 flex-1 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400 dark:text-white" /></label></div></header>
     <nav aria-label="Blog categories" className="flex gap-2 overflow-x-auto pb-2">{categories.map((item) => <button key={item} type="button" onClick={() => setCategory(item)} aria-pressed={category === item} className={'shrink-0 rounded-full border px-4 py-2 text-xs font-bold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 ' + (category === item ? 'border-cyan-700 bg-cyan-800 text-white' : 'border-slate-200 bg-white text-slate-700 hover:border-cyan-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200')}>{item}</button>)}</nav>
     {query.trim() === '' && category === 'All' && !isCategory && <section><div className="mb-4 flex items-end justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-wider text-cyan-700 dark:text-cyan-300">Start here</p><h2 className="mt-1 text-2xl font-black text-slate-950 dark:text-white">Featured guides</h2></div></div><div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{articles.filter((item) => item.featured).slice(0, 3).map((item) => <ArticleCard key={item.slug} article={item} />)}</div></section>}
     <section><div className="mb-4"><h2 className="text-2xl font-black text-slate-950 dark:text-white">{isCategory && currentCategory ? currentCategory : query ? 'Search results' : 'All published guides'}</h2><p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{filtered.length} {filtered.length === 1 ? 'article' : 'articles'}</p></div>{filtered.length ? <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{filtered.map((item) => <ArticleCard key={item.slug} article={item} />)}</div> : <div className="rounded-2xl border border-dashed border-slate-300 p-10 text-center dark:border-slate-700"><BookOpen className="mx-auto h-8 w-8 text-slate-400" /><h3 className="mt-3 font-bold text-slate-900 dark:text-white">No guides found</h3><p className="mt-1 text-sm text-slate-500">Try another search or choose a different category.</p><button type="button" onClick={() => { setQuery(''); setCategory('All'); }} className="mt-4 rounded-xl bg-cyan-800 px-4 py-2 text-sm font-bold text-white">Clear filters</button></div>}</section>
