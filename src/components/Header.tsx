@@ -38,7 +38,6 @@ const OTHER_TOOLS: NavItem[] = [
   { label: 'Major Projects Hub', workspace: 'projects', icon: Wrench },
   { label: 'GPA Hub', workspace: 'gpa', icon: Calculator },
   { label: 'Academics', workspace: 'academics', icon: BookOpen },
-  { label: 'AI Text Humanizer', workspace: 'humanizer', icon: Brain },
 ];
 
 export const Header: React.FC<HeaderProps> = ({ activeWorkspace = 'hub', onSelectWorkspace, setActiveTab, onOpenCommandPalette, onOpenLegal, onOpenSupport }) => {
