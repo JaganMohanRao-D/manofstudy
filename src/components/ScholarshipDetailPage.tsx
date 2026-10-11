@@ -145,7 +145,7 @@ export const ScholarshipDetailPage: React.FC = () => {
             Renewal rules, academic progression, attendance, minimum marks, institution restrictions and restrictions on combining awards are scheme-specific. Confirm these in the current guidelines before relying on this listing.
           </Section>
           <Section title="Sources and verification" icon={<ShieldCheck className="h-5 w-5 text-emerald-500" />}>
-            {record.source_note && <p>{record.source_note}</p>}
+            {record.source_note && <p><strong>Existing dataset note (not independently re-verified during this implementation):</strong> {record.source_note}</p>}
             <p className="mt-2 break-words">Source/application URL: <a className="font-semibold text-emerald-700 underline dark:text-emerald-300" href={record.apply_link} target="_blank" rel="noopener noreferrer">{record.apply_link}</a></p>
             <p className="mt-2">Last verification recorded in the dataset: <strong>{record.last_verified || 'Not recorded'}</strong>.</p>
             <p className="mt-2 text-xs">A recorded verification date does not guarantee that the deadline or scheme rules remain current. Confirm directly with the scheme provider.</p>
