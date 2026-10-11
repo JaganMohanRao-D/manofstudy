@@ -138,7 +138,7 @@
     "toolLinks": [
       {
         "label": "Open Naa College Image Compressor",
-        "href": "/#resizer"
+        "href": "/imagecompressor/"
       }
     ]
   },
@@ -161,7 +161,7 @@
     "toolLinks": [
       {
         "label": "Open Naa College PDF Tools",
-        "href": "/#pdf-tools"
+        "href": "/pdftools/"
       }
     ]
   },
@@ -189,7 +189,7 @@
     "toolLinks": [
       {
         "label": "Explore Naa College Scholarships",
-        "href": "/#scholarships"
+        "href": "/scholarships/"
       }
     ]
   },
