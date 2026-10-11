@@ -477,7 +477,11 @@ export default function App() {
     if (pathWorkspace === 'mock-tests' || pathWorkspace === 'cbt-mock-test' || pathWorkspace === 'eapcet-cbt') return 'hub';
     return pathWorkspace || 'hub';
   });
-  const [utilitySubTab, setUtilitySubTab] = useState<ToolTab>('pdf-tools');
+  const [utilitySubTab, setUtilitySubTab] = useState<ToolTab>(() =>
+    typeof window !== 'undefined' && window.location.pathname.replace(/\\/+$/, '').toLowerCase() === '/imagecompressor'
+      ? 'resizer'
+      : 'pdf-tools'
+  );
   const [eapcetPhase, setEapcetPhase] = useState<EapcetPhaseTab>('phase2');
   const [legalModal, setLegalModal] = useState<LegalModalType | null>(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -549,6 +553,9 @@ export default function App() {
             }
           } else {
             setActiveWorkspace(pathWorkspace);
+            if (pathWorkspace === 'utilities') {
+              setUtilitySubTab(pathname.toLowerCase() === '/imagecompressor' ? 'resizer' : 'pdf-tools');
+            }
           }
           return;
         }
