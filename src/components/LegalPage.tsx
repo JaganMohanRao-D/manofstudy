@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ArrowLeft, FileText, ShieldCheck, Mail, Info, Scale } from 'lucide-react';
 import { AboutUs } from './AboutUs';
 import { ContactUs } from './ContactUs';
@@ -26,6 +26,26 @@ const LEGAL_LINKS: { href: string; label: string }[] = [
 export const LegalPage: React.FC<{ type: StandaloneLegalPageType }> = ({ type }) => {
   const meta = PAGE_META[type];
   const Icon = meta.icon;
+  useEffect(() => {
+    document.title = meta.title + ' | Naa College';
+    const description = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
+    if (description) description.content = meta.description;
+
+    const canonicalByType: Record<StandaloneLegalPageType, string> = {
+      about: 'https://naacollege.in/about',
+      contact: 'https://naacollege.in/contact-us',
+      privacy: 'https://naacollege.in/privacy-policy',
+      terms: 'https://naacollege.in/terms-of-service',
+      disclaimer: 'https://naacollege.in/legal-safe-harbor',
+    };
+    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.rel = 'canonical';
+      document.head.appendChild(canonical);
+    }
+    canonical.href = canonicalByType[type];
+  }, [meta.description, meta.title, type]);
 
   return (
     <div className="min-h-screen bg-[var(--mos-page-bg)] text-[var(--mos-text-primary)] tech-grid-pattern-light">
