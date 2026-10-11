@@ -126,9 +126,12 @@ export const BlogPage: React.FC = () => {
     schema.textContent = JSON.stringify(article ? {
       '@context': 'https://schema.org', '@type': 'BlogPosting', headline: article.title, description: article.summary,
       datePublished: article.publishedAt, dateModified: article.updatedAt, mainEntityOfPage: canonical,
-      author: { '@type': 'Organization', name: 'Naa College', url: SITE + '/' },
-      publisher: { '@type': 'Organization', name: 'Naa College', url: SITE + '/' }
+      author: { '@type': 'Organization', name: 'TEAM NAA COLLEGE', url: SITE + '/' },
+      publisher: { '@type': 'Organization', name: 'TEAM NAA COLLEGE', url: SITE + '/' }
     } : { '@context': 'https://schema.org', '@type': 'Blog', name: 'Naa College Blog', url: SITE + '/blog/' });
+    // Remove the static first-paint copy only after BlogPage has committed its
+    // own article/listing DOM. This avoids a blank interval while React starts.
+    requestAnimationFrame(() => document.getElementById('seo-prerender')?.remove());
     return () => { document.getElementById('naa-blog-schema')?.remove(); };
   }, [article, isCategory, currentCategory]);
 
