@@ -176,7 +176,16 @@ export const ScholarshipsHub: React.FC = () => {
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('all');
   const [amountFilter, setAmountFilter] = useState<AmountFilter>('all');
   const [sortMode, setSortMode] = useState<SortMode>('deadline');
-  const [savedIds, setSavedIds] = useState<string[]>([]);
+  const [savedIds, setSavedIds] = useState<string[]>(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const raw = window.localStorage.getItem(STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : [];
+    } catch {
+      return [];
+    }
+  });
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [showSaved, setShowSaved] = useState(false);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
@@ -201,16 +210,7 @@ export const ScholarshipsHub: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    loadData();
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
-      const parsed = raw ? JSON.parse(raw) : [];
-      if (Array.isArray(parsed)) setSavedIds(parsed.filter((id): id is string => typeof id === 'string'));
-    } catch {
-      setSavedIds([]);
-    }
-  }, []);
+  useEffect(() => { loadData(); }, []);
 
   useEffect(() => {
     const timer = window.setTimeout(() => setDebouncedQuery(searchQuery.trim().toLowerCase()), 220);
