@@ -68,6 +68,8 @@ export const ScholarshipDetailsModal: React.FC<ScholarshipDetailsModalProps> = (
   };
 
   const docs = Array.isArray(scholarship.documents) ? scholarship.documents.filter(Boolean) : [];
+  const applicationUrl = scholarship.official_source_url || scholarship.apply_link;
+  const hasOfficialSource = Boolean(scholarship.official_source_url && safeExternalUrl(scholarship.official_source_url));
   const steps = Array.isArray(scholarship.application_steps) && scholarship.application_steps.length
     ? scholarship.application_steps
     : ['Read the current scheme guidelines and confirm every eligibility condition.', 'Prepare only the documents requested by the scheme or application portal.', 'Submit through the designated provider portal before the confirmed deadline.', 'Save the acknowledgement and follow any institute or authority verification steps.'];
@@ -130,6 +132,7 @@ export const ScholarshipDetailsModal: React.FC<ScholarshipDetailsModalProps> = (
             <p className="mt-2 text-xs leading-5 text-[var(--mos-text-secondary)]">{scholarship.source_note || 'This listing has not been independently verified for the current application cycle.'}</p>
             {scholarship.last_verified && <p className="mt-2 text-[11px] text-[var(--mos-text-muted)]">Record verification note: {scholarship.last_verified}</p>}
             {scholarship.guideline_url && safeExternalUrl(scholarship.guideline_url) && <a href={scholarship.guideline_url} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 underline underline-offset-4 dark:text-emerald-300">Read scheme guidelines <ExternalLink className="h-3 w-3" /></a>}
+            {!hasOfficialSource && <p className="mt-3 text-[11px] leading-5 text-amber-700 dark:text-amber-300">An official provider URL is not recorded for this listing. Treat the linked page as a source listing and verify the scheme directly with its provider before submitting details.</p>}
           </section>
         </div>
 
@@ -140,7 +143,7 @@ export const ScholarshipDetailsModal: React.FC<ScholarshipDetailsModalProps> = (
           </div>
           <div className="grid grid-cols-2 gap-2 sm:flex">
             <a href={detailUrl} className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[var(--mos-border)] px-3 py-2.5 text-xs font-bold transition hover:border-emerald-500/40 focus-visible:outline-2 focus-visible:outline-emerald-500">Full page <ArrowUpRight className="h-3.5 w-3.5" /></a>
-            {safeExternalUrl(scholarship.apply_link) ? <a href={scholarship.apply_link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white transition hover:bg-emerald-500 active:scale-[.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500">Apply now <ExternalLink className="h-3.5 w-3.5" /></a> : <button disabled className="rounded-xl bg-[var(--mos-surface-muted)] px-4 py-2.5 text-xs font-bold text-[var(--mos-text-muted)]">Application link unavailable</button>}
+            {safeExternalUrl(applicationUrl) ? <a href={applicationUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white transition hover:bg-emerald-500 active:scale-[.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500">{hasOfficialSource ? 'Apply now' : 'Open listing'} <ExternalLink className="h-3.5 w-3.5" /></a> : <button disabled className="rounded-xl bg-[var(--mos-surface-muted)] px-4 py-2.5 text-xs font-bold text-[var(--mos-text-muted)]">Application link unavailable</button>}
           </div>
         </footer>
       </section>
