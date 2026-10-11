@@ -134,7 +134,7 @@ export const MockTestSeriesHub: React.FC<MockTestSeriesHubProps> = ({
             </div>
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center min-w-[110px]">
               <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400">100%</div>
-              <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">Free &amp; Ad-Free</div>
+              <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">Free Practice Tests</div>
             </div>
           </div>
         </div>
