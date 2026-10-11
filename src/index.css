@@ -2013,3 +2013,78 @@ html.light .mos-about-hero .text-blue-300 {
   color: #93C5FD !important;
   -webkit-text-fill-color: #93C5FD !important;
 }
+
+
+/* Naa College: keep the shared navigation light on every page and in either theme. */
+#main-header.mos-k-nav {
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+  border-bottom: 1px solid #E2E8F0;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06) !important;
+}
+#main-header.mos-k-nav nav[aria-label="Primary navigation"] > a,
+#main-header.mos-k-nav nav[aria-label="Primary navigation"] > button,
+#main-header.mos-k-nav nav[aria-label="Primary navigation"] > div > button {
+  color: #334155 !important;
+}
+#main-header.mos-k-nav nav[aria-label="Primary navigation"] > a:hover,
+#main-header.mos-k-nav nav[aria-label="Primary navigation"] > button:hover,
+#main-header.mos-k-nav nav[aria-label="Primary navigation"] > div > button:hover {
+  color: #0F172A !important;
+  background-color: #F1F5F9 !important;
+}
+#main-header.mos-k-nav nav[aria-label="Primary navigation"] > button.bg-cyan-400\/15 {
+  color: #0E7490 !important;
+  background-color: #CFFAFE !important;
+}
+#main-header.mos-k-nav #header-command-palette-trigger,
+#main-header.mos-k-nav #header-hamburger-drawer-btn {
+  color: #334155 !important;
+  background-color: #F8FAFC !important;
+  border-color: #E2E8F0 !important;
+}
+#main-header.mos-k-nav #header-support-btn {
+  color: #0E7490 !important;
+  background-color: #ECFEFF !important;
+  border-color: #A5F3FC !important;
+}
+#main-header.mos-k-nav #header-support-btn:hover,
+#main-header.mos-k-nav #header-hamburger-drawer-btn:hover,
+#main-header.mos-k-nav #header-command-palette-trigger:hover {
+  background-color: #CFFAFE !important;
+  color: #155E75 !important;
+}
+#main-header.mos-k-nav .absolute.z-\[80\] {
+  background: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.16) !important;
+}
+#main-header.mos-k-nav .absolute.z-\[80\] button {
+  color: #334155 !important;
+}
+#main-header.mos-k-nav .absolute.z-\[80\] button:hover {
+  color: #0F172A !important;
+  background-color: #ECFEFF !important;
+}
+#main-header.mos-k-nav #mos-mobile-navigation-panel {
+  background: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+}
+#main-header.mos-k-nav #mos-mobile-navigation-panel button,
+#main-header.mos-k-nav #mos-mobile-navigation-panel a {
+  color: #334155 !important;
+}
+#main-header.mos-k-nav #mos-mobile-navigation-panel button:hover,
+#main-header.mos-k-nav #mos-mobile-navigation-panel a:hover {
+  color: #0F172A !important;
+}
+#main-header.mos-k-nav #mos-mobile-navigation-panel #mobile-search-tools {
+  background: #F0FDFA !important;
+  border-color: #A5F3FC !important;
+}
+#main-header.mos-k-nav #mos-mobile-navigation-panel #mobile-search-tools span {
+  color: #334155 !important;
+}
+#main-header.mos-k-nav #mos-mobile-navigation-panel #mobile-search-tools span:first-child {
+  color: #0E7490 !important;
+}

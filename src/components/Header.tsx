@@ -77,7 +77,7 @@ export const Header: React.FC<HeaderProps> = ({ activeWorkspace = 'hub', onSelec
   );
 
   return (
-    <header id="main-header" className="mos-k-nav sticky top-0 z-50 w-full text-white shadow-lg shadow-black/20">
+    <header id="main-header" className="mos-k-nav sticky top-0 z-50 w-full bg-white text-slate-900 shadow-sm shadow-slate-900/10">
       <div className="mx-auto flex h-[68px] max-w-7xl items-center gap-3 px-3 sm:px-5 lg:px-7">
         <a href="https://naacollege.in/" id="brand-logo" className="group flex min-w-0 shrink items-center text-left" aria-label="Naa College home">
           <img src="/Naacollege_fulllogo.webp" alt="Naa College home" width="320" height="180" className="block h-auto max-h-12 w-[min(44vw,220px)] object-contain sm:w-[220px]" loading="eager" decoding="async" />
