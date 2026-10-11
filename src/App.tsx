@@ -31,6 +31,7 @@ import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { Footer } from './components/Footer';
 import { LegalModals } from './components/LegalModals';
+import { LegalPage, type StandaloneLegalPageType } from './components/LegalPage';
 import { EducationalGuideAndSeo } from './components/EducationalGuideAndSeo';
 import type { EapcetPhaseTab } from './components/ApEapcetRadar';
 import { ChunkErrorBoundary } from './components/ChunkErrorBoundary';
@@ -385,6 +386,19 @@ const SEO_LANDING_PATHS = {
   gpaCalculator: '/tools/gpa-calculator/',
   roadmaps: '/engineering-roadmaps/',
 } as const;
+
+const getStandaloneLegalPage = (): StandaloneLegalPageType | null => {
+  if (typeof window === 'undefined') return null;
+  const path = window.location.pathname.replace(/\\/+$/, '').toLowerCase() || '/';
+  const routes: Record<string, StandaloneLegalPageType> = {
+    '/about': 'about', '/about-us': 'about',
+    '/contact': 'contact', '/contact-us': 'contact',
+    '/privacy': 'privacy', '/privacy-policy': 'privacy',
+    '/terms': 'terms', '/terms-of-service': 'terms',
+    '/disclaimer': 'disclaimer', '/legal-safe-harbor': 'disclaimer',
+  };
+  return routes[path] || null;
+};
 
 const getSeoLandingPath = () => {
   if (typeof window === 'undefined') return null;
@@ -921,6 +935,9 @@ export default function App() {
   };
 
   const currentDetails = getWorkspaceDetails();
+
+  const standaloneLegalPage = getStandaloneLegalPage();
+  if (standaloneLegalPage) return <LegalPage type={standaloneLegalPage} />;
 
   return (
     <div className="min-h-screen bg-[var(--mos-page-bg)] text-[var(--mos-text-primary)] tech-grid-pattern-light flex flex-col justify-between transition-colors duration-200">
