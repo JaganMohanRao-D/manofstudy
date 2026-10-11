@@ -35,7 +35,8 @@ export function getScholarshipSummary(s: IndianScholarship): string {
   return s.eligibility || 'Eligibility details available in the scholarship record.';
 }
 
-type Filter = 'all' | 'open' | 'government' | 'private' | 'state' | 'engineering' | 'girls';
+type Filter = 'all' | 'open' | 'closed' | 'government' | 'private' | 'state' | 'engineering' | 'girls';
+type EducationFilter = 'all' | 'school' | 'intermediate' | 'diploma' | 'undergraduate' | 'postgraduate';
 const effectiveStatus = (s: IndianScholarship) => {
   const explicitDate = s.deadline.match(/\b(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(20\d{2})\b/i);
   if (explicitDate && /open/i.test(s.status || '')) {
@@ -61,6 +62,7 @@ export const ScholarshipsHub: React.FC = () => {
   const [selectedScholarship, setSelectedScholarship] = useState<IndianScholarship | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [filter, setFilter] = useState<Filter>('all');
+  const [educationFilter, setEducationFilter] = useState<EducationFilter>('all');
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -103,14 +105,23 @@ export const ScholarshipsHub: React.FC = () => {
       const filterMatch =
         filter === 'all' ? true :
         filter === 'open' ? isOpen(s) :
+        filter === 'closed' ? effectiveStatus(s).toLowerCase().includes('closed') :
         filter === 'government' ? /government/i.test(s.category) :
         filter === 'state' ? /state government/i.test(s.category) :
         filter === 'private' ? /private|csr/i.test(s.category) :
         filter === 'engineering' ? /engineer|b\.tech|technical|professional|computer science|diploma/i.test(text) :
         isExclusivelyForGirls(s);
-      return filterMatch && (!q || text.includes(q));
+      const targetText = (s.target + ' ' + s.eligibility + ' ' + s.title).toLowerCase();
+      const educationMatch =
+        educationFilter === 'all' ? true :
+        educationFilter === 'school' ? /class 1|class 9|school student|school students|class 10|class 11|class 12/.test(targetText) :
+        educationFilter === 'intermediate' ? /intermediate|class 11|class 12|class xii|12th/.test(targetText) :
+        educationFilter === 'diploma' ? /diploma|polytechnic|iti/.test(targetText) :
+        educationFilter === 'undergraduate' ? /\bug\b|b\.tech|undergraduate|degree course|bachelor/.test(targetText) :
+        /postgraduate|\bpg\b|master/.test(targetText);
+      return filterMatch && educationMatch && (!q || text.includes(q));
     });
-  }, [scholarships, searchQuery, filter]);
+  }, [scholarships, searchQuery, filter, educationFilter]);
 
   const currentFeatured = featured.length ? featured[featuredIndex % featured.length] : null;
 
@@ -140,6 +151,7 @@ export const ScholarshipsHub: React.FC = () => {
   const filterButtons: { id: Filter; label: string; count: number }[] = [
     { id: 'all', label: 'All', count: stats.total },
     { id: 'open', label: 'Open now', count: stats.open },
+    { id: 'closed', label: 'Closed', count: scholarships.filter(s => effectiveStatus(s).toLowerCase().includes('closed')).length },
     { id: 'government', label: 'Government', count: scholarships.filter(s => /government/i.test(s.category)).length },
     { id: 'private', label: 'Private / CSR', count: scholarships.filter(s => /private|csr/i.test(s.category)).length },
     { id: 'state', label: 'State schemes', count: scholarships.filter(s => /state government/i.test(s.category)).length },
@@ -198,6 +210,12 @@ export const ScholarshipsHub: React.FC = () => {
       <div className="sticky top-2 z-20 rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface)]/95 backdrop-blur-xl p-3 shadow-xl">
         <div className="flex flex-col lg:flex-row gap-3">
           <div className="relative flex-1"><Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--mos-text-muted)]" /><input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search by scholarship, provider, engineering, SC, girls, amount, course…" className="w-full rounded-xl border border-[var(--mos-input-border)] bg-[var(--mos-input-bg)] px-10 py-3 text-sm text-[var(--mos-text-primary)] placeholder:text-[var(--mos-text-muted)] outline-none focus:border-emerald-400/60 focus:ring-2 focus:ring-emerald-400/10" />{searchQuery && <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--mos-text-muted)]" aria-label="Clear search"><X className="h-4 w-4" /></button>}</div>
+          <label className="flex items-center gap-2 rounded-xl border border-[var(--mos-input-border)] bg-[var(--mos-input-bg)] px-3 py-2 text-xs text-[var(--mos-text-secondary)]">
+            <span className="shrink-0">Study level</span>
+            <select aria-label="Filter by education level" value={educationFilter} onChange={e => setEducationFilter(e.target.value as EducationFilter)} className="min-w-0 bg-transparent py-1 text-xs text-[var(--mos-text-primary)] outline-none">
+              <option value="all">All levels</option><option value="school">School</option><option value="intermediate">Intermediate</option><option value="diploma">Diploma / ITI</option><option value="undergraduate">Undergraduate</option><option value="postgraduate">Postgraduate</option>
+            </select>
+          </label>
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar"><SlidersHorizontal className="h-4 w-4 text-[var(--mos-text-muted)] shrink-0" />{filterButtons.map(btn => <button key={btn.id} onClick={() => setFilter(btn.id)} className={`shrink-0 rounded-xl border px-3 py-2 text-[11px] font-bold cursor-pointer ${filter === btn.id ? 'border-emerald-500 bg-emerald-500 text-white' : 'border-[var(--mos-border)] bg-[var(--mos-surface-muted)] text-[var(--mos-text-secondary)]'}`}>{btn.label} <span className={filter === btn.id ? 'opacity-90' : 'text-[var(--mos-text-muted)]'}>· {btn.count}</span></button>)}</div>
         </div>
       </div>
@@ -219,7 +237,7 @@ export const ScholarshipsHub: React.FC = () => {
         </article>
       ); })}</div>}
 
-      {!loading && filtered.length === 0 && <div className="rounded-2xl border border-dashed border-[var(--mos-border)] bg-[var(--mos-surface-muted)] py-14 text-center"><GraduationCap className="mx-auto h-10 w-10 text-[var(--mos-text-muted)]" /><h3 className="mt-3 font-bold text-[var(--mos-text-primary)]">No matching scholarships</h3><p className="mt-1 text-xs text-[var(--mos-text-muted)]">Try another keyword or reset the filters.</p><button onClick={() => { setSearchQuery(''); setFilter('all'); }} className="mt-4 rounded-xl bg-[var(--mos-surface)] border border-[var(--mos-border)] px-4 py-2 text-xs font-bold cursor-pointer">Reset filters</button></div>}
+      {!loading && filtered.length === 0 && <div className="rounded-2xl border border-dashed border-[var(--mos-border)] bg-[var(--mos-surface-muted)] py-14 text-center"><GraduationCap className="mx-auto h-10 w-10 text-[var(--mos-text-muted)]" /><h3 className="mt-3 font-bold text-[var(--mos-text-primary)]">No matching scholarships</h3><p className="mt-1 text-xs text-[var(--mos-text-muted)]">Try another keyword or reset the filters.</p><button onClick={() => { setSearchQuery(''); setFilter('all'); setEducationFilter('all'); }} className="mt-4 rounded-xl bg-[var(--mos-surface)] border border-[var(--mos-border)] px-4 py-2 text-xs font-bold cursor-pointer">Reset filters</button></div>}
 
       <div className="rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface)] p-5 sm:p-6 shadow-xs"><div className="flex items-start gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" /><div><h3 className="font-bold text-[var(--mos-text-primary)]">How Naa College handles scholarship data</h3><p className="mt-1 text-xs leading-5 text-[var(--mos-text-muted)]">Award amounts are intentionally shown instead of hidden behind a button. “Open”, “Cycle-based” and “State scheme” describe the directory status, not a guarantee of eligibility. Always confirm the final amount, documents and closing date on the linked application/source page before submitting.</p></div></div><div className="mt-4 grid sm:grid-cols-3 gap-3">{[['1','Read eligibility','Check category, course, marks, income and institution rules.'],['2','Check the amount','The card shows the published award or clearly says when it varies.'],['3','Apply at source','Use the linked official/partner application page and never pay an agent.']].map(([n,t,d]) => <div key={n} className="rounded-xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] p-3.5"><div className="text-xs font-black text-emerald-600 dark:text-emerald-400">{n}</div><div className="mt-1 text-xs font-bold text-[var(--mos-text-primary)]">{t}</div><div className="mt-1 text-[10px] leading-4 text-[var(--mos-text-muted)]">{d}</div></div>)}</div></div>
 
