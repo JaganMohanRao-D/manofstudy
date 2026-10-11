@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Menu, X, ChevronDown, Home, GraduationCap, Map, Trophy, Sparkles, BookOpen, ShieldCheck, FileText, Image as ImageIcon, Heart, Wrench, Brain, Route, Calculator, ClipboardCheck, Info, Mail } from 'lucide-react';
+import { Search, Menu, X, ChevronDown, Home, GraduationCap, Map, Trophy, Sparkles, BookOpen, ShieldCheck, FileText, Image as ImageIcon, Heart, Wrench, Route, Calculator, ClipboardCheck, Info, Mail } from 'lucide-react';
 import { ToolTab, WorkspaceView, LegalModalType } from '../types';
 
 export interface HeaderProps {
