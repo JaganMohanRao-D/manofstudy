@@ -49,7 +49,7 @@ export const LegalPage: React.FC<{ type: StandaloneLegalPageType }> = ({ type })
 
   return (
     <div className="min-h-screen bg-[var(--mos-page-bg)] text-[var(--mos-text-primary)] tech-grid-pattern-light">
-      <header className="border-b border-slate-200/80 bg-white/90 dark:border-slate-800 dark:bg-slate-950/90">
+      <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <a href="https://naacollege.in/" aria-label="Naa College home" className="flex min-w-0 shrink items-center">
             <img src="/Naacollege_fulllogo.webp" alt="Naa College home" width="320" height="180" className="block h-auto max-h-12 w-[min(44vw,220px)] object-contain sm:w-[220px]" decoding="async" />
