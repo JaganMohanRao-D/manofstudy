@@ -51,12 +51,8 @@ export const LegalPage: React.FC<{ type: StandaloneLegalPageType }> = ({ type })
     <div className="min-h-screen bg-[var(--mos-page-bg)] text-[var(--mos-text-primary)] tech-grid-pattern-light">
       <header className="border-b border-slate-200/80 bg-white/90 dark:border-slate-800 dark:bg-slate-950/90">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-          <a href="/" aria-label="Naa College home" className="flex min-w-0 items-center gap-3">
-            <img src="/Naa%20College%20logo.webp" alt="Naa College logo" width="44" height="44" className="h-11 w-11 shrink-0 object-contain" />
-            <span className="min-w-0">
-              <span className="block text-base font-black tracking-tight text-slate-950 dark:text-white">Naa College</span>
-              <span className="block text-[10px] uppercase tracking-widest text-slate-500">Student utility platform</span>
-            </span>
+          <a href="https://naacollege.in/" aria-label="Naa College home" className="flex min-w-0 shrink items-center">
+            <img src="/Naacollege_fulllogo.webp" alt="Naa College home" width="320" height="180" className="block h-auto max-h-12 w-[min(44vw,220px)] object-contain sm:w-[220px]" decoding="async" />
           </a>
           <a href="/" className="inline-flex shrink-0 items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 transition hover:border-cyan-400 hover:text-cyan-700 dark:border-slate-700 dark:text-slate-200 dark:hover:text-cyan-300">
             <ArrowLeft className="h-4 w-4" /> <span className="hidden sm:inline">Back to Naa College</span><span className="sm:hidden">Home</span>
