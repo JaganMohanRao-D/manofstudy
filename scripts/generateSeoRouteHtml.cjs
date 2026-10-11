@@ -210,6 +210,7 @@ function buildRouteHtml(route) {
   html = setMeta(html, 'property', 'og:title', route.title);
   html = setMeta(html, 'property', 'og:description', route.description);
   html = setMeta(html, 'property', 'og:url', canonical);
+  if (route.schema && route.schema['@type'] === 'BlogPosting') html = setMeta(html, 'property', 'og:type', 'article');
   html = setMeta(html, 'name', 'twitter:title', route.title);
   html = setMeta(html, 'name', 'twitter:description', route.description);
   html = setMeta(html, 'name', 'twitter:url', canonical);
