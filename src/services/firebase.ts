@@ -36,7 +36,7 @@ export const firebaseConfig = {
   apiKey: firebaseAppletConfig.apiKey || "AIzaSyDelp9sBAtqVQ-YMP5zpdi1b_G_yafRRk",
   authDomain: firebaseAppletConfig.authDomain || "naa-college.firebaseapp.com",
   projectId: firebaseAppletConfig.projectId || "naa-college",
-  storageBucket: firebaseAppletConfig.storageBucket || "manofstudy-live.firebasestorage.app",
+  storageBucket: firebaseAppletConfig.storageBucket || "naa-college.firebasestorage.app",
   messagingSenderId: firebaseAppletConfig.messagingSenderId || "283454436896",
   appId: firebaseAppletConfig.appId || "1:283454436896:web:2841510b2f26162e9fae45",
   measurementId: firebaseAppletConfig.measurementId || "G-FZN0DVCZ5J",
