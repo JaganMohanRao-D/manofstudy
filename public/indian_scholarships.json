@@ -24,7 +24,9 @@
       "Need-based",
       "Postgraduate"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "top-class-sc-2026",
@@ -43,7 +45,7 @@
     "applyLink": "https://scholarships.gov.in",
     "description": "SC students in notified institutions pursuing UG/professional courses Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma, Undergraduate",
+    "level": "Undergraduate",
     "state": "All India / national scheme",
     "tags": [
       "Government",
@@ -51,7 +53,9 @@
       "Need-based",
       "SC"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "pm-yasasvi-top-class-college-2026",
@@ -70,7 +74,7 @@
     "applyLink": "https://scholarships.gov.in",
     "description": "OBC, EBC & DNT students in eligible higher-education institutions Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma",
+    "level": "Verify scheme-specific level",
     "state": "All India / national scheme",
     "tags": [
       "Government",
@@ -78,7 +82,9 @@
       "Need-based",
       "OBC / EBC / DNT"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "aicte-pragati-2026",
@@ -97,7 +103,7 @@
     "applyLink": "https://scholarships.gov.in",
     "description": "Girl students in AICTE-approved technical degree/diploma courses Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma, Undergraduate",
+    "level": "Diploma",
     "state": "All India / national scheme",
     "tags": [
       "Government",
@@ -106,7 +112,9 @@
       "Engineering",
       "Diploma"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "aicte-saksham-2026",
@@ -125,7 +133,7 @@
     "applyLink": "https://scholarships.gov.in",
     "description": "Students with benchmark disability in technical degree/diploma courses Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma, Undergraduate",
+    "level": "Diploma",
     "state": "All India / national scheme",
     "tags": [
       "Government",
@@ -133,7 +141,9 @@
       "Engineering",
       "Diploma"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "aicte-swanath-2026",
@@ -152,7 +162,7 @@
     "applyLink": "https://scholarships.gov.in",
     "description": "Eligible orphaned / vulnerable students in technical degree or diploma courses Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma, Undergraduate",
+    "level": "Diploma",
     "state": "All India / national scheme",
     "tags": [
       "Government",
@@ -160,7 +170,9 @@
       "Engineering",
       "Diploma"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "nmms-2026",
@@ -181,7 +193,7 @@
     "applyLink": "https://scholarships.gov.in",
     "description": "Eligible school students from Class 9–12 Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "School, Diploma",
+    "level": "School",
     "state": "All India / national scheme",
     "tags": [
       "Government",
@@ -208,7 +220,7 @@
     "applyLink": "https://online-inspire.gov.in",
     "description": "UG/PG students in eligible basic and natural science subjects Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Undergraduate, Postgraduate",
+    "level": "Intermediate, Undergraduate, Postgraduate",
     "state": "All India / national scheme",
     "tags": [
       "Government",
@@ -216,7 +228,9 @@
       "Engineering",
       "Postgraduate"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://online-inspire.gov.in",
+    "guideline_url": "https://online-inspire.gov.in"
   },
   {
     "id": "post-matric-sc-2026",
@@ -242,7 +256,9 @@
       "Need-based",
       "SC"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "post-matric-obc-2026",
@@ -268,7 +284,9 @@
       "Need-based",
       "OBC / EBC / DNT"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "post-matric-minority-2026",
@@ -287,14 +305,16 @@
     "applyLink": "https://scholarships.gov.in",
     "description": "Eligible notified minority-community students after Class 10 Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "School, Diploma",
+    "level": "School",
     "state": "All India / national scheme",
     "tags": [
       "Government",
       "Need-based",
       "School"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "pm-usp-pmsss-2026",
@@ -319,7 +339,9 @@
       "Government",
       "Diploma"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "reliance-ug-2026",
@@ -345,7 +367,9 @@
       "Merit",
       "Need-based"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.reliancefoundation.org",
+    "guideline_url": "https://scholarships.reliancefoundation.org"
   },
   {
     "id": "reliance-pg-2026",
@@ -371,7 +395,9 @@
       "Merit",
       "Postgraduate"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://www.scholarships.reliancefoundation.org/PG_Scholarship.aspx",
+    "guideline_url": "https://www.scholarships.reliancefoundation.org/PG_Scholarship.aspx"
   },
   {
     "id": "hdfc-ecss-2026",
@@ -399,7 +425,9 @@
       "Postgraduate",
       "Diploma"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://www.parivartanecss.com",
+    "guideline_url": "https://www.parivartanecss.com"
   },
   {
     "id": "tata-pankh-2026",
@@ -444,7 +472,7 @@
     "applyLink": "https://www.buddy4study.com/kotak-kanya-scholarship-programme",
     "description": "Girl students pursuing eligible professional UG degrees Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma, Undergraduate",
+    "level": "Undergraduate",
     "state": "All India / national scheme",
     "tags": [
       "Private / CSR",
@@ -470,7 +498,7 @@
     "applyLink": "https://www.santoorscholarships.com",
     "description": "Women entering first-year UG in selected states Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Undergraduate",
+    "level": "School, Undergraduate",
     "state": "All India / national scheme",
     "tags": [
       "Private / CSR",
@@ -478,7 +506,9 @@
       "Andhra Pradesh",
       "Telangana"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://www.santoorscholarships.com",
+    "guideline_url": "https://www.santoorscholarships.com"
   },
   {
     "id": "aditya-birla-scholars-2026",
@@ -497,13 +527,15 @@
     "applyLink": "https://www.adityabirlascholars.net",
     "description": "Students at selected premier engineering, management and law institutions Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma, Undergraduate",
+    "level": "Undergraduate",
     "state": "All India / national scheme",
     "tags": [
       "Private / CSR",
       "Engineering"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://www.adityabirlascholars.net",
+    "guideline_url": "https://www.adityabirlascholars.net"
   },
   {
     "id": "rolls-royce-unnati-2026",
@@ -522,7 +554,7 @@
     "applyLink": "https://www.buddy4study.com",
     "description": "Eligible female engineering students in selected years Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma, Undergraduate",
+    "level": "Undergraduate",
     "state": "All India / national scheme",
     "tags": [
       "Private / CSR",
@@ -557,7 +589,9 @@
       "Girls / women",
       "Engineering"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://www.forwomeninscience.com",
+    "guideline_url": "https://www.forwomeninscience.com"
   },
   {
     "id": "colgate-smiling-2026",
@@ -576,7 +610,7 @@
     "applyLink": "https://www.buddy4study.com",
     "description": "Eligible school, UG and professional-course students Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma, Undergraduate",
+    "level": "School, Undergraduate",
     "state": "All India / national scheme",
     "tags": [
       "Private / CSR",
@@ -601,14 +635,16 @@
     "applyLink": "https://www.kindcircle.com",
     "description": "Class 9 through higher-education students facing financial hardship Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "School, Diploma",
+    "level": "School",
     "state": "All India / national scheme",
     "tags": [
       "Private / CSR",
       "Need-based",
       "School"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://www.kindcircle.com",
+    "guideline_url": "https://www.kindcircle.com"
   },
   {
     "id": "sbi-asha-2026",
@@ -627,14 +663,16 @@
     "applyLink": "https://www.sbiashascholarship.co.in",
     "description": "School, UG, PG, medical, IIT, IIM and selected overseas students Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Undergraduate, Postgraduate",
+    "level": "School, Undergraduate, Postgraduate",
     "state": "All India / national scheme",
     "tags": [
       "Private / CSR",
       "Need-based",
       "Postgraduate"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://www.sbiashascholarship.co.in",
+    "guideline_url": "https://www.sbiashascholarship.co.in"
   },
   {
     "id": "ffe-technical-2026",
@@ -653,7 +691,7 @@
     "applyLink": "https://ffe.org/scholarships",
     "description": "First-year B.E./B.Tech, MBBS and eligible 5-year LLB students Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma, Undergraduate",
+    "level": "Undergraduate",
     "state": "All India / national scheme",
     "tags": [
       "Private / CSR",
@@ -661,7 +699,9 @@
       "Need-based",
       "Engineering"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://ffe.org/scholarships",
+    "guideline_url": "https://ffe.org/scholarships"
   },
   {
     "id": "amazon-afe-2026",
@@ -688,7 +728,9 @@
       "Girls / women",
       "Engineering"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://ffe.org/amazon-future-engineer/",
+    "guideline_url": "https://ffe.org/amazon-future-engineer/"
   },
   {
     "id": "sitaram-jindal-2026",
@@ -716,7 +758,9 @@
       "Postgraduate",
       "Diploma"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://www.sitaramjindalfoundation.org",
+    "guideline_url": "https://www.sitaramjindalfoundation.org"
   },
   {
     "id": "ongc-scholarship-2026",
@@ -735,7 +779,7 @@
     "applyLink": "https://ongcscholar.org",
     "description": "Eligible first-year engineering, MBBS, MBA and geoscience students Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma, Undergraduate",
+    "level": "Undergraduate",
     "state": "All India / national scheme",
     "tags": [
       "Private / CSR",
@@ -743,7 +787,9 @@
       "Need-based",
       "Engineering"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://ongcscholar.org",
+    "guideline_url": "https://ongcscholar.org"
   },
   {
     "id": "lic-golden-jubilee-2026",
@@ -762,13 +808,15 @@
     "applyLink": "https://www.licindia.in/en/web/guest/golden-jubilee-foundation",
     "description": "Eligible students entering higher education and specified professional courses Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma",
+    "level": "Verify scheme-specific level",
     "state": "All India / national scheme",
     "tags": [
       "Private / CSR",
       "Need-based"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://www.licindia.in/en/web/guest/golden-jubilee-foundation",
+    "guideline_url": "https://www.licindia.in/en/web/guest/golden-jubilee-foundation"
   },
   {
     "id": "google-generation-2026",
@@ -787,12 +835,14 @@
     "applyLink": "https://buildyourfuture.withgoogle.com/scholarships",
     "description": "Eligible underrepresented students in computer science-related degrees Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Undergraduate",
+    "level": "Verify scheme-specific level",
     "state": "All India / national scheme",
     "tags": [
       "Private / CSR"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://buildyourfuture.withgoogle.com/scholarships",
+    "guideline_url": "https://buildyourfuture.withgoogle.com/scholarships"
   },
   {
     "id": "csss-state-ap-jvd-vasathi-2026",
@@ -811,7 +861,7 @@
     "applyLink": "https://jnanabhumi.ap.gov.in",
     "description": "Eligible AP students in diploma, degree and professional courses Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma, Undergraduate",
+    "level": "Diploma",
     "state": "Andhra Pradesh",
     "tags": [
       "State Government",
@@ -819,7 +869,9 @@
       "Andhra Pradesh",
       "Diploma"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://jnanabhumi.ap.gov.in",
+    "guideline_url": "https://jnanabhumi.ap.gov.in"
   },
   {
     "id": "telangana-epass-2026",
@@ -848,7 +900,9 @@
       "OBC / EBC / DNT",
       "Telangana"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://telanganaepass.cgg.gov.in",
+    "guideline_url": "https://telanganaepass.cgg.gov.in"
   },
   {
     "id": "karnataka-ssp-2026",
@@ -867,7 +921,7 @@
     "applyLink": "https://ssp.postmatric.karnataka.gov.in",
     "description": "Eligible Karnataka post-matric students Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma",
+    "level": "Verify scheme-specific level",
     "state": "State-specific; verify domicile",
     "tags": [
       "State Government",
@@ -892,7 +946,7 @@
     "applyLink": "https://mahadbt.maharashtra.gov.in",
     "description": "Eligible EBC/EWS students in diploma, degree and PG technical/professional courses Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma, Undergraduate, Postgraduate",
+    "level": "Diploma, Postgraduate",
     "state": "State-specific; verify domicile",
     "tags": [
       "State Government",
@@ -921,7 +975,7 @@
     "applyLink": "https://scholarship.up.gov.in",
     "description": "Eligible pre-matric and post-matric students Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma",
+    "level": "Verify scheme-specific level",
     "state": "State-specific; verify domicile",
     "tags": [
       "State Government",
@@ -946,14 +1000,16 @@
     "applyLink": "https://scholarships.gov.in",
     "description": "First-year regular/full-time PG students Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma, Undergraduate, Postgraduate",
+    "level": "Postgraduate",
     "state": "All India / national scheme",
     "tags": [
       "Government",
       "Girls / women",
       "Postgraduate"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "ishan-uday-2026",
@@ -972,13 +1028,15 @@
     "applyLink": "https://scholarships.gov.in",
     "description": "Eligible students from the eight North-Eastern states pursuing UG Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma, Undergraduate",
+    "level": "Undergraduate",
     "state": "All India / national scheme",
     "tags": [
       "Government",
       "Need-based"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "post-matric-disability-2026",
@@ -997,13 +1055,15 @@
     "applyLink": "https://scholarships.gov.in",
     "description": "Students with benchmark disabilities in post-matric courses Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma",
+    "level": "Verify scheme-specific level",
     "state": "All India / national scheme",
     "tags": [
       "Government",
       "Need-based"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "top-class-disability-2026",
@@ -1022,12 +1082,14 @@
     "applyLink": "https://scholarships.gov.in",
     "description": "Students with benchmark disabilities in eligible higher-education institutions Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma",
+    "level": "Verify scheme-specific level",
     "state": "All India / national scheme",
     "tags": [
       "Government"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "st-students-top-class-2026",
@@ -1046,14 +1108,16 @@
     "applyLink": "https://scholarships.gov.in",
     "description": "Eligible ST students in higher education Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma, Postgraduate",
+    "level": "Postgraduate",
     "state": "All India / national scheme",
     "tags": [
       "Government",
       "Need-based",
       "ST"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "pmss-capf-2026",
@@ -1072,12 +1136,14 @@
     "applyLink": "https://scholarships.gov.in",
     "description": "Eligible wards/widows of CAPF and Assam Rifles personnel Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma",
+    "level": "Verify scheme-specific level",
     "state": "All India / national scheme",
     "tags": [
       "Government"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "pmss-police-martyrs-2026",
@@ -1101,7 +1167,9 @@
     "tags": [
       "Government"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "beedi-post-matric-2026",
@@ -1120,13 +1188,15 @@
     "applyLink": "https://scholarships.gov.in",
     "description": "Eligible wards of workers in covered sectors Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma",
+    "level": "Verify scheme-specific level",
     "state": "All India / national scheme",
     "tags": [
       "Government",
       "Need-based"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "national-renewable-energy-fellowship-2026",
@@ -1145,12 +1215,14 @@
     "applyLink": "https://scholarships.gov.in",
     "description": "Eligible higher-education/research students under the current fellowship rules Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma, Postgraduate",
+    "level": "Verify scheme-specific level",
     "state": "All India / national scheme",
     "tags": [
       "Government"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "isi-ug-pg-stipend-2026",
@@ -1175,7 +1247,9 @@
       "Government",
       "Postgraduate"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "icar-nts-ug-2026",
@@ -1194,12 +1268,14 @@
     "applyLink": "https://scholarships.gov.in",
     "description": "Eligible UG agriculture/allied students Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma, Undergraduate",
+    "level": "Undergraduate",
     "state": "All India / national scheme",
     "tags": [
       "Government"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "nec-merit-2026",
@@ -1218,13 +1294,15 @@
     "applyLink": "https://scholarships.gov.in",
     "description": "Eligible students from the North-Eastern Region Review the current official scheme guidelines for the complete eligibility conditions.",
     "documents": [],
-    "level": "Diploma",
+    "level": "Verify scheme-specific level",
     "state": "All India / national scheme",
     "tags": [
       "Government",
       "Merit"
     ],
-    "dateAdded": null
+    "dateAdded": null,
+    "official_source_url": "https://scholarships.gov.in",
+    "guideline_url": "https://scholarships.gov.in"
   },
   {
     "id": "pm-yasasvi-top-class-school-2026",
