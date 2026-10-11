@@ -1,12 +1,12 @@
 {
-  "projectId": "naa-college",
-  "appId": "1:283454436896:web:2841510b2f26162e9fae45",
-  "apiKey": "AIzaSyDelp9sBAtqVQ-YMP5zpdi1b_G_yJyafRRk",
-  "authDomain": "naa-college.firebaseapp.com",
+  "projectId": "manofstudy-live",
+  "appId": "1:9699503499:web:2798a930e61a310c75538e",
+  "apiKey": "AIzaSyAi1z2yWqdDXzeip3TUC37huvsChqK8Lqo",
+  "authDomain": "manofstudy-live.firebaseapp.com",
   "firestoreDatabaseId": "(default)",
-  "storageBucket": "naa-college.firebasestorage.app",
-  "messagingSenderId": "283454436896",
-  "measurementId": "G-FZN0DVCZ5J",
+  "storageBucket": "manofstudy-live.firebasestorage.app",
+  "messagingSenderId": "9699503499",
+  "measurementId": "G-CBFMX3VKF4",
   "oAuthClientId": "",
   "recaptchaSiteKey": ""
 }
