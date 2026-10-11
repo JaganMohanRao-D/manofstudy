@@ -70,6 +70,7 @@ export function scholarshipDeadlineState(s: IndianScholarship): 'open' | 'closin
     return 'unconfirmed';
   }
   if (/closed|expired|ended/.test(originalStatus)) return 'expired';
+  if (!date && s.official_source_url && /applications listed as open on official portal/i.test(originalStatus)) return 'open';
   return 'unconfirmed';
 }
 
