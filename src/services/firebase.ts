@@ -33,13 +33,13 @@ import firebaseAppletConfig from '../../firebase-applet-config.json';
 // Official dedicated Firebase credentials for Naa College
 export const firebaseConfig = {
   ...firebaseAppletConfig,
-  apiKey: firebaseAppletConfig.apiKey || "AIzaSyAi1z2yWqdDXzeip3TUC37huvsChqK8Lqo",
-  authDomain: firebaseAppletConfig.authDomain || "manofstudy-live.firebaseapp.com",
-  projectId: firebaseAppletConfig.projectId || "manofstudy-live",
+  apiKey: firebaseAppletConfig.apiKey || "AIzaSyDelp9sBAtqVQ-YMP5zpdi1b_G_yafRRk",
+  authDomain: firebaseAppletConfig.authDomain || "naa-college.firebaseapp.com",
+  projectId: firebaseAppletConfig.projectId || "naa-college",
   storageBucket: firebaseAppletConfig.storageBucket || "manofstudy-live.firebasestorage.app",
-  messagingSenderId: firebaseAppletConfig.messagingSenderId || "9699503499",
-  appId: firebaseAppletConfig.appId || "1:9699503499:web:2798a930e61a310c75538e",
-  measurementId: firebaseAppletConfig.measurementId || "G-CBFMX3VKF4",
+  messagingSenderId: firebaseAppletConfig.messagingSenderId || "283454436896",
+  appId: firebaseAppletConfig.appId || "1:283454436896:web:2841510b2f26162e9fae45",
+  measurementId: firebaseAppletConfig.measurementId || "G-FZN0DVCZ5J",
   firestoreDatabaseId: firebaseAppletConfig.firestoreDatabaseId || "(default)",
 };
 
