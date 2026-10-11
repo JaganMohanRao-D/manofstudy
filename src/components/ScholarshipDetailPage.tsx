@@ -23,6 +23,8 @@ type ScholarshipRecord = {
   guideline_url?: string;
 };
 
+const safeExternalUrl = (value: string) => { try { const url = new URL(value); return url.protocol === 'https:' || url.protocol === 'http:'; } catch { return false; } };
+
 const slugify = (value: string) => value.toLowerCase()
   .normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
   .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -52,6 +54,8 @@ export const ScholarshipDetailPage: React.FC = () => {
   const [failed, setFailed] = useState(false);
   const pathSlug = typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).slice(1).join('/') : '';
   const record = records.find(item => slugify(item.title) === pathSlug);
+  const applicationUrl = record ? (record.official_source_url || record.apply_link) : '';
+  const hasOfficialSource = Boolean(record?.official_source_url && safeExternalUrl(record.official_source_url));
 
   useEffect(() => {
     let alive = true;
@@ -124,7 +128,7 @@ export const ScholarshipDetailPage: React.FC = () => {
             </div>
           </div>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <a href={record.apply_link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2"><ExternalLink className="h-4 w-4" /> Visit application / source page</a>
+            {safeExternalUrl(applicationUrl) ? <a href={applicationUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2"><ExternalLink className="h-4 w-4" /> {hasOfficialSource ? 'Visit official source' : 'Open listed source'}</a> : <span className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--mos-surface-muted)] px-5 py-3 text-sm font-bold text-[var(--mos-text-muted)]">Application link unavailable</span>}
             <a href="/scholarships/" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-5 py-3 text-sm font-bold"><ArrowLeft className="h-4 w-4" /> All scholarships</a>
           </div>
         </div>
@@ -156,7 +160,8 @@ export const ScholarshipDetailPage: React.FC = () => {
             {record.source_note && <p><strong>Source note:</strong> {record.source_note}</p>}
             {record.official_source_url && <p className="mt-2 break-words">Official source: <a className="font-semibold text-emerald-700 underline dark:text-emerald-300" href={record.official_source_url} target="_blank" rel="noopener noreferrer">{record.official_source_url}</a></p>}
             {record.guideline_url && record.guideline_url !== record.official_source_url && <p className="mt-2 break-words">Scheme guidelines: <a className="font-semibold text-emerald-700 underline dark:text-emerald-300" href={record.guideline_url} target="_blank" rel="noopener noreferrer">{record.guideline_url}</a></p>}
-            <p className="mt-2 break-words">Application / source URL: <a className="font-semibold text-emerald-700 underline dark:text-emerald-300" href={record.apply_link} target="_blank" rel="noopener noreferrer">{record.apply_link}</a></p>
+            {safeExternalUrl(record.apply_link) && <p className="mt-2 break-words">Listed application/source URL: <a className="font-semibold text-emerald-700 underline dark:text-emerald-300" href={record.apply_link} target="_blank" rel="noopener noreferrer">{record.apply_link}</a></p>}
+            {!hasOfficialSource && <p className="mt-2 text-xs text-amber-700 dark:text-amber-300">An official provider URL is not recorded for this entry. Verify the scheme directly with its provider before submitting personal information.</p>}
             <p className="mt-2">Last verification recorded in the dataset: <strong>{record.last_verified || 'Not recorded'}</strong>.</p>
             <p className="mt-2 text-xs">A recorded verification date does not guarantee that the deadline or scheme rules remain current. Confirm directly with the scheme provider.</p>
           </Section>
