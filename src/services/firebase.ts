@@ -33,7 +33,7 @@ import firebaseAppletConfig from '../../firebase-applet-config.json';
 // Official dedicated Firebase credentials for Naa College
 export const firebaseConfig = {
   ...firebaseAppletConfig,
-  apiKey: firebaseAppletConfig.apiKey || "AIzaSyDelp9sBAtqVQ-YMP5zpdi1b_G_yafRRk",
+  apiKey: firebaseAppletConfig.apiKey || "AIzaSyDelp9sBAtqVQ-YMP5zpdi1b_G_yJyafRRk",
   authDomain: firebaseAppletConfig.authDomain || "naa-college.firebaseapp.com",
   projectId: firebaseAppletConfig.projectId || "naa-college",
   storageBucket: firebaseAppletConfig.storageBucket || "naa-college.firebasestorage.app",
