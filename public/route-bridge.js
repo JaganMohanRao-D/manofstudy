@@ -37,7 +37,7 @@
     'internships': '/internships',
     'cbt-mock-test': '/mock-test',
     'eapcet-cbt': '/eapcet-mock-test',
-    'mock-tests': '/mock-tests',
+    'mock-tests': '/mocktests',
     'gap-analyzer': '/ai-gap-analyzer',
     'privacy': '/privacy-policy',
     'terms': '/terms-of-service',
@@ -482,8 +482,17 @@
     }
   }
 
+  // Keep historic mock-test URLs working while exposing one canonical clean URL.
   var currentPath = normalizePath(window.location.pathname);
   var initialHash = window.location.hash;
+  var pathAliases = {
+    '/mock-tests': '/mocktests',
+    '/mocktest': '/mocktests'
+  };
+  if (pathAliases[currentPath]) {
+    currentPath = pathAliases[currentPath];
+    window.history.replaceState(null, '', currentPath + (window.location.search || '') + initialHash);
+  }
 
   if (!initialHash && currentPath !== '/' && !seoPaths[currentPath]) {
     var initialKey = null;
