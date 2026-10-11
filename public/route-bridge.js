@@ -35,7 +35,6 @@
     'guides': '/study-guides',
     'projects': '/major-projects',
     'internships': '/internships',
-    'humanizer': '/ai-humanizer',
     'cbt-mock-test': '/mock-test',
     'eapcet-cbt': '/eapcet-mock-test',
     'mock-tests': '/mock-tests',
