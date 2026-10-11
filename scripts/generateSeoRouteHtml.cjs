@@ -103,27 +103,40 @@ const inlineStatic = (value) => htmlEscape(value)
   .replace(/\[([^\]]+)\]\((\/[^)]+)\)/g, '<a href="$2">$1</a>')
   .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
 const renderStaticArticle = (article) => {
-  const blocks = String(article.content || '').trim().split(/\n\s*\n/);
-  const body = blocks.map((raw) => {
-    const block = raw.trim();
-    if (!block) return '';
-    if (block.startsWith('## ')) return '<h2>' + inlineStatic(block.slice(3)) + '</h2>';
-    if (block.startsWith('> ')) return '<blockquote>' + inlineStatic(block.slice(2).replace(/\n> /g, ' ')) + '</blockquote>';
-    const lines = block.split('\n').map((line) => line.trim()).filter(Boolean);
-    if (lines.every((line) => line.startsWith('- '))) {
-      return '<ul>' + lines.map((line) => '<li>' + inlineStatic(line.slice(2)) + '</li>').join('') + '</ul>';
+  const lines = String(article.content || '').trim().split(/\r?\n/);
+  const blocks = [];
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i].trim();
+    if (!line) { i++; continue; }
+    if (line.startsWith('## ')) { blocks.push('<h2 class="mt-8 mb-3 text-2xl font-semibold tracking-tight">' + inlineStatic(line.slice(3).trim()) + '</h2>'); i++; continue; }
+    if (line.startsWith('### ')) { blocks.push('<h3 class="mt-6 mb-2 text-xl font-semibold">' + inlineStatic(line.slice(4).trim()) + '</h3>'); i++; continue; }
+    if (line.startsWith('> ')) {
+      const quote = [];
+      while (i < lines.length && lines[i].trim().startsWith('> ')) quote.push(lines[i++].trim().replace(/^>\s?/, ''));
+      blocks.push('<blockquote class="my-5 border-l-4 border-cyan-500 bg-cyan-50 px-4 py-3 leading-7">' + inlineStatic(quote.join(' ')) + '</blockquote>'); continue;
     }
-    if (lines.every((line) => /^\d+\.\s/.test(line))) {
-      return '<ol>' + lines.map((line) => '<li>' + inlineStatic(line.replace(/^\d+\.\s/, '')) + '</li>').join('') + '</ol>';
+    if (/^[-*]\s+/.test(line)) {
+      const items = [];
+      while (i < lines.length && /^[-*]\s+/.test(lines[i].trim())) items.push('<li class="mb-2">' + inlineStatic(lines[i++].trim().replace(/^[-*]\s+/, '')) + '</li>');
+      blocks.push('<ul class="my-4 list-disc space-y-2 pl-6 leading-7">' + items.join('') + '</ul>'); continue;
     }
-    return '<p>' + inlineStatic(block.replace(/\n/g, ' ')) + '</p>';
-  }).join('\n');
-  return '<article><p><a href="/blog/">Naa College Blog</a> / ' + htmlEscape(article.category) +
-    '</p><h1>' + htmlEscape(article.title) + '</h1><p>' + htmlEscape(article.summary) +
-    '</p><p>Updated ' + htmlEscape(article.updatedAt) + ' · By Naa College</p>' + body +
-    (article.sources && article.sources.length ? '<h2>Official and reference sources</h2><ul>' +
-      article.sources.map((source) => '<li><a href="' + htmlEscape(source.url) + '" rel="noopener noreferrer">' + htmlEscape(source.label) + '</a></li>').join('') + '</ul>' : '') +
-    '<p>Educational information only. Verify time-sensitive details with the relevant official authority or product documentation.</p></article>';
+    if (/^\d+[.)]\s+/.test(line)) {
+      const items = [];
+      while (i < lines.length && /^\d+[.)]\s+/.test(lines[i].trim())) items.push('<li class="mb-2">' + inlineStatic(lines[i++].trim().replace(/^\d+[.)]\s+/, '')) + '</li>');
+      blocks.push('<ol class="my-4 list-decimal space-y-2 pl-6 leading-7">' + items.join('') + '</ol>'); continue;
+    }
+    const paragraph = [line]; i++;
+    while (i < lines.length && lines[i].trim() && !/^(#{2,3}\s|>\s|[-*]\s+|\d+[.)]\s+)/.test(lines[i].trim())) paragraph.push(lines[i++].trim());
+    blocks.push('<p class="my-4 text-base font-normal leading-8 text-slate-700">' + inlineStatic(paragraph.join(' ')) + '</p>');
+  }
+  return '<article class="mx-auto max-w-4xl px-4 py-6 sm:px-8"><p class="mb-5 text-sm"><a href="/blog/" class="text-cyan-700 underline">Naa College Blog</a> / ' + htmlEscape(article.category) +
+    '</p><h1 class="mb-4 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">' + htmlEscape(article.title) + '</h1><p class="mb-5 text-lg leading-8 text-slate-600">' + htmlEscape(article.summary) +
+    '</p><p class="mb-8 text-sm text-slate-500">Updated ' + htmlEscape(article.updatedAt) + ' · By TEAM NAA COLLEGE · ' +
+    Math.max(2, Math.ceil(String(article.content || '').trim().split(/\s+/).filter(Boolean).length / 220)) + ' min read</p><div class="blog-prose">' + blocks.join('\n') + '</div>' +
+    (article.sources && article.sources.length ? '<h2 class="mt-10 text-xl font-semibold">Official and reference sources</h2><ul class="my-4 list-disc space-y-2 pl-6">' +
+      article.sources.map((source) => '<li><a href="' + htmlEscape(source.url) + '" rel="noopener noreferrer" class="text-cyan-700 underline">' + htmlEscape(source.label) + '</a></li>').join('') + '</ul>' : '') +
+    '<p class="mt-10 border-t pt-5 text-sm leading-7 text-slate-500">Educational information only. Verify time-sensitive details with the relevant official authority or product documentation.</p></article>';
 };
 const blogListingBody = (title, description, list) =>
   '<section><h1>' + htmlEscape(title) + '</h1><p>' + htmlEscape(description) + '</p><nav aria-label="Blog categories"><ul>' +
