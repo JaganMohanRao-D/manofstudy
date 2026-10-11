@@ -51,7 +51,6 @@ export type ToolTab =
   | 'gpa' 
   | 'internal-calc'
   | 'resizer' 
-  | 'humanizer'
   | 'essentials'
   | 'store'
   | 'projects'
