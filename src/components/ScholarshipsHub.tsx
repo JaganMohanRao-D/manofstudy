@@ -157,7 +157,7 @@ export const ScholarshipsHub: React.FC = () => {
         </div>
         <div className="p-5 sm:p-7 lg:p-9">
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-[.16em] text-emerald-700 dark:text-emerald-300"><BadgeCheck className="h-3.5 w-3.5" /> 2026 Scholarship Directory</div>
-          <h1 className="mt-4 text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[var(--mos-text-primary)]">Find scholarships with the <span className="text-emerald-600 dark:text-emerald-300">amount upfront.</span></h1>
+          <h1 className="mt-4 text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[var(--mos-text-primary)]">Find scholarships that <span className="text-emerald-600 dark:text-emerald-300">fit your future.</span></h1>
           <p className="mt-3 max-w-3xl text-sm sm:text-base leading-6 text-[var(--mos-text-secondary)]">Explore government, state, CSR and private scholarships with eligibility, published amounts and application sources in one student-friendly directory.</p>
           <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-w-3xl">
             {[[stats.total, 'Scholarships'], [stats.open, 'Open now'], [stats.government, 'Government'], [stats.engineering, 'Engineering']].map(([n, label]) => <div key={String(label)} className="rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-3 py-3"><div className="text-lg sm:text-xl font-black text-[var(--mos-text-primary)]">{n}</div><div className="mt-0.5 text-[10px] text-[var(--mos-text-muted)]">{label}</div></div>)}
@@ -172,7 +172,7 @@ export const ScholarshipsHub: React.FC = () => {
             <div className="p-4 sm:p-5">
               <div className="flex flex-wrap gap-2">
                 <span className={`rounded-full border px-2.5 py-1 text-[10px] font-bold ${categoryClass(currentFeatured.category)}`}>{currentFeatured.category}</span>
-                <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-300">{currentFeatured.status || 'Cycle-based'}</span>
+                <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-300">{effectiveStatus(currentFeatured)}</span>
               </div>
               <div className="mt-3 grid lg:grid-cols-[1fr_auto] gap-5 items-center">
                 <div className="min-w-0">
