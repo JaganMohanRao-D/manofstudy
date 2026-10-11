@@ -713,7 +713,7 @@ export default function App() {
     }
     setActiveWorkspace(ws);
     const seoPath = getSeoLandingPath();
-    if (seoPath) {
+    if (seoPath || isBlogPath(window.location.pathname)) {
       history.replaceState(null, '', '/');
     }
     if (ws === 'eapcet-cbt' && targetSubTab) {
