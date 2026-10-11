@@ -309,41 +309,6 @@ export interface CompressedImageResult {
 }
 
 // ----------------------------------------------------
-// Tool: AI Text Humanizer & Pattern Scanner Types
-// ----------------------------------------------------
-export type HumanizeMode = 'academic' | 'casual' | 'professional';
-
-export interface AiPatternMetric {
-  name: string;
-  score: number; // 0-100%
-  status: 'low' | 'moderate' | 'high';
-  description: string;
-}
-
-export interface AiScanAnalysis {
-  aiLikelihoodScore: number; // 0 to 100
-  verdict: 'Highly AI Generated' | 'Likely AI with Mixed Patterns' | 'Human-Written Flow';
-  metrics: AiPatternMetric[];
-  roboticPhrasesDetected: string[];
-  sentenceCount: number;
-  wordCount: number;
-  charCount: number;
-  averageSentenceLength: number;
-  burstinessScore: number; // Variance in sentence lengths
-  perplexityScore: number; // Estimate of vocabulary predictability
-  passiveVoiceRatio: number; // % of sentences with passive markers
-}
-
-export interface HumanizerResult {
-  originalText: string;
-  humanizedText: string;
-  mode: HumanizeMode;
-  statsOriginal: { words: number; chars: number; readingTimeSec: number; gradeLevel: string };
-  statsHumanized: { words: number; chars: number; readingTimeSec: number; gradeLevel: string };
-  improvementsApplied: string[];
-}
-
-// ----------------------------------------------------
 // Tool: Client-Side PDF Power Tools Types (30+ Tools)
 // ----------------------------------------------------
 export type PdfToolCategory = 'all' | 'convert' | 'manage' | 'image' | 'utilities' | 'edit' | 'secure' | 'optimize';
