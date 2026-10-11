@@ -79,15 +79,9 @@ export const Header: React.FC<HeaderProps> = ({ activeWorkspace = 'hub', onSelec
   return (
     <header id="main-header" className="mos-k-nav sticky top-0 z-50 w-full text-white shadow-lg shadow-black/20">
       <div className="mx-auto flex h-[68px] max-w-7xl items-center gap-3 px-3 sm:px-5 lg:px-7">
-        <button type="button" id="brand-logo" onClick={goHome} className="group flex min-w-0 shrink-0 items-center gap-2.5 text-left" aria-label="Naa College home">
-          <span className="mos-brand-mark relative flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-cyan-300/15 bg-[#07101d] p-0.5 shadow-lg" aria-hidden="true">
-            <img src="/Naa%20College%20logo.webp" alt="" width="40" height="40" className="h-full w-full object-contain transition-transform duration-200 group-hover:scale-105" loading="eager" />
-          </span>
-          <span className="min-w-0 sm:block">
-            <span className="mos-brand-wordmark block whitespace-nowrap text-[17px] font-black tracking-[-0.03em] text-white sm:text-[19px]">Naa College</span>
-            <span className="mos-brand-tagline block whitespace-nowrap text-[9px] font-medium tracking-[0.08em] text-slate-500 uppercase">Student utility platform</span>
-          </span>
-        </button>
+        <a href="https://naacollege.in/" id="brand-logo" className="group flex min-w-0 shrink items-center text-left" aria-label="Naa College home">
+          <img src="/Naacollege_fulllogo.webp" alt="Naa College home" width="320" height="180" className="block h-auto max-h-12 w-[min(44vw,220px)] object-contain sm:w-[220px]" loading="eager" decoding="async" />
+        </a>
 
         <nav className="hidden flex-1 items-center justify-center gap-1 lg:flex" aria-label="Primary navigation">
           <button type="button" onClick={goHome} className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${activeWorkspace === 'hub' ? 'bg-cyan-400/15 text-cyan-200' : 'text-slate-300 hover:bg-white/8 hover:text-white'}`}><Home className="w-4 h-4" /> Home</button>
