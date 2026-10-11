@@ -86,6 +86,90 @@ if (fs.existsSync(scholarshipDataPath)) {
   console.warn('[SEO] Scholarship JSON not found; individual scholarship HTML routes were not generated.');
 }
 
+
+// Blog routes share the same typed editorial JSON used by the React UI.
+// Only published articles become public URLs or sitemap entries.
+const blogDataPath = path.resolve(process.cwd(), 'src/data/blogArticles.json');
+const blogArticles = fs.existsSync(blogDataPath)
+  ? JSON.parse(fs.readFileSync(blogDataPath, 'utf8'))
+  : [];
+const publishedBlogArticles = blogArticles.filter((article) => article.status === 'published');
+const slugifyBlogCategory = (value) => String(value || '').toLowerCase()
+  .replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const htmlEscape = (value) => String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+const inlineStatic = (value) => htmlEscape(value)
+  .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" rel="noopener noreferrer">$1</a>')
+  .replace(/\[([^\]]+)\]\((\/[^)]+)\)/g, '<a href="$2">$1</a>')
+  .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+const renderStaticArticle = (article) => {
+  const blocks = String(article.content || '').trim().split(/\n\s*\n/);
+  const body = blocks.map((raw) => {
+    const block = raw.trim();
+    if (!block) return '';
+    if (block.startsWith('## ')) return '<h2>' + inlineStatic(block.slice(3)) + '</h2>';
+    if (block.startsWith('> ')) return '<blockquote>' + inlineStatic(block.slice(2).replace(/\n> /g, ' ')) + '</blockquote>';
+    const lines = block.split('\n').map((line) => line.trim()).filter(Boolean);
+    if (lines.every((line) => line.startsWith('- '))) {
+      return '<ul>' + lines.map((line) => '<li>' + inlineStatic(line.slice(2)) + '</li>').join('') + '</ul>';
+    }
+    if (lines.every((line) => /^\d+\.\s/.test(line))) {
+      return '<ol>' + lines.map((line) => '<li>' + inlineStatic(line.replace(/^\d+\.\s/, '')) + '</li>').join('') + '</ol>';
+    }
+    return '<p>' + inlineStatic(block.replace(/\n/g, ' ')) + '</p>';
+  }).join('\n');
+  return '<article><p><a href="/blog/">Naa College Blog</a> / ' + htmlEscape(article.category) +
+    '</p><h1>' + htmlEscape(article.title) + '</h1><p>' + htmlEscape(article.summary) +
+    '</p><p>Updated ' + htmlEscape(article.updatedAt) + ' · By Naa College</p>' + body +
+    (article.sources && article.sources.length ? '<h2>Official and reference sources</h2><ul>' +
+      article.sources.map((source) => '<li><a href="' + htmlEscape(source.url) + '" rel="noopener noreferrer">' + htmlEscape(source.label) + '</a></li>').join('') + '</ul>' : '') +
+    '<p>Educational information only. Verify time-sensitive details with the relevant official authority or product documentation.</p></article>';
+};
+const blogListingBody = (title, description, list) =>
+  '<section><h1>' + htmlEscape(title) + '</h1><p>' + htmlEscape(description) + '</p><nav aria-label="Blog categories"><ul>' +
+  Array.from(new Set(publishedBlogArticles.map((article) => article.category))).map((category) =>
+    '<li><a href="/blog/category/' + slugifyBlogCategory(category) + '/">' + htmlEscape(category) + '</a></li>').join('') +
+  '</ul></nav><h2>Published guides</h2><ul>' + list.map((article) =>
+    '<li><article><h3><a href="/blog/' + htmlEscape(article.slug) + '/">' + htmlEscape(article.title) +
+    '</a></h3><p>' + htmlEscape(article.summary) + '</p><p>' + htmlEscape(article.category) + ' · ' +
+    Math.max(2, Math.ceil(String(article.content || '').trim().split(/\s+/).filter(Boolean).length / 220)) + ' min read</p></article></li>').join('') +
+  '</ul></section>';
+routes.push({
+  path: '/blog/',
+  title: 'Student Blog & Knowledge Hub | Naa College',
+  description: 'Practical guides for EAPCET counselling, student tools, scholarships, programming, and responsible AI-assisted development.',
+  staticBody: blogListingBody('Naa College Blog & Student Knowledge Hub', 'Practical, student-focused guides for admissions, tools, scholarships, programming, and responsible AI-assisted development.', publishedBlogArticles),
+  schema: { '@context': 'https://schema.org', '@type': 'Blog', name: 'Naa College Blog', url: 'https://naacollege.in/blog/' }
+});
+const blogCategories = Array.from(new Set(publishedBlogArticles.map((article) => article.category)));
+blogCategories.forEach((category) => {
+  const slug = slugifyBlogCategory(category);
+  const categoryArticles = publishedBlogArticles.filter((article) => article.category === category);
+  routes.push({
+    path: '/blog/category/' + slug + '/',
+    title: category + ' Guides | Naa College Blog',
+    description: ('Practical student-focused guides in ' + category + ' from Naa College.').slice(0, 158),
+    staticBody: blogListingBody(category + ' Guides', 'Published Naa College articles in ' + category + '.', categoryArticles),
+    schema: { '@context': 'https://schema.org', '@type': 'CollectionPage', name: category + ' Guides', url: 'https://naacollege.in/blog/category/' + slug + '/' }
+  });
+});
+publishedBlogArticles.forEach((article) => {
+  const canonical = 'https://naacollege.in/blog/' + article.slug + '/';
+  routes.push({
+    path: '/blog/' + article.slug + '/',
+    title: article.title + ' | Naa College',
+    description: String(article.summary || '').slice(0, 158),
+    staticBody: renderStaticArticle(article),
+    schema: {
+      '@context': 'https://schema.org', '@type': 'BlogPosting', headline: article.title,
+      description: article.summary, datePublished: article.publishedAt, dateModified: article.updatedAt,
+      mainEntityOfPage: canonical,
+      author: { '@type': 'Organization', name: 'Naa College', url: 'https://naacollege.in/' },
+      publisher: { '@type': 'Organization', name: 'Naa College', url: 'https://naacollege.in/' }
+    }
+  });
+});
+
 function escapeAttribute(value) {
   return value
     .replace(/&/g, '&amp;')
@@ -130,6 +214,13 @@ function buildRouteHtml(route) {
   html = setMeta(html, 'name', 'twitter:description', route.description);
   html = setMeta(html, 'name', 'twitter:url', canonical);
   html = setCanonical(html, canonical);
+  if (route.schema) {
+    const schemaTag = '<script type="application/ld+json" data-generated-blog-schema>' + JSON.stringify(route.schema).replace(/</g, '\\u003c') + '</script>';
+    html = html.replace('</head>', '    ' + schemaTag + '\n  </head>');
+  }
+  if (route.staticBody) {
+    html = html.replace('<div id="root"></div>', '<div id="root">' + route.staticBody + '</div>');
+  }
 
   const routeDir = path.join(distDir, route.path.replace(/^\/+|\/+$/g, ''));
   fs.mkdirSync(routeDir, { recursive: true });
@@ -150,6 +241,7 @@ const xmlEscape = (value) => String(value).replace(/&/g, '&amp;').replace(/</g, 
 const sitemap = [
   '<?xml version="1.0" encoding="UTF-8"?>',
   '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+  '  <url><loc>https://naacollege.in/</loc></url>',
   ...routes.map((route) => '  <url><loc>' + xmlEscape('https://naacollege.in' + route.path) + '</loc></url>'),
   '</urlset>',
 ].join('\n') + '\n';
