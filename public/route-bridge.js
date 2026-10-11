@@ -106,7 +106,6 @@
       'pdf': 'utilities',
       'image-tools': 'resizer',
       'photo-resizer': 'resizer',
-      'ai-humanizer': 'humanizer',
       'test-series': 'mock-tests',
       'cbt-series': 'mock-tests',
       'mock-tests': 'mock-tests',
