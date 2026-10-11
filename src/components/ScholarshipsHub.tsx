@@ -39,14 +39,16 @@ type Filter = 'all' | 'open' | 'closed' | 'government' | 'private' | 'state' | '
 type EducationFilter = 'all' | 'school' | 'intermediate' | 'diploma' | 'undergraduate' | 'postgraduate';
 const effectiveStatus = (s: IndianScholarship) => {
   const explicitDate = s.deadline.match(/\b(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(20\d{2})\b/i);
-  if (explicitDate && /open/i.test(s.status || '')) {
+  if (/open/i.test(s.status || '')) {
+    if (!explicitDate) return 'Cycle status not confirmed';
     const monthIndex = ['january','february','march','april','may','june','july','august','september','october','november','december'].indexOf(explicitDate[2].toLowerCase());
     const deadlineDate = new Date(Number(explicitDate[3]), monthIndex, Number(explicitDate[1]), 23, 59, 59);
     if (!Number.isNaN(deadlineDate.getTime()) && deadlineDate.getTime() < Date.now()) return 'Closed — listed deadline passed';
+    return 'Listed as open — verify provider';
   }
   return s.status || 'Check official source';
 };
-const isOpen = (s: IndianScholarship) => effectiveStatus(s).toLowerCase() === 'open';
+const isOpen = (s: IndianScholarship) => effectiveStatus(s).toLowerCase().startsWith('listed as open');
 
 const SCHOLARSHIP_HERO_IMAGE = '/Scholorship_images/manofstudy_scholorship%20_hero%20page.png';
 
@@ -150,7 +152,7 @@ export const ScholarshipsHub: React.FC = () => {
 
   const filterButtons: { id: Filter; label: string; count: number }[] = [
     { id: 'all', label: 'All', count: stats.total },
-    { id: 'open', label: 'Open now', count: stats.open },
+    { id: 'open', label: 'Listed open*', count: stats.open },
     { id: 'closed', label: 'Closed', count: scholarships.filter(s => effectiveStatus(s).toLowerCase().includes('closed')).length },
     { id: 'government', label: 'Government', count: scholarships.filter(s => /government/i.test(s.category)).length },
     { id: 'private', label: 'Private / CSR', count: scholarships.filter(s => /private|csr/i.test(s.category)).length },
@@ -172,7 +174,7 @@ export const ScholarshipsHub: React.FC = () => {
           <h1 className="mt-4 text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[var(--mos-text-primary)]">Find scholarships that <span className="text-emerald-600 dark:text-emerald-300">fit your future.</span></h1>
           <p className="mt-3 max-w-3xl text-sm sm:text-base leading-6 text-[var(--mos-text-secondary)]">Explore government, state, CSR and private scholarships with eligibility, published amounts and application sources in one student-friendly directory.</p>
           <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-w-3xl">
-            {[[stats.total, 'Scholarships'], [stats.open, 'Open now'], [stats.government, 'Government'], [stats.engineering, 'Engineering']].map(([n, label]) => <div key={String(label)} className="rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-3 py-3"><div className="text-lg sm:text-xl font-black text-[var(--mos-text-primary)]">{n}</div><div className="mt-0.5 text-[10px] text-[var(--mos-text-muted)]">{label}</div></div>)}
+            {[[stats.total, 'Scholarships'], [stats.open, 'Listed open*'], [stats.government, 'Government'], [stats.engineering, 'Engineering']].map(([n, label]) => <div key={String(label)} className="rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-3 py-3"><div className="text-lg sm:text-xl font-black text-[var(--mos-text-primary)]">{n}</div><div className="mt-0.5 text-[10px] text-[var(--mos-text-muted)]">{label}</div></div>)}
           </div>
         </div>
       </div>
