@@ -233,7 +233,7 @@ function buildRouteHtml(route) {
     html = html.replace('</head>', '    ' + schemaTag + '\n  </head>');
   }
   if (route.staticBody) {
-    html = html.replace('<div id="root"></div>', '<div id="seo-prerender" data-seo-prerender="true">' + route.staticBody + '</div><div id="root"></div>');
+    html = html.replace('<div id="root"></div>', '<div id="seo-prerender" data-seo-prerender="true" style="display:none">' + route.staticBody + '</div><div id="root"></div>');
   }
 
   const routeDir = path.join(distDir, route.path.replace(/^\/+|\/+$/g, ''));
