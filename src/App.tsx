@@ -389,7 +389,7 @@ const SEO_LANDING_PATHS = {
 
 const getStandaloneLegalPage = (): StandaloneLegalPageType | null => {
   if (typeof window === 'undefined') return null;
-  const path = window.location.pathname.replace(/\\/+$/, '').toLowerCase() || '/';
+  const path = window.location.pathname.replace(/\/+$/, '').toLowerCase() || '/';
   const routes: Record<string, StandaloneLegalPageType> = {
     '/about': 'about', '/about-us': 'about',
     '/contact': 'contact', '/contact-us': 'contact',
