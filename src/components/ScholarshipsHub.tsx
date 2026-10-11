@@ -191,6 +191,7 @@ export const ScholarshipsHub: React.FC = () => {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
+  const [copyError, setCopyError] = useState('');
 
   const loadData = async () => {
     setLoading(true);
@@ -279,9 +280,10 @@ export const ScholarshipsHub: React.FC = () => {
   const copyText = async (value: string, s: IndianScholarship) => {
     try {
       await navigator.clipboard.writeText(value);
+      setCopyError('');
       setCopiedId(s.id);
     } catch {
-      setLoadError('Copy was blocked by this browser. Use the share button or open the scholarship page instead.');
+      setCopyError('Copy is blocked by this browser. You can still open or share the scholarship page.');
     }
   };
 
@@ -363,6 +365,7 @@ export const ScholarshipsHub: React.FC = () => {
       </section>
 
       {loadError && <div role="alert" className="flex items-start gap-3 rounded-2xl border border-rose-500/25 bg-rose-500/5 p-4 text-sm"><AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-rose-500" /><div className="min-w-0 flex-1"><p className="font-semibold">We couldn’t load the scholarship list.</p><p className="mt-1 text-[var(--mos-text-secondary)]">{loadError}</p><button type="button" onClick={loadData} className="mt-3 inline-flex items-center gap-2 rounded-lg bg-rose-600 px-3 py-2 text-xs font-bold text-white hover:bg-rose-500">Try again</button></div></div>}
+      {copyError && <div role="status" className="rounded-xl border border-amber-500/25 bg-amber-500/5 px-4 py-3 text-xs text-[var(--mos-text-secondary)]">{copyError}</div>}
 
       <div className="flex flex-wrap items-end justify-between gap-3"><div><h2 className="text-xl font-bold tracking-tight sm:text-2xl">Scholarship opportunities</h2><p className="mt-1 text-sm text-[var(--mos-text-muted)]">Showing {loading ? '—' : visibleItems.length} of {filtered.length} matching results</p></div><p className="max-w-lg text-xs leading-5 text-[var(--mos-text-muted)]"><ShieldCheck className="mr-1 inline h-3.5 w-3.5 text-emerald-600" />Cycle status is calculated from listed dates where possible. Always confirm the current rules on the provider’s site.</p></div>
 
