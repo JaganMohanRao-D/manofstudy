@@ -3,13 +3,13 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/
 import { getFirestore } from "firebase/firestore";
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyAi1z2yWqdDXzeip3TUC37huvsChqK8Lqo",
-  authDomain: "manofstudy-live.firebaseapp.com",
-  projectId: "manofstudy-live",
-  storageBucket: "manofstudy-live.firebasestorage.app",
-  messagingSenderId: "9699503499",
-  appId: "1:9699503499:web:2798a930e61a310c75538e",
-  measurementId: "G-CBFMX3VKF4"
+  apiKey: "AIzaSyDelp9sBAtqVQ-YMP5zpdi1b_G_yafRRk",
+  authDomain: "naa-college.firebaseapp.com",
+  projectId: "naa-college",
+  storageBucket: "naa-college.firebasestorage.app",
+  messagingSenderId: "283454436896",
+  appId: "1:283454436896:web:2841510b2f26162e9fae45",
+  measurementId: "G-FZN0DVCZ5J"
 };
 
 // Initialize Firebase safely without duplicate initialization
