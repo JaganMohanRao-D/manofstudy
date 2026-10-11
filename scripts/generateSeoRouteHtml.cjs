@@ -144,4 +144,14 @@ function buildRouteHtml(route) {
 }
 
 for (const route of routes) buildRouteHtml(route);
-console.log('[SEO] Generated ' + routes.length + ' static SEO route entry points.');
+
+// Keep the deployed sitemap aligned with the exact static routes generated above.
+const xmlEscape = (value) => String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const sitemap = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+  ...routes.map((route) => '  <url><loc>' + xmlEscape('https://naacollege.in' + route.path) + '</loc></url>'),
+  '</urlset>',
+].join('\\n') + '\\n';
+fs.writeFileSync(path.join(distDir, 'sitemap.xml'), sitemap, 'utf8');
+console.log('[SEO] Generated ' + routes.length + ' static SEO route entry points and refreshed sitemap.xml.');
