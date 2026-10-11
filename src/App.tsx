@@ -477,7 +477,7 @@ export default function App() {
   useEffect(() => {
     if (getSeoLandingPath() || authLoading) return;
     const handleHashChange = () => {
-      const pathname = window.location.pathname.replace(/\\/+$/, '') || '/';
+      const pathname = window.location.pathname.replace(/\/+$/, '') || '/';
       if (pathname.startsWith('/scholarships/')) {
         setActiveWorkspace('scholarships');
         return;
