@@ -3,7 +3,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/
 import { getFirestore } from "firebase/firestore";
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyDelp9sBAtqVQ-YMP5zpdi1b_G_yafRRk",
+  apiKey: "AIzaSyDelp9sBAtqVQ-YMP5zpdi1b_G_yJyafRRk",
   authDomain: "naa-college.firebaseapp.com",
   projectId: "naa-college",
   storageBucket: "naa-college.firebasestorage.app",
