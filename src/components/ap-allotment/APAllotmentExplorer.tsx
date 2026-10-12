@@ -374,7 +374,7 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
                   <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-cyan-700 dark:text-cyan-300">
                     <Sparkles className="h-3.5 w-3.5" /> AP EAPCET {selectedYear} · {selectedPhase === 'ALL' ? 'All phases' : 'Phase ' + selectedPhase}
                   </div>
-                  <h2 className="mt-4 text-2xl sm:text-4xl font-black tracking-[-0.04em] text-slate-950 dark:text-white">AP Allotments <span className="text-cyan-700 dark:text-cyan-300">Explorer</span></h2>
+                  <h2 className="mt-4 text-2xl sm:text-4xl font-black tracking-[-0.04em] text-slate-950 dark:text-white">AP EAPCET 2026 College-Wise Allotments</h2>
                   <p className="mt-2 max-w-2xl text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-slate-400">Find colleges, branches and allotted students from the selected AP EAPCET source dataset — without mixing years.</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2 sm:gap-3">
