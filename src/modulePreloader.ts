@@ -8,7 +8,7 @@ const loaders: Record<string, () => Promise<unknown>> = {
   'TG EAPCET College Predictor': () => import('./components/TgCollegePredictor'),
   'AP EAPCET Top B.Tech Colleges': () => import('./components/ApTopColleges'),
   'Top B.Tech Colleges in Telangana': () => import('./components/TgTopColleges'),
-  'AP Allotments (Namewise)': () => import('./components/ApEapcet2025AllotmentExplorer'),
+  'AP EAPCET 2026 College-Wise Allotments': () => import('./components/ApEapcet2025AllotmentExplorer'),
   'TG EAPCET 2026 Final Phase Seat Allotments Name Wise': () => import('./components/TgAllotmentExplorer'),
   'Scholarships Radar': () => import('./components/ScholarshipsHub'),
   'Engineering Branch Roadmaps': () => import('./components/EngineeringRoadmaps'),
@@ -55,7 +55,7 @@ if (typeof window !== 'undefined') {
       'TG EAPCET College Predictor',
       'AP EAPCET Top B.Tech Colleges',
       'Top B.Tech Colleges in Telangana',
-      'AP Allotments (Namewise)',
+      'AP EAPCET 2026 College-Wise Allotments',
       'TG EAPCET 2026 Final Phase Seat Allotments Name Wise',
     ].forEach(preload);
     const idleWindow = window as Window & {
