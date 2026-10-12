@@ -19,7 +19,7 @@ const AP_TOOLS: NavItem[] = [
   { label: 'AP EAPCET College Predictor', workspace: 'ap-predictor', icon: Map },
   { label: 'AP EAPCET Rank Predictor', workspace: 'ap-rank-predictor', icon: Calculator },
   { label: 'AP Top B.Tech Colleges', workspace: 'ap-top-colleges', icon: Trophy },
-  { label: 'AP Allotments — Namewise', workspace: 'ap-allotments', icon: ClipboardCheck },
+  { label: 'AP EAPCET 2026 College-Wise Allotments', workspace: 'ap-allotments', icon: ClipboardCheck },
   { label: 'AP EAPCET Vacancy Radar', workspace: 'eapcet-radar', icon: Search },
 ];
 const TG_TOOLS: NavItem[] = [
