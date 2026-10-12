@@ -1,16 +1,44 @@
+# Naa College — public search and AI crawler access
+# These rules request access; they do not guarantee indexing or citations.
+
 User-agent: *
 Allow: /
 
+# Google Search
 User-agent: Googlebot
 Allow: /
 
+# Gemini / Google AI services (Google-Extended is a policy token)
 User-agent: Google-Extended
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+# OpenAI / ChatGPT
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
 Allow: /
 
 User-agent: GPTBot
 Allow: /
 
+# Perplexity
 User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# Brave Search
+User-agent: BraveBot
+Allow: /
+
+# Grok / xAI
+# This only applies if the crawler identifies itself with this exact token.
+User-agent: GrokBot
 Allow: /
 
 Sitemap: https://naacollege.in/sitemap.xml
