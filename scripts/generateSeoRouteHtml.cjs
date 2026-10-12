@@ -26,7 +26,8 @@ const routes = [
   {
     path: '/ap-eapcet/college-wise-allotments/',
     title: 'AP EAPCET 2026 College-Wise Allotments | Naa College',
-    description: 'Explore AP EAPCET engineering allotment records by college and branch with the Naa College allotment explorer.',
+    description: 'Explore AP EAPCET 2026 allotment records by college, branch, rank and available category filters. Review the dataset on Naa College and verify current counselling decisions with the official AP EAPCET portal.',
+    staticBody: '<main class="mx-auto max-w-5xl px-4 py-8 sm:px-6"><p class="text-sm font-semibold uppercase tracking-wide">AP EAPCET 2026 · Engineering Admissions</p><h1 class="mt-3 text-3xl font-bold tracking-tight">AP EAPCET 2026 College-Wise Allotments</h1><p class="mt-4 max-w-3xl text-base leading-7">Explore the AP EAPCET 2026 allotment dataset by college and branch. Use the available filters to review records and observed ranks for the selected dataset. These records are for exploration and do not guarantee a future seat or replace an official counselling result.</p><h2 class="mt-6 text-xl font-semibold">How to use this page</h2><ul class="mt-3 list-disc space-y-2 pl-6 leading-7"><li>Select a college to inspect its available allotment records.</li><li>Choose a branch and use the available rank or category filters to narrow the results.</li><li>Check the year and phase shown in the tool before comparing records.</li><li>Confirm deadlines, seat allotments and reporting instructions with the official AP EAPCET counselling authority.</li></ul><p class="mt-6 text-sm leading-6">Naa College is an independent student resource. Dataset coverage may differ by year and phase; always verify important decisions with the official authority.</p><p class="mt-4"><a class="font-semibold underline" href="https://eapcet-sche.aptonline.in/EAPCET/" rel="noopener noreferrer">Visit the AP EAPCET official portal</a></p></main>',
   },
   {
     path: '/tg-eapcet/name-wise-allotments/',
@@ -233,7 +234,7 @@ function buildRouteHtml(route) {
     html = html.replace('</head>', '    ' + schemaTag + '\n  </head>');
   }
   if (route.staticBody) {
-    html = html.replace('<div id="root"></div>', '<div id="seo-prerender" data-seo-prerender="true" style="display:none">' + route.staticBody + '</div><div id="root"></div>');
+    html = html.replace('<div id="root"></div>', '<div id="root">' + route.staticBody + '</div>');
   }
 
   const routeDir = path.join(distDir, route.path.replace(/^\/+|\/+$/g, ''));
