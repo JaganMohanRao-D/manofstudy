@@ -289,8 +289,8 @@ export const TOOLS_CONFIG: ToolMeta[] = [
   },
   {
     id: 'ap-allotments',
-    name: 'AP Allotments (Namewise)',
-    shortName: 'AP Allotments',
+    name: 'AP EAPCET 2026 College-Wise Allotments',
+    shortName: 'AP EAPCET Allotments',
     category: 'counselling',
     description: 'Search student allotments, explore colleges and branches, and inspect observed category-wise rank ranges.',
     badge: '2026 DATA',
@@ -725,7 +725,7 @@ export default function App() {
     const metadata: Record<string, { title: string; description: string; canonical: string }> = {
       apAllotments: {
         title: 'AP EAPCET 2026 College-Wise Allotments | Naa College',
-        description: 'Explore AP EAPCET 2026 engineering allotment records by college and branch with the Naa College allotment explorer.',
+        description: 'Explore AP EAPCET 2026 allotment records by college, branch, rank and available category filters. Review the dataset on Naa College and verify current counselling decisions with the official AP EAPCET portal.',
         canonical: 'https://naacollege.in/ap-eapcet/college-wise-allotments/',
       },
       tgAllotments: {
@@ -907,7 +907,7 @@ export default function App() {
         };
       case 'ap-allotments':
         return {
-          title: 'AP Allotments (Namewise)',
+          title: 'AP EAPCET 2026 College-Wise Allotments',
           icon: <Building2 className="w-4 h-4 text-cyan-400" />,
         };
       case 'ap-predictor':
@@ -1048,7 +1048,7 @@ export default function App() {
           <SeoLandingPage
             eyebrow="AP EAPCET 2026 · Engineering Admissions"
             title="AP EAPCET 2026 College-Wise Allotments"
-            description="Use the Naa College AP allotment explorer to browse the available 2026 engineering allotment dataset by college, branch, rank and category. The page is built around the same interactive allotment tool available across Naa College."
+            description="Explore AP EAPCET 2026 allotment records by college, branch, rank and available category filters. Review the dataset shown on this page; it does not guarantee a future seat and does not replace an official counselling result."
             tool={<ApEapcet2025AllotmentExplorer />}
             howTo={[
               'Open the college selector and choose a specific AP engineering college, or use the statewide view.',
@@ -1062,7 +1062,7 @@ export default function App() {
               { question: 'Are these guaranteed future cutoffs?', answer: 'No. Allotment records describe the dataset available to the tool. They should not be treated as a guarantee of a future allotment or admission outcome.' }
             ]}
             relatedLinks={[
-              { href: '/ap-eapcet/college-wise-allotments/', label: 'AP College-Wise Allotments' },
+              { href: '/ap-eapcet/college-wise-allotments/', label: 'AP EAPCET 2026 College-Wise Allotments' },
               { href: '/tg-eapcet/name-wise-allotments/', label: 'TG Name-Wise Allotments' },
               { href: '/#ap-predictor', label: 'AP EAPCET College Predictor' }
             ]}
