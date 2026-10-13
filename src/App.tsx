@@ -1215,7 +1215,7 @@ export default function App() {
             ]}
           />
         ) : activeWorkspace === 'hub' ? (
-          <div className="space-y-8 animate-in fade-in duration-200">
+          <div className="mos-k-homepage-flow mos-kinetic-home space-y-8 animate-in fade-in duration-200">
             {/* Dynamic Feature Selector Hero & Bento Cards Showcase */}
             <HeroSection
               activeWorkspace={activeWorkspace}
