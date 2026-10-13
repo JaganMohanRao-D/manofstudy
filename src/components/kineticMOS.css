@@ -885,3 +885,96 @@ html.light .mos-kinetic-home .mos-k-cursor { display:none !important; }
  html.light .mos-kinetic-home .naa-search-wrap { flex-wrap:wrap; }
  html.light .mos-kinetic-home .naa-search-wrap input { min-width:160px; }
 }
+
+
+/* Follow-up audit: remaining homepage sections still inherit original Kinetic surface/text utilities.
+   Scope every normalization to the home route wrapper; do not touch other workspaces. */
+html.light .mos-kinetic-home .mos-k-hero,
+html.light .mos-kinetic-home .mos-k-section,
+html.light .mos-kinetic-home .mos-k-feature-hub,
+html.light .mos-kinetic-home .mos-k-guide,
+html.light .mos-kinetic-home .mos-k-faq,
+html.light .mos-kinetic-home #student-testimonials-section,
+html.light .mos-kinetic-home #features-hub,
+html.light .mos-kinetic-home .mos-k-footer {
+  background:#f3f8ff !important;
+  background-color:#f3f8ff !important;
+  color:#17366f !important;
+  border-color:#dce8f8 !important;
+}
+html.light .mos-kinetic-home .mos-k-hero::before,
+html.light .mos-kinetic-home .mos-k-hero::after,
+html.light .mos-kinetic-home .mos-k-section::before,
+html.light .mos-kinetic-home .mos-k-section::after,
+html.light .mos-kinetic-home .mos-k-feature-hub::before,
+html.light .mos-kinetic-home .mos-k-feature-hub::after,
+html.light .mos-kinetic-home .mos-k-guide::before,
+html.light .mos-kinetic-home .mos-k-guide::after,
+html.light .mos-kinetic-home .mos-k-faq::before,
+html.light .mos-kinetic-home .mos-k-faq::after { background:transparent !important; box-shadow:none !important; }
+html.light .mos-kinetic-home [class*="bg-slate-950"],
+html.light .mos-kinetic-home [class*="bg-slate-900"],
+html.light .mos-kinetic-home [class*="bg-slate-800"],
+html.light .mos-kinetic-home [class*="bg-gray-950"],
+html.light .mos-kinetic-home [class*="bg-gray-900"],
+html.light .mos-kinetic-home [class*="bg-zinc-950"],
+html.light .mos-kinetic-home [class*="bg-zinc-900"],
+html.light .mos-kinetic-home [class*="bg-black"],
+html.light .mos-kinetic-home [style*="background:#08090b"],
+html.light .mos-kinetic-home [style*="background: #08090b"],
+html.light .mos-kinetic-home [style*="background-color:#08090b"] {
+  background:#fff !important; background-color:#fff !important; color:#17366f !important; border-color:#dce8f8 !important;
+}
+html.light .mos-kinetic-home [class*="text-white"],
+html.light .mos-kinetic-home [class*="text-slate-50"],
+html.light .mos-kinetic-home [class*="text-slate-100"],
+html.light .mos-kinetic-home [class*="text-slate-200"],
+html.light .mos-kinetic-home [class*="text-gray-50"],
+html.light .mos-kinetic-home [class*="text-gray-100"],
+html.light .mos-kinetic-home [class*="text-zinc-50"],
+html.light .mos-kinetic-home [class*="text-zinc-100"] { color:#17366f !important; }
+html.light .mos-kinetic-home [class*="text-slate-300"],
+html.light .mos-kinetic-home [class*="text-slate-400"],
+html.light .mos-kinetic-home [class*="text-slate-500"],
+html.light .mos-kinetic-home [class*="text-gray-300"],
+html.light .mos-kinetic-home [class*="text-gray-400"],
+html.light .mos-kinetic-home [class*="text-gray-500"],
+html.light .mos-kinetic-home [class*="text-zinc-300"],
+html.light .mos-kinetic-home [class*="text-zinc-400"],
+html.light .mos-kinetic-home [class*="text-zinc-500"] { color:#536b91 !important; }
+html.light .mos-kinetic-home .mos-k-review-card,
+html.light .mos-kinetic-home .mos-k-faq>div,
+html.light .mos-kinetic-home .mos-k-feature-hub section,
+html.light .mos-kinetic-home .mos-k-feature-hub article,
+html.light .mos-kinetic-home .mos-k-guide [class*="rounded-xl"],
+html.light .mos-kinetic-home .mos-k-guide [class*="rounded-2xl"],
+html.light .mos-kinetic-home #student-testimonials-section form,
+html.light .mos-kinetic-home #features-hub [class*="rounded-xl"],
+html.light .mos-kinetic-home #features-hub [class*="rounded-2xl"] {
+  background:#fff !important; background-color:#fff !important; color:#17366f !important;
+  border-color:#dce8f8 !important; box-shadow:0 8px 24px rgba(32,83,145,.06) !important;
+}
+html.light .mos-kinetic-home .mos-k-review-card p,
+html.light .mos-kinetic-home .mos-k-review-card blockquote,
+html.light .mos-kinetic-home .mos-k-faq p,
+html.light .mos-kinetic-home .mos-k-guide p,
+html.light .mos-kinetic-home .mos-k-feature-hub p,
+html.light .mos-kinetic-home #student-testimonials-section p,
+html.light .mos-kinetic-home #features-hub p { color:#536b91 !important; }
+html.light .mos-kinetic-home .mos-k-faq button,
+html.light .mos-kinetic-home .mos-k-guide button,
+html.light .mos-kinetic-home .mos-k-feature-hub button,
+html.light .mos-kinetic-home #student-testimonials-section button,
+html.light .mos-kinetic-home #features-hub button { color:#17366f !important; border-color:#dce8f8 !important; }
+html.light .mos-kinetic-home .mos-k-faq input,
+html.light .mos-kinetic-home .mos-k-faq textarea,
+html.light .mos-kinetic-home .mos-k-guide input,
+html.light .mos-kinetic-home .mos-k-guide textarea,
+html.light .mos-kinetic-home #student-testimonials-section input,
+html.light .mos-kinetic-home #student-testimonials-section textarea,
+html.light .mos-kinetic-home #features-hub input,
+html.light .mos-kinetic-home #features-hub textarea,
+html.light .mos-kinetic-home #features-hub select { background:#fff !important; color:#17366f !important; border-color:#cbdcf4 !important; }
+html.light .mos-kinetic-home .mos-k-faq input::placeholder,
+html.light .mos-kinetic-home .mos-k-guide input::placeholder,
+html.light .mos-kinetic-home #features-hub input::placeholder { color:#647b9e !important; opacity:1; }
