@@ -680,3 +680,249 @@ body:has(.naa-home) .max-w-7xl.mx-auto.my-6 span {
   body:has(.naa-home) .mos-k-nav { width: 100% !important; margin: 0 !important; border-radius: 0 !important; }
   body:has(.naa-home) #features-hub > div { padding-left: 20px !important; padding-right: 20px !important; }
 }
+
+ 
+/* =========================================================================
+   Naa College bright homepage theme — component-level fixes for the actual DOM.
+   The older Kinetic rules below/above this comment hard-code dark surfaces on
+   reviews, guides, FAQs, toolkit cards and workflow panels. Keep those styles
+   available outside the homepage; override only these rendered homepage pieces.
+   ========================================================================= */
+html.light body:has(.naa-home) .mos-k-homepage-flow {
+  --mk-bg: #ffffff;
+  --mk-fg: #17366f;
+  --mk-muted: #536b91;
+  --mk-line: #dce8f8;
+  --mk-accent: #2878f0;
+  --mk-orange: #0f9d8a;
+  background: #ffffff !important;
+  color: #17366f !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-why-section,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-workflow-section {
+  background: #f3f8ff !important;
+  color: #17366f !important;
+  border-color: #dce8f8 !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-guide,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-toolkit-section,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-experience-faq,
+html.light body:has(.naa-home) .mos-k-homepage-flow #student-testimonials-section {
+  background: #ffffff !important;
+  color: #17366f !important;
+  border-color: #dce8f8 !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub section,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub article,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub section[class*="bg-"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub button:not([class*="bg-blue-"]):not([class*="bg-cyan-"]):not([class*="bg-emerald-"]),
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-guide [class*="rounded-2xl"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-why-section > div,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-toolkit-section article,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-workflow-section > div,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-experience-faq > div,
+html.light body:has(.naa-home) .mos-k-homepage-flow #student-testimonials-section form,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card {
+  background: #ffffff !important;
+  color: #17366f !important;
+  border-color: #dce8f8 !important;
+  box-shadow: 0 8px 26px rgba(35, 70, 125, 0.06) !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub button:not([class*="bg-blue-"]):not([class*="bg-cyan-"]):not([class*="bg-emerald-"]):hover {
+  background: #eafbf8 !important;
+  border-color: #bfe9e4 !important;
+  color: #17366f !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub button[class*="bg-blue-"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub button[class*="bg-cyan-"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub button[class*="bg-emerald-"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq > div > div:nth-child(2) button.bg-blue-600 {
+  background: #1d4ed8 !important;
+  color: #ffffff !important;
+  border-color: #1d4ed8 !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq > div {
+  background: transparent !important;
+  border-color: #dce8f8 !important;
+  box-shadow: none !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq > div > div:first-child,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq > div > div:nth-child(2),
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq > div > div:nth-child(3) > div {
+  background: transparent !important;
+  border-color: #dce8f8 !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq > div > div:nth-child(3) > div > div {
+  background: #ffffff !important;
+  color: #536b91 !important;
+  border-color: #dce8f8 !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq input,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq select,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq textarea {
+  background: #ffffff !important;
+  color: #17366f !important;
+  border-color: #cbdcf4 !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq input::placeholder,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq textarea::placeholder {
+  color: #64748b !important;
+  opacity: 1 !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq > div > div:nth-child(2) button {
+  background: #ffffff !important;
+  color: #536b91 !important;
+  border-color: #dce8f8 !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq > div > div:nth-child(2) button.bg-blue-600 {
+  background: #1d4ed8 !important;
+  color: #ffffff !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq > div > div:nth-child(3) > div > button:hover {
+  background: #eaf3ff !important;
+  color: #17366f !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq > div > div:nth-child(3) > div > button .w-8 {
+  background: #f3f8ff !important;
+  color: #2878f0 !important;
+  border-color: #dce8f8 !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq > div > div:last-child .w-10 {
+  background: #1d4ed8 !important;
+  color: #ffffff !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq > div > div:last-child a {
+  background: #ffffff !important;
+  color: #17366f !important;
+  border-color: #dce8f8 !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq > div > div:last-child a:hover {
+  background: #eaf3ff !important;
+  color: #1d4ed8 !important;
+  border-color: #b9d2ff !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq > div > div:first-child p,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub p,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-guide p,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-why-section p,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-toolkit-section p,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-workflow-section p,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-experience-faq p,
+html.light body:has(.naa-home) .mos-k-homepage-flow #student-testimonials-section p {
+  color: #536b91 !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub h1,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub h2,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub h3,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub h4,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-guide h1,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-guide h2,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-guide h3,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq h1,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq h2,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq h3,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-why-section h1,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-why-section h2,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-why-section h3,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-toolkit-section h1,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-toolkit-section h2,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-toolkit-section h3,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-workflow-section h1,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-workflow-section h2,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-workflow-section h3,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-experience-faq h1,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-experience-faq h2,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-experience-faq h3,
+html.light body:has(.naa-home) .mos-k-homepage-flow #student-testimonials-section h2 {
+  color: #17366f !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub [class*="text-white"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub [class*="text-slate-100"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub [class*="text-slate-200"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub [class*="text-slate-300"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-guide [class*="text-white"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-guide [class*="text-slate-100"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-guide [class*="text-slate-200"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-guide [class*="text-slate-300"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq [class*="text-white"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq [class*="text-slate-100"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq [class*="text-slate-200"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq [class*="text-slate-300"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-why-section [class*="text-white"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-why-section [class*="text-slate-100"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-toolkit-section [class*="text-white"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-workflow-section [class*="text-white"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-experience-faq [class*="text-white"] {
+  color: #17366f !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card::before {
+  background: #eafbf8 !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card:hover .text-slate-900,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card:hover .dark\\:text-slate-100,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card:hover .text-slate-600,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card:hover .dark\\:text-slate-300,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card:hover .text-sky-700,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card:hover .dark\\:text-sky-400,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card:hover .text-slate-400 {
+  color: #17366f !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card:hover svg {
+  color: #17366f !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card:hover .fill-amber-400 {
+  fill: #17366f !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq input:focus-visible,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq button:focus-visible,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub button:focus-visible,
+html.light body:has(.naa-home) .naa-home button:focus-visible,
+html.light body:has(.naa-home) .naa-home input:focus-visible {
+  outline: 3px solid #2878f0 !important;
+  outline-offset: 3px !important;
+}
+
+html.light body:has(.naa-home) .naa-search-wrap > button {
+  background: #1d4ed8 !important;
+  color: #ffffff !important;
+}
+
+@media (max-width: 760px) {
+  html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub,
+  html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-guide,
+  html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq,
+  html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-why-section,
+  html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-toolkit-section,
+  html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-workflow-section,
+  html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-experience-faq {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
