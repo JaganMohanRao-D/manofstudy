@@ -486,3 +486,12 @@
 .mos-k-nav #header-hamburger-drawer-btn{background:#f0f5ff!important;color:#234a8a!important;border-color:#dce8ff!important}
 .mos-k-nav .mos-header-link{color:#294b83!important}.mos-k-nav .mos-tools-dropdown{background:#fff!important;border-color:#dce8ff!important;box-shadow:0 20px 50px rgba(24,57,111,.15)}.mos-k-nav .mos-tools-dropdown a{color:#294b83}.mos-k-nav .mos-tools-dropdown a:hover{background:#edf4ff;color:#1d5ec2}
 @media(max-width:760px){.mos-k-nav{width:calc(100% - 20px)!important;margin-top:10px!important;border-radius:17px!important}.naa-hero-inner{padding-top:27px}}
+
+.mos-k-nav .text-cyan-200,.mos-k-nav .text-cyan-300{color:#2875f0!important}
+.mos-k-nav .bg-cyan-400\/15,.mos-k-nav .bg-cyan-400\/8{background:#edf4ff!important}
+.mos-k-nav .border-cyan-300\/10,.mos-k-nav .border-cyan-300\/15,.mos-k-nav .border-cyan-400\/15{border-color:#dce8ff!important}
+#mos-mobile-navigation-panel{background:#fff!important;border-color:#e2ebfa!important}
+#mos-mobile-navigation-panel .text-slate-200,#mos-mobile-navigation-panel .text-slate-300,#mos-mobile-navigation-panel .text-slate-400{color:#294b83!important}
+#mos-mobile-navigation-panel .border-white\/8{border-color:#e0eafa!important}
+#mos-mobile-navigation-panel [class*=bg-white\/\[\.03\]]{background:#f6f9ff!important}
+#mos-mobile-navigation-panel .text-white{color:#193568!important}
