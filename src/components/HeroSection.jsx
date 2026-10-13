@@ -1,22 +1,21 @@
 import React, { useMemo, useState } from 'react';
 import { ArrowRight, Search, GraduationCap, Landmark, Wrench, Users, Sparkles, BookOpen, Heart } from 'lucide-react';
-import { WorkspaceView } from '../types';
 import './kineticMOS.css';
 import { FeaturesHub } from './FeaturesHub';
 
-export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }: { activeWorkspace?: WorkspaceView; onSelectWorkspace?: (ws: WorkspaceView) => void }) => {
+export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
   const [query, setQuery] = useState('');
   const shortcuts = [
-    { title: 'AP EAPCET College Predictor', detail: 'Explore colleges by rank and branch', icon: Landmark, workspace: 'ap-predictor' as WorkspaceView, tone: 'blue' },
-    { title: 'Telangana College Predictor', detail: 'Find options from TG allotment data', icon: GraduationCap, workspace: 'tg-predictor' as WorkspaceView, tone: 'mint' },
-    { title: 'Scholarships Hub', detail: 'Find funding for your education', icon: Heart, workspace: 'scholarships' as WorkspaceView, tone: 'sun' },
-    { title: 'Student Tools', detail: 'PDF, image, attendance and GPA tools', icon: Wrench, workspace: 'utilities' as WorkspaceView, tone: 'lilac' },
+    { title: 'AP EAPCET College Predictor', detail: 'Explore colleges by rank and branch', icon: Landmark, workspace: 'ap-predictor', tone: 'blue' },
+    { title: 'Telangana College Predictor', detail: 'Find options from TG allotment data', icon: GraduationCap, workspace: 'tg-predictor', tone: 'mint' },
+    { title: 'Scholarships Hub', detail: 'Find funding for your education', icon: Heart, workspace: 'scholarships', tone: 'sun' },
+    { title: 'Student Tools', detail: 'PDF, image, attendance and GPA tools', icon: Wrench, workspace: 'utilities', tone: 'lilac' },
   ];
   const matches = useMemo(() => {
     const q = query.trim().toLowerCase();
     return q ? shortcuts.filter(item => (item.title + ' ' + item.detail).toLowerCase().includes(q)).slice(0, 3) : [];
   }, [query]);
-  const go = (workspace: WorkspaceView) => {
+  const go = (workspace) => {
     onSelectWorkspace?.(workspace);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
