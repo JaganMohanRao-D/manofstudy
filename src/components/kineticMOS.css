@@ -926,3 +926,34 @@ html.light body:has(.naa-home) .naa-search-wrap > button {
     padding-right: 20px !important;
   }
 }
+
+
+/* Keep accessible foregrounds on explicitly colored homepage actions after the
+   legacy utility-color normalization above. */
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub button[class*="bg-blue-"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub button[class*="bg-cyan-"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub button[class*="bg-emerald-"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq button.bg-blue-600 {
+  color: #ffffff !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub button[class*="bg-blue-"] [class*="text-white"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub button[class*="bg-cyan-"] [class*="text-white"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub button[class*="bg-emerald-"] [class*="text-white"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-faq button.bg-blue-600 [class*="text-white"] {
+  color: #ffffff !important;
+}
+
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-why-section [class*="text-slate-200"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-why-section [class*="text-slate-300"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-toolkit-section [class*="text-slate-100"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-toolkit-section [class*="text-slate-200"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-toolkit-section [class*="text-slate-300"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-workflow-section [class*="text-slate-100"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-workflow-section [class*="text-slate-200"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-workflow-section [class*="text-slate-300"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-experience-faq [class*="text-slate-100"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-experience-faq [class*="text-slate-200"],
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-experience-faq [class*="text-slate-300"] {
+  color: #536b91 !important;
+}
