@@ -1155,3 +1155,71 @@ html.light .mos-kinetic-home .mos-k-orb,
 html.light .mos-kinetic-home .mos-k-physics-field,
 html.light .mos-kinetic-home .mos-k-string,
 html.light .mos-kinetic-home .mos-k-cursor { display:none !important; }
+
+
+/* Fix homepage update ticker: reserve a dedicated label column so the moving
+   items can never slide underneath/overlap the "Latest updates" label. */
+html.light .mos-kinetic-home .naa-updates-strip,
+html.light .naa-home .naa-updates-strip {
+  display:grid !important;
+  grid-template-columns:max-content minmax(0,1fr) !important;
+  align-items:center !important;
+  column-gap:clamp(12px,2vw,24px) !important;
+  overflow:hidden !important;
+  box-sizing:border-box !important;
+  padding:0 clamp(14px,3.5vw,52px) !important;
+  min-width:0 !important;
+}
+html.light .mos-kinetic-home .naa-updates-strip>span,
+html.light .naa-home .naa-updates-strip>span {
+  position:relative !important;
+  z-index:2 !important;
+  display:inline-flex !important;
+  width:max-content !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  flex:none !important;
+  white-space:nowrap !important;
+  padding-right:clamp(10px,1.5vw,22px) !important;
+  margin:0 !important;
+  border-right:1px solid #c7dced !important;
+  background:#eafbff !important;
+}
+html.light .mos-kinetic-home .naa-updates-track,
+html.light .naa-home .naa-updates-track {
+  position:relative !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:clamp(14px,2.4vw,35px) !important;
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  white-space:nowrap !important;
+  margin:0 !important;
+  transform:none !important;
+  animation:naaTicker 38s linear infinite !important;
+}
+html.light .mos-kinetic-home .naa-updates-track>*,
+html.light .naa-home .naa-updates-track>* { flex:0 0 auto !important; }
+html.light .mos-kinetic-home .naa-updates-strip:hover .naa-updates-track,
+html.light .naa-home .naa-updates-strip:hover .naa-updates-track { animation-play-state:paused !important; }
+@media(max-width:620px) {
+  html.light .mos-kinetic-home .naa-updates-strip,
+  html.light .naa-home .naa-updates-strip {
+    grid-template-columns:minmax(0,1fr) !important;
+    row-gap:4px !important;
+    height:auto !important;
+    min-height:58px !important;
+    padding:9px 14px !important;
+    border-radius:16px !important;
+  }
+  html.light .mos-kinetic-home .naa-updates-strip>span,
+  html.light .naa-home .naa-updates-strip>span {
+    border-right:0 !important;
+    padding-right:0 !important;
+    font-size:10px !important;
+  }
+  html.light .mos-kinetic-home .naa-updates-track,
+  html.light .naa-home .naa-updates-track { min-height:18px !important; }
+}
