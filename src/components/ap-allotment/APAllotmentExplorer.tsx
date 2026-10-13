@@ -227,7 +227,6 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
     (AP_EAPCET_CATEGORY_INSIGHTS?.byAllottedQuota ?? [])
       .filter((item: any) => item.totalRecords > 0)
       .sort((a: any, b: any) => b.totalRecords - a.totalRecords)
-      .slice(0, 8)
   ), []);
 
   const currentCollege = selectedCollegeCode !== 'ALL' ? collegeData : null;
