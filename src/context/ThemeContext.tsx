@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
-export type Theme = 'dark';
+export type Theme = 'light' | 'dark';
 
 interface ThemeContextType {
   theme: Theme;
@@ -10,34 +10,50 @@ interface ThemeContextType {
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: 'dark',
-  isDarkMode: true,
+  theme: 'light',
+  isDarkMode: false,
   toggleTheme: () => {},
   setTheme: () => {},
 });
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  useEffect(() => {
-    const root = document.documentElement;
-    root.classList.add('dark');
-    root.classList.remove('light');
-    root.setAttribute('data-theme', 'dark');
-    root.style.colorScheme = 'dark';
+  const [theme, setThemeState] = useState<Theme>('light');
 
+  const applyLightTheme = () => {
+    const root = document.documentElement;
+    root.classList.remove('dark');
+    root.classList.add('light');
+    root.setAttribute('data-theme', 'light');
+    root.style.colorScheme = 'light';
+    document.body?.classList.remove('mos-dark-only');
+    document.body?.classList.add('mos-regional-light');
     try {
-      localStorage.setItem('mos_theme', 'dark');
-      localStorage.setItem('javisak_theme', 'dark');
-      localStorage.setItem('studymacha_theme', 'dark');
+      localStorage.setItem('mos_theme', 'light');
+      localStorage.setItem('javisak_theme', 'light');
+      localStorage.setItem('studymacha_theme', 'light');
     } catch {
-      // Ignore storage restrictions.
+      // Storage can be unavailable in private/restricted browsing.
     }
+  };
+
+  useEffect(() => {
+    applyLightTheme();
   }, []);
 
-  const setTheme = (_theme: Theme) => {};
-  const toggleTheme = () => {};
+  // Naa College is intentionally light-theme-only. Preserve this API for existing
+  // consumers, but never allow a component to turn the site dark again.
+  const setTheme = (_nextTheme: Theme) => {
+    setThemeState('light');
+    applyLightTheme();
+  };
+
+  const toggleTheme = () => {
+    setThemeState('light');
+    applyLightTheme();
+  };
 
   return (
-    <ThemeContext.Provider value={{ theme: 'dark', isDarkMode: true, toggleTheme, setTheme }}>
+    <ThemeContext.Provider value={{ theme: 'light', isDarkMode: false, toggleTheme, setTheme }}>
       {children}
     </ThemeContext.Provider>
   );

@@ -2106,3 +2106,67 @@ body{background-color:var(--mos-page-bg);color:var(--mos-text-primary)}
 #workspace-viewport [class*=shadow-2xl],#workspace-viewport [class*=shadow-xl]{box-shadow:0 12px 35px rgba(35,70,125,.08)}
 #main-header{isolation:isolate}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important}}
+
+
+/* Naa College homepage: retire legacy Kinetic MOS visual treatment. */
+html.light body { background:#f3f8ff !important; color:#17366f !important; }
+html.light #main-header { background:rgba(255,255,255,.98) !important; color:#17366f !important; border-bottom:1px solid #dce8f8 !important; box-shadow:0 4px 18px rgba(15,23,42,.06) !important; }
+html.light #main-header .mos-brand-wordmark, html.light #main-header .mos-header-link, html.light #main-header nav a, html.light #main-header nav button { color:#17366f !important; text-shadow:none !important; }
+html.light #main-header .mos-brand-tagline, html.light #main-header .mos-header-link small { color:#536b91 !important; }
+html.light #main-header .mos-brand-mark { background:#fff !important; border-color:#dce8f8 !important; }
+html.light .mos-tools-dropdown { background:#fff !important; border-color:#dce8f8 !important; box-shadow:0 18px 42px rgba(15,23,42,.12) !important; }
+html.light .mos-tools-dropdown a { color:#17366f !important; }
+html.light .mos-tools-dropdown a:hover { color:#176b9b !important; background:#eafbff !important; }
+html.light .naa-home { background:#f3f8ff !important; color:#17366f !important; }
+html.light .naa-home .naa-hero { background:linear-gradient(120deg,#ffffff 0%,#f0f7ff 60%,#eafbff 100%) !important; color:#17366f !important; }
+html.light .naa-home .naa-hero h1, html.light .naa-home .naa-home-section h2, html.light .naa-home .naa-trust-section h2 { color:#17366f !important; }
+html.light .naa-home .naa-hero-description, html.light .naa-home .naa-home-section p, html.light .naa-home .naa-trust-section p { color:#536b91 !important; }
+html.light .naa-home .naa-home-section, html.light .naa-home .naa-trust-section { background:#f3f8ff !important; color:#17366f !important; border-color:#dce8f8 !important; }
+html.light .naa-home .naa-shortcut, html.light .naa-home .naa-stat { background:#fff !important; color:#17366f !important; border-color:#dce8f8 !important; box-shadow:0 8px 24px rgba(32,83,145,.06) !important; }
+html.light .naa-home .naa-shortcut small, html.light .naa-home .naa-stat small { color:#536b91 !important; }
+html.light .naa-home .naa-updates-strip { background:#eafbff !important; color:#17366f !important; border-color:#dce8f8 !important; }
+html.light .naa-home .naa-section-kicker { color:#176b9b !important; }
+html.light .naa-home #features-hub { background:#f3f8ff !important; color:#17366f !important; }
+html.light .naa-home #features-hub h1, html.light .naa-home #features-hub h2, html.light .naa-home #features-hub h3, html.light .naa-home #features-hub h4 { color:#17366f !important; }
+html.light .naa-home #features-hub p, html.light .naa-home #features-hub label { color:#536b91 !important; }
+html.light .naa-home #features-hub [class*="bg-slate-950"], html.light .naa-home #features-hub [class*="bg-slate-900"], html.light .naa-home #features-hub [class*="bg-gray-950"], html.light .naa-home #features-hub [class*="bg-gray-900"], html.light .naa-home #features-hub [class*="bg-black"] { background:#fff !important; color:#17366f !important; border-color:#dce8f8 !important; }
+html.light .naa-home #features-hub [class*="text-white"], html.light .naa-home #features-hub [class*="text-slate-100"], html.light .naa-home #features-hub [class*="text-slate-200"], html.light .naa-home #features-hub [class*="text-slate-300"] { color:#17366f !important; }
+html.light .naa-home #features-hub [class*="text-slate-400"], html.light .naa-home #features-hub [class*="text-slate-500"] { color:#536b91 !important; }
+html.light .naa-home #features-hub input, html.light .naa-home #features-hub select, html.light .naa-home #features-hub textarea { background:#fff !important; color:#17366f !important; border-color:#cbdcf4 !important; }
+
+
+/* Enforce light surfaces for legacy dark utility classes across the entire site.
+   Only descendants inside legacy dark surfaces have their text normalized, so
+   white text on legitimate blue/teal buttons elsewhere remains unchanged. */
+html.light [class~="bg-black"],
+html.light [class*="bg-slate-950"],
+html.light [class*="bg-slate-900"],
+html.light [class*="bg-slate-800"],
+html.light [class*="bg-gray-950"],
+html.light [class*="bg-gray-900"],
+html.light [class*="bg-gray-800"],
+html.light [class*="bg-zinc-950"],
+html.light [class*="bg-zinc-900"],
+html.light [class*="bg-neutral-950"],
+html.light [class*="bg-neutral-900"] {
+  background-color:#fff !important;
+  color:#172033 !important;
+  border-color:#d9e1ec !important;
+}
+html.light [class*="bg-slate-950"] [class*="text-white"],
+html.light [class*="bg-slate-900"] [class*="text-white"],
+html.light [class*="bg-slate-800"] [class*="text-white"],
+html.light [class*="bg-gray-950"] [class*="text-white"],
+html.light [class*="bg-gray-900"] [class*="text-white"],
+html.light [class*="bg-gray-800"] [class*="text-white"],
+html.light [class*="bg-zinc-950"] [class*="text-white"],
+html.light [class*="bg-zinc-900"] [class*="text-white"],
+html.light [class*="bg-neutral-950"] [class*="text-white"],
+html.light [class*="bg-neutral-900"] [class*="text-white"],
+html.light [class*="bg-slate-950"] [class*="text-slate-100"],
+html.light [class*="bg-slate-900"] [class*="text-slate-100"],
+html.light [class*="bg-gray-900"] [class*="text-slate-100"] {
+  color:#172033 !important;
+}
+html.light body,
+html.light #root { background-color:#f5f9ff; color:#172033; color-scheme:light; }

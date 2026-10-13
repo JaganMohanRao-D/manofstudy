@@ -282,13 +282,14 @@ const addRegionalWorkspaceVisual = () => {
 const syncRegionalTheme = () => {
   if (typeof window === 'undefined') return null;
   const region = getRegionalWorkspace();
-  const regional = region !== null;
-  document.documentElement.classList.toggle('dark', !regional);
-  document.documentElement.classList.toggle('light', regional);
-  document.documentElement.setAttribute('data-theme', regional ? 'light' : 'dark');
-  document.documentElement.style.colorScheme = regional ? 'light' : 'dark';
-  document.body.classList.toggle('mos-regional-light', regional);
-  document.body.classList.toggle('mos-dark-only', !regional);
+  // Naa College uses the bright theme across every route and workspace.
+  // Do not let regional navigation re-enable the legacy dark theme.
+  document.documentElement.classList.remove('dark');
+  document.documentElement.classList.add('light');
+  document.documentElement.setAttribute('data-theme', 'light');
+  document.documentElement.style.colorScheme = 'light';
+  document.body.classList.add('mos-regional-light');
+  document.body.classList.remove('mos-dark-only');
   return region;
 };
 

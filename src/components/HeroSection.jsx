@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { ArrowRight, Search, GraduationCap, Landmark, Wrench, Users, Sparkles, BookOpen, Heart } from 'lucide-react';
 import './kineticMOS.css';
+import { ArrowRight, Search, GraduationCap, Landmark, Wrench, Users, Sparkles, BookOpen, Heart } from 'lucide-react';
 import { FeaturesHub } from './FeaturesHub';
 
 export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
