@@ -2133,3 +2133,32 @@ html.light .naa-home #features-hub [class*="bg-slate-950"], html.light .naa-home
 html.light .naa-home #features-hub [class*="text-white"], html.light .naa-home #features-hub [class*="text-slate-100"], html.light .naa-home #features-hub [class*="text-slate-200"], html.light .naa-home #features-hub [class*="text-slate-300"] { color:#17366f !important; }
 html.light .naa-home #features-hub [class*="text-slate-400"], html.light .naa-home #features-hub [class*="text-slate-500"] { color:#536b91 !important; }
 html.light .naa-home #features-hub input, html.light .naa-home #features-hub select, html.light .naa-home #features-hub textarea { background:#fff !important; color:#17366f !important; border-color:#cbdcf4 !important; }
+
+
+/* Enforce light surfaces for legacy dark utility classes across the entire site.
+   Brand/accent colors and interactive behavior are intentionally untouched. */
+html.light [class~="bg-black"],
+html.light [class*="bg-slate-950"],
+html.light [class*="bg-slate-900"],
+html.light [class*="bg-slate-800"],
+html.light [class*="bg-gray-950"],
+html.light [class*="bg-gray-900"],
+html.light [class*="bg-gray-800"],
+html.light [class*="bg-zinc-950"],
+html.light [class*="bg-zinc-900"],
+html.light [class*="bg-neutral-950"],
+html.light [class*="bg-neutral-900"] {
+  background-color:#fff !important;
+  color:#172033 !important;
+  border-color:#d9e1ec !important;
+}
+html.light [class*="text-white"],
+html.light [class*="text-slate-50"],
+html.light [class*="text-slate-100"],
+html.light [class*="text-slate-200"],
+html.light [class*="text-gray-50"],
+html.light [class*="text-gray-100"],
+html.light [class*="text-zinc-50"],
+html.light [class*="text-zinc-100"] { color:#172033 !important; }
+html.light body,
+html.light #root { background-color:#f5f9ff; color:#172033; color-scheme:light; }
