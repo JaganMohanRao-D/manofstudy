@@ -5,7 +5,6 @@ import {
   X, ArrowUpRight, Clock3, RotateCcw, ChevronDown, Building2, Sparkles,
   MapPin, Wallet, Users, Filter, AlertCircle, FileText
 } from 'lucide-react';
-import { ScholarshipDetailsModal } from './ScholarshipDetailsModal';
 import { ScholarshipDetailPage, scholarshipSlug } from './ScholarshipDetailPage';
 
 export interface IndianScholarship {
@@ -168,7 +167,6 @@ const statusStyles = {
 
 export const ScholarshipsHub: React.FC = () => {
   const [scholarships, setScholarships] = useState<IndianScholarship[]>([]);
-  const [selectedScholarship, setSelectedScholarship] = useState<IndianScholarship | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [mainFilter, setMainFilter] = useState<MainFilter>('all');
@@ -335,12 +333,12 @@ export const ScholarshipsHub: React.FC = () => {
 
   return (
     <section className="mos-scholarships-hub mx-auto w-full max-w-7xl space-y-7 px-3 py-5 text-[var(--mos-text-primary)] sm:px-5 sm:py-8 lg:px-8">
-      <header className="relative overflow-hidden rounded-[24px] border border-[var(--mos-border)] bg-[var(--mos-surface)] p-5 shadow-sm sm:rounded-[28px] sm:p-8 lg:p-10">
-        <div aria-hidden="true" className="pointer-events-none absolute -right-14 -top-20 h-64 w-64 rounded-full bg-emerald-500/[.08] blur-3xl" />
+      <header className="mos-scholarship-hero relative overflow-hidden rounded-[24px] border border-[var(--mos-border)] p-5 shadow-sm sm:rounded-[28px] sm:p-8 lg:p-10">
+        <div aria-hidden="true" className="mos-scholarship-orbit mos-scholarship-orbit-one pointer-events-none absolute -right-14 -top-20 h-64 w-64 rounded-full blur-3xl" /><div aria-hidden="true" className="mos-scholarship-orbit mos-scholarship-orbit-two pointer-events-none absolute -bottom-24 right-1/3 h-40 w-40 rounded-full blur-3xl" />
         <div className="relative max-w-4xl">
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[.14em] text-emerald-700 dark:text-emerald-300"><Sparkles className="h-3.5 w-3.5" /> Scholarship finder · 2026–27</div>
-          <h1 className="mt-4 max-w-3xl text-3xl font-black leading-tight tracking-tight sm:text-4xl lg:text-5xl">Find funding for <span className="text-emerald-600 dark:text-emerald-300">what comes next.</span></h1>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--mos-text-secondary)] sm:text-base">Explore scholarships, understand the published benefit, and follow the provider’s application instructions. No images, no clutter—just the details students need.</p>
+          <h1 className="mt-4 max-w-3xl text-3xl font-black leading-tight tracking-tight sm:text-4xl lg:text-5xl">Big dreams deserve <span className="mos-scholarship-gradient-text">opportunities.</span></h1>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--mos-text-secondary)] sm:text-base">Discover scholarships, understand your options, and find funding opportunities for your educational journey.</p>
           <div className="mt-6 flex flex-wrap items-center gap-2 text-xs text-[var(--mos-text-muted)]"><span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-3 py-1.5"><ShieldCheck className="h-3.5 w-3.5 text-emerald-600" /> Official-source links where available</span><span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-3 py-1.5"><Bookmark className="h-3.5 w-3.5" /> Save for later</span></div>
         </div>
         <div className="relative mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -351,12 +349,12 @@ export const ScholarshipsHub: React.FC = () => {
         </div>
       </header>
 
-      <section className="sticky top-2 z-30 rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface)]/95 p-3 shadow-lg backdrop-blur-xl sm:p-4" aria-label="Scholarship search and filters">
-        <div className="flex flex-col gap-3 sm:flex-row">
+      <section className="mos-scholarship-controls rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface)] p-3 shadow-sm sm:p-4" aria-label="Scholarship search and filters">
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(280px,1.15fr)_auto] lg:items-start">
           <div className="relative min-w-0 flex-1"><Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--mos-text-muted)]" /><input aria-label="Search scholarships by name, provider or tag" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search scholarship, provider, B.Tech, merit…" className="w-full rounded-xl border border-[var(--mos-input-border)] bg-[var(--mos-input-bg)] py-3 pl-10 pr-10 text-sm text-[var(--mos-text-primary)] outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20" />{searchQuery && <button type="button" onClick={() => setSearchQuery('')} aria-label="Clear search" className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-[var(--mos-text-muted)] hover:bg-[var(--mos-surface-muted)] focus-visible:outline-2 focus-visible:outline-emerald-500"><X className="h-4 w-4" /></button>}</div>
           <button type="button" onClick={() => { setShowSaved(v => !v); setMainFilter('all'); }} className={'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-emerald-500 ' + (showSaved ? 'border-emerald-500 bg-emerald-500 text-white' : 'border-[var(--mos-border)] bg-[var(--mos-surface-muted)] hover:border-emerald-500/50')}><BookmarkCheck className="h-4 w-4" /> Saved <span className="rounded-full bg-black/5 px-1.5 py-0.5 text-xs dark:bg-white/10">{savedIds.length}</span></button>
           <button type="button" onClick={() => setShowMobileFilters(true)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-4 text-sm font-semibold transition hover:border-emerald-500/50 focus-visible:outline-2 focus-visible:outline-emerald-500 sm:hidden"><Filter className="h-4 w-4" /> Filters {filterCount > 0 && <span className="rounded-full bg-emerald-600 px-1.5 py-0.5 text-[10px] text-white">{filterCount}</span>}</button>
-          <div className="hidden sm:block sm:w-full">{filterControls}</div>
+          <div className="hidden min-w-0 sm:block lg:col-span-2">{filterControls}</div>
         </div>
         <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-[var(--mos-border)] pt-3">
           {[{ id: 'all' as MainFilter, label: 'All scholarships' }, { id: 'open' as MainFilter, label: 'Open' }, { id: 'closing' as MainFilter, label: 'Closing soon' }, { id: 'expired' as MainFilter, label: 'Expired' }, { id: 'saved' as MainFilter, label: 'Saved' }].map(tab => <button type="button" key={tab.id} onClick={() => { setMainFilter(tab.id); if (tab.id === 'saved') setShowSaved(false); }} className={'rounded-full px-3 py-1.5 text-xs font-semibold transition focus-visible:outline-2 focus-visible:outline-emerald-500 ' + (mainFilter === tab.id ? 'bg-emerald-600 text-white shadow-sm' : 'text-[var(--mos-text-secondary)] hover:bg-[var(--mos-surface-muted)]')}>{tab.label}</button>)}
@@ -378,14 +376,14 @@ export const ScholarshipsHub: React.FC = () => {
             const saved = savedIds.includes(s.id);
             const level = inferLevel(s).map(x => ({ school: 'School', intermediate: 'Intermediate', diploma: 'Diploma', undergraduate: 'UG / B.Tech', postgraduate: 'PG' }[x])).join(' · ');
             const tags = (s.tags && s.tags.length ? s.tags : [s.category, ...(isExclusivelyForGirls(s) ? ['Girls'] : []), ...( /engineer|b\\.tech|technical|diploma/i.test(s.title + ' ' + s.target) ? ['Engineering'] : [] )]).slice(0, 3);
-            return <article key={s.id} className="group flex min-w-0 flex-col rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface)] shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-emerald-500/40 hover:shadow-lg motion-reduce:transform-none motion-reduce:transition-none">
+            return <article key={s.id} className="mos-scholarship-card group flex min-w-0 flex-col rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface)] shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-emerald-500/40 hover:shadow-lg motion-reduce:transform-none motion-reduce:transition-none">
               <div className="flex-1 p-4 sm:p-5">
                 <div className="flex items-start gap-3">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/10 text-sm font-black text-emerald-700 dark:text-emerald-300" aria-hidden="true">{(s.provider || 'S').trim().charAt(0).toUpperCase()}</div>
                   <div className="min-w-0 flex-1"><p className="truncate text-xs font-semibold text-[var(--mos-text-muted)]" title={s.provider}>{s.provider}</p><div className="mt-1 flex flex-wrap gap-1.5">{tags.slice(0, 2).map(tag => <span key={tag} className="rounded-md border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-2 py-0.5 text-[10px] font-medium text-[var(--mos-text-secondary)]">{tag}</span>)}{s.dateAdded && !Number.isNaN(new Date(s.dateAdded).getTime()) && (Date.now() - new Date(s.dateAdded).getTime() < 14 * 86400000) && <span className="inline-flex items-center gap-1 rounded-md bg-sky-500/10 px-2 py-0.5 text-[10px] font-bold text-sky-700 dark:text-sky-300"><Sparkles className="h-3 w-3" /> New</span>}</div></div>
                   <button type="button" onClick={() => toggleSaved(s.id)} aria-label={saved ? 'Remove ' + s.title + ' from saved scholarships' : 'Save ' + s.title} aria-pressed={saved} title={saved ? 'Saved' : 'Save scholarship'} className={'rounded-lg border p-2 transition focus-visible:outline-2 focus-visible:outline-emerald-500 ' + (saved ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600' : 'border-transparent text-[var(--mos-text-muted)] hover:border-[var(--mos-border)] hover:bg-[var(--mos-surface-muted)]')}><Bookmark className="h-4 w-4" fill={saved ? 'currentColor' : 'none'} /></button>
                 </div>
-                <h3 className="mt-4 line-clamp-2 min-h-[3.25rem] text-base font-bold leading-6 tracking-tight text-[var(--mos-text-primary)]">{s.title}</h3>
+                <h3 className="mt-4 min-h-[3.25rem] text-base font-extrabold leading-6 tracking-tight text-[var(--mos-text-primary)] sm:text-lg">{s.title}</h3>
                 <div className="mt-3 flex items-start gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/[.06] p-3"><Wallet className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-300" /><div className="min-w-0"><p className="text-[10px] font-bold uppercase tracking-[.12em] text-emerald-700 dark:text-emerald-300">Benefit / award</p><p className="mt-1 break-words text-sm font-bold leading-5 text-[var(--mos-text-primary)]">{s.amount || 'Amount not confirmed from an official source'}</p></div></div>
                 <div className="mt-3 space-y-2 text-xs text-[var(--mos-text-secondary)]">
                   <p className="flex items-start gap-2"><GraduationCap className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--mos-text-muted)]" /><span className="line-clamp-2">{level || 'Education level depends on scheme rules'}</span></p>
@@ -398,8 +396,8 @@ export const ScholarshipsHub: React.FC = () => {
                 </div>
                 {state === 'closing' && <div className="mt-2 text-[11px] font-semibold text-amber-700 dark:text-amber-300">Deadline is within the next 7 days — verify before applying.</div>}
               </div>
-              <div className="grid grid-cols-2 gap-2 border-t border-[var(--mos-border)] p-3.5">
-                <button type="button" onClick={() => setSelectedScholarship(s)} className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-3 py-2.5 text-xs font-bold transition hover:border-emerald-500/40 hover:bg-emerald-500/5 focus-visible:outline-2 focus-visible:outline-emerald-500">View details <ChevronDown className="h-3.5 w-3.5" /></button>
+              <div className="grid grid-cols-1 gap-2 border-t border-[var(--mos-border)] p-4 sm:grid-cols-2">
+                <a href={'/scholarships/' + scholarshipSlug(s.title) + '/'} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border border-sky-500/25 bg-sky-500/[.07] px-3 py-2.5 text-xs font-bold text-[var(--mos-text-primary)] transition hover:border-sky-500/50 hover:bg-sky-500/10 focus-visible:outline-2 focus-visible:outline-sky-500">View Full Details <ArrowUpRight className="h-3.5 w-3.5" /></a>
                 {externalUrl(s.official_source_url || s.apply_link) ? <a href={s.official_source_url || s.apply_link} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-2.5 text-xs font-bold text-white transition hover:bg-emerald-500 active:scale-[.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500">{s.official_source_url ? 'Apply now' : 'Open listing'} <ExternalLink className="h-3.5 w-3.5" /></a> : <button type="button" disabled className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-[var(--mos-surface-muted)] px-3 py-2.5 text-xs font-bold text-[var(--mos-text-muted)]" title="No valid application URL is available">Link unavailable</button>}
                 <button type="button" onClick={() => shareScholarship(s)} className="inline-flex items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-xs font-semibold text-[var(--mos-text-muted)] transition hover:bg-[var(--mos-surface-muted)] hover:text-[var(--mos-text-primary)] focus-visible:outline-2 focus-visible:outline-emerald-500"><Share2 className="h-3.5 w-3.5" /> Share</button>
                 <button type="button" onClick={() => copyText('https://naacollege.in/scholarships/' + scholarshipSlug(s.title) + '/', s)} className="inline-flex items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-xs font-semibold text-[var(--mos-text-muted)] transition hover:bg-[var(--mos-surface-muted)] hover:text-[var(--mos-text-primary)] focus-visible:outline-2 focus-visible:outline-emerald-500">{copiedId === s.id ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}{copiedId === s.id ? 'Copied link' : 'Copy link'}</button>
@@ -414,7 +412,6 @@ export const ScholarshipsHub: React.FC = () => {
 
       {showMobileFilters && <div className="fixed inset-0 z-[9998] sm:hidden" role="dialog" aria-modal="true" aria-label="Scholarship filters"><button type="button" aria-label="Close filters" onClick={() => setShowMobileFilters(false)} className="absolute inset-0 bg-slate-950/55 backdrop-blur-sm" /><div className="absolute inset-x-0 bottom-0 max-h-[88dvh] overflow-y-auto rounded-t-3xl border border-[var(--mos-border)] bg-[var(--mos-surface)] p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-2xl"><div className="flex items-center justify-between gap-3"><div><h2 className="text-lg font-bold">Filters</h2><p className="mt-1 text-xs text-[var(--mos-text-muted)]">Narrow the list to what matters to you.</p></div><button type="button" onClick={() => setShowMobileFilters(false)} aria-label="Close filters" className="rounded-xl border border-[var(--mos-border)] p-2"><X className="h-4 w-4" /></button></div><div className="mt-5">{filterControls}</div><div className="mt-5 grid grid-cols-2 gap-3"><button type="button" onClick={() => { clearFilters(); setShowMobileFilters(false); }} className="rounded-xl border border-[var(--mos-border)] px-4 py-3 text-sm font-semibold">Clear all</button><button type="button" onClick={() => setShowMobileFilters(false)} className="rounded-xl bg-emerald-600 px-4 py-3 text-sm font-bold text-white">Show {filtered.length} results</button></div></div></div>}
 
-      {selectedScholarship && <ScholarshipDetailsModal scholarship={selectedScholarship} onClose={() => setSelectedScholarship(null)} />}
     </section>
   );
 };
