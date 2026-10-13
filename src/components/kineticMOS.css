@@ -680,3 +680,21 @@ body:has(.naa-home) .max-w-7xl.mx-auto.my-6 span {
   body:has(.naa-home) .mos-k-nav { width: 100% !important; margin: 0 !important; border-radius: 0 !important; }
   body:has(.naa-home) #features-hub > div { padding-left: 20px !important; padding-right: 20px !important; }
 }
+
+
+/* Scoped readability safeguards for Naa College's bright theme. */
+html.light body { background-color:#f3f8ff; color:#17366f; }
+html.light #global-gpa-hub-tool [class*="from-indigo-950"],html.light #global-gpa-hub-tool [class*="via-slate-900"],html.light #global-gpa-hub-tool [class*="to-slate-950"] { background:linear-gradient(120deg,#eaf2ff 0%,#f5f9ff 55%,#eafbff 100%) !important; border-color:#d4e3f8 !important; color:#17366f !important; }
+html.light #global-gpa-hub-tool [class*="from-indigo-950"] h1,html.light #global-gpa-hub-tool [class*="from-indigo-950"] h2,html.light #global-gpa-hub-tool [class*="from-indigo-950"] h3,html.light #global-gpa-hub-tool [class*="from-indigo-950"] p,html.light #global-gpa-hub-tool [class*="from-indigo-950"] span { color:#17366f !important; }
+html.light #global-gpa-hub-tool [class*="text-indigo-300"],html.light #global-gpa-hub-tool [class*="text-indigo-400"] { color:#315fa8 !important; }
+html.light #mock-test-series { color:#17366f; }
+html.light #mock-test-series > div:first-child { background:linear-gradient(120deg,#f3f8ff 0%,#fff 65%,#eafbff 100%); border-color:#d7e5f8; color:#17366f; }
+html.light #mock-test-series h1,html.light #mock-test-series h2,html.light #mock-test-series h3 { color:#17366f; }
+html.light #mock-test-series p { color:#536b91; }
+html.light #major-projects-hub,html.light [data-workspace="major-projects"] { color:#17366f; }
+html.light #major-projects-hub [class*="bg-gradient-to-br"],html.light [data-workspace="major-projects"] [class*="bg-gradient-to-br"] { background:linear-gradient(120deg,#eaf2ff,#f5f9ff 70%,#eafbff) !important; border-color:#d7e5f8 !important; color:#17366f !important; }
+html.light #major-projects-hub [class*="bg-gradient-to-br"] h1,html.light #major-projects-hub [class*="bg-gradient-to-br"] h2,html.light #major-projects-hub [class*="bg-gradient-to-br"] p,html.light [data-workspace="major-projects"] [class*="bg-gradient-to-br"] h1,html.light [data-workspace="major-projects"] [class*="bg-gradient-to-br"] h2,html.light [data-workspace="major-projects"] [class*="bg-gradient-to-br"] p { color:#17366f !important; }
+html.light #mock-test-series [class*="text-slate-100"],html.light #mock-test-series [class*="text-slate-200"],html.light #mock-test-series [class*="text-slate-300"],html.light #global-gpa-hub-tool [class*="text-slate-100"],html.light #global-gpa-hub-tool [class*="text-slate-200"],html.light #global-gpa-hub-tool [class*="text-slate-300"],html.light #major-projects-hub [class*="text-slate-100"],html.light #major-projects-hub [class*="text-slate-200"],html.light #major-projects-hub [class*="text-slate-300"] { color:#536b91 !important; }
+html.light #mock-test-series input,html.light #mock-test-series select,html.light #mock-test-series textarea,html.light #global-gpa-hub-tool input,html.light #global-gpa-hub-tool select,html.light #global-gpa-hub-tool textarea { background-color:#fff; color:#17366f; border-color:#cbdcf4; }
+html.light #mock-test-series input::placeholder,html.light #mock-test-series textarea::placeholder,html.light #global-gpa-hub-tool input::placeholder,html.light #global-gpa-hub-tool textarea::placeholder { color:#647da4; opacity:1; }
+html.light :where(button,a,input,select,textarea):focus-visible { outline:3px solid #2878f0; outline-offset:2px; }
