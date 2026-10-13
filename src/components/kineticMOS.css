@@ -680,3 +680,63 @@ body:has(.naa-home) .max-w-7xl.mx-auto.my-6 span {
   body:has(.naa-home) .mos-k-nav { width: 100% !important; margin: 0 !important; border-radius: 0 !important; }
   body:has(.naa-home) #features-hub > div { padding-left: 20px !important; padding-right: 20px !important; }
 }
+
+
+/* Follow-up: remaining homepage editorial sections and their text contrast. */
+body:has(.naa-home) .naa-home-section,
+body:has(.naa-home) .naa-home-section > div,
+body:has(.naa-home) .naa-home-section section,
+body:has(.naa-home) .naa-home-section article,
+body:has(.naa-home) .naa-home-section [class*="bg-slate-950"],
+body:has(.naa-home) .naa-home-section [class*="bg-slate-900"],
+body:has(.naa-home) .naa-home-section [class*="bg-gray-900"],
+body:has(.naa-home) .naa-home-section [class*="bg-zinc-900"],
+body:has(.naa-home) .naa-home-section [class*="bg-black"],
+body:has(.naa-home) .naa-home-section [class*="bg-white/[.04]"],
+body:has(.naa-home) .naa-home-section [class*="bg-white/[0.04]"] {
+  background-color: #ffffff !important;
+  color: #17366f !important;
+  border-color: #dce8f8 !important;
+}
+body:has(.naa-home) .naa-home-section:nth-of-type(even),
+body:has(.naa-home) .naa-home-section:nth-of-type(even) > div {
+  background-color: #f3f8ff !important;
+}
+body:has(.naa-home) .naa-home-section h1,
+body:has(.naa-home) .naa-home-section h2,
+body:has(.naa-home) .naa-home-section h3,
+body:has(.naa-home) .naa-home-section h4,
+body:has(.naa-home) .naa-home-section [class*="text-white"],
+body:has(.naa-home) .naa-home-section [class*="text-slate-100"],
+body:has(.naa-home) .naa-home-section [class*="text-slate-200"],
+body:has(.naa-home) .naa-home-section [class*="text-slate-300"] {
+  color: #17366f !important;
+}
+body:has(.naa-home) .naa-home-section p,
+body:has(.naa-home) .naa-home-section li,
+body:has(.naa-home) .naa-home-section label,
+body:has(.naa-home) .naa-home-section [class*="text-slate-400"],
+body:has(.naa-home) .naa-home-section [class*="text-slate-500"],
+body:has(.naa-home) .naa-home-section [class*="text-gray-400"] {
+  color: #536b91 !important;
+}
+body:has(.naa-home) .naa-home-section a:not([class*="bg-blue-"]):not([class*="bg-cyan-"]),
+body:has(.naa-home) .naa-home-section button:not([class*="bg-blue-"]):not([class*="bg-cyan-"]) {
+  color: #2878f0;
+}
+body:has(.naa-home) .naa-home-section input,
+body:has(.naa-home) .naa-home-section select,
+body:has(.naa-home) .naa-home-section textarea {
+  background: #fff !important;
+  color: #17366f !important;
+  border-color: #cbdcf4 !important;
+}
+body:has(.naa-home) .naa-home-section input::placeholder,
+body:has(.naa-home) .naa-home-section textarea::placeholder {
+  color: #647da4 !important;
+  opacity: 1;
+}
+body:has(.naa-home) .naa-home-section [class*="bg-gradient-to-"] {
+  background-image: linear-gradient(135deg, #f3f8ff, #eafbff) !important;
+  color: #17366f !important;
+}
