@@ -957,3 +957,29 @@ html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-experience-faq [class
 html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-experience-faq [class*="text-slate-300"] {
   color: #536b91 !important;
 }
+
+
+/* Accent text must meet AA on the light homepage; keep brighter blue for
+   decorative borders/icons, and use a deeper blue for small text labels. */
+html.light body:has(.naa-home) .mos-k-homepage-flow {
+  --mk-accent: #1d4ed8;
+}
+
+html.light body:has(.naa-home) .naa-home .naa-section-kicker,
+html.light body:has(.naa-home) .naa-home .naa-section-heading h2 span,
+html.light body:has(.naa-home) .naa-home .naa-trust-section h2 span {
+  color: #1d4ed8 !important;
+}
+
+html.light body:has(.naa-home) .naa-home .naa-hero h1 span {
+  background: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  color: #1d4ed8 !important;
+  -webkit-text-fill-color: #1d4ed8 !important;
+}
+
+html.light body:has(.naa-home) .naa-home .naa-section-heading p span,
+html.light body:has(.naa-home) .naa-updates-track i {
+  color: #8a4b08 !important;
+}
