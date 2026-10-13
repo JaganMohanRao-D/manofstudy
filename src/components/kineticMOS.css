@@ -978,3 +978,81 @@ html.light .mos-kinetic-home #features-hub select { background:#fff !important; 
 html.light .mos-kinetic-home .mos-k-faq input::placeholder,
 html.light .mos-kinetic-home .mos-k-guide input::placeholder,
 html.light .mos-kinetic-home #features-hub input::placeholder { color:#647b9e !important; opacity:1; }
+
+
+/* Final targeted pass for the exact remaining homepage sections reported by visual review.
+   The original Kinetic rules above still set these sections to #08090b/#0c0d10,
+   so explicitly override their legacy parent selector and descendants. */
+html.light .mos-k-homepage-flow .mos-k-guide,
+html.light .mos-k-homepage-flow .mos-k-faq,
+html.light .mos-k-homepage-flow .mos-k-feature-hub {
+  background:#f3f8ff !important;
+  background-color:#f3f8ff !important;
+  color:#17366f !important;
+  border-color:#dce8f8 !important;
+  font-family:inherit !important;
+}
+html.light .mos-k-homepage-flow .mos-k-guide h1,
+html.light .mos-k-homepage-flow .mos-k-guide h2,
+html.light .mos-k-homepage-flow .mos-k-guide h3,
+html.light .mos-k-homepage-flow .mos-k-faq h1,
+html.light .mos-k-homepage-flow .mos-k-faq h2,
+html.light .mos-k-homepage-flow .mos-k-faq h3,
+html.light .mos-k-homepage-flow .mos-k-feature-hub h1,
+html.light .mos-k-homepage-flow .mos-k-feature-hub h2,
+html.light .mos-k-homepage-flow .mos-k-feature-hub h3,
+html.light .mos-k-homepage-flow .mos-k-feature-hub h4 {
+  color:#17366f !important;
+  font-family:inherit !important;
+}
+html.light .mos-k-homepage-flow .mos-k-guide p,
+html.light .mos-k-homepage-flow .mos-k-faq p,
+html.light .mos-k-homepage-flow .mos-k-feature-hub p,
+html.light .mos-k-homepage-flow .mos-k-guide li,
+html.light .mos-k-homepage-flow .mos-k-faq li { color:#536b91 !important; }
+html.light .mos-k-homepage-flow .mos-k-guide [class*="rounded-2xl"],
+html.light .mos-k-homepage-flow .mos-k-guide [class*="rounded-xl"],
+html.light .mos-k-homepage-flow .mos-k-faq>div,
+html.light .mos-k-homepage-flow .mos-k-faq [class*="bg-"],
+html.light .mos-k-homepage-flow .mos-k-feature-hub [class*="rounded-2xl"],
+html.light .mos-k-homepage-flow .mos-k-feature-hub [class*="rounded-xl"] {
+  background:#fff !important;
+  background-color:#fff !important;
+  color:#17366f !important;
+  border-color:#dce8f8 !important;
+  box-shadow:0 8px 24px rgba(32,83,145,.06) !important;
+}
+html.light .mos-k-homepage-flow .mos-k-faq button,
+html.light .mos-k-homepage-flow .mos-k-guide button,
+html.light .mos-k-homepage-flow .mos-k-feature-hub button {
+  background-color:#fff !important;
+  color:#17366f !important;
+  border-color:#dce8f8 !important;
+}
+html.light .mos-k-homepage-flow .mos-k-faq [class*="text-white"],
+html.light .mos-k-homepage-flow .mos-k-guide [class*="text-white"],
+html.light .mos-k-homepage-flow .mos-k-feature-hub [class*="text-white"],
+html.light .mos-k-homepage-flow .mos-k-faq [class*="text-slate-100"],
+html.light .mos-k-homepage-flow .mos-k-guide [class*="text-slate-100"],
+html.light .mos-k-homepage-flow .mos-k-feature-hub [class*="text-slate-100"] { color:#17366f !important; }
+html.light .mos-k-homepage-flow .mos-k-faq input,
+html.light .mos-k-homepage-flow .mos-k-guide input,
+html.light .mos-k-homepage-flow .mos-k-feature-hub input,
+html.light .mos-k-homepage-flow .mos-k-faq textarea,
+html.light .mos-k-homepage-flow .mos-k-guide textarea {
+  background:#fff !important; color:#17366f !important; border-color:#cbdcf4 !important;
+}
+html.light .mos-k-homepage-flow .mos-k-faq input::placeholder,
+html.light .mos-k-homepage-flow .mos-k-guide input::placeholder { color:#647b9e !important; opacity:1; }
+
+/* Explicitly target the "Why Naa College" trust block and "Before you use a tool" guide. */
+html.light .mos-k-homepage-flow .naa-trust-section,
+html.light .mos-k-homepage-flow section.naa-trust-section,
+html.light .mos-k-homepage-flow [aria-label*="Why Naa College"],
+html.light .mos-k-homepage-flow [aria-label*="Before you use a tool"] {
+  background:#eafbff !important; background-color:#eafbff !important; color:#17366f !important;
+}
+html.light .mos-k-homepage-flow .naa-trust-section h2,
+html.light .mos-k-homepage-flow .naa-trust-section h2 span,
+html.light .mos-k-homepage-flow .naa-trust-section h3 { color:#17366f !important; }
+html.light .mos-k-homepage-flow .naa-trust-section p { color:#536b91 !important; }
