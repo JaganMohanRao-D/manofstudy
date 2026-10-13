@@ -53,7 +53,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
               fetchPriority="high"
               decoding="async"
             />
-          </div>>
+          </div>
         </div>
       </section>
 
