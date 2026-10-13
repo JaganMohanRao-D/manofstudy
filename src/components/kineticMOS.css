@@ -48,17 +48,17 @@
 .mos-kinetic-home #features-hub .rounded-xl,
 .mos-kinetic-home #features-hub .rounded-2xl{border-radius:0!important;box-shadow:none!important}
 .mos-kinetic-home #features-hub .bg-white,
-.mos-kinetic-home #features-hub .dark\\:bg-slate-900\/80,
-.mos-kinetic-home #features-hub .dark\\:bg-slate-900\/75,
-.mos-kinetic-home #features-hub .dark\\:bg-slate-950\/50{background:#0c0d10!important}
+.mos-kinetic-home #features-hub .dark\:bg-slate-900\/80,
+.mos-kinetic-home #features-hub .dark\:bg-slate-900\/75,
+.mos-kinetic-home #features-hub .dark\:bg-slate-950\/50{background:#0c0d10!important}
 .mos-kinetic-home #features-hub section{border-color:var(--mk-line)!important}
 .mos-kinetic-home #features-hub button:hover{transform:none!important}
 .mos-kinetic-home #features-hub .text-slate-900,
-.mos-kinetic-home #features-hub .dark\\:text-white{color:#f1f1ed!important}
+.mos-kinetic-home #features-hub .dark\:text-white{color:#f1f1ed!important}
 .mos-kinetic-home #features-hub .text-slate-500,
-.mos-kinetic-home #features-hub .dark\\:text-slate-400{color:#888c93!important}
+.mos-kinetic-home #features-hub .dark\:text-slate-400{color:#888c93!important}
 .mos-kinetic-home #features-hub .text-cyan-600,
-.mos-kinetic-home #features-hub .dark\\:text-cyan-300{color:var(--mk-accent)!important}
+.mos-kinetic-home #features-hub .dark\:text-cyan-300{color:var(--mk-accent)!important}
 .mos-k-tool-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--mk-line);border-left:1px solid var(--mk-line)}
 .mos-k-tool-grid>*{border-right:1px solid var(--mk-line);border-bottom:1px solid var(--mk-line);min-height:180px}
 .mos-k-footer{background:#08090b!important;border-top:1px solid var(--mk-line)!important;color:#8d9198!important;margin-top:0!important}
@@ -883,11 +883,11 @@ html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card::before {
 }
 
 html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card:hover .text-slate-900,
-html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card:hover .dark\\:text-slate-100,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card:hover .dark\:text-slate-100,
 html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card:hover .text-slate-600,
-html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card:hover .dark\\:text-slate-300,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card:hover .dark\:text-slate-300,
 html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card:hover .text-sky-700,
-html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card:hover .dark\\:text-sky-400,
+html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card:hover .dark\:text-sky-400,
 html.light body:has(.naa-home) .mos-k-homepage-flow .mos-k-review-card:hover .text-slate-400 {
   color: #17366f !important;
 }
