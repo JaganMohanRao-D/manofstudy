@@ -2136,7 +2136,8 @@ html.light .naa-home #features-hub input, html.light .naa-home #features-hub sel
 
 
 /* Enforce light surfaces for legacy dark utility classes across the entire site.
-   Brand/accent colors and interactive behavior are intentionally untouched. */
+   Only descendants inside legacy dark surfaces have their text normalized, so
+   white text on legitimate blue/teal buttons elsewhere remains unchanged. */
 html.light [class~="bg-black"],
 html.light [class*="bg-slate-950"],
 html.light [class*="bg-slate-900"],
@@ -2152,13 +2153,20 @@ html.light [class*="bg-neutral-900"] {
   color:#172033 !important;
   border-color:#d9e1ec !important;
 }
-html.light [class*="text-white"],
-html.light [class*="text-slate-50"],
-html.light [class*="text-slate-100"],
-html.light [class*="text-slate-200"],
-html.light [class*="text-gray-50"],
-html.light [class*="text-gray-100"],
-html.light [class*="text-zinc-50"],
-html.light [class*="text-zinc-100"] { color:#172033 !important; }
+html.light [class*="bg-slate-950"] [class*="text-white"],
+html.light [class*="bg-slate-900"] [class*="text-white"],
+html.light [class*="bg-slate-800"] [class*="text-white"],
+html.light [class*="bg-gray-950"] [class*="text-white"],
+html.light [class*="bg-gray-900"] [class*="text-white"],
+html.light [class*="bg-gray-800"] [class*="text-white"],
+html.light [class*="bg-zinc-950"] [class*="text-white"],
+html.light [class*="bg-zinc-900"] [class*="text-white"],
+html.light [class*="bg-neutral-950"] [class*="text-white"],
+html.light [class*="bg-neutral-900"] [class*="text-white"],
+html.light [class*="bg-slate-950"] [class*="text-slate-100"],
+html.light [class*="bg-slate-900"] [class*="text-slate-100"],
+html.light [class*="bg-gray-900"] [class*="text-slate-100"] {
+  color:#172033 !important;
+}
 html.light body,
 html.light #root { background-color:#f5f9ff; color:#172033; color-scheme:light; }
