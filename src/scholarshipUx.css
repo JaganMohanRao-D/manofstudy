@@ -1,21 +1,26 @@
-/* Naa College Scholarships Hub — joyful, responsive, accessible design layer. */
+/* Naa College shared visual tokens and joyful Scholarships Hub styling.
+   Scoped to the hub to protect unrelated production modules. */
+:root{--naa-blue:#2563eb;--naa-teal:#0f9f9a;--naa-mint:#d1fae5;--naa-sunshine:#fef3c7;--naa-coral:#fb7185;--naa-lavender:#ede9fe;--naa-cream:#fffdf6}
 .mos-scholarships-hub,.mos-scholarships-hub *{box-sizing:border-box}
-.mos-scholarships-hub{--scholarship-blue:#2563eb;--scholarship-mint:#d1fae5;--scholarship-sun:#fef3c7;--scholarship-lilac:#ede9fe}
-.mos-scholarship-hero{background:radial-gradient(ellipse at 92% 6%,rgba(125,211,252,.25),transparent 36%),radial-gradient(ellipse at 72% 92%,rgba(167,243,208,.30),transparent 34%),linear-gradient(125deg,#fffdf6 0%,#f0f9ff 52%,#f0fdf4 100%);border-color:#dbeafe!important}
-.dark .mos-scholarship-hero{background:radial-gradient(ellipse at 92% 6%,rgba(14,165,233,.15),transparent 36%),radial-gradient(ellipse at 72% 92%,rgba(16,185,129,.12),transparent 34%),var(--mos-surface);border-color:var(--mos-border)!important}
+.mos-scholarships-hub{--scholarship-blue:var(--naa-blue);--scholarship-mint:var(--naa-mint);--scholarship-sun:var(--naa-sunshine);--scholarship-lilac:var(--naa-lavender);min-width:0}
+.mos-scholarship-hero{isolation:isolate;background:radial-gradient(ellipse at 92% 6%,rgba(125,211,252,.28),transparent 34%),radial-gradient(ellipse at 72% 92%,rgba(167,243,208,.34),transparent 35%),linear-gradient(125deg,#fffdf6 0%,#f0f9ff 52%,#f0fdf4 100%);border-color:#dbeafe!important}
+.dark .mos-scholarship-hero{background:radial-gradient(ellipse at 92% 6%,rgba(14,165,233,.18),transparent 36%),radial-gradient(ellipse at 72% 92%,rgba(16,185,129,.14),transparent 34%),var(--mos-surface);border-color:var(--mos-border)!important}
 .mos-scholarship-gradient-text{color:#059669;background:linear-gradient(95deg,#0284c7 0%,#059669 60%,#65a30d 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .dark .mos-scholarship-gradient-text{background-image:linear-gradient(95deg,#7dd3fc 0%,#6ee7b7 60%,#bef264 100%)}
-.mos-scholarship-orbit{border-radius:9999px;filter:blur(38px)}.mos-scholarship-orbit-one{background:rgba(56,189,248,.18)}.mos-scholarship-orbit-two{background:rgba(251,191,36,.16)}
-.mos-scholarship-controls{position:relative;z-index:1}
+.mos-scholarship-orbit{border-radius:9999px;filter:blur(38px)}.mos-scholarship-orbit-one{background:rgba(56,189,248,.2)}.mos-scholarship-orbit-two{background:rgba(251,191,36,.18)}
 .mos-scholarships-hub input,.mos-scholarships-hub select,.mos-scholarships-hub button,.mos-scholarships-hub a{min-width:0}
-.mos-scholarships-hub input[type="text"],.mos-scholarships-hub input:not([type]){width:100%;min-height:46px;box-sizing:border-box}
-.mos-scholarships-hub input::placeholder{opacity:1;color:var(--mos-text-muted)}
-.mos-scholarships-hub label{min-width:0}.mos-scholarships-hub select{max-width:100%;text-overflow:ellipsis}
-.mos-scholarships-hub .mos-scholarship-card{overflow:visible;border-radius:22px;background:var(--mos-surface)}
+.mos-scholarships-hub label{min-width:0}.mos-scholarships-hub select{width:100%;max-width:100%;min-height:44px;text-overflow:ellipsis}
+.mos-scholarship-controls{position:relative;z-index:1}.mos-scholarship-search{isolation:isolate}
+.mos-scholarships-hub .mos-scholarship-search-input{display:block;width:100%;min-width:0;height:48px;min-height:48px;max-width:100%;padding:0 42px;border-radius:14px;font:inherit;font-size:14px;line-height:1.4;color:var(--mos-text-primary)!important;-webkit-text-fill-color:var(--mos-text-primary);background-color:var(--mos-input-bg)!important;caret-color:var(--mos-text-primary);opacity:1;box-shadow:none}
+.mos-scholarships-hub .mos-scholarship-search-input::placeholder{color:var(--mos-text-muted)!important;-webkit-text-fill-color:var(--mos-text-muted);opacity:1}
+.mos-scholarships-hub .mos-scholarship-search-input:focus-visible{outline:2px solid var(--naa-blue);outline-offset:2px}
+.mos-scholarships-hub .mos-scholarship-card{min-width:0;overflow:visible;border-radius:22px;background:var(--mos-surface);box-shadow:0 2px 8px rgba(15,23,42,.035)}
 .mos-scholarships-hub .mos-scholarship-card>div:first-child{min-width:0}
 .mos-scholarships-hub .mos-scholarship-card h3{overflow-wrap:anywhere;word-break:normal}
 .mos-scholarships-hub .mos-scholarship-card p,.mos-scholarships-hub .mos-scholarship-card span,.mos-scholarships-hub .mos-scholarship-card a,.mos-scholarships-hub .mos-scholarship-card button{overflow-wrap:anywhere}
 .mos-scholarships-hub .mos-scholarship-card>div:last-child a,.mos-scholarships-hub .mos-scholarship-card>div:last-child button{min-height:44px}
+.mos-scholarships-hub button,.mos-scholarships-hub a{transition:background-color .16s ease,border-color .16s ease,box-shadow .16s ease,transform .16s ease}
+.mos-scholarships-hub button:focus-visible,.mos-scholarships-hub a:focus-visible{outline:2px solid var(--naa-blue);outline-offset:3px}
 @media(min-width:1024px){.mos-scholarships-hub .mos-scholarship-card:hover{box-shadow:0 16px 36px rgba(15,23,42,.09)}}
-@media(max-width:639px){.mos-scholarships-hub{padding-left:12px!important;padding-right:12px!important}.mos-scholarships-hub .mos-scholarship-hero{border-radius:22px!important}}
+@media(max-width:639px){.mos-scholarships-hub{padding-left:12px!important;padding-right:12px!important}.mos-scholarships-hub .mos-scholarship-hero{border-radius:22px!important}.mos-scholarships-hub .mos-scholarship-search-input{height:50px;min-height:50px;font-size:16px}.mos-scholarships-hub .mos-scholarship-card>div:last-child{grid-template-columns:minmax(0,1fr)}}
 @media(prefers-reduced-motion:reduce){.mos-scholarships-hub *,.mos-scholarships-hub *::before,.mos-scholarships-hub *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
