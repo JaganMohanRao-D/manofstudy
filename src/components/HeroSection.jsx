@@ -27,9 +27,6 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         <div className="naa-hero-decoration naa-decoration-one" aria-hidden="true" />
         <div className="naa-hero-decoration naa-decoration-two" aria-hidden="true" />
         <div className="naa-dots" aria-hidden="true" />
-        <div className="naa-bird naa-bird-one" aria-hidden="true">🕊️</div>
-        <div className="naa-bird naa-bird-two" aria-hidden="true">🕊️</div>
-        <div className="naa-bird naa-bird-three" aria-hidden="true">🕊️</div>
         <div className="naa-hero-inner">
           <div className="naa-hero-copy">
             <div className="naa-eyebrow"><span className="naa-eyebrow-icon"><GraduationCap size={16}/></span> Your education journey starts here</div>
@@ -48,16 +45,15 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
               <div className="naa-stat naa-stat-sun"><span><Users size={19}/></span><strong>Student-first</strong><small>Made for your journey</small></div>
             </div>
           </div>
-          <div className="naa-hero-art" aria-label="Illustration of college students on a colourful campus">
-            <div className="naa-sun-disc" />
-            <div className="naa-campus-building"><div className="naa-building-roof"/><div className="naa-building-columns"><i/><i/><i/><i/></div></div>
-            <div className="naa-tree naa-tree-left"/><div className="naa-tree naa-tree-right"/>
-            <div className="naa-book-stack"><i/><i/><i/></div>
-            <div className="naa-student naa-student-left"><div className="naa-hair naa-hair-left"/><div className="naa-face"><i/><i/><b/></div><div className="naa-neck"/><div className="naa-body naa-body-blue"><span className="naa-backpack"/></div><div className="naa-arm naa-arm-left"/></div>
-            <div className="naa-student naa-student-center"><div className="naa-hair naa-hair-center"/><div className="naa-face"><i/><i/><b/></div><div className="naa-neck"/><div className="naa-body naa-body-pink"><span className="naa-books"><i/><i/><i/></span></div><div className="naa-arm naa-arm-right"/></div>
-            <div className="naa-student naa-student-right"><div className="naa-hair naa-hair-right"/><div className="naa-glasses"/><div className="naa-face"><i/><i/><b/></div><div className="naa-neck"/><div className="naa-body naa-body-orange"><span className="naa-backpack"/></div><div className="naa-arm naa-arm-right"/></div>
-            <div className="naa-art-sparkle sparkle-a">✦</div><div className="naa-art-sparkle sparkle-b">✧</div><div className="naa-art-heart">♡</div>
-          </div>
+          <div className="naa-hero-art naa-hero-art-image">
+            <img
+              className="naa-campus-life-image"
+              src="/Vibrant%20Campus%20Life%20Illustration.webp"
+              alt="Three cheerful college students on a colourful campus with flying birds"
+              fetchPriority="high"
+              decoding="async"
+            />
+          </div>>
         </div>
       </section>
 
