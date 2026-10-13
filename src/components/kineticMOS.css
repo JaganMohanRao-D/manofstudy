@@ -502,3 +502,46 @@
 .naa-hero-art-image::before,.naa-hero-art-image::after{content:none!important;display:none!important}
 .naa-hero-art-image .naa-sun-disc,.naa-hero-art-image .naa-campus-building,.naa-hero-art-image .naa-tree,.naa-hero-art-image .naa-book-stack,.naa-hero-art-image .naa-student,.naa-hero-art-image .naa-art-sparkle,.naa-hero-art-image .naa-art-heart{display:none!important}
 @media(max-width:760px){.naa-hero-art-image{min-height:280px}.naa-campus-life-image{height:auto;max-height:420px;width:100%;object-fit:contain}}
+
+
+/* Naa College bright full-width repair: overrides legacy Kinetic dark/card framing. */
+body:has(.naa-home) { background:#ffffff!important; color:#17366f; }
+body:has(.naa-home) #root { width:100%; max-width:none; margin:0; background:#ffffff; }
+body:has(.naa-home) #root > div.min-h-screen { width:100%; max-width:none; margin:0; padding:0; background:#ffffff!important; color:#17366f!important; }
+body:has(.naa-home) .mos-k-homepage-flow { width:100%; max-width:none; margin:0!important; padding:0!important; overflow:clip; background:#ffffff!important; color:#17366f!important; }
+body:has(.naa-home) .mos-k-homepage-flow > * { min-width:0; }
+body:has(.naa-home) .mos-k-nav { width:100%!important; max-width:none!important; margin:0!important; border-radius:0 0 22px 22px!important; border-left:0!important; border-right:0!important; border-top:0!important; background:rgba(255,255,255,.96)!important; box-shadow:0 5px 22px rgba(35,70,125,.08)!important; }
+body:has(.naa-home) .naa-home { width:100%; max-width:none; margin:0; overflow:clip; background:#fffefa!important; color:#17366f!important; }
+body:has(.naa-home) .naa-hero { width:100%; min-height:0; background:radial-gradient(ellipse at 82% 28%,#dff5ff 0%,rgba(223,245,255,.65) 23%,transparent 48%),radial-gradient(ellipse at 10% 80%,#fff2c6 0%,transparent 38%),linear-gradient(115deg,#fffefa 0%,#f8fcff 54%,#eaf8ff 100%)!important; border:0!important; }
+body:has(.naa-home) .naa-hero-inner { width:100%; max-width:none; min-height:min(690px,calc(100vh - 86px)); padding:clamp(30px,4.3vw,68px) clamp(24px,5.7vw,88px) clamp(26px,3vw,44px); grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr); gap:clamp(16px,2.5vw,44px); }
+body:has(.naa-home) .naa-hero h1 { max-width:760px; font-size:clamp(44px,5.1vw,78px); line-height:1.02; letter-spacing:-.055em; color:#17366f; overflow-wrap:normal; }
+body:has(.naa-home) .naa-hero h1 span { display:block; white-space:normal; background:linear-gradient(90deg,#2878f0,#20b9b5); -webkit-background-clip:text; background-clip:text; color:transparent; }
+body:has(.naa-home) .naa-hero-description { max-width:590px; color:#536b91!important; font-size:clamp(15px,1.2vw,18px); line-height:1.75; }
+body:has(.naa-home) .naa-hero-art { width:100%; height:clamp(430px,44vw,660px); min-width:0; overflow:visible; align-self:center; border-radius:0!important; background:transparent!important; }
+body:has(.naa-home) .naa-campus-life-image { width:100%; height:100%; max-width:100%; object-fit:contain; object-position:center bottom; filter:none; }
+body:has(.naa-home) .naa-updates-strip { width:calc(100% - clamp(24px,7vw,112px)); max-width:none; height:62px; margin:0 auto; border:1px solid #f2d36e; border-radius:999px; box-shadow:0 5px 18px rgba(120,95,30,.08); position:relative; z-index:4; }
+body:has(.naa-home) .naa-updates-track { min-width:0; flex:1; overflow:hidden; }
+body:has(.naa-home) .naa-home-section { width:100%; max-width:none; margin:0; padding:clamp(44px,5vw,76px) clamp(24px,5.7vw,88px); }
+body:has(.naa-home) #features-hub { width:100%; max-width:none; background:#fff!important; color:#17366f!important; }
+body:has(.naa-home) #features-hub > div { width:100%; max-width:none!important; margin:0!important; padding:clamp(42px,5vw,72px) clamp(24px,5.7vw,88px)!important; }
+body:has(.naa-home) #features-hub h1,body:has(.naa-home) #features-hub h2,body:has(.naa-home) #features-hub h3,body:has(.naa-home) #features-hub h4 { color:#17366f!important; }
+body:has(.naa-home) #features-hub p,body:has(.naa-home) #features-hub label { color:#536b91!important; }
+body:has(.naa-home) #features-hub [class*="bg-slate-950"],body:has(.naa-home) #features-hub [class*="bg-slate-900"],body:has(.naa-home) #features-hub [class*="bg-black"] { background:#f3f8ff!important; }
+body:has(.naa-home) #features-hub [class*="text-white"],body:has(.naa-home) #features-hub [class*="text-slate-100"],body:has(.naa-home) #features-hub [class*="text-slate-200"] { color:#17366f!important; }
+body:has(.naa-home) .naa-trust-section { width:100%; }
+body:has(.naa-home) .mos-k-homepage-flow .max-w-7xl,body:has(.naa-home) .mos-k-homepage-flow .max-w-6xl { max-width:none!important; }
+@media(max-width:1050px) {
+ body:has(.naa-home) .naa-hero-inner { grid-template-columns:minmax(0,1fr) minmax(0,1fr); min-height:0; }
+ body:has(.naa-home) .naa-hero-art { height:clamp(360px,48vw,520px); }
+}
+@media(max-width:760px) {
+ body:has(.naa-home) .mos-k-nav { border-radius:0 0 16px 16px!important; }
+ body:has(.naa-home) .naa-hero-inner { display:flex; flex-direction:column; gap:10px; padding:30px 20px 18px; }
+ body:has(.naa-home) .naa-hero h1 { font-size:clamp(42px,10vw,60px); line-height:1.02; }
+ body:has(.naa-home) .naa-hero-art { height:auto; min-height:0; margin:0; width:100%; }
+ body:has(.naa-home) .naa-campus-life-image { height:auto; max-height:none; width:100%; object-fit:contain; }
+ body:has(.naa-home) .naa-updates-strip { width:calc(100% - 24px); border-radius:18px; height:54px; }
+ body:has(.naa-home) .naa-updates-track { font-size:10px; }
+ body:has(.naa-home) .naa-home-section,body:has(.naa-home) #features-hub > div { padding-left:20px!important; padding-right:20px!important; }
+}
+@media(prefers-reduced-motion:reduce) { body:has(.naa-home) .naa-updates-track { animation:none!important; } }
