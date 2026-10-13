@@ -532,3 +532,151 @@ body:has(.naa-home) .mos-k-homepage-flow .max-w-7xl,body:has(.naa-home) .mos-k-h
 @media(max-width:1050px){body:has(.naa-home) .naa-hero-inner{grid-template-columns:minmax(0,1fr) minmax(0,1fr);min-height:0}body:has(.naa-home) .naa-hero-art{height:clamp(360px,48vw,520px)}}
 @media(max-width:760px){body:has(.naa-home) .mos-k-nav{border-radius:0 0 16px 16px!important}body:has(.naa-home) .naa-hero-inner{display:flex;flex-direction:column;gap:10px;padding:30px 20px 18px}body:has(.naa-home) .naa-hero h1{font-size:clamp(42px,10vw,60px);line-height:1.02}body:has(.naa-home) .naa-hero-art{height:auto;min-height:0;margin:0;width:100%}body:has(.naa-home) .naa-campus-life-image{height:auto;max-height:none;width:100%;object-fit:contain}body:has(.naa-home) .naa-updates-strip{width:calc(100% - 24px);border-radius:18px;height:54px}body:has(.naa-home) .naa-updates-track{font-size:10px}body:has(.naa-home) .naa-home-section,body:has(.naa-home) #features-hub>div{padding-left:20px!important;padding-right:20px!important}}
 @media(prefers-reduced-motion:reduce){body:has(.naa-home) .naa-updates-track{animation:none!important}}
+
+
+/* Homepage light-theme completion: override legacy Kinetic dark art direction only
+   while the homepage is active. Keep dark styling available on non-home workspaces. */
+body:has(.naa-home) {
+  background: #ffffff !important;
+  color: #17366f !important;
+}
+body:has(.naa-home) .mos-k-homepage-flow,
+body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub,
+body:has(.naa-home) .mos-k-homepage-flow #features-hub {
+  background: #ffffff !important;
+  color: #17366f !important;
+  border-color: #dce8f8 !important;
+}
+body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub {
+  padding: clamp(2.5rem, 5vw, 4.5rem) clamp(1.25rem, 5.7vw, 5.5rem) !important;
+}
+body:has(.naa-home) .mos-k-homepage-flow .mos-k-feature-hub::before {
+  color: #2878f0 !important;
+}
+body:has(.naa-home) #features-hub,
+body:has(.naa-home) #features-hub > div,
+body:has(.naa-home) #features-hub section,
+body:has(.naa-home) #features-hub article,
+body:has(.naa-home) #features-hub [class*="bg-slate-950"],
+body:has(.naa-home) #features-hub [class*="bg-slate-900"],
+body:has(.naa-home) #features-hub [class*="bg-gray-900"],
+body:has(.naa-home) #features-hub [class*="bg-zinc-900"],
+body:has(.naa-home) #features-hub [class*="bg-black"],
+body:has(.naa-home) #features-hub [class*="bg-white/[.03]"],
+body:has(.naa-home) #features-hub [class*="bg-white/[0.03]"] {
+  background-color: #f3f8ff !important;
+  color: #17366f !important;
+  border-color: #dce8f8 !important;
+}
+body:has(.naa-home) #features-hub > div:first-child,
+body:has(.naa-home) #features-hub .border-b {
+  border-color: #dce8f8 !important;
+}
+body:has(.naa-home) #features-hub h1,
+body:has(.naa-home) #features-hub h2,
+body:has(.naa-home) #features-hub h3,
+body:has(.naa-home) #features-hub h4,
+body:has(.naa-home) #features-hub .text-white,
+body:has(.naa-home) #features-hub [class*="text-slate-100"],
+body:has(.naa-home) #features-hub [class*="text-slate-200"],
+body:has(.naa-home) #features-hub [class*="text-slate-300"] {
+  color: #17366f !important;
+}
+body:has(.naa-home) #features-hub p,
+body:has(.naa-home) #features-hub label,
+body:has(.naa-home) #features-hub .text-slate-400,
+body:has(.naa-home) #features-hub .text-slate-500,
+body:has(.naa-home) #features-hub .text-slate-600 {
+  color: #536b91 !important;
+}
+body:has(.naa-home) #features-hub [class*="text-cyan-300"],
+body:has(.naa-home) #features-hub [class*="text-blue-400"],
+body:has(.naa-home) #features-hub [class*="text-emerald-400"],
+body:has(.naa-home) #features-hub [class*="text-teal-400"] {
+  color: #2878f0 !important;
+}
+body:has(.naa-home) #features-hub input,
+body:has(.naa-home) #features-hub select,
+body:has(.naa-home) #features-hub textarea {
+  background-color: #ffffff !important;
+  color: #17366f !important;
+  border-color: #cbdcf4 !important;
+}
+body:has(.naa-home) #features-hub input::placeholder,
+body:has(.naa-home) #features-hub textarea::placeholder {
+  color: #647da4 !important;
+  opacity: 1;
+}
+body:has(.naa-home) #features-hub button:not([class*="bg-blue-600"]):not([class*="bg-cyan-600"]):not([class*="bg-emerald-600"]) {
+  border-color: #dce8f8;
+}
+body:has(.naa-home) .mos-k-nav {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-top: 0 !important;
+  background: rgba(255,255,255,.98) !important;
+  color: #17366f !important;
+}
+body:has(.naa-home) .mos-k-nav .text-slate-300,
+body:has(.naa-home) .mos-k-nav .text-slate-200,
+body:has(.naa-home) .mos-k-nav .text-slate-100,
+body:has(.naa-home) .mos-k-nav .text-white {
+  color: #294b83 !important;
+}
+body:has(.naa-home) .mos-k-nav [class*="bg-[#07101d]"],
+body:has(.naa-home) .mos-k-nav [class*="bg-[#040b16]"],
+body:has(.naa-home) .mos-k-nav [class*="bg-slate-950"] {
+  background: #ffffff !important;
+  color: #294b83 !important;
+  border-color: #dce8f8 !important;
+}
+body:has(.naa-home) .mos-k-nav [class*="hover:bg-white"] {
+  --tw-bg-opacity: 1;
+  background-color: #edf4ff;
+}
+body:has(.naa-home) .mos-k-footer {
+  margin: 0 !important;
+  background: #f3f8ff !important;
+  color: #536b91 !important;
+  border-top: 1px solid #dce8f8 !important;
+}
+body:has(.naa-home) .mos-k-footer h1,
+body:has(.naa-home) .mos-k-footer h2,
+body:has(.naa-home) .mos-k-footer h3,
+body:has(.naa-home) .mos-k-footer strong,
+body:has(.naa-home) .mos-k-footer .font-\\[\\'Syne\\'\\] {
+  color: #17366f !important;
+}
+body:has(.naa-home) .mos-k-footer p,
+body:has(.naa-home) .mos-k-footer a,
+body:has(.naa-home) .mos-k-footer .text-\\[\\#858990\\],
+body:has(.naa-home) .mos-k-footer .text-\\[\\#777b82\\],
+body:has(.naa-home) .mos-k-footer .text-\\[\\#b8bbc0\\],
+body:has(.naa-home) .mos-k-footer .text-\\[\\#666a71\\] {
+  color: #536b91 !important;
+}
+body:has(.naa-home) .mos-k-footer a:hover,
+body:has(.naa-home) .mos-k-footer button:hover {
+  color: #2878f0 !important;
+}
+body:has(.naa-home) .mos-k-footer .mk-built {
+  color: #2878f0 !important;
+}
+body:has(.naa-home) .max-w-7xl.mx-auto.my-6 > div {
+  background: #ffffff !important;
+  color: #17366f !important;
+  border-color: #dce8f8 !important;
+  box-shadow: 0 4px 16px rgba(35,70,125,.06) !important;
+}
+body:has(.naa-home) .max-w-7xl.mx-auto.my-6 p,
+body:has(.naa-home) .max-w-7xl.mx-auto.my-6 span {
+  color: #536b91;
+}
+@media (max-width: 760px) {
+  body:has(.naa-home) .mos-k-nav { width: 100% !important; margin: 0 !important; border-radius: 0 !important; }
+  body:has(.naa-home) #features-hub > div { padding-left: 20px !important; padding-right: 20px !important; }
+}
