@@ -1056,3 +1056,102 @@ html.light .mos-k-homepage-flow .naa-trust-section h2,
 html.light .mos-k-homepage-flow .naa-trust-section h2 span,
 html.light .mos-k-homepage-flow .naa-trust-section h3 { color:#17366f !important; }
 html.light .mos-k-homepage-flow .naa-trust-section p { color:#536b91 !important; }
+
+
+/* SITE-WIDE BRIGHT THEME LOCK — remove the legacy Kinetic dark canvas even
+   when a component's original stylesheet hard-codes dark colors. */
+html.light .mos-kinetic-home {
+  --mk-bg:#f3f8ff !important;
+  --mk-fg:#17366f !important;
+  --mk-muted:#536b91 !important;
+  --mk-line:#dce8f8 !important;
+  background:#f3f8ff !important;
+  background-color:#f3f8ff !important;
+  color:#17366f !important;
+  color-scheme:light !important;
+  font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif !important;
+}
+html.light .mos-kinetic-home .mos-k-nav,
+html.light .mos-kinetic-home .mos-k-hero,
+html.light .mos-kinetic-home .mos-k-section,
+html.light .mos-kinetic-home .mos-k-feature-hub,
+html.light .mos-kinetic-home .mos-k-guide,
+html.light .mos-kinetic-home .mos-k-faq,
+html.light .mos-kinetic-home .mos-k-footer,
+html.light .mos-kinetic-home #features-hub,
+html.light .mos-kinetic-home #student-testimonials-section,
+html.light .mos-kinetic-home .naa-home,
+html.light .mos-kinetic-home .naa-trust-section {
+  background:#f3f8ff !important;
+  background-color:#f3f8ff !important;
+  color:#17366f !important;
+  border-color:#dce8f8 !important;
+}
+html.light .mos-kinetic-home .mos-k-guide *,
+html.light .mos-kinetic-home .mos-k-faq *,
+html.light .mos-kinetic-home .mos-k-feature-hub *,
+html.light .mos-kinetic-home #student-testimonials-section * {
+  border-color:#dce8f8;
+}
+html.light .mos-kinetic-home .mos-k-guide [class*="bg-"],
+html.light .mos-kinetic-home .mos-k-faq [class*="bg-"],
+html.light .mos-kinetic-home .mos-k-feature-hub [class*="bg-"],
+html.light .mos-kinetic-home #student-testimonials-section [class*="bg-"],
+html.light .mos-kinetic-home [class*="bg-slate-950"],
+html.light .mos-kinetic-home [class*="bg-slate-900"],
+html.light .mos-kinetic-home [class*="bg-slate-800"],
+html.light .mos-kinetic-home [class*="bg-gray-950"],
+html.light .mos-kinetic-home [class*="bg-gray-900"],
+html.light .mos-kinetic-home [class*="bg-zinc-950"],
+html.light .mos-kinetic-home [class*="bg-zinc-900"],
+html.light .mos-kinetic-home [class*="bg-black"] {
+  background:#fff !important;
+  background-color:#fff !important;
+  color:#17366f !important;
+  border-color:#dce8f8 !important;
+}
+html.light .mos-kinetic-home .mos-k-guide [class*="text-"],
+html.light .mos-kinetic-home .mos-k-faq [class*="text-"],
+html.light .mos-kinetic-home .mos-k-feature-hub [class*="text-"],
+html.light .mos-kinetic-home #student-testimonials-section [class*="text-"] {
+  --tw-text-opacity:1;
+}
+html.light .mos-kinetic-home .mos-k-guide [class*="text-white"],
+html.light .mos-kinetic-home .mos-k-faq [class*="text-white"],
+html.light .mos-kinetic-home .mos-k-feature-hub [class*="text-white"],
+html.light .mos-kinetic-home #student-testimonials-section [class*="text-white"],
+html.light .mos-kinetic-home [class*="text-slate-50"],
+html.light .mos-kinetic-home [class*="text-slate-100"],
+html.light .mos-kinetic-home [class*="text-slate-200"],
+html.light .mos-kinetic-home [class*="text-gray-50"],
+html.light .mos-kinetic-home [class*="text-gray-100"],
+html.light .mos-kinetic-home [class*="text-zinc-50"],
+html.light .mos-kinetic-home [class*="text-zinc-100"] {
+  color:#17366f !important;
+}
+html.light .mos-kinetic-home .mos-k-guide p,
+html.light .mos-kinetic-home .mos-k-faq p,
+html.light .mos-kinetic-home .mos-k-feature-hub p,
+html.light .mos-kinetic-home #student-testimonials-section p,
+html.light .mos-kinetic-home [class*="text-slate-300"],
+html.light .mos-kinetic-home [class*="text-slate-400"],
+html.light .mos-kinetic-home [class*="text-slate-500"],
+html.light .mos-kinetic-home [class*="text-gray-300"],
+html.light .mos-kinetic-home [class*="text-gray-400"],
+html.light .mos-kinetic-home [class*="text-zinc-300"],
+html.light .mos-kinetic-home [class*="text-zinc-400"] {
+  color:#536b91 !important;
+}
+html.light .mos-kinetic-home input,
+html.light .mos-kinetic-home select,
+html.light .mos-kinetic-home textarea {
+  background:#fff !important;
+  color:#17366f !important;
+  border-color:#cbdcf4 !important;
+}
+html.light .mos-kinetic-home .mos-k-grid,
+html.light .mos-kinetic-home .mos-k-glow,
+html.light .mos-kinetic-home .mos-k-orb,
+html.light .mos-kinetic-home .mos-k-physics-field,
+html.light .mos-kinetic-home .mos-k-string,
+html.light .mos-kinetic-home .mos-k-cursor { display:none !important; }
