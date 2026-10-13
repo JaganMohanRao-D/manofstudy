@@ -698,3 +698,28 @@ html.light #mock-test-series [class*="text-slate-100"],html.light #mock-test-ser
 html.light #mock-test-series input,html.light #mock-test-series select,html.light #mock-test-series textarea,html.light #global-gpa-hub-tool input,html.light #global-gpa-hub-tool select,html.light #global-gpa-hub-tool textarea { background-color:#fff; color:#17366f; border-color:#cbdcf4; }
 html.light #mock-test-series input::placeholder,html.light #mock-test-series textarea::placeholder,html.light #global-gpa-hub-tool input::placeholder,html.light #global-gpa-hub-tool textarea::placeholder { color:#647da4; opacity:1; }
 html.light :where(button,a,input,select,textarea):focus-visible { outline:3px solid #2878f0; outline-offset:2px; }
+
+
+/* Kinetic MOS dark art direction retired: retain structural/layout styles but use Naa College bright palette. */
+html.light body, body.mos-regional-light { background:#f3f8ff !important; color:#17366f !important; }
+html.light .mos-kinetic-home, body.mos-regional-light .mos-kinetic-home { --mk-bg:#ffffff; --mk-fg:#17366f; --mk-muted:#536b91; --mk-line:#dce8f8; background:#ffffff !important; color:#17366f !important; }
+html.light .mos-k-hero, body.mos-regional-light .mos-k-hero { background:linear-gradient(120deg,#f3f8ff,#ffffff 58%,#eafbff) !important; border-color:#dce8f8 !important; color:#17366f !important; }
+html.light .mos-k-section, body.mos-regional-light .mos-k-section { background:#ffffff !important; color:#17366f !important; border-color:#dce8f8 !important; }
+html.light .mos-k-nav, body.mos-regional-light .mos-k-nav { background:rgba(255,255,255,.98) !important; color:#17366f !important; border-color:#dce8f8 !important; }
+html.light .mos-k-meta, html.light .mos-k-index, html.light .mos-k-section-label, html.light .mos-k-copy, html.light .mos-k-nav .mos-brand-tagline { color:#536b91 !important; }
+html.light .mos-k-copy b, html.light .mos-k-title, html.light .mos-k-section-title, html.light .mos-k-nav .mos-brand-wordmark { color:#17366f !important; }
+html.light .mos-k-index a, html.light .mos-k-nav a, html.light .mos-k-nav button { color:#294b83; }
+html.light .mos-k-grid { opacity:.08 !important; }
+html.light .mos-k-glow { opacity:.28 !important; }
+html.light .mos-k-cta { background:#2878f0 !important; color:#ffffff !important; border-color:#2878f0 !important; }
+html.light .mos-kinetic-home #features-hub { background:#f3f8ff !important; color:#17366f !important; border-color:#dce8f8 !important; }
+html.light .mos-kinetic-home #features-hub h1, html.light .mos-kinetic-home #features-hub h2, html.light .mos-kinetic-home #features-hub h3, html.light .mos-kinetic-home #features-hub h4, html.light .mos-kinetic-home #features-hub .text-white, html.light .mos-kinetic-home #features-hub [class*="text-slate-100"], html.light .mos-kinetic-home #features-hub [class*="text-slate-200"], html.light .mos-kinetic-home #features-hub [class*="text-slate-300"] { color:#17366f !important; }
+html.light .mos-kinetic-home #features-hub p, html.light .mos-kinetic-home #features-hub label, html.light .mos-kinetic-home #features-hub [class*="text-slate-400"], html.light .mos-kinetic-home #features-hub [class*="text-slate-500"] { color:#536b91 !important; }
+html.light .mos-kinetic-home #features-hub [class*="bg-slate-950"], html.light .mos-kinetic-home #features-hub [class*="bg-slate-900"], html.light .mos-kinetic-home #features-hub [class*="bg-gray-900"], html.light .mos-kinetic-home #features-hub [class*="bg-zinc-900"], html.light .mos-kinetic-home #features-hub [class*="bg-black"] { background:#ffffff !important; color:#17366f !important; border-color:#dce8f8 !important; }
+html.light .mos-kinetic-home #features-hub input, html.light .mos-kinetic-home #features-hub select, html.light .mos-kinetic-home #features-hub textarea { background:#ffffff !important; color:#17366f !important; border-color:#cbdcf4 !important; }
+html.light .mos-k-footer { background:#f3f8ff !important; color:#536b91 !important; border-color:#dce8f8 !important; }
+html.light .mos-k-footer h1, html.light .mos-k-footer h2, html.light .mos-k-footer h3, html.light .mos-k-footer strong { color:#17366f !important; }
+html.light .mos-k-footer p, html.light .mos-k-footer a { color:#536b91 !important; }
+html.light #workspace-viewport [class*="bg-slate-950"], html.light #workspace-viewport [class*="bg-slate-900"], html.light #workspace-viewport [class*="bg-slate-800"], html.light #workspace-viewport [class*="bg-gray-950"], html.light #workspace-viewport [class*="bg-gray-900"], html.light #workspace-viewport [class*="bg-black"] { background-color:#ffffff !important; }
+html.light #workspace-viewport [class*="text-white"], html.light #workspace-viewport [class*="text-slate-50"], html.light #workspace-viewport [class*="text-slate-100"], html.light #workspace-viewport [class*="text-slate-200"], html.light #workspace-viewport [class*="text-slate-300"], html.light #workspace-viewport [class*="text-gray-50"], html.light #workspace-viewport [class*="text-gray-100"], html.light #workspace-viewport [class*="text-gray-200"], html.light #workspace-viewport [class*="text-gray-300"] { color:#17366f !important; }
+html.light #workspace-viewport [class*="text-slate-400"], html.light #workspace-viewport [class*="text-slate-500"], html.light #workspace-viewport [class*="text-gray-400"], html.light #workspace-viewport [class*="text-gray-500"] { color:#536b91 !important; }
