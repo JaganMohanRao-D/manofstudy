@@ -743,3 +743,145 @@ html.light .mos-kinetic-home #features-hub [class*="bg-slate-950"], html.light .
 html.light .mos-kinetic-home #features-hub [class*="text-white"], html.light .mos-kinetic-home #features-hub [class*="text-slate-100"], html.light .mos-kinetic-home #features-hub [class*="text-slate-200"], html.light .mos-kinetic-home #features-hub [class*="text-slate-300"] { color:#17366f !important; }
 html.light .mos-kinetic-home #features-hub [class*="text-slate-400"], html.light .mos-kinetic-home #features-hub [class*="text-slate-500"] { color:#536b91 !important; }
 @media(max-width:760px){ html.light .mos-k-homepage-flow { overflow:clip; } html.light .mos-kinetic-home .naa-hero-inner { padding-left:20px; padding-right:20px; } }
+
+
+/* NAA COLLEGE HOMEPAGE — replace legacy Kinetic art direction with a stable light UI.
+   These rules intentionally scope to the homepage only; workspace styling and behavior stay untouched. */
+html.light .mos-k-homepage-flow,
+html.light .mos-kinetic-home,
+html.light .mos-kinetic-home .naa-home {
+  --mk-bg:#f3f8ff; --mk-fg:#17366f; --mk-muted:#536b91; --mk-line:#dce8f8; --mk-accent:#087dbb; --mk-orange:#b7791f;
+  background:#f3f8ff !important; color:#17366f !important; font-family:inherit !important;
+}
+html.light .mos-k-homepage-flow { max-width:100%; width:100%; overflow:visible; }
+html.light .mos-kinetic-home .naa-home { display:block; width:100%; margin:0; overflow:visible; }
+html.light .mos-kinetic-home .naa-hero {
+  position:relative; isolation:isolate; min-height:0; overflow:hidden; cursor:auto;
+  background:linear-gradient(120deg,#fff 0%,#f3f8ff 58%,#eafbff 100%) !important;
+  color:#17366f !important; border-bottom:1px solid #dce8f8;
+}
+html.light .mos-kinetic-home .naa-hero-inner {
+  position:relative; z-index:1; display:grid; grid-template-columns:minmax(0,1.05fr) minmax(280px,.95fr);
+  align-items:center; gap:clamp(24px,4vw,64px); width:100%; max-width:1440px; margin:0 auto;
+  padding:clamp(32px,5vw,76px) clamp(20px,5vw,72px);
+}
+html.light .mos-kinetic-home .naa-hero-copy { min-width:0; }
+html.light .mos-kinetic-home .naa-eyebrow { display:inline-flex; align-items:center; gap:9px; color:#176b9b !important; font-size:13px; font-weight:700; }
+html.light .mos-kinetic-home .naa-eyebrow-icon { display:inline-flex; color:#087dbb !important; }
+html.light .mos-kinetic-home .naa-hero h1 { max-width:760px; margin:20px 0 16px; color:#17366f !important; font-size:clamp(2.3rem,5vw,4.7rem); line-height:1.05; letter-spacing:-.045em; font-weight:800; }
+html.light .mos-kinetic-home .naa-hero h1 span { color:#087dbb !important; }
+html.light .mos-kinetic-home .naa-hero h1 i { color:#d49a18 !important; font-style:normal; }
+html.light .mos-kinetic-home .naa-hero-description { max-width:650px; margin:0 0 24px; color:#536b91 !important; font-size:clamp(15px,1.35vw,18px); line-height:1.75; }
+html.light .mos-kinetic-home .naa-search-wrap { position:relative; display:flex; align-items:center; gap:12px; max-width:660px; min-height:58px; padding:7px 8px 7px 16px; border:1px solid #cbdcf4; border-radius:16px; background:#fff !important; color:#2878f0 !important; box-shadow:0 8px 24px rgba(32,83,145,.08); }
+html.light .mos-kinetic-home .naa-search-wrap input { flex:1; min-width:0; border:0; outline:none; background:transparent !important; color:#17366f !important; font:inherit; }
+html.light .mos-kinetic-home .naa-search-wrap input::placeholder { color:#647b9e !important; opacity:1; }
+html.light .mos-kinetic-home .naa-search-wrap>button { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 16px; border:0; border-radius:11px; background:#2878f0 !important; color:#fff !important; font-weight:700; cursor:pointer; }
+html.light .mos-kinetic-home .naa-search-suggestions { position:absolute; z-index:10; top:calc(100% + 8px); left:0; right:0; padding:8px; border:1px solid #dce8f8; border-radius:14px; background:#fff !important; box-shadow:0 12px 32px rgba(32,83,145,.14); }
+html.light .mos-kinetic-home .naa-search-suggestions button { display:flex; justify-content:space-between; width:100%; padding:12px; background:#fff !important; color:#17366f !important; text-align:left; }
+html.light .mos-kinetic-home .naa-stat-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:22px; }
+html.light .mos-kinetic-home .naa-stat { display:grid; grid-template-columns:36px minmax(0,1fr); align-items:center; column-gap:10px; padding:13px; border:1px solid #dce8f8; border-radius:14px; background:#fff !important; color:#17366f !important; }
+html.light .mos-kinetic-home .naa-stat>span { grid-row:span 2; display:grid; place-items:center; width:36px; height:36px; border-radius:10px; color:#2878f0 !important; background:#eaf3ff !important; }
+html.light .mos-kinetic-home .naa-stat strong { color:#17366f !important; font-size:14px; }
+html.light .mos-kinetic-home .naa-stat small { color:#536b91 !important; font-size:12px; }
+html.light .mos-kinetic-home .naa-hero-art { min-width:0; display:flex; align-items:center; justify-content:center; }
+html.light .mos-kinetic-home .naa-campus-life-image { display:block; width:100%; max-width:660px; height:auto; object-fit:contain; border-radius:24px; }
+html.light .mos-kinetic-home .naa-hero-decoration,
+html.light .mos-kinetic-home .naa-dots { pointer-events:none; }
+html.light .mos-kinetic-home .naa-updates-strip { display:flex; align-items:center; gap:18px; overflow:hidden; padding:14px clamp(20px,5vw,72px); border-bottom:1px solid #dce8f8; background:#eafbff !important; color:#17366f !important; }
+html.light .mos-kinetic-home .naa-updates-strip>span { display:inline-flex; align-items:center; gap:8px; flex-shrink:0; color:#176b9b !important; font-weight:700; }
+html.light .mos-kinetic-home .naa-updates-track { display:flex; align-items:center; gap:22px; min-width:0; color:#536b91 !important; white-space:nowrap; }
+html.light .mos-kinetic-home .naa-updates-track b { color:#31577f !important; font-weight:600; }
+html.light .mos-kinetic-home .naa-home-section { padding:clamp(32px,5vw,64px) clamp(20px,5vw,72px); background:#f3f8ff !important; color:#17366f !important; }
+html.light .mos-kinetic-home .naa-section-heading { display:flex; flex-wrap:wrap; align-items:end; justify-content:space-between; gap:18px; margin-bottom:24px; }
+html.light .mos-kinetic-home .naa-section-heading h2 { margin:8px 0 0; color:#17366f !important; font-size:clamp(1.8rem,3.5vw,3rem); line-height:1.1; letter-spacing:-.035em; }
+html.light .mos-kinetic-home .naa-section-heading h2 span { color:#087dbb !important; }
+html.light .mos-kinetic-home .naa-section-heading p { color:#536b91 !important; }
+html.light .mos-kinetic-home .naa-section-heading>button { display:inline-flex; align-items:center; gap:8px; padding:11px 14px; border:1px solid #cbdcf4; border-radius:10px; background:#fff !important; color:#175ca8 !important; font-weight:700; }
+html.light .mos-kinetic-home .naa-section-kicker { color:#176b9b !important; font-size:12px; font-weight:800; letter-spacing:.09em; }
+html.light .mos-kinetic-home .naa-shortcut-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; }
+html.light .mos-kinetic-home .naa-shortcut { position:relative; display:grid; grid-template-columns:44px minmax(0,1fr); align-content:start; align-items:center; gap:7px 12px; min-width:0; padding:20px; border:1px solid #dce8f8; border-radius:16px; background:#fff !important; color:#17366f !important; text-align:left; box-shadow:0 8px 24px rgba(32,83,145,.05); }
+html.light .mos-kinetic-home .naa-shortcut-icon { grid-row:span 2; display:grid; place-items:center; width:44px; height:44px; border-radius:12px; background:#eaf3ff !important; color:#2878f0 !important; }
+html.light .mos-kinetic-home .naa-shortcut-title { color:#17366f !important; font-weight:750; line-height:1.35; }
+html.light .mos-kinetic-home .naa-shortcut small { grid-column:2; color:#536b91 !important; font-size:13px; line-height:1.5; }
+html.light .mos-kinetic-home .naa-shortcut-arrow { position:absolute; right:14px; top:14px; color:#2878f0 !important; }
+html.light .mos-kinetic-home .naa-trust-section { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(22px,4vw,56px); padding:clamp(40px,6vw,80px) clamp(20px,5vw,72px); background:#eafbff !important; color:#17366f !important; border-top:1px solid #dce8f8; }
+html.light .mos-kinetic-home .naa-trust-section h2 { margin:10px 0; color:#17366f !important; font-size:clamp(1.7rem,3vw,2.6rem); line-height:1.12; letter-spacing:-.035em; }
+html.light .mos-kinetic-home .naa-trust-section h2 span { color:#087dbb !important; }
+html.light .mos-kinetic-home .naa-trust-section p { max-width:420px; color:#536b91 !important; line-height:1.75; }
+html.light .mos-kinetic-home .mos-k-feature-hub,
+html.light .mos-kinetic-home .mos-k-guide,
+html.light .mos-kinetic-home .mos-k-faq,
+html.light .mos-kinetic-home #student-testimonials-section,
+html.light .mos-kinetic-home #features-hub { background:#f3f8ff !important; color:#17366f !important; border-color:#dce8f8 !important; }
+html.light .mos-kinetic-home .mos-k-feature-hub h1,
+html.light .mos-kinetic-home .mos-k-feature-hub h2,
+html.light .mos-kinetic-home .mos-k-feature-hub h3,
+html.light .mos-kinetic-home .mos-k-guide h1,
+html.light .mos-kinetic-home .mos-k-guide h2,
+html.light .mos-kinetic-home .mos-k-guide h3,
+html.light .mos-kinetic-home .mos-k-faq h1,
+html.light .mos-kinetic-home .mos-k-faq h2,
+html.light .mos-kinetic-home .mos-k-faq h3,
+html.light .mos-kinetic-home #student-testimonials-section h1,
+html.light .mos-kinetic-home #student-testimonials-section h2,
+html.light .mos-kinetic-home #student-testimonials-section h3,
+html.light .mos-kinetic-home #features-hub h1,
+html.light .mos-kinetic-home #features-hub h2,
+html.light .mos-kinetic-home #features-hub h3,
+html.light .mos-kinetic-home #features-hub h4 { color:#17366f !important; font-family:inherit !important; }
+html.light .mos-kinetic-home .mos-k-feature-hub p,
+html.light .mos-kinetic-home .mos-k-guide p,
+html.light .mos-kinetic-home .mos-k-faq p,
+html.light .mos-kinetic-home #student-testimonials-section p,
+html.light .mos-kinetic-home #features-hub p,
+html.light .mos-kinetic-home #features-hub label { color:#536b91 !important; }
+html.light .mos-kinetic-home .mos-k-review-card,
+html.light .mos-kinetic-home .mos-k-faq>div,
+html.light .mos-kinetic-home .mos-k-guide [class*="rounded-2xl"],
+html.light .mos-kinetic-home #features-hub section,
+html.light .mos-kinetic-home #features-hub article,
+html.light .mos-kinetic-home #features-hub button { background:#fff !important; color:#17366f !important; border-color:#dce8f8 !important; }
+html.light .mos-kinetic-home #features-hub [class*="bg-slate-950"],
+html.light .mos-kinetic-home #features-hub [class*="bg-slate-900"],
+html.light .mos-kinetic-home #features-hub [class*="bg-gray-950"],
+html.light .mos-kinetic-home #features-hub [class*="bg-gray-900"],
+html.light .mos-kinetic-home #features-hub [class*="bg-zinc-900"],
+html.light .mos-kinetic-home #features-hub [class*="bg-black"] { background:#fff !important; color:#17366f !important; border-color:#dce8f8 !important; }
+html.light .mos-kinetic-home #features-hub [class*="text-white"],
+html.light .mos-kinetic-home #features-hub [class*="text-slate-100"],
+html.light .mos-kinetic-home #features-hub [class*="text-slate-200"],
+html.light .mos-kinetic-home #features-hub [class*="text-slate-300"],
+html.light .mos-kinetic-home #student-testimonials-section [class*="text-white"],
+html.light .mos-kinetic-home .mos-k-faq [class*="text-white"] { color:#17366f !important; }
+html.light .mos-kinetic-home #features-hub [class*="text-slate-400"],
+html.light .mos-kinetic-home #features-hub [class*="text-slate-500"],
+html.light .mos-kinetic-home #student-testimonials-section [class*="text-slate-400"],
+html.light .mos-kinetic-home #student-testimonials-section [class*="text-slate-500"] { color:#536b91 !important; }
+html.light .mos-kinetic-home #features-hub input,
+html.light .mos-kinetic-home #features-hub select,
+html.light .mos-kinetic-home #features-hub textarea,
+html.light .mos-kinetic-home .mos-k-faq input { background:#fff !important; color:#17366f !important; border-color:#cbdcf4 !important; }
+html.light .mos-kinetic-home .mos-k-footer { background:#fff !important; color:#536b91 !important; border-color:#dce8f8 !important; }
+html.light .mos-kinetic-home .mos-k-footer h1,
+html.light .mos-kinetic-home .mos-k-footer h2,
+html.light .mos-kinetic-home .mos-k-footer h3 { color:#17366f !important; }
+html.light .mos-kinetic-home .mos-k-grid,
+html.light .mos-kinetic-home .mos-k-glow,
+html.light .mos-kinetic-home .mos-k-orb,
+html.light .mos-kinetic-home .mos-k-physics-field,
+html.light .mos-kinetic-home .mos-k-string,
+html.light .mos-kinetic-home .mos-k-cursor { display:none !important; }
+@media(max-width:900px) {
+ html.light .mos-kinetic-home .naa-hero-inner { grid-template-columns:minmax(0,1fr); }
+ html.light .mos-kinetic-home .naa-hero-art { max-width:650px; width:100%; margin:0 auto; }
+ html.light .mos-kinetic-home .naa-shortcut-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+ html.light .mos-kinetic-home .naa-trust-section { grid-template-columns:1fr; }
+}
+@media(max-width:560px) {
+ html.light .mos-kinetic-home .naa-stat-grid,
+ html.light .mos-kinetic-home .naa-shortcut-grid { grid-template-columns:minmax(0,1fr); }
+ html.light .mos-kinetic-home .naa-hero-inner { padding:28px 18px; }
+ html.light .mos-kinetic-home .naa-home-section { padding:30px 18px; }
+ html.light .mos-kinetic-home .naa-search-wrap { flex-wrap:wrap; }
+ html.light .mos-kinetic-home .naa-search-wrap input { min-width:160px; }
+}
