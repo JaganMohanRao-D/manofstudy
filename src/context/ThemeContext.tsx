@@ -19,44 +19,41 @@ const ThemeContext = createContext<ThemeContextType>({
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>('light');
 
-  useEffect(() => {
+  const applyLightTheme = () => {
     const root = document.documentElement;
-    // Naa College now defaults to the requested bright theme. Keep the theme
-    // context API functional so existing consumers do not break.
     root.classList.remove('dark');
     root.classList.add('light');
     root.setAttribute('data-theme', 'light');
     root.style.colorScheme = 'light';
-
+    document.body?.classList.remove('mos-dark-only');
+    document.body?.classList.add('mos-regional-light');
     try {
       localStorage.setItem('mos_theme', 'light');
       localStorage.setItem('javisak_theme', 'light');
       localStorage.setItem('studymacha_theme', 'light');
     } catch {
-      // Ignore storage restrictions.
-    }
-  }, [theme]);
-
-  const setTheme = (nextTheme: Theme) => {
-    setThemeState(nextTheme);
-    const root = document.documentElement;
-    root.classList.toggle('dark', nextTheme === 'dark');
-    root.classList.toggle('light', nextTheme === 'light');
-    root.setAttribute('data-theme', nextTheme);
-    root.style.colorScheme = nextTheme;
-    try {
-      localStorage.setItem('mos_theme', nextTheme);
-      localStorage.setItem('javisak_theme', nextTheme);
-      localStorage.setItem('studymacha_theme', nextTheme);
-    } catch {
-      // Ignore storage restrictions.
+      // Storage can be unavailable in private/restricted browsing.
     }
   };
 
-  const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
+  useEffect(() => {
+    applyLightTheme();
+  }, []);
+
+  // Naa College is intentionally light-theme-only. Preserve this API for existing
+  // consumers, but never allow a component to turn the site dark again.
+  const setTheme = (_nextTheme: Theme) => {
+    setThemeState('light');
+    applyLightTheme();
+  };
+
+  const toggleTheme = () => {
+    setThemeState('light');
+    applyLightTheme();
+  };
 
   return (
-    <ThemeContext.Provider value={{ theme, isDarkMode: theme === 'dark', toggleTheme, setTheme }}>
+    <ThemeContext.Provider value={{ theme: 'light', isDarkMode: false, toggleTheme, setTheme }}>
       {children}
     </ThemeContext.Provider>
   );
