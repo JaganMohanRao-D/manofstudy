@@ -1,199 +1,76 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useMemo, useState } from 'react';
+import { ArrowRight, Search, GraduationCap, Landmark, Wrench, Users, Sparkles, BookOpen, Heart } from 'lucide-react';
 import './kineticMOS.css';
-import { ArrowDownRight, ArrowRight } from 'lucide-react';
 import { FeaturesHub } from './FeaturesHub';
 
 export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
-  const cursorRef = useRef(null);
-  const cursorDotRef = useRef(null);
-  const cursorRingRef = useRef(null);
-  const heroRef = useRef(null);
-  const stringPathRef = useRef(null);
-  const stringGripRef = useRef(null);
-
+  const [query, setQuery] = useState('');
+  const shortcuts = [
+    { title: 'AP EAPCET College Predictor', detail: 'Explore colleges by rank and branch', icon: Landmark, workspace: 'ap-predictor', tone: 'blue' },
+    { title: 'Telangana College Predictor', detail: 'Find options from TG allotment data', icon: GraduationCap, workspace: 'tg-predictor', tone: 'mint' },
+    { title: 'Scholarships Hub', detail: 'Find funding for your education', icon: Heart, workspace: 'scholarships', tone: 'sun' },
+    { title: 'Student Tools', detail: 'PDF, image, attendance and GPA tools', icon: Wrench, workspace: 'utilities', tone: 'lilac' },
+  ];
+  const matches = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return q ? shortcuts.filter(item => (item.title + ' ' + item.detail).toLowerCase().includes(q)).slice(0, 3) : [];
+  }, [query]);
   const go = (workspace) => {
     onSelectWorkspace?.(workspace);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
-  useEffect(() => {
-    const root = heroRef.current;
-    const cursor = cursorRef.current;
-    const dot = cursorDotRef.current;
-    const ring = cursorRingRef.current;
-    const path = stringPathRef.current;
-    const grip = stringGripRef.current;
-    if (!root || !cursor || !dot || !ring || !path || !grip || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    const boxes = Array.from(root.querySelectorAll('.mos-k-physics-box')).map((el) => ({ el, homeX: parseFloat(el.dataset.x || '50'), homeY: parseFloat(el.dataset.y || '50'), x: 0, y: 0, vx: 0, vy: 0, rot: 0 }));
-    let raf = 0;
-    let targetX = window.innerWidth / 2;
-    let targetY = window.innerHeight / 2;
-    let mouseX = root.clientWidth / 2;
-    let mouseY = root.clientHeight / 2;
-    let stringX = mouseX;
-    let stringY = root.clientHeight * 0.57;
-    let stringVY = 0;
-    let lastX = mouseX;
-    let lastY = mouseY;
-    let active = false;
-
-    const updatePointer = (event) => {
-      targetX = event.clientX; targetY = event.clientY; active = root.contains(event.target); cursor.classList.toggle('is-active', active);
-      const rect = root.getBoundingClientRect();
-      mouseX = event.clientX - rect.left; mouseY = event.clientY - rect.top;
-      root.style.setProperty('--mk-mouse-x', event.clientX + 'px');
-      root.style.setProperty('--mk-mouse-y', event.clientY + 'px');
-    };
-    const hidePointer = (event) => { if (!event.relatedTarget) { active = false; cursor.classList.remove('is-active'); } };
-
-    const animate = () => {
-      const width = root.clientWidth || 1; const height = root.clientHeight || 1;
-      const rect = root.getBoundingClientRect();
-      mouseX = targetX - rect.left; mouseY = targetY - rect.top;
-      stringVY += (mouseY - stringY) * 0.055; stringVY *= 0.8; stringY += stringVY; stringX += (mouseX - stringX) * 0.12;
-      const baseY = height * 0.57; const controlY = 2 * stringY - baseY;
-      path.setAttribute('d', 'M 0 ' + baseY + ' Q ' + stringX + ' ' + controlY + ' ' + width + ' ' + baseY);
-      grip.setAttribute('cx', stringX); grip.setAttribute('cy', stringY); grip.setAttribute('opacity', active ? '1' : '0');
-      const speedX = mouseX - lastX; const speedY = mouseY - lastY; lastX = mouseX; lastY = mouseY;
-      boxes.forEach((box) => {
-        const homeX = (box.homeX / 100) * width; const homeY = (box.homeY / 100) * height;
-        const dx = homeX - mouseX; const dy = homeY - mouseY; const distance = Math.max(1, Math.hypot(dx, dy));
-        const force = Math.max(0, 1 - distance / Math.min(250, Math.max(150, width * 0.18)));
-        const nx = dx / distance; const ny = dy / distance;
-        const tx = nx * force * 85 + speedX * force * 0.8; const ty = ny * force * 85 + speedY * force * 0.8;
-        box.vx += (tx - box.x) * 0.075; box.vy += (ty - box.y) * 0.075; box.vx *= 0.82; box.vy *= 0.82; box.x += box.vx; box.y += box.vy;
-        box.rot += ((speedX - speedY) * force * 0.03 - box.rot) * 0.08;
-        box.el.style.left = box.homeX + '%'; box.el.style.top = box.homeY + '%';
-        box.el.style.transform = 'translate3d(' + box.x.toFixed(1) + 'px,' + box.y.toFixed(1) + 'px,0) rotate(' + box.rot.toFixed(2) + 'deg)';
-      });
-      dot.style.transform = 'translate3d(' + targetX + 'px,' + targetY + 'px,0)';
-      ring.style.transform = 'translate3d(' + targetX + 'px,' + targetY + 'px,0)';
-      cursor.style.opacity = active ? '1' : '0';
-      raf = requestAnimationFrame(animate);
-    };
-    window.addEventListener('pointermove', updatePointer, { passive: true });
-    window.addEventListener('pointerout', hidePointer);
-    raf = requestAnimationFrame(animate);
-    return () => { window.removeEventListener('pointermove', updatePointer); window.removeEventListener('pointerout', hidePointer); cancelAnimationFrame(raf); };
-  }, []);
-
-  const scrollToTools = () => {
-    document.getElementById('features-hub')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
+  const scrollToTools = () => document.getElementById('features-hub')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   return (
-    <main className="mos-kinetic-home">
-      <section ref={heroRef} className="mos-k-hero" aria-labelledby="mos-k-title">
-        <div ref={cursorRef} className="mos-k-cursor" aria-hidden="true">
-          <span ref={cursorRingRef} className="mos-k-cursor-ring"><i /><i /><i /><i /></span>
-          <span ref={cursorDotRef} className="mos-k-cursor-dot" />
-          <span className="mos-k-cursor-label">MOVE / EXPLORE</span>
-        </div>
-        <div className="mos-k-grid" aria-hidden="true" />
-        <div className="mos-k-physics-field" aria-hidden="true">
-          <span className="mos-k-physics-box acid" data-x="9" data-y="24" />
-          <span className="mos-k-physics-box warm" data-x="18" data-y="42" />
-          <span className="mos-k-physics-box" data-x="31" data-y="20" />
-          <span className="mos-k-physics-box acid" data-x="46" data-y="31" />
-          <span className="mos-k-physics-box warm" data-x="61" data-y="18" />
-          <span className="mos-k-physics-box" data-x="77" data-y="30" />
-          <span className="mos-k-physics-box acid" data-x="90" data-y="20" />
-          <span className="mos-k-physics-box warm" data-x="13" data-y="72" />
-          <span className="mos-k-physics-box" data-x="29" data-y="82" />
-          <span className="mos-k-physics-box acid" data-x="48" data-y="74" />
-          <span className="mos-k-physics-box warm" data-x="70" data-y="82" />
-          <span className="mos-k-physics-box" data-x="88" data-y="68" />
-        </div>
-        <svg className="mos-k-string" aria-hidden="true">
-          <path ref={stringPathRef} className="mos-k-string-path" />
-          <circle className="mos-k-string-anchor" cx="0" cy="0" r="4" />
-          <circle className="mos-k-string-anchor" cx="100%" cy="0" r="4" />
-          <circle ref={stringGripRef} className="mos-k-string-grip" cx="50%" cy="50%" r="7" />
-        </svg>
-        <div className="mos-k-glow" aria-hidden="true" />
-        <span className="mos-k-orb a" aria-hidden="true" />
-        <span className="mos-k-orb b" aria-hidden="true" />
-        <span className="mos-k-orb c" aria-hidden="true" />
-
-        <div className="mos-k-content">
-          <div className="mos-k-meta">
-            <span><strong>NAA COLLEGE</strong> / STUDENT PLATFORM</span>
-            <span>AP + TG / 2026</span>
-          </div>
-
-          <div>
-            <h1 id="mos-k-title" className="mos-k-title" aria-label="Naa College">
-              <span>NAA</span>
-              <span className="accent">COLLEGE<span className="orange">.</span></span>
-            </h1>
-
-            <div className="mos-k-bottom">
-              <p className="mos-k-copy">
-                <b>Everything students need, in one place.</b><br />
-                Explore AP &amp; Telangana admissions, allotments, college predictors,
-                scholarships, internships, roadmaps and practical student tools — built
-                around the real student journey.
-              </p>
-
-              <button type="button" className="mos-k-cta" onClick={scrollToTools}>
-                Explore Naa College <ArrowDownRight size={15} />
-              </button>
-
-              <div className="mos-k-index" aria-label="Homepage sections">
-                <span>01 / Admissions</span>
-                <span>02 / Academics</span>
-                <span>03 / Career</span>
-                <span>04 / Student Tools</span>
-              </div>
+    <main className="naa-home">
+      <section className="naa-hero" aria-labelledby="naa-hero-title">
+        <div className="naa-hero-decoration naa-decoration-one" aria-hidden="true" />
+        <div className="naa-hero-decoration naa-decoration-two" aria-hidden="true" />
+        <div className="naa-dots" aria-hidden="true" />
+        <div className="naa-bird naa-bird-one" aria-hidden="true">🕊️</div>
+        <div className="naa-bird naa-bird-two" aria-hidden="true">🕊️</div>
+        <div className="naa-bird naa-bird-three" aria-hidden="true">🕊️</div>
+        <div className="naa-hero-inner">
+          <div className="naa-hero-copy">
+            <div className="naa-eyebrow"><span className="naa-eyebrow-icon"><GraduationCap size={16}/></span> Your education journey starts here</div>
+            <h1 id="naa-hero-title">Build your future with <span>Naa College</span><i aria-hidden="true">✦</i></h1>
+            <p className="naa-hero-description">Explore colleges, understand EAPCET allotments, discover scholarships and use practical student tools — all in one friendly place.</p>
+            <div className="naa-search-wrap">
+              <Search size={19} aria-hidden="true"/>
+              <input value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && matches[0]) go(matches[0].workspace); }} placeholder="Search colleges, scholarships, tools..." aria-label="Search Naa College resources" />
+              <button type="button" onClick={() => matches[0] ? go(matches[0].workspace) : scrollToTools()}>{matches.length ? 'Open' : 'Explore'} <ArrowRight size={16}/></button>
+              {matches.length > 0 && <div className="naa-search-suggestions">{matches.map(item => <button type="button" key={item.title} onClick={() => go(item.workspace)}><span>{item.title}</span><ArrowRight size={15}/></button>)}</div>}
+            </div>
+            <div className="naa-stat-grid">
+              <div className="naa-stat naa-stat-blue"><span><Landmark size={19}/></span><strong>AP + TG</strong><small>Admissions resources</small></div>
+              <div className="naa-stat naa-stat-mint"><span><Heart size={19}/></span><strong>Scholarships</strong><small>Funding opportunities</small></div>
+              <div className="naa-stat naa-stat-lilac"><span><Wrench size={19}/></span><strong>Free tools</strong><small>Useful student utilities</small></div>
+              <div className="naa-stat naa-stat-sun"><span><Users size={19}/></span><strong>Student-first</strong><small>Made for your journey</small></div>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section className="mos-k-section" aria-labelledby="mos-k-discover">
-        <div className="mos-k-section-head">
-          <div>
-            <div className="mos-k-section-label">01 / Student Intelligence</div>
-            <h2 id="mos-k-discover" className="mos-k-section-title">Find what<br />you need.</h2>
+          <div className="naa-hero-art" aria-label="Illustration of college students on a colourful campus">
+            <div className="naa-sun-disc" />
+            <div className="naa-campus-building"><div className="naa-building-roof"/><div className="naa-building-columns"><i/><i/><i/><i/></div></div>
+            <div className="naa-tree naa-tree-left"/><div className="naa-tree naa-tree-right"/>
+            <div className="naa-book-stack"><i/><i/><i/></div>
+            <div className="naa-student naa-student-left"><div className="naa-hair naa-hair-left"/><div className="naa-face"><i/><i/><b/></div><div className="naa-neck"/><div className="naa-body naa-body-blue"><span className="naa-backpack"/></div><div className="naa-arm naa-arm-left"/></div>
+            <div className="naa-student naa-student-center"><div className="naa-hair naa-hair-center"/><div className="naa-face"><i/><i/><b/></div><div className="naa-neck"/><div className="naa-body naa-body-pink"><span className="naa-books"><i/><i/><i/></span></div><div className="naa-arm naa-arm-right"/></div>
+            <div className="naa-student naa-student-right"><div className="naa-hair naa-hair-right"/><div className="naa-glasses"/><div className="naa-face"><i/><i/><b/></div><div className="naa-neck"/><div className="naa-body naa-body-orange"><span className="naa-backpack"/></div><div className="naa-arm naa-arm-right"/></div>
+            <div className="naa-art-sparkle sparkle-a">✦</div><div className="naa-art-sparkle sparkle-b">✧</div><div className="naa-art-heart">♡</div>
           </div>
-          <div className="mos-k-section-label">DATA / TOOLS / GUIDANCE</div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 border-l border-t border-white/10">
-          <button type="button" onClick={() => go('ap-predictor')} className="group min-h-[180px] border-r border-b border-white/10 p-6 text-left transition hover:bg-white/[.025]">
-            <div className="flex items-start justify-between"><span className="text-xs font-mono text-[#22d3ee]">01</span><ArrowRight className="text-white/40 transition group-hover:translate-x-1 group-hover:text-[#22d3ee]" size={17}/></div>
-            <h3 className="mt-16 font-['Syne'] text-2xl font-bold tracking-tight">AP / TG Admissions</h3>
-            <p className="mt-2 max-w-sm text-xs leading-6 text-[#858990]">Predict colleges, inspect allotments, compare ranks and explore counselling data.</p>
-          </button>
-
-          <button type="button" onClick={() => go('academics')} className="group min-h-[180px] border-r border-b border-white/10 p-6 text-left transition hover:bg-white/[.025]">
-            <div className="flex items-start justify-between"><span className="text-xs font-mono text-[#ff9f68]">02</span><ArrowRight className="text-white/40 transition group-hover:translate-x-1 group-hover:text-[#ff9f68]" size={17}/></div>
-            <h3 className="mt-16 font-['Syne'] text-2xl font-bold tracking-tight">Academics</h3>
-            <p className="mt-2 max-w-sm text-xs leading-6 text-[#858990]">Attendance, GPA, internal marks, backlogs, mock tests and study resources.</p>
-          </button>
-
-          <button type="button" onClick={() => go('roadmaps')} className="group min-h-[180px] border-r border-b border-white/10 p-6 text-left transition hover:bg-white/[.025]">
-            <div className="flex items-start justify-between"><span className="text-xs font-mono text-[#22d3ee]">03</span><ArrowRight className="text-white/40 transition group-hover:translate-x-1 group-hover:text-[#22d3ee]" size={17}/></div>
-            <h3 className="mt-16 font-['Syne'] text-2xl font-bold tracking-tight">Career &amp; Skills</h3>
-            <p className="mt-2 max-w-sm text-xs leading-6 text-[#858990]">Roadmaps, internships, projects, placement preparation and practical guidance.</p>
-          </button>
         </div>
       </section>
 
-      <div id="features-hub">
-        <FeaturesHub activeWorkspace={activeWorkspace} onSelectWorkspace={onSelectWorkspace} />
-      </div>
+      <div className="naa-updates-strip"><span><Sparkles size={17}/> Latest updates</span><div className="naa-updates-track"><b>AP &amp; Telangana EAPCET resources</b><i>✦</i><b>Scholarships and student opportunities</b><i>✦</i><b>Free practical tools for students</b><i>✦</i><b>AP &amp; Telangana EAPCET resources</b></div></div>
 
-      <section className="mos-k-section" aria-label="Naa College principles">
-        <div className="grid gap-10 md:grid-cols-3">
-          <div><div className="mos-k-section-label">02 / Data</div><h2 className="mt-5 font-['Syne'] text-3xl font-bold">Useful data.<br/>Clear context.</h2><p className="mt-4 text-xs leading-6 text-[#858990]">AP and Telangana counselling tools are organised around the questions students actually ask.</p></div>
-          <div><div className="mos-k-section-label">03 / Access</div><h2 className="mt-5 font-['Syne'] text-3xl font-bold">Built for<br/>students.</h2><p className="mt-4 text-xs leading-6 text-[#858990]">Most tools work directly in the browser, keeping common student tasks quick and accessible.</p></div>
-          <div><div className="mos-k-section-label">04 / Future</div><h2 className="mt-5 font-['Syne'] text-3xl font-bold">Keep<br/>building.</h2><p className="mt-4 text-xs leading-6 text-[#858990]">Naa College keeps evolving as new student needs, data and practical resources become available.</p></div>
-        </div>
+      <section className="naa-home-section" aria-labelledby="naa-services-title">
+        <div className="naa-section-heading"><div><span className="naa-section-kicker">YOUR STUDENT TOOLKIT</span><h2 id="naa-services-title">Explore our <span>key services</span></h2></div><p>Everything you need, all in one place <span aria-hidden="true">↗</span></p><button type="button" onClick={scrollToTools}>View all services <ArrowRight size={16}/></button></div>
+        <div className="naa-shortcut-grid">{shortcuts.map(item => { const Icon = item.icon; return <button type="button" key={item.title} className={'naa-shortcut naa-shortcut-' + item.tone} onClick={() => go(item.workspace)}><span className="naa-shortcut-icon"><Icon size={21}/></span><span className="naa-shortcut-title">{item.title}</span><small>{item.detail}</small><span className="naa-shortcut-arrow"><ArrowRight size={17}/></span></button>; })}</div>
       </section>
+
+      <div id="features-hub"><FeaturesHub activeWorkspace={activeWorkspace} onSelectWorkspace={onSelectWorkspace} /></div>
+      <section className="naa-trust-section"><div><span className="naa-section-kicker">01 / CLEAR INFORMATION</span><h2>Useful data.<br/><span>Clear context.</span></h2><p>Explore AP and Telangana counselling resources with context about the underlying allotment data and its limitations.</p></div><div><span className="naa-section-kicker">02 / STUDENT-FIRST</span><h2>Made for<br/><span>real student needs.</span></h2><p>From scholarships and roadmaps to attendance and PDF utilities, the platform brings everyday student tasks together.</p></div><div><span className="naa-section-kicker">03 / KEEP EXPLORING</span><h2>Your next step<br/><span>starts here.</span></h2><p>Use the resources that fit your goals, verify important deadlines with official sources, and keep learning at your own pace.</p></div></section>
     </main>
   );
 };
-
 export default HeroSection;

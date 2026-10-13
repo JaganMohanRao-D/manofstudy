@@ -20,7 +20,7 @@
 
 @layer base {
   :root {
-    --mos-page-bg: #F5F7FB;
+    --mos-page-bg: #F5F9FF;
     --mos-surface: #FFFFFF;
     --mos-surface-raised: #FFFFFF;
     --mos-surface-muted: #EEF2F7;
@@ -29,10 +29,10 @@
     --mos-text-muted: #64748B;
     --mos-border: #D9E1EC;
     --mos-border-strong: #B8C5D6;
-    --mos-primary: #059669;
-    --mos-primary-soft: rgba(5, 150, 105, 0.1);
-    --mos-accent: #0284C7;
-    --mos-success: #059669;
+    --mos-primary: #2875F0;
+    --mos-primary-soft: rgba(40, 117, 240, 0.1);
+    --mos-accent: #20B9B2;
+    --mos-success: #159A78;
     --mos-warning: #D97706;
     --mos-danger: #E11D48;
     --mos-info: #0284C7;
@@ -2088,3 +2088,21 @@ html.light .mos-about-hero .text-blue-300 {
 #main-header.mos-k-nav #mos-mobile-navigation-panel #mobile-search-tools span:first-child {
   color: #0E7490 !important;
 }
+
+
+/* Naa College shared campus palette for every tool/workspace page */
+:root{--naa-ink:#193568;--naa-blue:#2875f0;--naa-teal:#20b9b2;--naa-coral:#ff7047;--naa-yellow:#ffd65a}
+body{background-color:var(--mos-page-bg);color:var(--mos-text-primary)}
+#workspace-viewport{color:var(--mos-text-primary)}
+#workspace-viewport h1,#workspace-viewport h2,#workspace-viewport h3{letter-spacing:-.025em}
+#workspace-viewport input:not([type=checkbox]):not([type=radio]):not([type=file]),#workspace-viewport select,#workspace-viewport textarea{border-radius:12px}
+#workspace-viewport input:focus-visible,#workspace-viewport select:focus-visible,#workspace-viewport textarea:focus-visible,#workspace-viewport button:focus-visible{outline:2px solid #2875f0;outline-offset:2px}
+#workspace-viewport [class*=rounded-2xl],#workspace-viewport [class*=rounded-3xl]{border-color:var(--mos-border)}
+#workspace-viewport [class*=bg-slate-950],#workspace-viewport [class*=bg-slate-900]{background-color:#f4f8ff}
+#workspace-viewport [class*=text-slate-900],#workspace-viewport [class*=text-white]{color:var(--mos-text-primary)}
+#workspace-viewport [class*=border-slate-800],#workspace-viewport [class*=border-white\/10]{border-color:var(--mos-border)}
+#workspace-viewport [class*=bg-blue-600],#workspace-viewport [class*=bg-emerald-600]{background-color:#2875f0}
+#workspace-viewport [class*=text-blue-600],#workspace-viewport [class*=text-emerald-600]{color:#2875f0}
+#workspace-viewport [class*=shadow-2xl],#workspace-viewport [class*=shadow-xl]{box-shadow:0 12px 35px rgba(35,70,125,.08)}
+#main-header{isolation:isolate}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important}}
