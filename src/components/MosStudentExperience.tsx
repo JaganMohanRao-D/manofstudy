@@ -253,22 +253,22 @@ const FaqList: React.FC = () => {
     <div>
       {FAQS.map((item, index) => {
         const expanded = open === index;
+        const panelId = `mos-experience-faq-panel-${index}`;
         return (
           <div key={item.q}>
             <button
               type="button"
               onClick={() => setOpen(expanded ? -1 : index)}
               aria-expanded={expanded}
+              aria-controls={panelId}
               className="flex min-h-16 w-full items-center justify-between gap-4 py-4 text-left"
             >
               <span className="text-sm font-extrabold leading-6 text-[var(--mos-text-primary)] sm:text-base">{item.q}</span>
               <ChevronDown className={`h-4 w-4 shrink-0 text-[var(--mos-text-muted)] transition-transform ${expanded ? 'rotate-180' : ''}`} aria-hidden="true" />
             </button>
-            {expanded && (
-              <div className="pb-5 pr-7 text-sm leading-6 text-[var(--mos-text-secondary)]">
-                {item.a}
-              </div>
-            )}
+            <div id={panelId} hidden={!expanded} className="pb-5 pr-7 text-sm leading-6 text-[var(--mos-text-secondary)]">
+              {item.a}
+            </div>
           </div>
         );
       })}
