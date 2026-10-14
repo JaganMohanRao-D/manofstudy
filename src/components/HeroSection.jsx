@@ -67,7 +67,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
           <div className="naa-hero-art naa-hero-art-image naa-bie-hero-art">
             <video
               className="naa-campus-life-image"
-              src="/HERO_VIDEO.mp4"
+              src="/HERO_VEDIO.webm"
               autoPlay
               muted
               loop
