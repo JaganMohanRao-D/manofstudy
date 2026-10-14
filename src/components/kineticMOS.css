@@ -1569,3 +1569,31 @@ html.light .naa-bie-inspired-home .naa-bie-hero-art .naa-campus-life-image {
     transform: translateY(-12px) !important;
   }
 }
+
+
+/* Hero visual polish: align the media higher and blend its white canvas into the hero. */
+html.light .naa-bie-inspired-home .naa-bie-hero {
+  background: #fff !important;
+  background-image: none !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero::before,
+html.light .naa-bie-inspired-home .naa-bie-hero::after {
+  background-image: none !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero-art {
+  background: #fff !important;
+  transform: translateY(-64px) !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero-art .naa-campus-life-image {
+  background: #fff !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  clip-path: inset(0 3px 0 0) !important;
+}
+@media (max-width: 620px) {
+  html.light .naa-bie-inspired-home .naa-bie-hero-art {
+    transform: translateY(-24px) !important;
+  }
+}
