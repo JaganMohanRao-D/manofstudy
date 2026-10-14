@@ -367,7 +367,7 @@ export const FeaturesHub = ({
 
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {regionalGroups.map((group) => (
-          <section key={group.title} className="relative overflow-hidden rounded-[1.75rem] border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 p-4 sm:p-5 shadow-lg">
+          <section key={group.title} id={group.title === 'FOR AP STUDENTS' ? 'regional-section-ap' : 'regional-section-tg'} className="relative scroll-mt-24 overflow-hidden rounded-[1.75rem] border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 p-4 sm:p-5 shadow-lg">
             <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-cyan-400/10 blur-3xl" />
             <div className="relative">
               <div className="flex items-start justify-between gap-3 mb-4">
