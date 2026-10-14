@@ -1558,3 +1558,32 @@ html.light .naa-bie-inspired-home #features-hub {scroll-margin-top:24px !importa
 @media(max-width:620px) {
  html.light .naa-bie-inspired-home .naa-bie-quick-search .naa-search-suggestions {max-height:45vh !important;}
 }
+
+
+/* Production homepage hero: pure-white canvas, higher media placement, no hard edge. */
+html.light .naa-bie-inspired-home .naa-bie-hero {
+  background: #fff !important;
+  background-image: none !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero::before {
+  display: none !important;
+  background-image: none !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero-art {
+  background: #fff !important;
+  transform: translateY(-64px) !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero-art .naa-campus-life-image {
+  background: #fff !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+  transform: none !important;
+  clip-path: inset(0 4px 0 0) !important;
+}
+@media (max-width: 620px) {
+  html.light .naa-bie-inspired-home .naa-bie-hero-art {
+    transform: translateY(-24px) !important;
+  }
+}
