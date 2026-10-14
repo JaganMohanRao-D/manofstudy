@@ -1558,3 +1558,14 @@ html.light .naa-bie-inspired-home #features-hub {scroll-margin-top:24px !importa
 @media(max-width:620px) {
  html.light .naa-bie-inspired-home .naa-bie-quick-search .naa-search-suggestions {max-height:45vh !important;}
 }
+
+
+/* Slightly lift the homepage hero video without changing its sizing or layout. */
+html.light .naa-bie-inspired-home .naa-bie-hero-art .naa-campus-life-image {
+  transform: translateY(-28px) !important;
+}
+@media (max-width: 620px) {
+  html.light .naa-bie-inspired-home .naa-bie-hero-art .naa-campus-life-image {
+    transform: translateY(-12px) !important;
+  }
+}
