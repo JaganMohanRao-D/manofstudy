@@ -1,20 +1,46 @@
 import React, { useMemo, useState } from 'react';
 import './kineticMOS.css';
 import { ArrowRight, Search, GraduationCap, Landmark, Wrench, Users, Sparkles, BookOpen, Heart, Bell, MapPin } from 'lucide-react';
-import { FeaturesHub } from './FeaturesHub';
+import { FeaturesHub, WORKSPACES, FLAGSHIP_FEATURES } from './FeaturesHub';
 
 export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
   const [query, setQuery] = useState('');
+  const [searchOpen, setSearchOpen] = useState(false);
   const shortcuts = [
-    { title: 'AP EAPCET College Predictor', detail: 'Explore colleges by rank and branch', icon: Landmark, workspace: 'ap-predictor', tone: 'blue' },
-    { title: 'Telangana College Predictor', detail: 'Find options from TG allotment data', icon: GraduationCap, workspace: 'tg-predictor', tone: 'mint' },
+    { title: 'AP EAPCET College Predictor', detail: 'Explore Andhra Pradesh colleges by rank and branch', icon: Landmark, workspace: 'ap-predictor', tone: 'blue' },
+    { title: 'Telangana College Predictor', detail: 'Find Telangana colleges using EAPCET allotment data', icon: GraduationCap, workspace: 'tg-predictor', tone: 'mint' },
     { title: 'Scholarships Hub', detail: 'Find funding for your education', icon: Heart, workspace: 'scholarships', tone: 'sun' },
     { title: 'Student Tools', detail: 'PDF, image, attendance and GPA tools', icon: Wrench, workspace: 'utilities', tone: 'lilac' },
   ];
+  const searchIndex = useMemo(() => {
+    const items = [
+      ...WORKSPACES.map(item => ({ title: item.title.replace(/^🎯\\s*/, ''), detail: item.description || item.category || 'Student resource', workspace: item.workspace, keywords: item.category || '' })),
+      ...FLAGSHIP_FEATURES.map(item => ({ title: item.title, detail: item.description || item.badge || 'Featured resource', workspace: item.workspace, keywords: item.badge || '' })),
+      { title: 'Andhra Students — AP EAPCET tools', detail: 'AP namewise allotments, college predictor, rank predictor and top colleges', target: 'regional-section-ap', keywords: 'andhra ap eapcet counselling' },
+      { title: 'Telangana Students — TG EAPCET tools', detail: 'TG namewise allotments, college predictor and top colleges', target: 'regional-section-tg', keywords: 'telangana tg eapcet counselling' },
+      { title: 'PDF & Document Utilities', detail: 'Merge, split and optimize PDFs', workspace: 'utilities', keywords: 'pdf document merge split compress' },
+      { title: 'Image Compressor', detail: 'Compress images in your browser', workspace: 'utilities', keywords: 'image photo compress' },
+    ];
+    return items.filter((item, index, arr) => arr.findIndex(other => other.title === item.title && other.workspace === item.workspace && other.target === item.target) === index);
+  }, []);
   const matches = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return q ? shortcuts.filter(item => (item.title + ' ' + item.detail).toLowerCase().includes(q)).slice(0, 3) : [];
-  }, [query]);
+    if (q.length < 2) return [];
+    const terms = q.split(/\\s+/).filter(Boolean);
+    return searchIndex.map(item => {
+      const haystack = (item.title + ' ' + item.detail + ' ' + (item.keywords || '')).toLowerCase();
+      const score = terms.reduce((sum, term) => sum + (item.title.toLowerCase().includes(term) ? 3 : haystack.includes(term) ? 1 : 0), 0);
+      return { ...item, score };
+    }).filter(item => item.score > 0).sort((a, b) => b.score - a.score || a.title.localeCompare(b.title)).slice(0, 7);
+  }, [query, searchIndex]);
+  const openSearchResult = (item) => {
+    setSearchOpen(false);
+    if (item.target) {
+      document.getElementById(item.target)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+    go(item.workspace || 'hub');
+  };
   const go = (workspace) => {
     onSelectWorkspace?.(workspace);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -29,13 +55,13 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         <div className="naa-dots" aria-hidden="true" />
         <div className="naa-bie-hero-inner">
           <div className="naa-bie-audience-cards">
-            <button type="button" className="naa-bie-audience-card naa-bie-student-card" onClick={() => go('hub')}>
+            <button type="button" className="naa-bie-audience-card naa-bie-student-card" onClick={() => document.getElementById('regional-section-ap')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
               <span className="naa-bie-card-art naa-bie-student-art" aria-hidden="true"><Users size={54} strokeWidth={1.4} /><GraduationCap size={35} strokeWidth={1.5} /></span>
-              <span className="naa-bie-card-copy"><strong>FOR STUDENTS</strong><small>Explore college predictors, admission insights, scholarships, internships, and learning resources.</small><span className="naa-bie-card-action">Explore Student Tools <ArrowRight size={16}/></span></span>
+              <span className="naa-bie-card-copy"><strong>ANDHRA STUDENTS</strong><small>AP EAPCET allotments, college predictors, rank insights, scholarships and student resources.</small><span className="naa-bie-card-action">Explore AP Tools <ArrowRight size={16}/></span></span>
             </button>
-            <button type="button" className="naa-bie-audience-card naa-bie-college-card" onClick={() => go('hub')}>
+            <button type="button" className="naa-bie-audience-card naa-bie-college-card" onClick={() => document.getElementById('regional-section-tg')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
               <span className="naa-bie-card-art naa-bie-college-art" aria-hidden="true"><Landmark size={60} strokeWidth={1.35} /><MapPin size={25} strokeWidth={1.5} /></span>
-              <span className="naa-bie-card-copy"><strong>FOR COLLEGES</strong><small>Discover college information, branches, admissions data, and useful institutional insights.</small><span className="naa-bie-card-action">Explore Colleges <ArrowRight size={16}/></span></span>
+              <span className="naa-bie-card-copy"><strong>TELANGANA STUDENTS</strong><small>TG EAPCET allotments, college discovery, category cutoffs and rank-based insights.</small><span className="naa-bie-card-action">Explore TG Tools <ArrowRight size={16}/></span></span>
             </button>
           </div>
           <div className="naa-hero-art naa-hero-art-image naa-bie-hero-art">
@@ -63,9 +89,9 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
           <div className="naa-bie-section-title"><h2>Quick <span>Links</span></h2><ArrowRight size={23} aria-hidden="true"/></div>
           <div className="naa-search-wrap naa-bie-quick-search">
             <Search size={18} aria-hidden="true"/>
-            <input value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && matches[0]) go(matches[0].workspace); }} placeholder="Search colleges, scholarships, tools..." aria-label="Search Naa College resources" />
-            <button type="button" onClick={() => matches[0] ? go(matches[0].workspace) : scrollToTools()}>{matches.length ? 'Open' : 'Explore'} <ArrowRight size={16}/></button>
-            {matches.length > 0 && <div className="naa-search-suggestions">{matches.map(item => <button type="button" key={item.title} onClick={() => go(item.workspace)}><span>{item.title}</span><ArrowRight size={15}/></button>)}</div>}
+            <input value={query} onFocus={() => setSearchOpen(true)} onChange={e => { setQuery(e.target.value); setSearchOpen(true); }} onKeyDown={e => { if (e.key === 'Enter' && matches[0]) openSearchResult(matches[0]); if (e.key === 'Escape') setSearchOpen(false); }} placeholder="Search any tool, college resource, scholarship..." aria-label="Search all Naa College tools and resources" aria-expanded={searchOpen && matches.length > 0} aria-controls="naa-global-search-results" autoComplete="off" />
+            <button type="button" onClick={() => matches[0] ? openSearchResult(matches[0]) : (setSearchOpen(true), scrollToTools())}>{matches.length ? 'Open' : 'Search'} <ArrowRight size={16}/></button>
+            {searchOpen && query.trim().length >= 2 && <div className="naa-search-suggestions" id="naa-global-search-results" role="listbox">{matches.length ? matches.map(item => <button type="button" role="option" key={item.title + (item.workspace || item.target || '')} onClick={() => openSearchResult(item)}><span><strong>{item.title}</strong><small>{item.detail}</small></span><ArrowRight size={15}/></button>) : <p className="naa-search-empty">No matching resources. Try “AP”, “TG”, “scholarship”, “PDF” or “attendance”.</p>}</div>}
           </div>
           <div className="naa-bie-quick-grid">
             {shortcuts.map(item => { const Icon = item.icon; return <button type="button" key={item.title} className="naa-bie-quick-link" onClick={() => go(item.workspace)}><span className="naa-bie-quick-icon"><Icon size={20}/></span><span>{item.title}</span><ArrowRight size={15}/></button>; })}
