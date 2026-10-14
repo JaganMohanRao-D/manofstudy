@@ -100,11 +100,6 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         </div>
       </section>
 
-      <section className="naa-home-section naa-bie-services" aria-labelledby="naa-services-title">
-        <div className="naa-section-heading"><div><span className="naa-section-kicker">YOUR STUDENT TOOLKIT</span><h2 id="naa-services-title">Explore our <span>key services</span></h2></div><p>Everything you need, all in one place <span aria-hidden="true">↗</span></p><button type="button" onClick={scrollToTools}>View all services <ArrowRight size={16}/></button></div>
-        <div className="naa-shortcut-grid">{shortcuts.map(item => { const Icon = item.icon; return <button type="button" key={item.title} className={'naa-shortcut naa-shortcut-' + item.tone} onClick={() => go(item.workspace)}><span className="naa-shortcut-icon"><Icon size={21}/></span><span className="naa-shortcut-title">{item.title}</span><small>{item.detail}</small><span className="naa-shortcut-arrow"><ArrowRight size={17}/></span></button>; })}</div>
-      </section>
-
       <div id="features-hub"><FeaturesHub activeWorkspace={activeWorkspace} onSelectWorkspace={onSelectWorkspace} /></div>
       <section className="naa-trust-section"><div><span className="naa-section-kicker">01 / CLEAR INFORMATION</span><h2>Useful data.<br/><span>Clear context.</span></h2><p>Explore AP and Telangana counselling resources with context about the underlying allotment data and its limitations.</p></div><div><span className="naa-section-kicker">02 / STUDENT-FIRST</span><h2>Made for<br/><span>real student needs.</span></h2><p>From scholarships and roadmaps to attendance and PDF utilities, the platform brings everyday student tasks together.</p></div><div><span className="naa-section-kicker">03 / KEEP EXPLORING</span><h2>Your next step<br/><span>starts here.</span></h2><p>Use the resources that fit your goals, verify important deadlines with official sources, and keep learning at your own pace.</p></div></section>
     </main>
