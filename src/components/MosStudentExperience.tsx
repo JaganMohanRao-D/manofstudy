@@ -248,7 +248,7 @@ const GuidanceBlock: React.FC = () => (
 );
 
 const FaqList: React.FC = () => {
-  const [open, setOpen] = useState(0);
+  const [open, setOpen] = useState(-1);
   return (
     <div>
       {FAQS.map((item, index) => {
