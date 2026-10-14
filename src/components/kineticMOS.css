@@ -2066,3 +2066,62 @@ html.light .naa-bie-inspired-home .naa-bie-hero .naa-bie-audience-cards::after {
     transition: none !important;
   }
 }
+
+
+/* Bright-theme fallback for the student guidance portal. This component is
+   mounted through a portal beside the legacy FAQ, so it may sit outside
+   .mos-k-homepage-flow; keep the same light treatment without that ancestor. */
+html.light .mos-k-experience-faq,
+html.light .mos-k-experience-faq > div {
+  color: #18345f !important;
+  background-color: #fff !important;
+  border-color: #dce8f7 !important;
+}
+html.light .mos-k-experience-faq {
+  padding-top: clamp(2.75rem, 5.5vw, 5rem) !important;
+  padding-bottom: clamp(1rem, 2vw, 1.75rem) !important;
+}
+html.light .mos-k-experience-faq > div {
+  background: radial-gradient(ellipse at 100% 0%, rgba(228, 241, 255, .58), transparent 34%), #fff !important;
+  border-radius: 22px !important;
+  box-shadow: 0 8px 28px rgba(29, 71, 125, .055) !important;
+}
+html.light .mos-k-experience-faq h2 {
+  color: #17396c !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  letter-spacing: -.035em !important;
+}
+html.light .mos-k-experience-faq p {
+  color: #5d718d !important;
+}
+html.light .mos-k-experience-faq .mos-k-eyebrow {
+  color: #2a6fbe !important;
+}
+html.light .mos-k-experience-faq .divide-y,
+html.light .mos-k-experience-faq .border-y {
+  border-color: #e2ebf6 !important;
+}
+html.light .mos-k-experience-faq button {
+  color: #1b3c6d !important;
+  border-radius: 12px !important;
+}
+html.light .mos-k-experience-faq button:hover {
+  background: #f3f8ff !important;
+  color: #205fa8 !important;
+}
+html.light .mos-k-experience-faq button svg,
+html.light .mos-k-experience-faq > div > div > div svg {
+  color: #3479c7 !important;
+}
+html.light .mos-k-experience-faq [hidden] {
+  display: none !important;
+}
+@media (max-width: 760px) {
+  html.light .mos-k-experience-faq {
+    padding-top: 2.5rem !important;
+  }
+  html.light .mos-k-experience-faq > div {
+    border-radius: 18px !important;
+    padding: 1.25rem !important;
+  }
+}
