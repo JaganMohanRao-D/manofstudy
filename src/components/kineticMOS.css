@@ -1734,3 +1734,72 @@ html.light .naa-bie-updates:hover .naa-updates-track {
     transform: none !important;
   }
 }
+
+
+/* Soft blue flowing-wave decoration behind the AP/TG audience cards only.
+   Keep the hero canvas white, the right-side campus visual untouched, and
+   place the decoration behind content at every breakpoint. */
+html.light .naa-bie-inspired-home .naa-bie-hero {
+  background-color: #fff !important;
+  background-image:
+    radial-gradient(ellipse 330px 190px at 7% 27%, rgba(220, 238, 255, .72) 0%, rgba(220, 238, 255, .30) 48%, transparent 76%),
+    radial-gradient(ellipse 270px 150px at 30% 76%, rgba(235, 246, 255, .95) 0%, rgba(235, 246, 255, .45) 54%, transparent 80%),
+    radial-gradient(ellipse 190px 100px at 3% 91%, rgba(207, 232, 255, .48) 0%, transparent 78%) !important;
+  background-repeat: no-repeat !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero .naa-bie-hero-inner {
+  position: relative !important;
+  z-index: 1 !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero .naa-bie-audience-cards {
+  position: relative !important;
+  isolation: isolate !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero .naa-bie-audience-cards::before {
+  content: "" !important;
+  position: absolute !important;
+  z-index: -1 !important;
+  pointer-events: none !important;
+  inset: -38px -30px -34px -38px !important;
+  border-radius: 46% 54% 58% 42% / 42% 42% 58% 58% !important;
+  background:
+    radial-gradient(ellipse at 22% 30%, rgba(220, 239, 255, .82) 0%, rgba(220, 239, 255, .40) 42%, transparent 72%),
+    radial-gradient(ellipse at 74% 72%, rgba(232, 244, 255, .90) 0%, rgba(232, 244, 255, .48) 46%, transparent 76%) !important;
+  filter: blur(9px) !important;
+  transform: rotate(-5deg) !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero .naa-bie-audience-cards::after {
+  content: "" !important;
+  position: absolute !important;
+  z-index: -1 !important;
+  pointer-events: none !important;
+  inset: -24px -18px -20px -22px !important;
+  border: 1px solid rgba(185, 220, 252, .55) !important;
+  border-radius: 38px 72px 44px 66px !important;
+  clip-path: polygon(0 10%, 62% 0, 100% 24%, 92% 74%, 55% 100%, 4% 85%) !important;
+  opacity: .65 !important;
+}
+@media (max-width: 760px) {
+  html.light .naa-bie-inspired-home .naa-bie-hero {
+    background-image:
+      radial-gradient(ellipse 230px 140px at 10% 24%, rgba(220, 238, 255, .66) 0%, rgba(220, 238, 255, .24) 52%, transparent 78%),
+      radial-gradient(ellipse 220px 130px at 86% 45%, rgba(235, 246, 255, .80) 0%, rgba(235, 246, 255, .30) 56%, transparent 80%),
+      radial-gradient(ellipse 210px 120px at 25% 78%, rgba(207, 232, 255, .40) 0%, transparent 78%) !important;
+  }
+  html.light .naa-bie-inspired-home .naa-bie-hero .naa-bie-audience-cards::before {
+    inset: -22px -12px -24px -16px !important;
+    filter: blur(7px) !important;
+  }
+  html.light .naa-bie-inspired-home .naa-bie-hero .naa-bie-audience-cards::after {
+    inset: -14px -8px -14px -10px !important;
+    border-radius: 28px 48px 30px 44px !important;
+  }
+}
+@media (max-width: 390px) {
+  html.light .naa-bie-inspired-home .naa-bie-hero .naa-bie-audience-cards::before {
+    inset: -16px -6px -18px -8px !important;
+  }
+  html.light .naa-bie-inspired-home .naa-bie-hero .naa-bie-audience-cards::after {
+    opacity: .45 !important;
+  }
+}
