@@ -80,7 +80,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         </div>
       </section>
 
-      <div className="naa-updates-strip naa-bie-updates"><span><Sparkles size={17}/> Latest Updates</span><div className="naa-updates-track"><b>AP &amp; Telangana EAPCET resources</b><i>•</i><b>College Predictors</b><i>•</i><b>Scholarships</b><i>•</i><b>Student Resources</b></div></div>
+      <div className="naa-updates-strip naa-bie-updates" aria-label="Latest updates"><span><Sparkles size={17} aria-hidden="true"/> Latest Updates</span><div className="naa-updates-viewport"><div className="naa-updates-track"><b>AP &amp; Telangana EAPCET resources</b><i>•</i><b>College Predictors</b><i>•</i><b>Scholarships</b><i>•</i><b>Student Resources</b><i>•</i><b>AP &amp; Telangana EAPCET resources</b><i>•</i><b>College Predictors</b><i>•</i><b>Scholarships</b><i>•</i><b>Student Resources</b><i aria-hidden="true">•</i></div></div></div>
 
       <section className="naa-bie-alert-links" aria-label="Latest alerts and quick links">
         <div className="naa-bie-alert-panel">
