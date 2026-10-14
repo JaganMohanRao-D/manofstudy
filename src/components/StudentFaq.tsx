@@ -134,9 +134,7 @@ export const StudentFaq: React.FC<StudentFaqProps> = ({
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [openFaqIds, setOpenFaqIds] = useState<Set<string>>(
-    new Set(['faq-mission-story', 'faq-roadmap-guidance', 'faq-pdf-security'])
-  );
+  const [openFaqIds, setOpenFaqIds] = useState<Set<string>>(() => new Set());
 
   const categories = [
     { id: 'all', label: 'All Queries', icon: HelpCircle },
