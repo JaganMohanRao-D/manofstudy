@@ -1558,3 +1558,109 @@ html.light .naa-bie-inspired-home #features-hub {scroll-margin-top:24px !importa
 @media(max-width:620px) {
  html.light .naa-bie-inspired-home .naa-bie-quick-search .naa-search-suggestions {max-height:45vh !important;}
 }
+
+
+/* NAA COLLEGE — polished light-only styling for the homepage sections below the hero.
+   Scoped to the homepage so tool workspaces retain their own intentional styling. */
+html.light .mos-k-homepage-flow,
+html.light .mos-k-homepage-flow .mos-k-why-section,
+html.light .mos-k-homepage-flow .mos-k-workflow-section,
+html.light .mos-k-homepage-flow .mos-k-experience-faq,
+html.light .mos-k-homepage-flow .mos-k-faq {
+  background: #f7f9fc !important;
+  color: #17243b !important;
+}
+html.light .mos-k-homepage-flow .mos-k-why-section > div,
+html.light .mos-k-homepage-flow .mos-k-workflow-section > div,
+html.light .mos-k-homepage-flow .mos-k-experience-faq > div,
+html.light .mos-k-homepage-flow .mos-k-faq > div {
+  background: #ffffff !important;
+  color: #17243b !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 22px !important;
+  box-shadow: 0 8px 28px rgba(27, 48, 79, .055) !important;
+}
+html.light .mos-k-homepage-flow .mos-k-why-section h2,
+html.light .mos-k-homepage-flow .mos-k-why-section h3,
+html.light .mos-k-homepage-flow .mos-k-workflow-section h2,
+html.light .mos-k-homepage-flow .mos-k-workflow-section h3,
+html.light .mos-k-homepage-flow .mos-k-experience-faq h2,
+html.light .mos-k-homepage-flow .mos-k-experience-faq h3,
+html.light .mos-k-homepage-flow .mos-k-faq h2,
+html.light .mos-k-homepage-flow .mos-k-faq h3 {
+  color: #172b4d !important;
+  font-family: inherit !important;
+  letter-spacing: -.025em !important;
+}
+html.light .mos-k-homepage-flow .mos-k-why-section p,
+html.light .mos-k-homepage-flow .mos-k-workflow-section p,
+html.light .mos-k-homepage-flow .mos-k-experience-faq p,
+html.light .mos-k-homepage-flow .mos-k-faq p,
+html.light .mos-k-homepage-flow .mos-k-faq li {
+  color: #53647c !important;
+}
+html.light .mos-k-homepage-flow .mos-k-why-section [class*="bg-[#0"],
+html.light .mos-k-homepage-flow .mos-k-why-section [class*="bg-slate-9"],
+html.light .mos-k-homepage-flow .mos-k-workflow-section [class*="bg-[#0"],
+html.light .mos-k-homepage-flow .mos-k-experience-faq [class*="bg-[#0"],
+html.light .mos-k-homepage-flow .mos-k-faq [class*="bg-[#0"] {
+  background: #ffffff !important;
+  color: #17243b !important;
+  border-color: #e2e8f0 !important;
+}
+html.light .mos-k-homepage-flow .mos-k-faq button,
+html.light .mos-k-homepage-flow .mos-k-experience-faq button {
+  color: #243b5a !important;
+  background: #ffffff !important;
+  border-radius: 12px !important;
+}
+html.light .mos-k-homepage-flow .mos-k-faq button:hover,
+html.light .mos-k-homepage-flow .mos-k-experience-faq button:hover {
+  background: #f0f6ff !important;
+}
+html.light .mos-k-homepage-flow .mos-k-faq svg,
+html.light .mos-k-homepage-flow .mos-k-experience-faq svg {
+  color: #4779bd !important;
+}
+html.light .mos-k-homepage-flow .mos-k-why-section a,
+html.light .mos-k-homepage-flow .mos-k-workflow-section a,
+html.light .mos-k-homepage-flow .mos-k-experience-faq a,
+html.light .mos-k-homepage-flow .mos-k-faq a {
+  color: #245fb3 !important;
+}
+html.light .mos-k-homepage-flow .mos-k-why-section [class*="text-white"],
+html.light .mos-k-homepage-flow .mos-k-workflow-section [class*="text-white"],
+html.light .mos-k-homepage-flow .mos-k-experience-faq [class*="text-white"],
+html.light .mos-k-homepage-flow .mos-k-faq [class*="text-white"] {
+  color: #243b5a !important;
+}
+html.light #student-faq-section {
+  color: #17243b !important;
+}
+html.light #student-faq-section [class*="bg-slate-900"],
+html.light #student-faq-section [class*="bg-slate-950"],
+html.light #student-faq-section [class*="bg-[#0"] {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+html.light #student-faq-section h2,
+html.light #student-faq-section h3,
+html.light #student-faq-section button {
+  color: #172b4d !important;
+}
+html.light #student-faq-section p {
+  color: #53647c !important;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html.light .mos-k-homepage-flow .mos-k-why-section > div,
+  html.light .mos-k-homepage-flow .mos-k-workflow-section > div,
+  html.light .mos-k-homepage-flow .mos-k-experience-faq > div,
+  html.light .mos-k-homepage-flow .mos-k-faq > div {
+    transition: box-shadow .2s ease, border-color .2s ease, transform .2s ease !important;
+  }
+  html.light .mos-k-homepage-flow .mos-k-why-section > div:hover,
+  html.light .mos-k-homepage-flow .mos-k-workflow-section > div:hover {
+    box-shadow: 0 12px 32px rgba(27, 48, 79, .09) !important;
+    border-color: #cbd9ed !important;
+  }
+}
