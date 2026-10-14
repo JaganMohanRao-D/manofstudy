@@ -47,17 +47,6 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
               decoding="async"
             />
           </div>
-          <div className="naa-bie-hero-accessible-copy">
-            <span className="naa-eyebrow"><span className="naa-eyebrow-icon"><GraduationCap size={16}/></span> Your education journey starts here</span>
-            <h1 id="naa-hero-title">Naa College <span>— Your Guide to Engineering Admissions &amp; Student Resources</span></h1>
-            <p>Explore AP and Telangana admissions, scholarships, college information, and practical student tools in one place.</p>
-            <div className="naa-search-wrap">
-              <Search size={19} aria-hidden="true"/>
-              <input value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && matches[0]) go(matches[0].workspace); }} placeholder="Search colleges, scholarships, tools..." aria-label="Search Naa College resources" />
-              <button type="button" onClick={() => matches[0] ? go(matches[0].workspace) : scrollToTools()}>{matches.length ? 'Open' : 'Explore'} <ArrowRight size={16}/></button>
-              {matches.length > 0 && <div className="naa-search-suggestions">{matches.map(item => <button type="button" key={item.title} onClick={() => go(item.workspace)}><span>{item.title}</span><ArrowRight size={15}/></button>)}</div>}
-            </div>
-          </div>
         </div>
       </section>
 
@@ -72,6 +61,12 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         </div>
         <div className="naa-bie-quick-panel">
           <div className="naa-bie-section-title"><h2>Quick <span>Links</span></h2><ArrowRight size={23} aria-hidden="true"/></div>
+          <div className="naa-search-wrap naa-bie-quick-search">
+            <Search size={18} aria-hidden="true"/>
+            <input value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && matches[0]) go(matches[0].workspace); }} placeholder="Search colleges, scholarships, tools..." aria-label="Search Naa College resources" />
+            <button type="button" onClick={() => matches[0] ? go(matches[0].workspace) : scrollToTools()}>{matches.length ? 'Open' : 'Explore'} <ArrowRight size={16}/></button>
+            {matches.length > 0 && <div className="naa-search-suggestions">{matches.map(item => <button type="button" key={item.title} onClick={() => go(item.workspace)}><span>{item.title}</span><ArrowRight size={15}/></button>)}</div>}
+          </div>
           <div className="naa-bie-quick-grid">
             {shortcuts.map(item => { const Icon = item.icon; return <button type="button" key={item.title} className="naa-bie-quick-link" onClick={() => go(item.workspace)}><span className="naa-bie-quick-icon"><Icon size={20}/></span><span>{item.title}</span><ArrowRight size={15}/></button>; })}
           </div>
