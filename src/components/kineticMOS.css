@@ -1609,3 +1609,128 @@ html.light .naa-bie-inspired-home .naa-bie-hero-inner::after {
 html.light .naa-bie-inspired-home .naa-bie-hero-art .naa-campus-life-image {
   clip-path: inset(0 10px 0 0) !important;
 }
+
+
+/* Latest Updates: seamless news-style horizontal ticker (desktop + mobile). */
+html.light .naa-home .naa-bie-updates,
+html.light .naa-bie-inspired-home .naa-bie-updates,
+html.light .mos-kinetic-home .naa-bie-updates {
+  display: grid !important;
+  grid-template-columns: max-content minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: clamp(12px, 2vw, 24px) !important;
+  height: 58px !important;
+  min-height: 58px !important;
+  padding: 0 clamp(16px, 4vw, 58px) !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+html.light .naa-home .naa-bie-updates > span,
+html.light .naa-bie-inspired-home .naa-bie-updates > span,
+html.light .mos-kinetic-home .naa-bie-updates > span {
+  grid-column: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  width: max-content !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  flex: none !important;
+  position: relative !important;
+  z-index: 2 !important;
+  margin: 0 !important;
+  padding: 0 clamp(12px, 1.8vw, 24px) 0 0 !important;
+  border-right: 1px solid #c7a544 !important;
+  background: transparent !important;
+}
+html.light .naa-home .naa-updates-viewport,
+html.light .naa-bie-inspired-home .naa-updates-viewport,
+html.light .mos-kinetic-home .naa-updates-viewport {
+  grid-column: 2 !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  position: relative !important;
+  mask-image: linear-gradient(to right, transparent 0, #000 2%, #000 98%, transparent 100%) !important;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 2%, #000 98%, transparent 100%) !important;
+}
+html.light .naa-home .naa-updates-track,
+html.light .naa-bie-inspired-home .naa-updates-track,
+html.light .mos-kinetic-home .naa-updates-track {
+  display: flex !important;
+  align-items: center !important;
+  gap: clamp(16px, 2.5vw, 35px) !important;
+  width: max-content !important;
+  min-width: max-content !important;
+  max-width: none !important;
+  overflow: visible !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  transform: translateX(0) !important;
+  animation: naaNewsTicker 34s linear infinite !important;
+  will-change: transform !important;
+}
+html.light .naa-home .naa-updates-track > *,
+html.light .naa-bie-inspired-home .naa-updates-track > *,
+html.light .mos-kinetic-home .naa-updates-track > * {
+  flex: 0 0 auto !important;
+}
+html.light .naa-home .naa-updates-track b,
+html.light .naa-bie-inspired-home .naa-updates-track b,
+html.light .mos-kinetic-home .naa-updates-track b {
+  font-weight: 750 !important;
+}
+html.light .naa-home .naa-updates-track i,
+html.light .naa-bie-inspired-home .naa-updates-track i,
+html.light .mos-kinetic-home .naa-updates-track i {
+  font-style: normal !important;
+  color: #c27b17 !important;
+}
+html.light .naa-bie-updates:hover .naa-updates-track {
+  animation-play-state: paused !important;
+}
+@keyframes naaNewsTicker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (max-width: 620px) {
+  html.light .naa-home .naa-bie-updates,
+  html.light .naa-bie-inspired-home .naa-bie-updates,
+  html.light .mos-kinetic-home .naa-bie-updates {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 5px !important;
+    height: auto !important;
+    min-height: 62px !important;
+    padding: 8px 14px !important;
+  }
+  html.light .naa-home .naa-bie-updates > span,
+  html.light .naa-bie-inspired-home .naa-bie-updates > span,
+  html.light .mos-kinetic-home .naa-bie-updates > span {
+    grid-column: 1 !important;
+    padding: 0 !important;
+    border-right: 0 !important;
+    font-size: 10px !important;
+  }
+  html.light .naa-home .naa-updates-viewport,
+  html.light .naa-bie-inspired-home .naa-updates-viewport,
+  html.light .mos-kinetic-home .naa-updates-viewport {
+    grid-column: 1 !important;
+    width: 100% !important;
+  }
+  html.light .naa-home .naa-updates-track,
+  html.light .naa-bie-inspired-home .naa-updates-track,
+  html.light .mos-kinetic-home .naa-updates-track {
+    font-size: 11px !important;
+    gap: 18px !important;
+    animation-duration: 27s !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.light .naa-home .naa-updates-track,
+  html.light .naa-bie-inspired-home .naa-updates-track,
+  html.light .mos-kinetic-home .naa-updates-track {
+    animation: none !important;
+    transform: none !important;
+  }
+}
