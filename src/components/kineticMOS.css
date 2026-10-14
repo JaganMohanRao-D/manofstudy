@@ -1803,3 +1803,266 @@ html.light .naa-bie-inspired-home .naa-bie-hero .naa-bie-audience-cards::after {
     opacity: .45 !important;
   }
 }
+
+
+/* Homepage experience refresh: warm, readable light surfaces instead of the old
+   black/cyan treatment. Scoped to homepage sections; tool logic and other pages
+   retain their existing styles. */
+.mos-k-homepage-flow .mos-k-why-section,
+.mos-k-homepage-flow .mos-k-toolkit-section,
+.mos-k-homepage-flow .mos-k-workflow-section,
+.mos-k-homepage-flow .mos-k-experience-faq,
+.mos-k-homepage-flow .mos-k-faq {
+  color: #18345f !important;
+  background: #fff !important;
+  border-color: #e3edf9 !important;
+}
+.mos-k-homepage-flow .mos-k-why-section,
+.mos-k-homepage-flow .mos-k-toolkit-section,
+.mos-k-homepage-flow .mos-k-workflow-section,
+.mos-k-homepage-flow .mos-k-experience-faq {
+  padding-top: clamp(2.75rem, 5.5vw, 5rem) !important;
+  padding-bottom: clamp(1rem, 2vw, 1.75rem) !important;
+}
+.mos-k-homepage-flow .mos-k-why-section > div,
+.mos-k-homepage-flow .mos-k-toolkit-section article,
+.mos-k-homepage-flow .mos-k-workflow-section > div,
+.mos-k-homepage-flow .mos-k-experience-faq > div,
+.mos-k-homepage-flow .mos-k-faq > div {
+  color: #18345f !important;
+  background-color: #fff !important;
+  border-color: #dce8f7 !important;
+  border-radius: 22px !important;
+  box-shadow: 0 8px 28px rgba(29, 71, 125, .055) !important;
+}
+.mos-k-homepage-flow .mos-k-why-section > div {
+  background:
+    radial-gradient(ellipse at 96% 4%, rgba(216, 237, 255, .72), transparent 38%),
+    linear-gradient(135deg, #fff 0%, #f7fbff 100%) !important;
+}
+.mos-k-homepage-flow .mos-k-why-section h2,
+.mos-k-homepage-flow .mos-k-toolkit-section h2,
+.mos-k-homepage-flow .mos-k-workflow-section h2,
+.mos-k-homepage-flow .mos-k-experience-faq h2,
+.mos-k-homepage-flow .mos-k-faq h2,
+.mos-k-homepage-flow .mos-k-faq h3 {
+  color: #17396c !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  letter-spacing: -.035em !important;
+}
+.mos-k-homepage-flow .mos-k-why-section h2 span {
+  color: #2875d9 !important;
+}
+.mos-k-homepage-flow .mos-k-why-section p,
+.mos-k-homepage-flow .mos-k-toolkit-section p,
+.mos-k-homepage-flow .mos-k-workflow-section p,
+.mos-k-homepage-flow .mos-k-experience-faq p,
+.mos-k-homepage-flow .mos-k-faq p,
+.mos-k-homepage-flow .mos-k-faq li {
+  color: #5d718d !important;
+}
+.mos-k-homepage-flow .mos-k-eyebrow {
+  color: #2a6fbe !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  letter-spacing: .11em !important;
+}
+.mos-k-homepage-flow .mos-k-why-section > div > div > div:last-child > div {
+  background: rgba(255,255,255,.88) !important;
+  border: 1px solid #e0ebf8 !important;
+  border-radius: 15px !important;
+  box-shadow: 0 3px 12px rgba(31, 75, 130, .035) !important;
+}
+.mos-k-homepage-flow .mos-k-why-section svg,
+.mos-k-homepage-flow .mos-k-toolkit-section svg,
+.mos-k-homepage-flow .mos-k-workflow-section svg,
+.mos-k-homepage-flow .mos-k-experience-faq svg,
+.mos-k-homepage-flow .mos-k-faq svg {
+  color: #3479c7 !important;
+}
+.mos-k-homepage-flow .mos-k-toolkit-section article {
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 18px !important;
+  padding: 22px !important;
+  box-shadow: 0 5px 20px rgba(29, 71, 125, .045) !important;
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease !important;
+}
+.mos-k-homepage-flow .mos-k-toolkit-section article:hover {
+  transform: translateY(-3px) !important;
+  border-color: #b9d7f8 !important;
+  background: #fbfdff !important;
+  box-shadow: 0 12px 28px rgba(29, 71, 125, .09) !important;
+}
+.mos-k-homepage-flow .mos-k-toolkit-section article h3 {
+  color: #183a6d !important;
+}
+.mos-k-homepage-flow .mos-k-toolkit-section article .rounded-full {
+  border-radius: 999px !important;
+  background: #f0f6ff !important;
+  border-color: #d9e8fb !important;
+  color: #37699f !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  letter-spacing: .04em !important;
+}
+.mos-k-homepage-flow .mos-k-toolkit-section article .inline-flex {
+  color: #286dc0 !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 12px !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+.mos-k-homepage-flow .mos-k-toolkit-section article .rounded-2xl {
+  background: #edf5ff !important;
+  border-color: #dceafa !important;
+  border-radius: 13px !important;
+}
+.mos-k-homepage-flow .mos-k-workflow-section > div {
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(222, 239, 255, .75), transparent 42%),
+    #f6faff !important;
+  border-radius: 22px !important;
+}
+.mos-k-homepage-flow .mos-k-workflow-section > div > div:last-child > div {
+  background: #fff !important;
+  border: 1px solid #dce8f7 !important;
+  border-radius: 17px !important;
+  box-shadow: 0 4px 16px rgba(29, 71, 125, .04) !important;
+}
+.mos-k-homepage-flow .mos-k-step-number {
+  width: 38px !important;
+  height: 38px !important;
+  border: 1px solid #bfd9f7 !important;
+  border-radius: 12px !important;
+  background: #edf5ff !important;
+  color: #2267b4 !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 13px !important;
+}
+.mos-k-homepage-flow .mos-k-experience-faq > div {
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(228, 241, 255, .58), transparent 34%),
+    #fff !important;
+  border-radius: 22px !important;
+}
+.mos-k-homepage-flow .mos-k-experience-faq .divide-y,
+.mos-k-homepage-flow .mos-k-experience-faq .border-y {
+  border-color: #e2ebf6 !important;
+}
+.mos-k-homepage-flow .mos-k-experience-faq button {
+  color: #1b3c6d !important;
+  border-radius: 12px !important;
+}
+.mos-k-homepage-flow .mos-k-experience-faq button:hover {
+  background: #f3f8ff !important;
+  color: #205fa8 !important;
+}
+.mos-k-homepage-flow .mos-k-experience-faq button svg {
+  color: #467cb9 !important;
+}
+.mos-k-homepage-flow .mos-k-faq {
+  padding-top: clamp(2.5rem, 5vw, 4.5rem) !important;
+  padding-bottom: clamp(2.5rem, 5vw, 4.5rem) !important;
+  border-top: 1px solid #e5edf7 !important;
+}
+.mos-k-homepage-flow .mos-k-faq::before {
+  content: none !important;
+  display: none !important;
+}
+.mos-k-homepage-flow .mos-k-faq > div {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.mos-k-homepage-flow .mos-k-faq > div > div:first-child {
+  background: transparent !important;
+  border: 0 !important;
+}
+.mos-k-homepage-flow .mos-k-faq > div > div:first-child p {
+  color: #5d718d !important;
+}
+.mos-k-homepage-flow .mos-k-faq input {
+  color: #18345f !important;
+  background: #fff !important;
+  border: 1px solid #d7e4f4 !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+}
+.mos-k-homepage-flow .mos-k-faq input::placeholder {
+  color: #8495ab !important;
+}
+.mos-k-homepage-flow .mos-k-faq > div > div:nth-child(2) button {
+  color: #416184 !important;
+  background: #f6f9fd !important;
+  border: 1px solid #dce7f5 !important;
+  border-radius: 999px !important;
+}
+.mos-k-homepage-flow .mos-k-faq > div > div:nth-child(2) button.bg-blue-600 {
+  color: #fff !important;
+  background: #286dc0 !important;
+  border-color: #286dc0 !important;
+}
+.mos-k-homepage-flow .mos-k-faq > div > div:nth-child(3) > div {
+  border-top: 1px solid #e2ebf6 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+.mos-k-homepage-flow .mos-k-faq > div > div:nth-child(3) > div:last-child {
+  border-bottom: 1px solid #e2ebf6 !important;
+}
+.mos-k-homepage-flow .mos-k-faq > div > div:nth-child(3) > div > button {
+  padding: 18px 12px !important;
+  background: #fff !important;
+  border-radius: 12px !important;
+}
+.mos-k-homepage-flow .mos-k-faq > div > div:nth-child(3) > div > button:hover {
+  background: #f4f8fe !important;
+}
+.mos-k-homepage-flow .mos-k-faq > div > div:nth-child(3) > div > button h3 {
+  color: #1b3c6d !important;
+}
+.mos-k-homepage-flow .mos-k-faq > div > div:nth-child(3) > div > button .w-8 {
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 50% !important;
+  background: #edf5ff !important;
+  color: #286dc0 !important;
+  border: 1px solid #d7e7fa !important;
+}
+.mos-k-homepage-flow .mos-k-faq > div > div:nth-child(3) > div > div {
+  color: #5d718d !important;
+  background: #f8fbff !important;
+  border-top: 1px solid #e5edf7 !important;
+  padding: 16px 16px 20px !important;
+}
+.mos-k-homepage-flow .mos-k-faq > div > div:last-child a {
+  color: #286dc0 !important;
+  background: #f7faff !important;
+  border-color: #dce8f7 !important;
+  border-radius: 12px !important;
+}
+@media (max-width: 760px) {
+  .mos-k-homepage-flow .mos-k-why-section,
+  .mos-k-homepage-flow .mos-k-toolkit-section,
+  .mos-k-homepage-flow .mos-k-workflow-section,
+  .mos-k-homepage-flow .mos-k-experience-faq,
+  .mos-k-homepage-flow .mos-k-faq {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  .mos-k-homepage-flow .mos-k-why-section > div,
+  .mos-k-homepage-flow .mos-k-workflow-section > div,
+  .mos-k-homepage-flow .mos-k-experience-faq > div {
+    border-radius: 17px !important;
+  }
+  .mos-k-homepage-flow .mos-k-toolkit-section article {
+    padding: 18px !important;
+  }
+  .mos-k-homepage-flow .mos-k-experience-faq button {
+    min-height: 52px !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mos-k-homepage-flow .mos-k-toolkit-section article {
+    transition: none !important;
+  }
+}
