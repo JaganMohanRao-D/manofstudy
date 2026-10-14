@@ -1587,3 +1587,25 @@ html.light .naa-bie-inspired-home .naa-bie-hero-art .naa-campus-life-image {
     transform: translateY(-24px) !important;
   }
 }
+
+
+/* Final correction: make the ENTIRE hero canvas white, not just the video box. */
+html.light .naa-bie-inspired-home .naa-bie-hero,
+html.light .naa-bie-inspired-home .naa-bie-hero-inner,
+html.light .naa-bie-inspired-home .naa-bie-hero-art,
+html.light .naa-bie-inspired-home .naa-hero-art,
+html.light .naa-bie-inspired-home .naa-hero-art-image {
+  background-color: #fff !important;
+  background-image: none !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero::before,
+html.light .naa-bie-inspired-home .naa-bie-hero::after,
+html.light .naa-bie-inspired-home .naa-bie-hero-inner::before,
+html.light .naa-bie-inspired-home .naa-bie-hero-inner::after {
+  content: none !important;
+  display: none !important;
+  background-image: none !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero-art .naa-campus-life-image {
+  clip-path: inset(0 10px 0 0) !important;
+}
