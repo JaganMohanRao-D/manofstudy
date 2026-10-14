@@ -1531,3 +1531,30 @@ html.light .naa-bie-inspired-home .naa-bie-quick-search>svg { flex:none !importa
   html.light .naa-bie-inspired-home .naa-bie-hero-inner { grid-template-rows:auto !important; }
   html.light .naa-bie-inspired-home .naa-bie-quick-search { margin-top:14px !important; }
 }
+
+/* Global Quick Links search: dropdown must stay legible and above neighbouring content. */
+html.light .naa-bie-inspired-home .naa-bie-quick-panel { position:relative !important; z-index:5 !important; }
+html.light .naa-bie-inspired-home .naa-bie-quick-search { position:relative !important; z-index:20 !important; }
+html.light .naa-bie-inspired-home .naa-bie-quick-search .naa-search-suggestions {
+  position:absolute !important;top:calc(100% + 8px) !important;left:0 !important;right:0 !important;z-index:999 !important;
+  display:flex !important;flex-direction:column !important;max-height:min(360px,55vh) !important;overflow-y:auto !important;
+  padding:6px !important;background:#fff !important;color:#102c55 !important;border:1px solid #dce6f4 !important;
+  border-radius:14px !important;box-shadow:0 18px 48px rgba(16,44,85,.2) !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-quick-search .naa-search-suggestions>button {
+  display:flex !important;align-items:center !important;justify-content:space-between !important;gap:12px !important;
+  width:100% !important;min-width:0 !important;padding:11px 12px !important;text-align:left !important;
+  background:#fff !important;color:#102c55 !important;border:0 !important;border-radius:9px !important;cursor:pointer !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-quick-search .naa-search-suggestions>button:hover,
+html.light .naa-bie-inspired-home .naa-bie-quick-search .naa-search-suggestions>button:focus-visible {background:#edf5ff !important;outline:2px solid #8dbbfa !important;outline-offset:-2px !important;}
+html.light .naa-bie-inspired-home .naa-bie-quick-search .naa-search-suggestions>button>span {display:flex !important;flex-direction:column !important;gap:3px !important;min-width:0 !important;}
+html.light .naa-bie-inspired-home .naa-bie-quick-search .naa-search-suggestions strong {color:#102c55 !important;font-size:12px !important;font-weight:800 !important;line-height:1.4 !important;}
+html.light .naa-bie-inspired-home .naa-bie-quick-search .naa-search-suggestions small {color:#5c6f89 !important;font-size:11px !important;line-height:1.4 !important;white-space:normal !important;}
+html.light .naa-bie-inspired-home .naa-bie-quick-search .naa-search-suggestions>button>svg {flex:none !important;color:#2f80ed !important;}
+html.light .naa-bie-inspired-home .naa-bie-quick-search .naa-search-empty {padding:14px !important;margin:0 !important;color:#5c6f89 !important;font-size:12px !important;line-height:1.5 !important;}
+html.light .naa-bie-inspired-home .naa-bie-quick-panel {overflow:visible !important;}
+html.light .naa-bie-inspired-home #features-hub {scroll-margin-top:24px !important;}
+@media(max-width:620px) {
+ html.light .naa-bie-inspired-home .naa-bie-quick-search .naa-search-suggestions {max-height:45vh !important;}
+}
