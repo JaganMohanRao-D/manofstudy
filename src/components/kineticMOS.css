@@ -1284,3 +1284,250 @@ html.light .naa-home .naa-updates-track>* { flex:0 0 auto !important; }
   html.light .mos-kinetic-home .naa-updates-track,
   html.light .naa-home .naa-updates-track { grid-column:1 !important; }
 }
+
+
+/* Naa College BIE-inspired homepage refresh — light theme only.
+   Scoped to the homepage so predictor/tool workspaces keep their existing layout. */
+html.light .naa-bie-inspired-home {
+  --bie-ink:#102c55;
+  --bie-muted:#526b8a;
+  --bie-blue:#2f80ed;
+  --bie-orange:#f36d21;
+  --bie-gold:#ffc943;
+  --bie-border:#e2e8f2;
+  background:#fff !important;
+  color:var(--bie-ink) !important;
+  font-family:'Plus Jakarta Sans',Inter,Arial,sans-serif !important;
+  overflow:hidden;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero {
+  position:relative !important;
+  min-height:clamp(500px,42vw,650px) !important;
+  padding:0 !important;
+  overflow:hidden !important;
+  background:linear-gradient(112deg,#eee9ff 0%,#f2f4ff 30%,#f7fbff 55%,#fffbe9 100%) !important;
+  border:0 !important;
+  border-radius:0 !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero::before {
+  content:"";
+  position:absolute;inset:0;pointer-events:none;opacity:.65;
+  background-image:linear-gradient(to right,transparent calc(100% - 1px),rgba(75,109,160,.13) calc(100% - 1px));
+  background-size:14.3% 100%;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero-inner {
+  position:relative !important;z-index:1 !important;
+  display:grid !important;grid-template-columns:minmax(390px,.88fr) minmax(0,1.45fr) !important;
+  align-items:center !important;gap:clamp(12px,2vw,34px) !important;
+  width:100% !important;max-width:1600px !important;min-height:inherit !important;
+  margin:0 auto !important;padding:clamp(24px,3.5vw,56px) clamp(22px,4vw,64px) 30px !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-audience-cards {
+  display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:clamp(12px,1.6vw,24px) !important;
+  align-self:center !important;position:relative !important;z-index:3 !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-audience-card {
+  display:flex !important;flex-direction:column !important;align-items:stretch !important;
+  min-width:0 !important;min-height:clamp(260px,19vw,330px) !important;padding:0 !important;
+  overflow:hidden !important;text-align:left !important;cursor:pointer !important;
+  border:1px solid rgba(255,255,255,.88) !important;border-radius:24px !important;
+  box-shadow:0 12px 25px rgba(26,47,84,.16) !important;color:#102c55 !important;
+  transition:transform .2s ease,box-shadow .2s ease !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-audience-card:hover {
+  transform:translateY(-5px) !important;box-shadow:0 18px 34px rgba(26,47,84,.2) !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-student-card {background:linear-gradient(150deg,#fff0ba 0%,#fff2e9 100%) !important;}
+html.light .naa-bie-inspired-home .naa-bie-college-card {background:linear-gradient(150deg,#ffd4d8 0%,#f0e4ff 100%) !important;}
+html.light .naa-bie-inspired-home .naa-bie-card-art {
+  height:clamp(100px,8vw,145px) !important;display:flex !important;align-items:center !important;justify-content:center !important;
+  gap:8px !important;position:relative !important;overflow:hidden !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-student-art {
+  color:#1d70ad !important;background:linear-gradient(135deg,#d3efff,#fff0d4) !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-college-art {
+  color:#235c8f !important;background:linear-gradient(135deg,#bce8ff,#ffe4cf) !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-card-art::before,
+html.light .naa-bie-inspired-home .naa-bie-card-art::after {
+  content:"";position:absolute;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.3);
+}
+html.light .naa-bie-inspired-home .naa-bie-card-art::before {left:-32px;top:-38px;}
+html.light .naa-bie-inspired-home .naa-bie-card-art::after {right:-32px;bottom:-50px;}
+html.light .naa-bie-inspired-home .naa-bie-card-art svg {position:relative;z-index:1;filter:drop-shadow(0 3px 2px rgba(24,57,91,.12));}
+html.light .naa-bie-inspired-home .naa-bie-card-copy {
+  display:flex !important;flex:1 !important;flex-direction:column !important;align-items:flex-start !important;
+  gap:12px !important;padding:clamp(16px,1.5vw,24px) !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-card-copy>strong {
+  font-size:clamp(15px,1.25vw,21px) !important;line-height:1.2 !important;font-weight:850 !important;letter-spacing:-.035em !important;color:#102c55 !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-card-copy>small {
+  color:#526b8a !important;font-size:clamp(11px,.9vw,14px) !important;line-height:1.6 !important;font-weight:500 !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-card-action {
+  display:inline-flex !important;align-items:center !important;gap:8px !important;margin-top:auto !important;
+  border-radius:999px !important;padding:10px 13px !important;background:rgba(255,255,255,.72) !important;
+  color:#176bd2 !important;font-size:12px !important;font-weight:750 !important;white-space:nowrap !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero-art {
+  display:flex !important;align-items:center !important;justify-content:center !important;
+  min-width:0 !important;min-height:0 !important;position:relative !important;align-self:stretch !important;
+}
+html.light .naa-bie-inspired-home .naa-campus-life-image {
+  display:block !important;width:100% !important;height:100% !important;max-height:600px !important;object-fit:contain !important;
+  filter:drop-shadow(0 14px 16px rgba(24,56,88,.08)) !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero-accessible-copy {
+  grid-column:1 / -1 !important;max-width:850px !important;margin:0 auto !important;text-align:center !important;
+  padding:0 12px 4px !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero-accessible-copy .naa-eyebrow {display:none !important;}
+html.light .naa-bie-inspired-home .naa-bie-hero-accessible-copy h1 {
+  margin:0 auto 8px !important;color:#102c55 !important;font-size:clamp(19px,2vw,27px) !important;font-weight:800 !important;letter-spacing:-.04em !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero-accessible-copy h1 span {
+  color:#526b8a !important;font-size:.68em !important;font-weight:600 !important;letter-spacing:-.015em !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero-accessible-copy p {
+  margin:0 auto 14px !important;color:#526b8a !important;font-size:13px !important;line-height:1.65 !important;
+}
+html.light .naa-bie-inspired-home .naa-search-wrap {
+  position:relative !important;max-width:620px !important;margin:0 auto !important;
+  border:1px solid #d9e4f4 !important;border-radius:999px !important;background:#fff !important;
+  box-shadow:0 8px 24px rgba(21,54,99,.08) !important;color:#52709a !important;
+}
+html.light .naa-bie-inspired-home .naa-search-wrap input {color:#17366f !important;background:transparent !important;}
+html.light .naa-bie-inspired-home .naa-search-wrap>button {
+  background:#f36d21 !important;color:#fff !important;border-radius:999px !important;
+}
+html.light .naa-bie-inspired-home .naa-updates-strip.naa-bie-updates {
+  display:grid !important;grid-template-columns:max-content minmax(0,1fr) !important;gap:0 !important;
+  align-items:center !important;min-height:46px !important;padding:0 !important;overflow:hidden !important;
+  border-radius:0 !important;background:#ffcc45 !important;color:#182c43 !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-updates>span {
+  display:flex !important;align-items:center !important;gap:9px !important;align-self:stretch !important;
+  padding:0 clamp(14px,2vw,26px) !important;margin:0 !important;white-space:nowrap !important;
+  background:#f36d21 !important;color:#fff !important;font-size:14px !important;font-weight:800 !important;
+  border:0 !important;border-radius:0 !important;z-index:2 !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-updates .naa-updates-track {
+  grid-column:2 !important;display:flex !important;align-items:center !important;gap:20px !important;
+  min-width:0 !important;width:100% !important;overflow-x:auto !important;overflow-y:hidden !important;
+  padding:0 24px !important;white-space:nowrap !important;animation:none !important;transform:none !important;
+  scrollbar-width:none !important;contain:layout paint !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-updates .naa-updates-track::-webkit-scrollbar {display:none !important;}
+html.light .naa-bie-inspired-home .naa-bie-updates .naa-updates-track>* {flex:0 0 auto !important;color:#182c43 !important;font-size:12px !important;font-weight:700 !important;}
+html.light .naa-bie-inspired-home .naa-bie-updates .naa-updates-track>i {font-style:normal !important;color:#102c55 !important;}
+html.light .naa-bie-inspired-home .naa-bie-alert-links {
+  display:grid !important;grid-template-columns:1fr 1fr !important;gap:0 !important;
+  width:100% !important;margin:0 !important;border:0 !important;background:#fff !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-alert-panel,
+html.light .naa-bie-inspired-home .naa-bie-quick-panel {
+  min-width:0 !important;padding:clamp(28px,4vw,58px) clamp(24px,5.5vw,88px) !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-alert-panel {background:#0b2b56 !important;color:#fff !important;}
+html.light .naa-bie-inspired-home .naa-bie-quick-panel {
+  background:linear-gradient(145deg,#fff 0%,#fbfdff 100%) !important;color:#102c55 !important;
+  border-left:1px solid #edf1f8 !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-section-title {
+  display:flex !important;align-items:center !important;justify-content:space-between !important;gap:12px !important;margin-bottom:10px !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-section-title h2 {
+  margin:0 !important;font-size:clamp(25px,2.4vw,36px) !important;letter-spacing:-.04em !important;font-weight:650 !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-alert-panel .naa-bie-section-title h2 {color:#fff !important;}
+html.light .naa-bie-inspired-home .naa-bie-section-title h2 span {color:#ffcc45 !important;}
+html.light .naa-bie-inspired-home .naa-bie-quick-panel .naa-bie-section-title h2 span {color:#ffbd36 !important;}
+html.light .naa-bie-inspired-home .naa-bie-section-title>svg {color:#ffcc45 !important;}
+html.light .naa-bie-inspired-home .naa-bie-quick-panel .naa-bie-section-title>svg {color:#4387ed !important;}
+html.light .naa-bie-inspired-home .naa-bie-section-intro {margin:0 0 20px !important;color:#d7e4f8 !important;font-size:13px !important;line-height:1.6 !important;}
+html.light .naa-bie-inspired-home .naa-bie-alert-link {
+  width:100% !important;display:flex !important;align-items:center !important;justify-content:space-between !important;gap:14px !important;
+  padding:15px 0 !important;text-align:left !important;background:transparent !important;color:#fff !important;
+  border:0 !important;border-top:1px solid rgba(255,255,255,.18) !important;cursor:pointer !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-alert-link span {display:flex !important;flex-direction:column !important;gap:5px !important;}
+html.light .naa-bie-inspired-home .naa-bie-alert-link strong {font-size:13px !important;font-weight:750 !important;color:#fff !important;}
+html.light .naa-bie-inspired-home .naa-bie-alert-link small {font-size:12px !important;line-height:1.5 !important;color:#d7e4f8 !important;}
+html.light .naa-bie-inspired-home .naa-bie-alert-link>svg {flex:none !important;color:#ffcc45 !important;}
+html.light .naa-bie-inspired-home .naa-bie-quick-grid {display:grid !important;grid-template-columns:1fr 1fr !important;gap:10px !important;margin-top:22px !important;}
+html.light .naa-bie-inspired-home .naa-bie-quick-link {
+  display:flex !important;align-items:center !important;gap:10px !important;min-width:0 !important;min-height:66px !important;
+  padding:12px !important;text-align:left !important;background:#fff !important;color:#17366f !important;
+  border:1px solid #e2eaf6 !important;border-radius:14px !important;box-shadow:0 4px 12px rgba(21,54,99,.045) !important;
+  font-size:12px !important;font-weight:700 !important;cursor:pointer !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-quick-link>span:nth-child(2) {flex:1 !important;min-width:0 !important;line-height:1.4 !important;}
+html.light .naa-bie-inspired-home .naa-bie-quick-link>svg {flex:none !important;color:#4387ed !important;}
+html.light .naa-bie-inspired-home .naa-bie-quick-icon {
+  display:grid !important;place-items:center !important;flex:none !important;width:34px !important;height:34px !important;
+  border-radius:10px !important;background:#edf5ff !important;color:#2f80ed !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-all-tools {
+  display:inline-flex !important;align-items:center !important;gap:8px !important;margin-top:18px !important;
+  padding:10px 0 !important;background:transparent !important;color:#2674d8 !important;font-size:13px !important;font-weight:800 !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-services {padding-top:54px !important;}
+@media(max-width:900px) {
+  html.light .naa-bie-inspired-home .naa-bie-hero-inner {
+    grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) !important;padding:28px 22px !important;
+  }
+  html.light .naa-bie-inspired-home .naa-bie-audience-cards {grid-template-columns:1fr !important;}
+  html.light .naa-bie-inspired-home .naa-bie-audience-card {min-height:0 !important;}
+  html.light .naa-bie-inspired-home .naa-bie-card-art {height:90px !important;}
+  html.light .naa-bie-inspired-home .naa-bie-card-copy {gap:8px !important;padding:14px !important;}
+  html.light .naa-bie-inspired-home .naa-bie-card-copy>small {font-size:12px !important;}
+  html.light .naa-bie-inspired-home .naa-bie-card-action {font-size:11px !important;padding:8px 10px !important;}
+}
+@media(max-width:620px) {
+  html.light .naa-bie-inspired-home .naa-bie-hero {min-height:0 !important;}
+  html.light .naa-bie-inspired-home .naa-bie-hero-inner {
+    display:flex !important;flex-direction:column-reverse !important;gap:12px !important;padding:16px 14px 24px !important;
+  }
+  html.light .naa-bie-inspired-home .naa-bie-hero-art {width:100% !important;max-height:280px !important;}
+  html.light .naa-bie-inspired-home .naa-campus-life-image {max-height:280px !important;}
+  html.light .naa-bie-inspired-home .naa-bie-audience-cards {width:100% !important;grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:10px !important;}
+  html.light .naa-bie-inspired-home .naa-bie-audience-card {border-radius:17px !important;}
+  html.light .naa-bie-inspired-home .naa-bie-card-art {height:72px !important;}
+  html.light .naa-bie-inspired-home .naa-bie-card-art svg {width:31px !important;height:31px !important;}
+  html.light .naa-bie-inspired-home .naa-bie-card-copy {padding:11px !important;gap:8px !important;}
+  html.light .naa-bie-inspired-home .naa-bie-card-copy>strong {font-size:12px !important;}
+  html.light .naa-bie-inspired-home .naa-bie-card-copy>small {font-size:10px !important;line-height:1.45 !important;}
+  html.light .naa-bie-inspired-home .naa-bie-card-action {white-space:normal !important;font-size:10px !important;padding:7px 8px !important;}
+  html.light .naa-bie-inspired-home .naa-bie-hero-accessible-copy {padding:0 4px !important;}
+  html.light .naa-bie-inspired-home .naa-bie-hero-accessible-copy h1 {font-size:20px !important;}
+  html.light .naa-bie-inspired-home .naa-bie-hero-accessible-copy p {font-size:12px !important;}
+  html.light .naa-bie-inspired-home .naa-search-wrap {width:100% !important;}
+  html.light .naa-bie-inspired-home .naa-updates-strip.naa-bie-updates {grid-template-columns:1fr !important;min-height:0 !important;}
+  html.light .naa-bie-inspired-home .naa-bie-updates>span {min-height:36px !important;padding:0 14px !important;font-size:12px !important;}
+  html.light .naa-bie-inspired-home .naa-bie-updates .naa-updates-track {grid-column:1 !important;min-height:40px !important;padding:0 14px !important;gap:14px !important;}
+  html.light .naa-bie-inspired-home .naa-bie-alert-links {grid-template-columns:1fr !important;}
+  html.light .naa-bie-inspired-home .naa-bie-alert-panel,
+  html.light .naa-bie-inspired-home .naa-bie-quick-panel {padding:28px 20px !important;}
+  html.light .naa-bie-inspired-home .naa-bie-quick-grid {grid-template-columns:1fr !important;}
+  html.light .naa-bie-inspired-home .naa-bie-section-title h2 {font-size:26px !important;}
+}
+@media(prefers-reduced-motion:reduce) {
+  html.light .naa-bie-inspired-home * {scroll-behavior:auto !important;transition:none !important;animation:none !important;}
+}
+
+/* Keep the hero as a clean two-column composition; search lives with Quick Links. */
+html.light .naa-bie-inspired-home .naa-bie-hero-inner { grid-template-rows:minmax(0,1fr) !important; }
+html.light .naa-bie-inspired-home .naa-bie-hero-accessible-copy { display:none !important; }
+html.light .naa-bie-inspired-home .naa-bie-quick-search {
+  width:100% !important;max-width:none !important;margin:18px 0 0 !important;
+  min-height:48px !important;border-radius:12px !important;box-shadow:none !important;
+}
+html.light .naa-bie-inspired-home .naa-bie-quick-search input { min-width:0 !important;font-size:12px !important; }
+html.light .naa-bie-inspired-home .naa-bie-quick-search>button { padding:9px 14px !important;font-size:12px !important; }
+html.light .naa-bie-inspired-home .naa-bie-quick-search>svg { flex:none !important;margin-left:12px !important; }
+@media(max-width:620px) {
+  html.light .naa-bie-inspired-home .naa-bie-hero-inner { grid-template-rows:auto !important; }
+  html.light .naa-bie-inspired-home .naa-bie-quick-search { margin-top:14px !important; }
+}
