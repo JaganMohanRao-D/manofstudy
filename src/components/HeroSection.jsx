@@ -65,13 +65,17 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
             </button>
           </div>
           <div className="naa-hero-art naa-hero-art-image naa-bie-hero-art">
-            <img
+            <video
               className="naa-campus-life-image"
-              src="/Vibrant%20Campus%20Life%20Illustration.webp"
-              alt="Illustration celebrating college students and campus life"
-              fetchPriority="high"
-              decoding="async"
-            />
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-label="Naa College campus hero video"
+            >
+              <source src="/HERO_VEDIO.webm" type="video/webm" />
+            </video>
           </div>
         </div>
       </section>
