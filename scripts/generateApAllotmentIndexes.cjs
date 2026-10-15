@@ -5,6 +5,25 @@ const DATASETS = {
   '2025': path.join(process.cwd(), 'public', 'AP_EAPCET_2025_ALLOTMENT_BY_COLLEGE'),
   '2026': path.join(process.cwd(), 'public', 'AP_EAPCET_2026_ALLOTMENT_BY_COLLEGE'),
 };
+// Reuse verified AP 2026 campus locations for colleges that also appear in
+// the 2025 allotment dataset. 2025 source rows do not carry district values.
+const districtByCollegeCode = new Map();
+try {
+  const manifest2026 = JSON.parse(fs.readFileSync(
+    path.join(DATASETS['2026'], 'manifest.json'),
+    'utf8'
+  ));
+  for (const college of (manifest2026.colleges || [])) {
+    const code = String(college.collegeCode ?? college.college_code ?? '').trim().toUpperCase();
+    const district = String(college.district ?? '').trim();
+    if (code && district && district.toUpperCase() !== 'ANDHRA PRADESH') {
+      districtByCollegeCode.set(code, district);
+    }
+  }
+} catch (error) {
+  console.warn('[ap-index] Could not read AP 2026 district reference; district fallback will be used.', error.message);
+}
+
 const EXCLUDED = new Set([
   'index.json',
   'manifest.json',
@@ -72,7 +91,7 @@ function normalizeRecord(year, r, collegeCode, collegeName, branchCode = '', bra
     collegeName,
     branchCode: String(r.branch_code ?? branchCode ?? '').trim().toUpperCase(),
     branchName: String(r.branch_name ?? branchName ?? '').trim(),
-    district: '',
+    district: districtByCollegeCode.get(String(collegeCode).trim().toUpperCase()) || '',
     totalSeats: 0,
     leftOverSeats: 0,
     hallTicket: String(r.roll_no ?? r.hall_ticket ?? r.hallTicket ?? ''),
@@ -223,7 +242,7 @@ function processYear(year, dir) {
     colleges.push({
       code: collegeCode,
       name: collegeName,
-      district: records[0]?.district || '',
+      district: records.find((record) => record.district)?.district || districtByCollegeCode.get(collegeCode) || '',
       recordCount: records.length,
       branches: branchList,
     });
