@@ -240,7 +240,19 @@ function processYear(year, dir) {
       if (x.category) b.categories.add(x.category);
     };
 
-    if (Array.isArray(raw.records)) {
+    // AP 2025 source files store allotments under branches[].records.
+    // Read each nested record with its branch metadata so records are not
+    // silently dropped and branch filters/statistics remain accurate.
+    if (Array.isArray(raw.branches)) {
+      for (const branch of raw.branches) {
+        if (!branch || !Array.isArray(branch.records)) continue;
+        const branchCode = String(branch.branch_code ?? branch.branchCode ?? '').trim().toUpperCase();
+        const branchName = String(branch.branch_name ?? branch.branchName ?? branch.name ?? branchCode).trim();
+        for (const r of branch.records) {
+          if (r && typeof r === 'object') add(r, branchCode, branchName);
+        }
+      }
+    } else if (Array.isArray(raw.records)) {
       for (const r of raw.records) add(r);
     } else if (Array.isArray(raw.allotments)) {
       for (const r of raw.allotments) add(r);
