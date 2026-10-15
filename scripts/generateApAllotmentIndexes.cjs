@@ -5,23 +5,50 @@ const DATASETS = {
   '2025': path.join(process.cwd(), 'public', 'AP_EAPCET_2025_ALLOTMENT_BY_COLLEGE'),
   '2026': path.join(process.cwd(), 'public', 'AP_EAPCET_2026_ALLOTMENT_BY_COLLEGE'),
 };
-// Reuse verified AP 2026 campus locations for colleges that also appear in
-// the 2025 allotment dataset. 2025 source rows do not carry district values.
+// Build district metadata from actual AP 2026 college records, not the
+// generated manifest (which may be stale at the start of prebuild). AP 2025
+// source rows do not carry districts, so use matching college codes only.
 const districtByCollegeCode = new Map();
-try {
-  const manifest2026 = JSON.parse(fs.readFileSync(
-    path.join(DATASETS['2026'], 'manifest.json'),
-    'utf8'
-  ));
-  for (const college of (manifest2026.colleges || [])) {
-    const code = String(college.collegeCode ?? college.college_code ?? '').trim().toUpperCase();
-    const district = String(college.district ?? '').trim();
-    if (code && district && district.toUpperCase() !== 'ANDHRA PRADESH') {
-      districtByCollegeCode.set(code, district);
+function districtFromCollegeFile(filePath) {
+  try {
+    const raw = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    const rows = [];
+    if (Array.isArray(raw.records)) rows.push(...raw.records);
+    if (Array.isArray(raw.branches)) {
+      for (const branch of raw.branches) {
+        if (Array.isArray(branch.records)) rows.push(...branch.records);
+      }
     }
+    for (const value of Object.values(raw)) {
+      if (Array.isArray(value)) {
+        for (const item of value) {
+          if (item && typeof item === 'object' && !Array.isArray(item)) rows.push(item);
+        }
+      }
+    }
+    const row = rows.find((item) => {
+      const district = String(item.district ?? '').trim();
+      return district && district.toUpperCase() !== 'ANDHRA PRADESH';
+    });
+    return row ? String(row.district).trim() : '';
+  } catch {
+    return '';
   }
-} catch (error) {
-  console.warn('[ap-index] Could not read AP 2026 district reference; district fallback will be used.', error.message);
+}
+for (const file of fs.readdirSync(DATASETS['2026']).filter((name) =>
+  name.endsWith('.json') &&
+  !['index.json', 'manifest.json', 'search_index.json', 'top_colleges_index.json', 'category_insights.json', 'predictor_index.json'].includes(name)
+)) {
+  const filePath = path.join(DATASETS['2026'], file);
+  let code = path.basename(file, '.json').trim().toUpperCase();
+  try {
+    const raw = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    code = String(raw.college_code ?? raw.collegeCode ?? raw.inst_code ?? code).trim().toUpperCase();
+  } catch {
+    // Keep the filename-derived code as a fallback.
+  }
+  const district = districtFromCollegeFile(filePath);
+  if (code && district && code !== 'CBIT') districtByCollegeCode.set(code, district);
 }
 
 const EXCLUDED = new Set([
