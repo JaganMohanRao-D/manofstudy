@@ -370,10 +370,35 @@ async function loadSearchIndex(year: AllotmentYear): Promise<SearchIndexData> {
     const response = await fetch(BASE_PATH[year] + 'search_index.json');
     if (!response.ok) throw new Error(`Unable to load AP EAPCET ${year} search index (HTTP ${response.status})`);
     const data = await response.json();
+
+    // AP 2025's search index exceeds the single-asset size threshold and is
+    // emitted as a manifest plus chunk files by fixApSearchIndexSize.cjs.
+    // Read chunks only for 2025 so the already-working 2026 loading path stays
+    // byte-for-byte equivalent in behavior.
+    let candidates = Array.isArray(data.candidates) ? data.candidates : [];
+    if (year === '2025' && Array.isArray(data.chunks) && data.chunks.length > 0) {
+      const chunks = await Promise.all(
+        data.chunks.map(async (fileName: string) => {
+          const chunkResponse = await fetch(BASE_PATH[year] + fileName);
+          if (!chunkResponse.ok) {
+            throw new Error(`Unable to load AP EAPCET 2025 search chunk ${fileName} (HTTP ${chunkResponse.status})`);
+          }
+          const chunkData = await chunkResponse.json();
+          return Array.isArray(chunkData) ? chunkData : (Array.isArray(chunkData.candidates) ? chunkData.candidates : []);
+        })
+      );
+      candidates = chunks.flat();
+    }
+
     return {
-      candidates: Array.isArray(data.candidates) ? data.candidates : [],
+      candidates,
       branchMap: data.branchMap ?? {},
       collegeMap: data.collegeMap ?? {},
+      stats: data.stats ?? {
+        totalColleges: Number(data.collegeCount ?? 0),
+        totalRecords: Number(data.totalRecords ?? candidates.length),
+        totalBranches: Object.keys(data.branchMap ?? {}).length,
+      },
     };
   })();
   searchIndexCache.set(year, promise);
