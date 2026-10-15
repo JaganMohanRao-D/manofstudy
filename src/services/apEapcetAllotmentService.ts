@@ -419,7 +419,10 @@ export async function searchAllotments(year: AllotmentYear, options: SearchOptio
   const results: AllotmentRecord[] = [];
 
   for (const raw of candidates) {
-    const [rank, candName, gender, category, region, allottedCategory, rawPhase, collegeCode, branchCode, hallTicket] = raw;
+    const [rank, candName, gender, category, region, allottedCategory, rawPhase, collegeCode, branchCode] = raw;
+    // New generated tuples put fees/seats before the roll number; older
+    // compact tuples kept the hall ticket at index 9.
+    const hallTicket = raw.length > 13 ? raw[13] : raw[9];
     const numRank = typeof rank === 'number' ? rank : (asOptionalNumber(rank) ?? 0);
     if (nameQuery && !normalize(candName).includes(nameQuery)) continue;
     if (options.exactRank && numRank !== options.exactRank) continue;
