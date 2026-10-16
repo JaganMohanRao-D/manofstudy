@@ -87,6 +87,15 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
               <a href={`mailto:${supportEmail}`} className="hover:text-blue-600 dark:hover:text-blue-400 font-medium underline underline-offset-2">
                 {supportEmail}
               </a>
+              <span aria-hidden="true" className="text-slate-300 dark:text-slate-600">•</span>
+              <a
+                href="https://jagan-me.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-blue-600 dark:text-blue-400 hover:underline underline-offset-2"
+              >
+                Personal Portfolio ↗
+              </a>
             </div>
           </div>
 
@@ -101,6 +110,14 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
                 <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
               </svg>
               <span>Connect on LinkedIn</span>
+            </a>
+            <a
+              href="https://jagan-me.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/50 hover:bg-blue-100 dark:hover:bg-blue-900/60 rounded-lg border border-blue-200 dark:border-blue-900 transition-colors"
+            >
+              <span>View Portfolio ↗</span>
             </a>
           </div>
         </section>

@@ -120,6 +120,14 @@ export const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
               >
                 <span>Connect with Founder on LinkedIn →</span>
               </a>
+              <a
+                href="https://jagan-me.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-blue-700 dark:text-blue-300 hover:underline"
+              >
+                <span>View Developer Portfolio ↗</span>
+              </a>
             </div>
           </div>
         </div>
