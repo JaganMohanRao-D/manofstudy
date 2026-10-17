@@ -2170,3 +2170,72 @@ html.light [class*="bg-gray-900"] [class*="text-slate-100"] {
 }
 html.light body,
 html.light #root { background-color:#f5f9ff; color:#172033; color-scheme:light; }
+
+
+/* Student FAQ: scoped contrast repair; does not affect other sections. */
+#student-faq-section {
+  color: #172033 !important;
+}
+#student-faq-section > div {
+  background: #FFFFFF !important;
+  color: #172033 !important;
+  border-color: #D9E1EC !important;
+}
+#student-faq-section > div > div:first-child,
+#student-faq-section > div > div:nth-child(2) {
+  background: #F3F7FD !important;
+  color: #172033 !important;
+  border-color: #D9E1EC !important;
+}
+#student-faq-section h2,
+#student-faq-section h3,
+#student-faq-section h4,
+#student-faq-section p,
+#student-faq-section label,
+#student-faq-section span:not(.sr-only) {
+  color: #243B63;
+}
+#student-faq-section h2 { color: #17366F !important; }
+#student-faq-section p { color: #536783 !important; }
+#student-faq-section input,
+#student-faq-section select,
+#student-faq-section textarea {
+  background: #FFFFFF !important;
+  color: #172033 !important;
+  border-color: #CBD5E1 !important;
+}
+#student-faq-section input::placeholder { color: #64748B !important; }
+#student-faq-section [class*="bg-slate-950"],
+#student-faq-section [class*="bg-slate-900"],
+#student-faq-section [class*="bg-gray-950"],
+#student-faq-section [class*="bg-gray-900"],
+#student-faq-section [class*="bg-black"] {
+  background-color: #FFFFFF !important;
+  color: #172033 !important;
+  border-color: #D9E1EC !important;
+}
+#student-faq-section [class*="text-white"],
+#student-faq-section [class*="text-slate-100"],
+#student-faq-section [class*="text-slate-200"],
+#student-faq-section [class*="text-slate-300"],
+#student-faq-section [class*="text-blue-900"],
+#student-faq-section [class*="text-slate-900"] {
+  color: #243B63 !important;
+}
+#student-faq-section button[aria-expanded="false"] {
+  color: #17366F !important;
+}
+#student-faq-section button[aria-expanded="true"] {
+  color: #17366F !important;
+}
+#student-faq-section button.bg-blue-600,
+#student-faq-section button.bg-sky-600 {
+  background-color: #2563EB !important;
+  color: #FFFFFF !important;
+}
+#student-faq-section button.bg-blue-600 span,
+#student-faq-section button.bg-sky-600 span {
+  color: #FFFFFF !important;
+}
+#student-faq-section .border-t,
+#student-faq-section .border-b { border-color: #D9E1EC !important; }
