@@ -1009,8 +1009,19 @@ export default function App() {
   const standaloneLegalPage = getStandaloneLegalPage();
   if (standaloneLegalPage) return <LegalPage type={standaloneLegalPage} />;
 
+  const currentPath = typeof window !== "undefined"
+    ? window.location.pathname.replace(/\/+$/, "").toLowerCase() || "/"
+    : "/";
+  const isAmazonOrEssentialsPage =
+    activeWorkspace === "essentials" ||
+    activeWorkspace === "store" ||
+    currentPath.includes("amazon") ||
+    currentPath.includes("student-store") ||
+    currentPath.includes("student-essentials");
+  const showPageWatermark = currentPath !== "/" && !isAmazonOrEssentialsPage && !isExamActive;
+
   return (
-    <div className="min-h-screen bg-[var(--mos-page-bg)] text-[var(--mos-text-primary)] tech-grid-pattern-light flex flex-col justify-between transition-colors duration-200">
+    <div className={`min-h-screen bg-[var(--mos-page-bg)] text-[var(--mos-text-primary)] tech-grid-pattern-light flex flex-col justify-between transition-colors duration-200${showPageWatermark ? " naa-watermark-page" : ""}`}>
       {/* 1. Modern Streamlined Header (Zero Clutter, No Secondary Ribbon) */}
       {!isExamActive && (
         <Header
