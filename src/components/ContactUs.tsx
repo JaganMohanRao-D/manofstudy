@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Send, Check, Copy, MessageSquare, ArrowLeft, Clock, Sparkles } from 'lucide-react';
+import { Mail, Send, Check, Copy, MessageSquare, ArrowLeft, Clock, Sparkles, Instagram } from 'lucide-react';
 
 export interface ContactUsProps {
   onBack?: () => void;
@@ -127,6 +127,17 @@ export const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
                 className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-blue-700 dark:text-blue-300 hover:underline"
               >
                 <span>View Developer Portfolio ↗</span>
+              </a>
+              <a
+                href="https://www.instagram.com/naacollege.in?rpxt=bmhpMDByaGo5YmVs"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Follow Naa College on Instagram"
+                title="Naa College on Instagram"
+                className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-pink-600 dark:text-pink-400 hover:underline"
+              >
+                <Instagram className="w-4 h-4" aria-hidden="true" />
+                <span>Follow Naa College on Instagram ↗</span>
               </a>
             </div>
           </div>
