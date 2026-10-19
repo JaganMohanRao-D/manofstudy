@@ -1348,48 +1348,6 @@ export default function TgAllotmentExplorer({ initialCollegeCode = 'ALL', initia
               </div>
             </div>
 
-            {/* Quick Search Demonstration Card */}
-            <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-rose-950/40 border border-rose-500/20 rounded-2xl p-4 sm:p-6 space-y-3 shadow-xl">
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-rose-400" />
-                <h3 className="text-base sm:text-lg font-bold text-white">
-                  Statewide Candidate Search Engine
-                </h3>
-              </div>
-              <p className="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
-                You can instantly search any student among all <strong>71,646 candidate allotments</strong> across all 151 Telangana engineering colleges without picking a single college or branch first.
-              </p>
-
-              {/* Sample Queries Chips */}
-              <div className="pt-2">
-                <span className="text-[11px] text-slate-400 font-medium block mb-2">
-                  Try one of these sample queries or enter any Rank / Name in the search bar above:
-                </span>
-                <div className="flex flex-wrap gap-2">
-                  {[
-                    { label: 'Rank 42500', query: '42500' },
-                    { label: 'BHUKYA JAGAN', query: 'BHUKYA JAGAN' },
-                    { label: 'RAMINENI JAGAN MOHAN', query: 'RAMINENI JAGAN MOHAN' },
-                    { label: 'Rank 2887', query: '2887' },
-                    { label: 'Hall Ticket 2625T07028', query: '2625T07028' },
-                  ].map((chip) => (
-                    <button
-                      key={chip.label}
-                      type="button"
-                      onClick={() => {
-                        setSearchQuery(chip.query);
-                        executeGlobalSearch({ q: chip.query });
-                      }}
-                      className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 border border-slate-700 cursor-pointer transition-colors"
-                    >
-                      <Search className="w-3 h-3 text-rose-400" />
-                      <span>{chip.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
             {/* Top Engineering Streams Grid */}
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3 shadow-lg">
               <div className="flex items-center justify-between">
