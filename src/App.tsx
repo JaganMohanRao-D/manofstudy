@@ -177,11 +177,6 @@ const StudentGapAnalyzer = lazyWithRetry(() =>
     default: m.StudentGapAnalyzer || m.default,
   }))
 );
-const StudentFaq = lazyWithRetry(() =>
-  import('./components/StudentFaq').then((m: any) => ({
-    default: m.StudentFaq || m.default,
-  }))
-);
 const StudentTestimonials = lazyWithRetry(() =>
   import('./components/StudentTestimonials').then((m: any) => ({
     default: m.StudentTestimonials || m.default,
@@ -1232,18 +1227,6 @@ export default function App() {
                   <EducationalGuideAndSeo />
                 </div>
 
-                {/* Comprehensive Expandable Student FAQ */}
-                <div className="content-visibility-auto">
-                  <StudentFaq
-                    onSelectTab={(tab) => {
-                      if (tab === 'eapcet-radar') handleSelectWorkspace('eapcet');
-                      else if (tab === 'roadmaps') handleSelectWorkspace('roadmaps');
-                      else if (tab === 'scholarships') handleSelectWorkspace('scholarships');
-                      else handleSelectWorkspace('utilities', tab);
-                    }}
-                    onOpenLegal={(type) => setLegalModal(type)}
-                  />
-                </div>
               </Suspense>
             </ChunkErrorBoundary>
           </div>
