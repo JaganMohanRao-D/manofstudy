@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Sparkles, GraduationCap, Compass, ShieldCheck, ArrowLeft, Mail, Award, Users } from 'lucide-react';
+import { Heart, Sparkles, GraduationCap, Compass, ShieldCheck, ArrowLeft, Mail, Award, Users, Instagram } from 'lucide-react';
 
 export interface AboutUsProps {
   onBack?: () => void;
@@ -118,6 +118,17 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
               className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/50 hover:bg-blue-100 dark:hover:bg-blue-900/60 rounded-lg border border-blue-200 dark:border-blue-900 transition-colors"
             >
               <span>View Portfolio ↗</span>
+            </a>
+            <a
+              href="https://www.instagram.com/naacollege.in?rpxt=bmhpMDByaGo5YmVs"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Follow Naa College on Instagram"
+              title="Naa College on Instagram"
+              className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 hover:brightness-110 rounded-lg transition-all shadow-xs"
+            >
+              <Instagram className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>Instagram</span>
             </a>
           </div>
         </section>
