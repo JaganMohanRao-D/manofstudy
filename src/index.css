@@ -2239,3 +2239,37 @@ html.light #root { background-color:#f5f9ff; color:#172033; color-scheme:light; 
 }
 #student-faq-section .border-t,
 #student-faq-section .border-b { border-color: #D9E1EC !important; }
+
+/* Subtle Naa College logo watermark on eligible inner pages only. */
+.naa-watermark-page {
+  position: relative;
+  isolation: isolate;
+}
+
+.naa-watermark-page::before {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("/Naa%20College%20logo.webp");
+  background-repeat: repeat;
+  background-size: 168px 168px;
+  background-position: 34px 28px;
+  opacity: 0.035;
+  transform: rotate(-35deg);
+  transform-origin: center;
+}
+
+@media (max-width: 640px) {
+  .naa-watermark-page::before {
+    background-size: 138px 138px;
+    opacity: 0.03;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .naa-watermark-page::before {
+    transform: none;
+  }
+}
