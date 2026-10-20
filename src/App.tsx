@@ -1013,7 +1013,7 @@ export default function App() {
 
   const standaloneLegalPage = getStandaloneLegalPage();
   if (standaloneLegalPage) return <LegalPage type={standaloneLegalPage} />;
-  const requestedPath = typeof window !== 'undefined' ? window.location.pathname.replace(/\\/+$/, '').toLowerCase() || '/' : '/';
+  const requestedPath = typeof window !== 'undefined' ? window.location.pathname.replace(/\/+$/, '').toLowerCase() || '/' : '/';
   if (requestedPath === '/autonomous-colleges') return <AutonomousCollegesDirectory />;
 
   const currentPath = typeof window !== "undefined"
