@@ -87,35 +87,35 @@ const routes = [
     renderStaticBodyInRoot: true,
   },
   {
-    path: '/about',
+    path: '/about/',
     title: 'About Naa College | Student Education Resources',
     description: 'Learn about Naa College, its educational tools, data resources, and purpose for students.',
     staticBody: '<main class="mx-auto max-w-4xl px-4 py-8"><h1 class="text-3xl font-bold">About Naa College</h1><p class="mt-4 leading-7">Naa College is an independent student resource that brings together educational tools, EAPCET data explorers, admission guidance, scholarship information, engineering roadmaps, and study utilities.</p><h2 class="mt-6 text-xl font-semibold">Purpose and limitations</h2><p class="mt-2 leading-7">The platform helps students understand information and plan their learning. It is not a government counselling authority, college, scholarship provider, or guarantee of admission or employment. Check important decisions against the relevant official source.</p><p class="mt-5 leading-7">For questions, use the <a href="/contact-us">contact page</a>. Read the <a href="/privacy-policy">privacy policy</a> and <a href="/legal-safe-harbor">disclaimer</a>.</p></main>',
     renderStaticBodyInRoot: true,
   },
   {
-    path: '/contact-us',
+    path: '/contact-us/',
     title: 'Contact Naa College',
     description: 'Contact Naa College about site functionality, data corrections, or privacy concerns.',
     staticBody: '<main class="mx-auto max-w-4xl px-4 py-8"><h1 class="text-3xl font-bold">Contact Naa College</h1><p class="mt-4 leading-7">Use the contact details and form provided on the Naa College contact page to report a technical issue, suggest an improvement, ask about a data source, or raise a privacy concern.</p><p class="mt-4 leading-7">When reporting an issue, include the page URL and a short description. Do not send passwords, Aadhaar details, hall-ticket numbers, or other sensitive personal information in a support message.</p><p class="mt-5"><a href="/about">About Naa College</a> · <a href="/privacy-policy">Privacy Policy</a></p></main>',
     renderStaticBodyInRoot: true,
   },
   {
-    path: '/privacy-policy',
+    path: '/privacy-policy/',
     title: 'Privacy Policy | Naa College',
     description: 'Read how Naa College handles browser-based tools, AI summarisation, local preferences, and third-party services.',
     staticBody: '<main class="mx-auto max-w-4xl px-4 py-8"><h1 class="text-3xl font-bold">Privacy Policy</h1><p class="mt-4 leading-7">Many Naa College utilities process files in your browser. The AI PDF summariser extracts text from a selected document and sends it to Google Gemini for processing. Do not submit sensitive documents or personal identifiers to AI features.</p><h2 class="mt-6 text-xl font-semibold">Third-party services</h2><p class="mt-2 leading-7">Some features use third-party services for AI processing, authentication, or advertising. Review the full policy and relevant feature description before using a feature that may send information to another service.</p><p class="mt-5 leading-7">This summary is not a substitute for the complete policy. For privacy questions, use the <a href="/contact-us">contact page</a>.</p></main>',
     renderStaticBodyInRoot: true,
   },
   {
-    path: '/terms-of-service',
+    path: '/terms-of-service/',
     title: 'Terms of Service | Naa College',
     description: 'Review the terms for using Naa College educational tools, data explorers, and student resources.',
     staticBody: '<main class="mx-auto max-w-4xl px-4 py-8"><h1 class="text-3xl font-bold">Terms of Service</h1><p class="mt-4 leading-7">Naa College provides educational information and utilities for general informational use. Check inputs, review results, and confirm important admission, scholarship, academic, or career decisions with the relevant official source.</p><p class="mt-4 leading-7">Tools may rely on historical or incomplete datasets and may change as the platform is updated. Do not use a prediction or calculator result as an official decision or guarantee.</p><p class="mt-5"><a href="/privacy-policy">Privacy Policy</a> · <a href="/legal-safe-harbor">Disclaimer</a></p></main>',
     renderStaticBodyInRoot: true,
   },
   {
-    path: '/legal-safe-harbor',
+    path: '/legal-safe-harbor/',
     title: 'Disclaimer | Naa College',
     description: 'Important limitations for Naa College admission data, calculators, scholarship summaries, and learning resources.',
     staticBody: '<main class="mx-auto max-w-4xl px-4 py-8"><h1 class="text-3xl font-bold">Disclaimer</h1><p class="mt-4 leading-7">Naa College is an independent educational resource and is not affiliated with a government counselling authority, university, or scholarship provider unless explicitly stated. Historical allotment data, college predictors, calculators, and scholarship summaries are informational and may be incomplete or change over time.</p><p class="mt-4 leading-7">Always check current official notices, eligibility requirements, deadlines, fees, and final decisions with the relevant authority. A tool result does not guarantee admission, scholarship approval, academic outcomes, or employment.</p><p class="mt-5"><a href="/about">About Naa College</a> · <a href="/contact-us">Contact</a></p></main>',
@@ -142,7 +142,7 @@ if (fs.existsSync(scholarshipDataPath)) {
     }
     usedSlugs.add(slug);
     const title = scholarship.title + ': Eligibility, Benefits & Application | Naa College';
-    const summary = scholarship.description || scholarship.target || '';
+    const summary = scholarship.target || scholarship.description || '';
     const description = (scholarship.title + ' — ' + summary + ' Check current eligibility, benefits, application dates and official scheme guidance.').slice(0, 158);
     const sourceUrl = safeExternalUrl(scholarship.official_source_url || scholarship.guideline_url || scholarship.apply_link || scholarship.applyLink);
     const fields = [
