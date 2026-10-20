@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Search, RotateCcw, ChevronLeft, ChevronRight, SlidersHorizontal, GraduationCap, ExternalLink } from 'lucide-react';
-import apData from '../data/ap-autonomous-colleges.json';
-import tgData from '../data/telangana-autonomous-colleges.json';
+import apDataRaw from '../data/ap-autonomous-colleges.json?raw';
+import tgDataRaw from '../data/telangana-autonomous-colleges.json?raw';
 
 type College = {
   sr_no?: number | string;
@@ -12,7 +12,7 @@ type College = {
   affiliated_to?: string;
 };
 type Dataset = { source?: string; state?: string; total?: number; colleges?: College[] };
-const datasets = [apData as Dataset, tgData as Dataset];
+// The AP source contains a few bare NaN tokens, which are not valid JSON. Parse a derived copy safely without editing the original source file.\nconst parseDataset = (raw: string): Dataset => JSON.parse(raw.replace(/\\bNaN\\b/g, 'null')) as Dataset;\nconst datasets = [parseDataset(apDataRaw), parseDataset(tgDataRaw)];
 const clean = (value: unknown) => String(value ?? '').trim();
 const norm = (value: unknown) => clean(value).toLocaleLowerCase();
 const getYear = (value: unknown): number | null => {
