@@ -386,7 +386,7 @@ const SEO_LANDING_PATHS = {
 
 const getRoadmapDetailId = (): string | null => {
   if (typeof window === 'undefined') return null;
-  const match = window.location.pathname.replace(/\\/+$/, '').match(/^\\/engineering-roadmaps\\/([^/]+)$/i);
+  const match = window.location.pathname.replace(/\/+$/, '').match(/^\/engineering-roadmaps\/([^/]+)$/i);
   return match ? match[1].toLowerCase() : null;
 };
 
