@@ -96,7 +96,6 @@ export const ScholarshipDetailPage: React.FC = () => {
 
   const status = effectiveStatus(record);
   const statusLower = status.toLowerCase();
-  const isClosed = statusLower.includes('closed');
   const isListedOpen = statusLower.startsWith('listed as open');
   const related = records.filter(item => item.id !== record.id && (item.category === record.category || /engineering|b\.tech|technical|diploma|undergraduate/i.test(item.target + ' ' + record.target))).slice(0, 3);
 
