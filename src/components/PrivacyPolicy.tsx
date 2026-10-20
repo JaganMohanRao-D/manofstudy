@@ -44,7 +44,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             Client-Side Sandbox
           </h3>
           <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            All PDF merges, compressions, image resizings, and ATS resume tokenizations process exclusively in your device's browser memory (RAM / WebAssembly).
+            Many PDF merges, compressions, image resizings, and document utilities process in your browser. The AI PDF summariser is an exception: it sends extracted text to Google Gemini for processing.
           </p>
         </div>
 
@@ -80,7 +80,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             1. Introduction &amp; Core Operating Philosophy
           </h2>
           <p>
-            NAA COLLEGE (the "Platform", accessible at <a href="https://naacollege.in" target="_blank" rel="noopener noreferrer" className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">https://naacollege.in</a> and preview mirrors) is an independent open-access educational launchpad developed to assist engineering and degree scholars across Andhra Pradesh, Telangana, and broader India. We believe that privacy is a foundational human right. Unlike predatory commercial websites that upload sensitive resumes, mark sheets, and national ID cards to remote databases for monetization, NAA COLLEGE is engineered with a browser-based processing for many utility features, with external processing disclosed for features that use third-party services.
+            NAA COLLEGE (the "Platform", accessible at <a href="https://naacollege.in" target="_blank" rel="noopener noreferrer" className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">https://naacollege.in</a> and preview mirrors) is an independent open-access educational launchpad developed to assist engineering and degree scholars across Andhra Pradesh, Telangana, and broader India. We believe that privacy is a foundational human right. Unlike predatory commercial websites that upload sensitive resumes, mark sheets, and national ID cards to remote databases for monetization, NAA COLLEGE uses browser-based processing for many utility features and discloses external processing for features that use third-party services.
           </p>
         </section>
 
@@ -103,7 +103,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             3. Browser Local Storage &amp; Session State
           </h2>
           <p>
-            NAA COLLEGE utilizes client-side <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-emerald-600 font-mono text-xs">localStorage</code> solely to save non-sensitive, convenience preferences across your visits. These settings include:
+            NAA COLLEGE uses browser <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-emerald-600 font-mono text-xs">localStorage</code> for some convenience preferences and browser-local feature state, which can include:
           </p>
           <ul className="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-400">
             <li>UI visual theme mode (Light Mode / Dark Mode).</li>
@@ -121,7 +121,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             <span>4. Google AdSense &amp; Third-Party Advertising Cookies</span>
           </h2>
           <p>
-            To keep NAA COLLEGE 100% free forever for students without requiring subscription paywalls, this website may display advertisements served by Google AdSense and certified Google third-party advertising partners:
+            This website may display advertisements served by Google AdSense and third-party advertising partners. Depending on your settings and region, these services may use cookies or similar technologies:
           </p>
           <ul className="list-disc pl-5 space-y-1.5 text-slate-600 dark:text-slate-400">
             <li>
