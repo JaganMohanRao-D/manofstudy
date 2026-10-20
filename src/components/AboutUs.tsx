@@ -37,7 +37,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-3xl leading-relaxed">
-            Built from the ground up by <strong>JAGAN MOHAN RAO DUNNA</strong>, NAA COLLEGE is an open, client-side academic and career launchpad created to empower students across Andhra Pradesh, Telangana, and Pan-India to bridge the gap between tier-3 engineering classrooms and high-growth global technology careers.
+            Built from the ground up by <strong>JAGAN MOHAN RAO DUNNA</strong>, NAA COLLEGE is an independent academic and career resource platform created to help students across Andhra Pradesh, Telangana, and India access practical tools, admissions information, and learning guidance.
           </p>
         </div>
       </div>
@@ -80,7 +80,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
               JAGAN MOHAN RAO DUNNA
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-400">
-              Dedicated to empowering engineering scholars across India with zero-compromise, client-side academic tools.
+              Dedicated to helping students access practical academic resources, transparent disclosures, and browser-based tools where available.
             </p>
             <div className="pt-1 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
               <Mail className="w-3.5 h-3.5 text-slate-400" />
