@@ -80,7 +80,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             1. Introduction &amp; Core Operating Philosophy
           </h2>
           <p>
-            NAA COLLEGE (the "Platform", accessible at <a href="https://naacollege.in" target="_blank" rel="noopener noreferrer" className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">https://naacollege.in</a> ) is an independent open-access educational launchpad developed to assist engineering and degree scholars across Andhra Pradesh, Telangana, and broader India. We believe that privacy is a foundational human right. Unlike predatory commercial websites that upload sensitive resumes, mark sheets, and national ID cards to remote databases for monetization, NAA COLLEGE uses browser-based processing for many utility features and discloses external processing for features that use third-party services.
+            NAA COLLEGE (the "Platform", accessible at <a href="https://naacollege.in" target="_blank" rel="noopener noreferrer" className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">https://naacollege.in</a>) is an independent educational resource for students in Andhra Pradesh, Telangana, and across India. Many utility features process information in the browser, while collaborative, authentication, AI-assisted, and advertising features may involve third-party services as described in this policy. Review individual feature descriptions before submitting information.
           </p>
         </section>
 
