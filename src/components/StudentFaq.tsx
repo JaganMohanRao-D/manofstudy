@@ -71,7 +71,7 @@ const FAQ_ITEMS: FaqItem[] = [
     icon: GraduationCap,
     question: 'How do you verify scholarships and grants listed on the platform?',
     answer:
-      'Every listing in our 2026 Scholarship Directory is manually fact-checked against government gazettes (NSP, PMSSS, AICTE Pragati, state ePASS portals) and verified corporate CSR foundations (Tata, Reliance, Infosys, HDFC Parivartan). We strictly list the upfront reward amounts, official application portals, and clear deadlines.',
+      'Scholarship records include the source notes and links available to us, but details may be incomplete or change. Check eligibility, current deadlines, required documents, and benefits directly with the scheme provider before applying.',
     actionText: 'View 2026 Scholarships',
     actionTarget: { type: 'workspace', target: 'scholarships' },
   },
@@ -104,7 +104,7 @@ const FAQ_ITEMS: FaqItem[] = [
     icon: FileCheck2,
     question: 'What personal data does NAA COLLEGE collect from students?',
     answer:
-      'We do not require mandatory registration for public academic tools, counseling explorers, or PDF utilities. When using collaborative features like CampusConnect or Project Hubs, authentication is handled securely through Firebase. We never sell student data or academic history to third-party marketing companies.',
+      'Public academic tools generally do not require sign-in. Some collaborative features use Firebase authentication, and AI-assisted features may send submitted text to Google Gemini. Review the relevant privacy disclosures and avoid submitting sensitive personal information.',
     actionText: 'Read Privacy Policy',
     actionTarget: { type: 'legal', modal: 'privacy' },
   },
