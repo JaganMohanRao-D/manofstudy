@@ -554,7 +554,7 @@ export const SlideOverDrawer = ({
                   <Briefcase className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                   <div>
                     <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
-                      <span>Verified Student Internships Radar</span>
+                      <span>Student Internship Resources</span>
                       <span className="text-[9px] bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 px-1.5 py-0.2 rounded font-mono font-semibold">Vetted</span>
                     </div>
                     <div className="text-[10px] text-slate-600 dark:text-slate-400 leading-normal mt-0.5">
