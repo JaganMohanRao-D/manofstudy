@@ -297,18 +297,7 @@ export const ALL_PDF_TOOLS: PdfToolDefinition[] = [
     keywords: ['metadata', 'author', 'title', 'properties', 'subject', 'tags', 'clean', 'submission', 'pdf metadata'],
     description: 'Inspect and customize author name, document title, subject, and keywords for clean academic submission.',
   },
-  {
-    id: 'ai-summarizer',
-    name: 'AI PDF Summarizer',
-    tagline: 'Extract key takeaways, reading time & executive summary',
-    subtitle: 'Get key takeaways, reading time & summary',
-    category: 'utilities',
-    badge: 'Smart',
-    acceptedFileTypes: '.pdf',
-    fileHint: '.pdf',
-    keywords: ['ai', 'summary', 'summarizer', 'takeaways', 'reading time', 'quick notes', 'ai summarizer'],
-    description: 'Extract full document text locally to calculate reading times, word counts, and bulleted key takeaways.',
-  },
+
   {
     id: 'ocr-pdf',
     name: 'OCR PDF',
