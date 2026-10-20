@@ -58,7 +58,7 @@ function ArticleBody({ content }: { content: string }) {
     while (i < lines.length && lines[i].trim() && !/^(#{2,3}\s|>\s|[-*]\s+|\d+[.)]\s+)/.test(lines[i].trim())) paragraph.push(lines[i++].trim());
     blocks.push({ type: 'p', value: [paragraph.join(' ')] });
   }
-  return <div className="blog-prose space-y-5">
+  return <div className="blog-prose space-y-5" onCopy={(event) => event.preventDefault()}
     {blocks.map((block, index) => {
       if (block.type === 'h2') return <h2 id={headingId(block.value[0])} key={index} className="scroll-mt-24 pt-4 text-xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-2xl">{block.value[0]}</h2>;
       if (block.type === 'h3') return <h3 key={index} className="pt-2 text-lg font-semibold tracking-tight text-slate-900 dark:text-white sm:text-xl">{block.value[0]}</h3>;
