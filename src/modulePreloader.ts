@@ -17,7 +17,7 @@ const loaders: Record<string, () => Promise<unknown>> = {
   'Internal Cutoff Estimator': () => import('./components/InternalExamEstimator'),
   'free pdf tools for students': () => import('./components/PdfPowerTools'),
   'Exam Image Resizer': () => import('./components/ImageResizer'),
-  'Verified Student Internships Radar': () => import('./components/InternshipsRadar'),
+  'Student Internship Resources': () => import('./components/InternshipsRadar'),
   'Campus Placement Major Projects Hub': () => import('./components/MajorProjectsHub'),
   'AI Student Gap Analyzer': () => import('./components/StudentGapAnalyzer/StudentGapAnalyzer'),
   'Placement Viva Flashcards & Practical Code Vault': () => import('./components/PlacementCodeVault'),
