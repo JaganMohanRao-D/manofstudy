@@ -50,17 +50,17 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
             <span>The Origin Story: Solving Real Student Pain</span>
           </h2>
           <p>
-            Every year, hundreds of thousands of Telugu students step out of intermediate colleges and into technical education. What they encounter on the internet is a frustrating landscape:
+            Students comparing engineering colleges often have to switch between official counselling notices, fee documents, calculators, and separate learning resources. Naa College aims to make some of those everyday tasks easier to explore from one place:
           </p>
           <ul className="list-disc pl-5 space-y-2 text-slate-600 dark:text-slate-400">
             <li>
-              <strong>Predatory Web Tools:</strong> PDF tools and image resizers saturated with deceptive ads, popup malware, and mandatory file uploads that store sensitive student hall tickets and identity documents on unverified remote servers.
+              <strong>Scattered utilities:</strong> Students may need separate tools for attendance estimates, grade calculations, document processing, and study planning. Naa College groups several utilities together and describes when browser-based processing or an external service may be involved.
             </li>
             <li>
-              <strong>Opaque Counselling Information:</strong> AP EAPCET Phase-2 leftover vacancies and college fee schedules buried across fragmented government PDF notifications, leaving students anxious during crucial web option selections.
+              <strong>Complex admissions information:</strong> Historical allotment records and official counselling notices can be difficult to compare. Naa College provides explorers and predictors to help organise past records, while directing students to official authorities for current rules and final decisions.
             </li>
             <li>
-              <strong>The Tier-3 Mentorship Void:</strong> Students in rural and semi-urban engineering campuses struggling with outdated curricula, 75% attendance detention stress, fear of backlogs, and zero guidance on building modern software portfolios.
+              <strong>Practical learning guidance:</strong> Roadmaps, project ideas, and beginner-friendly guides can help students plan skills practice alongside college coursework. The right plan depends on a student's available time, resources, and goals.
             </li>
           </ul>
           <p>
@@ -144,7 +144,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
               <span className="font-bold text-slate-900 dark:text-white text-xs block">1. Free to Use</span>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Education tools should never be gated behind paywalls. Every calculator, PDF tool, branch roadmap, and scholarship listing on NAA COLLEGE is free for every student.
+                Core calculators, roadmaps, document utilities, and scholarship information are available to explore without a paid subscription. Individual third-party services, if used, may have their own terms or limits.
               </p>
             </div>
 
@@ -156,14 +156,14 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
             </div>
 
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
-              <span className="font-bold text-slate-900 dark:text-white text-xs block">3. Rigorous Empirical Accuracy</span>
+              <span className="font-bold text-slate-900 dark:text-white text-xs block">3. Source-aware information</span>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                We calibrate formulas against official university ordinances (JNTUK, JNTUA, AU, VTU, Anna University) and verified public government datasets.
+                Where tools use published rules or public datasets, we aim to identify the assumptions and source context. Data may be incomplete or become outdated; calculations and predictions should be checked against current official information.
               </p>
             </div>
 
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
-              <span className="font-bold text-slate-900 dark:text-white text-xs block">4. Practical Tier-3 Empowerment</span>
+              <span className="font-bold text-slate-900 dark:text-white text-xs block">4. Practical skill-building</span>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                 Actionable advice that acknowledges real-world constraints: building verifiable public GitHub proof-of-work, winning off-campus referrals, and mastering problem-solving patterns.
               </p>
@@ -176,7 +176,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
           <div className="space-y-1">
             <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-1.5">
               <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
-              <span>Keep NAA COLLEGE Independent &amp; Ad-Clean</span>
+              <span>Support Independent Development</span>
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-400">
               NAA COLLEGE is maintained independently. If our tools saved your attendance or helped you plan admissions, consider buying a coffee.
