@@ -160,6 +160,20 @@ if (fs.existsSync(scholarshipDataPath)) {
       '<p class="mt-5 text-sm leading-6">Scholarship terms, eligibility and dates can change. This page summarises the available record; confirm the latest requirements with the scheme provider before making an application decision.</p></main>';
     routes.push({ path: '/scholarships/' + slug + '/', title, description, staticBody, renderStaticBodyInRoot: true });
   });
+  const scholarshipListingItems = scholarshipRecords.map((scholarship) => {
+    const slug = slugify(scholarship.title);
+    const label = escapeHtml(scholarship.title);
+    const target = scholarship.target ? '<p>' + escapeHtml(scholarship.target) + '</p>' : '';
+    const amount = scholarship.amount ? '<p><strong>Listed benefit:</strong> ' + escapeHtml(scholarship.amount) + '</p>' : '';
+    return '<li><article><h2><a href="/scholarships/' + escapeHtml(slug) + '/">' + label + '</a></h2>' + target + amount + '</article></li>';
+  }).join('');
+  routes.push({
+    path: '/scholarships/',
+    title: 'Scholarship Directory for Indian Students | Naa College',
+    description: 'Browse scholarship records with available eligibility, benefit, deadline, and source details. Confirm current rules with each scheme provider.',
+    staticBody: '<main class="mx-auto max-w-5xl px-4 py-8 sm:px-6"><h1 class="text-3xl font-bold">Scholarship Directory for Students</h1><p class="mt-4 leading-7">Browse the scholarship records currently listed on Naa College. Each record may contain eligibility information, listed benefits, application dates, and source notes. Details can change; confirm current rules and deadlines with the scheme provider before applying.</p><h2 class="mt-7 text-xl font-semibold">Available scholarship records</h2><ul class="mt-3 space-y-5 leading-7">' + scholarshipListingItems + '</ul><p class="mt-6 text-sm leading-6">This directory is an independent information resource, not a scholarship provider. A listing does not guarantee eligibility or approval.</p></main>',
+    renderStaticBodyInRoot: true,
+  });
 } else {
   console.warn('[SEO] Scholarship JSON not found; individual scholarship HTML routes were not generated.');
 }
