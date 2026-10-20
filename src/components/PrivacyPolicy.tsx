@@ -24,7 +24,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
       <div className="relative overflow-hidden rounded-3xl bg-slate-950 text-white border border-slate-800 p-6 sm:p-8 space-y-3 shadow-xl">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-          <span>100% In-Memory Privacy Architecture</span>
+          <span>How We Handle Files and Data</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
           Privacy Policy &amp; Data Protection Disclosures
@@ -53,10 +53,10 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             <Server className="w-4 h-4" />
           </div>
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
-            Zero File Uploads
+            Browser-Based File Tools
           </h3>
           <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            We operate zero backend database storage for user files. No student resumes, marksheets, or examination photos are ever transmitted to or stored on remote servers.
+            Many file utilities process files in your browser. The AI PDF summariser extracts document text and sends it to Google Gemini for processing. Do not submit sensitive documents or personal identifiers to AI features. This statement does not mean that every feature operates entirely offline.
           </p>
         </div>
 
@@ -65,7 +65,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             <EyeOff className="w-4 h-4" />
           </div>
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
-            No PII Tracking
+            Data Minimisation
           </h3>
           <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
             We do not collect government Aadhaar numbers, biometric impressions, phone numbers, or academic credentials. You use NAA COLLEGE anonymously.
@@ -80,7 +80,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             1. Introduction &amp; Core Operating Philosophy
           </h2>
           <p>
-            NAA COLLEGE (the "Platform", accessible at <a href="https://naacollege.in" target="_blank" rel="noopener noreferrer" className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">https://naacollege.in</a> and preview mirrors) is an independent open-access educational launchpad developed to assist engineering and degree scholars across Andhra Pradesh, Telangana, and broader India. We believe that privacy is a foundational human right. Unlike predatory commercial websites that upload sensitive resumes, mark sheets, and national ID cards to remote databases for monetization, NAA COLLEGE is engineered with a strict <strong>client-side in-memory execution paradigm</strong>.
+            NAA COLLEGE (the "Platform", accessible at <a href="https://naacollege.in" target="_blank" rel="noopener noreferrer" className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">https://naacollege.in</a> and preview mirrors) is an independent open-access educational launchpad developed to assist engineering and degree scholars across Andhra Pradesh, Telangana, and broader India. We believe that privacy is a foundational human right. Unlike predatory commercial websites that upload sensitive resumes, mark sheets, and national ID cards to remote databases for monetization, NAA COLLEGE is engineered with a browser-based processing for many utility features, with external processing disclosed for features that use third-party services.
           </p>
         </section>
 
@@ -92,8 +92,8 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             When utilizing any feature across our suite—including the Attendance Defender, Global GPA Hub, Internal Exam Cutoff Estimator, 30+ PDF Power Tools, 20KB Exam Photo Resizer, and ATS Resume Analyzer:
           </p>
           <ul className="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-400">
-            <li><strong>No Documents or Media:</strong> Your uploaded PDF files, images, photographs, resumes, and text documents remain strictly in your browser session memory. They are never transmitted over the internet to our servers.</li>
-            <li><strong>No Biometric or Identity Numbers:</strong> We never request, capture, or log Aadhaar numbers, biometric fingerprints, iris scans, or hall ticket passwords.</li>
+            <li><strong>File processing:</strong> Many PDF and image utilities process files in your browser. The AI PDF summariser extracts text from a selected PDF and sends that text to Google Gemini for processing. Do not submit sensitive documents to AI features.</li>
+            <li><strong>Sensitive information:</strong> Do not enter Aadhaar numbers, hall-ticket details, passwords, or other sensitive identifiers into tools unless the feature explicitly requires them and you understand how the information is processed.</li>
             <li><strong>No Academic Transcripts:</strong> Your internal test marks, semester grades, and attendance entries are processed via instantaneous JavaScript arithmetic in your local browser window.</li>
           </ul>
         </section>
@@ -111,7 +111,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             <li>Client-side checklist completion ticks for your personal DSA study plan.</li>
           </ul>
           <p>
-            This data never leaves your browser device. You can purge all stored preferences at any time by clearing your browser cache or clicking "Clear Local Storage" in your browser developer settings.
+            Browser-local preferences are stored on your device. Clearing site data in your browser removes local preferences; it does not delete information already sent to an external service or data handled by third-party providers.
           </p>
         </section>
 
