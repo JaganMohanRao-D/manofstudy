@@ -352,7 +352,7 @@ export interface SearchOptions {
   limit?: number;
 }
 
-type SearchIndexCandidate = [number, string, string, string, string, string, number, string, string, string];
+type SearchIndexCandidate = [number, string, string, string, string, string, number, string, string, string, ...unknown[]];
 
 interface SearchIndexData {
   candidates: SearchIndexCandidate[];
