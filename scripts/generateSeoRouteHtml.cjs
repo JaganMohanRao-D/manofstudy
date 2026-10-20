@@ -123,6 +123,35 @@ const routes = [
   }
 ];
 
+// Generate a dedicated crawlable HTML entry point for every roadmap in the
+// same source datasets used by the interactive React roadmap directory.
+const roadmapDataFiles = [
+  'src/data/engineeringRoadmapsData.ts',
+  'src/data/engineeringRoadmapsExtended.ts',
+  'src/data/iotRoadmap.ts'
+];
+const discoveredRoadmaps = new Map();
+const roadmapEntryPattern = /\{\s*id:\s*'([^']+)',\s*code:\s*'([^']+)',\s*name:\s*'([^']+)'/g;
+for (const relativeFile of roadmapDataFiles) {
+  const absoluteFile = path.resolve(process.cwd(), relativeFile);
+  if (!fs.existsSync(absoluteFile)) continue;
+  const source = fs.readFileSync(absoluteFile, 'utf8');
+  for (const match of source.matchAll(roadmapEntryPattern)) {
+    const [, id, code, name] = match;
+    if (!discoveredRoadmaps.has(id)) discoveredRoadmaps.set(id, { id, code, name });
+  }
+}
+for (const roadmap of discoveredRoadmaps.values()) {
+  const pathName = '/engineering-roadmaps/' + encodeURIComponent(roadmap.id) + '/';
+  const title = roadmap.name + ' Roadmap | Naa College';
+  const description = 'Explore the ' + roadmap.name + ' (' + roadmap.code + ') roadmap on Naa College, with staged learning guidance, skills, project directions, career options and a downloadable guide.';
+  const name = escapeHtml(roadmap.name);
+  const code = escapeHtml(roadmap.code);
+  const staticBody = '<main class="mx-auto max-w-5xl px-4 py-8 sm:px-6"><nav class="text-sm text-slate-500"><a href="/engineering-roadmaps/">All roadmaps</a> / ' + code + '</nav><p class="mt-5 text-sm font-semibold uppercase tracking-wide">Naa College · Career roadmap</p><h1 class="mt-3 text-3xl font-bold tracking-tight">' + name + ' Roadmap</h1><p class="mt-4 max-w-3xl text-base leading-7">Explore the learning roadmap for ' + name + '. The interactive guide includes staged learning areas, skills to develop, project directions, career paths, and a downloadable PDF to help organise your learning.</p><h2 class="mt-7 text-xl font-semibold">How to use this roadmap</h2><ul class="mt-3 list-disc space-y-2 pl-6 leading-7"><li>Review the stages in order and build the foundations before moving to advanced areas.</li><li>Use suggested skills and projects to practise what you learn rather than only reading about it.</li><li>Adapt the sequence to your university syllabus, available time, interests and current skill level.</li><li>Use career and salary information as general context, not as a promise of employment or earnings.</li><li>Open the full interactive roadmap below and download the PDF when you need an offline reference.</li></ul><p class="mt-5 leading-7">This independent learning guide is not an official university syllabus. Course requirements, hiring expectations, tools and compensation vary, so verify important details with current official or employer sources.</p><p class="mt-5"><a class="font-semibold underline" href="/engineering-roadmaps/">Browse all Naa College roadmaps</a></p></main>';
+  routes.push({ path: pathName, title, description, staticBody, includeInSitemap: true });
+}
+console.log('[SEO] Discovered ' + discoveredRoadmaps.size + ' individual roadmap pages from source data.');
+
 // Generate one crawlable static HTML entry point per scholarship record.
 // The React detail page reads the same JSON dataset, keeping routes and content aligned.
 const scholarshipDataPath = path.resolve(process.cwd(), 'public/indian_scholarships.json');
