@@ -64,7 +64,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
             </li>
           </ul>
           <p>
-            NAA COLLEGE was created by <strong>JAGAN MOHAN RAO DUNNA</strong> to eliminate this chaos. We set out to build a clean, blazing-fast, and 100% private platform where students can calculate bunks with mathematical certainty, analyze live EAPCET vacancies, access 24+ semester-by-semester degree roadmaps, and convert exam documents without uploading a single byte to a server.
+            NAA COLLEGE was created by <strong>JAGAN MOHAN RAO DUNNA</strong> to bring student-focused academic tools and resources into one place. Students can calculate attendance, explore EAPCET data, use engineering roadmaps, and work with document utilities. Many file operations run locally in the browser; the AI summariser sends extracted document text to Google Gemini for processing, so users should avoid submitting sensitive information to that feature.
           </p>
         </section>
 
@@ -151,7 +151,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
               <span className="font-bold text-slate-900 dark:text-white text-xs block">2. In-Browser Privacy By Design</span>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Zero server-side file uploads. Everything runs locally in WebAssembly and JavaScript in your device's memory. Your personal documents never leave your hands.
+                Many PDF and image utilities process files locally in your browser. The AI summariser is different: it sends extracted text to Google Gemini for processing. Check each tool's description and avoid submitting sensitive documents to AI features.
               </p>
             </div>
 
