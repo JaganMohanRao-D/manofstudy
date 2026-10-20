@@ -12,7 +12,9 @@ type College = {
   affiliated_to?: string;
 };
 type Dataset = { source?: string; state?: string; total?: number; colleges?: College[] };
-// The AP source contains a few bare NaN tokens, which are not valid JSON. Parse a derived copy safely without editing the original source file.\nconst parseDataset = (raw: string): Dataset => JSON.parse(raw.replace(/\\bNaN\\b/g, 'null')) as Dataset;\nconst datasets = [parseDataset(apDataRaw), parseDataset(tgDataRaw)];
+// The AP source contains a few bare NaN tokens, which are not valid JSON. Parse a derived copy safely without editing the original source file.
+const parseDataset = (raw: string): Dataset => JSON.parse(raw.replace(/\bNaN\b/g, 'null')) as Dataset;
+const datasets = [parseDataset(apDataRaw), parseDataset(tgDataRaw)];
 const clean = (value: unknown) => String(value ?? '').trim();
 const norm = (value: unknown) => clean(value).toLocaleLowerCase();
 const getYear = (value: unknown): number | null => {
