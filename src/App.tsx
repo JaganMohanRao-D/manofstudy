@@ -39,6 +39,7 @@ import { GuidesHub } from './components/GuidesHub';
 import { SeoLandingPage } from './components/SeoLandingPage';
 import { BlogPage, isBlogPath } from './components/BlogPage';
 import { useAuth } from './context/AuthContext';
+import { AutonomousCollegesDirectory } from './components/AutonomousCollegesDirectory';
 
 // Resilient dynamic code splitting with retry logic for network or stale bundle resilience
 const lazyWithRetry = <T extends React.ComponentType<any>>(
@@ -1012,6 +1013,8 @@ export default function App() {
 
   const standaloneLegalPage = getStandaloneLegalPage();
   if (standaloneLegalPage) return <LegalPage type={standaloneLegalPage} />;
+  const requestedPath = typeof window !== 'undefined' ? window.location.pathname.replace(/\\/+$/, '').toLowerCase() || '/' : '/';
+  if (requestedPath === '/autonomous-colleges') return <AutonomousCollegesDirectory />;
 
   const currentPath = typeof window !== "undefined"
     ? window.location.pathname.replace(/\/+$/, "").toLowerCase() || "/"
