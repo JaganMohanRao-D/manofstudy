@@ -166,7 +166,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
 
         <section className="space-y-2">
           <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
-            6. Children’s Online Privacy Protection (COPPA / DPDP Compliance)
+            6. Children and Age-Appropriate Use
           </h2>
           <p>
             NAA COLLEGE is intended as an educational resource. Some collaborative features may use Firebase authentication, and AI-assisted features may send submitted text to Google Gemini. Do not provide personal information unless it is necessary for the feature and you understand how it is processed. This statement is not a certification of legal compliance.
@@ -176,7 +176,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
         <section className="space-y-2 pt-4 border-t border-slate-200 dark:border-slate-800">
           <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
             <Mail className="w-4 h-4 text-blue-500" />
-            <span>7. Data Protection Officer &amp; Inquiries</span>
+            <span>7. Privacy Questions &amp; Inquiries</span>
           </h2>
           <p>
             For questions, legal notices, or feedback about this policy, contact the site support address below:
