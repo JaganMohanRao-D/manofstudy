@@ -46,7 +46,7 @@ const routes = [
   },
   {
     path: '/tg-eapcet/name-wise-allotments/',
-    title: 'TG EAPCET 2026 Name-Wise Seat Allotments | Naa College',
+    title: 'TG EAPCET 2026 Allotment Explorer | Naa College',
     description: 'Explore Telangana EAPCET 2026 final-phase allotment records and understand the limits of historical counselling data.',
     staticBody: '<main class="mx-auto max-w-5xl px-4 py-8 sm:px-6"><p class="text-sm font-semibold uppercase tracking-wide">Telangana EAPCET · Engineering Admissions</p><h1 class="mt-3 text-3xl font-bold">TG EAPCET 2026 Allotment Explorer</h1><p class="mt-4 leading-7">Use this explorer to understand published Telangana EAPCET allotment information for the specified counselling cycle. Records describe a past allotment process and do not guarantee a seat in a future cycle.</p><h2 class="mt-6 text-xl font-semibold">How to interpret the records</h2><ul class="mt-3 list-disc space-y-2 pl-6 leading-7"><li>Confirm the counselling year and phase before comparing records.</li><li>Compare like-for-like branch, college, and category information.</li><li>Use official counselling notices for current eligibility, deadlines, seat matrices, and final allotments.</li><li>A historical record is not a prediction or confirmation of a current student\'s admission.</li></ul><p class="mt-5 leading-7">Naa College is an independent student resource. Verify important decisions with the <a href="https://tgeapcet.nic.in/" rel="noopener noreferrer">official Telangana EAPCET counselling portal</a>.</p></main>',
     renderStaticBodyInRoot: true,
