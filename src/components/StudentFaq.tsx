@@ -60,7 +60,7 @@ const FAQ_ITEMS: FaqItem[] = [
     icon: ShieldCheck,
     question: 'Are my uploaded PDF files and documents stored on your servers?',
     answer:
-      'No! 100% of your PDF operations (merging, compressing, password protection, splitting, watermark removal) run entirely inside your browser via WebAssembly (PDF-lib and PDF.js). Your confidential marksheets, Aadhaar scans, and hall tickets never leave your device or touch any external server.',
+      'Many PDF operations, such as merging, splitting, and conversion, run in your browser. The AI PDF summariser extracts text and sends it to Google Gemini for processing. Do not submit Aadhaar details, hall tickets, marksheets, or other sensitive information to AI features. Check the description of the specific tool before using it.',
     actionText: 'Launch Private PDF Studio',
     actionTarget: { type: 'workspace', target: 'pdftools' },
   },
@@ -218,7 +218,7 @@ export const StudentFaq: React.FC<StudentFaqProps> = ({
             </h2>
 
             <p className="text-sm sm:text-base text-[var(--mos-text-secondary)] leading-relaxed">
-              Transparent answers regarding our 4-year engineering roadmaps, 100% private browser PDF tools, verified
+              Transparent answers regarding our engineering roadmaps, browser-based PDF utilities, scholarship information, data privacy policies, and
               scholarships, data privacy policies, and the student mission behind NAA COLLEGE.
             </p>
           </div>
