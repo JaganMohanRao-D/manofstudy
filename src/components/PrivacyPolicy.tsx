@@ -68,7 +68,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             Data Minimisation
           </h3>
           <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            We do not collect government Aadhaar numbers, biometric impressions, phone numbers, or academic credentials. You use NAA COLLEGE anonymously.
+            Avoid entering government ID numbers, biometric information, passwords, or other sensitive details into public tools. Some features require information to calculate results, and some AI-assisted features send submitted text to an external provider.
           </p>
         </div>
       </div>
