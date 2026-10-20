@@ -606,5 +606,207 @@
         "href": "/blog/beginner-programming-roadmap/"
       }
     ]
+  },
+  {
+    "slug": "best-free-ai-courses-for-students",
+    "title": "Best Free AI Courses for Students: A Practical Learning Path",
+    "category": "AI Tools and Vibe Coding",
+    "tags": [
+      "AI courses",
+      "machine learning",
+      "free learning",
+      "student roadmap",
+      "LLMs"
+    ],
+    "status": "published",
+    "publishedAt": "2026-10-20",
+    "updatedAt": "2026-10-20",
+    "featured": false,
+    "summary": "A free-first path through AI fundamentals, machine learning, generative AI and large language models, with official learning resources and project ideas.",
+    "content": "Artificial intelligence can feel like a collection of new tools, model names and course certificates appearing every week. Students do not need to learn everything at once. A better approach is to understand what AI can and cannot do, learn enough programming to experiment, and follow a course that matches the work you want to try. This guide prioritises free learning resources and explains where optional exams or credentials may involve a separate cost.\n\n## First decide what you mean by learning AI\n\nSeveral different goals are often grouped under “AI.” AI literacy is about understanding capabilities, limitations, privacy and responsible use. Machine learning focuses on systems that learn patterns from data. Generative AI covers models that create text, images, code or other outputs. Building AI-powered applications means using a model through a documented interface and designing a reliable product around it. Research-level AI and model training require deeper mathematics, programming, data and computing resources.\n\nYou do not need advanced neural-network theory to use AI tools responsibly. If you are new to programming, start with basic concepts, functions and simple data manipulation. If you already know a language and can solve simple problems, start an introductory machine-learning course and actually complete the exercises instead of only watching videos.\n\n## Course 1: Machine-learning foundations\n\nGoogle's [Machine Learning Crash Course](https://developers.google.com/machine-learning/crash-course/) is a practical resource with explanations, interactive visualisations and exercises. Work through the units in order if the concepts are new. Pause to answer questions yourself and revisit topics where you cannot explain the result. Before beginning, check the current prerequisites: programming familiarity and basic mathematical understanding make the hands-on material easier to follow.\n\nFocus on the process as well as the terms. Learn what a dataset, feature and label are; why training and evaluation data should be separated; why overfitting happens; and why accuracy can be misleading for an imbalanced dataset. A small experiment whose errors you understand teaches more than a complicated demo you cannot explain.\n\n## Course 2: Introductory modules and learning paths\n\nThe [Microsoft Learn AI training catalogue](https://learn.microsoft.com/training/browse/?terms=AI%20fundamentals) includes modules and paths for AI concepts, generative AI and development. Browse by beginner level and choose a coherent path rather than opening dozens of unrelated lessons. Individual learning materials are generally accessible online, but exams, certification attempts, cloud resources or optional services may have separate conditions or costs. Check the current page before budgeting for a credential.\n\nUse short modules to build vocabulary and then apply it immediately. After a lesson on generative AI, for example, write down what the model input is, what output it creates, which information needs checking and what the system should do when it cannot answer confidently.\n\n## Course 3: Large language models, after Python basics\n\nThe [Hugging Face course](https://huggingface.co/docs/course/chapter1/1) covers natural-language processing and large language models using tools from the Hugging Face ecosystem. It is free to access, but is a better next step once you can read and write basic Python. Its libraries are useful for understanding how pretrained models and datasets are handled; beginners should not expect to master the entire ecosystem in a few sessions.\n\nLearn the difference between using a hosted model, adapting a pretrained model, fine-tuning a model and training from scratch. They require different amounts of expertise, data, computing resources and money. Most beginners should first learn to evaluate and responsibly use pretrained models rather than attempt expensive training.\n\n## A six-week learning plan around college\n\n- **Week 1:** Learn common AI terms and practise the programming basics you need.\n- **Week 2:** Work with a small dataset; inspect its columns, missing values and limitations.\n- **Weeks 3–4:** Follow introductory machine-learning lessons and complete exercises.\n- **Week 5:** Explore generative AI, prompt design and methods for verifying outputs.\n- **Week 6:** Build a small project, test its limits and document what you learned.\n\nThis is a suggested pace, not a promise that everyone will master AI in six weeks. If the exercises are difficult, extend the schedule instead of skipping the foundations.\n\n## Project ideas that prove understanding\n\nA simple feedback classifier can teach data labelling and error analysis. A source-grounded study helper can teach retrieval and show which public document supports an answer. An AI study planner can create a draft schedule, but students should be able to review and change it. For each project, define a success test and a failure test. If a summariser handles lecture notes, check its output against the source and look for missing qualifications.\n\nDo not upload private marksheets, passwords, confidential college records or another person’s personal data into tools without permission. Keep credentials out of public code, and explain the privacy limits of any prototype.\n\n## How to choose a course without wasting time or money\n\nCheck prerequisites, syllabus, lesson format, hands-on tasks, last update and what the learner will actually build. Confirm whether access to the material is free and whether a certificate or exam costs extra. Do not buy a course merely because an advertisement promises a job or a guaranteed salary. A certificate shows completion; it does not prove that you can build independently.\n\nIf you enjoy data, strengthen Python, statistics and data visualisation. If you prefer product development, learn APIs, web development, testing and privacy. If you want to go deeper into ML, gradually learn linear algebra, probability, calculus basics and experimental evaluation. Choose one path, complete practical exercises and keep a portfolio that explains what worked, what failed and what you would improve.",
+    "sources": [
+      {
+        "label": "Google for Developers — Machine Learning Crash Course",
+        "url": "https://developers.google.com/machine-learning/crash-course/"
+      },
+      {
+        "label": "Microsoft Learn — AI fundamentals training catalogue",
+        "url": "https://learn.microsoft.com/training/browse/?terms=AI%20fundamentals"
+      },
+      {
+        "label": "Hugging Face — Course introduction",
+        "url": "https://huggingface.co/docs/course/chapter1/1"
+      }
+    ],
+    "toolLinks": [
+      {
+        "label": "Read the beginner programming roadmap",
+        "href": "/blog/beginner-programming-roadmap/"
+      },
+      {
+        "label": "Explore engineering roadmaps",
+        "href": "/engineering-roadmaps/"
+      }
+    ]
+  },
+  {
+    "slug": "ai-machine-learning-roadmap-for-beginners",
+    "title": "AI and Machine Learning Roadmap for Beginners",
+    "category": "AI Tools and Vibe Coding",
+    "tags": [
+      "AI roadmap",
+      "machine learning",
+      "Python",
+      "data science",
+      "beginner"
+    ],
+    "status": "published",
+    "publishedAt": "2026-10-20",
+    "updatedAt": "2026-10-20",
+    "featured": false,
+    "summary": "Understand AI, machine learning and generative AI, then follow a practical path through Python, data skills, evaluation and responsible project work.",
+    "content": "Starting AI can be confusing because tutorials often jump from basic prompts to advanced neural networks without explaining the skills in between. A realistic roadmap separates the concepts, gives each stage a clear outcome and includes enough practice to reveal whether you understand it. You can explore AI tools immediately, but building reliable AI systems takes programming, data skills, evaluation and careful testing.\n\n## Understand the terms before choosing a course\n\nArtificial intelligence is the broad field of creating systems that perform tasks associated with capabilities such as language, perception or decision-making. Machine learning is an approach within AI in which a system learns patterns from data. Deep learning uses neural networks with multiple layers. Generative AI describes systems that create new content, including text, code, images or audio. Large language models are a family of models designed for language and related tasks.\n\nThese terms overlap but are not interchangeable. A rule-based calculator is software, not automatically machine learning. A chatbot that sends text to a hosted language model is an AI-powered application, but its developer did not necessarily train the model. Naming your project accurately helps you explain what you built.\n\n## Stage 1: Learn enough programming to experiment\n\nPython is a practical starting point for many introductory AI examples because of its readable syntax and broad data ecosystem. Start with variables, conditions, loops, functions, lists and dictionaries, files, modules and debugging. Practise writing functions yourself before relying on a library to solve everything. If your university course uses C, C++ or Java, those fundamentals still transfer.\n\nCreate small programs such as a marks calculator, a text counter, a CSV reader or a quiz. Test empty input, invalid values and boundary cases. The goal is to get comfortable turning a problem into steps, not to memorise syntax from a tutorial.\n\n## Stage 2: Become comfortable with data\n\nMachine-learning projects rely on data. Learn how rows, columns, features and labels relate to a problem. Practise reading a small CSV file, inspecting data types, identifying missing values, finding duplicates and making a basic chart. Ask where the data came from, what it leaves out and whether you have permission to use it.\n\nDo not begin by searching for a huge dataset or an expensive GPU. A small, understandable dataset lets you inspect examples and notice errors. Write down the dataset’s limitations before using it to make a claim.\n\n## Stage 3: Learn the machine-learning workflow\n\nFollow a structured introduction such as [Google's Machine Learning Crash Course](https://developers.google.com/machine-learning/crash-course/). Focus on framing a question, preparing data, creating a baseline, separating training and evaluation data, training a model, measuring results and investigating errors. The baseline matters because a complex model should be compared against a simple approach.\n\nLearn concepts such as classification, regression, overfitting, generalisation, precision and recall as they become relevant. The right metric depends on the task. A model with high overall accuracy can still perform poorly for a smaller group, and a model that looks good on data it has already seen may fail on new examples.\n\n## Stage 4: Explore generative AI and language models\n\nOnce programming and data concepts are familiar, learn how language models generate responses and why plausible answers can still be wrong. Study prompts, context windows, tokens, embeddings and retrieval-augmented generation at a conceptual level. Start by testing a model on a narrow task and recording examples where it works and where it fails.\n\nA useful AI application needs more than a successful demonstration. Consider latency, cost limits, error handling, source verification, privacy and what the app should do when a response is empty or incorrect. For a question-answering tool, show useful sources and test questions that the system should not answer confidently.\n\n## Stage 5: Build projects that measure quality\n\nA student feedback classifier can teach you to label data and inspect misclassified examples. A source-grounded study helper can answer from a small collection of public educational documents; it should show sources and handle questions whose answers are not present. A model-comparison notebook can compare a baseline with a more advanced method on the same evaluation set. Explain the metrics and inspect errors rather than publishing one accuracy number without context.\n\nFor each project, write down the intended user, the source of data, the success criterion, the limitations and how you tested it. Avoid using private student records without permission and a suitable data-handling plan.\n\n## Learn mathematics alongside the work\n\nYou do not need to master all mathematics before beginning. As topics arise, build understanding of averages, probability, vectors, matrices, derivatives and optimisation. Linear algebra helps explain vector and matrix operations; probability and statistics help interpret data and uncertainty; calculus helps explain gradient-based learning. Small numerical examples can make equations less intimidating.\n\n## A progress checklist\n\n- I can write and debug small programs without copying every line.\n- I can load a dataset and explain its columns and limitations.\n- I can describe training data versus evaluation data.\n- I can choose a relevant metric and explain why it matters.\n- I can identify examples where a model fails.\n- I can document a project so another student can reproduce it.\n- I can explain privacy and reliability risks in my application.\n\nIf several items are not yet true, practise the relevant stage instead of abandoning the path. Start with [Google's Machine Learning Crash Course](https://developers.google.com/machine-learning/crash-course/), explore [Microsoft Learn's AI training catalogue](https://learn.microsoft.com/training/browse/?terms=AI%20fundamentals), and use the [Hugging Face course](https://huggingface.co/docs/course/chapter1/1) when you are ready for NLP and LLM tooling. Check current prerequisites and optional certification costs before enrolling.\n\nThe goal is not to become an expert after one course. It is to move from terminology to programming, data, experiments and a project you can explain honestly.",
+    "sources": [
+      {
+        "label": "Google for Developers — Machine Learning Crash Course",
+        "url": "https://developers.google.com/machine-learning/crash-course/"
+      },
+      {
+        "label": "Microsoft Learn — AI training catalogue",
+        "url": "https://learn.microsoft.com/training/browse/?terms=AI%20fundamentals"
+      },
+      {
+        "label": "Hugging Face — Course introduction",
+        "url": "https://huggingface.co/docs/course/chapter1/1"
+      }
+    ],
+    "toolLinks": [
+      {
+        "label": "Read the beginner programming roadmap",
+        "href": "/blog/beginner-programming-roadmap/"
+      }
+    ]
+  },
+  {
+    "slug": "generative-ai-and-llms-explained",
+    "title": "Generative AI and Large Language Models Explained for Students",
+    "category": "AI Tools and Vibe Coding",
+    "tags": [
+      "generative AI",
+      "LLMs",
+      "AI literacy",
+      "prompting",
+      "responsible AI"
+    ],
+    "status": "published",
+    "publishedAt": "2026-10-20",
+    "updatedAt": "2026-10-20",
+    "featured": false,
+    "summary": "Learn what generative AI and large language models do, why they make mistakes, how prompts and context work, and how students can use them responsibly.",
+    "content": "Generative AI tools can explain concepts, draft text, summarise documents, help with code and create images. Their outputs can look confident and fluent, which makes it tempting to trust them immediately. Understanding the basic mechanism helps students use these tools more effectively: a generated answer is a model output, not automatically a verified fact.\n\n## What is generative AI?\n\nGenerative AI describes systems that produce new content based on patterns learned during training and the context supplied at use time. Different systems work with different kinds of data and outputs. A text model may produce a paragraph or code; an image model may generate a visual; a speech system may transcribe or create audio. Each has distinct strengths and limitations.\n\nA large language model, or LLM, is trained to work with language and related sequences. It processes a prompt and surrounding context to generate an output. That does not mean it has human-like understanding or direct access to every current fact. It can produce an answer that is grammatically convincing but factually wrong, inconsistent or unsupported by a reliable source.\n\n## What happens when you write a prompt?\n\nA prompt is the instruction and context you provide. A useful prompt tells the system the task, intended audience, relevant background, constraints and expected output. For a study explanation, specify the course level, name the concept and request an example plus a short self-test. For coding, provide relevant code and the actual error message while removing credentials and private information.\n\nMore words do not always mean a better prompt. Irrelevant context can distract from the task, and detailed instructions cannot make a model know information that is missing. Ask the model to state assumptions and flag uncertainty when the task depends on sources or changing facts.\n\n## Why an answer can be wrong\n\nA model can generate an inaccurate date, fabricated reference, outdated software method or an explanation that misses an important exception. Language generation is not the same as authoritative fact retrieval. A model may also misread a long prompt or generalise from examples that do not match your case.\n\nUse a verification method appropriate to the task. Open official documentation for programming APIs. Check official counselling or scholarship notices for current dates. Test code against known inputs. Compare a summary with the source document. When the model cites a page, read the page and confirm it supports the claim. If the source is missing, mark the statement unverified instead of guessing.\n\n## Tokens, context windows and retrieval\n\nA token is a unit used by many language models to process text; it may represent part of a word, a word or punctuation. A context window is the amount of input and conversation a model can consider at once, subject to product limits. In long conversations, include the important facts in a concise task description rather than assuming every prior detail will receive equal attention.\n\nRetrieval-augmented generation, or RAG, is an approach in which an application finds relevant material from a chosen knowledge source and supplies it to a model as context. This can help a system answer using a specific document collection, but retrieval does not guarantee correctness. The source may be incomplete or outdated, and the model can still misinterpret it. Good applications show sources and test unsupported questions.\n\n## How students can use generative AI to learn\n\nUse a model as a tutor, not a replacement for practising. Ask for a hint first, solve the example yourself, then request feedback. Ask it to generate a new practice question and check your reasoning. For programming, have it explain an error and propose a minimal correction; then recreate the fix and test edge cases without copying blindly.\n\nFor research, use AI to create subquestions, identify terminology or organise notes. Confirm important claims from credible sources and keep the original references. For projects, AI can help brainstorm requirements and tests, but you remain responsible for understanding the implementation and following your institution’s rules.\n\n## Privacy, bias and evaluation\n\nDo not paste private marksheets, identity details, passwords, API keys or confidential college records into a service without permission and a clear reason. Review the specific tool’s current settings and data policies because different services can handle conversations and files differently.\n\nAI outputs can reflect gaps or bias in data and may work unevenly across languages, contexts or groups. For an application that affects people, test representative examples, inspect failures and provide a safe fallback. Do not assume an answer is fair or accurate because it sounds polished.\n\n## A beginner project idea\n\nBuild a study helper that answers from a small collection of public course notes. Start with simple search or retrieval, display the source title and section used, and let the app say that the answer was not found in the supplied notes. Test it with questions answered by the documents and questions they do not cover. Keep a log of misses and explain the limits in the README.\n\nFor structured learning, start with [Google's Machine Learning Crash Course](https://developers.google.com/machine-learning/crash-course/) and then explore the [Hugging Face course](https://huggingface.co/docs/course/chapter1/1) when ready for NLP and LLM tooling. Generative AI is a powerful tool category, not a shortcut around verification. Students who can explain a result, test it and recognise its limitations will be better prepared than students who only know which button to click.",
+    "sources": [
+      {
+        "label": "Google for Developers — Machine Learning Crash Course",
+        "url": "https://developers.google.com/machine-learning/crash-course/"
+      },
+      {
+        "label": "Hugging Face — Course introduction",
+        "url": "https://huggingface.co/docs/course/chapter1/1"
+      },
+      {
+        "label": "OpenAI Help Center — Data controls in ChatGPT",
+        "url": "https://help.openai.com/en/articles/7730893-data-controls-in-chatgpt"
+      }
+    ],
+    "toolLinks": [
+      {
+        "label": "How to write better prompts for coding tools",
+        "href": "/blog/write-better-prompts-for-ai-coding-tools/"
+      }
+    ]
+  },
+  {
+    "slug": "python-vs-java-vs-cpp-beginners",
+    "title": "Python vs Java vs C++: Which Programming Language Should You Learn First?",
+    "category": "Programming and Web Development",
+    "tags": [
+      "Python",
+      "Java",
+      "C++",
+      "programming languages",
+      "beginner"
+    ],
+    "status": "published",
+    "publishedAt": "2026-10-20",
+    "updatedAt": "2026-10-20",
+    "featured": false,
+    "summary": "Compare Python, Java and C++ by learning curve, common uses, college coursework and project goals, then choose a first language with a practical plan.",
+    "content": "A common beginner question is whether to start with Python, Java or C++. Online discussions can make the choice feel permanent, as though selecting one language closes every other career path. It does not. The fundamentals—breaking problems into steps, choosing data structures, testing edge cases and debugging—transfer between languages. The right first choice depends on your coursework, the project you want to build and the language you can practise consistently.\n\n## Python: a readable starting point for scripts and data work\n\nPython has syntax that many beginners find approachable. It is used for scripting, automation, data analysis, machine learning, backend services and educational exercises. A short program can often express an idea with relatively little syntax, which helps beginners focus on problem-solving.\n\nPython is not only for beginners, but you still need to learn program structure, testing, error handling, modules and performance trade-offs. If you plan to explore data or AI, Python is a practical choice because many introductory resources and libraries use it. Start with variables, conditions, loops, functions, lists and dictionaries, then build a small command-line project. The [official Python tutorial](https://docs.python.org/3/tutorial/) is a useful reference once you understand basic programming vocabulary.\n\n## Java: structure, classes and applications\n\nJava is a general-purpose language used in enterprise software, backend systems and many Android-related workflows. Its type system and class-based structure encourage explicit modelling of data and behavior. That may introduce more syntax at the beginning, but it can help students learn how larger programs are organised.\n\nJava can be a good choice if your university teaches it, your course covers object-oriented programming or you want to practise designing classes and interfaces. Learn variables and control flow, then methods, classes, collections, exceptions, interfaces and testing. The [official Java learning site](https://dev.java/learn/) provides tutorials and learning material.\n\nDo not choose Java only because you heard a company uses it. Employers use many languages, and familiarity with syntax alone is not enough. Algorithms, debugging, design and collaboration matter too.\n\n## C++: control, performance and deeper systems concepts\n\nC++ is a compiled general-purpose language used in performance-sensitive software, games, systems and competitive programming. It offers powerful features but adds complexity around types, object lifetimes, memory, compilation and language versions. That complexity can be useful for learning lower-level details, but it may add friction for a complete beginner.\n\nIf your course requires C or C++, follow the course sequence and practise it steadily rather than trying to maintain three languages in parallel. Learn expressions, control flow, functions and collections before classes, references, pointers and resource management. Use a current compiler and understand the build process. [LearnCpp](https://www.learncpp.com/) offers a structured tutorial, while the [Standard C++ Foundation FAQ](https://isocpp.org/faq) provides ecosystem guidance.\n\n## Compare the choices\n\n| Question | Python | Java | C++ |\n| --- | --- | --- | --- |\n| Beginner experience | Often concise and readable | More explicit structure | More language and build details |\n| Common first projects | Automation, data scripts, small web services | Console apps, object-oriented projects | Algorithms, command-line programs |\n| Useful next topics | Files, modules, data libraries and APIs | Classes, interfaces, collections and testing | Compilation, types, memory concepts and classes |\n| Good reason to choose it | You want readable practice or data/AI foundations | It aligns with your course or application goals | Your course or interests involve systems or C++ practice |\n\nThis is a broad guide, not a ranking. Real projects can use more than one language and each ecosystem changes over time.\n\n## How to choose without losing weeks to comparisons\n\nWrite down your current course language, one project you want to complete and the resources available to you. If your syllabus requires C or C++, prioritise that language for coursework. If your immediate goal is a small automation or data project and you have flexibility, Python may feel approachable. If you want to learn class-based design or your course uses Java, choose Java.\n\nPick one language for a four-to-six-week learning block. Track what you can do: write a function, use a collection, read an error message, test edge cases and finish a small project. Revisit the decision after real practice rather than comparing opinions indefinitely.\n\n## A four-week beginner plan\n\n- **Week 1:** Learn variables, input/output, conditions and loops; write five tiny programs.\n- **Week 2:** Learn functions, strings and collections; practise input validation.\n- **Week 3:** Read and write simple files, handle errors and organise code into modules or classes.\n- **Week 4:** Build a small project, test normal and unusual inputs, write a README and commit a working version.\n\nSpend a little time most days rather than watching a large course in one sitting. Try a problem before looking at its solution, and recreate AI-suggested code until you can explain it.\n\n## What matters after choosing a language\n\nLearn to debug, use Git, read documentation, write tests and describe trade-offs. Build projects that solve small real problems, and make your README clear enough for another person to run the code. Later, add data structures and algorithms, databases, networking or web development according to your interests. Programming languages are tools; consistent problem-solving and the ability to explain your own code turn a first language into a foundation for the next one.",
+    "sources": [
+      {
+        "label": "Python — Official tutorial",
+        "url": "https://docs.python.org/3/tutorial/"
+      },
+      {
+        "label": "Java — Official learning resources",
+        "url": "https://dev.java/learn/"
+      },
+      {
+        "label": "LearnCpp — C++ tutorial",
+        "url": "https://www.learncpp.com/"
+      },
+      {
+        "label": "Standard C++ Foundation — FAQ",
+        "url": "https://isocpp.org/faq"
+      }
+    ],
+    "toolLinks": [
+      {
+        "label": "Read the beginner programming roadmap",
+        "href": "/blog/beginner-programming-roadmap/"
+      }
+    ]
+  },
+  {
+    "slug": "html-css-javascript-web-development-roadmap",
+    "title": "HTML, CSS and JavaScript: A Beginner's Web Development Roadmap",
+    "category": "Programming and Web Development",
+    "tags": [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "web development",
+      "frontend"
+    ],
+    "status": "published",
+    "publishedAt": "2026-10-20",
+    "updatedAt": "2026-10-20",
+    "featured": false,
+    "summary": "Learn how HTML, CSS and JavaScript work together, what to practise first, how to build a responsive project and how to test it responsibly.",
+    "content": "Web development can look complicated when a tutorial begins with a framework, authentication, a database and deployment. A simpler route is to learn browser fundamentals first. HTML describes content, CSS controls presentation and JavaScript adds behavior. Understanding how these pieces work together makes frameworks easier to learn and helps you debug generated code rather than treating the project as a black box.\n\n## Stage 1: HTML gives the page its structure\n\nLearn headings, paragraphs, lists, links, images, forms, labels, buttons and semantic page regions. Use elements for their intended meaning: a button performs an action, while a link navigates to another location. Form labels help users understand input, and meaningful alternative text helps people using assistive technologies understand informative images.\n\nStart by building a simple page about a subject you know. Use a clear heading structure, useful links and a form with labels. Check that the page is understandable before styling it. Do not choose a heading element merely because its default font size looks attractive.\n\n## Stage 2: CSS controls layout and readability\n\nBegin with selectors, the box model, units, typography, spacing, colors, borders and the difference between block and inline layout. Then learn Flexbox, Grid, responsive media queries and focus states. Practise changing one layout at a time and checking what happens when the viewport becomes narrow.\n\nResponsive design is more than shrinking the page. Text should remain readable, buttons usable, navigation unobstructed and long headings able to wrap. Check color contrast and visible keyboard focus. Avoid fixing every layout problem with absolute positioning; normal document flow and flexible layouts are often easier to maintain.\n\n## Stage 3: JavaScript adds interaction\n\nLearn variables, functions, conditions, loops, arrays, objects and events. Then practise reading form values, validating input, updating text on the page and showing useful error messages. Use the browser console to inspect errors and understand what your code is doing.\n\nA small project might be a quiz that counts correct answers, a to-do list, a unit converter or an attendance calculator. Test empty fields, invalid input and repeated actions. Keep HTML, CSS and JavaScript understandable before introducing complex build tools.\n\n## Stage 4: Use browser tools and Git\n\nOpen developer tools to inspect the page structure, view console errors, check network requests and test responsive sizes. Learn how to reproduce a bug with specific steps. If a page calls an API, inspect its response and handle a failed request instead of assuming the network always succeeds.\n\nUse Git to create a repository, review changes and commit working milestones. Add a README with a short description, setup instructions, screenshots or a demo and known limitations. Never put private API keys in frontend JavaScript; code delivered to the browser can be inspected by visitors.\n\n## Stage 5: Build one finished project\n\nChoose a small user problem and define what counts as done. A study planner might let the user add a task, mark it complete and filter the list. Start with in-page behavior before adding a database or account system. Write tests for normal and invalid inputs, make the layout work on mobile and ask another person to try it.\n\nOnce the core version works, decide whether it actually needs a framework. React or another framework can help manage complex interfaces, but beginners who cannot yet explain HTML, CSS and JavaScript may struggle to understand generated components and build errors. A simple project finished well is a useful milestone.\n\n## A six-week practice schedule\n\n- **Week 1:** HTML structure, links, images and forms.\n- **Week 2:** CSS typography, spacing, colors and the box model.\n- **Week 3:** Flexbox, Grid and responsive design.\n- **Week 4:** JavaScript fundamentals, events and form validation.\n- **Week 5:** Build a small interactive project and test edge cases.\n- **Week 6:** Use Git, improve the README, deploy the project and fix feedback.\n\nThis is a suggested pace, not a deadline. If JavaScript functions or CSS layout still feel confusing, spend another week practising before moving on.\n\n## References worth keeping open\n\nThe [MDN Learn Web Development curriculum](https://developer.mozilla.org/en-US/docs/Learn_web_development) provides a structured path through web fundamentals. The [MDN JavaScript Guide](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide) is useful when practising JavaScript, and [GitHub Skills](https://skills.github.com/) offers hands-on learning activities for source control.\n\nDocumentation is not something you read once and memorise. Learn to search for a specific element, property, method or error, read the example and test it in a small isolated page. That habit remains useful even when you use AI coding tools.\n\n## Use AI help without skipping the fundamentals\n\nAn AI assistant can explain an error, suggest a small CSS change or review a function. Give it relevant code and exact expected behavior, then test the suggestion yourself. Ask it to identify assumptions and possible regressions. Do not accept a large refactor because the screenshot looks better; make sure links, forms, keyboard navigation and narrow screens still work.\n\nYour first web-development goal is not collecting frameworks. It is building a page whose structure you understand, whose layout works across screen sizes, whose interactions have been tested, and whose code another person can run.",
+    "sources": [
+      {
+        "label": "MDN — Learn Web Development",
+        "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development"
+      },
+      {
+        "label": "MDN — JavaScript Guide",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide"
+      },
+      {
+        "label": "GitHub Skills",
+        "url": "https://skills.github.com/"
+      }
+    ],
+    "toolLinks": [
+      {
+        "label": "Build a clear GitHub portfolio project",
+        "href": "/blog/github-portfolio-project-for-beginners/"
+      },
+      {
+        "label": "Read the beginner programming roadmap",
+        "href": "/blog/beginner-programming-roadmap/"
+      }
+    ]
   }
 ]
