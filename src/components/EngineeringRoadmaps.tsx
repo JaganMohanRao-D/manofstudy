@@ -130,9 +130,7 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
         } else {
           setMajorTrack('mpc');
         }
-        setActiveModalBranch(match);
-        setNavFeedback(`Opened ${match.code} — ${match.name}`);
-        setTimeout(() => setNavFeedback(null), 3500);
+        window.location.assign(`/engineering-roadmaps/${encodeURIComponent(match.id)}/`);
       }
     }
   }, [targetBranchId]);
@@ -150,7 +148,7 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
           } else {
             setMajorTrack('mpc');
           }
-          setActiveModalBranch(match);
+          window.location.assign(`/engineering-roadmaps/${encodeURIComponent(match.id)}/`);
         }
       }
     };
@@ -280,10 +278,8 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
   }, [selectedStream]);
 
   const handleOpenBranchModal = (branch: BranchRoadmap) => {
-    setActiveModalBranch(branch);
-    if (onSelectBranch) {
-      onSelectBranch(branch.id);
-    }
+    if (onSelectBranch) onSelectBranch(branch.id);
+    window.location.assign(`/engineering-roadmaps/${encodeURIComponent(branch.id)}/`);
   };
 
   const handleDownloadPdf = async (branch: BranchRoadmap) => {

@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import {
   X,
+  ArrowLeft,
   Download,
   Share2,
   Check,
@@ -37,6 +39,7 @@ export interface RoadmapModalProps {
   pdfExportStatus?: 'idle' | 'generating' | 'success' | 'error';
   pdfErrorMessage?: string | null;
   onNavigateToStore?: (category?: string) => void;
+  fullPage?: boolean;
 }
 
 export const RoadmapModal: React.FC<RoadmapModalProps> = ({
@@ -48,6 +51,7 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
   pdfExportStatus = 'idle',
   pdfErrorMessage,
   onNavigateToStore,
+  fullPage = false,
 }) => {
   const [selectedYear, setSelectedYear] = useState<number>(1);
   const [copiedLink, setCopiedLink] = useState(false);
@@ -92,13 +96,13 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
     };
 
     window.addEventListener('keydown', handleKeyDown, true);
-    document.body.style.overflow = 'hidden';
+    if (!fullPage) document.body.style.overflow = 'hidden';
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown, true);
-      document.body.style.overflow = '';
+      if (!fullPage) document.body.style.overflow = '';
     };
-  }, [isOpen, showShareDialog, handleModalClose]);
+  }, [isOpen, showShareDialog, handleModalClose, fullPage]);
 
   if (!isOpen) return null;
 
@@ -155,13 +159,12 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
     setShowShareDialog(true);
   };
 
-  return (
+  const roadmapModalContent = (
     <div
       id="roadmap-modal-overlay"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-hidden"
+      className={fullPage ? 'relative w-full overflow-visible' : 'fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-hidden'}
     >
-      {/* 1. Strict Background Dimmer Overlay with direct Click & TouchEnd listeners */}
-      <div
+      {!fullPage && <div
         id="roadmap-modal-dimmer"
         className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm cursor-pointer z-0 transition-opacity animate-in fade-in duration-200"
         onClick={handleModalClose}
@@ -170,14 +173,15 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
           handleModalClose();
         }}
         aria-label="Close roadmap modal backdrop"
-      />
+      />}
 
-      {/* 2. Modal Content Container */}
       <div
         id="roadmap-modal-container"
-        className="relative z-10 w-full max-w-5xl max-h-[92vh] flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden animate-in zoom-in-95 duration-200"
-        role="dialog"
-        aria-modal="true"
+        className={fullPage
+          ? 'relative z-10 mx-auto w-full max-w-6xl flex flex-col bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-visible'
+          : 'relative z-10 w-full max-w-5xl max-h-[92dvh] flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden animate-in zoom-in-95 duration-200'}
+        role={fullPage ? undefined : 'dialog'}
+        aria-modal={fullPage ? undefined : true}
         aria-labelledby="modal-branch-title"
         onClick={(e) => e.stopPropagation()}
       >
@@ -237,17 +241,17 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
                 e.preventDefault();
                 handleModalClose();
               }}
-              title="Close modal (Esc)"
-              className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 dark:hover:text-rose-400 active:scale-98 text-slate-700 dark:text-slate-200 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
-              aria-label="Close modal"
+              title={fullPage ? 'Back to all roadmaps' : 'Close modal (Esc)'}
+              className="inline-flex items-center justify-center gap-2 p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-98 text-slate-700 dark:text-slate-200 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer min-h-[44px] min-w-[44px]"
+              aria-label={fullPage ? 'Back to all roadmaps' : 'Close modal'}
             >
-              <X className="w-5 h-5" />
+              {fullPage ? <><ArrowLeft className="w-5 h-5" /><span className="hidden sm:inline text-xs font-semibold">All roadmaps</span></> : <X className="w-5 h-5" />}
             </button>
           </div>
         </div>
 
         {/* Scrollable Content Body */}
-        <div className="flex-1 overflow-y-auto p-5 sm:p-8 space-y-8 divide-y divide-slate-200 dark:divide-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100">
+        <div className={`${fullPage ? 'flex-none overflow-visible' : 'flex-1 overflow-y-auto'} p-5 sm:p-8 space-y-8 divide-y divide-slate-200 dark:divide-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100`}>
           {/* SECTION 1: Industry Compensation & Corporate Matrix */}
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-slate-900 dark:text-slate-100 font-extrabold text-sm sm:text-base tracking-tight">
@@ -706,4 +710,7 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
       )}
     </div>
   );
+
+  if (fullPage) return roadmapModalContent;
+  return createPortal(roadmapModalContent, document.body);
 };

@@ -25,7 +25,7 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
 
   // Generate branch deep link
   const origin = typeof window !== 'undefined' ? window.location.origin : '';
-  const shareUrl = `${origin}/#roadmap-${branch.id}`;
+  const shareUrl = `${origin}/engineering-roadmaps/${encodeURIComponent(branch.id)}/`;
 
   const shareText = `Check out the comprehensive 4-Year Engineering Roadmap for ${branch.name} (${branch.code}) on Naa College! Includes semester subjects, lab skills, certifications, open-source projects, and placement prep.`;
 
