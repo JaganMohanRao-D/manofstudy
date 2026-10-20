@@ -95,7 +95,8 @@ export const ScholarshipDetailPage: React.FC = () => {
   if (failed || !record) return <main className="mx-auto max-w-3xl px-4 py-16 text-center text-[var(--mos-text-primary)]"><GraduationCap className="mx-auto h-10 w-10 text-emerald-500" /><h1 className="mt-4 text-2xl font-black">Scholarship not found</h1><p className="mt-2 text-sm text-[var(--mos-text-secondary)]">This scholarship link may have changed or the record is temporarily unavailable.</p><a className="mt-6 inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-sm font-bold text-white" href="/scholarships/"><ArrowLeft className="h-4 w-4" /> Browse scholarships</a></main>;
 
   const status = effectiveStatus(record);
-  const isClosed = status.toLowerCase().includes('closed');
+  const statusLower = status.toLowerCase();
+  const isListedOpen = statusLower.startsWith('listed as open');
   const related = records.filter(item => item.id !== record.id && (item.category === record.category || /engineering|b\.tech|technical|diploma|undergraduate/i.test(item.target + ' ' + record.target))).slice(0, 3);
 
   return (
@@ -111,11 +112,11 @@ export const ScholarshipDetailPage: React.FC = () => {
         <div className="p-5 sm:p-8 lg:p-10">
           <div className="flex flex-wrap items-center gap-2">
             <span className="rounded-full border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-3 py-1 text-xs font-semibold">{record.category}</span>
-            <span className={'rounded-full border px-3 py-1 text-xs font-semibold ' + (isClosed ? 'border-slate-400/30 bg-slate-400/10 text-[var(--mos-text-muted)]' : 'border-emerald-500/25 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300')}>{status}</span>
+            <span className={'rounded-full border px-3 py-1 text-xs font-semibold ' + (isListedOpen ? 'border-emerald-500/25 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300' : 'border-slate-400/30 bg-slate-400/10 text-[var(--mos-text-muted)]')}>{status}</span>
           </div>
           <h1 className="mt-4 max-w-4xl text-2xl font-black tracking-tight sm:text-4xl">{record.title}</h1>
           <p className="mt-3 text-sm text-[var(--mos-text-secondary)]">{record.provider}</p>
-          <p className="mt-4 max-w-3xl text-sm leading-7 text-[var(--mos-text-secondary)]">{record.description || record.target}</p>
+          <p className="mt-4 max-w-3xl text-sm leading-7 text-[var(--mos-text-secondary)]">{record.description && !/review the current official scheme guidelines/i.test(record.description) ? record.description : (record.eligibility || record.target)}</p>
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/[.05] p-4">
               <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-emerald-700 dark:text-emerald-300"><GraduationCap className="h-4 w-4" /> Listed benefit</div>

@@ -59,7 +59,6 @@ import {
   redactPdf,
   cropPdf,
   generatePdfFormFields,
-  summarizePdf,
   exportPdfToMarkdown,
   extractPagesPdf,
   pdfToText,
@@ -131,14 +130,6 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
   const [organizeIndices, setOrganizeIndices] = useState<number[]>([]);
   const [pdfPageCount, setPdfPageCount] = useState<number | null>(null);
   const [isReadingPdf, setIsReadingPdf] = useState<boolean>(false);
-
-  // AI Summary & Markdown Results
-  const [summaryData, setSummaryData] = useState<{
-    wordCount: number;
-    readingTimeMin: number;
-    keyTakeaways: string[];
-    executiveSummary: string;
-  } | null>(null);
 
   const [markdownOutput, setMarkdownOutput] = useState<string>('');
   const [copiedMd, setCopiedMd] = useState<boolean>(false);
@@ -915,19 +906,6 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
             statusMessage: 'Overlay text stamped onto document!',
             downloadUrl,
             downloadFilename: res.filename,
-          });
-          break;
-        }
-
-        case 'ai-summarizer': {
-          const res = await summarizePdf(mainFile, (pct, msg) => {
-            setProgress((prev) => ({ ...prev, progressPercent: pct, statusMessage: msg }));
-          });
-          setSummaryData(res);
-          setProgress({
-            isProcessing: false,
-            progressPercent: 100,
-            statusMessage: `Analyzed ${res.wordCount} words (~${res.readingTimeMin} min read)!`,
           });
           break;
         }
@@ -1834,37 +1812,6 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
           </div>
         )}
 
-        {/* AI Summarizer Result View */}
-        {summaryData && (
-          <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3 text-xs">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-200">
-              <span className="font-bold text-slate-900 flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-sky-600" />
-                AI Document Summary
-              </span>
-              <span className="text-slate-500">
-                <strong>{summaryData.wordCount}</strong> words • <strong>{summaryData.readingTimeMin}</strong> min read
-              </span>
-            </div>
-
-            <div className="space-y-1.5">
-              <span className="font-semibold text-slate-700 block">Executive Overview:</span>
-              <p className="text-slate-600 leading-relaxed bg-white p-2.5 rounded-lg border border-slate-200">
-                {summaryData.executiveSummary}
-              </p>
-            </div>
-
-            <div className="space-y-1.5">
-              <span className="font-semibold text-slate-700 block">Key Takeaways:</span>
-              <ul className="list-disc list-inside space-y-1 text-slate-600 bg-white p-2.5 rounded-lg border border-slate-200">
-                {summaryData.keyTakeaways.map((point, idx) => (
-                  <li key={idx}>{point}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        )}
-
         {/* Markdown Export Preview */}
         {markdownOutput && (
           <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3 text-xs">
@@ -1929,7 +1876,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
               Close
             </button>
 
-            {!progress.downloadUrl && !summaryData && !markdownOutput && !compareData && (
+            {!progress.downloadUrl && !markdownOutput && !compareData && (
               <button
                 onClick={handleExecute}
                 disabled={progress.isProcessing}

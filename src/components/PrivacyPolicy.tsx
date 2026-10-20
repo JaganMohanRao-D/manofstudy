@@ -44,7 +44,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             Client-Side Sandbox
           </h3>
           <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            Many PDF merges, compressions, image resizings, and document utilities process in your browser. The AI PDF summariser is an exception: it sends extracted text to Google Gemini for processing.
+            Many PDF merges, compressions, image resizings, and document utilities process in your browser. The Student Gap Analyzer may use an external AI service when that service is configured; review the feature before submitting personal information.
           </p>
         </div>
 
@@ -56,7 +56,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             Browser-Based File Tools
           </h3>
           <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            Many file utilities process files in your browser. The AI PDF summariser extracts document text and sends it to Google Gemini for processing. Do not submit sensitive documents or personal identifiers to AI features. This statement does not mean that every feature operates entirely offline.
+            Many file utilities process files in your browser. The Student Gap Analyzer may send assessment inputs to an external AI service when configured. Avoid submitting sensitive documents, government identifiers, passwords, or unnecessary personal information. This statement does not mean that every feature operates entirely offline.
           </p>
         </div>
 
@@ -80,7 +80,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             1. Introduction &amp; Core Operating Philosophy
           </h2>
           <p>
-            NAA COLLEGE (the "Platform", accessible at <a href="https://naacollege.in" target="_blank" rel="noopener noreferrer" className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">https://naacollege.in</a> and preview mirrors) is an independent open-access educational launchpad developed to assist engineering and degree scholars across Andhra Pradesh, Telangana, and broader India. We believe that privacy is a foundational human right. Unlike predatory commercial websites that upload sensitive resumes, mark sheets, and national ID cards to remote databases for monetization, NAA COLLEGE uses browser-based processing for many utility features and discloses external processing for features that use third-party services.
+            NAA COLLEGE (the "Platform", accessible at <a href="https://naacollege.in" target="_blank" rel="noopener noreferrer" className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">https://naacollege.in</a>) is an independent educational resource for students in Andhra Pradesh, Telangana, and across India. Many utility features process information in the browser, while collaborative, authentication, AI-assisted, and advertising features may involve third-party services as described in this policy. Review individual feature descriptions before submitting information.
           </p>
         </section>
 
@@ -92,9 +92,9 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             When utilizing any feature across our suite—including the Attendance Defender, Global GPA Hub, Internal Exam Cutoff Estimator, 30+ PDF Power Tools, 20KB Exam Photo Resizer, and ATS Resume Analyzer:
           </p>
           <ul className="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-400">
-            <li><strong>File processing:</strong> Many PDF and image utilities process files in your browser. The AI PDF summariser extracts text from a selected PDF and sends that text to Google Gemini for processing. Do not submit sensitive documents to AI features.</li>
+            <li><strong>File processing:</strong> Many PDF and image utilities process files in your browser. The Student Gap Analyzer may use an external AI service when configured. Avoid entering sensitive information into AI-assisted features.</li>
             <li><strong>Sensitive information:</strong> Do not enter Aadhaar numbers, hall-ticket details, passwords, or other sensitive identifiers into tools unless the feature explicitly requires them and you understand how the information is processed.</li>
-            <li><strong>Calculator inputs:</strong> Attendance and grade calculations generally run in the browser. AI-assisted features may send information you enter or text extracted from a document to Google Gemini for processing; avoid submitting sensitive details to those features.</li>
+            <li><strong>Calculator inputs:</strong> Attendance and grade calculations generally run in the browser. The Student Gap Analyzer may send assessment inputs to an external AI service when configured; avoid submitting sensitive details.</li>
           </ul>
         </section>
 
@@ -169,7 +169,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             6. Children and Age-Appropriate Use
           </h2>
           <p>
-            NAA COLLEGE is intended as an educational resource. Some collaborative features may use Firebase authentication, and AI-assisted features may send submitted text to Google Gemini. Do not provide personal information unless it is necessary for the feature and you understand how it is processed. This statement is not a certification of legal compliance.
+            NAA COLLEGE is intended as an educational resource. Some collaborative features may use Firebase authentication, and the Student Gap Analyzer may send assessment inputs to an external AI service when configured. Do not provide personal information unless it is necessary for the feature and you understand how it is processed. This statement is not a certification of legal compliance.
           </p>
         </section>
 

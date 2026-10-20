@@ -37,7 +37,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-3xl leading-relaxed">
-            Built from the ground up by <strong>JAGAN MOHAN RAO DUNNA</strong>, NAA COLLEGE is an open, client-side academic and career launchpad created to empower students across Andhra Pradesh, Telangana, and Pan-India to bridge the gap between tier-3 engineering classrooms and high-growth global technology careers.
+            Built from the ground up by <strong>JAGAN MOHAN RAO DUNNA</strong>, NAA COLLEGE is an independent academic and career resource platform created to help students across Andhra Pradesh, Telangana, and India access practical tools, admissions information, and learning guidance.
           </p>
         </div>
       </div>
@@ -64,7 +64,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
             </li>
           </ul>
           <p>
-            NAA COLLEGE was created by <strong>JAGAN MOHAN RAO DUNNA</strong> to bring student-focused academic tools and resources into one place. Students can calculate attendance, explore EAPCET data, use engineering roadmaps, and work with document utilities. Many file operations run locally in the browser; the AI summariser sends extracted document text to Google Gemini for processing, so users should avoid submitting sensitive information to that feature.
+            NAA COLLEGE was created by <strong>JAGAN MOHAN RAO DUNNA</strong> to bring student-focused academic tools and resources into one place. Students can calculate attendance, explore EAPCET data, use engineering roadmaps, and work with document utilities. Many file operations run locally in the browser. Some collaborative features use Firebase, and the Student Gap Analyzer may use an external AI service when configured; users should review each feature before submitting personal information.
           </p>
         </section>
 
@@ -80,7 +80,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
               JAGAN MOHAN RAO DUNNA
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-400">
-              Dedicated to empowering engineering scholars across India with zero-compromise, client-side academic tools.
+              Dedicated to helping students access practical academic resources, transparent disclosures, and browser-based tools where available.
             </p>
             <div className="pt-1 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
               <Mail className="w-3.5 h-3.5 text-slate-400" />
@@ -151,7 +151,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
               <span className="font-bold text-slate-900 dark:text-white text-xs block">2. In-Browser Privacy By Design</span>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Many PDF and image utilities process files locally in your browser. The AI summariser is different: it sends extracted text to Google Gemini for processing. Check each tool's description and avoid submitting sensitive documents to AI features.
+                Many PDF and image utilities process files locally in your browser. Some features may use external services; check each tool's description and avoid submitting sensitive documents or personal identifiers.
               </p>
             </div>
 

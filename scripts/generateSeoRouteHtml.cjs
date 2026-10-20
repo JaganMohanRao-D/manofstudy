@@ -103,8 +103,8 @@ const routes = [
   {
     path: '/privacy-policy/',
     title: 'Privacy Policy | Naa College',
-    description: 'Read how Naa College handles browser-based tools, AI summarisation, local preferences, and third-party services.',
-    staticBody: '<main class="mx-auto max-w-4xl px-4 py-8"><h1 class="text-3xl font-bold">Privacy Policy</h1><p class="mt-4 leading-7">Many Naa College utilities process files in your browser. The AI PDF summariser extracts text from a selected document and sends it to Google Gemini for processing. Do not submit sensitive documents or personal identifiers to AI features.</p><h2 class="mt-6 text-xl font-semibold">Third-party services</h2><p class="mt-2 leading-7">Some features use third-party services for AI processing, authentication, or advertising. Review the full policy and relevant feature description before using a feature that may send information to another service.</p><p class="mt-5 leading-7">This summary is not a substitute for the complete policy. For privacy questions, use the <a href="/contact-us">contact page</a>.</p></main>',
+    description: 'Read how Naa College handles browser-based tools, local preferences, authentication, and third-party services.',
+    staticBody: '<main class="mx-auto max-w-4xl px-4 py-8"><h1 class="text-3xl font-bold">Privacy Policy</h1><p class="mt-4 leading-7">Many Naa College utilities process files in your browser. Some features may use third-party services for authentication, assessment assistance, or advertising. Review the full policy and each feature description before submitting personal information.</p><h2 class="mt-6 text-xl font-semibold">Third-party services</h2><p class="mt-2 leading-7">Some features use third-party services for AI processing, authentication, or advertising. Review the full policy and relevant feature description before using a feature that may send information to another service.</p><p class="mt-5 leading-7">This summary is not a substitute for the complete policy. For privacy questions, use the <a href="/contact-us">contact page</a>.</p></main>',
     renderStaticBodyInRoot: true,
   },
   {

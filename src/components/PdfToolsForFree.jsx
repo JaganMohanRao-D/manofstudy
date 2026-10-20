@@ -5,7 +5,6 @@ import {
   Scissors,
   Image as ImageIcon,
   Lock,
-  Sparkles,
   Upload,
   Download,
   CheckCircle2,
@@ -16,30 +15,19 @@ import {
   ArrowDown,
   Eye,
   EyeOff,
-  Copy,
-  Check,
-  RefreshCw,
   Layers,
   ChevronRight,
   ShieldCheck,
   FileCheck2,
   Clock,
-  BookOpen,
   FileSpreadsheet,
   Table,
 } from 'lucide-react';
 import { PDFDocument, rgb, degrees, PageSizes } from 'pdf-lib';
-import * as pdfjsLib from 'pdfjs-dist';
 import { encryptPDF } from '@pdfsmaller/pdf-encrypt';
 import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
 import autoTable from 'jspdf-autotable';
-import { configurePdfWorker } from '../utils/pdfWorkerConfig';
-
-// Initialize PDF.js worker
-if (typeof window !== 'undefined') {
-  configurePdfWorker();
-}
 
 /**
  * Robust helper to download a Blob safely in-browser
@@ -404,13 +392,7 @@ const TOOLS = [
     tagline: 'Apply genuine standard encryption so only users with the password can open it.',
     badge: 'Real Crypto Lock',
   },
-  {
-    id: 'ai-summarizer',
-    name: 'AI PDF Summariser',
-    icon: Sparkles,
-    tagline: 'Extract text layer via PDF.js and generate 5-bullet exam summaries using Gemini Flash.',
-    badge: 'Live Gemini Flash',
-  },
+
 ];
 
 export const PdfToolsForFree = () => {
@@ -452,14 +434,6 @@ export const PdfToolsForFree = () => {
   const [protectConfirm, setProtectConfirm] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const protectInputRef = useRef(null);
-
-  // 6. AI Summariser State
-  const [summaryFile, setSummaryFile] = useState(null);
-  const [extractedText, setExtractedText] = useState('');
-  const [aiSummary, setAiSummary] = useState('');
-  const [summaryStats, setSummaryStats] = useState(null);
-  const [isCopied, setIsCopied] = useState(false);
-  const summaryInputRef = useRef(null);
 
   // Clear messages on tab change
   useEffect(() => {
@@ -861,147 +835,6 @@ export const PdfToolsForFree = () => {
   };
 
   // ==========================================================================
-  // TOOL 6: AI PDF SUMMARISER (LIVE GEMINI FLASH INFERENCE)
-  // ==========================================================================
-  const handleSetSummaryFile = async (file) => {
-    setErrorMessage('');
-    setSuccessMessage('');
-    setAiSummary('');
-    setExtractedText('');
-    setSummaryStats(null);
-
-    if (!file || (!file.type.includes('pdf') && !file.name.toLowerCase().endsWith('.pdf'))) {
-      setErrorMessage('Please upload a valid .pdf file.');
-      return;
-    }
-
-    setSummaryFile(file);
-  };
-
-  const executeAiSummary = async () => {
-    if (!summaryFile) {
-      setErrorMessage('Please upload a PDF file to summarize.');
-      return;
-    }
-
-    setIsProcessing(true);
-    setErrorMessage('');
-    setSuccessMessage('');
-    setAiSummary('');
-    setStatusMessage('Extracting readable text layer using PDF.js in-browser...');
-
-    try {
-      configurePdfWorker();
-      const buffer = await summaryFile.arrayBuffer();
-
-      let pdf;
-      try {
-        const loadingTask = pdfjsLib.getDocument({
-          data: new Uint8Array(buffer),
-          useSystemFonts: true,
-        });
-        pdf = await loadingTask.promise;
-      } catch (err) {
-        throw new Error('Could not open PDF. The file may be password-protected or corrupt.');
-      }
-
-      const numPages = pdf.numPages;
-      let fullText = '';
-
-      for (let i = 1; i <= numPages; i++) {
-        setStatusMessage(`Reading page ${i} of ${numPages}...`);
-        const page = await pdf.getPage(i);
-        const textContent = await page.getTextContent();
-        const pageText = textContent.items
-          .map((item) => (item.str ? item.str : ''))
-          .join(' ');
-        fullText += pageText + '\n';
-      }
-
-      const trimmedText = fullText.trim();
-
-      // Graceful rejection for scanned / image-only / non-OCR PDFs
-      if (trimmedText.length < 25) {
-        throw new Error('Could not extract text. Please ensure this is a readable text PDF.');
-      }
-
-      setExtractedText(trimmedText);
-      const wordCount = trimmedText.split(/\s+/).filter(Boolean).length;
-      const readingTime = Math.max(1, Math.ceil(wordCount / 200));
-
-      setSummaryStats({
-        pages: numPages,
-        words: wordCount,
-        readingTime,
-      });
-
-      setStatusMessage('Synthesizing notes with live Gemini Flash AI for exam takeaways...');
-
-      const textToSend = trimmedText.slice(0, 30000);
-      let response;
-      let attempt = 0;
-      const maxAttempts = 2;
-
-      while (attempt < maxAttempts) {
-        attempt++;
-        try {
-          response = await fetch('/api/gemini/summarize', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              text: textToSend,
-              filename: summaryFile.name,
-            }),
-          });
-          if (response) break;
-        } catch (fetchErr) {
-          if (attempt < maxAttempts) {
-            setStatusMessage('Reconnecting to Gemini AI service...');
-            await new Promise((r) => setTimeout(r, 1500));
-          } else {
-            throw new Error('Could not reach the AI summary service. Please check your connection and try again.');
-          }
-        }
-      }
-
-      if (!response || !response.ok) {
-        const errJson = await response?.json().catch(() => ({}));
-        throw new Error(errJson?.error || `Server responded with status ${response?.status || 500}`);
-      }
-
-      const data = await response.json();
-      if (!data.summary) {
-        throw new Error('Did not receive summary from Gemini AI.');
-      }
-
-      setAiSummary(data.summary);
-      setSuccessMessage('AI Exam Summary generated successfully with Gemini Flash!');
-    } catch (err) {
-      console.error('AI Summary error:', err);
-      setErrorMessage(err.message || 'Failed to process AI summary.');
-    } finally {
-      setIsProcessing(false);
-      setStatusMessage('');
-    }
-  };
-
-  const handleCopySummary = () => {
-    if (!aiSummary) return;
-    navigator.clipboard.writeText(aiSummary);
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 2000);
-  };
-
-  const handleDownloadSummary = (format) => {
-    if (!aiSummary) return;
-    const baseName = summaryFile ? summaryFile.name.replace(/\.pdf$/i, '') : 'notes';
-    const ext = format === 'md' ? 'md' : 'txt';
-    const blob = new Blob([aiSummary], { type: 'text/plain;charset=utf-8' });
-    downloadBlob(blob, `${baseName}_exam_summary.${ext}`);
-  };
-
   return (
     <div id="pdf-tools-for-free-root" className="space-y-6">
       {/* Header & Rebrand */}
@@ -1023,14 +856,14 @@ export const PdfToolsForFree = () => {
               free pdf tools for students
             </h1>
             <p className="text-sm text-slate-600 leading-relaxed max-w-3xl">
-              Student PDF utilities for merging, splitting, converting, and summarising documents. Most file operations run in your browser; the AI summariser sends extracted text to Google Gemini for processing.
+              Student PDF utilities for merging, splitting, and converting documents. File operations run locally in your browser.
             </p>
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
             <div className="text-right hidden sm:block">
               <span className="block text-xs font-bold text-slate-800">Verified Native PDF Stack</span>
-              <span className="block text-[11px] text-slate-500">jsPDF • SheetJS • pdf-lib • Gemini Flash</span>
+              <span className="block text-[11px] text-slate-500">jsPDF • SheetJS • pdf-lib</span>
             </div>
             <div className="w-10 h-10 rounded-xl bg-pink-50 border border-pink-200 flex items-center justify-center text-pink-600 shadow-xs">
               <ShieldCheck className="w-5 h-5" />
@@ -1162,7 +995,7 @@ export const PdfToolsForFree = () => {
                 </div>
                 <div className="inline-flex items-center gap-2 text-[11px] font-semibold text-pink-700 bg-pink-50 border border-pink-200 px-3 py-1 rounded-full">
                   <ShieldCheck className="w-3.5 h-3.5" />
-                  Processed in your browser for this tool. The AI summariser sends extracted text to Google Gemini.
+                  Processed locally in your browser.
                 </div>
               </div>
             ) : (
@@ -1874,214 +1707,7 @@ export const PdfToolsForFree = () => {
           </div>
         )}
 
-        {/* ==================================================================== */}
-        {/* 6. AI PDF SUMMARISER */}
-        {/* ==================================================================== */}
-        {activeTab === 'ai-summarizer' && (
-          <div className="space-y-6">
-            <div className="border-b border-slate-100 pb-4">
-              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-pink-600" />
-                AI PDF Summariser (Live Gemini Flash)
-              </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Extracts text layer with PDF.js and sends it to live Gemini Flash for structured 5-bullet summaries and key exam takeaways.
-              </p>
-            </div>
 
-            <input
-              ref={summaryInputRef}
-              type="file"
-              accept=".pdf,application/pdf"
-              className="hidden"
-              onChange={(e) => {
-                if (e.target.files?.[0]) handleSetSummaryFile(e.target.files[0]);
-                e.target.value = '';
-              }}
-            />
-
-            {!summaryFile ? (
-              <div
-                onClick={() => summaryInputRef.current?.click()}
-                className="border-2 border-dashed border-pink-200 hover:border-pink-400 bg-pink-50/20 hover:bg-pink-50/40 rounded-2xl p-10 text-center transition-all cursor-pointer space-y-3"
-              >
-                <div className="w-12 h-12 mx-auto rounded-xl bg-pink-100/80 text-pink-600 flex items-center justify-center">
-                  <Sparkles className="w-6 h-6" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-slate-900">Upload syllabus notes, research paper, or textbook PDF</p>
-                  <p className="text-xs text-slate-500 mt-1">Must contain readable text layer (non-scanned OCR)</p>
-                </div>
-                <div className="inline-flex items-center gap-2 text-[11px] font-semibold text-pink-700 bg-pink-50 border border-pink-200 px-3 py-1 rounded-full">
-                  <BookOpen className="w-3.5 h-3.5" />
-                  Extracts 5 key takeaways + exam definitions automatically
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-5">
-                <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-200">
-                  <div className="flex items-center gap-3">
-                    <FileText className="w-7 h-7 text-pink-600" />
-                    <div>
-                      <p className="text-xs font-bold text-slate-900">{summaryFile.name}</p>
-                      <p className="text-[11px] text-slate-500">{formatBytes(summaryFile.size)}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSummaryFile(null);
-                        setAiSummary('');
-                      }}
-                      className="text-xs text-rose-600 hover:underline cursor-pointer"
-                    >
-                      Change File
-                    </button>
-                  </div>
-                </div>
-
-                {!aiSummary && (
-                  <div className="text-center py-6 space-y-3">
-                    <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
-                      Ready to synthesize! Click below to extract text using in-browser PDF.js and request Gemini Flash analysis.
-                    </p>
-                    <button
-                      type="button"
-                      disabled={isProcessing}
-                      onClick={executeAiSummary}
-                      className="px-6 py-3 text-xs font-bold text-white bg-pink-600 hover:bg-pink-700 rounded-xl disabled:opacity-50 transition-colors shadow-xs inline-flex items-center gap-2 cursor-pointer"
-                    >
-                      {isProcessing ? (
-                        <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          <span>Generating AI Summary...</span>
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="w-4 h-4" />
-                          <span>Run Live Gemini Flash Summariser</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                )}
-
-                {/* Rendered Baby-Pink Accented Summary Card */}
-                {aiSummary && (
-                  <div className="rounded-2xl bg-pink-50/70 border border-pink-200/90 p-6 space-y-5 shadow-xs">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-pink-200/60 pb-4">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-pink-600 text-white flex items-center justify-center shadow-xs">
-                          <Sparkles className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <h3 className="text-sm font-bold text-pink-950">
-                            ✨ AI Student Exam Summary &amp; Key Takeaways
-                          </h3>
-                          {summaryStats && (
-                            <p className="text-[11px] text-pink-800/80">
-                              Analyzed {summaryStats.pages} pages • {summaryStats.words} words • ~
-                              {summaryStats.readingTime} min read
-                            </p>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleCopySummary}
-                          className="px-3 py-1.5 text-xs font-semibold bg-white border border-pink-200 text-pink-900 rounded-lg hover:bg-pink-50 flex items-center gap-1.5 transition-colors cursor-pointer"
-                        >
-                          {isCopied ? (
-                            <>
-                              <Check className="w-3.5 h-3.5 text-emerald-600" />
-                              <span className="text-emerald-700">Copied!</span>
-                            </>
-                          ) : (
-                            <>
-                              <Copy className="w-3.5 h-3.5 text-pink-600" />
-                              <span>Copy Text</span>
-                            </>
-                          )}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleDownloadSummary('md')}
-                          className="px-3 py-1.5 text-xs font-semibold bg-pink-600 hover:bg-pink-700 text-white rounded-lg flex items-center gap-1.5 transition-colors shadow-xs cursor-pointer"
-                        >
-                          <Download className="w-3.5 h-3.5" />
-                          <span>Export .md</span>
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Markdown Body */}
-                    <div className="prose prose-sm max-w-none text-slate-800 leading-relaxed space-y-3 font-normal">
-                      {aiSummary.split('\n').map((line, idx) => {
-                        const trimmed = line.trim();
-                        if (!trimmed) return <div key={idx} className="h-2" />;
-                        if (trimmed.startsWith('###')) {
-                          return (
-                            <h4
-                              key={idx}
-                              className="text-sm font-extrabold text-pink-900 pt-2 pb-1 border-b border-pink-200/50"
-                            >
-                              {trimmed.replace(/^###\s*/, '')}
-                            </h4>
-                          );
-                        }
-                        const renderInlineBold = (text) => {
-                          if (!text) return null;
-                          const parts = text.split(/(\*\*.*?\*\*)/g);
-                          return parts.map((part, pIdx) => {
-                            if (part.startsWith('**') && part.endsWith('**')) {
-                              return (
-                                <strong key={pIdx} className="font-bold text-slate-900">
-                                  {part.slice(2, -2)}
-                                </strong>
-                              );
-                            }
-                            return part;
-                          });
-                        };
-
-                        if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
-                          const content = trimmed.substring(2);
-                          return (
-                            <div key={idx} className="flex items-start gap-2 text-xs text-slate-800 pl-1">
-                              <span className="text-pink-600 font-bold shrink-0 mt-0.5">•</span>
-                              <span>{renderInlineBold(content)}</span>
-                            </div>
-                          );
-                        }
-                        return (
-                          <p key={idx} className="text-xs text-slate-800">
-                            {renderInlineBold(trimmed)}
-                          </p>
-                        );
-                      })}
-                    </div>
-
-                    <div className="pt-3 border-t border-pink-200/60 flex items-center justify-between text-[11px] text-pink-800/80">
-                      <span>Powered by Gemini Flash &amp; In-Browser PDF.js</span>
-                      <button
-                        type="button"
-                        onClick={executeAiSummary}
-                        disabled={isProcessing}
-                        className="font-semibold text-pink-700 hover:underline flex items-center gap-1 cursor-pointer"
-                      >
-                        <RefreshCw className="w-3 h-3" />
-                        Re-generate
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );

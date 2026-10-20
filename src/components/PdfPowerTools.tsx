@@ -91,8 +91,6 @@ export const PdfPowerTools: React.FC = () => {
         return AlignLeft;
       case 'pdf-metadata':
         return Tag;
-      case 'summarize-pdf':
-        return Sparkles;
       case 'ocr-pdf':
         return Search;
       case 'protect-pdf':

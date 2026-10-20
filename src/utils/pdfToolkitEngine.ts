@@ -2414,54 +2414,7 @@ export async function generatePdfFormFields(
 }
 
 // ============================================================================
-// 29. AI SUMMARIZER (Extract & Analyze)
-// ============================================================================
-export async function summarizePdf(
-  file: File,
-  onProgress?: (progress: number, msg: string) => void
-): Promise<{
-  wordCount: number;
-  readingTimeMin: number;
-  keyTakeaways: string[];
-  executiveSummary: string;
-}> {
-  onProgress?.(25, 'Reading document text layer...');
-  const buffer = await file.arrayBuffer();
-  const { fullText } = await extractTextFromPdf(buffer, onProgress);
-
-  onProgress?.(70, 'Analyzing key concepts & sentence structures...');
-  const words = fullText.trim().split(/\s+/).filter(Boolean);
-  const wordCount = words.length;
-  const readingTimeMin = Math.max(1, Math.ceil(wordCount / 200));
-
-  // Extract key sentences
-  const sentences = fullText
-    .split(/[.!?]\s+/)
-    .map((s) => s.trim())
-    .filter((s) => s.length > 30 && s.length < 200);
-
-  const keyTakeaways = sentences.slice(0, 5);
-  if (keyTakeaways.length === 0) {
-    keyTakeaways.push(
-      'The document was loaded successfully, containing structured academic or administrative information.',
-      'Text extraction verified and analyzed with zero server uploads.'
-    );
-  }
-
-  const executiveSummary =
-    sentences.slice(0, 3).join('. ') +
-    (sentences.length > 0 ? '.' : ' Document text analyzed locally in browser.');
-
-  return {
-    wordCount,
-    readingTimeMin,
-    keyTakeaways,
-    executiveSummary,
-  };
-}
-
-// ============================================================================
-// 30. TRANSLATE / MARKDOWN EXPORTER
+// TRANSLATE / MARKDOWN EXPORTER
 // ============================================================================
 export async function exportPdfToMarkdown(
   file: File,
