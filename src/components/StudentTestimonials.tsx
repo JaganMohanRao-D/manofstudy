@@ -51,7 +51,13 @@ export const StudentTestimonials: React.FC = () => {
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed)) {
-          setUserReviews(parsed);
+          const normalised = parsed.map((review) => ({
+            ...review,
+            badge: review.badge === 'Parent' ? 'Parent' : 'Student',
+            isUserSubmitted: true,
+          }));
+          setUserReviews(normalised);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(normalised));
         }
       }
     } catch {
