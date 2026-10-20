@@ -85,7 +85,8 @@ export const Header: React.FC<HeaderProps> = ({ activeWorkspace = 'hub', onSelec
 
         <nav className="hidden flex-1 items-center justify-center gap-1 lg:flex" aria-label="Primary navigation">
           <button type="button" onClick={goHome} className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${activeWorkspace === 'hub' ? 'bg-cyan-400/15 text-cyan-200' : 'text-slate-300 hover:bg-white/8 hover:text-white'}`}><Home className="w-4 h-4" /> Home</button>
-          <a href="/blog/" className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-slate-300 transition-colors hover:bg-white/8 hover:text-white">Blog</a>
+          <a href="/blog/" className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900">Blog</a>
+          <a href="/autonomous-colleges/" className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900">Autonomous Colleges</a>
           <Dropdown label="For AP" menu="ap" items={AP_TOOLS} />
           <Dropdown label="For TG" menu="tg" items={TG_TOOLS} />
           <button type="button" onClick={() => navigate({ label: 'Scholarships', workspace: 'scholarships', icon: GraduationCap })} className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${activeWorkspace === 'scholarships' ? 'bg-cyan-400/15 text-cyan-200' : 'text-slate-300 hover:bg-white/8 hover:text-white'}`}>Scholarships</button>
@@ -104,7 +105,8 @@ export const Header: React.FC<HeaderProps> = ({ activeWorkspace = 'hub', onSelec
         <div id="mos-mobile-navigation-panel" className="border-t border-cyan-300/10 bg-[#040b16] px-3 pb-4 pt-2 lg:hidden">
           <div className="mx-auto max-w-7xl space-y-1">
             <button type="button" onClick={goHome} className="w-full rounded-xl px-3 py-3 text-left text-sm font-semibold text-slate-200 hover:bg-cyan-400/10">Home</button>
-            <a href="/blog/" onClick={() => setMobileOpen(false)} className="block w-full rounded-xl px-3 py-3 text-left text-sm font-semibold text-slate-200 hover:bg-cyan-400/10">Blog</a>
+            <a href="/blog/" onClick={() => setMobileOpen(false)} className="block w-full rounded-xl px-3 py-3 text-left text-sm font-semibold text-slate-700 hover:bg-slate-100">Blog</a>
+            <a href="/autonomous-colleges/" onClick={() => setMobileOpen(false)} className="block w-full rounded-xl px-3 py-3 text-left text-sm font-semibold text-slate-700 hover:bg-slate-100">Autonomous Colleges</a>
             <button type="button" onClick={() => { setMobileOpen(false); onOpenCommandPalette?.(); }} id="mobile-search-tools" className="group mb-2 flex min-h-12 w-full items-center gap-3 rounded-2xl border border-cyan-300/20 bg-gradient-to-r from-cyan-400/[0.10] to-cyan-300/[0.06] px-3.5 py-3 text-left shadow-lg shadow-cyan-950/10 transition hover:border-cyan-300/35 hover:bg-cyan-400/[0.14]" aria-label="Search Naa College tools">
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-cyan-300/15 bg-[#07101d] text-cyan-300"><Search className="h-4 w-4" /></span>
               <span className="min-w-0 flex-1"><span className="block text-sm font-semibold text-white">Search Naa College</span><span className="mt-0.5 block text-[11px] text-slate-400">Find tools by name or what you need</span></span>
