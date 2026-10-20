@@ -191,29 +191,29 @@ export const StudentEssentialsStore: React.FC<StudentEssentialsStoreProps> = ({
         <div className="relative z-10 max-w-3xl space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs font-bold tracking-wide uppercase">
             <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-            <span>Verified Student Essentials &amp; Academic Store</span>
+            <span>Student Essentials &amp; Academic Gear</span>
           </div>
 
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-white leading-tight">
-            🎓 Verified Student Essentials &amp; Academic Gear
+            🎓 Student Essentials &amp; Academic Gear
           </h1>
 
           <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            Handpicked engineering calculators, curated PYQ bundles, coding setups, and noise-cancelling audio for Telugu scholars.
+            Explore example picks for calculators, study books, computing devices, and audio gear. Confirm exact models, seller details, exam rules, compatibility, and current availability on the retailer's listing.
           </p>
 
           <div className="flex flex-wrap items-center gap-4 pt-2 text-xs text-slate-300">
             <div className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>JNTU / Autonomous Exam Compliant</span>
+              <span>Check your exam requirements</span>
             </div>
             <div className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>Direct Amazon Verified Portals</span>
+              <span>External retailer links</span>
             </div>
             <div className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>Tested by Engineering Alumni</span>
+              <span>Editorial suggestions; not tested</span>
             </div>
           </div>
         </div>
@@ -349,10 +349,10 @@ export const StudentEssentialsStore: React.FC<StudentEssentialsStoreProps> = ({
                 {/* Product Image Showcase Container */}
                 <div>
                   <div className="w-full h-44 bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-800/40 dark:to-slate-900/60 rounded-xl overflow-hidden flex items-center justify-center relative p-3 border border-slate-200/80 dark:border-slate-800 mb-4">
-                    {/* Realistic HD Product Visual */}
+                    {/* Representative category imagery, not a verified product photo */}
                     <img
                       src={product.imageUrl}
-                      alt={product.title}
+                      alt={`Representative image for ${product.category}; confirm the exact model on the retailer page`}
                       loading="lazy"
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-cover object-center rounded-lg group-hover:scale-105 transition-transform duration-300 shadow-2xs"
@@ -363,18 +363,17 @@ export const StudentEssentialsStore: React.FC<StudentEssentialsStoreProps> = ({
                       }}
                     />
 
-                    {/* Floating Glassmorphic Category Tag Badge (Top-Left) */}
+                    {/* General browse label; no unverified rankings or endorsements */}
                     <div className="absolute top-2.5 left-2.5 z-10">
                       <span className="backdrop-blur-md bg-white/85 dark:bg-slate-900/85 text-slate-900 dark:text-white font-semibold text-[11px] px-2.5 py-1 rounded-full shadow-xs border border-slate-200/50 dark:border-slate-700/50 flex items-center gap-1">
-                        {product.tag}
+                        Explore item
                       </span>
                     </div>
 
-                    {/* Official Amazon Logo Pill (Top-Right) */}
+                    {/* Neutral external retailer label */}
                     <div className="absolute top-2.5 right-2.5 z-10">
                       <div className="backdrop-blur-md bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-xs border border-slate-200/60 dark:border-slate-700/60 flex items-center gap-1">
-                        <span className="text-amber-500 font-black text-xs leading-none">a</span>
-                        <span className="tracking-tight text-slate-900 dark:text-slate-100 font-bold">amazon</span>
+                        <span className="tracking-tight text-slate-900 dark:text-slate-100 font-semibold">External retailer</span>
                       </div>
                     </div>
                   </div>
@@ -403,15 +402,15 @@ export const StudentEssentialsStore: React.FC<StudentEssentialsStoreProps> = ({
                   </div>
                 </div>
 
-                {/* Bottom Action Area with Amazon Price Check CTA & Primary Button */}
+                {/* External retailer link; prices are not retrieved or verified by this tool */}
                 <div className="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-800/80 space-y-2.5">
                   <div className="flex items-center justify-between text-[11px]">
                     <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      <span>Verified Authentic</span>
+                      <Search className="w-3.5 h-3.5" />
+                      <span>Check seller and exact model</span>
                     </span>
                     <span className="text-slate-500 dark:text-slate-400 font-medium text-[11px]">
-                      Live Amazon Price Check
+                      Open current listing
                     </span>
                   </div>
 
@@ -421,9 +420,9 @@ export const StudentEssentialsStore: React.FC<StudentEssentialsStoreProps> = ({
                     target="_blank"
                     rel="sponsored noopener noreferrer"
                     className="w-full bg-amber-400 hover:bg-amber-500 active:scale-[0.98] text-slate-950 font-bold px-4 py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer group/btn"
-                    title={`View ${product.title} on Amazon`}
+                    title={`Open retailer listing for ${product.title}`}
                   >
-                    <span>View on Amazon</span>
+                    <span>View retailer listing</span>
                     <span className="font-bold text-xs transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5">
                       ↗
                     </span>
@@ -443,7 +442,7 @@ export const StudentEssentialsStore: React.FC<StudentEssentialsStoreProps> = ({
             No essentials match "{searchQuery}"
           </h4>
           <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
-            Try checking for typos or clear your search query to see all 34 curated student products.
+            Try checking for typos or clear your search query to see all 34 student gear ideas.
           </p>
           <button
             type="button"
@@ -464,11 +463,11 @@ export const StudentEssentialsStore: React.FC<StudentEssentialsStoreProps> = ({
         <div className="flex items-center gap-2">
           <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
           <span>
-            <strong>Transparency Notice:</strong> MAN OF STUDY participates in verified academic and equipment partner programs. Links open directly to authentic items on Amazon India. Prices and availability are subject to change.
+            <strong>Transparency notice:</strong> These are editorial gear suggestions, not independently tested or verified product endorsements. Images may be representative rather than exact product photographs. Product details, seller, price, and availability can change; confirm the exact listing before purchasing. Some outbound links may be affiliate links; where a qualifying purchase is tracked through an affiliate program, Naa College may earn a commission at no extra cost to you. This does not certify the product's authenticity, exam suitability, or compatibility.
           </span>
         </div>
         <span className="text-[11px] text-slate-400 whitespace-nowrap">
-          Updated for Academic Year 2026–2027
+          Gear ideas reviewed: October 2026
         </span>
       </div>
     </div>
