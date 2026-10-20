@@ -251,7 +251,7 @@ export const RoadmapModal: React.FC<RoadmapModalProps> = ({
         </div>
 
         {/* Scrollable Content Body */}
-        <div className={`flex-1 ${fullPage ? 'overflow-visible' : 'overflow-y-auto'} p-5 sm:p-8 space-y-8 divide-y divide-slate-200 dark:divide-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100`}>
+        <div className={`${fullPage ? 'flex-none overflow-visible' : 'flex-1 overflow-y-auto'} p-5 sm:p-8 space-y-8 divide-y divide-slate-200 dark:divide-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100`}>
           {/* SECTION 1: Industry Compensation & Corporate Matrix */}
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-slate-900 dark:text-slate-100 font-extrabold text-sm sm:text-base tracking-tight">
