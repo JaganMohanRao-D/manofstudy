@@ -556,7 +556,7 @@ function tgAllotmentPlugin(): Plugin {
     <p style="margin: 0; color: #1e293b; font-size: 14px; line-height: 1.6;">${safeContent}</p>
   </div>
   <div style="text-align: center; margin: 24px 0 16px 0;">
-    <a href="https://manofstudy.vercel.app/#campus-connect" style="display: inline-block; background-color: #ec4899; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 14px;">
+    <a href="https://naacollege.in/#campus-connect" style="display: inline-block; background-color: #ec4899; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 14px;">
       View Full Discussion on Naa College
     </a>
   </div>
@@ -722,7 +722,7 @@ function tgAllotmentPlugin(): Plugin {
         A student has posted an answer to your question.
       </p>
       <div style="text-align: center; margin: 28px 0;">
-        <a href="https://manofstudy.vercel.app/#campus-connect" style="display: inline-block; background-color: #be185d; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 14px; box-shadow: 0 2px 6px rgba(190, 24, 93, 0.3);">
+        <a href="https://naacollege.in/#campus-connect" style="display: inline-block; background-color: #be185d; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 14px; box-shadow: 0 2px 6px rgba(190, 24, 93, 0.3);">
           View Answer
         </a>
       </div>
