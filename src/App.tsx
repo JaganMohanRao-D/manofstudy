@@ -798,7 +798,11 @@ export default function App() {
       setUtilitySubTab(targetSubTab as ToolTab);
     }
     if (ws === 'hub') {
-      history.replaceState(null, '', window.location.pathname + window.location.search);
+      // The home workspace must always have the root URL, even when returning
+      // from a clean-path page such as /scholarships or a nested tool route.
+      // Keeping the previous pathname here desynchronizes the address bar
+      // from the workspace rendered by React.
+      history.replaceState(null, '', '/' + window.location.search);
     } else {
       window.location.hash = ws;
     }
