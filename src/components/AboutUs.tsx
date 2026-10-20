@@ -64,7 +64,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
             </li>
           </ul>
           <p>
-            NAA COLLEGE was created by <strong>JAGAN MOHAN RAO DUNNA</strong> to bring student-focused academic tools and resources into one place. Students can calculate attendance, explore EAPCET data, use engineering roadmaps, and work with document utilities. Many file operations run locally in the browser; the AI summariser sends extracted document text to Google Gemini for processing, so users should avoid submitting sensitive information to that feature.
+            NAA COLLEGE was created by <strong>JAGAN MOHAN RAO DUNNA</strong> to bring student-focused academic tools and resources into one place. Students can calculate attendance, explore EAPCET data, use engineering roadmaps, and work with document utilities. Many file operations run locally in the browser. Some collaborative features use Firebase, and the Student Gap Analyzer may use an external AI service when configured; users should review each feature before submitting personal information.
           </p>
         </section>
 
@@ -151,7 +151,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
               <span className="font-bold text-slate-900 dark:text-white text-xs block">2. In-Browser Privacy By Design</span>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Many PDF and image utilities process files locally in your browser. The AI summariser is different: it sends extracted text to Google Gemini for processing. Check each tool's description and avoid submitting sensitive documents to AI features.
+                Many PDF and image utilities process files locally in your browser. Some features may use external services; check each tool's description and avoid submitting sensitive documents or personal identifiers.
               </p>
             </div>
 
