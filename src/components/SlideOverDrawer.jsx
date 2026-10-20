@@ -555,10 +555,10 @@ export const SlideOverDrawer = ({
                   <div>
                     <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
                       <span>Student Internship Resources</span>
-                      <span className="text-[9px] bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 px-1.5 py-0.2 rounded font-mono font-semibold">Vetted</span>
+                      <span className="text-[9px] bg-slate-100 text-slate-700 dark:bg-slate-500/20 dark:text-slate-300 border border-slate-200 dark:border-slate-500/30 px-1.5 py-0.2 rounded font-mono font-semibold">Resources</span>
                     </div>
                     <div className="text-[10px] text-slate-600 dark:text-slate-400 leading-normal mt-0.5">
-                      100% non-scam: AICTE, Google Summer of Code, DRDO, LFX
+                      Resources include programmes such as AICTE opportunities, Google Summer of Code, DRDO, and LFX; confirm each opening at its official source.
                     </div>
                   </div>
                 </div>
