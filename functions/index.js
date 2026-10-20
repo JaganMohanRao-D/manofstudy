@@ -118,7 +118,7 @@ exports.notifyQuestionOwnerOnAnswer = onDocumentCreated(
     }
 
     // 6. Build clean, privacy-preserving email HTML (Requirement 8)
-    const viewAnswerUrl = `https://manofstudy.vercel.app/#campus-connect`;
+    const viewAnswerUrl = `https://naacollege.in/#campus-connect`;
     const safeTitle = String(questionTitle).replace(/</g, "&lt;").replace(/>/g, "&gt;");
     const safeRecipientName = String(questionOwnerName).replace(/</g, "&lt;").replace(/>/g, "&gt;");
     const safeAnswerAuthor = String(replyAuthorName).replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -296,7 +296,16 @@ exports.processCampusCommunityReport = onDocumentCreated(
 
     const { targetType, targetId, postId, authorUid } = report;
     const reporterUid = report.reporterUid;
+    const { reportId } = event.params;
     if (!reporterUid || !targetType || !targetId || !postId) return null;
+
+    // Only process the canonical one-report-per-user-and-target document ID.
+    // This also protects moderation from forged legacy client writes.
+    const expectedReportId = `rep_${targetType}_${postId}_${targetId}_${reporterUid}`;
+    if (reportId !== expectedReportId) {
+      console.warn(`[CommunityReport] Ignoring non-canonical report ID ${reportId}.`);
+      return null;
+    }
 
     const targetRef = targetType === "post"
       ? db.collection("campus_posts").doc(targetId)
