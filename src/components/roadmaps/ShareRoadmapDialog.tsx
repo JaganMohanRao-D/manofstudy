@@ -206,7 +206,7 @@ export const ShareRoadmapDialog: React.FC<ShareRoadmapDialogProps> = ({
                 id="copy-platform-url-btn"
                 onClick={async () => {
                   try {
-                    await navigator.clipboard.writeText('https://javisak.vercel.app');
+                    await navigator.clipboard.writeText('https://naacollege.in/');
                     setCopiedPlatform(true);
                     setTimeout(() => setCopiedPlatform(false), 2500);
                   } catch {
