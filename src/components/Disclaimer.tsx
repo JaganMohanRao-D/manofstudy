@@ -62,7 +62,7 @@ export const Disclaimer: React.FC<DisclaimerProps> = ({ onBack }) => {
             2. Attendance &amp; Internal Examination Estimations
           </h2>
           <p>
-            The Attendance Defender and Internal Exam Cutoff Estimator apply standard mathematical formulas (e.g. 75% statutory criteria, 80:20 mid-term weighted averages). While these formulas align with general university guidelines:
+            The Attendance Defender and Internal Exam Cutoff Estimator use the formulas and assumptions implemented in each tool. Attendance thresholds, grading schemes, mid-term weightings, and condonation rules can differ by institution, course, regulation year, and department. Therefore:
           </p>
           <ul className="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-400">
             <li>Individual institutions, autonomous academic councils, and departmental heads maintain authority to enforce custom condonation fines, medical proof verifications, or lab attendance policies.</li>
@@ -84,7 +84,7 @@ export const Disclaimer: React.FC<DisclaimerProps> = ({ onBack }) => {
             4. Client-Side Document Tools
           </h2>
           <p>
-            The 30+ PDF Power Tools, 20KB Photo Resizer, and ATS Resume Analyzer operate 100% in your device's browser memory using WebAssembly. Users are responsible for verifying that converted document file formats, DPI resolutions, and file sizes comply with specific examination guidelines (such as UPSC, SSC, GATE, or university portal specifications) before submitting official examination registration forms.
+            Many document and image operations are designed to run in the browser, but processing can differ by tool and some features may use external services. Check each tool's explanation before selecting a file, and do not submit sensitive personal information unless necessary and you understand the relevant processing. After conversion or compression, open the resulting file and verify its readability, dimensions, file size, and format against the current requirements of the destination portal before submitting it.
           </p>
         </section>
 
@@ -94,7 +94,7 @@ export const Disclaimer: React.FC<DisclaimerProps> = ({ onBack }) => {
             <span>5. Institutional Data Corrections</span>
           </h2>
           <p>
-            If you represent a university or engineering institution and notice an outdated tuition fee or updated seat distribution in our matrices, please email our verification team for prompt review and dataset synchronization:
+            If you represent a university or engineering institution and notice an outdated tuition fee or updated seat distribution in our matrices, please email the support desk with the page URL and an official public source, where available, so the issue can be reviewed:
           </p>
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
             <span className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">{supportEmail}</span>
