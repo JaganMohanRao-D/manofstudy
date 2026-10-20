@@ -255,11 +255,17 @@ const blogCategories = Array.from(new Set(publishedBlogArticles.map((article) =>
 blogCategories.forEach((category) => {
   const slug = slugifyBlogCategory(category);
   const categoryArticles = publishedBlogArticles.filter((article) => article.category === category);
+  // Category archives with very few published entries stay usable for readers but
+  // should not be promoted as search landing pages until the category has depth.
+  // This is an editorial threshold, not a Google word-count policy.
+  const indexable = categoryArticles.length >= 3;
   routes.push({
     path: '/blog/category/' + slug + '/',
     title: category + ' Guides | Naa College Blog',
     description: ('Practical student-focused guides in ' + category + ' from Naa College.').slice(0, 158),
     staticBody: blogListingBody(category + ' Guides', 'Published Naa College articles in ' + category + '.', categoryArticles),
+    noindex: !indexable,
+    includeInSitemap: indexable,
     schema: { '@context': 'https://schema.org', '@type': 'CollectionPage', name: category + ' Guides', url: 'https://naacollege.in/blog/category/' + slug + '/' }
   });
 });
@@ -317,6 +323,7 @@ function buildRouteHtml(route) {
   let html = baseHtml;
   html = html.replace(/<title>[^<]*<\/title>/i, '<title>' + escapeAttribute(route.title) + '</title>');
   html = setMeta(html, 'name', 'description', route.description);
+  if (route.noindex) html = setMeta(html, 'name', 'robots', 'noindex,follow');
   html = setMeta(html, 'property', 'og:title', route.title);
   html = setMeta(html, 'property', 'og:description', route.description);
   html = setMeta(html, 'property', 'og:url', canonical);
@@ -365,7 +372,7 @@ const sitemap = [
   '<?xml version="1.0" encoding="UTF-8"?>',
   '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
   '  <url><loc>https://naacollege.in/</loc></url>',
-  ...routes.map((route) => '  <url><loc>' + xmlEscape('https://naacollege.in' + route.path) + '</loc></url>'),
+  ...routes.filter((route) => route.includeInSitemap !== false).map((route) => '  <url><loc>' + xmlEscape('https://naacollege.in' + route.path) + '</loc></url>'),
   '</urlset>',
 ].join('\n') + '\n';
 fs.writeFileSync(path.join(distDir, 'sitemap.xml'), sitemap, 'utf8');
