@@ -352,7 +352,7 @@ export const StudentEssentialsStore: React.FC<StudentEssentialsStoreProps> = ({
                     {/* Representative category imagery, not a verified product photo */}
                     <img
                       src={product.imageUrl}
-                      alt={product.title}
+                      alt={`Representative image for ${product.category}; confirm the exact model on the retailer page`}
                       loading="lazy"
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-cover object-center rounded-lg group-hover:scale-105 transition-transform duration-300 shadow-2xs"
@@ -363,18 +363,17 @@ export const StudentEssentialsStore: React.FC<StudentEssentialsStoreProps> = ({
                       }}
                     />
 
-                    {/* Floating Glassmorphic Category Tag Badge (Top-Left) */}
+                    {/* General browse label; no unverified rankings or endorsements */}
                     <div className="absolute top-2.5 left-2.5 z-10">
                       <span className="backdrop-blur-md bg-white/85 dark:bg-slate-900/85 text-slate-900 dark:text-white font-semibold text-[11px] px-2.5 py-1 rounded-full shadow-xs border border-slate-200/50 dark:border-slate-700/50 flex items-center gap-1">
-                        {product.tag}
+                        Explore item
                       </span>
                     </div>
 
                     {/* Neutral external retailer label */}
                     <div className="absolute top-2.5 right-2.5 z-10">
                       <div className="backdrop-blur-md bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-xs border border-slate-200/60 dark:border-slate-700/60 flex items-center gap-1">
-                        <span className="text-amber-500 font-black text-xs leading-none">a</span>
-                        <span className="tracking-tight text-slate-900 dark:text-slate-100 font-bold">amazon</span>
+                        <span className="tracking-tight text-slate-900 dark:text-slate-100 font-semibold">External retailer</span>
                       </div>
                     </div>
                   </div>
@@ -403,11 +402,11 @@ export const StudentEssentialsStore: React.FC<StudentEssentialsStoreProps> = ({
                   </div>
                 </div>
 
-                {/* Bottom Action Area with Amazon Price Check CTA & Primary Button */}
+                {/* External retailer link; prices are not retrieved or verified by this tool */}
                 <div className="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-800/80 space-y-2.5">
                   <div className="flex items-center justify-between text-[11px]">
                     <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <Search className="w-3.5 h-3.5" />
                       <span>Check seller and exact model</span>
                     </span>
                     <span className="text-slate-500 dark:text-slate-400 font-medium text-[11px]">
@@ -468,7 +467,7 @@ export const StudentEssentialsStore: React.FC<StudentEssentialsStoreProps> = ({
           </span>
         </div>
         <span className="text-[11px] text-slate-400 whitespace-nowrap">
-          Updated for Academic Year 2026–2027
+          Gear ideas reviewed: October 2026
         </span>
       </div>
     </div>
