@@ -300,7 +300,7 @@ export const TOOLS_CONFIG: ToolMeta[] = [
   },
   {
     id: 'internships',
-    name: 'Verified Student Internships Radar',
+    name: 'Student Internship Resources',
     shortName: 'Internships Radar',
     category: 'academic',
     description: '100% verified non-scam internships: AICTE Portal, Google Summer of Code, DRDO/ISRO Trainees, LFX Mentorship',
@@ -993,7 +993,7 @@ export default function App() {
       case 'essentials':
       case 'store':
         return {
-          title: 'Verified Student Essentials & Academic Gear Store',
+          title: 'Student Essentials & Academic Gear Store',
           icon: <ShoppingBag className="w-4 h-4 text-amber-500" />,
         };
       default:
