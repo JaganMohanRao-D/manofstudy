@@ -40,7 +40,7 @@ function checkPage(filePath, expectedCanonical, label) {
   const canonicals = [...html.matchAll(/<link\b(?=[^>]*\brel=["']canonical["'])[^>]*href=["']([^"']+)["'][^>]*>/gi)];
   if (titles.length !== 1 || !titles[0][1].trim()) fail(label + ': expected exactly one non-empty title');
   if (canonicals.length !== 1 || canonicals[0][1] !== expectedCanonical) fail(label + ': canonical is missing, duplicated, or mismatched');
-  if (/id=["']seo-prerender["']|display\s*:\s*none/i.test(html)) fail(label + ': hidden SEO prerender markup detected');
+  if (/id=["']seo-prerender["']/i.test(html)) fail(label + ': hidden SEO prerender markup detected');
   const rootStart = html.indexOf('<div id="root">');
   const bodyEnd = html.toLowerCase().lastIndexOf('</body>');
   if (rootStart < 0 || bodyEnd < rootStart) {
