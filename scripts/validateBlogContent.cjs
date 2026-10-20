@@ -16,7 +16,14 @@ for (const article of articles) {
   if (!article.title || !article.summary || !article.category || !article.content) errors.push('Missing required content fields: ' + article.slug);
   if (!['published', 'draft'].includes(article.status)) errors.push('Invalid publication status: ' + article.slug);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(article.publishedAt || '') || !/^\d{4}-\d{2}-\d{2}$/.test(article.updatedAt || '')) errors.push('Invalid publication/update date: ' + article.slug);
-  if (article.status === 'published' && String(article.content).trim().length < 500) errors.push('Published article is too short to pass the minimum content review: ' + article.slug);
+  if (article.status === 'published') {
+    const content = String(article.content || '').trim();
+    const wordCount = content.split(/\s+/).filter(Boolean).length;
+    const headingCount = (content.match(/^##\s+.+$/gm) || []).length;
+    // Editorial sanity checks only; Google does not prescribe a minimum word count.
+    if (content.length < 1200 || wordCount < 250) errors.push('Published article needs more substantive content: ' + article.slug + ' (' + wordCount + ' words).');
+    if (headingCount < 4) errors.push('Published article needs clearer section structure (at least four H2 sections): ' + article.slug);
+  }
   if (!Array.isArray(article.tags) || !Array.isArray(article.sources) || !Array.isArray(article.toolLinks)) errors.push('Tags, sources, and toolLinks must be arrays: ' + article.slug);
   for (const source of article.sources || []) {
     if (!/^https?:\/\//.test(source.url || '')) errors.push('Invalid source URL: ' + article.slug + ' (' + (source.url || 'missing') + ')');
