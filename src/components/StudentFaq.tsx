@@ -60,7 +60,7 @@ const FAQ_ITEMS: FaqItem[] = [
     icon: ShieldCheck,
     question: 'Are my uploaded PDF files and documents stored on your servers?',
     answer:
-      'Many PDF operations, such as merging, splitting, and conversion, run in your browser. The AI PDF summariser extracts text and sends it to Google Gemini for processing. Do not submit Aadhaar details, hall tickets, marksheets, or other sensitive information to AI features. Check the description of the specific tool before using it.',
+      'Many PDF operations, such as merging, splitting, and conversion, run in your browser. Some features may use external services, so check each feature's description and avoid submitting Aadhaar details, hall tickets, marksheets, passwords, or other sensitive information.',
     actionText: 'Launch Private PDF Studio',
     actionTarget: { type: 'workspace', target: 'pdftools' },
   },
