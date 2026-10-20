@@ -42,7 +42,7 @@ export const APDatasetStats: React.FC<APDatasetStatsProps> = ({ stats }) => {
           {totalRecords}
         </div>
         <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-          Verified Student Seats
+          Allotment Records
         </div>
       </div>
 

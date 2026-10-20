@@ -1023,7 +1023,7 @@ export const PdfToolsForFree = () => {
               free pdf tools for students
             </h1>
             <p className="text-sm text-slate-600 leading-relaxed max-w-3xl">
-              Fast, in-browser PDF utilities. Zero uploads, zero tracking, completely free.
+              Student PDF utilities for merging, splitting, converting, and summarising documents. Most file operations run in your browser; the AI summariser sends extracted text to Google Gemini for processing.
             </p>
           </div>
 
@@ -1162,7 +1162,7 @@ export const PdfToolsForFree = () => {
                 </div>
                 <div className="inline-flex items-center gap-2 text-[11px] font-semibold text-pink-700 bg-pink-50 border border-pink-200 px-3 py-1 rounded-full">
                   <ShieldCheck className="w-3.5 h-3.5" />
-                  Zero server upload • 100% processed in local RAM
+                  Processed in your browser for this tool. The AI summariser sends extracted text to Google Gemini.
                 </div>
               </div>
             ) : (
@@ -1740,7 +1740,7 @@ export const PdfToolsForFree = () => {
                 </div>
                 <div className="inline-flex items-center gap-2 text-[11px] font-semibold text-pink-700 bg-pink-50 border border-pink-200 px-3 py-1 rounded-full">
                   <ShieldCheck className="w-3.5 h-3.5" />
-                  Vector table rendering • Zero server uploads
+                  Vector table rendering in your browser
                 </div>
               </div>
             ) : (

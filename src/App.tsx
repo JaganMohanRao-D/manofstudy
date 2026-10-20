@@ -300,7 +300,7 @@ export const TOOLS_CONFIG: ToolMeta[] = [
   },
   {
     id: 'internships',
-    name: 'Verified Student Internships Radar',
+    name: 'Student Internship Resources',
     shortName: 'Internships Radar',
     category: 'academic',
     description: '100% verified non-scam internships: AICTE Portal, Google Summer of Code, DRDO/ISRO Trainees, LFX Mentorship',
@@ -327,7 +327,7 @@ export const TOOLS_CONFIG: ToolMeta[] = [
     name: 'free pdf tools for students',
     shortName: 'free pdf tools for students',
     category: 'document',
-    description: 'Fast, in-browser PDF utilities. Zero uploads, zero tracking, completely free.',
+    description: 'Student PDF utilities for merging, splitting, converting, and summarising documents. Most file operations run in your browser; the AI summariser sends extracted text to Google Gemini for processing.',
     badge: '100% Free',
   },
   {
@@ -993,7 +993,7 @@ export default function App() {
       case 'essentials':
       case 'store':
         return {
-          title: 'Verified Student Essentials & Academic Gear Store',
+          title: 'Student Essentials & Academic Gear Store',
           icon: <ShoppingBag className="w-4 h-4 text-amber-500" />,
         };
       default:

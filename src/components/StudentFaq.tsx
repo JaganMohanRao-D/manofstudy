@@ -60,7 +60,7 @@ const FAQ_ITEMS: FaqItem[] = [
     icon: ShieldCheck,
     question: 'Are my uploaded PDF files and documents stored on your servers?',
     answer:
-      'No! 100% of your PDF operations (merging, compressing, password protection, splitting, watermark removal) run entirely inside your browser via WebAssembly (PDF-lib and PDF.js). Your confidential marksheets, Aadhaar scans, and hall tickets never leave your device or touch any external server.',
+      'Many PDF operations, such as merging, splitting, and conversion, run in your browser. The AI PDF summariser extracts text and sends it to Google Gemini for processing. Do not submit Aadhaar details, hall tickets, marksheets, or other sensitive information to AI features. Check the description of the specific tool before using it.',
     actionText: 'Launch Private PDF Studio',
     actionTarget: { type: 'workspace', target: 'pdftools' },
   },
@@ -71,7 +71,7 @@ const FAQ_ITEMS: FaqItem[] = [
     icon: GraduationCap,
     question: 'How do you verify scholarships and grants listed on the platform?',
     answer:
-      'Every listing in our 2026 Scholarship Directory is manually fact-checked against government gazettes (NSP, PMSSS, AICTE Pragati, state ePASS portals) and verified corporate CSR foundations (Tata, Reliance, Infosys, HDFC Parivartan). We strictly list the upfront reward amounts, official application portals, and clear deadlines.',
+      'Scholarship records include the source notes and links available to us, but details may be incomplete or change. Check eligibility, current deadlines, required documents, and benefits directly with the scheme provider before applying.',
     actionText: 'View 2026 Scholarships',
     actionTarget: { type: 'workspace', target: 'scholarships' },
   },
@@ -104,7 +104,7 @@ const FAQ_ITEMS: FaqItem[] = [
     icon: FileCheck2,
     question: 'What personal data does NAA COLLEGE collect from students?',
     answer:
-      'We do not require mandatory registration for public academic tools, counseling explorers, or PDF utilities. When using collaborative features like CampusConnect or Project Hubs, authentication is handled securely through Firebase. We never sell student data or academic history to third-party marketing companies.',
+      'Public academic tools generally do not require sign-in. Some collaborative features use Firebase authentication, and AI-assisted features may send submitted text to Google Gemini. Review the relevant privacy disclosures and avoid submitting sensitive personal information.',
     actionText: 'Read Privacy Policy',
     actionTarget: { type: 'legal', modal: 'privacy' },
   },
@@ -113,7 +113,7 @@ const FAQ_ITEMS: FaqItem[] = [
     category: 'roadmaps',
     categoryLabel: 'Career & Internships',
     icon: Briefcase,
-    question: 'Where can I find verified internships for 1st, 2nd, and 3rd year students?',
+    question: 'Where can I find internship opportunities for 1st, 2nd, and 3rd year students?',
     answer:
       'Check out our Student Internship Radar. We filter real corporate portals (Google Summer of Code, Microsoft Engage, ISRO START, DRDO apprenticeships, AICTE Internships) categorized by academic year suitability, stipend transparency, and official verification badges.',
     actionText: 'Go to Internship Radar',
@@ -218,7 +218,7 @@ export const StudentFaq: React.FC<StudentFaqProps> = ({
             </h2>
 
             <p className="text-sm sm:text-base text-[var(--mos-text-secondary)] leading-relaxed">
-              Transparent answers regarding our 4-year engineering roadmaps, 100% private browser PDF tools, verified
+              Transparent answers regarding our engineering roadmaps, browser-based PDF utilities, scholarship information, data privacy policies, and
               scholarships, data privacy policies, and the student mission behind NAA COLLEGE.
             </p>
           </div>

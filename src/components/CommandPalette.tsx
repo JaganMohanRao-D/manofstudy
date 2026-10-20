@@ -279,8 +279,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'tool-internships',
-        title: 'Verified Student Internships Radar',
-        subtitle: '100% verified non-scam internships: AICTE Portal, GSoC, DRDO/ISRO Trainees, LFX',
+        title: 'Student Internship Resources',
+        subtitle: 'Internship resources from official programmes and established platforms; verify each opening at its source',
         category: 'Core Tools',
         badge: 'Internships',
         icon: <Briefcase className="w-4 h-4 text-emerald-500" />,

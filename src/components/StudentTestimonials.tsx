@@ -21,54 +21,13 @@ export interface ReviewItem {
   college: string;
   rating: number;
   comment: string;
-  badge: 'Verified Student' | 'Parent';
+  badge: 'Student' | 'Parent';
   date: string;
   isUserSubmitted?: boolean;
 }
 
-// Four concise homepage reviews.
-const BASE_REVIEWS: ReviewItem[] = [
-  {
-    id: 'ap-review-1',
-    name: 'K. Sai Varun Teja',
-    role: 'B.Tech CSE Student',
-    college: 'PVPSIT, Vijayawada',
-    rating: 5,
-    date: 'Verified',
-    badge: 'Verified Student',
-    comment: 'The AP EAPCET allotment and college tools made my counselling research much clearer. I could compare branches and fees without jumping across multiple websites.',
-  },
-  {
-    id: 'ap-review-2',
-    name: 'P. Venkata Ramana Rao',
-    role: 'Parent of Engineering Aspirant',
-    college: 'SRKR Engineering College, Bhimavaram',
-    rating: 5,
-    date: 'Verified',
-    badge: 'Parent',
-    comment: 'Having counselling information, college details and fee context together made the admission process much easier for our family.',
-  },
-  {
-    id: 'ap-review-3',
-    name: 'M. Harshitha Reddy',
-    role: 'B.Tech IT Student',
-    college: 'Shri Vishnu Engineering College',
-    rating: 5,
-    date: 'Verified',
-    badge: 'Verified Student',
-    comment: 'The combination of admission data and practical roadmaps is genuinely useful. It helped me understand both my college options and what to learn next.',
-  },
-  {
-    id: 'ap-review-4',
-    name: 'B. Sravani Devi',
-    role: 'Parent of B.Tech Aspirant',
-    college: 'AU College of Engineering, Visakhapatnam',
-    rating: 5,
-    date: 'Verified',
-    badge: 'Parent',
-    comment: 'Clear, simple and free. We could understand the college information ourselves instead of depending completely on agents or consultancy advice.',
-  },
-];
+// Do not seed fabricated testimonials. Only user-entered feedback stored in this browser is shown.
+const BASE_REVIEWS: ReviewItem[] = [];
 
 const STORAGE_KEY = 'studymacha_community_reviews_v3';
 
@@ -92,7 +51,13 @@ export const StudentTestimonials: React.FC = () => {
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed)) {
-          setUserReviews(parsed);
+          const normalised = parsed.map((review) => ({
+            ...review,
+            badge: review.badge === 'Parent' ? 'Parent' : 'Student',
+            isUserSubmitted: true,
+          }));
+          setUserReviews(normalised);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(normalised));
         }
       }
     } catch {
@@ -136,7 +101,7 @@ export const StudentTestimonials: React.FC = () => {
       college: trimmedCollege,
       rating,
       comment: trimmedComment,
-      badge: userRole === 'Parent' ? 'Parent' : 'Verified Student',
+      badge: userRole === 'Parent' ? 'Parent' : 'Student',
       date: 'Just now',
       isUserSubmitted: true,
     };
@@ -152,7 +117,7 @@ export const StudentTestimonials: React.FC = () => {
       setComment('');
       setRating(5);
       setShowForm(false);
-      setSuccessToast(`Thank you, ${trimmedName}! Your review is now live in the community stream.`);
+      setSuccessToast(`Thank you, ${trimmedName}! Your review is saved in this browser only; it has not been published to other visitors.`);
       setTimeout(() => setSuccessToast(null), 5000);
     } catch {
       setFormError('Could not save review locally. Please try again.');
@@ -173,20 +138,20 @@ export const StudentTestimonials: React.FC = () => {
     <section
       id="student-testimonials-section"
       className="space-y-4 pt-2 pb-2 w-full max-w-full overflow-hidden"
-      aria-label="Student & Parent Testimonials and Feedback"
+      aria-label="Student and Parent Feedback"
     >
       {/* Header Container */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1">
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60">
             <Sparkles className="w-3 h-3 text-amber-600" />
-            <span>AP EAPCET &amp; Engineering Verified Reviews</span>
+            <span>Student &amp; Parent Feedback</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
-            Loved by Students &amp; Families Across Andhra Pradesh
+            Share Feedback on Naa College
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Authentic experiences with PVPSIT, SRKR, Shri Vishnu, Aditya, AUCE, JNTUK, GMRIT &amp; GVPCOE admissions.
+            Feedback entered here is stored in this browser only. Reviews are not independently verified or shared publicly.
           </p>
         </div>
 
@@ -333,7 +298,7 @@ export const StudentTestimonials: React.FC = () => {
               className="px-4 py-1.5 text-xs font-bold rounded-xl bg-sky-600 hover:bg-sky-700 text-white flex items-center gap-1.5 shadow-xs"
             >
               <Send className="w-3 h-3" />
-              <span>Publish Review</span>
+              <span>Save Feedback</span>
             </button>
           </div>
         </form>
@@ -341,8 +306,10 @@ export const StudentTestimonials: React.FC = () => {
 
       {/* Four-review kinetic grid */}
       <div className="mos-k-reviews-grid">
-          {marqueeReviews.map((item, idx) => {
-            const isStudent = item.badge === 'Verified Student';
+          {marqueeReviews.length === 0 ? (
+            <p className="col-span-full rounded-xl border border-dashed border-slate-300 dark:border-slate-700 p-4 text-sm leading-6 text-slate-500 dark:text-slate-400">No feedback has been saved in this browser yet. Use the form above to save your feedback locally; it will not be published to other visitors.</p>
+          ) : marqueeReviews.map((item, idx) => {
+            const isStudent = item.badge === 'Student';
             return (
               <div
                 key={`${item.id}-${idx}`}

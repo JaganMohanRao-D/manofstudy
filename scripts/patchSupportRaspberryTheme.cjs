@@ -21,8 +21,8 @@ page = page.replace(
   /className="([^"]*min-h-screen[^"]*tech-grid-pattern-light[^"]*)"/,
   (_, classes) => classes.includes('support-page-root') ? `className="${classes}"` : `className="support-page-root ${classes}"`
 );
-page = page.replace(/Support Naa College\.((?!🫶)[\s\S]{0,4})/, 'Support Naa College. 🫶');
-page = page.replace(/Keep student tools moving\.((?!💗)[\s\S]{0,4})/, 'Keep student tools moving. 💗');
+page = page.replace(/Support Naa College\.(?!\s*🫶)/, 'Support Naa College. 🫶');
+page = page.replace(/Keep student tools moving\.(?!\s*💗)/, 'Keep student tools moving. 💗');
 page = page.replace('Your support is gratitude — not a subscription.', 'Your support is kindness — not a subscription. 🫶');
 page = page.replace(
   'This support does not unlock paid features or create a recurring subscription.',
