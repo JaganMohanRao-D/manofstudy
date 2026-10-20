@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Search, RotateCcw, ChevronLeft, ChevronRight, SlidersHorizontal, GraduationCap, ExternalLink } from 'lucide-react';
+import { Search, RotateCcw, ChevronLeft, ChevronRight, SlidersHorizontal, ExternalLink, CalendarDays, Building2 } from 'lucide-react';
 import apDataRaw from '../data/ap-autonomous-colleges.json?raw';
 import tgDataRaw from '../data/telangana-autonomous-colleges.json?raw';
 
@@ -98,30 +98,29 @@ export const AutonomousCollegesDirectory: React.FC = () => {
       <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <a href="/" className="flex items-center gap-2 font-bold text-slate-900" aria-label="Naa College home">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-blue-700"><GraduationCap size={21}/></span>
-            <span>Naa College</span>
+            <img src="/Naacollege_fulllogo.webp" alt="Naa College home" width="320" height="180" className="block h-auto max-h-11 w-[min(44vw,220px)] object-contain" decoding="async" />
           </a>
           <a href="/" className="text-sm font-semibold text-blue-700 hover:text-blue-900">Back to home <ExternalLink size={14} className="ml-1 inline"/></a>
         </div>
       </header>
       <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-9">
-        <div className="max-w-3xl">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">College directory</p>
-          <h1 className="mt-2 text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">Autonomous Colleges in Andhra Pradesh &amp; Telangana</h1>
+        <div className="max-w-4xl border-b border-slate-200 pb-7 sm:pb-9">
+          <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-blue-700">Admissions reference · AP & Telangana</p>
+          <h1 className="mt-3 max-w-3xl text-3xl font-bold leading-tight tracking-[-0.04em] text-slate-950 sm:text-4xl">Autonomous Colleges in Andhra Pradesh &amp; Telangana</h1>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">Search colleges listed in the supplied UGC-derived dataset and review their recorded autonomy dates and affiliating universities.</p>
           <p className="mt-2 text-xs text-slate-500">Source: records extracted from a UGC document. This directory does not independently verify current status.</p>
         </div>
 
-        <section aria-label="Dataset totals" className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <section aria-label="Dataset totals" className="mt-5 flex flex-wrap items-end gap-x-8 gap-y-4 border-b border-slate-200 pb-5">
           {[{label:'Andhra Pradesh colleges',value:apCount},{label:'Telangana colleges',value:tgCount},{label:'Total source records',value:sourceRecords.length}].map((item) => (
-            <div key={item.label} className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+            <div key={item.label} className="min-w-[110px]">
               <p className="text-xs font-medium text-slate-500">{item.label}</p>
               <p className="mt-1 text-2xl font-bold tabular-nums text-slate-900">{item.value.toLocaleString('en-IN')}</p>
             </div>
           ))}
         </section>
 
-        <section aria-label="Search and filters" className="mt-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        <section aria-label="Search and filters" className="mt-6 border-y border-slate-200 bg-white/70 py-5 sm:py-6">
           <label htmlFor="autonomous-search" className="mb-2 block text-sm font-semibold text-slate-800">Search directory</label>
           <div className="relative">
             <Search size={18} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"/>
@@ -164,17 +163,17 @@ export const AutonomousCollegesDirectory: React.FC = () => {
           <p className="text-xs text-slate-500">Page {page} of {totalPages}</p>
         </div>
 
-        <section aria-label="College results" className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+        <section aria-label="College results" className="mt-3 grid grid-cols-1 gap-3 lg:grid-cols-2">
           {visible.length ? visible.map((college) => (
-            <article key={college._key} className="border-b border-slate-100 px-4 py-4 last:border-b-0 sm:px-5">
+            <article key={college._key} className="group flex min-w-0 flex-col border border-slate-200 bg-white p-5 transition-colors duration-150 hover:border-blue-300 sm:p-5">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0 flex-1">
-                  <h2 className="break-words text-base font-semibold leading-6 text-slate-900">{clean(college.college_name) || 'College name not recorded'}</h2>
+                  <h2 className="break-words text-[17px] font-bold leading-6 tracking-[-0.02em] text-slate-950">{clean(college.college_name) || 'College name not recorded'}</h2>
                   <p className="mt-1 break-words text-sm leading-5 text-slate-600">{clean(college.affiliated_to) || 'Affiliated university not recorded'}</p>
                 </div>
                 <span className="w-fit shrink-0 rounded-md bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-800">{college._state}</span>
               </div>
-              <dl className="mt-3 grid grid-cols-1 gap-3 border-t border-slate-100 pt-3 text-sm sm:grid-cols-2 lg:grid-cols-3">
+              <dl className="mt-4 grid grid-cols-1 gap-3 border-t border-slate-100 pt-3.5 text-sm sm:grid-cols-2">
                 <div><dt className="text-xs text-slate-500">Autonomy commenced</dt><dd className="mt-1 font-medium text-slate-800">{clean(college.autonomy_from) || 'Not recorded'}</dd></div>
                 <div><dt className="text-xs text-slate-500">Recorded validity period</dt><dd className="mt-1 font-medium text-slate-800">{clean(college.autonomy_valid_upto) || 'Not recorded'}</dd></div>
                 {clean(college.sr_no) && <div><dt className="text-xs text-slate-500">Source serial number</dt><dd className="mt-1 font-medium text-slate-800">{clean(college.sr_no)}</dd></div>}
