@@ -38,6 +38,7 @@ import { ChunkErrorBoundary } from './components/ChunkErrorBoundary';
 import { GuidesHub } from './components/GuidesHub';
 import { SeoLandingPage } from './components/SeoLandingPage';
 import { BlogPage, isBlogPath } from './components/BlogPage';
+import { RoadmapFullPage } from './components/RoadmapFullPage';
 import { useAuth } from './context/AuthContext';
 import { AutonomousCollegesDirectory } from './components/AutonomousCollegesDirectory';
 
@@ -382,6 +383,12 @@ const SEO_LANDING_PATHS = {
   gpaCalculator: '/tools/gpa-calculator/',
   roadmaps: '/engineering-roadmaps/',
 } as const;
+
+const getRoadmapDetailId = (): string | null => {
+  if (typeof window === 'undefined') return null;
+  const match = window.location.pathname.replace(/\/+$/, '').match(/^\/engineering-roadmaps\/([^/]+)$/i);
+  return match ? match[1].toLowerCase() : null;
+};
 
 const getStandaloneLegalPage = (): StandaloneLegalPageType | null => {
   if (typeof window === 'undefined') return null;
@@ -1048,7 +1055,12 @@ export default function App() {
           : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-6'
       }`}>
         
-        {isBlogPath(window.location.pathname) ? (
+        {getRoadmapDetailId() ? (
+          <RoadmapFullPage
+            branchId={getRoadmapDetailId() as string}
+            onNavigateToStore={() => handleSelectWorkspace('essentials')}
+          />
+        ) : isBlogPath(window.location.pathname) ? (
           <BlogPage />
         ) : isUnknownAppPath() ? (
           <section className="mx-auto flex min-h-[55vh] w-full max-w-3xl flex-col items-center justify-center px-4 py-16 text-center" role="status">
