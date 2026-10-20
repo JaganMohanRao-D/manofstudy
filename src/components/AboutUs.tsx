@@ -142,7 +142,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBack, onOpenSupport }) => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
-              <span className="font-bold text-slate-900 dark:text-white text-xs block">1. 100% Free Forever</span>
+              <span className="font-bold text-slate-900 dark:text-white text-xs block">1. Free to Use</span>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                 Education tools should never be gated behind paywalls. Every calculator, PDF tool, branch roadmap, and scholarship listing on NAA COLLEGE is free for every student.
               </p>
