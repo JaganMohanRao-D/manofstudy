@@ -113,7 +113,7 @@ const FAQ_ITEMS: FaqItem[] = [
     category: 'roadmaps',
     categoryLabel: 'Career & Internships',
     icon: Briefcase,
-    question: 'Where can I find verified internships for 1st, 2nd, and 3rd year students?',
+    question: 'Where can I find internship opportunities for 1st, 2nd, and 3rd year students?',
     answer:
       'Check out our Student Internship Radar. We filter real corporate portals (Google Summer of Code, Microsoft Engage, ISRO START, DRDO apprenticeships, AICTE Internships) categorized by academic year suitability, stipend transparency, and official verification badges.',
     actionText: 'Go to Internship Radar',
