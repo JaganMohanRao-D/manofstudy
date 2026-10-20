@@ -63,7 +63,7 @@ for (const url of urls) {
     fail('unexpected non-canonical origin in sitemap: ' + url);
     continue;
   }
-  const route = parsed.pathname.replace(/^\\/+|\\/+$/g, '');
+  const route = parsed.pathname.replace(/^\/+|\/+$/g, '');
   const filePath = route ? path.join(dist, route, 'index.html') : rootPath;
   checkPage(filePath, url, parsed.pathname || '/');
 }
