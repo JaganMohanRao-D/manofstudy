@@ -123,7 +123,7 @@ exports.notifyQuestionOwnerOnAnswer = onDocumentCreated(
     const safeRecipientName = String(questionOwnerName).replace(/</g, "&lt;").replace(/>/g, "&gt;");
     const safeAnswerAuthor = String(replyAuthorName).replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-    const emailSubject = "Someone answered your question on MOS CampusConnect";
+    const emailSubject = "Someone answered your question on Naa College CampusConnect";
     const emailHtml = `<!DOCTYPE html>
 <html>
 <head>
@@ -169,7 +169,7 @@ exports.notifyQuestionOwnerOnAnswer = onDocumentCreated(
         <p style="margin: 2px 0 12px 0; color: #ec4899; font-style: italic;">Built for students. Built by a student.</p>
         <p style="margin: 0; font-size: 11px; color: #94a3b8;">
           You received this email because you opted in for answer notifications on Naa College CampusConnect.<br/>
-          Your email address is 100% private and never visible to other students.
+          Your email address is not included in the public question or answer.
         </p>
       </div>
     </div>
