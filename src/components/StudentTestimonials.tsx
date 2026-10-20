@@ -298,7 +298,7 @@ export const StudentTestimonials: React.FC = () => {
               className="px-4 py-1.5 text-xs font-bold rounded-xl bg-sky-600 hover:bg-sky-700 text-white flex items-center gap-1.5 shadow-xs"
             >
               <Send className="w-3 h-3" />
-              <span>Publish Review</span>
+              <span>Save Feedback</span>
             </button>
           </div>
         </form>
@@ -306,7 +306,9 @@ export const StudentTestimonials: React.FC = () => {
 
       {/* Four-review kinetic grid */}
       <div className="mos-k-reviews-grid">
-          {marqueeReviews.map((item, idx) => {
+          {marqueeReviews.length === 0 ? (
+            <p className="col-span-full rounded-xl border border-dashed border-slate-300 dark:border-slate-700 p-4 text-sm leading-6 text-slate-500 dark:text-slate-400">No feedback has been saved in this browser yet. Use the form above to save your feedback locally; it will not be published to other visitors.</p>
+          ) : marqueeReviews.map((item, idx) => {
             const isStudent = item.badge === 'Student';
             return (
               <div
