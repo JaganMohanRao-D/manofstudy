@@ -279,7 +279,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
       {
         id: 'tool-internships',
-        title: 'Verified Student Internships Radar',
+        title: 'Student Internship Resources',
         subtitle: 'Internship resources from official programmes and established platforms; verify each opening at its source',
         category: 'Core Tools',
         badge: 'Internships',
