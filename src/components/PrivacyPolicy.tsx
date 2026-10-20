@@ -157,10 +157,10 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
 
         <section className="space-y-2">
           <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
-            5. Anonymous Telemetry &amp; Hosting Infrastructure
+            5. Hosting Infrastructure &amp; Technical Logs
           </h2>
           <p>
-            Our web assets are served via secure Edge Content Delivery Networks (including Cloudflare Pages). These edge proxies may process non-personally identifiable server logs (such as IP addresses for DDoS mitigation, browser User-Agent strings, and latency metrics) to ensure rapid asset caching and defense against automated attacks. The hosting provider controls how these logs are used and retained. Consult the provider's current documentation for its applicable retention practices.
+            Our web assets may be served through hosting and edge-network providers, including Cloudflare Pages. These providers may process technical request data such as IP addresses, browser and device information, requested URLs, timestamps, and security signals to deliver the site, troubleshoot errors, and protect against abuse. An IP address should not automatically be treated as anonymous. The provider controls the relevant logs and retention practices; consult its current privacy documentation for details.
           </p>
         </section>
 

@@ -8,11 +8,31 @@ import { Disclaimer } from './Disclaimer';
 export type StandaloneLegalPageType = 'about' | 'contact' | 'privacy' | 'terms' | 'disclaimer';
 
 const PAGE_META: Record<StandaloneLegalPageType, { title: string; description: string; icon: React.ComponentType<{ className?: string }> }> = {
-  about: { title: 'About Naa College', description: 'Learn about the purpose and people behind Naa College.', icon: Info },
-  contact: { title: 'Contact Developer', description: 'Contact the Naa College developer and support desk.', icon: Mail },
-  privacy: { title: 'Privacy Policy', description: 'Review how Naa College describes data, browser storage and privacy.', icon: ShieldCheck },
-  terms: { title: 'Terms of Service', description: 'Review the terms for using Naa College tools and resources.', icon: FileText },
-  disclaimer: { title: 'Legal Safe Harbor & Disclaimer', description: 'Review important information about educational data, predictions and independent status.', icon: Scale },
+  about: {
+    title: 'About Naa College | Student Education Resources',
+    description: 'Learn how Naa College brings student tools, admissions data, study guidance, and scholarship information together, including the limits of each resource.',
+    icon: Info,
+  },
+  contact: {
+    title: 'Contact Naa College',
+    description: 'Contact Naa College about site functionality, data corrections, scholarship listing questions, accessibility, or privacy concerns.',
+    icon: Mail,
+  },
+  privacy: {
+    title: 'Privacy Policy | Naa College',
+    description: 'Read how Naa College describes browser-based tools, local preferences, Firebase features, AI-assisted processing, and third-party advertising.',
+    icon: ShieldCheck,
+  },
+  terms: {
+    title: 'Terms of Service | Naa College',
+    description: 'Review the terms, limitations, source checks, and responsible-use guidance for Naa College educational tools and student resources.',
+    icon: FileText,
+  },
+  disclaimer: {
+    title: 'Disclaimer | Naa College',
+    description: 'Read limitations for historical EAPCET data, college predictions, calculators, scholarship records, learning guides, and third-party resources.',
+    icon: Scale,
+  },
 };
 
 const LEGAL_LINKS: { href: string; label: string }[] = [
@@ -27,16 +47,16 @@ export const LegalPage: React.FC<{ type: StandaloneLegalPageType }> = ({ type })
   const meta = PAGE_META[type];
   const Icon = meta.icon;
   useEffect(() => {
-    document.title = meta.title + ' | Naa College';
+    document.title = meta.title;
     const description = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
     if (description) description.content = meta.description;
 
     const canonicalByType: Record<StandaloneLegalPageType, string> = {
-      about: 'https://naacollege.in/about',
-      contact: 'https://naacollege.in/contact-us',
-      privacy: 'https://naacollege.in/privacy-policy',
-      terms: 'https://naacollege.in/terms-of-service',
-      disclaimer: 'https://naacollege.in/legal-safe-harbor',
+      about: 'https://naacollege.in/about/',
+      contact: 'https://naacollege.in/contact-us/',
+      privacy: 'https://naacollege.in/privacy-policy/',
+      terms: 'https://naacollege.in/terms-of-service/',
+      disclaimer: 'https://naacollege.in/legal-safe-harbor/',
     };
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
     if (!canonical) {

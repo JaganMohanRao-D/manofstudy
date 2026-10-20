@@ -60,7 +60,7 @@ export const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-2xl leading-relaxed">
-            Have a question regarding TG/AP EAPCET allotment data, noticed a university formula discrepancy, want to report a tool bug, or have a suggestion? We respond within 24 to 48 hours.
+            Have a question about TG/AP EAPCET data, noticed a possible formula discrepancy, want to report a tool bug, or have a suggestion? Response times can vary, and submitting a message does not guarantee a particular reply time.
           </p>
         </div>
       </div>
@@ -95,7 +95,7 @@ export const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
             <div className="space-y-3 text-xs text-slate-600 dark:text-slate-400">
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-slate-400 shrink-0" />
-                <span>Typical response time: 24–48 business hours</span>
+                <span>Response time may vary depending on the request</span>
               </div>
               <div className="flex items-center gap-2">
                 <MessageSquare className="w-4 h-4 text-slate-400 shrink-0" />
