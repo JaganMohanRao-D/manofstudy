@@ -160,7 +160,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             5. Anonymous Telemetry &amp; Hosting Infrastructure
           </h2>
           <p>
-            Our web assets are served via secure Edge Content Delivery Networks (including Cloudflare Pages). These edge proxies may process non-personally identifiable server logs (such as IP addresses for DDoS mitigation, browser User-Agent strings, and latency metrics) to ensure rapid asset caching and defense against automated attacks. These logs are governed by the hosting provider's security policies and are purged on standard operational cycles.
+            Our web assets are served via secure Edge Content Delivery Networks (including Cloudflare Pages). These edge proxies may process non-personally identifiable server logs (such as IP addresses for DDoS mitigation, browser User-Agent strings, and latency metrics) to ensure rapid asset caching and defense against automated attacks. The hosting provider controls how these logs are used and retained. Consult the provider's current documentation for its applicable retention practices.
           </p>
         </section>
 
