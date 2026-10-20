@@ -327,7 +327,7 @@ export const TOOLS_CONFIG: ToolMeta[] = [
     name: 'free pdf tools for students',
     shortName: 'free pdf tools for students',
     category: 'document',
-    description: 'Student PDF utilities for merging, splitting, converting, and summarising documents. Most file operations run in your browser; the AI summariser sends extracted text to Google Gemini for processing.',
+    description: 'Student PDF utilities for merging, splitting, and converting documents. Most file operations run in your browser.',
     badge: '100% Free',
   },
   {
