@@ -346,7 +346,6 @@ export type PdfToolId =
   | 'redact-pdf'
   | 'crop-pdf'
   | 'pdf-forms'
-  | 'ai-summarizer'
   | 'translate-markdown';
 
 export interface PdfToolDefinition {
