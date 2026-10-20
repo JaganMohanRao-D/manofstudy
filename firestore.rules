@@ -149,11 +149,14 @@ service cloud.firestore {
         && request.resource.data.reporterUid == request.auth.uid
         && request.resource.data.targetType in ['post', 'reply']
         && request.resource.data.targetId is string
+        && request.resource.data.targetId.size() <= 200
         && request.resource.data.postId is string
+        && request.resource.data.postId.size() <= 200
         && request.resource.data.reason is string
         && request.resource.data.reason.size() <= 200
         && (!('details' in request.resource.data) || request.resource.data.details is string)
-        && request.resource.data.id == reportId;
+        && request.resource.data.id == reportId
+        && reportId == 'rep_' + request.resource.data.targetType + '_' + request.resource.data.postId + '_' + request.resource.data.targetId + '_' + request.auth.uid;
       allow update, delete: if false;
     }
 
