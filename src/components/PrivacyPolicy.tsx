@@ -30,7 +30,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
           Privacy Policy &amp; Data Protection Disclosures
         </h1>
         <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-          Effective Date: Academic Year 2026. Built with absolute respect for student confidentiality, local browser execution, and strict global data privacy standards (GDPR, CCPA, and India DPDP Act 2023).
+          Effective date: October 2026. This policy describes the current intended handling of information across Naa College features. Different tools may process information differently, including through third-party services.
         </p>
       </div>
 
@@ -86,7 +86,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
 
         <section className="space-y-2">
           <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
-            2. Information We Do NOT Collect
+            2. How Features Process Information
           </h2>
           <p>
             When utilizing any feature across our suite—including the Attendance Defender, Global GPA Hub, Internal Exam Cutoff Estimator, 30+ PDF Power Tools, 20KB Exam Photo Resizer, and ATS Resume Analyzer:
@@ -94,7 +94,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
           <ul className="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-400">
             <li><strong>File processing:</strong> Many PDF and image utilities process files in your browser. The AI PDF summariser extracts text from a selected PDF and sends that text to Google Gemini for processing. Do not submit sensitive documents to AI features.</li>
             <li><strong>Sensitive information:</strong> Do not enter Aadhaar numbers, hall-ticket details, passwords, or other sensitive identifiers into tools unless the feature explicitly requires them and you understand how the information is processed.</li>
-            <li><strong>No Academic Transcripts:</strong> Your internal test marks, semester grades, and attendance entries are processed via instantaneous JavaScript arithmetic in your local browser window.</li>
+            <li><strong>Calculator inputs:</strong> Attendance and grade calculations generally run in the browser. AI-assisted features may send information you enter or text extracted from a document to Google Gemini for processing; avoid submitting sensitive details to those features.</li>
           </ul>
         </section>
 
@@ -169,7 +169,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             6. Children’s Online Privacy Protection (COPPA / DPDP Compliance)
           </h2>
           <p>
-            NAA COLLEGE does not knowingly collect personal data from individuals under 13 years of age. All interactive utilities operate without user accounts, sign-ups, or login walls, ensuring full compliance with child safety and digital student privacy directives.
+            NAA COLLEGE is intended as an educational resource. Some collaborative features may use Firebase authentication, and AI-assisted features may send submitted text to Google Gemini. Do not provide personal information unless it is necessary for the feature and you understand how it is processed. This statement is not a certification of legal compliance.
           </p>
         </section>
 
@@ -179,7 +179,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
             <span>7. Data Protection Officer &amp; Inquiries</span>
           </h2>
           <p>
-            For questions, legal notices, or feedback concerning our privacy guarantees, contact our grievance desk directly at:
+            For questions, legal notices, or feedback about this policy, contact the site support address below:
           </p>
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
             <div>
