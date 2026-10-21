@@ -1,13 +1,13 @@
 /* Naa College homepage redesign — based on the hand-drawn wireframe.
    Scoped to the homepage and shared header/footer; application logic is unchanged. */
 .mos-k-homepage-flow {
-  --nc-page: #f5f9ff;
+  --nc-page: #ffffff;
   --nc-surface: #ffffff;
   --nc-text: #12315b;
   --nc-muted: #5d718d;
   --nc-line: #dce7f5;
   --nc-blue: #246bd6;
-  --nc-mint: #eaf7f1;
+  --nc-mint: #ffffff;
   --nc-shadow: 0 12px 34px rgba(25, 64, 115, .07);
   background: var(--nc-page) !important;
   color: var(--nc-text) !important;
@@ -28,7 +28,7 @@ html.dark .mos-k-homepage-flow {
   overflow: clip;
   background: var(--nc-page, #f5f9ff);
   color: var(--nc-text, #12315b);
-  font-family: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: "Lucida Calligraphy", "URW Chancery L", "Apple Chancery", cursive;
 }
 .naa-wireframe-home *,
 .nc-ticker-strip * { box-sizing: border-box; }
@@ -323,7 +323,7 @@ html.light .mos-k-review-card:hover .fill-amber-400 { fill: #c48a12 !important; 
 
 /* Bright, playful student-facing palette requested for the homepage. */
 .mos-k-homepage-flow {
-  --nc-page: #fbfff7;
+  --nc-page: #ffffff;
   --nc-surface: #ffffff;
   --nc-text: #20251f;
   --nc-muted: #515c4d;
@@ -1206,4 +1206,33 @@ html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card
     min-height: 0;
     padding: 19px;
   }
+}
+
+
+/* White hero canvas and calligraphic type requested for Naa College. */
+html.light .mos-k-homepage-flow,
+html.light .naa-wireframe-home,
+html.light .nc-hero {
+  --nc-page: #ffffff !important;
+  --nc-mint: #ffffff !important;
+  background: #ffffff !important;
+  background-image: none !important;
+}
+html body,
+html body button,
+html body input,
+html body textarea,
+html body select,
+html body [role="button"] {
+  font-family: "Lucida Calligraphy", "URW Chancery L", "Apple Chancery", cursive !important;
+}
+html body :is(h1, h2, h3, h4) {
+  color: #202820 !important;
+  font-family: "Lucida Calligraphy", "URW Chancery L", "Apple Chancery", cursive !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+}
+html body :is(h1, h2, h3, h4) :is(span, em, strong) { color: inherit !important; }
+@media (prefers-reduced-motion: no-preference) {
+  .nc-hero { transition: background-color .2s ease; }
 }
