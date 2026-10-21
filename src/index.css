@@ -2273,3 +2273,24 @@ html.light #root { background-color:#f5f9ff; color:#172033; color-scheme:light; 
     transform: none;
   }
 }
+
+
+/* NAA COLLEGE display identity: bold editorial headings + warm orange accent. */
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+html body :is(h1, h2, h3, h4) {
+  color: #ee4b12 !important;
+  font-family: "Archivo Black", "Arial Black", "Plus Jakarta Sans", sans-serif !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.035em;
+  text-wrap: pretty;
+}
+
+html body :is(h1, h2, h3, h4) :is(span, em, strong) {
+  color: inherit !important;
+}
+
+/* Preserve readable body copy and the site's white, mint and golden surfaces. */
+html body :is(p, li, label, small) {
+  --mos-heading-accent: #ee4b12;
+}
