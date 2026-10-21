@@ -196,7 +196,6 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
             </div>
             <div className="nc-video-footnote"><span>ADMISSIONS</span><i aria-hidden="true" /><span>ACADEMICS</span><i aria-hidden="true" /><span>STUDENT LIFE</span></div>
           </div>
-          </div>
         </div>
       </section>
 
