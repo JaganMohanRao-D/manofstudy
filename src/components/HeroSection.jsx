@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import './kineticMOS.css';
-import { ArrowRight, Search, GraduationCap, Landmark, Wrench, Users, Sparkles, BookOpen, Heart, Bell, MapPin } from 'lucide-react';
+import { ArrowRight, Search, GraduationCap, Landmark, Wrench, Users, Sparkles, BookOpen, Heart, Bell, MapPin, Building2 } from 'lucide-react';
+import './homepageReferencePolish.css';
 import { FeaturesHub, WORKSPACES, FLAGSHIP_FEATURES } from './FeaturesHub';
 
 export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
@@ -53,6 +54,11 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         <div className="naa-hero-decoration naa-decoration-one" aria-hidden="true" />
         <div className="naa-hero-decoration naa-decoration-two" aria-hidden="true" />
         <div className="naa-dots" aria-hidden="true" />
+        <div className="naa-bie-hero-heading">
+          <p className="naa-bie-hero-eyebrow"><span aria-hidden="true" /> MANA AP &amp; TELANGANA STUDENTS KOSAM</p>
+          <h1 id="naa-hero-title">College decisions, <span>ippudu inka clear ga.</span></h1>
+          <p className="naa-bie-hero-subtitle">EAPCET allotments choodandi, colleges compare cheyyandi, scholarships vetakandi — mee engineering journey ki useful tools anni oke chota.</p>
+        </div>
         <div className="naa-bie-hero-inner">
           <div className="naa-bie-audience-cards">
             <button type="button" className="naa-bie-audience-card naa-bie-student-card" onClick={() => document.getElementById('regional-section-ap')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
@@ -80,12 +86,12 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         </div>
       </section>
 
-      <div className="naa-updates-strip naa-bie-updates" aria-label="Latest updates"><span><Sparkles size={17} aria-hidden="true"/> Latest Updates</span><div className="naa-updates-viewport"><div className="naa-updates-track"><b>AP &amp; Telangana EAPCET resources</b><i>•</i><b>College Predictors</b><i>•</i><b>Scholarships</b><i>•</i><b>Student Resources</b><i>•</i><b>AP &amp; Telangana EAPCET resources</b><i>•</i><b>College Predictors</b><i>•</i><b>Scholarships</b><i>•</i><b>Student Resources</b><i aria-hidden="true">•</i></div></div></div>
+      <div className="naa-updates-strip naa-bie-updates" aria-label="Latest updates"><span><Sparkles size={17} aria-hidden="true"/> Latest Updates</span><div className="naa-updates-viewport"><div className="naa-updates-track"><b>AP &amp; TG EAPCET updates</b><i>•</i><b>Rank batti college options</b><i>•</i><b>Scholarships vetakandi</b><i>•</i><b>Students kosam free tools</b><i>•</i><b>AP &amp; TG EAPCET updates</b><i>•</i><b>Rank batti college options</b><i>•</i><b>Scholarships vetakandi</b><i>•</i><b>Students kosam free tools</b><i aria-hidden="true">•</i></div></div></div>
 
       <section className="naa-bie-alert-links" aria-label="Latest alerts and quick links">
         <div className="naa-bie-alert-panel">
           <div className="naa-bie-section-title"><h2>Latest <span>Alerts</span></h2><Bell size={23} aria-hidden="true"/></div>
-          <p className="naa-bie-section-intro">Quick access to important admission and student resources.</p>
+          <p className="naa-bie-section-intro">Admissions ki important updates, student resources — easy ga access cheyyandi.</p>
           <button type="button" className="naa-bie-alert-link" onClick={() => go('ap-predictor')}><span><strong>AP EAPCET College Predictor</strong><small>Explore college options by rank and branch</small></span><ArrowRight size={18}/></button>
           <button type="button" className="naa-bie-alert-link" onClick={() => go('tg-predictor')}><span><strong>Telangana EAPCET Resources</strong><small>Explore Telangana college and allotment tools</small></span><ArrowRight size={18}/></button>
         </div>
@@ -93,17 +99,22 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
           <div className="naa-bie-section-title"><h2>Quick <span>Links</span></h2><ArrowRight size={23} aria-hidden="true"/></div>
           <div className="naa-search-wrap naa-bie-quick-search">
             <Search size={18} aria-hidden="true"/>
-            <input value={query} onFocus={() => setSearchOpen(true)} onChange={e => { setQuery(e.target.value); setSearchOpen(true); }} onKeyDown={e => { if (e.key === 'Enter' && matches[0]) openSearchResult(matches[0]); if (e.key === 'Escape') setSearchOpen(false); }} placeholder="Search any tool, college resource, scholarship..." aria-label="Search all Naa College tools and resources" aria-expanded={searchOpen && matches.length > 0} aria-controls="naa-global-search-results" autoComplete="off" />
+            <input value={query} onFocus={() => setSearchOpen(true)} onChange={e => { setQuery(e.target.value); setSearchOpen(true); }} onKeyDown={e => { if (e.key === 'Enter' && matches[0]) openSearchResult(matches[0]); if (e.key === 'Escape') setSearchOpen(false); }} placeholder="Tool, college, scholarship search cheyyandi..." aria-label="Search all Naa College tools and resources" aria-expanded={searchOpen && matches.length > 0} aria-controls="naa-global-search-results" autoComplete="off" />
             <button type="button" onClick={() => matches[0] ? openSearchResult(matches[0]) : (setSearchOpen(true), scrollToTools())}>{matches.length ? 'Open' : 'Search'} <ArrowRight size={16}/></button>
             {searchOpen && query.trim().length >= 2 && <div className="naa-search-suggestions" id="naa-global-search-results" role="listbox">{matches.length ? matches.map(item => <button type="button" role="option" key={item.title + (item.workspace || item.target || '')} onClick={() => openSearchResult(item)}><span><strong>{item.title}</strong><small>{item.detail}</small></span><ArrowRight size={15}/></button>) : <p className="naa-search-empty">No matching resources. Try “AP”, “TG”, “scholarship”, “PDF” or “attendance”.</p>}</div>}
           </div>
           <div className="naa-bie-quick-grid">
             {shortcuts.map(item => { const Icon = item.icon; return <button type="button" key={item.title} className="naa-bie-quick-link" onClick={() => go(item.workspace)}><span className="naa-bie-quick-icon"><Icon size={20}/></span><span>{item.title}</span><ArrowRight size={15}/></button>; })}
           </div>
-          <button type="button" className="naa-bie-all-tools" onClick={scrollToTools}>Browse all student tools <ArrowRight size={16}/></button>
+          <button type="button" className="naa-bie-all-tools" onClick={scrollToTools}>Student tools anni choodandi <ArrowRight size={16}/></button>
         </div>
       </section>
 
+      <section className="naa-autonomous-home-promo" aria-labelledby="naa-autonomous-home-title">
+        <div className="naa-autonomous-promo-mark" aria-hidden="true"><Building2 size={30} strokeWidth={1.6} /><span>AP · TG</span></div>
+        <div className="naa-autonomous-promo-copy"><p>COLLEGE RESEARCH</p><h2 id="naa-autonomous-home-title">Autonomous colleges kosam vetukuthunnara?</h2><span>AP, Telangana colleges search cheyyandi; autonomy details, affiliating university information choodandi.</span></div>
+        <a href="/autonomous-colleges" className="naa-autonomous-promo-link">Directory choodandi <ArrowRight size={17} aria-hidden="true" /></a>
+      </section>
       <div id="features-hub"><FeaturesHub activeWorkspace={activeWorkspace} onSelectWorkspace={onSelectWorkspace} /></div>
       <section className="naa-trust-section"><div><span className="naa-section-kicker">01 / CLEAR INFORMATION</span><h2>Useful data.<br/><span>Clear context.</span></h2><p>Explore AP and Telangana counselling resources with context about the underlying allotment data and its limitations.</p></div><div><span className="naa-section-kicker">02 / STUDENT-FIRST</span><h2>Made for<br/><span>real student needs.</span></h2><p>From scholarships and roadmaps to attendance and PDF utilities, the platform brings everyday student tasks together.</p></div><div><span className="naa-section-kicker">03 / KEEP EXPLORING</span><h2>Your next step<br/><span>starts here.</span></h2><p>Use the resources that fit your goals, verify important deadlines with official sources, and keep learning at your own pace.</p></div></section>
     </main>
