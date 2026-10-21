@@ -32,11 +32,21 @@ function InlineText({ value }: { value: string }) {
 
 function ArticleBody({ content }: { content: string }) {
   const lines = content.trim().split(/\r?\n/);
-  const blocks: { type: string; value: string[] }[] = [];
+  const blocks: { type: string; value: string[]; table?: { headers: string[]; rows: string[][] } }[] = [];
   let i = 0;
   while (i < lines.length) {
     const line = lines[i].trim();
     if (!line) { i++; continue; }
+    if (line.startsWith('|') && i + 1 < lines.length && /^\|\s*:?-{3,}/.test(lines[i + 1].trim())) {
+      const parseTableRow = (raw: string) => raw.trim().replace(/^\|/, '').replace(/\|$/, '')
+        .split(/(?<!\\)\|/).map((cell) => cell.replace(/\\\|/g, '|').trim());
+      const headers = parseTableRow(line);
+      i += 2; // header plus Markdown separator row
+      const rows: string[][] = [];
+      while (i < lines.length && lines[i].trim().startsWith('|')) rows.push(parseTableRow(lines[i++]));
+      blocks.push({ type: 'table', value: [], table: { headers, rows } });
+      continue;
+    }
     if (line.startsWith('## ')) { blocks.push({ type: 'h2', value: [line.slice(3).trim()] }); i++; continue; }
     if (line.startsWith('### ')) { blocks.push({ type: 'h3', value: [line.slice(4).trim()] }); i++; continue; }
     if (line.startsWith('> ')) {
@@ -60,6 +70,7 @@ function ArticleBody({ content }: { content: string }) {
   }
   return <div className="blog-prose space-y-5" onCopy={(event) => event.preventDefault()}>
     {blocks.map((block, index) => {
+      if (block.type === 'table' && block.table) return <div key={index} role="region" aria-label="Scrollable article table" tabIndex={0} className="my-6 overflow-x-auto rounded-xl border border-slate-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-600 dark:border-slate-700"><table className="min-w-full border-collapse text-left text-sm"><thead className="bg-cyan-50 text-slate-900 dark:bg-cyan-950/50 dark:text-white"><tr>{block.table.headers.map((heading, column) => <th key={column} scope="col" className="border-b border-slate-200 px-4 py-3 font-bold dark:border-slate-700"><InlineText value={heading} /></th>)}</tr></thead><tbody>{block.table.rows.map((row, rowIndex) => <tr key={rowIndex} className="odd:bg-white even:bg-slate-50 dark:odd:bg-slate-950 dark:even:bg-slate-900/70">{block.table!.headers.map((_, column) => <td key={column} className="border-b border-slate-100 px-4 py-3 align-top leading-6 text-slate-700 dark:border-slate-800 dark:text-slate-200"><InlineText value={row[column] || ''} /></td>)}</tr>)}</tbody></table></div>;
       if (block.type === 'h2') return <h2 id={headingId(block.value[0])} key={index} className="scroll-mt-24 pt-4 text-xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-2xl">{block.value[0]}</h2>;
       if (block.type === 'h3') return <h3 key={index} className="pt-2 text-lg font-semibold tracking-tight text-slate-900 dark:text-white sm:text-xl">{block.value[0]}</h3>;
       if (block.type === 'quote') return <blockquote key={index} className="rounded-r-xl border-l-4 border-cyan-500 bg-cyan-50 px-4 py-3 text-[15px] leading-7 text-slate-700 dark:bg-cyan-950/30 dark:text-slate-200"><InlineText value={block.value.join(' ')} /></blockquote>;
