@@ -24,10 +24,69 @@ export interface ReviewItem {
   badge: 'Student' | 'Parent';
   date: string;
   isUserSubmitted?: boolean;
+  isSample?: boolean;
 }
 
-// Do not seed fabricated testimonials. Only user-entered feedback stored in this browser is shown.
-const BASE_REVIEWS: ReviewItem[] = [];
+// Clearly labeled sample-copy cards for previewing the testimonial layout.
+// Replace these placeholders with real, permissioned student feedback before presenting
+// them as genuine reviews. Locally submitted visitor feedback remains browser-only.
+const BASE_REVIEWS: ReviewItem[] = [
+  {
+    id: 'sample-review-ap-01',
+    name: 'Sample Student 01',
+    role: 'Engineering Aspirant',
+    college: 'Example College · Andhra Pradesh',
+    rating: 5,
+    comment: 'The AP college tools give me a useful place to compare past allotment patterns and build a shortlist. The filters make the information easier to explore.',
+    badge: 'Student',
+    date: 'SAMPLE COPY',
+    isSample: true,
+  },
+  {
+    id: 'sample-review-tg-02',
+    name: 'Sample Student 02',
+    role: 'Engineering Aspirant',
+    college: 'Example College · Telangana',
+    rating: 4,
+    comment: 'The Telangana allotment search brings college and branch details together. It gives me a clearer starting point for checking my options before counselling.',
+    badge: 'Student',
+    date: 'SAMPLE COPY',
+    isSample: true,
+  },
+  {
+    id: 'sample-review-tools-03',
+    name: 'Sample Student 03',
+    role: 'B.Tech Student',
+    college: 'Example Engineering College',
+    rating: 5,
+    comment: 'Having roadmaps, attendance tools and scholarship resources in one place feels convenient. The quick links help me find the tools I need without extra searching.',
+    badge: 'Student',
+    date: 'SAMPLE COPY',
+    isSample: true,
+  },
+  {
+    id: 'sample-review-parent-04',
+    name: 'Sample Parent 04',
+    role: 'Parent of Engineering Aspirant',
+    college: 'Example Family · Andhra Pradesh',
+    rating: 4,
+    comment: 'The organised scholarship information is a helpful starting point for our family. We would still verify the eligibility rules and deadlines on the official portals.',
+    badge: 'Parent',
+    date: 'SAMPLE COPY',
+    isSample: true,
+  },
+  {
+    id: 'sample-review-predictor-05',
+    name: 'Sample Student 05',
+    role: 'Engineering Aspirant',
+    college: 'Example College · Student Preview',
+    rating: 5,
+    comment: 'The predictor helps me explore a possible college shortlist, and the historical-data notes remind me to check official counselling updates before making a decision.',
+    badge: 'Student',
+    date: 'SAMPLE COPY',
+    isSample: true,
+  },
+];
 
 const STORAGE_KEY = 'studymacha_community_reviews_v3';
 
@@ -151,7 +210,7 @@ export const StudentTestimonials: React.FC = () => {
             Share Feedback on Naa College
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Feedback entered here is stored in this browser only. Reviews are not independently verified or shared publicly.
+            Sample review cards are illustrative layout copy, not verified testimonials. Replace them with permissioned student feedback before publishing as genuine reviews. Feedback submitted with this form is saved in this browser only and is not shared publicly.
           </p>
         </div>
 
@@ -326,12 +385,14 @@ export const StudentTestimonials: React.FC = () => {
 
                     <span
                       className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border shrink-0 ${
-                        isStudent
-                          ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
-                          : 'bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800'
+                        item.isSample
+                          ? 'bg-amber-50 text-amber-800 border-amber-200'
+                          : isStudent
+                            ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
+                            : 'bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800'
                       }`}
                     >
-                      {item.badge}
+                      {item.isSample ? 'Sample copy' : item.badge}
                     </span>
                   </div>
 

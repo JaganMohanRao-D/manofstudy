@@ -516,3 +516,480 @@ html.dark .mos-k-homepage-flow {
     transition: none !important;
   }
 }
+
+
+/* Large animated laptop presentation for the recent-blog collection. */
+.naa-wireframe-home .nc-blogs-section {
+  padding-top: 22px;
+}
+.naa-wireframe-home .nc-blogs-section .nc-section-heading-row {
+  margin-bottom: 28px;
+}
+.naa-wireframe-home #nc-blogs-title {
+  text-transform: uppercase;
+  letter-spacing: -.045em;
+}
+.naa-wireframe-home .nc-laptop-device {
+  width: min(1120px, 100%);
+  margin: 0 auto 8px;
+  position: relative;
+  perspective: 1400px;
+  animation: nc-laptop-float 7s ease-in-out infinite;
+  transform-origin: center center;
+}
+.naa-wireframe-home .nc-laptop-lid {
+  position: relative;
+  padding: 20px 20px 22px;
+  border: 1px solid #3b4036;
+  border-bottom-width: 9px;
+  border-radius: 20px 20px 11px 11px;
+  background: linear-gradient(145deg, #484c42 0%, #242820 75%);
+  box-shadow: 0 24px 42px rgba(45, 68, 35, .18), inset 0 1px 1px rgba(255,255,255,.35);
+  transition: box-shadow .35s ease, transform .35s ease;
+}
+.naa-wireframe-home .nc-laptop-device:hover .nc-laptop-lid {
+  box-shadow: 0 30px 50px rgba(45, 68, 35, .22), inset 0 1px 1px rgba(255,255,255,.35);
+  transform: rotateX(.6deg);
+}
+.naa-wireframe-home .nc-laptop-camera {
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #c7b576;
+  box-shadow: 0 0 0 2px rgba(12,15,10,.6);
+  transform: translateX(-50%);
+}
+.naa-wireframe-home .nc-laptop-screen {
+  overflow: hidden;
+  border: 2px solid #dfe6d8;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.12);
+}
+.naa-wireframe-home .nc-laptop-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 47px;
+  padding: 0 19px;
+  border-bottom: 1px solid #e4eadc;
+  background: #ffffff;
+  color: #20251f;
+  font-size: 10px;
+  letter-spacing: .04em;
+}
+.naa-wireframe-home .nc-laptop-brand-icon {
+  display: grid;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 9px;
+  background: #e4f5d5;
+  color: #2d7143;
+}
+.naa-wireframe-home .nc-laptop-toolbar > strong {
+  color: #252a21;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .1em;
+}
+.naa-wireframe-home .nc-laptop-toolbar-divider {
+  width: 1px;
+  height: 19px;
+  margin: 0 3px;
+  background: #e0e8d8;
+}
+.naa-wireframe-home .nc-laptop-toolbar-subtitle {
+  color: #6b7663;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .13em;
+}
+.naa-wireframe-home .nc-laptop-toolbar-spacer {
+  flex: 1;
+}
+.naa-wireframe-home .nc-laptop-toolbar-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #497149;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+.naa-wireframe-home .nc-laptop-toolbar-status i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #70bd58;
+  box-shadow: 0 0 0 3px #e7f6dd;
+}
+.naa-wireframe-home .nc-laptop-content {
+  padding: 20px 21px 25px;
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(221, 244, 200, .58), transparent 35%),
+    radial-gradient(ellipse at 100% 0%, rgba(255, 228, 139, .28), transparent 36%),
+    #fbfdf8;
+}
+.naa-wireframe-home .nc-laptop-content-heading {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 5px 14px;
+  margin: 0 0 17px;
+  padding: 0 1px 14px;
+  border-bottom: 1px solid #e2ead9;
+}
+.naa-wireframe-home .nc-laptop-overline {
+  grid-column: 1 / -1;
+  color: #5b8a45;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .16em;
+}
+.naa-wireframe-home .nc-laptop-content-heading > strong {
+  color: #282d24;
+  font-family: "Sora", "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(16px, 1.8vw, 22px);
+  line-height: 1.3;
+  letter-spacing: -.035em;
+}
+.naa-wireframe-home .nc-laptop-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border: 1px solid #e5d18b;
+  border-radius: 999px;
+  background: #fff4c9;
+  color: #6b5715;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  white-space: nowrap;
+}
+.naa-wireframe-home .nc-laptop-blog-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 15px !important;
+  align-items: stretch;
+}
+.naa-wireframe-home .nc-laptop-blog-grid .nc-blog-card {
+  display: flex !important;
+  min-width: 0;
+  min-height: 315px;
+  flex-direction: column;
+  border: 1px solid #e2e8da;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 5px 0 rgba(190, 219, 164, .14);
+  animation: nc-laptop-blog-arrive .65s cubic-bezier(.2,.7,.2,1) both;
+}
+.naa-wireframe-home .nc-laptop-blog-grid .nc-blog-card:nth-child(2) {
+  animation-delay: .10s;
+}
+.naa-wireframe-home .nc-laptop-blog-grid .nc-blog-card:nth-child(3) {
+  animation-delay: .20s;
+}
+.naa-wireframe-home .nc-laptop-blog-grid .nc-blog-art {
+  min-height: 126px;
+}
+.naa-wireframe-home .nc-laptop-blog-grid .nc-blog-body {
+  flex: 1;
+  padding: 15px 15px 16px;
+}
+.naa-wireframe-home .nc-laptop-blog-grid .nc-blog-body h3 {
+  font-size: 13px;
+  line-height: 1.5;
+}
+.naa-wireframe-home .nc-laptop-blog-grid .nc-blog-body p {
+  font-size: 10px;
+  line-height: 1.75;
+  -webkit-line-clamp: 3;
+}
+.naa-wireframe-home .nc-laptop-blog-grid .nc-read-article {
+  font-size: 10px;
+}
+.naa-wireframe-home .nc-laptop-base {
+  position: relative;
+  width: 108%;
+  height: 23px;
+  margin: 0 -4% 0;
+  border: 1px solid #c7cbbf;
+  border-top: 1px solid #e1e4da;
+  border-radius: 0 0 42px 42px;
+  background: linear-gradient(180deg, #dfe2d9 0%, #f7f8f3 48%, #c5c9be 100%);
+  box-shadow: 0 10px 16px rgba(49, 66, 40, .10);
+}
+.naa-wireframe-home .nc-laptop-trackpad {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 17%;
+  height: 8px;
+  border: 1px solid #c8ccc1;
+  border-top: 0;
+  border-radius: 0 0 8px 8px;
+  background: rgba(255,255,255,.28);
+  transform: translateX(-50%);
+}
+@keyframes nc-laptop-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+@keyframes nc-laptop-blog-arrive {
+  from { opacity: 0; transform: translateY(11px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 850px) {
+  .naa-wireframe-home .nc-laptop-lid {
+    padding: 16px 15px 18px;
+  }
+  .naa-wireframe-home .nc-laptop-content {
+    padding: 17px 15px 19px;
+  }
+  .naa-wireframe-home .nc-laptop-blog-grid {
+    gap: 10px !important;
+  }
+  .naa-wireframe-home .nc-laptop-blog-grid .nc-blog-card {
+    min-height: 300px;
+  }
+  .naa-wireframe-home .nc-laptop-blog-grid .nc-blog-body {
+    padding: 12px;
+  }
+}
+@media (max-width: 620px) {
+  .naa-wireframe-home .nc-laptop-lid {
+    padding: 13px 9px 12px;
+    border-radius: 13px 13px 8px 8px;
+    border-bottom-width: 6px;
+  }
+  .naa-wireframe-home .nc-laptop-screen {
+    border-width: 1px;
+    border-radius: 5px;
+  }
+  .naa-wireframe-home .nc-laptop-toolbar {
+    min-height: 39px;
+    gap: 7px;
+    padding: 0 9px;
+  }
+  .naa-wireframe-home .nc-laptop-brand-icon {
+    flex-basis: 24px;
+    width: 24px;
+    height: 24px;
+  }
+  .naa-wireframe-home .nc-laptop-toolbar > strong {
+    font-size: 8px;
+  }
+  .naa-wireframe-home .nc-laptop-toolbar-subtitle,
+  .naa-wireframe-home .nc-laptop-toolbar-divider {
+    display: none;
+  }
+  .naa-wireframe-home .nc-laptop-toolbar-status {
+    font-size: 7px;
+  }
+  .naa-wireframe-home .nc-laptop-content {
+    padding: 13px 9px 16px;
+  }
+  .naa-wireframe-home .nc-laptop-content-heading {
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    gap: 4px 6px;
+  }
+  .naa-wireframe-home .nc-laptop-content-heading > strong {
+    font-size: 14px;
+  }
+  .naa-wireframe-home .nc-laptop-count {
+    padding: 5px 7px;
+    font-size: 7px;
+  }
+  .naa-wireframe-home .nc-laptop-blog-grid {
+    grid-template-columns: 1fr !important;
+    gap: 9px !important;
+  }
+  .naa-wireframe-home .nc-laptop-blog-grid .nc-blog-card {
+    display: grid !important;
+    grid-template-columns: 90px minmax(0, 1fr);
+    min-height: 0;
+    border-radius: 8px;
+  }
+  .naa-wireframe-home .nc-laptop-blog-grid .nc-blog-art-link {
+    display: block;
+    min-width: 0;
+  }
+  .naa-wireframe-home .nc-laptop-blog-grid .nc-blog-art {
+    height: 100%;
+    min-height: 155px;
+  }
+  .naa-wireframe-home .nc-laptop-blog-grid .nc-blog-body {
+    padding: 10px 9px;
+  }
+  .naa-wireframe-home .nc-laptop-blog-grid .nc-blog-body h3 {
+    margin: 7px 0;
+    font-size: 11px;
+  }
+  .naa-wireframe-home .nc-laptop-blog-grid .nc-blog-body p {
+    margin-bottom: 7px;
+    font-size: 9px;
+    line-height: 1.55;
+    -webkit-line-clamp: 3;
+  }
+  .naa-wireframe-home .nc-laptop-blog-grid .nc-blog-meta {
+    font-size: 7px;
+  }
+  .naa-wireframe-home .nc-laptop-blog-grid .nc-read-article {
+    font-size: 9px;
+  }
+  .naa-wireframe-home .nc-laptop-base {
+    height: 15px;
+    width: 106%;
+    margin-inline: -3%;
+    border-radius: 0 0 24px 24px;
+  }
+  .naa-wireframe-home .nc-laptop-trackpad {
+    height: 5px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .naa-wireframe-home .nc-laptop-device,
+  .naa-wireframe-home .nc-laptop-blog-grid .nc-blog-card {
+    animation: none !important;
+  }
+  .naa-wireframe-home .nc-laptop-device:hover .nc-laptop-lid {
+    transform: none !important;
+  }
+}
+
+
+/* Five-card student feedback preview, styled to match the bright homepage. */
+html.light .mos-k-homepage-flow #student-testimonials-section {
+  padding: 34px 0 clamp(46px, 6vw, 72px);
+  color: #252a21;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section > div:first-of-type {
+  align-items: end;
+  margin-bottom: 18px;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section h2 {
+  color: #252a21 !important;
+  font-family: "Sora", "Plus Jakarta Sans", sans-serif !important;
+  letter-spacing: -.04em;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section p {
+  color: #5a6653 !important;
+  line-height: 1.75;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card {
+  display: flex;
+  min-width: 0;
+  min-height: 244px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 21px;
+  border: 1px solid #dcebcf !important;
+  border-radius: 17px;
+  background: linear-gradient(150deg, #ffffff, #fff6d5) !important;
+  color: #262b22 !important;
+  box-shadow: 0 7px 0 rgba(191, 222, 157, .20);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:nth-child(2),
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:nth-child(5) {
+  background: linear-gradient(150deg, #ffffff, #eaf9dc) !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:nth-child(3) {
+  background: linear-gradient(150deg, #ffffff, #f5ebff) !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:nth-child(4) {
+  background: linear-gradient(150deg, #ffffff, #ffebdd) !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card::before {
+  content: none !important;
+  display: none !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 11px 0 rgba(191, 222, 157, .18);
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .text-slate-900,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .dark\:text-slate-100 {
+  color: #252a21 !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .text-slate-600,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .dark\:text-slate-300 {
+  color: #424b3d !important;
+  line-height: 1.8;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .text-sky-700,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .dark\:text-sky-400 {
+  color: #47793a !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .text-slate-400 {
+  color: #6c7565 !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .text-slate-900,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .dark\:text-slate-100,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .text-slate-600,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .dark\:text-slate-300,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .text-sky-700,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .dark\:text-sky-400,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .text-slate-400 {
+  color: #252a21 !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover svg {
+  color: #b1840d !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section button.bg-slate-900 {
+  background: #2e7544 !important;
+  color: #ffffff !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section button.bg-slate-900:hover {
+  background: #245e36 !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section button.bg-sky-600 {
+  background: #2e7544 !important;
+  color: #ffffff !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section button.bg-sky-600:hover {
+  background: #245e36 !important;
+}
+@media (max-width: 950px) {
+  html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-reviews-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 620px) {
+  html.light .mos-k-homepage-flow #student-testimonials-section {
+    padding-top: 25px;
+  }
+  html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-reviews-grid {
+    grid-template-columns: 1fr;
+    gap: 11px;
+  }
+  html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card {
+    min-height: 0;
+    padding: 17px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card {
+    transition: none !important;
+  }
+  html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover {
+    transform: none !important;
+  }
+}
