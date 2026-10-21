@@ -1275,3 +1275,10 @@ html.dark .naa-wireframe-home .nc-hero h1 span {
   color: #C29316 !important;
   font-family: "Lucida Calligraphy", "URW Chancery L", "Apple Chancery", cursive !important;
 }
+
+
+/* Always keep the hero canvas pure white to blend into the video artwork. */
+.naa-wireframe-home .nc-hero {
+  background: #ffffff !important;
+  background-image: none !important;
+}
