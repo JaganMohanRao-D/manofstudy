@@ -1,0 +1,148 @@
+'use strict';
+
+const fs = require('node:fs');
+const path = require('node:path');
+
+const root = process.cwd();
+const outputPath = path.join(root, 'src/data/editorialBlogArticles.generated.json');
+const contentDate = '2026-10-21';
+const alternateCsePath = 'src/data/01_cse_core_vs_specializations_blog.json';
+const specs = [
+  { path: 'src/data/blog_01_cse_core_vs_specializations.json', category: 'Branch & Career Guidance', tags: ['CSE Core','AI/ML','Data Science','Cyber Security','engineering branches','career guidance'], toolLinks: [{label:'AP EAPCET College Predictor',href:'/ap-eapcet/college-predictor/'},{label:'TG EAPCET College Predictor',href:'/tg-eapcet/college-predictor/'}] },
+  { path: 'src/data/blog_03_eapcet_web_options_mistakes.json', category: 'EAPCET Counselling', tags: ['EAPCET','web options','counselling','AP EAPCET','TG EAPCET','college choice'], toolLinks: [{label:'AP college-wise allotment explorer',href:'/ap-eapcet/college-wise-allotments/'},{label:'TG name-wise allotment explorer',href:'/tg-eapcet/name-wise-allotments/'}] },
+  { path: 'src/data/blog_04_top_engineering_colleges_ap_tg.json', category: 'College Selection', tags: ['engineering colleges','Andhra Pradesh colleges','Telangana colleges','college comparison','placements','fees'], toolLinks: [{label:'AP EAPCET College Predictor',href:'/ap-eapcet/college-predictor/'},{label:'TG EAPCET College Predictor',href:'/tg-eapcet/college-predictor/'}] },
+  { path: 'src/data/blog_05_score_9_sgpa_first_year.json', category: 'Study Skills', tags: ['SGPA','B.Tech first year','study plan','exam preparation','active recall'], toolLinks: [{label:'Open GPA Calculator',href:'/tools/gpa-calculator/'}] },
+  { path: 'src/data/blog_06_c_programming_dsa_roadmap.json', category: 'Programming Roadmaps', tags: ['C programming','data structures','DSA','programming roadmap','beginners'], toolLinks: [{label:'Explore Engineering Roadmaps',href:'/engineering-roadmaps/'}] },
+  { path: 'src/data/blog_08_autonomous_vs_affiliated.json', category: 'College Selection', tags: ['autonomous colleges','JNTU','Andhra University','college selection','curriculum','exams'], toolLinks: [{label:'Explore autonomous colleges',href:'/autonomous-colleges/'}] },
+  { path: 'src/data/blog_10_first_tech_internship_second_year.json', category: 'Internships & Careers', tags: ['internships','second year','resume','GitHub','projects','career'], toolLinks: [{label:'Explore Engineering Roadmaps',href:'/engineering-roadmaps/'}] }
+];
+
+function readJson(relativePath) {
+  const filePath = path.join(root, relativePath);
+  if (!fs.existsSync(filePath)) throw new Error('[Blog integration] Missing source file: ' + relativePath);
+  try { return JSON.parse(fs.readFileSync(filePath, 'utf8')); }
+  catch (error) { throw new Error('[Blog integration] Invalid JSON in ' + relativePath + ': ' + error.message); }
+}
+function asArray(value) { return value == null ? [] : Array.isArray(value) ? value : [value]; }
+function str(value) {
+  if (value == null) return '';
+  if (typeof value === 'string' || typeof value === 'number') return String(value).trim();
+  if (Array.isArray(value)) return value.map(str).filter(Boolean).join('\n');
+  if (typeof value === 'object') {
+    for (const key of ['text_te','text','content_te','content','description_te','description','meaning_te','answer_te','a_te','label','name','term','question_te','q_te']) {
+      if (typeof value[key] === 'string' && value[key].trim()) return value[key].trim();
+    }
+  }
+  return '';
+}
+function paragraphs(value) { return asArray(value).map(str).filter(Boolean).join('\n\n'); }
+function tableMarkdown(table) {
+  if (!table || !Array.isArray(table.headers) || !Array.isArray(table.rows)) return '';
+  const cell = value => str(value).replace(/\s+/g, ' ').replace(/\|/g, '\\|').trim();
+  const headers = table.headers.map(cell);
+  return ['| ' + headers.join(' | ') + ' |','| ' + headers.map(() => '---').join(' | ') + ' |', ...table.rows.map(row => '| ' + headers.map((_, index) => cell(row?.[index] ?? '')).join(' | ') + ' |')].join('\n');
+}
+function bullets(values) {
+  return asArray(values).map(value => {
+    if (typeof value === 'string' || typeof value === 'number') return '- ' + str(value);
+    if (value && typeof value === 'object') {
+      const label = str(value.myth_te || value.term_te || value.title_te || value.heading_te || value.label || value.name || value.term);
+      const detail = str(value.reality_te || value.meaning_te || value.description_te || value.explanation_te || value.body_te || value.text_te || value.answer_te);
+      if (label || detail) return '- ' + (label ? '**' + label + '**' : '') + (label && detail ? ' — ' : '') + detail;
+    }
+    return '';
+  }).filter(Boolean).join('\n');
+}
+function numbered(values) {
+  return asArray(values).map((item, index) => {
+    const value = item && typeof item === 'object' ? str(item.question_te || item.q_te || item.text_te || item.label || item.title_te || item.question || item.q) : str(item);
+    return value ? (index + 1) + '. ' + value : '';
+  }).filter(Boolean).join('\n');
+}
+function faqs(values) {
+  return asArray(values).map(item => {
+    const question = str(item?.q_te || item?.question_te || item?.question || item?.q);
+    const answer = str(item?.a_te || item?.answer_te || item?.answer || item?.a);
+    return question && answer ? '### ' + question + '\n\n' + answer : '';
+  }).filter(Boolean).join('\n\n');
+}
+function sectionMarkdown(section, level = 2) {
+  const parts = [];
+  const heading = str(section.heading_te || section.title_te || section.heading || section.title);
+  if (heading) parts.push('#'.repeat(Math.min(4, Math.max(2, level))) + ' ' + heading);
+  const body = paragraphs(section.paragraphs_te); if (body) parts.push(body);
+  const after = paragraphs(section.paragraphs_after_te); if (after) parts.push(after);
+  const points = bullets(section.points_te); if (points) parts.push(points);
+  const table = tableMarkdown(section.table); if (table) parts.push(table);
+  const nums = numbered(section.numbered_questions_te); if (nums) parts.push(nums);
+  const checklist = bullets(section.checklist_te); if (checklist) parts.push(checklist);
+  const myths = bullets(section.myths); if (myths) parts.push(myths);
+  const warning = str(section.warning_te); if (warning) parts.push('> **Note:** ' + warning.replace(/\n/g, ' '));
+  const tip = str(section.tip_te); if (tip) parts.push('> **Tip:** ' + tip.replace(/\n/g, ' '));
+  const example = str(section.example_te); if (example) parts.push('> **Example:** ' + example.replace(/\n/g, ' '));
+  for (const nested of asArray(section.subsections)) {
+    const value = sectionMarkdown(nested, Math.min(level + 1, 4));
+    if (value) parts.push(value);
+  }
+  const faq = faqs(section.faq); if (faq) parts.push(faq);
+  return parts.filter(Boolean).join('\n\n');
+}
+function normalize(raw, spec) {
+  const parts = [];
+  const intro = paragraphs(raw.intro_te); if (intro) parts.push(intro);
+  const quick = str(raw.quick_answer_te); if (quick) parts.push('## Quick Answer\n\n' + quick);
+  const glossary = asArray(raw.glossary).map(item => {
+    const term = str(item.term_te || item.term || item.name);
+    const meaning = str(item.meaning_te || item.definition_te || item.definition);
+    return term && meaning ? '- **' + term + '** — ' + meaning : '';
+  }).filter(Boolean).join('\n');
+  if (glossary) parts.push('## Key Terms\n\n' + glossary);
+  for (const section of asArray(raw.sections)) {
+    const rendered = sectionMarkdown(section, 2);
+    if (rendered) parts.push(rendered);
+  }
+  const checklist = bullets(raw.final_checklist_te); if (checklist) parts.push('## Final Checklist\n\n' + checklist);
+  const conclusion = paragraphs(raw.conclusion_te); if (conclusion) parts.push('## Conclusion\n\n' + conclusion);
+  const faq = faqs(raw.faq); if (faq) parts.push('## Frequently Asked Questions\n\n' + faq);
+  const content = parts.join('\n\n').replace(/\n{3,}/g, '\n\n').trim();
+  const slug = String(raw.seo?.slug || '').replace(/^\/+|\/+$/g, '');
+  const tags = [...new Set([...spec.tags, raw.seo?.primary_keyword, ...asArray(raw.seo?.secondary_keywords)].map(str).filter(Boolean))];
+  const references = asArray(raw.resources).map(resource => ({
+    label: str(resource.name || resource.label), url: str(resource.url)
+  })).filter(item => item.label && /^https?:\/\//i.test(item.url));
+  if (spec.path === 'src/data/blog_01_cse_core_vs_specializations.json') references.push(
+    {label:'AP EAPCET official portal',url:'https://cets.apsche.ap.gov.in/EAPCET/Eapcet/EAPCET_HomePage'},
+    {label:'TG EAPCET official portal',url:'https://tgeapcet.nic.in/default.aspx'}
+  );
+  const sources = [...new Map(references.map(item => [item.url, item])).values()];
+  return {
+    slug, title: str(raw.title_te || raw.title_en || raw.seo?.title),
+    category: spec.category, tags, status: 'published',
+    publishedAt: contentDate, updatedAt: contentDate, featured: false,
+    summary: str(raw.seo?.meta_description_te || raw.subtitle_te || asArray(raw.intro_te)[0] || raw.seo?.title),
+    content, sources, toolLinks: spec.toolLinks
+  };
+}
+
+const existing = readJson('src/data/blogArticles.json');
+if (!Array.isArray(existing)) throw new Error('[Blog integration] Existing blog data must be an array.');
+const alternateCse = readJson(alternateCsePath);
+if (!Array.isArray(alternateCse.sections) || !alternateCse.seo) throw new Error('[Blog integration] Alternate CSE JSON failed its structure check.');
+const slugs = new Set(existing.map(article => article.slug));
+const articles = specs.map(spec => {
+  const raw = readJson(spec.path);
+  if (!raw.seo?.slug || !Array.isArray(raw.sections) || raw.sections.length < 4) throw new Error('[Blog integration] Missing SEO slug/sections in ' + spec.path);
+  const article = normalize(raw, spec);
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(article.slug)) throw new Error('[Blog integration] Invalid slug: ' + article.slug);
+  if (slugs.has(article.slug)) throw new Error('[Blog integration] Duplicate slug: ' + article.slug);
+  slugs.add(article.slug);
+  const wordCount = article.content.split(/\s+/).filter(Boolean).length;
+  const headingCount = (article.content.match(/^##\s+.+$/gm) || []).length;
+  if (!article.title || !article.summary || article.content.length < 1200 || wordCount < 250 || headingCount < 4) throw new Error('[Blog integration] Incomplete article: ' + article.slug);
+  if (!article.sources.length || article.sources.some(source => !/^https?:\/\//i.test(source.url))) throw new Error('[Blog integration] Missing/invalid references: ' + article.slug);
+  if (article.toolLinks.some(link => !link.href || !link.href.startsWith('/'))) throw new Error('[Blog integration] Non-local tool link: ' + article.slug);
+  return article;
+});
+fs.writeFileSync(outputPath, JSON.stringify(articles, null, 2) + '\n', 'utf8');
+console.log('[Blog integration] Generated ' + articles.length + ' articles from structured src/data JSON.');
+console.log('[Blog integration] Excluded alternate CSE JSON from publication to prevent duplicate-topic content and a slugless route.');
