@@ -1152,7 +1152,7 @@ html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card
 html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:nth-child(5) {
   border-top: 4px solid #95ca71 !important;
 }
-html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card > .space-y-1\\.5 {
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card > .space-y-1\.5 {
   gap: 8px;
 }
 html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .font-mono {
