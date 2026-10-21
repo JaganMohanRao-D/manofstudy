@@ -143,7 +143,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
                 aria-label="Explore Andhra Pradesh student resources"
               >
                 <span className="nc-state-art nc-state-art-ap" aria-hidden="true">
-                  <img src="/andhra-pradesh-outline.svg" alt="" width="58" height="58" loading="eager" />
+                  <img src="/andhra-outline.webp" alt="" width="58" height="58" loading="eager" />
                 </span>
                 <span className="nc-state-copy">
                   <span className="nc-state-label">FOR AP STUDENTS</span>
@@ -160,7 +160,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
                 aria-label="Explore Telangana student resources"
               >
                 <span className="nc-state-art nc-state-art-tg" aria-hidden="true">
-                  <img src="/telangana-outline.svg" alt="" width="58" height="58" loading="eager" />
+                  <img src="/telangana-outline.webp" alt="" width="58" height="58" loading="eager" />
                 </span>
                 <span className="nc-state-copy">
                   <span className="nc-state-label">FOR TG STUDENTS</span>
