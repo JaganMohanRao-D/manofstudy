@@ -344,6 +344,8 @@ html.light .mos-k-review-card:hover .fill-amber-400 { fill: #c48a12 !important; 
 @media (prefers-reduced-motion: reduce) {
   .nc-ticker-track { animation: none !important; transform: none !important; will-change: auto; }
   .nc-ticker-group[aria-hidden="true"] { display: none !important; }
+  .nc-ticker-viewport { overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: thin; }
+  .nc-ticker-group { padding-right: 18px; }
   .nc-state-card, .nc-shortcut, .nc-blog-card, .nc-search-submit, .nc-ticker-item svg { transition: none !important; }
   .nc-state-card:hover, .nc-shortcut:hover, .nc-blog-card:hover, .nc-search-submit:hover { transform: none !important; }
 }
