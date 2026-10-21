@@ -235,6 +235,18 @@ const renderStaticArticle = (article) => {
   while (i < lines.length) {
     const line = lines[i].trim();
     if (!line) { i++; continue; }
+    if (line.startsWith('|') && i + 1 < lines.length && /^\|\s*:?-{3,}/.test(lines[i + 1].trim())) {
+      const parseTableRow = (raw) => raw.trim().replace(/^\|/, '').replace(/\|$/, '')
+        .split(/(?<!\\)\|/).map((cell) => cell.replace(/\\\|/g, '|').trim());
+      const headers = parseTableRow(line);
+      i += 2;
+      const rows = [];
+      while (i < lines.length && lines[i].trim().startsWith('|')) rows.push(parseTableRow(lines[i++]));
+      const headerHtml = '<thead class="bg-cyan-50"><tr>' + headers.map((cell) => '<th scope="col" class="border px-3 py-2 text-left font-semibold">' + inlineStatic(cell) + '</th>').join('') + '</tr></thead>';
+      const bodyHtml = '<tbody>' + rows.map((row) => '<tr>' + headers.map((_, index) => '<td class="border px-3 py-2 align-top">' + inlineStatic(row[index] || '') + '</td>').join('') + '</tr>').join('') + '</tbody>';
+      blocks.push('<div class="my-6 overflow-x-auto"><table class="min-w-full border-collapse text-sm">' + headerHtml + bodyHtml + '</table></div>');
+      continue;
+    }
     if (line.startsWith('## ')) { blocks.push('<h2 class="mt-8 mb-3 text-2xl font-semibold tracking-tight">' + inlineStatic(line.slice(3).trim()) + '</h2>'); i++; continue; }
     if (line.startsWith('### ')) { blocks.push('<h3 class="mt-6 mb-2 text-xl font-semibold">' + inlineStatic(line.slice(4).trim()) + '</h3>'); i++; continue; }
     if (line.startsWith('> ')) {
