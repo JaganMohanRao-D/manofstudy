@@ -84,6 +84,8 @@ html.dark .mos-k-homepage-flow {
 .nc-ticker-item svg { color: #75560a; transition: transform .16s ease; }
 .nc-ticker-item:hover { color: #0c4c88; text-decoration: underline; text-underline-offset: 3px; }
 .nc-ticker-item:hover svg { transform: translate(2px, -2px); }
+.nc-ticker-viewport:hover .nc-ticker-track,
+.nc-ticker-viewport:focus-within .nc-ticker-track { animation-play-state: paused; }
 @keyframes nc-ticker-scroll { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
 .nc-quick-section { display: grid; grid-template-columns: minmax(185px, .38fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); padding-top: clamp(46px, 6vw, 76px); padding-bottom: clamp(42px, 5vw, 62px); scroll-margin-top: 90px; }
 .nc-section-kicker { display: inline-block; color: var(--nc-blue, #246bd6); font-size: 9px; font-weight: 900; letter-spacing: .13em; line-height: 1.5; }
