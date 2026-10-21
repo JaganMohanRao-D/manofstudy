@@ -395,3 +395,124 @@ html.dark .mos-k-homepage-flow {
 @media (prefers-reduced-motion: reduce) {
   .nc-feedback-card:hover { transform: none; }
 }
+
+
+/* Video refinement: keep the original source, show the complete frame on white,
+   and avoid native controls obscuring the campus artwork on pointer hover. */
+.naa-wireframe-home .nc-video-frame {
+  aspect-ratio: 16 / 9 !important;
+  width: 100%;
+  height: auto;
+  padding: 0;
+  border: 1px solid #e7eee1 !important;
+  border-radius: 18px !important;
+  background: #ffffff !important;
+  box-shadow: 0 14px 34px rgba(45, 74, 36, .09) !important;
+}
+.naa-wireframe-home .nc-campus-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  border: 0;
+  border-radius: inherit;
+  background: #ffffff !important;
+}
+.naa-wireframe-home .nc-video-column {
+  min-width: 0;
+}
+.naa-wireframe-home .nc-video-caption {
+  display: none !important;
+}
+
+/* These are transparent student-benefit cards, not fabricated testimonials. */
+.naa-wireframe-home .nc-feedback-section {
+  padding-top: 22px;
+  padding-bottom: clamp(48px, 6vw, 76px);
+}
+.naa-wireframe-home .nc-feedback-card {
+  display: flex;
+  min-height: 252px;
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: 20px;
+  border-color: #dcebcf;
+  padding: 24px;
+  box-shadow: 0 9px 0 rgba(191, 222, 157, .20);
+}
+.naa-wireframe-home .nc-feedback-card-one {
+  background: linear-gradient(145deg, #fffefa 0%, #fff5c9 100%);
+}
+.naa-wireframe-home .nc-feedback-card-two {
+  background: linear-gradient(145deg, #ffffff 0%, #eaf9dc 100%);
+}
+.naa-wireframe-home .nc-feedback-card-three {
+  background: linear-gradient(145deg, #ffffff 0%, #f4eaff 100%);
+}
+.naa-wireframe-home .nc-benefit-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  margin-bottom: 16px;
+  border: 1px solid #f1d36d;
+  border-radius: 15px;
+  background: #ffdf72;
+  color: #20251f;
+}
+.naa-wireframe-home .nc-feedback-card-two .nc-benefit-icon {
+  border-color: #b9df99;
+  background: #d8f1bc;
+}
+.naa-wireframe-home .nc-feedback-card-three .nc-benefit-icon {
+  border-color: #d9c6fa;
+  background: #eadcff;
+}
+.naa-wireframe-home .nc-feedback-card h3 {
+  margin: 0 0 10px;
+  color: #20251f;
+  font-family: "Sora", "Plus Jakarta Sans", sans-serif;
+  font-size: 18px;
+  line-height: 1.35;
+  letter-spacing: -.025em;
+}
+.naa-wireframe-home .nc-feedback-card > p {
+  min-height: 0;
+  margin: 0 0 18px;
+  color: #394335;
+  font-size: 12px;
+  line-height: 1.85;
+}
+.naa-wireframe-home .nc-benefit-tag {
+  display: inline-flex;
+  margin-top: auto;
+  padding: 6px 9px;
+  border: 1px solid #d6e7c6;
+  border-radius: 999px;
+  background: rgba(255,255,255,.7);
+  color: #35492d;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .09em;
+}
+@media (max-width: 760px) {
+  .naa-wireframe-home .nc-video-frame {
+    aspect-ratio: 16 / 9 !important;
+  }
+  .naa-wireframe-home .nc-campus-video {
+    aspect-ratio: auto !important;
+  }
+  .naa-wireframe-home .nc-feedback-grid {
+    grid-template-columns: 1fr;
+  }
+  .naa-wireframe-home .nc-feedback-card {
+    min-height: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .naa-wireframe-home .nc-feedback-card {
+    transition: none !important;
+  }
+}
