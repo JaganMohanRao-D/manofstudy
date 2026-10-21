@@ -28,7 +28,7 @@ html.dark .mos-k-homepage-flow {
   overflow: clip;
   background: var(--nc-page, #f5f9ff);
   color: var(--nc-text, #12315b);
-  font-family: "Lucida Calligraphy", "URW Chancery L", "Apple Chancery", cursive;
+  font-family: "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif;
 }
 .naa-wireframe-home *,
 .nc-ticker-strip * { box-sizing: border-box; }
