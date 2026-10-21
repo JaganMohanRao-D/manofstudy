@@ -139,7 +139,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
               <button
                 type="button"
                 className="nc-state-card nc-state-ap"
-                onClick={() => document.getElementById('regional-section-ap')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                onClick={() => go('ap-allotments')}
                 aria-label="Explore Andhra Pradesh student resources"
               >
                 <span className="nc-state-art nc-state-art-ap" aria-hidden="true">
@@ -157,7 +157,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
               <button
                 type="button"
                 className="nc-state-card nc-state-tg"
-                onClick={() => document.getElementById('regional-section-tg')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                onClick={() => go('tg-allotments')}
                 aria-label="Explore Telangana student resources"
               >
                 <span className="nc-state-art nc-state-art-tg" aria-hidden="true">
