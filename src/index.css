@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -2276,7 +2277,6 @@ html.light #root { background-color:#f5f9ff; color:#172033; color-scheme:light; 
 
 
 /* NAA COLLEGE display identity: bold editorial headings + warm orange accent. */
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 html body :is(h1, h2, h3, h4) {
   color: #ee4b12 !important;
