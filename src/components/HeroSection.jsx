@@ -139,7 +139,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
               <button
                 type="button"
                 className="nc-state-card nc-state-ap"
-                onClick={() => document.getElementById('regional-section-ap')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                onClick={() => go('ap-allotments')}
                 aria-label="Explore Andhra Pradesh student resources"
               >
                 <span className="nc-state-art nc-state-art-ap" aria-hidden="true">
@@ -157,7 +157,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
               <button
                 type="button"
                 className="nc-state-card nc-state-tg"
-                onClick={() => document.getElementById('regional-section-tg')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                onClick={() => go('tg-allotments')}
                 aria-label="Explore Telangana student resources"
               >
                 <span className="nc-state-art nc-state-art-tg" aria-hidden="true">
@@ -183,18 +183,16 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
                 muted
                 loop
                 playsInline
-                controls
                 preload="metadata"
+                disablePictureInPicture
+                disableRemotePlayback
+                controlsList="nodownload noplaybackrate noremoteplayback"
                 poster="/Vibrant%20Campus%20Life%20Illustration.webp"
                 aria-label="Naa College introduction video"
               >
                 <source src="/HERO_VEDIO.webm" type="video/webm" />
                 Your browser does not support the Naa College introduction video.
               </video>
-              <div className="nc-video-caption">
-                <span className="nc-video-live-dot" aria-hidden="true" />
-                <span><strong>Naa College</strong><small>Tools for your next step</small></span>
-              </div>
             </div>
             <div className="nc-video-footnote"><span>ADMISSIONS</span><i aria-hidden="true" /><span>ACADEMICS</span><i aria-hidden="true" /><span>STUDENT LIFE</span></div>
           </div>
@@ -345,6 +343,36 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
               </div>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="nc-feedback-section nc-page-width" aria-labelledby="nc-feedback-title">
+        <div className="nc-section-heading-row">
+          <div>
+            <span className="nc-section-kicker">STUDENT-FIRST FEATURES</span>
+            <h2 id="nc-feedback-title">Made for your <span>next step.</span></h2>
+            <p>Useful resources, thoughtfully brought together for AP and Telangana students.</p>
+          </div>
+        </div>
+        <div className="nc-feedback-grid">
+          <article className="nc-feedback-card nc-feedback-card-one">
+            <div className="nc-benefit-icon" aria-hidden="true"><Landmark size={25} /></div>
+            <h3>Compare college options</h3>
+            <p>Explore available AP and Telangana allotment data, predictors and college information from one starting point.</p>
+            <span className="nc-benefit-tag">COLLEGE DISCOVERY</span>
+          </article>
+          <article className="nc-feedback-card nc-feedback-card-two">
+            <div className="nc-benefit-icon" aria-hidden="true"><Search size={25} /></div>
+            <h3>Find resources faster</h3>
+            <p>Use Quick Links to reach scholarships, academic tools and practical guides without hunting through menus.</p>
+            <span className="nc-benefit-tag">QUICK ACCESS</span>
+          </article>
+          <article className="nc-feedback-card nc-feedback-card-three">
+            <div className="nc-benefit-icon" aria-hidden="true"><GraduationCap size={25} /></div>
+            <h3>Plan your next step</h3>
+            <p>Browse mock tests, engineering roadmaps and student utilities to organise your preparation at your own pace.</p>
+            <span className="nc-benefit-tag">STUDENT RESOURCES</span>
+          </article>
         </div>
       </section>
 
