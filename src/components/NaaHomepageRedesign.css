@@ -926,27 +926,27 @@ html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card
   box-shadow: 0 11px 0 rgba(191, 222, 157, .18);
 }
 html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .text-slate-900,
-html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .dark\\:text-slate-100 {
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .dark\:text-slate-100 {
   color: #252a21 !important;
 }
 html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .text-slate-600,
-html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .dark\\:text-slate-300 {
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .dark\:text-slate-300 {
   color: #424b3d !important;
   line-height: 1.8;
 }
 html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .text-sky-700,
-html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .dark\\:text-sky-400 {
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .dark\:text-sky-400 {
   color: #47793a !important;
 }
 html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .text-slate-400 {
   color: #6c7565 !important;
 }
 html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .text-slate-900,
-html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .dark\\:text-slate-100,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .dark\:text-slate-100,
 html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .text-slate-600,
-html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .dark\\:text-slate-300,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .dark\:text-slate-300,
 html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .text-sky-700,
-html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .dark\\:text-sky-400,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .dark\:text-sky-400,
 html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .text-slate-400 {
   color: #252a21 !important;
 }
