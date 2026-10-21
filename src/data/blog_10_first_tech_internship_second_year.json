@@ -1,0 +1,201 @@
+{
+  "id": "blog_10",
+  "source_file": "blog_10_first_tech_internship_second_year.pdf",
+  "language": "te (Telugu + simple English words)",
+  "title_te": "రెండో సంవత్సరంలో మొదటి Tech Internship ఎలా సాధించాలి?",
+  "title_en": "How to Land Your First Tech Internship in 2nd Year",
+  "subtitle_te": "Projects, GitHub, resume, applications, interviews, professional ప్రవర్తన",
+  "audience_te": "భారతదేశంలో undergraduate విద్యార్థులు, తల్లిదండ్రులు, ఇంజినీరింగ్ దరఖాస్తుదారులు",
+  "seo": {
+    "title": "How to Land Your First Tech Internship in 2nd Year",
+    "slug": "/how-to-land-your-first-tech-internship-in-2nd-year",
+    "meta_description_te": "రెండో సంవత్సరంలో మొదటి tech internship కోసం projects, GitHub, resume, interview తయారీ, 10 వారాల ప్లాన్, red flags గురించి తెలుసుకోండి."
+  },
+  "editorial_note_te": "ప్రచురణకు ముందు company eligibility, internship నిబంధనలను తనిఖీ చేయండి. ఏ ప్లాన్ కూడా internship కి హామీ ఇవ్వదు. Project claims నిజాయితీగా ఉంచండి, గోప్యమైన data ను రక్షించండి.",
+  "glossary": [
+    {"term": "Internship", "meaning_te": "చదువుతూనే కొంతకాలం వాస్తవ పని అనుభవం పొందే అవకాశం"},
+    {"term": "GitHub", "meaning_te": "మీ code ని భద్రపరచి ఇతరులకు చూపించే website"},
+    {"term": "README", "meaning_te": "Project ఏమిటి, ఎలా run చేయాలో చెప్పే ప్రారంభ పత్రం"},
+    {"term": "Portfolio", "meaning_te": "మీ projects, skills ని చూపే సేకరణ లేదా website"},
+    {"term": "Open source", "meaning_te": "అందరికీ అందుబాటులో ఉండి, ఎవరైనా సహకరించగల software"},
+    {"term": "CRUD", "meaning_te": "Create, Read, Update, Delete. ఒక app లో data పై చేసే ప్రాథమిక పనులు"}
+  ],
+  "sections": [
+    {
+      "id": 1,
+      "heading_te": "మొదటి tech internship అంటే ఏమిటి?",
+      "heading_en": "What counts as a first tech internship?",
+      "paragraphs_te": [
+        "మొదటి internship అనేది అధికారిక company placement కావచ్చు, పర్యవేక్షణలో జరిగే research project కావచ్చు, startup role కావచ్చు, open-source contribution కావచ్చు లేదా campus లో ఏర్పాటు చేసిన structured అవకాశం కావచ్చు. అత్యంత ఉపయోగకరమైన అనుభవంలో స్పష్టమైన సమస్య, mentor లేదా reviewer, practical పని, మీరు నేర్చుకున్నదాన్ని వివరించే మార్గం ఉంటాయి.",
+        "నిపుణులయ్యేవరకు ఆగవద్దు. రెండో సంవత్సరంలో పునాదులు వేసుకుని, చొరవను చూపించడమే లక్ష్యం. కొన్ని companies internships ను తరువాతి సంవత్సరాలకు మాత్రమే కేటాయిస్తాయి. కాబట్టి faculty projects, hackathons, open-source contributions, చిన్న స్థానిక సంస్థలను కూడా పరిగణించండి."
+      ],
+      "points_te": [
+        "దరఖాస్తు చేసే ముందు eligibility నిబంధనలు చదవండి.",
+        "అస్పష్టమైన పేరు కంటే నిర్వచించిన learning అవకాశాన్ని ఎంచుకోండి.",
+        "స్పష్టమైన విద్యా విలువ లేకుండా ఎక్కువ పని కోరే unpaid roles పై జాగ్రత్తగా ఉండండి."
+      ]
+    },
+    {
+      "id": 2,
+      "heading_te": "Employers అంచనా వేయగల fundamentals ను నిర్మించుకోండి",
+      "heading_en": "Build the fundamentals employers can assess",
+      "paragraphs_te": [
+        "Software roles కి ఉపయోగకరమైన పునాదులు: ఒక programming language, data structures, algorithms, databases, Git, debugging, ప్రాథమిక software design, communication. Web development కి HTML, CSS, JavaScript, APIs, deployment basics కూడా కావాలి. Data roles కి SQL, Python, statistics, visualization అవసరం. Cybersecurity కి networking, Linux, scripting, నైతికమైన lab practice ఉపయోగపడతాయి.",
+        "Tools సేకరించే ముందు ఒక target role ను ఎంచుకోండి. వివరించలేని చాలా frameworks జాబితా చేసిన resume కంటే, బాగా వాడిన కొన్ని skills ఎక్కువ నమ్మకం కలిగిస్తాయి."
+      ],
+      "points_te": [
+        "మొదటి project చక్రానికి ఒక role family ని ఎంచుకోండి.",
+        "Coding లేదా technical exercises ను నిలకడగా practice చేయండి.",
+        "Documentation చదవడం, నిర్దిష్టమైన ప్రశ్నలు అడగడం నేర్చుకోండి."
+      ]
+    },
+    {
+      "id": 3,
+      "heading_te": "రెండు మూడు పూర్తయిన Projects నిర్మించండి",
+      "heading_en": "Build two or three finished projects",
+      "paragraphs_te": [
+        "వృత్తిపరమైన అనుభవం తక్కువగా ఉన్నప్పుడు మీరు ఏం చేయగలరో చూపించడానికి Projects ఒక ఆచరణాత్మక మార్గం. కొన్ని వారాల్లో పూర్తిచేయగల సమస్యలను ఎంచుకుని, testing, documentation, స్పష్టమైన వివరణ జోడించండి. Project మీ నిర్ణయాలను చూపాలి, కాపీ చేసిన tutorial ఫలితాన్ని మాత్రమే కాదు.",
+        "ఉదాహరణలు: చిన్న full-stack task tracker, command-line utility, data analysis dashboard, course timetable app, local environment లో secure login demo, సరళమైన API-based application. మీరు లోతుగా చర్చించగల project ను ఎంచుకోండి."
+      ],
+      "points_te": [
+        "చిన్న version తో మొదలుపెట్టి, అది పనిచేసిన తర్వాత మాత్రమే features జోడించండి.",
+        "Setup steps, screenshots, పరిమితులతో README రాయండి.",
+        "షేర్ చేసే ముందు edge cases ని test చేసి, స్పష్టమైన తప్పులను సరిదిద్దండి."
+      ],
+      "tip_te": "మీ college కి సంబంధించిన నిజమైన సమస్యను ఎంచుకోండి (ఉదా. attendance tracker, timetable planner). అప్పుడు మీరే మొదటి user అవుతారు, interview లో చెప్పడానికి కథ కూడా ఉంటుంది."
+    },
+    {
+      "id": 4,
+      "heading_te": "GitHub ని వృత్తిపరంగా వాడండి",
+      "heading_en": "Use GitHub professionally",
+      "paragraphs_te": [
+        "Public repository ఇతరులు మీ పనిని సమీక్షించడానికి సహాయపడుతుంది, కానీ అది సురక్షితంగా, అర్థమయ్యేలా ఉండాలి. Files ను క్రమబద్ధంగా ఉంచండి, అర్థవంతమైన commit messages వాడండి, project ను ఎలా run చేయాలో వివరించండి, అవసరమైతే license జోడించండి. Code లో secrets (passwords, API keys) ను తొలగించండి. అనుమతి లేకుండా ప్రైవేట్ employer లేదా college సమాచారాన్ని ఎప్పుడూ ప్రచురించవద్దు.",
+        "Contribution history ను పెంచి చూపకండి, మరొకరు రాసిన code ను మీదిగా చెప్పుకోకండి. Tutorial లేదా open-source component ను వాడితే క్రెడిట్ ఇచ్చి, మీరు ఏం మార్చారో వివరించండి."
+      ],
+      "points_te": [
+        "మీ ఉత్తమ పూర్తయిన projects ను pin చేయండి.",
+        "అర్థం చేసుకుని నిర్వహించగలిగేంత చిన్న repositories ఉంచండి.",
+        "ఉపయోగకరమైతే tasks ను ట్రాక్ చేయడానికి issues లేదా project board వాడండి."
+      ]
+    },
+    {
+      "id": 5,
+      "heading_te": "ఒక పేజీ, స్పష్టమైన Resume రాయండి",
+      "heading_en": "Write a focused one-page resume",
+      "paragraphs_te": [
+        "రెండో సంవత్సరం విద్యార్థి resume లో education, technical skills, projects, achievements, సంబంధిత activities సులభంగా అర్థమయ్యేలా ఉండాలి. బలమైన ఆధారాలను పైన ఉంచండి. Action verbs వాడండి, కొలవగల ఫలితాలను అవి ఖచ్చితమైనవి, సమర్థించుకోగలవి అయినప్పుడు మాత్రమే రాయండి.",
+        "ఒక్కసారి తెరిచిన ప్రతి tool ను జాబితా చేయకండి. ఒక language లేదా framework ను రాస్తే, దానితో ఒక project ను వివరించడానికి లేదా ప్రాథమిక సమస్యను పరిష్కరించడానికి సిద్ధంగా ఉండండి. Role కి అనుగుణంగా resume ని మార్చండి కానీ మీ అనుభవాన్ని తప్పుగా చూపకండి."
+      ],
+      "points_te": [
+        "పనిచేసే projects కు links, వృత్తిపరమైన contact address చేర్చండి.",
+        "ప్రతి project bullet లో మీ పాత్ర, tools, ఫలితం వివరించండి.",
+        "దరఖాస్తు చేసే ముందు spelling, తేదీలు, links, స్థిరత్వాన్ని తనిఖీ చేయండి."
+      ],
+      "table": {
+        "headers": ["బలహీనమైన bullet", "మెరుగైన విధానం"],
+        "rows": [
+          ["Worked on a website", "Login, task CRUD, documented setup steps తో చిన్న task-tracking website నిర్మించాను"],
+          ["Know Python and SQL", "Public dataset ను శుభ్రం చేయడానికి Python, ముఖ్య ధోరణులను సంగ్రహించడానికి SQL queries వాడాను"],
+          ["Cybersecurity expert", "Local security lab పూర్తి చేసి, vulnerabilities, mitigations ను document చేశాను"]
+        ]
+      }
+    },
+    {
+      "id": 6,
+      "heading_te": "అవకాశాలను వెతకండి, వ్యూహాత్మకంగా దరఖాస్తు చేయండి",
+      "heading_en": "Find opportunities and apply strategically",
+      "paragraphs_te": [
+        "Company career pages, campus placement లేదా internship cells, faculty research groups, startup websites, వృత్తిపరమైన communities, hackathons, పేరున్న internship platforms ను చూడండి. Role, eligibility, దరఖాస్తు తేదీ, contact, follow-up, ఫలితాన్ని నమోదు చేయడానికి ఒక tracker వాడండి.",
+        "మీ ప్రస్తుత skills, learning లక్ష్యాలకు సరిపోయే roles కి దరఖాస్తు చేయండి. Company పని గురించి ప్రస్తావించి, సంబంధిత project ను వివరించే ఆలోచనాత్మక దరఖాస్తు, అందరికీ పంపే ఒకే సాధారణ సందేశం కంటే మెరుగైనది. Internship లేదా offer letter కి హామీ ఇస్తానని చెప్పేవారికి డబ్బు చెల్లించవద్దు."
+      ],
+      "points_te": [
+        "ముందుగా official company career pages ని చూడండి.",
+        "Faculty, seniors నుంచి feedback అడగండి, కల్పిత referrals కాదు.",
+        "దరఖాస్తు సూచనలను పాటించి, అడిగిన materials మాత్రమే పంపండి."
+      ]
+    },
+    {
+      "id": 7,
+      "heading_te": "Interviews కి సిద్ధం అవ్వండి",
+      "heading_en": "Prepare for interviews",
+      "paragraphs_te": [
+        "Interview తయారీలో ఒక చిన్న పరిచయం, project వివరణ, ప్రాథమిక programming ప్రశ్నలు, role కి తగిన data structures, teamwork లేదా సమస్య పరిష్కారానికి ఉదాహరణలు ఉండాలి. Project గురించి సమస్య, design, ప్రత్యామ్నాయాలు, bugs, testing, ఏం మెరుగుపరుస్తారో వివరించడానికి సిద్ధంగా ఉండండి.",
+        "జవాబు తెలియకపోతే, దాన్ని ఎలా పరిశోధిస్తారో వివరించండి. Employers తరచుగా నిజాయితీ, ఆలోచనా సరళి, నేర్చుకునే సామర్థ్యానికి విలువ ఇస్తారు. పదానికి పదం బట్టీ పట్టిన స్క్రిప్ట్ కాకుండా స్పష్టంగా మాట్లాడటం practice చేయండి."
+      ],
+      "points_te": [
+        "మీ project ను 60 నుంచి 90 సెకన్లలో వివరించడం practice చేయండి.",
+        "పరిష్కారాలను కాపీ చేయకుండా ప్రాథమిక coding ప్రశ్నలను solve చేయండి.",
+        "ఒక తప్పు, feedback, మెరుగుదలకు సంబంధించిన ఉదాహరణలు సిద్ధం చేసుకోండి."
+      ],
+      "example_te": "60 సెకన్ల project pitch నమూనా: ‘నేను college విద్యార్థుల కోసం ఒక attendance tracker తయారు చేశాను. సమస్య ఏమిటంటే 75% నియమం వల్ల చాలామంది లెక్క తప్పుతున్నారు. నేను HTML, JavaScript వాడి నిర్మించాను. ఒక bug వల్ల శాతం తప్పుగా వచ్చింది, దాన్ని test cases తో సరిచేశాను. తర్వాత Cloud sync జోడించాలనుకుంటున్నాను.’"
+    },
+    {
+      "id": 8,
+      "heading_te": "10 వారాల internship తయారీ ప్లాన్",
+      "heading_en": "A 10-week internship preparation plan",
+      "paragraphs_te": [
+        "ఈ ప్లాన్ విద్యార్థి college తో పాటు చదువుతున్నాడని ఊహిస్తుంది. మీ semester కు అనుగుణంగా సమయాన్ని సర్దుబాటు చేసుకోండి. నిలకడగా పురోగతి సాధించి, నైపుణ్యానికి కనిపించే ఆధారాలను సృష్టించడమే లక్ష్యం."
+      ],
+      "table": {
+        "headers": ["వారాలు", "దృష్టి (Focus)", "ఫలితం (Deliverable)"],
+        "rows": [
+          ["1–2", "Role ఎంపిక, skills అంచనా, fundamentals refresh", "Learning plan, చిన్న coding exercises"],
+          ["3–4", "Project version one నిర్మాణం", "పనిచేసే prototype"],
+          ["5–6", "Tests జోడింపు, features polish, documentation", "పూర్తయిన project, README"],
+          ["7", "Resume, portfolio సమీక్ష", "ఒక పేజీ resume, portfolio links"],
+          ["8", "Interview practice", "Project pitch, technical సమీక్ష"],
+          ["9", "లక్ష్యిత దరఖాస్తులు", "Application tracker, customized submissions"],
+          ["10", "సమీక్ష, మెరుగుదల", "మెరుగైన project, తదుపరి అడుగుల ప్లాన్"]
+        ]
+      }
+    },
+    {
+      "id": 9,
+      "heading_te": "Internship Red Flags, వృత్తిపరమైన ప్రవర్తన",
+      "heading_en": "Internship red flags and professional conduct",
+      "paragraphs_te": [
+        "తక్కువ పనికి చాలా ఎక్కువ జీతం హామీ ఇచ్చినా, offer పొందడానికి డబ్బు అడిగినా, సున్నితమైన credentials కోరినా, లేదా స్పష్టమైన role, supervisor, learning లక్ష్యాలు ఇవ్వకపోయినా జాగ్రత్తగా ఉండండి. సంస్థను verify చేసి, official మార్గాల ద్వారా మాత్రమే సంభాషించండి.",
+        "Internship సమయంలో గోప్యతను గౌరవించండి. Screenshots లేదా code ను పంచుకునే ముందు అడగండి. మీ పనిని document చేయండి, వృత్తిపరంగా స్పందించండి, అంచనాలను స్పష్టం చేసుకోండి. అనుమతి లేకుండా company source code, customer data, అంతర్గత పత్రాలను public repository లోకి లేదా బయటి tool లోకి ఎప్పుడూ upload చేయవద్దు."
+      ],
+      "points_te": [
+        "వ్యక్తిగత సమాచారం పంచుకునే ముందు సంస్థను, role ను నిర్ధారించుకోండి.",
+        "ఏదైనా offer లేదా internship ఒప్పందాన్ని జాగ్రత్తగా చదవండి.",
+        "మేధో సంపత్తి (intellectual property), గోప్యతను గౌరవించండి."
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q_te": "రెండో సంవత్సరంలో internship దొరుకుతుందా?",
+      "a_te": "అవును, కొన్ని అవకాశాలు రెండో సంవత్సరం విద్యార్థులను అంగీకరిస్తాయి, మరికొన్ని తరువాతి సంవత్సరాల స్థాయి కోరతాయి. Eligibility చూసి, projects లేదా research అవకాశాలను కూడా పరిగణించండి."
+    },
+    {
+      "q_te": "చాలా certificates కావాలా?",
+      "a_te": "అవసరం లేదు. సంబంధిత skills, పూర్తయిన projects తరచుగా పొడవైన certificates జాబితా కంటే ఎక్కువ ఉపయోగపడతాయి."
+    },
+    {
+      "q_te": "Unpaid internship చేయడం విలువైనదేనా?",
+      "a_te": "ఇది learning విలువ, పర్యవేక్షణ, వ్యవధి, ఖర్చులు, స్థానిక నిబంధనలపై ఆధారపడుతుంది. దోపిడీతో కూడిన లేదా అస్పష్టమైన ఏర్పాట్లను నివారించండి."
+    },
+    {
+      "q_te": "ఎన్ని projects ఉండాలి?",
+      "a_te": "రెండు మూడు పూర్తయిన, బాగా document చేసిన projects ఉపయోగకరమైన ఆరంభం."
+    },
+    {
+      "q_te": "Reject అయితే ఏం చేయాలి?",
+      "a_te": "అందుబాటులో ఉన్నప్పుడు feedback ని గమనించండి, ఒక్కో skill ను బలపరచుకోండి, తగిన roles కి దరఖాస్తు చేస్తూనే ఉండండి."
+    }
+  ],
+  "resources": [
+    {"name": "GitHub Skills", "url": "https://skills.github.com/", "description_te": "GitHub workflows కు గైడెడ్ practice"},
+    {"name": "Git documentation", "url": "https://git-scm.com/doc", "description_te": "అధికారిక Git reference, tutorials"},
+    {"name": "CS50", "url": "https://cs50.harvard.edu/x/", "description_te": "Computer science fundamentals, project practice"},
+    {"name": "NPTEL", "url": "https://nptel.ac.in/", "description_te": "నిర్మాణాత్మక technical learning courses"}
+  ],
+  "publication_checklist_te": [
+    "ఒక ప్లాన్ internship కి హామీ ఇస్తుందని చెప్పవద్దు.",
+    "దరఖాస్తు చేసే ముందు company eligibility, internship నిబంధనలను తనిఖీ చేయండి.",
+    "Project claims ను నిజాయితీగా ఉంచి, గోప్యమైన data ను రక్షించండి."
+  ],
+  "conclusion_te": "మొదటి internship కోసం పెద్ద కంపెనీ పేరు కంటే, మీరు ఏం నిర్మించారో చూపించడం ముఖ్యం. ఒక భాషలో పట్టు, రెండు మూడు పూర్తయిన projects, శుభ్రమైన GitHub, నిజాయితీగల resume, ఆత్మవిశ్వాసంతో interview. ఈ పది వారాల ప్లాన్ ను అనుసరిస్తే మీరు అవకాశాలకు సిద్ధంగా ఉంటారు."
+}

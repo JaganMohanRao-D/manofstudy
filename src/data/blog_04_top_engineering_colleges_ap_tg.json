@@ -1,0 +1,157 @@
+{
+  "id": "blog_04",
+  "source_file": "blog_04_top_engineering_colleges_ap_tg.pdf",
+  "language": "te (Telugu + simple English words)",
+  "title_te": "ఆంధ్రప్రదేశ్ & తెలంగాణలో టాప్ ఇంజినీరింగ్ కాలేజీలు",
+  "title_en": "Top Engineering Colleges in Andhra Pradesh & Telangana",
+  "subtitle_te": "College tiers, placement claims, fees, learning opportunities ని ఎలా పోల్చాలి",
+  "audience_te": "భారతదేశంలో undergraduate చదవాలనుకునే విద్యార్థులు, తల్లిదండ్రులు, ఇంజినీరింగ్ దరఖాస్తుదారులు",
+  "seo": {
+    "title": "Top Engineering Colleges in Andhra Pradesh & Telangana",
+    "slug": "/top-engineering-colleges-in-andhra-pradesh-telangana",
+    "meta_description_te": "AP, Telangana లో ఇంజినీరింగ్ college ని ఎంచుకునేటప్పుడు tiers, placements, fees, facilities ని ఎలా సరిగ్గా పోల్చాలో తెలుసుకోండి."
+  },
+  "editorial_note_te": "ఈ వ్యాసం ఒక సమగ్ర draft. ప్రచురించే ముందు ప్రస్తుత సంవత్సరపు college shortlist ని official records తో చూసి verify చేయండి. Placement, fee గణాంకాలకు తేదీ రాయండి.",
+  "glossary": [
+    {"term": "Tier 1 / 2 / 3", "meaning_te": "విద్యార్థులు వాడే అనధికారిక పదాలు. ఇది అధికారిక national classification కాదు"},
+    {"term": "Accreditation", "meaning_te": "ఒక సంస్థ నాణ్యతను అధికారికంగా గుర్తించే ప్రక్రియ (ఉదా. NBA, NAAC)"},
+    {"term": "Median salary", "meaning_te": "అందరి జీతాలను వరుసగా పెడితే మధ్యలో ఉండే జీతం. సాధారణ student కి వచ్చే ఫలితానికి దగ్గరగా ఉంటుంది"},
+    {"term": "Highest package", "meaning_te": "ఒక్క student కి వచ్చిన అత్యధిక జీతం. అందరికీ వచ్చేది కాదు"},
+    {"term": "Eligible students", "meaning_te": "placement లో పాల్గొనడానికి అర్హత ఉన్న విద్యార్థుల సంఖ్య"},
+    {"term": "Fee reimbursement", "meaning_te": "ప్రభుత్వం కొన్ని వర్గాల విద్యార్థుల fees ని తిరిగి చెల్లించే పథకం"}
+  ],
+  "sections": [
+    {
+      "id": 1,
+      "heading_te": "College tiers అంటే అసలు ఏమిటి?",
+      "heading_en": "What do college tiers mean?",
+      "paragraphs_te": [
+        "విద్యార్థులు Tier 1, Tier 2, Tier 3 అనే పదాలను college కి ఉన్న పేరు, ప్రవేశం ఎంత కష్టం, సౌకర్యాలు, placement అవకాశాలను చెప్పడానికి shortcut గా వాడుతుంటారు. కానీ ఇవి దేశవ్యాప్తంగా ఒకే అధికారిక classification కాదు.",
+        "వేర్వేరు ranking systems వేర్వేరు విషయాలను కొలుస్తాయి. ఒక college ఒక department లో చాలా బలంగా, మరో department లో బలహీనంగా ఉండవచ్చు.",
+        "కాబట్టి tier లేబుల్‌ను ఒక నిజంగా కాకుండా, మొదటి అంచనా (hypothesis) గా చూడండి. తర్వాత ఆధారాలతో పరిశీలించండి: ప్రస్తుత accreditation, faculty, laboratories, student projects, internship అవకాశాలు, placement పారదర్శకత, fees, alumni ఫలితాలు. ఒక student కి అత్యుత్తమమైన college మరొకరికి కాకపోవచ్చు."
+      ],
+      "points_te": [
+        "అవసరమైనప్పుడు official ranking, accreditation sources వాడండి.",
+        "కేవలం university పేరు కాదు, program ని, campus ని పోల్చండి.",
+        "మీరు కోరుకునే branch కు సంబంధించిన department-level ఆధారాలు చూడండి."
+      ],
+      "tip_te": "NIRF వంటి ranking లో ఒక college మొత్తం ర్యాంక్ మంచిదైనా, మీ branch లో faculty తక్కువగా ఉండవచ్చు. కాబట్టి branch-wise వివరాలు కూడా అడగండి."
+    },
+    {
+      "id": 2,
+      "heading_te": "AP, Telangana లో colleges ని ఎలా అంచనా వేయాలి?",
+      "heading_en": "How to evaluate colleges in Andhra Pradesh and Telangana",
+      "paragraphs_te": [
+        "ఈ రెండు రాష్ట్రాల్లో ప్రభుత్వ, university, autonomous, private ఇంజినీరింగ్ సంస్థలు ఉన్నాయి. వాటి fee structure, affiliation, admission మార్గాలు, చదువుకునే వాతావరణం వేరువేరుగా ఉంటాయి. ఫలితాలు campus ని, department ని బట్టి మారతాయి.",
+        "ఒక college కి ఒక branch లో మంచి పేరు ఉంటే, అది ఆటోమేటిక్‌గా అన్ని branches కీ వర్తించదు.",
+        "ముందుగా official counselling lists నుంచి ఒక shortlist తయారు చేయండి. తర్వాత ప్రతి college లో exact course, intake, recognition లేదా approval, syllabus, మొత్తం ఖర్చు, student support గురించి పరిశోధించండి. College చెప్పే placement data అదే campus కి, అదే graduating batch కి సంబంధించినదో కాదో సరిచూడండి."
+      ],
+      "points_te": [
+        "Counselling portal లో exact campus, branch code ని నిర్ధారించండి.",
+        "ప్రస్తుత official fee, seat సమాచారాన్ని చూడండి.",
+        "వీలైతే campus ని సందర్శించండి. లేకపోతే ప్రస్తుత విద్యార్థులతో, పూర్వ విద్యార్థులతో మాట్లాడండి."
+      ]
+    },
+    {
+      "id": 3,
+      "heading_te": "Placement వాస్తవాలు: సంఖ్యలను సరిగ్గా చదవండి",
+      "heading_en": "Placement realities: read the numbers correctly",
+      "paragraphs_te": [
+        "Placement ప్రచారంలో తరచూ highest package ని హైలైట్ చేస్తారు. కానీ అది ఒక్క అసాధారణ విద్యార్థికి లేదా ప్రత్యేకమైన compensation components ఉన్న role కి సంబంధించి ఉండవచ్చు. అది సాధారణ student ఎంత సంపాదిస్తాడో చెప్పదు.",
+        "Median salary, ఎంతమంది eligible, ఎంతమందికి placement వచ్చింది, role రకం, ఎంతమంది higher studies కి వెళ్లారు అనే వివరాలు నిజమైన చిత్రాన్ని ఇస్తాయి.",
+        "Placement percentage కి కూడా denominator (భాగహారం) అవసరం. College అందరు విద్యార్థులనా, eligible వారినా, placement కి register అయిన వారినా లేక offer accept చేసిన వారినా లెక్కించిందో అడగండి. ఒక student కి బహుళ offers వస్తే ఎలా లెక్కిస్తారో, internships ని విడిగా చూపిస్తారో లేదో కూడా అడగండి."
+      ],
+      "points_te": [
+        "Batch size, eligible count, placed count, median, recruiter/role వివరాలు చూపించే పారదర్శక నివేదికలను ఇష్టపడండి.",
+        "Internships, full-time offers, higher-study ఫలితాలను వేరువేరుగా చూడండి.",
+        "Social media posters ని నిర్ధారణ కోసం ఆధారాలు వెతకడానికి ఒక lead గా మాత్రమే చూడండి, తుది రుజువుగా కాదు."
+      ],
+      "example_te": "ఉదాహరణ: ఒక college ‘95% placements’ అని చెబుతోంది. కానీ 200 మందిలో placement కి register అయిన 40 మందిలో 38 మందికి వచ్చినట్టు అయితే, నిజంగా ఆ శాతం అందరికీ వర్తించదు. అందుకే ‘ఏ సంఖ్యలో ఎంతమందిని లెక్కించారు?’ అని అడగాలి."
+    },
+    {
+      "id": 4,
+      "heading_te": "సౌకర్యాలు, learning environment",
+      "heading_en": "Facilities and learning environment",
+      "paragraphs_te": [
+        "సౌకర్యాలు విద్యార్థులు నిజంగా వాడుకోగలిగినప్పుడే ఉపయోగపడతాయి. Computer lab, makerspace, library, research centre అందుబాటులో ఉండి, సరిగ్గా నిర్వహించబడి, చదువుకి అనుసంధానమై ఉంటే విలువైనవి.",
+        "విద్యార్థులు practical assignments చేస్తారా, ఆధునిక tools వాడతారా, projects నిర్మిస్తారా, feedback పొందుతారా అని అడగండి.",
+        "Student clubs, coding groups, technical competitions, peer mentoring, faculty-guided projects పెద్ద తేడా తీసుకురాగలవు. ప్రేరణ ఉన్న student సహకార వాతావరణం నుంచి చాలా నేర్చుకోగలడు. కానీ కేవలం infrastructure ఉంటేనే skills వస్తాయని అనుకోకూడదు."
+      ],
+      "points_te": [
+        "సాధారణ coursework లో labs ఎంత తరచుగా వాడతారో అడగండి.",
+        "Capstone projects, technical club కార్యకలాపాలను చూడండి.",
+        "Internship support, industry projects, faculty mentorship ఉన్నాయో లేదో చూడండి."
+      ]
+    },
+    {
+      "id": 5,
+      "heading_te": "Fees, scholarships, మొత్తం ఖర్చు",
+      "heading_en": "Fees, scholarships, and total cost",
+      "paragraphs_te": [
+        "ప్రకటించిన tuition fee ఆర్థిక చిత్రంలో ఒక భాగం మాత్రమే. Hostel, ఆహారం, రవాణా, laptop, పుస్తకాలు, exam charges, deposits, వ్యక్తిగత ఖర్చులు కూడా కలపండి.",
+        "మీ category కి, ఆ institution కి scholarship లేదా fee reimbursement వర్తిస్తుందా, అది కొనసాగాలంటే attendance, grades, income లేదా ఇతర షరతులు ఉన్నాయా అని నిర్ధారించుకోండి.",
+        "Agent ఇచ్చే scholarship లేదా guaranteed reimbursement హామీలను నమ్మవద్దు. Official notification చదవండి. దరఖాస్తులు, రసీదులు, ఆమోదాల కాపీలు భద్రపరచండి."
+      ],
+      "points_te": [
+        "నాలుగేళ్ల ఖర్చు అంచనా తయారు చేయండి.",
+        "వీలైనంత వరకు official మార్గాల ద్వారా, రాతపూర్వకంగా scholarship అర్హతను నిర్ధారించండి.",
+        "ప్రయాణం లేదా hostel ఖర్చులు ఒక option విలువను మారుస్తాయేమో ఆలోచించండి."
+      ]
+    },
+    {
+      "id": 6,
+      "heading_te": "College comparison scorecard తయారు చేయండి",
+      "heading_en": "Build a college comparison scorecard",
+      "paragraphs_te": [
+        "Scorecard వల్ల పుకార్లు, భావోద్వేగ నిర్ణయాల ప్రభావం తగ్గుతుంది. మీ priorities ఆధారంగా ప్రతి అంశానికి weight ఇవ్వండి.",
+        "ఉదాహరణకు, research పై ఆసక్తి ఉన్న student faculty, laboratories కి ప్రాధాన్యం ఇవ్వవచ్చు. ఆర్థిక ఇబ్బందులు ఉన్నవారు ఖర్చు, scholarships కి ప్రాధాన్యం ఇవ్వవచ్చు. పరిశ్రమలో ఉద్యోగం కోరుకునేవారు సంబంధిత projects, internships, పారదర్శక placement data కి ప్రాధాన్యం ఇవ్వవచ్చు.",
+        "ఈ score ని శాస్త్రీయంగా ఖచ్చితమైన కొలతగా భావించకండి. ఒకే ప్రమాణాలతో options ని పోల్చడానికి ఒక క్రమబద్ధ పద్ధతి మాత్రమే. ప్రతి score వెనుక ఉన్న ఆధారాన్ని రాసుకోండి. తర్వాత మీ అంచనాలను మళ్లీ పరిశీలించుకోవచ్చు."
+      ],
+      "table": {
+        "headers": ["Criterion", "సూచించిన weight", "ఆధారం (Evidence)"],
+        "rows": [
+          ["Course, teaching quality", "ఎక్కువ", "Syllabus, faculty, labs, student work"],
+          ["Placement transparency", "ఎక్కువ", "Official batch-level reports"],
+          ["Total cost", "ఎక్కువ", "Official fee notices, living expenses"],
+          ["Internships, projects", "మధ్యస్థం నుంచి ఎక్కువ", "College records, student examples"],
+          ["Location, support", "వ్యక్తిగతం", "ప్రయాణం, hostel, భద్రత, కుటుంబ అవసరాలు"],
+          ["Accreditation, recognition", "తప్పనిసరి (Essential)", "Official regulator / institution records"]
+        ]
+      },
+      "tip_te": "సులభమైన పద్ధతి: ప్రతి criterion కి 1 నుంచి 5 వరకు score ఇవ్వండి, weight తో గుణించండి, మొత్తం కూడండి. కానీ తుది నిర్ణయం ముందు ఒకసారి మీ మనసు ఏమంటుందో కూడా వినండి."
+    }
+  ],
+  "faq": [
+    {
+      "q_te": "అన్ని Tier 1 colleges, Tier 2 కంటే మంచివా?",
+      "a_te": "Tier లేబుల్స్ అనధికారికం. అసలైన program ని, ఆధారాలను చూసి అంచనా వేయండి."
+    },
+    {
+      "q_te": "Branch కంటే college పేరుకు ప్రాధాన్యం ఇవ్వాలా?",
+      "a_te": "అందరికీ వర్తించే ఒకే సమాధానం లేదు. Curriculum, ఫలితాలు, ఖర్చు, మీ ఆసక్తిని పోల్చండి."
+    },
+    {
+      "q_te": "Highest package ని బట్టి college ని అంచనా వేయవచ్చా?",
+      "a_te": "కాదు. అది ఒక్క data point మాత్రమే, సాధారణ ఫలితాలను ప్రతిబింబించకపోవచ్చు."
+    },
+    {
+      "q_te": "College approved అవునో కాదో ఎలా చూడాలి?",
+      "a_te": "Official regulatory, institutional sources వాడండి. Exact campus, program ని కూడా నిర్ధారించండి."
+    },
+    {
+      "q_te": "పెద్దగా పేరు లేని college విద్యార్థి విజయం సాధించగలడా?",
+      "a_te": "సాధించగలడు. బలమైన fundamentals, projects, internships, communication, నిలకడైన కృషి సహాయపడతాయి. అయితే అవకాశాలు, support college ని బట్టి మారతాయి."
+    }
+  ],
+  "resources": [
+    {"name": "AP Common Admissions Portal", "url": "https://cap.apcfss.in/", "description_te": "AP admissions, college, course సమాచారం"},
+    {"name": "TG EAPCET counselling portal", "url": "https://www.tgeapcet.nic.in/", "description_te": "Telangana counselling, college సమాచారం"},
+    {"name": "National Institutional Ranking Framework (NIRF)", "url": "https://www.nirfindia.org/", "description_te": "ప్రచురించిన ranking పద్ధతి, ఫలితాలు"}
+  ],
+  "publication_checklist_te": [
+    "అధికారిక రికార్డులను పరిశోధించిన తర్వాత మాత్రమే ప్రస్తుత సంవత్సరపు verified college shortlist ని జోడించండి.",
+    "అనధికారిక tier లేబుల్ ని official classification గా చెప్పవద్దు.",
+    "Placement, fee గణాంకాలకు స్పష్టంగా తేదీ వేయండి."
+  ],
+  "conclusion_te": "మంచి college ని ఎంచుకోవడం అంటే పేరు వెనుక పరిగెత్తడం కాదు. ఆధారాలు చూడటం, మీ branch కి సంబంధించిన నిజమైన సమాచారం సేకరించడం, మొత్తం ఖర్చును లెక్కించడం, ఒకే ప్రమాణాలతో options ని పోల్చడం. అప్పుడు మీ నిర్ణయం పుకార్లపై కాకుండా నిజాలపై ఆధారపడుతుంది."
+}
