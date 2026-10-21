@@ -2276,4 +2276,43 @@ html.light #root { background-color:#f5f9ff; color:#172033; color-scheme:light; 
 }
 
 
+
+
+/* ==========================================================
+   Contrast repair for dark-gradient panels in Light mode.
+   The general light-theme utility bridge makes text-white and
+   slate-200/300 dark to support light surfaces. These scoped
+   exceptions preserve light text only where the surface itself
+   intentionally stays dark.
+   ========================================================== */
+.sga-report-hero-contrast {
+  color: #f8fafc !important;
+}
+.sga-report-hero-contrast h2,
+.sga-report-hero-contrast h3,
+.sga-report-hero-contrast .text-white {
+  color: #ffffff !important;
+}
+.sga-report-hero-contrast .text-slate-100 { color: #f1f5f9 !important; }
+.sga-report-hero-contrast .text-slate-200 { color: #e2e8f0 !important; }
+.sga-report-hero-contrast .text-slate-300 { color: #cbd5e1 !important; }
+
+.roadmaps-dark-banner {
+  color: #f8fafc !important;
+}
+.roadmaps-dark-banner h1,
+.roadmaps-dark-banner h2,
+.roadmaps-dark-banner h3,
+.roadmaps-dark-banner .text-white {
+  color: #ffffff !important;
+}
+.roadmaps-dark-banner .text-slate-100 { color: #f1f5f9 !important; }
+.roadmaps-dark-banner .text-slate-200 { color: #e2e8f0 !important; }
+.roadmaps-dark-banner .text-slate-300 { color: #cbd5e1 !important; }
+
+.roadmap-card-dark-overlay { color: #f8fafc !important; }
+.roadmap-card-dark-overlay .text-white { color: #ffffff !important; }
+.roadmap-card-dark-overlay .text-slate-100 { color: #f1f5f9 !important; }
+.roadmap-card-dark-overlay .text-slate-200 { color: #e2e8f0 !important; }
+
 /* Naa College heading styling is scoped in NaaHomepageRedesign.css. */
