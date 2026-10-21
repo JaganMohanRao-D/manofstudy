@@ -864,3 +864,132 @@ html.dark .mos-k-homepage-flow {
     transform: none !important;
   }
 }
+
+
+/* Five-card student feedback preview, styled to match the bright homepage. */
+html.light .mos-k-homepage-flow #student-testimonials-section {
+  padding: 34px 0 clamp(46px, 6vw, 72px);
+  color: #252a21;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section > div:first-of-type {
+  align-items: end;
+  margin-bottom: 18px;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section h2 {
+  color: #252a21 !important;
+  font-family: "Sora", "Plus Jakarta Sans", sans-serif !important;
+  letter-spacing: -.04em;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section p {
+  color: #5a6653 !important;
+  line-height: 1.75;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card {
+  display: flex;
+  min-width: 0;
+  min-height: 244px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 21px;
+  border: 1px solid #dcebcf !important;
+  border-radius: 17px;
+  background: linear-gradient(150deg, #ffffff, #fff6d5) !important;
+  color: #262b22 !important;
+  box-shadow: 0 7px 0 rgba(191, 222, 157, .20);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:nth-child(2),
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:nth-child(5) {
+  background: linear-gradient(150deg, #ffffff, #eaf9dc) !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:nth-child(3) {
+  background: linear-gradient(150deg, #ffffff, #f5ebff) !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:nth-child(4) {
+  background: linear-gradient(150deg, #ffffff, #ffebdd) !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card::before {
+  content: none !important;
+  display: none !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 11px 0 rgba(191, 222, 157, .18);
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .text-slate-900,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .dark\\:text-slate-100 {
+  color: #252a21 !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .text-slate-600,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .dark\\:text-slate-300 {
+  color: #424b3d !important;
+  line-height: 1.8;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .text-sky-700,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .dark\\:text-sky-400 {
+  color: #47793a !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card .text-slate-400 {
+  color: #6c7565 !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .text-slate-900,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .dark\\:text-slate-100,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .text-slate-600,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .dark\\:text-slate-300,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .text-sky-700,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .dark\\:text-sky-400,
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover .text-slate-400 {
+  color: #252a21 !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover svg {
+  color: #b1840d !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section button.bg-slate-900 {
+  background: #2e7544 !important;
+  color: #ffffff !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section button.bg-slate-900:hover {
+  background: #245e36 !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section button.bg-sky-600 {
+  background: #2e7544 !important;
+  color: #ffffff !important;
+}
+html.light .mos-k-homepage-flow #student-testimonials-section button.bg-sky-600:hover {
+  background: #245e36 !important;
+}
+@media (max-width: 950px) {
+  html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-reviews-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 620px) {
+  html.light .mos-k-homepage-flow #student-testimonials-section {
+    padding-top: 25px;
+  }
+  html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-reviews-grid {
+    grid-template-columns: 1fr;
+    gap: 11px;
+  }
+  html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card {
+    min-height: 0;
+    padding: 17px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card {
+    transition: none !important;
+  }
+  html.light .mos-k-homepage-flow #student-testimonials-section .mos-k-review-card:hover {
+    transform: none !important;
+  }
+}
