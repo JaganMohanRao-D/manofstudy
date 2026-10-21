@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import './kineticMOS.css';
 import './NaaHomepageRedesign.css';
-import { FeaturesHub, WORKSPACES, FLAGSHIP_FEATURES } from './FeaturesHub';
+import { WORKSPACES, FLAGSHIP_FEATURES } from './FeaturesHub';
 import articlesData from '../data/blogArticles.json';
 
 const publishedArticles = articlesData
@@ -301,19 +301,6 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         </div>
       </section>
 
-      <section className="nc-more-tools-section" aria-label="All student tools">
-        <div className="nc-page-width">
-          <div id="features-hub" className="nc-feature-hub"><FeaturesHub activeWorkspace={activeWorkspace} onSelectWorkspace={onSelectWorkspace} /></div>
-        </div>
-      </section>
-
-      <section className="nc-trust-section" aria-label="How to use Naa College">
-        <div className="nc-page-width nc-trust-grid">
-          <article><span className="nc-section-kicker">01 / CLEAR CONTEXT</span><h2>Useful data.<br /><span>Clear context.</span></h2><p>Past allotment data ni reference ga use cheyyandi. Final counselling decisions ni official sources tho verify cheyyandi.</p></article>
-          <article><span className="nc-section-kicker">02 / STUDENT-FIRST</span><h2>Made for<br /><span>real student needs.</span></h2><p>Predictors, scholarships, roadmaps, attendance and document tools — everyday student tasks kosam.</p></article>
-          <article><span className="nc-section-kicker">03 / KEEP EXPLORING</span><h2>Your next step<br /><span>starts here.</span></h2><p>Mee goals ki useful resources select chesi, mee pace lo learning and planning continue cheyyandi.</p></article>
-        </div>
-      </section>
       <section id="naa-recent-blogs" className="nc-blogs-section nc-page-width" aria-labelledby="nc-blogs-title">
         <div className="nc-section-heading-row">
           <div>
