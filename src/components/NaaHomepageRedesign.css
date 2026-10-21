@@ -307,12 +307,6 @@ html.light .mos-k-review-card:hover .fill-amber-400 { fill: #c48a12 !important; 
   .nc-blog-body h3 { margin-top: 7px; font-size: 12px; line-height: 1.45; }
   .nc-blog-body p { -webkit-line-clamp: 3; font-size: 10px; line-height: 1.6; margin-bottom: 9px; }
   .nc-read-article { font-size: 10px; }
-  .nc-more-tools-section { padding-bottom: 20px; }
-  .mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub { padding: 17px !important; }
-  .nc-trust-section { padding: 34px 0 42px; }
-  .nc-trust-grid { grid-template-columns: 1fr; gap: 24px; padding-top: 23px; }
-  .nc-trust-grid h2 { font-size: 23px; }
-  .nc-trust-grid p { max-width: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .nc-ticker-track { animation: none !important; transform: none !important; will-change: auto; }
@@ -323,5 +317,5 @@ html.light .mos-k-review-card:hover .fill-amber-400 { fill: #c48a12 !important; 
   .nc-state-card:hover, .nc-shortcut:hover, .nc-blog-card:hover, .nc-search-submit:hover { transform: none !important; }
 }
 @media (prefers-contrast: more) {
-  .nc-hero-description, .nc-state-copy small, .nc-hero-note, .nc-shortcut-text small, .nc-discovery-copy p, .nc-blog-body p, .nc-trust-grid p { color: var(--nc-text, #12315b); }
+  .nc-hero-description, .nc-state-copy small, .nc-hero-note, .nc-shortcut-text small, .nc-discovery-copy p, .nc-blog-body p { color: var(--nc-text, #12315b); }
 }
