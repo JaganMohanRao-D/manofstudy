@@ -47,7 +47,7 @@ html.dark .mos-k-homepage-flow {
 .nc-eyebrow { display: flex; align-items: center; gap: 9px; margin: 0 0 19px; color: var(--nc-blue, #246bd6); font-size: 12px; font-weight: 800; letter-spacing: .07em; }
 .nc-eyebrow-dot { width: 8px; height: 8px; border-radius: 50%; background: #42a984; box-shadow: 0 0 0 4px rgba(66, 169, 132, .12); flex: 0 0 auto; }
 .nc-hero h1 { max-width: 680px; margin: 0; color: var(--nc-text, #12315b); font-family: "Sora", "Plus Jakarta Sans", sans-serif; font-size: clamp(36px, 4.35vw, 60px); font-weight: 750; line-height: 1.12; letter-spacing: -.055em; text-wrap: balance; }
-.nc-hero h1 span { color: var(--nc-blue, #246bd6); }
+.nc-hero h1 span { color: #C29316 !important; font-family: inherit; }
 .nc-hero-description { max-width: 600px; margin: 22px 0 26px; color: var(--nc-muted, #5d718d); font-size: 15px; line-height: 1.85; }
 .nc-state-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .nc-state-card { display: flex; align-items: flex-start; gap: 13px; min-width: 0; min-height: 142px; padding: 17px 15px; border: 1px solid var(--nc-line, #dce7f5); border-radius: 16px; background: var(--nc-surface, #fff); text-align: left; box-shadow: 0 6px 22px rgba(22, 61, 112, .045); cursor: pointer; transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease; }
@@ -250,6 +250,21 @@ html.light .mos-k-review-card:hover .fill-amber-400 { fill: #c48a12 !important; 
   .nc-blog-body { padding: 14px; }
   .nc-blog-body h3 { font-size: 13px; }
 }
+@media (max-width: 850px) {
+  /* Mobile reading order: campus visual first, then the headline and state options. */
+  .naa-wireframe-home .nc-hero-grid { display: flex; flex-direction: column; }
+  .naa-wireframe-home .nc-video-column { order: 0; }
+  .naa-wireframe-home .nc-hero-copy { order: 1; }
+}
+.nc-state-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.nc-state-art-ap img { filter: none; }
+.nc-state-art-tg img { filter: none; }
+
 @media (max-width: 620px) {
   .nc-page-width { width: calc(100% - 30px); }
   .nc-hero { padding-top: 30px; padding-bottom: 32px; }
@@ -1219,7 +1234,7 @@ html.light .naa-wireframe-home {
 }
 .mos-k-homepage-flow :is(h1, h2, h3, h4) {
   color: #202820 !important;
-  font-family: "Lucida Calligraphy", "URW Chancery L", "Apple Chancery", cursive !important;
+  font-family: "Bebas Neue", "Arial Narrow", sans-serif !important;
   font-weight: 700 !important;
   letter-spacing: 0 !important;
 }
@@ -1235,7 +1250,7 @@ html.light .naa-wireframe-home .nc-hero h1 span,
 html.dark .naa-wireframe-home .nc-hero h1,
 html.dark .naa-wireframe-home .nc-hero h1 span {
   color: #C29316 !important;
-  font-family: "Lucida Calligraphy", "URW Chancery L", "Apple Chancery", cursive !important;
+  font-family: "Bebas Neue", "Arial Narrow", sans-serif !important;
 }
 
 
