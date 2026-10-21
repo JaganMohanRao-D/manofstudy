@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, ArrowRight, BookOpen, CalendarDays, Clock3, Search } from 'lucide-react';
-import articlesData from '../data/blogArticles.json';
+import articlesData from '../data/blogArticles.generated.json';
 
 type BlogArticle = {
-  slug: string; title: string; category: string; tags: string[]; status: 'published' | 'draft';
+  slug: string; title: string; seoTitle?: string; seoDescription?: string; category: string; tags: string[]; status: 'published' | 'draft';
   publishedAt: string; updatedAt: string; featured: boolean; summary: string; content: string;
   sources: { label: string; url: string }[]; toolLinks: { label: string; href: string }[];
 };
@@ -106,7 +106,7 @@ export const BlogPage: React.FC = () => {
     let title = 'Student Blog & Knowledge Hub | Naa College';
     let description = 'Practical guides for EAPCET, student tools, scholarships, programming, and responsible AI-assisted development.';
     let canonical = SITE + '/blog/';
-    if (article) { title = article.title + ' | Naa College'; description = article.summary; canonical = SITE + '/blog/' + article.slug + '/'; }
+    if (article) { title = (article.seoTitle || article.title) + ' | Naa College'; description = article.seoDescription || article.summary; canonical = SITE + '/blog/' + article.slug + '/'; }
     else if (isCategory && currentCategory) { title = currentCategory + ' Guides | Naa College Blog'; description = 'Practical, student-focused guides in ' + currentCategory + ' from Naa College.'; canonical = SITE + '/blog/category/' + categorySlug(currentCategory) + '/'; }
     document.title = title;
     const setMeta = (selector: string, value: string) => {
