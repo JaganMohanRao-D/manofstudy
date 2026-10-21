@@ -215,7 +215,7 @@ if (fs.existsSync(scholarshipDataPath)) {
 
 // Blog routes share the same typed editorial JSON used by the React UI.
 // Only published articles become public URLs or sitemap entries.
-const blogDataPath = path.resolve(process.cwd(), 'src/data/blogArticles.json');
+const blogDataPath = path.resolve(process.cwd(), 'src/data/blogArticles.generated.json');
 const blogArticles = fs.existsSync(blogDataPath)
   ? JSON.parse(fs.readFileSync(blogDataPath, 'utf8'))
   : [];
@@ -302,8 +302,8 @@ publishedBlogArticles.forEach((article) => {
   const canonical = 'https://naacollege.in/blog/' + article.slug + '/';
   routes.push({
     path: '/blog/' + article.slug + '/',
-    title: article.title + ' | Naa College',
-    description: String(article.summary || '').slice(0, 158),
+    title: (article.seoTitle || article.title) + ' | Naa College',
+    description: String(article.seoDescription || article.summary || '').slice(0, 158),
     staticBody: renderStaticArticle(article),
     schema: {
       '@context': 'https://schema.org', '@type': 'BlogPosting', headline: article.title,
