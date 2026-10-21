@@ -302,13 +302,31 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
       <section id="naa-recent-blogs" className="nc-blogs-section nc-page-width" aria-labelledby="nc-blogs-title">
         <div className="nc-section-heading-row">
           <div>
-            <span className="nc-section-kicker">THE NAA COLLEGE NOTEBOOK</span>
-            <h2 id="nc-blogs-title">Mana College — <span>Recent Blogs</span></h2>
-            <p>Mee kosam specially curated student guides.</p>
+            <span className="nc-section-kicker">READ · LEARN · GET AHEAD</span>
+            <h2 id="nc-blogs-title">NAA COLLEGE <span>— RECENT BLOGS</span></h2>
+            <p>Student guides and practical explainers, together in one place.</p>
           </div>
           <a className="nc-all-blogs-link" href="/blog/">View all blogs <ArrowRight size={16} aria-hidden="true" /></a>
         </div>
-        <div className="nc-blogs-grid">
+        <div className="nc-laptop-device" aria-label="Recent Naa College blogs displayed on a laptop screen">
+          <div className="nc-laptop-lid">
+            <span className="nc-laptop-camera" aria-hidden="true" />
+            <div className="nc-laptop-screen">
+              <div className="nc-laptop-toolbar" aria-hidden="true">
+                <span className="nc-laptop-brand-icon"><BookOpen size={16} /></span>
+                <strong>NAA COLLEGE</strong>
+                <span className="nc-laptop-toolbar-divider" />
+                <span className="nc-laptop-toolbar-subtitle">STUDENT KNOWLEDGE DESK</span>
+                <span className="nc-laptop-toolbar-spacer" />
+                <span className="nc-laptop-toolbar-status"><i /> ONLINE</span>
+              </div>
+              <div className="nc-laptop-content">
+                <div className="nc-laptop-content-heading">
+                  <span className="nc-laptop-overline">THE LATEST FROM OUR BLOG</span>
+                  <strong>Ideas that move you forward.</strong>
+                  <span className="nc-laptop-count">03 GUIDES <Sparkles size={13} /></span>
+                </div>
+                <div className="nc-blogs-grid nc-laptop-blog-grid">
           {publishedArticles.map((article, index) => (
             <article className={'nc-blog-card nc-blog-card-' + (index + 1)} key={article.slug}>
               <a href={'/blog/' + article.slug + '/'} className="nc-blog-art-link" aria-label={'Read ' + article.title}>
@@ -343,6 +361,13 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
               </div>
             </article>
           ))}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="nc-laptop-base" aria-hidden="true">
+            <span className="nc-laptop-trackpad" />
+          </div>
         </div>
       </section>
 
