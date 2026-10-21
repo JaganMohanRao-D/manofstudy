@@ -24,6 +24,8 @@ import articlesData from '../data/blogArticles.generated.json';
 
 const publishedArticles = articlesData
   .filter((article) => article.status === 'published')
+  .sort((a, b) => String(b.updatedAt || b.publishedAt || '').localeCompare(String(a.updatedAt || a.publishedAt || '')))
+  .slice(0, 3)
   .slice()
   .sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)) || String(b.updatedAt || b.publishedAt).localeCompare(String(a.updatedAt || a.publishedAt)))
   .slice(0, 3);
