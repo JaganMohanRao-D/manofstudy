@@ -20,7 +20,7 @@ import {
 import './kineticMOS.css';
 import './NaaHomepageRedesign.css';
 import { WORKSPACES, FLAGSHIP_FEATURES } from './FeaturesHub';
-import articlesData from '../data/blogArticles.json';
+import articlesData from '../data/blogArticles.generated.json';
 
 const publishedArticles = articlesData
   .filter((article) => article.status === 'published')
