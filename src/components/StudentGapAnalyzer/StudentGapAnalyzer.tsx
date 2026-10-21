@@ -774,7 +774,7 @@ export const StudentGapAnalyzer: React.FC<Props> = ({
       {step === 5 && result && (
         <div className="space-y-6">
           {/* 1. REPORT HERO HEADER */}
-          <div className="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-md relative overflow-hidden space-y-5">
+          <div className="sga-report-hero-contrast bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-md relative overflow-hidden space-y-5">
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
               <div className="space-y-2">
                 <div className="flex flex-wrap items-center gap-2">
