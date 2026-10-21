@@ -215,10 +215,24 @@ if (fs.existsSync(scholarshipDataPath)) {
 
 // Blog routes share the same typed editorial JSON used by the React UI.
 // Only published articles become public URLs or sitemap entries.
-const blogDataPath = path.resolve(process.cwd(), 'src/data/blogArticles.json');
-const blogArticles = fs.existsSync(blogDataPath)
-  ? JSON.parse(fs.readFileSync(blogDataPath, 'utf8'))
-  : [];
+const blogDataPaths = [
+  path.resolve(process.cwd(), 'src/data/blogArticles.json'),
+  path.resolve(process.cwd(), 'src/data/editorialBlogArticles.generated.json')
+];
+const blogArticles = blogDataPaths.flatMap((dataPath) => {
+  if (!fs.existsSync(dataPath)) {
+    if (dataPath.endsWith('editorialBlogArticles.generated.json')) {
+      throw new Error('[SEO] Integrated editorial blog data is missing; run the source generator before SEO generation.');
+    }
+    return [];
+  }
+  return JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+});
+const seenBlogSlugs = new Set();
+for (const article of blogArticles) {
+  if (seenBlogSlugs.has(article.slug)) throw new Error('[SEO] Duplicate blog slug: ' + article.slug);
+  seenBlogSlugs.add(article.slug);
+}
 const publishedBlogArticles = blogArticles.filter((article) => article.status === 'published');
 const slugifyBlogCategory = (value) => String(value || '').toLowerCase()
   .replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -228,6 +242,15 @@ const inlineStatic = (value) => htmlEscape(value)
   .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" rel="noopener noreferrer">$1</a>')
   .replace(/\[([^\]]+)\]\((\/[^)]+)\)/g, '<a href="$2">$1</a>')
   .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+const isMarkdownTableRow = (value) => /^\|.*\|$/.test(value.trim());
+const isMarkdownTableSeparator = (value) => /^\|?\s*:?-{3,}:?\s*(?:\|\s*:?-{3,}:?\s*)+\|?$/.test(value.trim());
+const parseMarkdownTableRow = (value) => value.trim().replace(/^\|/, '').replace(/\|$/, '').split(/(?<!\\)\|/).map((cell) => cell.replace(/\\\|/g, '|').trim());
+const renderStaticTable = (rows) => {
+  if (!rows || !rows.length) return '';
+  const header = rows[0].map((cell) => '<th scope="col" class="border-b border-slate-200 bg-slate-50 px-3 py-3 text-left font-bold">' + inlineStatic(cell) + '</th>').join('');
+  const body = rows.slice(1).map((row) => '<tr>' + rows[0].map((_, index) => '<td class="border-b border-slate-100 px-3 py-3 align-top">' + inlineStatic(row[index] || '') + '</td>').join('') + '</tr>').join('');
+  return '<div class="my-5 overflow-x-auto rounded-xl border border-slate-200"><table class="w-full min-w-[560px] border-collapse text-left text-sm leading-6"><thead><tr>' + header + '</tr></thead><tbody>' + body + '</tbody></table></div>';
+};
 const renderStaticArticle = (article) => {
   const lines = String(article.content || '').trim().split(/\r?\n/);
   const blocks = [];
@@ -235,6 +258,13 @@ const renderStaticArticle = (article) => {
   while (i < lines.length) {
     const line = lines[i].trim();
     if (!line) { i++; continue; }
+    if (isMarkdownTableRow(line) && i + 1 < lines.length && isMarkdownTableSeparator(lines[i + 1].trim())) {
+      const rows = [parseMarkdownTableRow(line)];
+      i += 2;
+      while (i < lines.length && isMarkdownTableRow(lines[i].trim())) rows.push(parseMarkdownTableRow(lines[i++].trim()));
+      blocks.push(renderStaticTable(rows));
+      continue;
+    }
     if (line.startsWith('## ')) { blocks.push('<h2 class="mt-8 mb-3 text-2xl font-semibold tracking-tight">' + inlineStatic(line.slice(3).trim()) + '</h2>'); i++; continue; }
     if (line.startsWith('### ')) { blocks.push('<h3 class="mt-6 mb-2 text-xl font-semibold">' + inlineStatic(line.slice(4).trim()) + '</h3>'); i++; continue; }
     if (line.startsWith('> ')) {
@@ -253,7 +283,7 @@ const renderStaticArticle = (article) => {
       blocks.push('<ol class="my-4 list-decimal space-y-2 pl-6 leading-7">' + items.join('') + '</ol>'); continue;
     }
     const paragraph = [line]; i++;
-    while (i < lines.length && lines[i].trim() && !/^(#{2,3}\s|>\s|[-*]\s+|\d+[.)]\s+)/.test(lines[i].trim())) paragraph.push(lines[i++].trim());
+    while (i < lines.length && lines[i].trim() && !/^(#{2,3}\s|>\s|[-*]\s+|\d+[.)]\s+)/.test(lines[i].trim()) && !isMarkdownTableRow(lines[i].trim())) paragraph.push(lines[i++].trim());
     blocks.push('<p class="my-4 text-base font-normal leading-8 text-slate-700">' + inlineStatic(paragraph.join(' ')) + '</p>');
   }
   return '<article class="mx-auto max-w-4xl px-4 py-6 sm:px-8"><p class="mb-5 text-sm"><a href="/blog/" class="text-cyan-700 underline">Naa College Blog</a> / ' + htmlEscape(article.category) +
