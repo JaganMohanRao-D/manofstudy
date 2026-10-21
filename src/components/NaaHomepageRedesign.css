@@ -1318,3 +1318,29 @@ html.dark .naa-wireframe-home .nc-hero h1 span {
     transition: none !important;
   }
 }
+
+/* Mobile polish: keep the updates ticker readable and let state outlines blend into their cards. */
+@media (max-width: 620px) {
+  .naa-wireframe-home .nc-ticker-track {
+    animation-duration: 72s !important;
+  }
+}
+.naa-wireframe-home .nc-state-art {
+  flex: 0 0 60px !important;
+  width: 60px !important;
+  height: 60px !important;
+  overflow: visible !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  border-radius: 10px !important;
+}
+.naa-wireframe-home .nc-state-art img {
+  display: block;
+  width: 126% !important;
+  height: 126% !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
