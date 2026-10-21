@@ -1,4 +1,4 @@
-import {StrictMode} from 'react';
+import {StrictMode, useEffect} from 'react';
 import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
@@ -12,6 +12,11 @@ import MockTestAccountControl from './components/MockTestAccountControl.tsx';
 import SiteUxFixes from './components/SiteUxFixes.tsx';
 
 function AppBootstrap() {
+  useEffect(() => {
+    // Release the initial HTML/SEO fallback cover only after the React app has committed.
+    document.documentElement.classList.add('app-ready');
+  }, []);
+
   return (
     <AuthProvider>
       <ThemeProvider>
