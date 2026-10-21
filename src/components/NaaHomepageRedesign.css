@@ -319,3 +319,79 @@ html.light .mos-k-review-card:hover .fill-amber-400 { fill: #c48a12 !important; 
 @media (prefers-contrast: more) {
   .nc-hero-description, .nc-state-copy small, .nc-hero-note, .nc-shortcut-text small, .nc-discovery-copy p, .nc-blog-body p { color: var(--nc-text, #12315b); }
 }
+
+
+/* Bright, playful student-facing palette requested for the homepage. */
+.mos-k-homepage-flow {
+  --nc-page: #fbfff7;
+  --nc-surface: #ffffff;
+  --nc-text: #20251f;
+  --nc-muted: #515c4d;
+  --nc-line: #dcebcf;
+  --nc-blue: #287345;
+  --nc-mint: #e7f8d7;
+  --nc-shadow: 0 14px 34px rgba(56, 94, 37, .10);
+}
+html.dark .mos-k-homepage-flow {
+  --nc-page: #fbfff7;
+  --nc-surface: #ffffff;
+  --nc-text: #20251f;
+  --nc-muted: #515c4d;
+  --nc-line: #dcebcf;
+  --nc-blue: #287345;
+  --nc-mint: #e7f8d7;
+  --nc-shadow: 0 14px 34px rgba(56, 94, 37, .10);
+}
+.nc-hero {
+  background:
+    radial-gradient(circle at 5% 15%, rgba(255, 211, 79, .30), transparent 25%),
+    radial-gradient(circle at 95% 20%, rgba(181, 232, 137, .40), transparent 28%),
+    linear-gradient(120deg, #fbfff7 0%, #f0ffdf 54%, #fff8d9 100%);
+}
+.nc-hero h1 span, .nc-quick-heading h2 span, .nc-section-heading-row h2 span { color: #287345; }
+.nc-eyebrow, .nc-section-kicker { color: #287345; }
+.nc-state-card { border-color: #dcebcf; box-shadow: 0 8px 0 rgba(180, 221, 145, .22); }
+.nc-state-ap { background: linear-gradient(140deg, #fff, #fff7d7); }
+.nc-state-tg { background: linear-gradient(140deg, #fff, #e9fbdc); }
+.nc-state-art { color: #20251f; background: #ffdf72; border-color: #f2d16b; }
+.nc-state-tg .nc-state-art { color: #20251f; background: #d7f4b8; border-color: #b9e696; }
+.nc-state-art-pin, .nc-state-tg .nc-state-art-pin { background: #287345; }
+.nc-card-action { color: #287345; }
+.nc-search-submit { background: #287345; color: #fff; }
+.nc-search-submit:hover { background: #1e5935; }
+.nc-search-wrap > svg { color: #287345; }
+.nc-shortcut:nth-child(1) { background: #fff7d7; }
+.nc-shortcut:nth-child(2) { background: #e8f8d9; }
+.nc-shortcut:nth-child(3) { background: #f3e9ff; }
+.nc-shortcut:nth-child(4) { background: #ffe9dc; }
+.nc-shortcut-icon { color: #20251f; }
+.nc-discovery-card { border-color: #dcebcf; }
+.nc-autonomous-card { background: linear-gradient(135deg, #fff, #e9f8d8); }
+.nc-mock-card { background: linear-gradient(135deg, #fffdf4, #ffefb0); }
+.nc-blog-card-1 .nc-blog-art { background: linear-gradient(135deg, #ffe58b, #fff6d7); }
+.nc-blog-card-2 .nc-blog-art { background: linear-gradient(135deg, #d8f5bd, #f5ffe8); }
+.nc-blog-card-3 .nc-blog-art { background: linear-gradient(135deg, #f3e4ff, #fff2cf); }
+.nc-blog-main-icon, .nc-blog-art svg { color: #20251f; }
+.nc-feedback-section { padding-top: 12px; padding-bottom: clamp(50px, 6vw, 78px); }
+.nc-feedback-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 24px; }
+.nc-feedback-card { position: relative; overflow: hidden; padding: 24px; border: 1px solid #dcebcf; border-radius: 18px; background: #fff; box-shadow: 0 10px 24px rgba(56, 94, 37, .07); transition: transform .2s ease, box-shadow .2s ease; }
+.nc-feedback-card:hover { transform: translateY(-4px) rotate(-.25deg); box-shadow: 0 16px 30px rgba(56, 94, 37, .12); }
+.nc-feedback-card-one { background: linear-gradient(145deg, #fff, #fff7d8); }
+.nc-feedback-card-two { background: linear-gradient(145deg, #fff, #eaf9dc); }
+.nc-feedback-card-three { background: linear-gradient(145deg, #fff, #f7edff); }
+.nc-feedback-stars { color: #bd8a00; font-size: 17px; letter-spacing: 3px; }
+.nc-feedback-card > p { min-height: 92px; margin: 15px 0 22px; color: #30382e; font-size: 13px; line-height: 1.85; }
+.nc-feedback-person { display: flex; align-items: center; gap: 10px; }
+.nc-feedback-avatar { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: #d9f1c3; color: #20251f; font-weight: 900; }
+.nc-feedback-card-two .nc-feedback-avatar { background: #ffdf72; }
+.nc-feedback-card-three .nc-feedback-avatar { background: #e8d7ff; }
+.nc-feedback-person > span:last-child { display: flex; flex-direction: column; gap: 3px; }
+.nc-feedback-person strong { color: #20251f; font-size: 12px; }
+.nc-feedback-person small { color: #596252; font-size: 10px; }
+@media (max-width: 760px) {
+  .nc-feedback-grid { grid-template-columns: 1fr; }
+  .nc-feedback-card > p { min-height: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nc-feedback-card:hover { transform: none; }
+}
