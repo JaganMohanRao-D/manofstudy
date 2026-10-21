@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import './kineticMOS.css';
-import { ArrowRight, Search, GraduationCap, Landmark, Wrench, Users, Sparkles, BookOpen, Heart, Bell, MapPin } from 'lucide-react';
+import { ArrowRight, Search, GraduationCap, Landmark, Wrench, Users, Sparkles, BookOpen, Heart, Bell, MapPin, Building2 } from 'lucide-react';
+import './homepageReferencePolish.css';
 import { FeaturesHub, WORKSPACES, FLAGSHIP_FEATURES } from './FeaturesHub';
 
 export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
@@ -53,6 +54,11 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         <div className="naa-hero-decoration naa-decoration-one" aria-hidden="true" />
         <div className="naa-hero-decoration naa-decoration-two" aria-hidden="true" />
         <div className="naa-dots" aria-hidden="true" />
+        <div className="naa-bie-hero-heading">
+          <p className="naa-bie-hero-eyebrow"><span aria-hidden="true" /> AP &amp; TELANGANA STUDENT RESOURCES</p>
+          <h1 id="naa-hero-title">College decisions, <span>made clearer.</span></h1>
+          <p className="naa-bie-hero-subtitle">Explore EAPCET allotments, compare colleges, discover scholarships and find practical tools for your engineering journey.</p>
+        </div>
         <div className="naa-bie-hero-inner">
           <div className="naa-bie-audience-cards">
             <button type="button" className="naa-bie-audience-card naa-bie-student-card" onClick={() => document.getElementById('regional-section-ap')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
@@ -104,6 +110,11 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         </div>
       </section>
 
+      <section className="naa-autonomous-home-promo" aria-labelledby="naa-autonomous-home-title">
+        <div className="naa-autonomous-promo-mark" aria-hidden="true"><Building2 size={30} strokeWidth={1.6} /><span>AP · TG</span></div>
+        <div className="naa-autonomous-promo-copy"><p>COLLEGE RESEARCH</p><h2 id="naa-autonomous-home-title">Looking for autonomous colleges?</h2><span>Search colleges across Andhra Pradesh and Telangana, compare recorded autonomy dates and find their affiliating universities.</span></div>
+        <a href="/autonomous-colleges" className="naa-autonomous-promo-link">Explore directory <ArrowRight size={17} aria-hidden="true" /></a>
+      </section>
       <div id="features-hub"><FeaturesHub activeWorkspace={activeWorkspace} onSelectWorkspace={onSelectWorkspace} /></div>
       <section className="naa-trust-section"><div><span className="naa-section-kicker">01 / CLEAR INFORMATION</span><h2>Useful data.<br/><span>Clear context.</span></h2><p>Explore AP and Telangana counselling resources with context about the underlying allotment data and its limitations.</p></div><div><span className="naa-section-kicker">02 / STUDENT-FIRST</span><h2>Made for<br/><span>real student needs.</span></h2><p>From scholarships and roadmaps to attendance and PDF utilities, the platform brings everyday student tasks together.</p></div><div><span className="naa-section-kicker">03 / KEEP EXPLORING</span><h2>Your next step<br/><span>starts here.</span></h2><p>Use the resources that fit your goals, verify important deadlines with official sources, and keep learning at your own pace.</p></div></section>
     </main>
