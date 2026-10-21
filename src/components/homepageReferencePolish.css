@@ -1,0 +1,148 @@
+/* Small, scoped refinements inspired by strong education-product patterns.
+   Keeps the existing Naa College brand and all current workspace behavior. */
+html.light .naa-bie-inspired-home .naa-bie-hero-heading {
+  position: relative;
+  z-index: 2;
+  width: min(100% - 2 * clamp(22px, 4vw, 64px), 1450px);
+  margin: 0 auto;
+  padding: 34px 0 0;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 13px;
+  color: #496b99;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: .16em;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero-eyebrow span {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22b7a3;
+  box-shadow: 0 0 0 4px rgba(34,183,163,.13);
+}
+html.light .naa-bie-inspired-home .naa-bie-hero-heading h1 {
+  max-width: 900px;
+  margin: 0;
+  color: #15355f;
+  font-size: clamp(34px, 4.2vw, 58px);
+  font-weight: 850;
+  line-height: 1.04;
+  letter-spacing: -.055em;
+}
+html.light .naa-bie-inspired-home .naa-bie-hero-heading h1 span { color: #2875e8; }
+html.light .naa-bie-inspired-home .naa-bie-hero-subtitle {
+  max-width: 680px;
+  margin: 13px 0 0;
+  color: #526b8a;
+  font-size: 14px;
+  line-height: 1.75;
+}
+html.light .naa-bie-inspired-home .naa-autonomous-home-promo {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0,1fr) auto;
+  align-items: center;
+  gap: 22px;
+  max-width: 1450px;
+  margin: 32px auto 42px;
+  padding: clamp(20px,3vw,32px);
+  border: 1px solid #dfe9f6;
+  border-radius: 20px;
+  background: linear-gradient(105deg,#f3f8ff 0%,#fff 56%,#eff9f6 100%);
+  box-shadow: 0 8px 25px rgba(28,65,111,.035);
+}
+html.light .naa-bie-inspired-home .naa-autonomous-promo-mark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 76px;
+  height: 76px;
+  border: 1px solid #d5e5f8;
+  border-radius: 17px;
+  background: #fff;
+  color: #2b70ce;
+}
+html.light .naa-bie-inspired-home .naa-autonomous-promo-mark span {
+  color: #4d719b;
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: .08em;
+}
+html.light .naa-bie-inspired-home .naa-autonomous-promo-copy { min-width: 0; }
+html.light .naa-bie-inspired-home .naa-autonomous-promo-copy>p {
+  margin: 0 0 6px;
+  color: #3976b9;
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: .15em;
+}
+html.light .naa-bie-inspired-home .naa-autonomous-promo-copy h2 {
+  margin: 0;
+  color: #17365f;
+  font-size: clamp(20px,2.5vw,29px);
+  font-weight: 850;
+  letter-spacing: -.04em;
+  line-height: 1.2;
+}
+html.light .naa-bie-inspired-home .naa-autonomous-promo-copy>span {
+  display: block;
+  max-width: 720px;
+  margin-top: 8px;
+  color: #657b95;
+  font-size: 12px;
+  line-height: 1.7;
+}
+html.light .naa-bie-inspired-home .naa-autonomous-promo-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid #246bd6;
+  border-radius: 11px;
+  background: #246bd6;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background .16s ease, transform .16s ease;
+}
+html.light .naa-bie-inspired-home .naa-autonomous-promo-link:hover {
+  transform: translateY(-1px);
+  background: #1e5dbd;
+}
+@media (max-width: 760px) {
+  html.light .naa-bie-inspired-home .naa-bie-hero-heading {
+    width: auto;
+    margin: 0 20px;
+    padding-top: 28px;
+  }
+  html.light .naa-bie-inspired-home .naa-bie-hero-heading h1 { font-size: clamp(33px,8.8vw,46px); }
+  html.light .naa-bie-inspired-home .naa-bie-hero-subtitle { font-size: 12px; line-height: 1.7; }
+  html.light .naa-bie-inspired-home .naa-bie-hero-inner { padding-top: 22px !important; }
+  html.light .naa-bie-inspired-home .naa-autonomous-home-promo {
+    grid-template-columns: auto minmax(0,1fr);
+    gap: 14px;
+    margin: 22px 14px 30px;
+    padding: 17px;
+    border-radius: 16px;
+  }
+  html.light .naa-bie-inspired-home .naa-autonomous-promo-mark { width: 55px; height: 55px; border-radius: 13px; }
+  html.light .naa-bie-inspired-home .naa-autonomous-promo-mark svg { width: 23px; height: 23px; }
+  html.light .naa-bie-inspired-home .naa-autonomous-promo-mark span { font-size: 8px; }
+  html.light .naa-bie-inspired-home .naa-autonomous-promo-copy h2 { font-size: 19px; }
+  html.light .naa-bie-inspired-home .naa-autonomous-promo-copy>span { font-size: 11px; }
+  html.light .naa-bie-inspired-home .naa-autonomous-promo-link { grid-column: 1 / -1; width: 100%; min-height: 42px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.light .naa-bie-inspired-home .naa-autonomous-promo-link { transition: none; }
+}
