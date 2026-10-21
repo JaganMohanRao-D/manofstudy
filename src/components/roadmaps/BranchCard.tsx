@@ -187,7 +187,7 @@ export const BranchCard: React.FC<BranchCardProps> = ({
         {/* Fallback or Overlay Banner */}
         {imgFailed && (
           <div
-            className={`absolute inset-0 bg-gradient-to-br ${categoryTheme.gradient} p-4 flex flex-col justify-between border-b border-slate-800`}
+            className={`roadmap-card-dark-overlay absolute inset-0 bg-gradient-to-br ${categoryTheme.gradient} p-4 flex flex-col justify-between border-b border-slate-800`}
           >
             {/* Ambient Glow */}
             <div
@@ -232,7 +232,7 @@ export const BranchCard: React.FC<BranchCardProps> = ({
 
         {/* Semi-transparent bottom gradient for text contrast if image was loaded */}
         {!imgFailed && (
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent flex flex-col justify-between p-3.5">
+          <div className="roadmap-card-dark-overlay absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent flex flex-col justify-between p-3.5">
             <div className="flex items-center justify-between">
               <span className="px-2.5 py-0.5 rounded-md text-[11px] font-black uppercase bg-black/70 text-white border border-white/20 backdrop-blur-xs">
                 {branch.code}
