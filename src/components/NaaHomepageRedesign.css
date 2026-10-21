@@ -186,21 +186,21 @@ html.dark .mos-k-homepage-flow {
 .mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub h2 { font-family: "Sora", sans-serif !important; font-size: clamp(22px, 2.8vw, 32px) !important; letter-spacing: -.04em !important; text-transform: none !important; color: var(--nc-text, #12315b) !important; }
 .mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub p { color: var(--nc-muted, #5d718d) !important; }
 .mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .text-slate-900,
-.mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .dark\\:text-white { color: var(--nc-text, #12315b) !important; }
+.mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .dark\:text-white { color: var(--nc-text, #12315b) !important; }
 .mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .text-slate-600,
-.mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .dark\\:text-slate-300,
+.mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .dark\:text-slate-300,
 .mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .text-slate-500,
-.mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .dark\\:text-slate-400 { color: var(--nc-muted, #5d718d) !important; }
+.mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .dark\:text-slate-400 { color: var(--nc-muted, #5d718d) !important; }
 .mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .bg-white,
-.mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .dark\\:bg-slate-900\\/80,
-.mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .dark\\:bg-slate-900\\/75,
-.mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .dark\\:bg-slate-950\\/50 { background: var(--nc-surface, #fff) !important; }
-.mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .rounded-\\[1\\.75rem\\],
+.mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .dark\:bg-slate-900\/80,
+.mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .dark\:bg-slate-900\/75,
+.mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .dark\:bg-slate-950\/50 { background: var(--nc-surface, #fff) !important; }
+.mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .rounded-\[1\.75rem\],
 .mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .rounded-xl,
 .mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .rounded-2xl { border-radius: 15px !important; box-shadow: none !important; }
 .mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub section { border-color: var(--nc-line, #dce7f5) !important; }
 .mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .border-slate-200,
-.mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .dark\\:border-slate-800 { border-color: var(--nc-line, #dce7f5) !important; }
+.mos-k-homepage-flow .nc-feature-hub .mos-k-feature-hub .dark\:border-slate-800 { border-color: var(--nc-line, #dce7f5) !important; }
 .nc-trust-section { padding: clamp(42px, 5vw, 62px) 0 clamp(50px, 6vw, 75px); background: var(--nc-page, #f5f9ff); }
 .nc-trust-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; border-top: 1px solid var(--nc-line, #dce7f5); padding-top: 27px; }
 .nc-trust-grid article { min-width: 0; }
@@ -221,9 +221,9 @@ html.light #main-header #header-command-palette-trigger svg,
 html.light #main-header #header-support-btn svg { color: #246bd6 !important; }
 html.light #main-header #header-support-btn { color: #24527e !important; border-color: #d4e3f5 !important; background: #f3f8ff !important; }
 html.light #main-header #header-support-btn:hover { background: #eaf2ff !important; }
-html.light #main-header .absolute.z-\\[80\\] { background: #fff !important; border-color: #dce7f5 !important; box-shadow: 0 15px 35px rgba(25,64,115,.13) !important; }
-html.light #main-header .absolute.z-\\[80\\] button { color: #294867 !important; }
-html.light #main-header .absolute.z-\\[80\\] button:hover { color: #174f9f !important; background: #f1f6ff !important; }
+html.light #main-header .absolute.z-\[80\] { background: #fff !important; border-color: #dce7f5 !important; box-shadow: 0 15px 35px rgba(25,64,115,.13) !important; }
+html.light #main-header .absolute.z-\[80\] button { color: #294867 !important; }
+html.light #main-header .absolute.z-\[80\] button:hover { color: #174f9f !important; background: #f1f6ff !important; }
 html.light #main-header #mos-mobile-navigation-panel { background: #fff !important; border-color: #dce7f5 !important; }
 html.light #main-header #mos-mobile-navigation-panel button,
 html.light #main-header #mos-mobile-navigation-panel a { color: #294867 !important; }
@@ -244,11 +244,11 @@ html.light .mos-k-review-card { background: #fff !important; color: #12315b !imp
 html.light .mos-k-review-card::before { background: #eaf7f1 !important; }
 html.light .mos-k-review-card:hover { border-color: #b4d5f2 !important; }
 html.light .mos-k-review-card:hover .text-slate-900,
-html.light .mos-k-review-card:hover .dark\\:text-slate-100,
+html.light .mos-k-review-card:hover .dark\:text-slate-100,
 html.light .mos-k-review-card:hover .text-slate-600,
-html.light .mos-k-review-card:hover .dark\\:text-slate-300,
+html.light .mos-k-review-card:hover .dark\:text-slate-300,
 html.light .mos-k-review-card:hover .text-sky-700,
-html.light .mos-k-review-card:hover .dark\\:text-sky-400,
+html.light .mos-k-review-card:hover .dark\:text-sky-400,
 html.light .mos-k-review-card:hover .text-slate-400 { color: #12315b !important; }
 html.light .mos-k-review-card:hover svg { color: #246bd6 !important; }
 html.light .mos-k-review-card:hover .fill-amber-400 { fill: #c48a12 !important; }
