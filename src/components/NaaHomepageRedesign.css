@@ -1236,3 +1236,42 @@ html body :is(h1, h2, h3, h4) :is(span, em, strong) { color: inherit !important;
 @media (prefers-reduced-motion: no-preference) {
   .nc-hero { transition: background-color .2s ease; }
 }
+
+
+/* Typography correction:
+   - Lucida Calligraphy only for prominent headings/subheadings.
+   - Keep everyday content and all controls in a readable sans-serif.
+   - Use gold instead of orange for the hero headline. */
+html body,
+html body p,
+html body li,
+html body label,
+html body small,
+html body input,
+html body textarea,
+html body select,
+html body button,
+html body [role="button"],
+html body a,
+html body nav,
+html body code,
+html body blockquote {
+  font-family: "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif !important;
+}
+html body :is(h1, h2, h3, h4) {
+  font-family: "Lucida Calligraphy", "URW Chancery L", "Apple Chancery", cursive !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  color: #202820 !important;
+}
+html body :is(h1, h2, h3, h4) :is(span, em, strong) {
+  font-family: inherit !important;
+  color: inherit !important;
+}
+html.light .naa-wireframe-home .nc-hero h1,
+html.light .naa-wireframe-home .nc-hero h1 span,
+html.dark .naa-wireframe-home .nc-hero h1,
+html.dark .naa-wireframe-home .nc-hero h1 span {
+  color: #C29316 !important;
+  font-family: "Lucida Calligraphy", "URW Chancery L", "Apple Chancery", cursive !important;
+}
