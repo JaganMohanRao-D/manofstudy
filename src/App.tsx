@@ -179,11 +179,6 @@ const StudentGapAnalyzer = lazyWithRetry(() =>
     default: m.StudentGapAnalyzer || m.default,
   }))
 );
-const StudentTestimonials = lazyWithRetry(() =>
-  import('./components/StudentTestimonials').then((m: any) => ({
-    default: m.StudentTestimonials || m.default,
-  }))
-);
 const CbtMockTestEngine = lazyWithRetry(() =>
   import('./components/CbtMockTestEngine').then((m: any) => ({
     default: m.CbtMockTestEngine || m.default,
@@ -1249,9 +1244,6 @@ export default function App() {
 
             <ChunkErrorBoundary fallbackTitle="Unable to load interactive sections">
               <Suspense fallback={<LoadingFallback />}>
-                {/* High-Trust Reviews: Continuous Horizontal Marquee Carousel */}
-                <StudentTestimonials />
-
                 {/* Educational Guides & Transparent Methodology Documentation */}
                 <div className="content-visibility-auto">
                   <EducationalGuideAndSeo />
