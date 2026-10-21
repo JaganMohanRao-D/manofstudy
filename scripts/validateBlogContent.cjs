@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 
-const dataPath = path.resolve(process.cwd(), 'src/data/blogArticles.json');
+const dataPath = path.resolve(process.cwd(), 'src/data/blogArticles.generated.json');
 if (!fs.existsSync(dataPath)) throw new Error('[Blog] Article data file is missing.');
 const articles = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 if (!Array.isArray(articles) || articles.length === 0) throw new Error('[Blog] Article data must be a non-empty array.');
