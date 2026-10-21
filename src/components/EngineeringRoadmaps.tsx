@@ -325,7 +325,7 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
   return (
     <div id="engineering-roadmaps-hub" className="space-y-6">
       {/* Top Banner Header: Futuristic Slate/Indigo Tech Grid */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-950 to-indigo-950 text-white border border-indigo-500/25 p-5 sm:p-7 shadow-xl">
+      <div className="roadmaps-dark-banner relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-950 to-indigo-950 text-white border border-indigo-500/25 p-5 sm:p-7 shadow-xl">
         {/* Subtle Tech Grid Lines */}
         <div className="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,#6366f118_1px,transparent_1px),linear-gradient(to_bottom,#6366f118_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 
