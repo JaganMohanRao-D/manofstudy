@@ -63,6 +63,25 @@ const blogArticleUrls = urls.filter((url) => /^https:\/\/naacollege\.in\/blog\/(
 if (scholarshipUrls.length < 40) fail('expected at least 40 individually generated scholarship records; found ' + scholarshipUrls.length);
 if (blogArticleUrls.length < 15) fail('expected at least 15 published blog article URLs; found ' + blogArticleUrls.length);
 
+const unifiedBlogDataPath = path.resolve(process.cwd(), 'src/data/blogArticles.generated.json');
+if (!fs.existsSync(unifiedBlogDataPath)) {
+  fail('unified generated blog article index is missing');
+} else {
+  try {
+    const unifiedBlogArticles = JSON.parse(fs.readFileSync(unifiedBlogDataPath, 'utf8'));
+    const expectedPublishedSlugs = unifiedBlogArticles.filter((article) => article && article.status === 'published').map((article) => article.slug);
+    for (const slug of expectedPublishedSlugs) {
+      const articleUrl = SITE + '/blog/' + slug + '/';
+      if (!urlSet.has(articleUrl)) fail('published blog article is missing from sitemap: ' + slug);
+    }
+    if (blogArticleUrls.length !== expectedPublishedSlugs.length) {
+      fail('sitemap has ' + blogArticleUrls.length + ' blog article URLs but unified index has ' + expectedPublishedSlugs.length + ' published articles');
+    }
+  } catch (error) {
+    fail('unable to validate unified blog index: ' + error.message);
+  }
+}
+
 const seenTitles = new Map();
 function minimumVisibleChars(url, pathname) {
   if (pathname === '/') return 500;
