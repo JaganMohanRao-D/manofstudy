@@ -1,19 +1,23 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, ArrowRight, BookOpen, CalendarDays, Clock3, Search } from 'lucide-react';
 import articlesData from '../data/blogArticles.json';
+import editorialArticlesData from '../data/editorialBlogArticles.generated.json';
 
 type BlogArticle = {
   slug: string; title: string; category: string; tags: string[]; status: 'published' | 'draft';
   publishedAt: string; updatedAt: string; featured: boolean; summary: string; content: string;
   sources: { label: string; url: string }[]; toolLinks: { label: string; href: string }[];
 };
-const allArticles = articlesData as BlogArticle[];
+const allArticles = [...(articlesData as BlogArticle[]), ...(editorialArticlesData as BlogArticle[])];
 const articles = allArticles.filter((article) => article.status === 'published');
 const SITE = 'https://naacollege.in';
 const categorySlug = (value: string) => value.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const slugFromPath = (path: string) => path.replace(/\/+$/, '').split('/').filter(Boolean).pop() || '';
 const readTime = (article: BlogArticle) => Math.max(2, Math.ceil(article.content.trim().split(/\s+/).filter(Boolean).length / 220));
 const headingId = (value: string) => categorySlug(value);
+const isMarkdownTableRow = (value: string) => /^\|.*\|$/.test(value.trim());
+const isMarkdownTableSeparator = (value: string) => /^\|?\s*:?-{3,}:?\s*(?:\|\s*:?-{3,}:?\s*)+\|?$/.test(value.trim());
+const parseMarkdownTableRow = (value: string) => value.trim().replace(/^\|/, '').replace(/\|$/, '').split(/(?<!\\)\|/).map((cell) => cell.replace(/\\\|/g, '|').trim());
 
 function InlineText({ value }: { value: string }) {
   const tokens = value.split(/(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*)/g);
@@ -32,11 +36,18 @@ function InlineText({ value }: { value: string }) {
 
 function ArticleBody({ content }: { content: string }) {
   const lines = content.trim().split(/\r?\n/);
-  const blocks: { type: string; value: string[] }[] = [];
+  const blocks: { type: string; value: string[]; rows?: string[][] }[] = [];
   let i = 0;
   while (i < lines.length) {
     const line = lines[i].trim();
     if (!line) { i++; continue; }
+    if (isMarkdownTableRow(line) && i + 1 < lines.length && isMarkdownTableSeparator(lines[i + 1].trim())) {
+      const rows = [parseMarkdownTableRow(line)];
+      i += 2;
+      while (i < lines.length && isMarkdownTableRow(lines[i].trim())) rows.push(parseMarkdownTableRow(lines[i++].trim()));
+      blocks.push({ type: 'table', value: [], rows });
+      continue;
+    }
     if (line.startsWith('## ')) { blocks.push({ type: 'h2', value: [line.slice(3).trim()] }); i++; continue; }
     if (line.startsWith('### ')) { blocks.push({ type: 'h3', value: [line.slice(4).trim()] }); i++; continue; }
     if (line.startsWith('> ')) {
@@ -55,11 +66,12 @@ function ArticleBody({ content }: { content: string }) {
       blocks.push({ type: 'ol', value: items }); continue;
     }
     const paragraph = [line]; i++;
-    while (i < lines.length && lines[i].trim() && !/^(#{2,3}\s|>\s|[-*]\s+|\d+[.)]\s+)/.test(lines[i].trim())) paragraph.push(lines[i++].trim());
+    while (i < lines.length && lines[i].trim() && !/^(#{2,3}\s|>\s|[-*]\s+|\d+[.)]\s+)/.test(lines[i].trim()) && !isMarkdownTableRow(lines[i].trim())) paragraph.push(lines[i++].trim());
     blocks.push({ type: 'p', value: [paragraph.join(' ')] });
   }
   return <div className="blog-prose space-y-5" onCopy={(event) => event.preventDefault()}>
     {blocks.map((block, index) => {
+      if (block.type === 'table' && block.rows?.length) return <div key={index} className="my-5 overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700"><table className="w-full min-w-[560px] border-collapse text-left text-sm leading-6"><thead className="bg-slate-50 dark:bg-slate-800/80"><tr>{block.rows[0].map((cell, cellIndex) => <th key={cellIndex} scope="col" className="border-b border-slate-200 px-3 py-3 font-bold text-slate-900 dark:border-slate-700 dark:text-white"><InlineText value={cell} /></th>)}</tr></thead><tbody>{block.rows.slice(1).map((row, rowIndex) => <tr key={rowIndex} className="odd:bg-white even:bg-slate-50/70 dark:odd:bg-slate-900 dark:even:bg-slate-800/40">{block.rows?.[0].map((_, cellIndex) => <td key={cellIndex} className="align-top border-b border-slate-100 px-3 py-3 text-slate-700 dark:border-slate-800 dark:text-slate-300"><InlineText value={row[cellIndex] || ''} /></td>)}</tr>)}</tbody></table></div>;
       if (block.type === 'h2') return <h2 id={headingId(block.value[0])} key={index} className="scroll-mt-24 pt-4 text-xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-2xl">{block.value[0]}</h2>;
       if (block.type === 'h3') return <h3 key={index} className="pt-2 text-lg font-semibold tracking-tight text-slate-900 dark:text-white sm:text-xl">{block.value[0]}</h3>;
       if (block.type === 'quote') return <blockquote key={index} className="rounded-r-xl border-l-4 border-cyan-500 bg-cyan-50 px-4 py-3 text-[15px] leading-7 text-slate-700 dark:bg-cyan-950/30 dark:text-slate-200"><InlineText value={block.value.join(' ')} /></blockquote>;
