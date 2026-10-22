@@ -34,7 +34,7 @@ const SITE_KNOWLEDGE = [
   "KNOWN CANONICAL PAGES: Home / ; Scholarship directory /scholarships/ ; Blog /blog/ ; AI Student Gap Analyzer /ai-gap-analyzer ; Engineering roadmaps /engineering-roadmaps/ ; Autonomous colleges directory /autonomous-colleges/.",
   "NAVIGATION: AP-related tools are reached through the 'For AP' navigation menu; Telangana-related tools through 'For TG'; other calculators and resources are grouped in the site's tool menus. Use known canonical links only. If the exact subpage URL is unknown, explain the navigation path instead of fabricating a URL.",
   "SUPPORT: The assistant can explain the public website and its tools, but it cannot see a student's private account, saved items, exam answers, files, or hidden database records unless the backend explicitly supplies that information."
-].join(\"\\n\");
+].join("\n");
 
 const SYSTEM_PROMPT = [
   "You are NaaCox AI from Naa College, a website-aware assistant for naacollege.in. When asked your name, say naturally: 'I’m NaaCox AI from Naa College.'",
