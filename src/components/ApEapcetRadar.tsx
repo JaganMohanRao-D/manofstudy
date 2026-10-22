@@ -261,14 +261,14 @@ export const ApEapcetRadar: React.FC<ApEapcetRadarProps> = ({ onNavigateToCbt })
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
-                AP EAPCET Phase 2 Left Over Seats Radar
+                AP EAPCET Seat & Fee Radar · 2027 Planning
               </h2>
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
-                Phase 2 Vacancies
+                Historical vacancy data
               </span>
             </div>
             <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 max-w-2xl">
-              Live college seat vacancies and leftover branch seats across Andhra Pradesh institutions.
+              Review the vacancy and fee records currently available on Naa College. These records may reflect an earlier counselling round, not official 2027 vacancies; verify the current year and round before relying on them.
             </p>
           </div>
         </div>
