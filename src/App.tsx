@@ -37,6 +37,7 @@ import type { EapcetPhaseTab } from './components/ApEapcetRadar';
 import { ChunkErrorBoundary } from './components/ChunkErrorBoundary';
 import { GuidesHub } from './components/GuidesHub';
 import { SeoLandingPage } from './components/SeoLandingPage';
+import { APToolsGuide } from './components/APToolsGuide';
 import { BlogPage, isBlogPath } from './components/BlogPage';
 import { RoadmapFullPage } from './components/RoadmapFullPage';
 import { useAuth } from './context/AuthContext';
@@ -1106,6 +1107,14 @@ export default function App() {
               { question: 'Can I search by college and branch?', answer: 'Yes. The explorer supports college and branch selection and exposes the available records for the selected context.' },
               { question: 'Are these guaranteed future cutoffs?', answer: 'No. Allotment records describe the dataset available to the tool. They should not be treated as a guarantee of a future allotment or admission outcome.' }
             ]}
+            guideSections={[
+              { heading: 'What AP EAPCET allotment records show', paragraphs: ['An allotment record represents a counselling outcome included in the dataset available to this explorer. Depending on the record, fields may include a college, branch, rank, category, gender or region. The page makes records easier to inspect through college, branch and candidate-oriented views.', 'Historical records describe the year and phase represented by the data. They are not guaranteed cutoffs for a future counselling year because seat intake, preferences, eligibility and rules may change.'] },
+              { heading: 'How to search and filter records', paragraphs: ['Start with the statewide view to explore broadly. Select a college and branch to narrow the results, then use the available search and filters to inspect matching rows. If nothing appears, clear one filter at a time; the chosen combination may simply have no matching records in the loaded dataset.', 'Read each field label carefully. Do not assume every displayed rank is a universal cutoff or that every record includes every possible counselling detail.'] },
+              { heading: 'Understanding rank, category and phase', paragraphs: ['Compare records only when year, phase, branch and relevant category are comparable. Category, gender, local-region eligibility and counselling phase can affect how records should be interpreted. A rank from one context is not automatically equivalent to a rank from another.', 'Use the explorer to build a research shortlist, then verify current seat matrices, eligibility, college codes and deadlines through official AP EAPCET counselling notices.'] },
+              { heading: 'What the data cannot confirm', paragraphs: ['Historical records can help you understand previous outcomes, but they cannot independently confirm current vacancies, your eligibility, fee reimbursement, current fees or a future allotment. The dataset may not include every change or correction made after its source data was prepared.', 'If information here differs from an official counselling notice, follow the official notice. This tool is for educational research and does not reserve seats or submit options.'] },
+              { heading: 'A practical student workflow', paragraphs: ['Write down your rank and the branches, locations and budgets that genuinely work for you. Explore records, shortlist a balanced set of colleges and investigate each institution separately. Consider course content, commute or hostel needs, total cost, student support and credible placement information—not just one rank value.', 'Before submitting web options, verify the current official college and branch codes, seat matrix, fees and option-entry instructions. Keep a copy of your final preference order.'] },
+              { heading: 'Privacy and responsible use', paragraphs: ['Some views may include candidate-level fields present in the underlying data. Use these only for legitimate educational research, avoid republishing personal information, and do not use the page to identify or contact other candidates.'] }
+            ]}
             relatedLinks={[
               { href: '/ap-eapcet/college-wise-allotments/', label: 'AP EAPCET Allotment Records · 2025–2026' },
               { href: '/tg-eapcet/name-wise-allotments/', label: 'TG Name-Wise Allotments' },
@@ -1153,6 +1162,14 @@ export default function App() {
               { question: 'Can I predict colleges based on my AP EAPCET rank?', answer: 'Yes. Enter your rank and relevant preferences to explore the college and branch matches returned by the predictor.' },
               { question: 'Can I check AP EAPCET colleges and branches?', answer: 'Yes. The predictor lets you narrow results by college and branch while considering the supported candidate preferences.' },
               { question: 'Is the AP EAPCET College Predictor a guaranteed allotment?', answer: 'No. Predictions are informational and based on the available dataset and selected inputs. Actual counselling rules, seat availability and official allotments determine admission.' }
+            ]}
+            guideSections={[
+              { heading: 'What the AP EAPCET College Predictor does', paragraphs: ['The predictor compares your entered rank and supported preferences with the historical allotment data available to Naa College, then displays college and branch options for further research. It is designed to help you explore possibilities and organise a shortlist.', 'It is not an official counselling service and does not allocate seats. It cannot know all the factors that determine a future round, including the final applicant pool, live seat matrix, candidate preferences or rule changes.'] },
+              { heading: 'Enter accurate details', paragraphs: ['Enter your rank carefully and select the category, gender, region and other supported preferences that accurately describe your counselling profile. Do not select a category or region simply because it returns more results; eligibility depends on official rules and valid documents.', 'Use broad filters first to understand the options, then narrow results to colleges and branches that matter to you.'] },
+              { heading: 'How to interpret matches', paragraphs: ['A displayed match means the historical data suggests an option may be worth checking. It is not a guaranteed seat, live vacancy or official cutoff for the next year. Outcomes can change with demand, seat availability, reservation rules and candidate choices.', 'Use results to create a balanced list of colleges you would genuinely consider. Compare course, location, total cost, commute or hostel needs, campus support and credible college information before ordering preferences.'] },
+              { heading: 'Why actual allotment may differ', paragraphs: ['The official counselling process applies the current rules and available seats to candidates’ submitted preferences. A historical predictor cannot reproduce every live condition, so even correct inputs may lead to results different from the eventual allotment.', 'Confirm the current schedule, seat matrix, eligibility, college and branch codes, fees, certificate requirements and option-entry instructions on official sources.'] },
+              { heading: 'Illustrative example', paragraphs: ['If a student sees several branches across multiple colleges, the sensible conclusion is that those options deserve further investigation—not that every option is equally likely or that any one is guaranteed. The student should check the historical context, research the colleges and order only acceptable options according to personal priorities.', 'This is an illustrative example, not a real prediction about a named college or rank.'] },
+              { heading: 'Before making an admission decision', paragraphs: ['Use the predictor as one research aid alongside official allotment records and current counselling information. It does not register you for counselling, submit web options or replace official advice. If an official source conflicts with this page, follow the official source.'] }
             ]}
             relatedLinks={[
               { href: '/ap-eapcet/college-predictor/', label: 'AP EAPCET College Predictor' },
@@ -1539,6 +1556,8 @@ export default function App() {
                     onNavigateToRoadmaps={() => handleSelectWorkspace('roadmaps')}
                   />
                 )}
+
+                {(['ap-allotments', 'ap-predictor', 'ap-web-options', 'ap-rank-predictor', 'ap-top-colleges'] as WorkspaceView[]).includes(activeWorkspace) && <APToolsGuide toolId={activeWorkspace} />}
 
                 {activeWorkspace === 'utilities' && (
                   <div className="space-y-6">

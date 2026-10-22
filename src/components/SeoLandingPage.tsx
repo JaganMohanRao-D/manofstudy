@@ -10,6 +10,7 @@ type SeoLandingPageProps = {
   faqs: Array<{ question: string; answer: string }>;
   relatedLinks: Array<{ href: string; label: string }>;
   toolIntro?: string;
+  guideSections?: Array<{ heading: string; paragraphs: string[]; bullets?: string[] }>;
 };
 
 export const SeoLandingPage: React.FC<SeoLandingPageProps> = ({
@@ -21,6 +22,7 @@ export const SeoLandingPage: React.FC<SeoLandingPageProps> = ({
   faqs,
   relatedLinks,
   toolIntro,
+  guideSections = [],
 }) => {
   const goToFeatureHub = () => {
     if (typeof window !== 'undefined') {
@@ -87,6 +89,25 @@ export const SeoLandingPage: React.FC<SeoLandingPageProps> = ({
           ))}
         </ol>
       </section>
+
+      {guideSections.length > 0 && (
+        <section aria-label="Detailed tool guide" className="space-y-5">
+          <header className="max-w-4xl space-y-2 px-1">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-600 dark:text-blue-400">Student guide · AP EAPCET</p>
+            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-950 dark:text-white">Understand the tool before you make a decision</h2>
+            <p className="text-sm sm:text-base leading-7 text-slate-600 dark:text-slate-300">This guide explains the purpose, workflow, data context and limitations of the tool. Use it as an educational aid and verify important admission decisions with the official counselling authority.</p>
+          </header>
+          <div className="grid gap-4">
+            {guideSections.map((section) => (
+              <article key={section.heading} className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 sm:p-7">
+                <h3 className="text-lg sm:text-xl font-extrabold text-slate-950 dark:text-white">{section.heading}</h3>
+                <div className="mt-3 space-y-3">{section.paragraphs.map((paragraph, paragraphIndex) => <p key={paragraphIndex} className="text-sm leading-7 text-slate-600 dark:text-slate-300">{paragraph}</p>)}</div>
+                {section.bullets && section.bullets.length > 0 && <ul className="mt-4 space-y-2 list-disc pl-5 text-sm leading-6 text-slate-600 dark:text-slate-300">{section.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul>}
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8">
         <h2 className="text-xl font-black text-slate-950 dark:text-white">Frequently asked questions</h2>
