@@ -20,28 +20,26 @@ interface PriorityChoice {
 type ObservedStatus = 'within' | 'beyond' | 'missing';
 type WebOptionGroupKey = 'dream' | 'borderline' | 'available' | 'safe-backup';
 
-// Site-owner priority order requested for these exact entries in the AP 2026 index.
-// This is a display preference, not an official college-quality ranking.
-const PREFERRED_COLLEGE_ORDER: Record<string, number> = { PPSV: 0, VITB: 1, SRKR: 2, VVITPU: 3 };
-const getPreferredCollegeOrder = (collegeCode: string) => PREFERRED_COLLEGE_ORDER[String(collegeCode || '').trim().toUpperCase()] ?? 99;
 interface WebOptionGroup {
   key: WebOptionGroupKey; title: string; badge: string; description: string;
   explanation: string; pdfAccent: [number, number, number]; pdfTint: [number, number, number];
 }
 interface GeneratedOption extends PriorityChoice {
-  closingRank: number | null; matchedRecords: number; isUserPriority: boolean; isInstitutionPriority: boolean;
+  closingRank: number | null; matchedRecords: number; isUserPriority: boolean;
   observedStatus: ObservedStatus; groupKey: WebOptionGroupKey; profileRank: number; category: string;
   gender: 'M' | 'F'; region: string; specialCategory: string;
 }
 interface GeneratedProfile {
   rank: number; category: string; gender: 'M' | 'F'; region: string; specialCategory: string;
   districts: string[]; branches: string[]; totalFilteredMatches: number;
-  displayedAlternatives: number; priorityCount: number;
+  displayedAlternatives: number; priorityCount: number; priorityChoiceIds: string[];
 }
 
 const MAX_PRIORITY_CHOICES = 30;
 const MAX_AUTO_OPTIONS_PER_GROUP = 30;
 const WEB_OPTIONS_URL = 'https://naacollege.in/ap-eapcet/web-options-builder';
+const PLANNING_YEAR = 2027;
+const HISTORICAL_DATA_YEAR = 2026;
 const WEB_OPTION_GROUPS: WebOptionGroup[] = [
   { key: 'dream', title: 'Dream Options', badge: 'AIM HIGH', description: 'Aspirational, highly competitive choices — including your manually prioritised colleges.', explanation: 'These options have a tighter observed 2026 closing rank than your entered rank would meet. Your priority choices stay here by design.', pdfAccent: [157, 111, 20], pdfTint: [255, 248, 226] },
   { key: 'borderline', title: 'Borderline Chance', badge: 'CLOSE TO CUTOFF', description: 'Your rank is moderately beyond the available 2026 closing-rank reference.', explanation: 'Rank falls within the predictor’s existing 10–35% historical comparison band. This is a borderline context, not a probability.', pdfAccent: [176, 99, 37], pdfTint: [255, 244, 232] },
@@ -205,6 +203,20 @@ export const ApWebOptionsBuilder: React.FC = () => {
   );
   const priorityBranchChoices = selectedPriorityCollege?.branches || [];
 
+  const isGeneratedDraftOutdated = useMemo(() => {
+    if (!generatedProfile) return false;
+    const currentRank = Number(String(rankInput).replace(/,/g, '').trim());
+    const sameSet = (left: string[], right: string[]) => JSON.stringify([...left].sort()) === JSON.stringify([...right].sort());
+    return currentRank !== generatedProfile.rank
+      || category !== generatedProfile.category
+      || gender !== generatedProfile.gender
+      || region !== generatedProfile.region
+      || specialCategory !== generatedProfile.specialCategory
+      || !sameSet(selectedDistricts, generatedProfile.districts)
+      || !sameSet(selectedBranches, generatedProfile.branches)
+      || JSON.stringify(priorityChoices.map((choice) => choice.id)) !== JSON.stringify(generatedProfile.priorityChoiceIds);
+  }, [generatedProfile, rankInput, category, gender, region, specialCategory, selectedDistricts, selectedBranches, priorityChoices]);
+
   useEffect(() => {
     if (!sourceColleges.length) return;
     if (!priorityCollegeChoices.length) {
@@ -219,19 +231,11 @@ export const ApWebOptionsBuilder: React.FC = () => {
     }
   }, [priorityCollegeChoices, priorityCollegeCode, sourceColleges.length]);
 
-  useEffect(() => {
-    setGeneratedOptions([]);
-    setGeneratedProfile(null);
-    setCopyMessage('');
-  }, [rankInput, category, gender, region, specialCategory, selectedDistricts, selectedBranches, priorityChoices]);
-
   const toggleDistrict = (district: string) => {
     setSelectedDistricts((current) => current.includes(district) ? current.filter((item) => item !== district) : [...current, district]);
   };
   const toggleBranch = (code: string) => {
-    const scrollTop = window.scrollY;
     setSelectedBranches((current) => current.includes(code) ? current.filter((item) => item !== code) : [...current, code]);
-    window.requestAnimationFrame(() => window.scrollTo({ top: scrollTop, behavior: 'auto' }));
   };
 
   const addPriorityChoice = () => {
@@ -283,8 +287,6 @@ export const ApWebOptionsBuilder: React.FC = () => {
     setRankError('');
     setGenerationError('');
     setCopyMessage('');
-    setGeneratedOptions([]);
-    setGeneratedProfile(null);
     const rank = Number(String(rankInput).replace(/,/g, '').trim());
     if (!Number.isInteger(rank) || rank < 1 || rank > 350000) {
       setRankError('Enter a whole-number AP EAPCET rank between 1 and 350,000.');
@@ -313,7 +315,6 @@ export const ApWebOptionsBuilder: React.FC = () => {
         return {
           ...choice, closingRank, matchedRecords: match?.matchingRecordCount || 0,
           isUserPriority,
-          isInstitutionPriority: getPreferredCollegeOrder(choice.collegeCode) < 99,
           observedStatus: getObservedStatus(rank, closingRank),
           groupKey: isUserPriority ? 'dream' : getWebOptionGroup(rank, closingRank),
           profileRank: rank, category, gender, region, specialCategory,
@@ -333,18 +334,10 @@ export const ApWebOptionsBuilder: React.FC = () => {
         const groupB = getWebOptionGroup(rank, b.closingRank);
         if (GROUP_ORDER[groupA] !== GROUP_ORDER[groupB]) return GROUP_ORDER[groupA] - GROUP_ORDER[groupB];
 
-        // Promoted colleges must survive the per-section cap; weaker late-closing options follow.
-        const preferredA = getPreferredCollegeOrder(a.collegeCode);
-        const preferredB = getPreferredCollegeOrder(b.collegeCode);
-        if (preferredA !== preferredB) return preferredA - preferredB;
-
-        // Lower observed closing rank means more selective in this historical dataset.
+        // Neutral, data-driven ordering. No college code or institution name gets a boost.
+        // A lower closing rank is a historical branch-demand indicator, not a quality score.
         if (a.closingRank !== b.closingRank) return a.closingRank - b.closingRank;
-
-        if (selectedBranches.length) {
-          const difference = selectedBranches.indexOf(a.branchCode) - selectedBranches.indexOf(b.branchCode);
-          if (difference !== 0) return difference;
-        }
+        if (a.matchingRecordCount !== b.matchingRecordCount) return b.matchingRecordCount - a.matchingRecordCount;
         return a.collegeName.localeCompare(b.collegeName) || a.branchName.localeCompare(b.branchName);
       });
 
@@ -365,6 +358,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
         districts: [...selectedDistricts], branches: [...selectedBranches],
         totalFilteredMatches: alternativeMatches.length,
         displayedAlternatives: alternativeOptions.length, priorityCount: priorityOptions.length,
+        priorityChoiceIds: priorityChoices.map((choice) => choice.id),
       });
     } catch (error) {
       setGenerationError(error instanceof Error ? error.message : 'Could not generate the web options from the 2026 rank index.');
@@ -374,7 +368,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
   };
 
   const downloadPdfOptions = async () => {
-    if (!generatedOptions.length || isExportingPdf) return;
+    if (!generatedOptions.length || isExportingPdf || isGeneratedDraftOutdated) return;
     setIsExportingPdf(true);
     setCopyMessage('');
     try {
@@ -600,7 +594,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
   };
 
   const copyOptions = async () => {
-    if (!generatedOptions.length) return;
+    if (!generatedOptions.length || isGeneratedDraftOutdated) return;
     try {
       if (!navigator.clipboard?.writeText) throw new Error('Clipboard access is unavailable in this browser.');
       await navigator.clipboard.writeText(makeExportText(generatedOptions, generatedProfile));
@@ -611,7 +605,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
   };
 
   const downloadOptions = () => {
-    if (!generatedOptions.length) return;
+    if (!generatedOptions.length || isGeneratedDraftOutdated) return;
     const file = new Blob([makeExportText(generatedOptions, generatedProfile)], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(file);
     const anchor = document.createElement('a');
