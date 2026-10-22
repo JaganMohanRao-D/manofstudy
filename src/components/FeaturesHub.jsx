@@ -13,6 +13,7 @@ import {
   FileText,
   ShoppingBag,
   Database,
+  ClipboardCheck,
   ChevronRight,
   Briefcase,
   MapPin,
@@ -153,6 +154,17 @@ export const WORKSPACES = [
     actionText: 'Predict Colleges',
     icon: Compass,
     iconBg: 'bg-sky-500/10 border-sky-500/30 text-sky-400',
+  },
+  {
+    id: 'ws-ap-web-options',
+    workspace: 'ap-web-options',
+    category: 'admissions',
+    title: 'AP EAPCET Web Options Builder',
+    badge: '2026 DATA',
+    description: 'Build and reorder a college-and-branch preference list using the available 2026 rank index, district choices and your priorities.',
+    actionText: 'Build Web Options',
+    icon: ClipboardCheck,
+    iconBg: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
   },
   {
     id: 'ws-ap-rank-predictor',
@@ -346,6 +358,7 @@ export const FeaturesHub = ({
       tools: [
         { workspace: 'ap-allotments', title: 'AP Namewise Allotments', description: 'Choose 2025 or 2026, then explore districts, colleges, branches and candidates.', icon: Database },
         { workspace: 'ap-predictor', title: 'AP College Predictor', description: 'Match your rank against the available AP EAPCET 2026 allotment records.', icon: Compass },
+        { workspace: 'ap-web-options', title: 'AP EAPCET Web Options Builder', description: 'Build a rank-aware preference ladder using real 2026 college, branch, district and closing-rank data.', icon: ClipboardCheck },
         { workspace: 'ap-rank-predictor', title: 'AP EAPCET Rank Predictor', description: 'Estimate a rank range from EAPCET subject marks and Intermediate/board marks.', icon: Award },
         { workspace: 'ap-top-colleges', title: 'AP Top B.Tech Colleges — Observed Ranks', description: 'Explore 2026 branch-wise highest, median and last observed OC ranks.', icon: Award },
       ],
