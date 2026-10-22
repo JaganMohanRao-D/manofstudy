@@ -121,14 +121,14 @@ export default function ApCollegePredictor({
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
-                  AP EAPCET 2026 College Predictor
+                  AP College Predictor · 2027 Planning
                 </h1>
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20">
                   Data Grounded
                 </span>
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Deterministic admission comparison based on 100,000+ official AP 2026 allotment records
+                Rank-based comparison using available AP EAPCET 2026 historical allotment records. For 2027 planning only; actual 2027 cutoffs may differ.
               </p>
             </div>
           </div>
