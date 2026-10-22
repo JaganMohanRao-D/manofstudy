@@ -383,12 +383,22 @@ export const ScholarshipsHub: React.FC = () => {
                   <div className="min-w-0 flex-1"><p className="truncate text-xs font-semibold text-[var(--mos-text-muted)]" title={s.provider}>{s.provider}</p><div className="mt-1 flex flex-wrap gap-1.5">{tags.slice(0, 2).map(tag => <span key={tag} className="rounded-md border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-2 py-0.5 text-[10px] font-medium text-[var(--mos-text-secondary)]">{tag}</span>)}{s.dateAdded && !Number.isNaN(new Date(s.dateAdded).getTime()) && (Date.now() - new Date(s.dateAdded).getTime() < 14 * 86400000) && <span className="inline-flex items-center gap-1 rounded-md bg-sky-500/10 px-2 py-0.5 text-[10px] font-bold text-sky-700 dark:text-sky-300"><Sparkles className="h-3 w-3" /> New</span>}</div></div>
                   <button type="button" onClick={() => toggleSaved(s.id)} aria-label={saved ? 'Remove ' + s.title + ' from saved scholarships' : 'Save ' + s.title} aria-pressed={saved} title={saved ? 'Saved' : 'Save scholarship'} className={'rounded-lg border p-2 transition focus-visible:outline-2 focus-visible:outline-emerald-500 ' + (saved ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600' : 'border-transparent text-[var(--mos-text-muted)] hover:border-[var(--mos-border)] hover:bg-[var(--mos-surface-muted)]')}><Bookmark className="h-4 w-4" fill={saved ? 'currentColor' : 'none'} /></button>
                 </div>
-                <h3 className="mt-4 min-h-[3.25rem] text-base font-extrabold leading-6 tracking-tight text-[var(--mos-text-primary)] sm:text-lg">{s.title}</h3>
-                <div className="mt-3 flex items-start gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/[.06] p-3"><Wallet className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-300" /><div className="min-w-0"><p className="text-[10px] font-bold uppercase tracking-[.12em] text-emerald-700 dark:text-emerald-300">Benefit / award</p><p className="mt-1 break-words text-sm font-bold leading-5 text-[var(--mos-text-primary)]">{s.amount || 'Amount not confirmed from an official source'}</p></div></div>
-                <div className="mt-3 space-y-2 text-xs text-[var(--mos-text-secondary)]">
-                  <p className="flex items-start gap-2"><GraduationCap className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--mos-text-muted)]" /><span className="line-clamp-2">{level || 'Education level depends on scheme rules'}</span></p>
-                  <p className="flex items-start gap-2"><Users className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--mos-text-muted)]" /><span className="line-clamp-2">{s.target || s.eligibility}</span></p>
-                  <p className="flex items-start gap-2"><MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--mos-text-muted)]" /><span>{inferredState(s) === 'andhra-pradesh' ? 'Andhra Pradesh' : inferredState(s) === 'telangana' ? 'Telangana' : inferredState(s) === 'national' ? 'National / All India' : 'State-specific'}</span></p>
+                <a href={'/scholarships/' + scholarshipSlug(s.title) + '/'} className="mos-scholarship-title-link mt-4 block rounded-xl px-3 py-3 text-base font-black leading-6 sm:text-lg" aria-label={'View details for ' + s.title}>
+                  <span className="mos-scholarship-title-kicker">SCHOLARSHIP OPPORTUNITY</span>
+                  <h3 className="mos-scholarship-shining-title">{s.title}</h3>
+                </a>
+                <div className="mos-scholarship-facts mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  <div className="mos-scholarship-fact mos-scholarship-amount"><p>AMOUNT / AWARD</p><strong>{s.amount || 'Amount not confirmed'}</strong></div>
+                  <div className="mos-scholarship-fact mos-scholarship-deadline"><p>DEADLINE</p><strong>{s.deadline || 'Current deadline not confirmed'}</strong></div>
+                </div>
+                <div className="mos-scholarship-info-block mt-3">
+                  <h4><FileText className="h-3.5 w-3.5" /> SCHOLARSHIP DETAILS</h4>
+                  <p className="line-clamp-3">{s.description || s.target || 'Review the provider guidelines for programme details.'}</p>
+                </div>
+                <div className="mos-scholarship-info-block mos-scholarship-eligibility mt-2">
+                  <h4><GraduationCap className="h-3.5 w-3.5" /> ELIGIBILITY</h4>
+                  <p className="line-clamp-3">{s.eligibility || s.target || 'Eligibility requirements are not confirmed in this record.'}</p>
+                  <p className="mos-scholarship-level">{level || 'Education level depends on scheme rules'} · {inferredState(s) === 'andhra-pradesh' ? 'Andhra Pradesh' : inferredState(s) === 'telangana' ? 'Telangana' : inferredState(s) === 'national' ? 'National / All India' : 'State-specific'}</p>
                 </div>
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--mos-border)] pt-3">
                   <span className={'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold ' + statusStyles[state]}><CalendarDays className="h-3 w-3" />{statusLabel(s)}</span>

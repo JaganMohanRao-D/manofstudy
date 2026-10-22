@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -16,6 +16,9 @@ import {
   Users,
   BookMarked,
   LibraryBig,
+  CalendarDays,
+  Wallet,
+  CheckCircle2 as VerifiedIcon,
 } from 'lucide-react';
 import './kineticMOS.css';
 import './NaaHomepageRedesign.css';
@@ -27,6 +30,30 @@ const publishedArticles = articlesData
   .slice()
   .sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)) || String(b.updatedAt || b.publishedAt).localeCompare(String(a.updatedAt || a.publishedAt)))
   .slice(0, 3);
+
+const scholarshipDeadlineDate = (value) => {
+  const text = String(value || '');
+  const iso = text.match(/\b(20\d{2})-(\d{1,2})-(\d{1,2})\b/);
+  if (iso) return new Date(Number(iso[1]), Number(iso[2]) - 1, Number(iso[3]));
+  const long = text.match(/\b(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(20\d{2})\b/i);
+  if (!long) return null;
+  const months = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+  return new Date(Number(long[3]), months.indexOf(long[2].toLowerCase()), Number(long[1]));
+};
+const getActiveFeaturedScholarships = (items) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return items
+    .map((item) => ({ ...item, _deadlineDate: scholarshipDeadlineDate(item.deadline) }))
+    .filter((item) => {
+      const status = String(item.status || '').toLowerCase();
+      return item._deadlineDate && item._deadlineDate >= today &&
+        /open|live|registration|renewal/.test(status) &&
+        !/closed|expired|ended|not confirmed/.test(status);
+    })
+    .sort((a, b) => a._deadlineDate - b._deadlineDate)
+    .slice(0, 3);
+};
 
 const TICKER_ITEMS = [
   { label: 'AP EAPCET allotments', detail: 'Explore available college-wise records', workspace: 'ap-allotments' },
@@ -40,6 +67,23 @@ const TICKER_ITEMS = [
 export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
   const [query, setQuery] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
+  const [featuredScholarships, setFeaturedScholarships] = useState([]);
+  const [scholarshipsLoaded, setScholarshipsLoaded] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    fetch('/indian_scholarships.json')
+      .then((response) => {
+        if (!response.ok) throw new Error('Scholarship data unavailable');
+        return response.json();
+      })
+      .then((items) => {
+        if (active && Array.isArray(items)) setFeaturedScholarships(getActiveFeaturedScholarships(items));
+      })
+      .catch(() => { if (active) setFeaturedScholarships([]); })
+      .finally(() => { if (active) setScholarshipsLoaded(true); });
+    return () => { active = false; };
+  }, []);
 
   const shortcuts = [
     { title: 'AP EAPCET College Predictor', detail: 'College options from your rank and preferences', icon: Landmark, workspace: 'ap-predictor' },
@@ -370,6 +414,38 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
       </section>
 
 
+      <section className="nc-featured-scholarships nc-page-width" aria-labelledby="nc-featured-scholarships-title">
+        <div className="nc-section-heading-row">
+          <div>
+            <span className="nc-section-kicker">FUND YOUR NEXT STEP</span>
+            <h2 id="nc-featured-scholarships-title">FEATURED <span>SCHOLARSHIPS</span></h2>
+            <p>Currently listed opportunities with upcoming deadlines. Open a card for eligibility and application details.</p>
+          </div>
+          <a className="nc-all-blogs-link" href="/scholarships/">Explore all scholarships <ArrowRight size={16} aria-hidden="true" /></a>
+        </div>
+        {featuredScholarships.length > 0 ? (
+          <div className="nc-featured-scholarship-grid">
+            {featuredScholarships.map((item) => (
+              <a className="nc-featured-scholarship-card" key={item.id} href={'/scholarships/' + String(item.title).toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') + '/'}>
+                <div className="nc-featured-scholarship-topline"><span><Sparkles size={14} /> ACTIVE LISTING</span><ArrowUpRight size={18} aria-hidden="true" /></div>
+                <h3 className="nc-featured-scholarship-title">{item.title}</h3>
+                <div className="nc-featured-scholarship-facts">
+                  <div><span><Wallet size={14} /> AMOUNT / AWARD</span><strong>{item.amount || 'Amount not confirmed'}</strong></div>
+                  <div><span><CalendarDays size={14} /> DEADLINE</span><strong>{item.deadline || 'Check official source'}</strong></div>
+                </div>
+                <div className="nc-featured-scholarship-copy"><strong>SCHOLARSHIP DETAILS</strong><p>{item.description || item.target || 'Read the official scheme details.'}</p></div>
+                <div className="nc-featured-scholarship-copy nc-featured-scholarship-eligibility"><strong>ELIGIBILITY</strong><p>{item.eligibility || item.target || 'Check the current provider guidelines.'}</p></div>
+                <span className="nc-featured-scholarship-cta">View full scholarship details <ArrowRight size={16} aria-hidden="true" /></span>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <div className="nc-featured-scholarship-empty">
+            {scholarshipsLoaded ? 'No upcoming deadlines are currently confirmed in the scholarship dataset. Check the full hub for updates.' : 'Checking currently listed scholarship deadlines…'}
+          </div>
+        )}
+        <p className="nc-featured-scholarship-note"><VerifiedIcon size={15} aria-hidden="true" /> Dates and eligibility can change. Confirm details on the scholarship provider’s official portal before applying.</p>
+      </section>
 
     </main>
   );
