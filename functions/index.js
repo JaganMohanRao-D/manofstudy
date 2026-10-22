@@ -384,3 +384,6 @@ exports.processCampusCommunityReport = onDocumentCreated(
     };
   }
 );
+
+// Public, rate-limited website guide endpoint; Gemini credentials stay in Secret Manager.
+exports.websiteAssistantChat = require("./websiteAssistant").websiteAssistantChat;
