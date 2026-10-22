@@ -345,7 +345,7 @@ export const ScholarshipsHub: React.FC = () => {
     <section className="mos-scholarships-hub mx-auto w-full max-w-none space-y-4 px-3 py-3 text-[var(--mos-text-primary)] sm:px-4 sm:py-4 lg:px-5">
       <header className="mos-scholarship-hero relative grid gap-4 overflow-hidden rounded-[20px] border border-[var(--mos-border)] p-4 shadow-sm sm:rounded-[22px] sm:p-5 md:grid-cols-[minmax(0,1fr)_minmax(270px,.82fr)] md:items-center md:gap-5">
         
-        <div className="relative z-10 max-w-4xl">
+        <div className="mos-scholarship-copy relative z-10 max-w-4xl">
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[.14em] text-emerald-700 dark:text-emerald-300"><Sparkles className="h-3.5 w-3.5" /> Scholarship finder · 2026–27</div>
           <h1 className="mt-2 max-w-3xl text-2xl font-black leading-tight tracking-tight sm:text-3xl lg:text-4xl">Big dreams deserve <span className="mos-scholarship-gradient-text">opportunities.</span></h1>
           <p className="mt-2 max-w-2xl text-xs leading-5 text-[var(--mos-text-secondary)] sm:text-sm sm:leading-6">Discover scholarships, understand your options, and find funding opportunities for your educational journey.</p>
@@ -363,7 +363,7 @@ export const ScholarshipsHub: React.FC = () => {
         <div className="mos-mini-scholarships-heading">
           <div>
             <span className="mos-mini-scholarships-eyebrow"><Sparkles className="h-3.5 w-3.5" /> UPCOMING OPPORTUNITY</span>
-            <h2 id="mos-mini-scholarships-title">Mini Scholarships</h2>
+            <h2 id="mos-mini-scholarships-title">Scholarship Spotlight</h2>
           </div>
           <a href="/scholarships/" className="mos-mini-scholarships-all">View directory <ArrowUpRight className="h-4 w-4" /></a>
         </div>
