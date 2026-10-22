@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react';
 import {
   AlertCircle, ArrowDown, ArrowRight, ArrowUp, BadgeCheck, Check, CheckCircle2,
-  ClipboardCheck, Copy, Download, GraduationCap, Info, ListOrdered, MapPin, Plus,
+  Copy, Download, GraduationCap, Info, ListOrdered, MapPin, Plus,
   RefreshCw, Search, ShieldCheck, Sparkles, Target, Trash2, X,
 } from 'lucide-react';
 import {
