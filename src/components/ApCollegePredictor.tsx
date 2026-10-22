@@ -254,11 +254,11 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
           </div>
 
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-white leading-tight">
-            AP EAPCET 2026 College Predictor
+            AP College Predictor · 2027 Planning
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 font-medium leading-relaxed">
-            Historical comparison using the available 2026 AP EAPCET allotment records, with category, gender, local-status/region and special-quota filters.
+            Explore category- and branch-matched college records for 2027 admission planning using available 2026 historical allotments. Official 2027 cutoffs are not assumed or invented.
           </p>
 
           <div className="pt-2 flex flex-wrap items-center gap-2 text-xs">
