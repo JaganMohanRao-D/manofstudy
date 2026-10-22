@@ -73,3 +73,29 @@
   .nca-chat-spinner { animation-duration: 2.5s; }
   .nca-chat-launcher { transition: none; }
 }
+
+.nca-chat-footer-note {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0 13px 12px;
+  background: #fff;
+  color: #7b8797;
+  font-size: 9px;
+  line-height: 1.4;
+  text-align: center;
+  letter-spacing: .005em;
+}
+.nca-chat-footer-note em { font-style: italic; color: #64748b; }
+.dark .nca-chat-panel { background: #111827; color: #f8fafc; border-color: #334155; }
+.dark .nca-chat-header { background: #172033; border-color: #334155; }
+.dark .nca-chat-header-copy h2 { color: #f8fafc; }
+.dark .nca-chat-header-copy p,.dark .nca-chat-footer-note { color: #94a3b8; }
+.dark .nca-chat-footer-note { background: #111827; }
+.dark .nca-chat-footer-note em { color: #cbd5e1; }
+.dark .nca-chat-messages,.dark .nca-chat-composer,.dark .nca-chat-disclaimer { background: #111827; }
+.dark .nca-chat-composer { border-color: #334155; }
+.dark .nca-chat-composer input { background: #0f172a; color: #f8fafc; border-color: #475569; }
+.dark .nca-chat-bubble { background: #1e293b; color: #f1f5f9; border-color: #334155; }
+.dark .nca-chat-inline-link { color: #6ee7b7; }
+.dark .nca-chat-disclaimer { color: #94a3b8; }
+
