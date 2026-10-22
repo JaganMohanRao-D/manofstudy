@@ -23,13 +23,13 @@ const WELCOME_MESSAGE: ChatMessage = {
   id: "nca-welcome",
   role: "assistant",
   content:
-    "Hi! I’m Naa College AI. Ask me how to use our AP/TG EAPCET tools, find scholarships, explore roadmaps, or navigate any student resource on this website.",
+    "Hi! I’m NaaCox AI from Naa College. I can help you understand our website, find tools, explore scholarships and roadmaps, and answer questions about Naa College. Ask in English or Telugu-English.",
 };
 
 const QUICK_QUESTIONS = [
+  "Who founded Naa College?",
+  "Find scholarships",
   "Where can I find AP allotments?",
-  "Help me find scholarships",
-  "Show me engineering roadmaps",
 ];
 
 function renderSafeLinks(text: string): React.ReactNode[] {
@@ -206,8 +206,8 @@ export function NaaCollegeAssistant() {
               <GraduationCap size={21} aria-hidden="true" />
             </div>
             <div className="nca-chat-header-copy">
-              <h2 id="nca-chat-title">Ask Naa College AI</h2>
-              <p><span className="nca-chat-online-dot" /> Website guide for students</p>
+              <h2 id="nca-chat-title">NaaCox AI</h2>
+              <p><span className="nca-chat-online-dot" /> Your Naa College student assistant</p>
             </div>
             <div className="nca-chat-header-actions">
               <button
@@ -248,7 +248,7 @@ export function NaaCollegeAssistant() {
             ))}
 
             {sending && (
-              <div className="nca-chat-message-row is-assistant" role="status" aria-label="Naa College AI is answering">
+              <div className="nca-chat-message-row is-assistant" role="status" aria-label="NaaCox AI is answering">
                 <div className="nca-chat-avatar" aria-hidden="true"><Bot size={15} /></div>
                 <div className="nca-chat-bubble nca-chat-thinking">
                   <LoaderCircle size={15} className="nca-chat-spinner" />
@@ -283,7 +283,7 @@ export function NaaCollegeAssistant() {
               id="nca-chat-input"
               value={draft}
               onChange={(event) => setDraft(event.target.value)}
-              placeholder="Ask about tools, scholarships, EAPCET…"
+              placeholder="Ask NaaCox AI about Naa College…"
               maxLength={1200}
               disabled={sending}
               autoComplete="off"
@@ -301,6 +301,7 @@ export function NaaCollegeAssistant() {
             <Check size={12} aria-hidden="true" />
             <span>Verify admission and scholarship decisions with official sources. Don’t share passwords or private details.</span>
           </div>
+          <p className="nca-chat-footer-note">NaaCox AI <em>may make mistakes, because humans do too.</em></p>
         </section>
       )}
 
@@ -308,13 +309,13 @@ export function NaaCollegeAssistant() {
         type="button"
         className={"nca-chat-launcher " + (open ? "is-open" : "")}
         onClick={() => setOpen((value) => !value)}
-        aria-label={open ? "Close Naa College AI assistant" : "Open Naa College AI assistant"}
+        aria-label={open ? "Close NaaCox AI assistant" : "Open NaaCox AI assistant"}
         aria-expanded={open}
         aria-controls="nca-chat-panel"
       >
         {open ? <X size={23} /> : <MessageCircle size={23} />}
         {!open && <span className="nca-chat-launcher-sparkle"><Sparkles size={12} /></span>}
-        {!open && <span className="nca-chat-launcher-label">Ask Naa AI</span>}
+        {!open && <span className="nca-chat-launcher-label">NaaCox AI</span>}
       </button>
     </div>
   );
