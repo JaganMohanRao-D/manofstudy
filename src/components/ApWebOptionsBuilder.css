@@ -291,3 +291,5 @@
   .apwo-spin, .apwo-art-orbit-one { animation: none !important; }
   .apwo-add-priority, .apwo-generate-button { transition: none !important; }
 }
+
+.apwo-record-count { display:inline-flex; align-items:center; padding:5px 7px; border:1px solid #dfe7e2; border-radius:8px; background:#f8faf8; color:#738176; font-size:8px; line-height:1.45; }
