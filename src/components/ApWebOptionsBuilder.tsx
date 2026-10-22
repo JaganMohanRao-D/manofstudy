@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react';
+import { jsPDF } from 'jspdf';
 import {
   AlertCircle, ArrowDown, ArrowRight, ArrowUp, BadgeCheck, Check, CheckCircle2,
-  Copy, Download, GraduationCap, Info, ListOrdered, MapPin, Plus,
+  Copy, Download, FileDown, GraduationCap, Info, ListOrdered, MapPin, Plus,
   RefreshCw, Search, ShieldCheck, Sparkles, Target, Trash2, X,
 } from 'lucide-react';
 import {
@@ -17,9 +18,14 @@ interface PriorityChoice {
   branchCode: string; branchName: string;
 }
 type ObservedStatus = 'within' | 'beyond' | 'missing';
+type WebOptionGroupKey = 'dream' | 'borderline' | 'available' | 'safe-backup';
+interface WebOptionGroup {
+  key: WebOptionGroupKey; title: string; badge: string; description: string;
+  explanation: string; pdfAccent: [number, number, number]; pdfTint: [number, number, number];
+}
 interface GeneratedOption extends PriorityChoice {
   closingRank: number | null; matchedRecords: number; isUserPriority: boolean;
-  observedStatus: ObservedStatus; profileRank: number; category: string;
+  observedStatus: ObservedStatus; groupKey: WebOptionGroupKey; profileRank: number; category: string;
   gender: 'M' | 'F'; region: string; specialCategory: string;
 }
 interface GeneratedProfile {
@@ -29,8 +35,36 @@ interface GeneratedProfile {
 }
 
 const MAX_PRIORITY_CHOICES = 30;
-const MAX_AUTO_OPTIONS = 60;
+const MAX_AUTO_OPTIONS_PER_GROUP = 30;
+const WEB_OPTIONS_URL = 'https://naacollege.in/ap-eapcet/web-options-builder';
+const WEB_OPTION_GROUPS: WebOptionGroup[] = [
+  { key: 'dream', title: 'Dream Options', badge: 'AIM HIGH', description: 'Aspirational, highly competitive choices — including your manually prioritised colleges.', explanation: 'These options have a tighter observed 2026 closing rank than your entered rank would meet. Your priority choices stay here by design.', pdfAccent: [157, 111, 20], pdfTint: [255, 248, 226] },
+  { key: 'borderline', title: 'Borderline Chance', badge: 'CLOSE TO CUTOFF', description: 'Your rank is moderately beyond the available 2026 closing-rank reference.', explanation: 'Rank falls within the predictor’s existing 10–35% historical comparison band. This is a borderline context, not a probability.', pdfAccent: [176, 99, 37], pdfTint: [255, 244, 232] },
+  { key: 'available', title: 'Available for Rank', badge: 'WITHIN OBSERVED RANGE', description: 'Your rank is at or better than the observed closing rank, without the larger backup buffer.', explanation: 'Your rank is within this category/gender/region-filtered 2026 observed closing-rank value. It does not guarantee a future allotment.', pdfAccent: [36, 112, 77], pdfTint: [235, 248, 239] },
+  { key: 'safe-backup', title: 'Safe Backup', badge: 'LARGER HISTORICAL BUFFER', description: 'Options where the observed closing rank is at least 35% higher than your entered rank.', explanation: 'This is a larger historical rank buffer only — no college or seat can be guaranteed safe in a future counselling round.', pdfAccent: [48, 101, 143], pdfTint: [236, 245, 252] },
+];
+const GROUP_ORDER: Record<WebOptionGroupKey, number> = { dream: 0, borderline: 1, available: 2, 'safe-backup': 3 };
 const formatRank = (value: number) => Math.round(value).toLocaleString('en-IN');
+const getWebOptionGroup = (rank: number, closingRank: number | null): WebOptionGroupKey => {
+  if (!closingRank || closingRank < 1) return 'dream';
+  if (rank > closingRank * 1.35) return 'dream';
+  if (rank > closingRank * 1.10) return 'borderline';
+  if (closingRank >= rank * 1.35) return 'safe-backup';
+  return 'available';
+};
+const loadLogoAsPng = async (src: string): Promise<string> => {
+  const image = new Image();
+  image.decoding = 'async';
+  image.src = src;
+  await image.decode();
+  const canvas = document.createElement('canvas');
+  canvas.width = image.naturalWidth || image.width;
+  canvas.height = image.naturalHeight || image.height;
+  const context = canvas.getContext('2d');
+  if (!context || !canvas.width || !canvas.height) throw new Error('The Naa College logo could not be prepared for PDF export.');
+  context.drawImage(image, 0, 0, canvas.width, canvas.height);
+  return canvas.toDataURL('image/png');
+};
 const getObservedStatus = (rank: number, closingRank: number | null): ObservedStatus => {
   if (!closingRank || closingRank < 1) return 'missing';
   return rank <= closingRank ? 'within' : 'beyond';
@@ -87,6 +121,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
   const [priorityChoices, setPriorityChoices] = useState<PriorityChoice[]>([]);
   const [priorityError, setPriorityError] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isExportingPdf, setIsExportingPdf] = useState(false);
   const [generationError, setGenerationError] = useState('');
   const [generatedOptions, setGeneratedOptions] = useState<GeneratedOption[]>([]);
   const [generatedProfile, setGeneratedProfile] = useState<GeneratedProfile | null>(null);
@@ -189,7 +224,9 @@ export const ApWebOptionsBuilder: React.FC = () => {
     setSelectedDistricts((current) => current.includes(district) ? current.filter((item) => item !== district) : [...current, district]);
   };
   const toggleBranch = (code: string) => {
+    const scrollTop = window.scrollY;
     setSelectedBranches((current) => current.includes(code) ? current.filter((item) => item !== code) : [...current, code]);
+    window.requestAnimationFrame(() => window.scrollTo({ top: scrollTop, behavior: 'auto' }));
   };
 
   const addPriorityChoice = () => {
@@ -270,6 +307,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
         return {
           ...choice, closingRank, matchedRecords: match?.matchingRecordCount || 0,
           isUserPriority, observedStatus: getObservedStatus(rank, closingRank),
+          groupKey: isUserPriority ? 'dream' : getWebOptionGroup(rank, closingRank),
           profileRank: rank, category, gender, region, specialCategory,
         };
       };
@@ -283,17 +321,17 @@ export const ApWebOptionsBuilder: React.FC = () => {
         if (selectedBranches.length && !selectedBranches.includes(match.branchCode)) return false;
         return true;
       }).sort((a, b) => {
-        const aWithin = rank <= a.closingRank;
-        const bWithin = rank <= b.closingRank;
-        if (aWithin !== bWithin) return aWithin ? -1 : 1;
-        if (aWithin && bWithin) {
-          const diff = b.closingRank - a.closingRank;
-          if (diff !== 0) return diff;
-        } else {
-          const aBeyond = rank - a.closingRank;
-          const bBeyond = rank - b.closingRank;
-          if (aBeyond !== bBeyond) return aBeyond - bBeyond;
+        const groupA = getWebOptionGroup(rank, a.closingRank);
+        const groupB = getWebOptionGroup(rank, b.closingRank);
+        if (GROUP_ORDER[groupA] !== GROUP_ORDER[groupB]) return GROUP_ORDER[groupA] - GROUP_ORDER[groupB];
+        if (groupA === 'dream' && a.closingRank !== b.closingRank) return a.closingRank - b.closingRank;
+        if (groupA === 'borderline') {
+          const gapA = Math.abs(rank - a.closingRank);
+          const gapB = Math.abs(rank - b.closingRank);
+          if (gapA !== gapB) return gapA - gapB;
         }
+        if (groupA === 'available' && a.closingRank !== b.closingRank) return a.closingRank - b.closingRank;
+        if (groupA === 'safe-backup' && a.closingRank !== b.closingRank) return b.closingRank - a.closingRank;
         if (selectedBranches.length) {
           const difference = selectedBranches.indexOf(a.branchCode) - selectedBranches.indexOf(b.branchCode);
           if (difference !== 0) return difference;
@@ -301,10 +339,13 @@ export const ApWebOptionsBuilder: React.FC = () => {
         return a.collegeName.localeCompare(b.collegeName) || a.branchName.localeCompare(b.branchName);
       });
 
-      const alternativeOptions = alternativeMatches.slice(0, MAX_AUTO_OPTIONS).map((match) => toGeneratedOption({
-        id: match.id, collegeCode: match.collegeCode, collegeName: match.collegeName,
-        district: match.district, branchCode: match.branchCode, branchName: match.branchName,
-      }, false));
+      const alternativeOptions = WEB_OPTION_GROUPS.flatMap((group) => alternativeMatches
+        .filter((match) => getWebOptionGroup(rank, match.closingRank) === group.key)
+        .slice(0, MAX_AUTO_OPTIONS_PER_GROUP)
+        .map((match) => toGeneratedOption({
+          id: match.id, collegeCode: match.collegeCode, collegeName: match.collegeName,
+          district: match.district, branchCode: match.branchCode, branchName: match.branchName,
+        }, false)));
       const combined = priorityOptions.concat(alternativeOptions);
       if (!combined.length) {
         setGenerationError('No matching closing-rank options were found in the loaded 2026 data for these filters. Try another district or branch. You can still add an explicit preference above and keep it at the top of your list.');
