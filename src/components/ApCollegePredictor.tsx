@@ -250,7 +250,7 @@ export const ApCollegePredictor: React.FC<ApCollegePredictorProps> = ({
         <div className="relative z-10 max-w-3xl space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase bg-blue-500/20 text-blue-300 border border-blue-400/30">
             <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-            <span>AP EAPCET 2026 • Data-Grounded Comparison</span>
+            <span>AP EAPCET 2027 Planning • Historical 2026 Data</span>
           </div>
 
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-white leading-tight">
