@@ -21,7 +21,7 @@ const AP_TOOLS: NavItem[] = [
   { label: 'AP Rank Predictor · 2027 Planning', workspace: 'ap-rank-predictor', icon: Calculator },
   { label: 'AP B.Tech Colleges · 2027 Planning', workspace: 'ap-top-colleges', icon: Trophy },
   { label: 'AP Allotment Records · 2025–2026', workspace: 'ap-allotments', icon: ClipboardCheck },
-  { label: 'AP Seat & Fee Radar · 2027 Planning', workspace: 'eapcet-radar', icon: Search },
+  { label: 'AP Seat & Fee Radar · 2027 Planning', workspace: 'eapcet', icon: Search },
 ];
 const TG_TOOLS: NavItem[] = [
   { label: 'TG EAPCET College Predictor', workspace: 'tg-predictor', icon: Map },
