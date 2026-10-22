@@ -278,7 +278,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
       const priorityIds = new Set(priorityChoices.map((choice) => makeChoiceKey(choice.collegeCode, choice.branchCode)));
       const priorityOptions = priorityChoices.map((choice) => toGeneratedOption(choice, true));
       const alternativeMatches = response.matches.filter((match) => {
-        if (!match.closingRank || match.closingRank < 1 || priorityIds.has(match.id)) return false;
+        if (!match.closingRank || match.closingRank < 1 || priorityIds.has(makeChoiceKey(match.collegeCode, match.branchCode))) return false;
         if (selectedDistricts.length && !selectedDistricts.includes(match.district)) return false;
         if (selectedBranches.length && !selectedBranches.includes(match.branchCode)) return false;
         return true;
