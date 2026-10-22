@@ -3,10 +3,10 @@
 :root{--naa-blue:#2563eb;--naa-teal:#0f9f9a;--naa-mint:#d1fae5;--naa-sunshine:#fef3c7;--naa-coral:#fb7185;--naa-lavender:#ede9fe;--naa-cream:#fffdf6}
 .mos-scholarships-hub,.mos-scholarships-hub *{box-sizing:border-box}
 .mos-scholarships-hub{--scholarship-blue:var(--naa-blue);--scholarship-mint:var(--naa-mint);--scholarship-sun:var(--naa-sunshine);--scholarship-lilac:var(--naa-lavender);min-width:0}
-.mos-scholarship-hero{isolation:isolate;background:radial-gradient(ellipse at 92% 6%,rgba(125,211,252,.28),transparent 34%),radial-gradient(ellipse at 72% 92%,rgba(167,243,208,.34),transparent 35%),linear-gradient(125deg,#fffdf6 0%,#f0f9ff 52%,#f0fdf4 100%);border-color:#dbeafe!important}
-.dark .mos-scholarship-hero{background:radial-gradient(ellipse at 92% 6%,rgba(14,165,233,.18),transparent 36%),radial-gradient(ellipse at 72% 92%,rgba(16,185,129,.14),transparent 34%),var(--mos-surface);border-color:var(--mos-border)!important}
-.mos-scholarship-gradient-text{color:#059669;background:linear-gradient(95deg,#0284c7 0%,#059669 60%,#65a30d 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.dark .mos-scholarship-gradient-text{background-image:linear-gradient(95deg,#7dd3fc 0%,#6ee7b7 60%,#bef264 100%)}
+.mos-scholarship-hero{isolation:isolate;background:#F6F9FC;border-color:#D7E2EC!important}
+.dark .mos-scholarship-hero{background:#111827;border-color:#374151!important}
+.mos-scholarship-gradient-text{color:#0F766E;background:none;-webkit-text-fill-color:currentColor}
+.dark .mos-scholarship-gradient-text{color:#6EE7B7;-webkit-text-fill-color:#6EE7B7;background:none}
 .mos-scholarship-orbit{border-radius:9999px;filter:blur(38px)}.mos-scholarship-orbit-one{background:rgba(56,189,248,.2)}.mos-scholarship-orbit-two{background:rgba(251,191,36,.18)}
 .mos-scholarships-hub input,.mos-scholarships-hub select,.mos-scholarships-hub button,.mos-scholarships-hub a{min-width:0}
 .mos-scholarships-hub label{min-width:0}.mos-scholarships-hub select{width:100%;max-width:100%;min-height:44px;text-overflow:ellipsis}
@@ -28,12 +28,12 @@
 
 /* Full-width, compact Scholarships Hub: removes the oversized dark orb and prioritises the first card. */
 .mos-scholarships-hub { width:100%; max-width:none!important; padding-top:10px!important; padding-bottom:18px!important; gap:14px!important; }
-.mos-scholarship-hero { min-width:0; padding:clamp(14px,1.7vw,24px)!important; border-radius:20px!important; border-color:#d7e6ef!important; background:linear-gradient(112deg,#fffdf7 0%,#f2f9ff 48%,#effcf6 100%)!important; box-shadow:0 7px 22px rgba(31,62,94,.045)!important; }
-.dark .mos-scholarship-hero { background:linear-gradient(112deg,#101e2b 0%,#122936 52%,#142b25 100%)!important; border-color:#2c4759!important; }
+.mos-scholarship-hero { min-width:0; padding:clamp(14px,1.7vw,24px)!important; border-radius:20px!important; border-color:#d7e6ef!important; background:#F6F9FC!important; background-image:none!important; box-shadow:0 4px 18px rgba(31,62,94,.045)!important; }
+.dark .mos-scholarship-hero { background:#111827!important; background-image:none!important; border-color:#374151!important; }
 .mos-scholarship-orbit { display:none!important; }
 .mos-scholarship-hero h1 { margin-top:8px!important; font-size:clamp(25px,2.7vw,39px)!important; line-height:1.1!important; letter-spacing:-.04em!important; }
 .mos-scholarship-hero p { max-width:680px; margin-top:8px!important; font-size:13px!important; line-height:1.5!important; }
-.mos-scholarship-hero .mos-scholarship-gradient-text { background-image:linear-gradient(95deg,#0284c7 0%,#059669 58%,#65a30d 100%)!important; }
+.mos-scholarship-hero .mos-scholarship-gradient-text { color:#0F766E!important; background:none!important; background-image:none!important; -webkit-text-fill-color:currentColor!important; }
 .mos-scholarship-stats>div { border-radius:13px!important; padding:10px 12px!important; }
 .mos-scholarship-stats>div>div:last-child { font-size:23px!important; }
 
@@ -45,15 +45,15 @@
 .mos-mini-scholarships-all { display:inline-flex; flex:0 0 auto; align-items:center; gap:5px; color:#087f5b; font-size:11px; font-weight:800; text-decoration:none; }
 .dark .mos-mini-scholarships-all { color:#6ee7b7; }
 .mos-mini-scholarships-all:hover { text-decoration:underline; text-underline-offset:3px; }
-.mos-mini-scholarship-card { position:relative; display:grid; grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr); gap:17px; padding:16px 18px; overflow:hidden; border:1px solid #f2c3ce; border-radius:18px; background:radial-gradient(ellipse at 100% 0%,rgba(251,113,133,.12),transparent 35%),linear-gradient(112deg,#fff7f8,#fff 56%,#f4fbff); box-shadow:0 8px 20px rgba(129,24,50,.055); color:#253047; text-decoration:none; transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease; }
-.mos-mini-scholarship-card:before { position:absolute; inset:0 0 auto; height:3px; background:linear-gradient(90deg,#be123c,#fb7185,#f59e0b); content:""; }
+.mos-mini-scholarship-card { position:relative; display:grid; grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr); gap:17px; padding:16px 18px; overflow:hidden; border:1px solid #F2C3CE; border-radius:18px; background:#FFF8FA; background-image:none!important; box-shadow:0 4px 14px rgba(129,24,50,.045); color:#253047; text-decoration:none; transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease; }
+.mos-mini-scholarship-card:before { position:absolute; inset:0 0 auto; height:3px; background:#BE123C; content:""; }
 .mos-mini-scholarship-card:hover { transform:translateY(-2px); border-color:#e87991; box-shadow:0 12px 25px rgba(190,18,60,.09); }
 .mos-mini-scholarship-main { min-width:0; display:flex; flex-direction:column; gap:9px; }
 .mos-mini-scholarship-status { display:inline-flex; align-items:center; gap:5px; align-self:flex-start; color:#087f5b; font-size:9px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
 .mos-mini-scholarship-main h3 { margin:0; color:#bf1238; font-size:clamp(16px,1.45vw,21px); font-weight:950; line-height:1.23; letter-spacing:-.02em; overflow-wrap:anywhere; }
 .mos-mini-scholarship-facts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:auto; }
-.mos-mini-scholarship-facts>div { min-width:0; padding:9px 10px; border:1px solid #d8eee2; border-radius:11px; background:linear-gradient(135deg,#ecfdf5,#fff); }
-.mos-mini-scholarship-facts>div+div { border-color:#f2e0b6; background:linear-gradient(135deg,#fffbeb,#fff); }
+.mos-mini-scholarship-facts>div { min-width:0; padding:9px 10px; border:1px solid #D8EEE2; border-radius:11px; background:#ECFDF5; background-image:none!important; }
+.mos-mini-scholarship-facts>div+div { border-color:#F2E0B6; background:#FFFBEB; background-image:none!important; }
 .mos-mini-scholarship-facts span { display:flex; align-items:center; gap:5px; margin-bottom:5px; color:#047857; font-size:9px; font-weight:900; letter-spacing:.07em; }
 .mos-mini-scholarship-facts>div+div span { color:#92400e; }
 .mos-mini-scholarship-facts strong { display:block; color:#253047; font-size:11px; line-height:1.5; overflow-wrap:anywhere; }
@@ -62,12 +62,12 @@
 .mos-mini-scholarship-details h4 svg { color:#0f766e; flex:0 0 auto; }
 .mos-mini-scholarship-details p { margin:0; color:#576579; font-size:11px; line-height:1.45; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 .mos-mini-scholarship-cta { display:flex; align-items:center; gap:5px; margin-top:auto; color:#a31537; font-size:10px; font-weight:900; }
-.dark .mos-mini-scholarship-card { border-color:#523343; background:linear-gradient(112deg,#241925,#182434 58%,#15282c); color:#f8fafc; }
+.dark .mos-mini-scholarship-card { border-color:#523343; background:#1F2937; background-image:none!important; color:#f8fafc; }
 .dark .mos-mini-scholarship-main h3 { color:#fda4af; }
 .dark .mos-mini-scholarship-facts strong,.dark .mos-mini-scholarship-details h4 { color:#f1f5f9; }
 .dark .mos-mini-scholarship-details p { color:#cbd5e1; }
-.mos-mini-scholarship-loading { height:150px; border:1px solid var(--mos-border); border-radius:18px; background:linear-gradient(90deg,var(--mos-surface-muted),var(--mos-surface),var(--mos-surface-muted)); background-size:200% 100%; animation:mos-mini-loading 1.5s ease-in-out infinite; }
-@keyframes mos-mini-loading { to { background-position:-200% 0; } }
+.mos-mini-scholarship-loading { height:150px; border:1px solid var(--mos-border); border-radius:18px; background:#F1F5F9; animation:mos-mini-loading 1.5s ease-in-out infinite; }
+@keyframes mos-mini-loading { 0%,100% { opacity:.7; } 50% { opacity:1; } }
 .mos-mini-scholarship-empty { padding:15px; border:1px dashed var(--mos-border); border-radius:14px; color:var(--mos-text-secondary); font-size:12px; line-height:1.5; }
 .mos-scholarship-controls { padding:12px!important; }
 .mos-scholarships-hub .mos-scholarship-controls select { min-height:40px; padding-top:8px; padding-bottom:8px; }
