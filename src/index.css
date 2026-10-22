@@ -1964,21 +1964,29 @@ html.light .mos-card-raised {
    Tailwind bridge only where a dark surface requires light text.
    ========================================================================== */
 
-/* Scholarship hero stays a true dark hero in the light site theme. */
-html.light .mos-scholarship-hero .text-white {
-  color: #F8FAFC !important;
-  -webkit-text-fill-color: #F8FAFC !important;
+/* Scholarship finder now uses a light, solid hero; keep all copy readable. */
+html.light .mos-scholarship-hero {
+  color: #172033 !important;
+  background: #F6F9FC !important;
+  background-image: none !important;
 }
-html.light .mos-scholarship-hero .text-slate-200,
-html.light .mos-scholarship-hero .text-slate-300 {
-  color: #CBD5E1 !important;
+html.light .mos-scholarship-hero .mos-scholarship-copy,
+html.light .mos-scholarship-hero .mos-scholarship-copy h1,
+html.light .mos-scholarship-hero .mos-scholarship-copy p {
+  color: #172033 !important;
+  -webkit-text-fill-color: #172033 !important;
+  background: transparent !important;
+  background-image: none !important;
 }
-html.light .mos-scholarship-hero .text-slate-400 {
-  color: #94A3B8 !important;
+html.light .mos-scholarship-hero .mos-scholarship-gradient-text {
+  color: #0F766E !important;
+  -webkit-text-fill-color: #0F766E !important;
+  background: none !important;
+  background-image: none !important;
 }
 html.light .mos-scholarship-hero .text-emerald-300 {
-  color: #6EE7B7 !important;
-  -webkit-text-fill-color: #6EE7B7 !important;
+  color: #047857 !important;
+  -webkit-text-fill-color: #047857 !important;
 }
 
 /* About Us content uses a deliberately high-contrast light surface. */
