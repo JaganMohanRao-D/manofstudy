@@ -64,9 +64,10 @@ const getActiveFeaturedScholarships = (items) => {
 };
 
 const TICKER_ITEMS = [
-  { label: 'AP EAPCET allotments', detail: 'Explore available college-wise records', workspace: 'ap-allotments' },
+  { label: 'AP EAPCET · 2027 planning', detail: 'Explore available 2025–2026 historical allotments', workspace: 'ap-allotments' },
+  { label: 'AP Web Options · 2027 planning', detail: 'Organise preferences using available 2026 rank data', workspace: 'ap-web-options' },
+  { label: 'AP College Predictor · 2027 planning', detail: 'Explore rank matches using historical data', workspace: 'ap-predictor' },
   { label: 'TG EAPCET name-wise allotments', detail: 'Search Telangana allotment records', workspace: 'tg-allotments' },
-  { label: 'College predictors', detail: 'Explore options by rank and preferences', workspace: 'ap-predictor' },
   { label: 'Scholarships hub', detail: 'Find student funding information', workspace: 'scholarships' },
   { label: 'Autonomous colleges directory', detail: 'Browse autonomy information', href: '/autonomous-colleges/' },
   { label: 'Mock test series', detail: 'Open the available practice tests', workspace: 'mock-tests' },
@@ -94,8 +95,10 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
   }, []);
 
   const shortcuts = [
-    { title: 'AP EAPCET College Predictor', detail: 'College options from your rank and preferences', icon: Landmark, workspace: 'ap-predictor' },
+    { title: 'AP College Predictor · 2027 Planning', detail: 'Explore rank matches with available 2026 data', icon: Landmark, workspace: 'ap-predictor' },
     { title: 'Telangana College Predictor', detail: 'Explore TG college and branch options', icon: GraduationCap, workspace: 'tg-predictor' },
+    { title: 'AP Web Options · 2027 Planning', detail: 'Build a preference draft from historical ranks', icon: ClipboardCheck, workspace: 'ap-web-options' },
+    { title: 'AP B.Tech Colleges · 2027 Planning', detail: 'Compare observed 2026 branch-rank patterns', icon: LibraryBig, workspace: 'ap-top-colleges' },
     { title: 'Scholarships', detail: 'Browse student funding resources', icon: BookMarked, workspace: 'scholarships' },
     { title: 'Student Tools', detail: 'Attendance, GPA, PDF and image tools', icon: Wrench, workspace: 'utilities' },
   ];

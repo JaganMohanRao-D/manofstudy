@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState, type FormEvent } from
 import { jsPDF } from 'jspdf';
 import {
   AlertCircle, ArrowDown, ArrowRight, ArrowUp, BadgeCheck, Check, CheckCircle2,
-  Copy, Download, FileDown, GraduationCap, Info, ListOrdered, MapPin, Plus,
+  BookOpenCheck, Copy, Download, FileDown, GraduationCap, Info, ListOrdered, MapPin, Plus,
   RefreshCw, Search, ShieldCheck, Sparkles, Target, Trash2, X,
 } from 'lucide-react';
 import {
@@ -20,32 +20,30 @@ interface PriorityChoice {
 type ObservedStatus = 'within' | 'beyond' | 'missing';
 type WebOptionGroupKey = 'dream' | 'borderline' | 'available' | 'safe-backup';
 
-// Site-owner priority order requested for these exact entries in the AP 2026 index.
-// This is a display preference, not an official college-quality ranking.
-const PREFERRED_COLLEGE_ORDER: Record<string, number> = { PPSV: 0, VITB: 1, SRKR: 2, VVITPU: 3 };
-const getPreferredCollegeOrder = (collegeCode: string) => PREFERRED_COLLEGE_ORDER[String(collegeCode || '').trim().toUpperCase()] ?? 99;
 interface WebOptionGroup {
   key: WebOptionGroupKey; title: string; badge: string; description: string;
   explanation: string; pdfAccent: [number, number, number]; pdfTint: [number, number, number];
 }
 interface GeneratedOption extends PriorityChoice {
-  closingRank: number | null; matchedRecords: number; isUserPriority: boolean; isInstitutionPriority: boolean;
+  closingRank: number | null; matchedRecords: number; isUserPriority: boolean;
   observedStatus: ObservedStatus; groupKey: WebOptionGroupKey; profileRank: number; category: string;
   gender: 'M' | 'F'; region: string; specialCategory: string;
 }
 interface GeneratedProfile {
   rank: number; category: string; gender: 'M' | 'F'; region: string; specialCategory: string;
   districts: string[]; branches: string[]; totalFilteredMatches: number;
-  displayedAlternatives: number; priorityCount: number;
+  displayedAlternatives: number; priorityCount: number; priorityChoiceIds: string[];
 }
 
 const MAX_PRIORITY_CHOICES = 30;
 const MAX_AUTO_OPTIONS_PER_GROUP = 30;
 const WEB_OPTIONS_URL = 'https://naacollege.in/ap-eapcet/web-options-builder';
+const PLANNING_YEAR = 2027;
+const HISTORICAL_DATA_YEAR = 2026;
 const WEB_OPTION_GROUPS: WebOptionGroup[] = [
-  { key: 'dream', title: 'Dream Options', badge: 'AIM HIGH', description: 'Aspirational, highly competitive choices — including your manually prioritised colleges.', explanation: 'These options have a tighter observed 2026 closing rank than your entered rank would meet. Your priority choices stay here by design.', pdfAccent: [157, 111, 20], pdfTint: [255, 248, 226] },
-  { key: 'borderline', title: 'Borderline Chance', badge: 'CLOSE TO CUTOFF', description: 'Your rank is moderately beyond the available 2026 closing-rank reference.', explanation: 'Rank falls within the predictor’s existing 10–35% historical comparison band. This is a borderline context, not a probability.', pdfAccent: [176, 99, 37], pdfTint: [255, 244, 232] },
-  { key: 'available', title: 'Available for Rank', badge: 'WITHIN OBSERVED RANGE', description: 'Your rank is at or better than the observed closing rank, without the larger backup buffer.', explanation: 'Your rank is within this category/gender/region-filtered 2026 observed closing-rank value. It does not guarantee a future allotment.', pdfAccent: [36, 112, 77], pdfTint: [235, 248, 239] },
+  { key: 'dream', title: 'Dream Options', badge: 'AIM HIGH', description: 'Aspirational options whose observed cutoff is far more competitive than your entered rank, plus any colleges you personally put first.', explanation: 'Your entered rank is more than 35% beyond the observed 2026 closing rank, or you manually chose the college as a priority. This is an aspirational comparison, not a prediction.', pdfAccent: [157, 111, 20], pdfTint: [255, 248, 226] },
+  { key: 'borderline', title: 'Borderline Chance', badge: 'CLOSE TO CUTOFF', description: 'Your entered rank is 10–35% beyond the available historical closing-rank value.', explanation: 'Rank falls within the predictor’s existing 10–35% historical comparison band. This is a borderline context, not a probability.', pdfAccent: [176, 99, 37], pdfTint: [255, 244, 232] },
+  { key: 'available', title: 'Available for Rank', badge: 'WITHIN OBSERVED RANGE', description: 'Your rank is within the observed closing-rank range or up to 10% beyond it, without the larger backup buffer.', explanation: 'Your entered rank is within or close to the category/gender/region-filtered 2026 observed closing-rank value. It does not guarantee a future allotment.', pdfAccent: [36, 112, 77], pdfTint: [235, 248, 239] },
   { key: 'safe-backup', title: 'Safe Backup', badge: 'LARGER HISTORICAL BUFFER', description: 'Options where the observed closing rank is at least 35% higher than your entered rank.', explanation: 'This is a larger historical rank buffer only — no college or seat can be guaranteed safe in a future counselling round.', pdfAccent: [48, 101, 143], pdfTint: [236, 245, 252] },
 ];
 const GROUP_ORDER: Record<WebOptionGroupKey, number> = { dream: 0, borderline: 1, available: 2, 'safe-backup': 3 };
@@ -82,9 +80,9 @@ const statusLabel: Record<ObservedStatus, string> = {
 
 const makeExportText = (options: GeneratedOption[], profile: GeneratedProfile | null) => {
   const header = [
-    'Naa College — AP Web Options Priority Draft',
-    'Prepared from the available AP EAPCET 2026 rank index' + (profile ? ' for rank ' + formatRank(profile.rank) : '') + '.',
-    'This is a personal preference list, not an official counselling submission or a guarantee of allotment.',
+    'Naa College — AP EAPCET 2027 Planning Web Options Draft',
+    'Prepared for 2027 admission planning from the available AP EAPCET 2026 historical rank index' + (profile ? ' for rank ' + formatRank(profile.rank) : '') + '.',
+    'This is a personal preference list, not an official 2027 cutoff, counselling submission or guarantee of allotment.',
     '',
   ];
   const entries = options.map((item, index) => {
@@ -205,6 +203,20 @@ export const ApWebOptionsBuilder: React.FC = () => {
   );
   const priorityBranchChoices = selectedPriorityCollege?.branches || [];
 
+  const isGeneratedDraftOutdated = useMemo(() => {
+    if (!generatedProfile) return false;
+    const currentRank = Number(String(rankInput).replace(/,/g, '').trim());
+    const sameSet = (left: string[], right: string[]) => JSON.stringify([...left].sort()) === JSON.stringify([...right].sort());
+    return currentRank !== generatedProfile.rank
+      || category !== generatedProfile.category
+      || gender !== generatedProfile.gender
+      || region !== generatedProfile.region
+      || specialCategory !== generatedProfile.specialCategory
+      || !sameSet(selectedDistricts, generatedProfile.districts)
+      || !sameSet(selectedBranches, generatedProfile.branches)
+      || JSON.stringify(priorityChoices.map((choice) => choice.id)) !== JSON.stringify(generatedProfile.priorityChoiceIds);
+  }, [generatedProfile, rankInput, category, gender, region, specialCategory, selectedDistricts, selectedBranches, priorityChoices]);
+
   useEffect(() => {
     if (!sourceColleges.length) return;
     if (!priorityCollegeChoices.length) {
@@ -219,19 +231,11 @@ export const ApWebOptionsBuilder: React.FC = () => {
     }
   }, [priorityCollegeChoices, priorityCollegeCode, sourceColleges.length]);
 
-  useEffect(() => {
-    setGeneratedOptions([]);
-    setGeneratedProfile(null);
-    setCopyMessage('');
-  }, [rankInput, category, gender, region, specialCategory, selectedDistricts, selectedBranches, priorityChoices]);
-
   const toggleDistrict = (district: string) => {
     setSelectedDistricts((current) => current.includes(district) ? current.filter((item) => item !== district) : [...current, district]);
   };
   const toggleBranch = (code: string) => {
-    const scrollTop = window.scrollY;
     setSelectedBranches((current) => current.includes(code) ? current.filter((item) => item !== code) : [...current, code]);
-    window.requestAnimationFrame(() => window.scrollTo({ top: scrollTop, behavior: 'auto' }));
   };
 
   const addPriorityChoice = () => {
@@ -283,8 +287,6 @@ export const ApWebOptionsBuilder: React.FC = () => {
     setRankError('');
     setGenerationError('');
     setCopyMessage('');
-    setGeneratedOptions([]);
-    setGeneratedProfile(null);
     const rank = Number(String(rankInput).replace(/,/g, '').trim());
     if (!Number.isInteger(rank) || rank < 1 || rank > 350000) {
       setRankError('Enter a whole-number AP EAPCET rank between 1 and 350,000.');
@@ -313,7 +315,6 @@ export const ApWebOptionsBuilder: React.FC = () => {
         return {
           ...choice, closingRank, matchedRecords: match?.matchingRecordCount || 0,
           isUserPriority,
-          isInstitutionPriority: getPreferredCollegeOrder(choice.collegeCode) < 99,
           observedStatus: getObservedStatus(rank, closingRank),
           groupKey: isUserPriority ? 'dream' : getWebOptionGroup(rank, closingRank),
           profileRank: rank, category, gender, region, specialCategory,
@@ -333,18 +334,10 @@ export const ApWebOptionsBuilder: React.FC = () => {
         const groupB = getWebOptionGroup(rank, b.closingRank);
         if (GROUP_ORDER[groupA] !== GROUP_ORDER[groupB]) return GROUP_ORDER[groupA] - GROUP_ORDER[groupB];
 
-        // Promoted colleges must survive the per-section cap; weaker late-closing options follow.
-        const preferredA = getPreferredCollegeOrder(a.collegeCode);
-        const preferredB = getPreferredCollegeOrder(b.collegeCode);
-        if (preferredA !== preferredB) return preferredA - preferredB;
-
-        // Lower observed closing rank means more selective in this historical dataset.
+        // Neutral, data-driven ordering. No college code or institution name gets a boost.
+        // A lower closing rank is a historical branch-demand indicator, not a quality score.
         if (a.closingRank !== b.closingRank) return a.closingRank - b.closingRank;
-
-        if (selectedBranches.length) {
-          const difference = selectedBranches.indexOf(a.branchCode) - selectedBranches.indexOf(b.branchCode);
-          if (difference !== 0) return difference;
-        }
+        if (a.matchingRecordCount !== b.matchingRecordCount) return b.matchingRecordCount - a.matchingRecordCount;
         return a.collegeName.localeCompare(b.collegeName) || a.branchName.localeCompare(b.branchName);
       });
 
@@ -365,6 +358,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
         districts: [...selectedDistricts], branches: [...selectedBranches],
         totalFilteredMatches: alternativeMatches.length,
         displayedAlternatives: alternativeOptions.length, priorityCount: priorityOptions.length,
+        priorityChoiceIds: priorityChoices.map((choice) => choice.id),
       });
     } catch (error) {
       setGenerationError(error instanceof Error ? error.message : 'Could not generate the web options from the 2026 rank index.');
@@ -374,7 +368,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
   };
 
   const downloadPdfOptions = async () => {
-    if (!generatedOptions.length || isExportingPdf) return;
+    if (!generatedOptions.length || isExportingPdf || isGeneratedDraftOutdated) return;
     setIsExportingPdf(true);
     setCopyMessage('');
     try {
@@ -387,8 +381,8 @@ export const ApWebOptionsBuilder: React.FC = () => {
       const bottomLimit = pageHeight - 18;
       const rank = generatedProfile?.rank || generatedOptions[0]?.profileRank || 0;
       pdf.setProperties({
-        title: 'AP EAPCET 2026 Web Options — Naa College',
-        subject: 'Personal college and branch preference list based on the available AP EAPCET 2026 rank index',
+        title: 'AP EAPCET 2027 Planning Web Options — Naa College',
+        subject: 'Personal preference list for 2027 admission planning using available AP EAPCET 2026 historical rank data',
         author: 'Naa College',
         creator: 'Naa College Web Options Builder',
         keywords: 'AP EAPCET, web options, college preferences, Naa College',
@@ -398,7 +392,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
         // Repeat a faint watermark across each page without clipping it over content.
         pdf.setFont('helvetica', 'bold');
         pdf.setFontSize(16);
-        pdf.setTextColor(247, 249, 247);
+        pdf.setTextColor(237, 242, 238);
         for (let y = 44; y < pageHeight - 18; y += 62) {
           for (let x = 13; x < pageWidth - 34; x += 92) {
             pdf.text('NAA COLLEGE', x, y, { angle: -28 });
@@ -411,11 +405,11 @@ export const ApWebOptionsBuilder: React.FC = () => {
         pdf.setFont('helvetica', 'bold');
         pdf.setFontSize(7.2);
         pdf.setTextColor(30, 68, 49);
-        pdf.text('AP EAPCET 2026', 54, 11.5);
+        pdf.text(PLANNING_YEAR + ' ADMISSION PLANNING', 54, 11.5);
         pdf.setFont('helvetica', 'normal');
         pdf.setFontSize(6.2);
         pdf.setTextColor(98, 116, 105);
-        pdf.text('PERSONAL WEB OPTIONS PLAN', 54, 17);
+        pdf.text('BASED ON HISTORICAL ' + HISTORICAL_DATA_YEAR + ' DATA', 54, 17);
         pdf.setFont('helvetica', 'bold');
         pdf.setFontSize(6.3);
         pdf.setTextColor(34, 101, 69);
@@ -439,7 +433,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
       pdf.setFont('helvetica', 'bold');
       pdf.setFontSize(7.1);
       pdf.setTextColor(229, 208, 125);
-      pdf.text('AP EAPCET 2026  /  STUDENT PREFERENCE PLAN', margin + 7, 42);
+      pdf.text('AP EAPCET ' + PLANNING_YEAR + ' PLANNING  /  HISTORICAL DATA: ' + HISTORICAL_DATA_YEAR, margin + 7, 42);
       pdf.setFontSize(23);
       pdf.setTextColor(255, 255, 255);
       pdf.text('WEB OPTIONS', margin + 7, 54);
@@ -454,7 +448,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
       pdf.setFont('helvetica', 'normal');
       pdf.setFontSize(6.8);
       pdf.setTextColor(207, 224, 212);
-      pdf.text('A personalised list • Four rank-context groups • Editable preference draft', margin + 7, 71);
+      pdf.text('A personalised list • Historical rank context • Editable preference draft', margin + 7, 71);
       pdf.link(margin, 33, contentWidth, 45, { url: WEB_OPTIONS_URL });
 
       const statGap = 3;
@@ -479,7 +473,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
       pdf.setTextColor(93, 108, 99);
       pdf.text(
         pdf.splitTextToSize(
-          'How to read this plan: observed 2026 closing ranks are historical comparisons, not future cutoffs. Four groups show rank context, not admission probabilities. Within each group, the site-owner priority shortlist is shown first; other entries follow from lower to higher observed closing rank. This is not an official college-quality ranking. “Safe Backup” means a larger historical buffer only, never a guarantee.',
+          '2026 closing ranks are historical references for 2027 planning, not future cutoffs. The four groups are based on rank-to-cutoff gaps, not admission probabilities. Within each group, lower observed branch closing ranks come first as a historical demand signal; no college is boosted by name. This is not an overall college-quality ranking. “Safe Backup” means a larger historical buffer only, never a guarantee.',
           contentWidth,
         ),
         margin, 110,
@@ -551,13 +545,13 @@ export const ApWebOptionsBuilder: React.FC = () => {
 
           pdf.setFontSize(6);
           pdf.setTextColor(102, 116, 106);
-          pdf.text('District: ' + (option.district || 'Not listed in rank index') + (option.isUserPriority ? '  ·  YOUR PRIORITY' : option.isInstitutionPriority ? '  ·  PREFERRED INSTITUTION' : ''), x + 15, y + 20.1);
+          pdf.text('District: ' + (option.district || 'Not listed in rank index') + (option.isUserPriority ? '  ·  YOUR PRIORITY' : ''), x + 15, y + 20.1);
 
           const cutoffText = option.closingRank ? formatRank(option.closingRank) : 'Not available';
           pdf.setFont('helvetica', 'bold');
           pdf.setFontSize(6.2);
           pdf.setTextColor(49, 69, 56);
-          pdf.text('2026 observed closing rank: ' + cutoffText, x + 15, y + 25.5);
+          pdf.text('2026 historical closing rank: ' + cutoffText, x + 15, y + 25.5);
           pdf.setFont('helvetica', 'normal');
           pdf.setFontSize(5.7);
           pdf.setTextColor(105, 116, 107);
@@ -600,7 +594,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
   };
 
   const copyOptions = async () => {
-    if (!generatedOptions.length) return;
+    if (!generatedOptions.length || isGeneratedDraftOutdated) return;
     try {
       if (!navigator.clipboard?.writeText) throw new Error('Clipboard access is unavailable in this browser.');
       await navigator.clipboard.writeText(makeExportText(generatedOptions, generatedProfile));
@@ -611,7 +605,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
   };
 
   const downloadOptions = () => {
-    if (!generatedOptions.length) return;
+    if (!generatedOptions.length || isGeneratedDraftOutdated) return;
     const file = new Blob([makeExportText(generatedOptions, generatedProfile)], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(file);
     const anchor = document.createElement('a');
@@ -630,11 +624,11 @@ export const ApWebOptionsBuilder: React.FC = () => {
         <div className="apwo-hero-glow apwo-hero-glow-one" aria-hidden="true" />
         <div className="apwo-hero-glow apwo-hero-glow-two" aria-hidden="true" />
         <div className="apwo-hero-inner">
-          <div className="apwo-kicker"><span className="apwo-kicker-icon"><ListOrdered size={16} /></span> AP EAPCET 2026 · PRIORITY PLANNER</div>
+          <div className="apwo-kicker"><span className="apwo-kicker-icon"><ListOrdered size={16} /></span> AP EAPCET 2027 · ADMISSION PLANNING</div>
           <h1>Build your <span>web options.</span></h1>
-          <p>Turn your rank and preferences into an editable college-and-branch priority list, grounded in the AP EAPCET 2026 rank data already available on Naa College.</p>
+          <p>Prepare an editable college-and-branch preference list for 2027 admissions using available 2026 historical allotment ranks. Official 2027 closing-rank data is not assumed or invented.</p>
           <div className="apwo-hero-pills">
-            <span><ShieldCheck size={15} /> Existing dataset only</span>
+            <span><ShieldCheck size={15} /> Historical data labelled clearly</span>
             <span><MapPin size={15} /> District-aware</span>
             <span><ListOrdered size={15} /> Your order comes first</span>
           </div>
@@ -654,8 +648,8 @@ export const ApWebOptionsBuilder: React.FC = () => {
       <section className="apwo-rule-note" aria-label="How priority order works">
         <span className="apwo-rule-icon"><Target size={19} /></span>
         <div>
-          <strong>Your preferred college can stay at the top—even if your rank is beyond its observed closing rank.</strong>
-          <p>We keep your manually ordered choices first and show their historical rank context honestly. Alternatives are listed afterward. Nothing here is an official seat guarantee or a submitted counselling form.</p>
+          <strong>Your own priorities come first. Automatic options follow the observed rank data.</strong>
+          <p>Add any college-and-branch combination you personally prefer; it will stay at the top because you chose it, not because the tool promotes a particular college. Automatic suggestions are sorted by the matching 2026 closing-rank data within each section.</p>
         </div>
       </section>
 
@@ -735,9 +729,10 @@ export const ApWebOptionsBuilder: React.FC = () => {
           </form>
 
           {generatedProfile && <section className="apwo-results" aria-labelledby="apwo-results-heading">
-            <div className="apwo-results-head"><div><span className="apwo-results-kicker"><CheckCircle2 size={15} /> YOUR OPTIONS DRAFT IS READY</span><h2 id="apwo-results-heading">Your priority ladder</h2><p>{'Rank ' + formatRank(generatedProfile.rank) + ' · ' + generatedProfile.category + ' · ' + (generatedProfile.gender === 'M' ? 'Male' : 'Female') + ' · ' + generatedProfile.region + ' · Special: ' + generatedProfile.specialCategory}</p></div><div className="apwo-results-actions"><button type="button" className="apwo-pdf-button" onClick={() => void downloadPdfOptions()} disabled={!generatedOptions.length || isExportingPdf}>{isExportingPdf ? <><RefreshCw size={15} className="apwo-spin" /> Preparing PDF…</> : <><FileDown size={15} /> Download premium PDF</>}</button><button type="button" className="apwo-secondary-button" onClick={() => void copyOptions()} disabled={!generatedOptions.length}><Copy size={15} /> Copy list</button><button type="button" className="apwo-download-button" onClick={downloadOptions} disabled={!generatedOptions.length}><Download size={15} /> Download .txt</button></div></div>
+            <div className="apwo-results-head"><div><span className="apwo-results-kicker"><CheckCircle2 size={15} /> YOUR OPTIONS DRAFT IS READY</span><h2 id="apwo-results-heading">Your priority ladder</h2><p>{'Rank ' + formatRank(generatedProfile.rank) + ' · ' + generatedProfile.category + ' · ' + (generatedProfile.gender === 'M' ? 'Male' : 'Female') + ' · ' + generatedProfile.region + ' · Special: ' + generatedProfile.specialCategory}</p></div><div className="apwo-results-actions"><button type="button" className="apwo-pdf-button" onClick={() => void downloadPdfOptions()} disabled={!generatedOptions.length || isExportingPdf || isGeneratedDraftOutdated}>{isExportingPdf ? <><RefreshCw size={15} className="apwo-spin" /> Preparing PDF…</> : <><FileDown size={15} /> Download premium PDF</>}</button><button type="button" className="apwo-secondary-button" onClick={() => void copyOptions()} disabled={!generatedOptions.length || isGeneratedDraftOutdated}><Copy size={15} /> Copy list</button><button type="button" className="apwo-download-button" onClick={downloadOptions} disabled={!generatedOptions.length || isGeneratedDraftOutdated}><Download size={15} /> Download .txt</button></div></div>
+            {isGeneratedDraftOutdated && <div className="apwo-stale-draft-note" role="status"><Info size={16} /><span><strong>Your inputs have changed.</strong> This list remains visible so the page does not jump while you choose filters. It reflects your previous profile; press Generate Web Options again before copying or downloading.</span></div>}
             <div className="apwo-results-summary"><div><strong>{generatedOptions.length}</strong><span>options in current order</span></div><div><strong>{generatedOptions.filter((option) => option.isUserPriority).length}</strong><span>your priority choices</span></div><div><strong>{generatedOptions.filter((option) => !option.isUserPriority).length}</strong><span>data-backed alternatives shown</span></div></div>
-            <div className="apwo-observed-note"><Info size={16} /><span>Options are grouped by rank context. Within each group, your named priority institutions (PVP Siddhartha, Vishnu, SRKR and the matching V V I T entry in the loaded source index) are shown first; remaining options are sorted from lower to higher observed closing rank so highly selective options are not buried below late-closing entries. This is a preference order from the requested shortlist and historical data, not an official college-quality ranking or a future seat guarantee.</span></div>
+            <div className="apwo-observed-note"><Info size={16} /><span>No college is promoted just because of its name. Automatic options are ordered using the matching 2026 closing rank for the selected branch and candidate filters; lower closing ranks appear first within each section. This is a branch-demand signal from historical allotments, not an overall college-quality score. Your manually selected choices appear first only because you explicitly chose them.</span></div>
             {generatedOptions.length ? WEB_OPTION_GROUPS.map((group) => {
               const groupOptions = generatedOptions.filter((item) => item.groupKey === group.key);
               if (!groupOptions.length) return null;
@@ -756,7 +751,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
                   return <li key={option.id + (option.isUserPriority ? '-priority' : '-suggestion')} className={'apwo-generated-item' + (option.isUserPriority ? ' is-priority' : '')}>
                     <span className={'apwo-generated-number' + (option.isUserPriority ? ' is-priority-number' : '')}>{String(index + 1).padStart(2, '0')}</span>
                     <div className="apwo-generated-main">
-                      <div className="apwo-generated-overline">{option.isUserPriority ? <span className="apwo-top-badge"><Sparkles size={12} /> YOUR PRIORITY</span> : <span className="apwo-alt-badge">DATA-BACKED ALTERNATIVE</span>}{option.isInstitutionPriority && <span className="apwo-featured-badge">PREFERRED INSTITUTION</span>}{option.district && <span className="apwo-location-pill"><MapPin size={12} /> {option.district}</span>}</div>
+                      <div className="apwo-generated-overline">{option.isUserPriority ? <span className="apwo-top-badge"><Sparkles size={12} /> YOUR PRIORITY</span> : <span className="apwo-alt-badge">DATA-BACKED ALTERNATIVE</span>}{option.district && <span className="apwo-location-pill"><MapPin size={12} /> {option.district}</span>}</div>
                       <h3>{option.collegeName}</h3><p className="apwo-generated-branch">{option.branchCode} <span>·</span> {option.branchName}</p>
                       <div className="apwo-observed-line">
                         {option.observedStatus === 'within' ? <span className="apwo-status apwo-status-within"><CheckCircle2 size={14} /> {statusLabel.within}</span> : option.observedStatus === 'beyond' ? <span className="apwo-status apwo-status-beyond"><Target size={14} /> {statusLabel.beyond}</span> : <span className="apwo-status apwo-status-missing"><Info size={14} /> {statusLabel.missing}</span>}
@@ -778,7 +773,76 @@ export const ApWebOptionsBuilder: React.FC = () => {
           </section>}
         </>
       )}
-      <footer className="apwo-page-footer"><GraduationCap size={18} /><span>Built around the available AP EAPCET 2026 rank data · Personal preference order stays yours.</span></footer>
+      <section className="apwo-guide" id="apwo-guide" aria-labelledby="apwo-guide-title">
+        <header className="apwo-guide-header">
+          <span className="apwo-guide-eyebrow"><BookOpenCheck size={15} /> STUDENT GUIDE · 2027 ADMISSION PLANNING</span>
+          <h2 id="apwo-guide-title">Understand your AP EAPCET web options</h2>
+          <p>This planner helps organise preferences using the rank records currently available on Naa College. It does not invent official 2027 cutoffs or decide which college is best for every student.</p>
+        </header>
+        <div className="apwo-guide-stats">
+          <div><strong>{PLANNING_YEAR}</strong><span>admission planning year</span></div>
+          <div><strong>{HISTORICAL_DATA_YEAR}</strong><span>historical rank dataset used</span></div>
+          <div><strong>4 groups</strong><span>rank-context categories</span></div>
+        </div>
+        <section className="apwo-guide-section">
+          <h3>What is this tool?</h3>
+          <p>The AP EAPCET Web Options Builder turns your rank profile and stated preferences into an editable list of college-and-branch combinations. It reads college names, branch codes, district labels and observed closing-rank information from Naa College’s existing AP rank index. It is a planning and comparison aid—not an official counselling portal or a promise of admission.</p>
+        </section>
+        <section className="apwo-guide-section">
+          <h3>How to use it — step by step</h3>
+          <ol className="apwo-guide-steps">
+            <li><span>01</span><div><strong>Enter your AP EAPCET rank</strong><p>Use your actual rank when you have it. If you are planning before the {PLANNING_YEAR} results, treat any entered number as a scenario, not a rank prediction.</p></div></li>
+            <li><span>02</span><div><strong>Select category, gender, region and special category</strong><p>These fields control how the existing quota-closing data is matched. Choose the options that genuinely apply to your counselling profile.</p></div></li>
+            <li><span>03</span><div><strong>Filter districts and branches</strong><p>Search and select only the locations and branches you would consider. Leave filters open to explore more of the records present in the index.</p></div></li>
+            <li><span>04</span><div><strong>Add your own priority colleges, if you want</strong><p>Search for an exact college and branch and add it to your preference order. Move your choices up or down. No college is inserted or boosted just because of its name.</p></div></li>
+            <li><span>05</span><div><strong>Generate and review all four sections</strong><p>Automatic entries are separated by their rank-to-closing-rank context and ordered by lower observed branch closing rank first within each section.</p></div></li>
+            <li><span>06</span><div><strong>Edit and export the list</strong><p>Reorder or remove options. Download the branded PDF for your notes; links in the document reopen this builder. Enter and verify your final choices yourself on the official counselling portal.</p></div></li>
+          </ol>
+        </section>
+        <section className="apwo-guide-section">
+          <h3>Understanding the four option groups</h3>
+          <p>The groups below use only the entered rank and the historical closing-rank value returned for the selected category, gender, region and special category. They are not probabilities and do not measure a college’s overall quality.</p>
+          <div className="apwo-guide-group-grid">
+            {WEB_OPTION_GROUPS.map((group) => <article key={group.key} className={'apwo-guide-group apwo-guide-group-' + group.key}>
+              <span className="apwo-guide-group-badge">{group.badge}</span><h4>{group.title}</h4><p>{group.explanation}</p>
+              {group.key === 'dream' && <small>Rule: the entered rank is more than 35% beyond the observed closing rank, or the entry is a manual priority without a matching cutoff.</small>}
+              {group.key === 'borderline' && <small>Rule: the entered rank is more than 10% but no more than 35% beyond the observed closing rank.</small>}
+              {group.key === 'available' && <small>Rule: the rank is within the observed closing rank or up to 10% beyond it, without the larger backup buffer.</small>}
+              {group.key === 'safe-backup' && <small>Rule: the observed closing rank is at least 35% higher than the entered rank. This is never a guaranteed seat.</small>}
+            </article>)}
+          </div>
+        </section>
+        <section className="apwo-guide-section">
+          <h3>How the college order works</h3>
+          <ul className="apwo-guide-bullets">
+            <li><strong>Your personal choices:</strong> manual priority options stay in your selected order because they reflect your preferences.</li>
+            <li><strong>Automatic options:</strong> no institution has a fixed boost. Within each section, lower observed {HISTORICAL_DATA_YEAR} branch closing ranks are shown first. This is a historical demand/selectivity signal for that branch and filter combination, not an overall college ranking.</li>
+            <li><strong>Section limits:</strong> up to 30 automatic suggestions appear per group. The most selective observed closing-rank combinations are retained first; change filters to explore different combinations.</li>
+            <li><strong>No invented entries:</strong> if the loaded index does not contain a college/branch or eligible closing-rank value for your filters, the builder cannot add a made-up record. Manual choices are available only for college-and-branch combinations present in the loaded selector.</li>
+          </ul>
+        </section>
+        <section className="apwo-guide-section apwo-guide-faq">
+          <h3>Frequently asked questions</h3>
+          <details><summary>Is this tool updated with official AP EAPCET 2027 cutoffs?</summary><p>No. It is designed for {PLANNING_YEAR} admission planning but currently compares available {HISTORICAL_DATA_YEAR} historical allotment data. Official {PLANNING_YEAR} cutoff data is not assumed or fabricated. The data basis should be updated when verified {PLANNING_YEAR} records become available.</p></details>
+          <details><summary>Why did a college I expected not appear in my list?</summary><p>Automatic entries must exist in the loaded index, match the selected branch and district filters, and have a usable closing-rank value for your category, gender, region and special-category settings. The builder does not force a college into the list or promote it by name. If the college and branch exist in the selector and you personally want them, add them as a manual priority choice.</p></details>
+          <details><summary>Why can a 9,000-rank scenario show colleges under Safe Backup?</summary><p>Safe Backup describes a larger rank buffer, not a ranking of college quality. Within that section, the options are ordered by lower historical branch closing rank first, so more selective observed combinations appear before very late-closing alternatives. Review all four sections before deciding which choices you want to prioritise.</p></details>
+          <details><summary>Does “Available for Rank” mean I will definitely get a seat?</summary><p>No. It means only that the entered rank compares favourably with the observed closing-rank value in the current data. Seat availability, future applicants, category rules, counselling round and official {PLANNING_YEAR} cutoffs can change the outcome.</p></details>
+          <details><summary>Does “Safe Backup” guarantee admission?</summary><p>No college is guaranteed safe. This label indicates a larger historical numerical buffer only. Include choices you would genuinely be willing to attend and verify official counselling notices.</p></details>
+          <details><summary>Why does the builder ask for category, gender and region?</summary><p>The underlying index contains quota-specific records. These inputs let the existing AP predictor engine choose eligible closing-rank observations. If no matching record exists, the builder shows no matching cutoff instead of inventing one.</p></details>
+          <details><summary>Can I submit these options directly to APSCHE?</summary><p>No. The builder creates an editable planning draft. It does not log in to, save choices to or submit forms to the official counselling site. Enter your final preference order on the official portal during the relevant counselling window.</p></details>
+          <details><summary>Can I download or share my preferences?</summary><p>Yes. After generating a fresh list, use “Download premium PDF” for a Naa College-branded PDF with the logo, repeated watermark, grouped options and clickable links back to the builder. Copy and text-download options are also available.</p></details>
+        </section>
+        <aside className="apwo-guide-disclaimer">
+          <ShieldCheck size={20} />
+          <div><h3>Data source, limitations and important disclaimer</h3>
+            <p><strong>Data basis:</strong> the existing AP EAPCET {HISTORICAL_DATA_YEAR} quota-closing-rank index in Naa College and its category/gender/region/special-category matching logic. No handpicked institution order is applied.</p>
+            <p><strong>{PLANNING_YEAR} status:</strong> this is a planning tool for the {PLANNING_YEAR} admission cycle using historical {HISTORICAL_DATA_YEAR} observations. It is not a {PLANNING_YEAR} allotment dataset, official cutoff release, personalised counselling advice or admission guarantee.</p>
+            <p><strong>Before submission:</strong> verify current official AP EAPCET/APSCHE counselling notices, eligibility rules, seat matrices, fees, choice-entry deadlines and reporting instructions. The official authority’s latest notice takes precedence over this draft.</p>
+          </div>
+        </aside>
+        <p className="apwo-guide-source-note">Naa College · AP EAPCET {PLANNING_YEAR} admission planning · Rank reference currently available: {HISTORICAL_DATA_YEAR} · Verify official counselling information.</p>
+      </section>
+      <footer className="apwo-page-footer"><GraduationCap size={18} /><span>For AP EAPCET 2027 admission planning · historical 2026 rank data · your preferences remain yours.</span></footer>
     </main>
   );
 };

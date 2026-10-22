@@ -255,51 +255,51 @@ export const TOOLS_CONFIG: ToolMeta[] = [
   },
   {
     id: 'eapcet-radar',
-    name: 'AP EAPCET Phase 2 Vacancy Radar',
-    shortName: 'EAPCET Phase 2',
+    name: 'AP EAPCET Seat & Fee Radar · 2027 Planning',
+    shortName: 'AP Seat & Fee Radar',
     category: 'counselling',
-    description: 'Live AP EAPCET Phase 2 leftover seats, college matrices & official branch fee schedules',
-    badge: 'Phase 2 Live',
+    description: 'Review available vacancy and fee information as a planning reference. Seat matrices change by round; verify current details with official notices.',
+    badge: '2027 PLANNING',
   },
   {
     id: 'ap-predictor',
-    name: 'AP EAPCET 2026 College Intelligence & Predictor',
-    shortName: 'AP Predictor 2026',
+    name: 'AP College Predictor · 2027 Planning',
+    shortName: 'AP Predictor',
     category: 'counselling',
-    description: 'Match AP EAPCET 2026 allotment records deterministically by rank, category, gender, region and branch.',
-    badge: 'AI Intelligence',
+    description: 'Explore rank-based college and branch matches for 2027 planning using the available 2026 historical allotment index. Future cutoffs may differ.',
+    badge: '2027 PLANNING',
   },
   {
     id: 'ap-web-options',
-    name: 'AP EAPCET Web Options Builder',
+    name: 'AP EAPCET Web Options Builder · 2027 Planning',
     shortName: 'AP Web Options',
     category: 'counselling',
-    description: 'Build and reorder a preferred college-and-branch list using the available 2026 rank index and your priority choices.',
-    badge: '2026 DATA',
+    description: 'Build an editable preference list for 2027 planning using 2026 historical closing-rank data. No institution is promoted by name.',
+    badge: '2027 PLANNING',
   },
   {
     id: 'ap-rank-predictor',
-    name: 'AP EAPCET Rank Predictor',
+    name: 'AP EAPCET Rank Predictor · 2027 Planning',
     shortName: 'AP Rank Predictor',
     category: 'counselling',
-    description: 'Estimate an AP EAPCET engineering rank range from subject and board marks using the supplied 75:25 weighting and anchor interpolation.',
-    badge: 'Rank Estimate',
+    description: 'Estimate a potential rank range from subject and board marks using the supplied 75:25 weighting and rank anchors. This is an estimate, not an official rank.',
+    badge: '2027 PLANNING',
   },
   {
     id: 'ap-top-colleges',
-    name: 'AP EAPCET Top B.Tech Colleges',
+    name: 'AP B.Tech Colleges · 2027 Planning',
     shortName: 'AP Top Colleges',
     category: 'counselling',
-    description: 'Explore branch-wise observed 2026 allotment rank patterns using a consistent OC reference group.',
-    badge: '2026 DATA',
+    description: 'Compare observed 2026 branch-wise rank patterns to inform planning. This is not an official 2027 cutoff list or an overall college-quality ranking.',
+    badge: '2027 PLANNING',
   },
   {
     id: 'ap-allotments',
-    name: 'AP EAPCET 2026 College-Wise Allotments',
-    shortName: 'AP EAPCET Allotments',
+    name: 'AP EAPCET Allotment Records · 2025–2026',
+    shortName: 'AP Allotments',
     category: 'counselling',
-    description: 'Search student allotments, explore colleges and branches, and inspect observed category-wise rank ranges.',
-    badge: '2026 DATA',
+    description: 'Explore available historical allotment records to inform 2027 admission planning. These are not official 2027 cutoffs.',
+    badge: '2027 PLANNING',
   },
   {
     id: 'projects',
@@ -742,8 +742,8 @@ export default function App() {
 
     const metadata: Record<string, { title: string; description: string; canonical: string }> = {
       apAllotments: {
-        title: 'AP EAPCET 2026 College-Wise Allotments | Naa College',
-        description: 'Explore AP EAPCET 2026 allotment records by college, branch, rank and available category filters. Review the dataset on Naa College and verify current counselling decisions with the official AP EAPCET portal.',
+        title: 'AP EAPCET Allotment Records 2025–2026 | 2027 Planning | Naa College',
+        description: 'Explore available AP EAPCET 2025–2026 historical allotment records by college, branch, rank and category to inform 2027 planning. This is not official 2027 cutoff data; verify current notices with the AP admissions authority.',
         canonical: 'https://naacollege.in/ap-eapcet/college-wise-allotments/',
       },
       tgAllotments: {
@@ -752,8 +752,8 @@ export default function App() {
         canonical: 'https://naacollege.in/tg-eapcet/name-wise-allotments/',
       },
       apPredictor: {
-        title: 'AP EAPCET College Predictor 2026 | Naa College',
-        description: 'Use the AP EAPCET 2026 College Predictor to explore college and branch options based on rank, category, gender, region and preferences.',
+        title: 'AP EAPCET College Predictor for 2027 Planning | Naa College',
+        description: 'Explore AP college and branch matches for 2027 admission planning using the available 2026 historical allotment data, rank, category, gender, region and preferences. Actual 2027 cutoffs may differ.',
         canonical: 'https://naacollege.in/ap-eapcet/college-predictor/',
       },
       tgPredictor: {
@@ -924,27 +924,32 @@ export default function App() {
         };
       case 'eapcet':
         return {
-          title: 'AP EAPCET Phase 2 Vacancy Radar & Fees',
+          title: 'AP EAPCET Seat & Fee Radar · 2027 Planning',
           icon: <Flame className="w-4 h-4 text-rose-500" />,
         };
       case 'ap-allotments':
         return {
-          title: 'AP EAPCET 2026 College-Wise Allotments',
+          title: 'AP EAPCET Allotment Records · 2025–2026 · 2027 Planning',
           icon: <Building2 className="w-4 h-4 text-cyan-400" />,
         };
       case 'ap-predictor':
         return {
-          title: 'AP EAPCET 2026 College Intelligence & Allotment Data',
+          title: 'AP College Predictor · 2027 Planning (Historical 2026 Data)',
           icon: <Compass className="w-4 h-4 text-rose-500" />,
+        };
+      case 'ap-web-options':
+        return {
+          title: 'AP EAPCET Web Options Builder · 2027 Planning',
+          icon: <FileText className="w-4 h-4 text-emerald-500" />,
         };
       case 'ap-rank-predictor':
         return {
-          title: 'AP EAPCET Rank Predictor — Estimated Rank Range',
+          title: 'AP EAPCET Rank Predictor · 2027 Planning — Estimated Rank Range',
           icon: <Calculator className="w-4 h-4 text-cyan-500" />,
         };
       case 'ap-top-colleges':
         return {
-          title: 'AP EAPCET Top B.Tech Colleges — Observed 2026 Ranks',
+          title: 'AP B.Tech Colleges · 2027 Planning — Observed 2026 Ranks',
           icon: <Award className="w-4 h-4 text-cyan-500" />,
         };
       case 'tg-allotments':
@@ -1086,9 +1091,9 @@ export default function App() {
           </section>
         ) : getSeoLandingPath() === 'apAllotments' ? (
           <SeoLandingPage
-            eyebrow="AP EAPCET 2026 · Engineering Admissions"
-            title="AP EAPCET 2026 College-Wise Allotments"
-            description="Explore AP EAPCET 2026 allotment records by college, branch, rank and available category filters. Review the dataset shown on this page; it does not guarantee a future seat and does not replace an official counselling result."
+            eyebrow="AP EAPCET · 2027 Planning from Historical Records"
+            title="AP EAPCET Allotment Records — 2025 & 2026"
+            description="Explore the available 2025–2026 AP EAPCET allotment records by college, branch, rank and category to inform 2027 admission planning. These are historical records, not official 2027 cutoffs, and do not guarantee a future seat."
             tool={<ApEapcet2025AllotmentExplorer />}
             howTo={[
               'Open the college selector and choose a specific AP engineering college, or use the statewide view.',
@@ -1102,7 +1107,7 @@ export default function App() {
               { question: 'Are these guaranteed future cutoffs?', answer: 'No. Allotment records describe the dataset available to the tool. They should not be treated as a guarantee of a future allotment or admission outcome.' }
             ]}
             relatedLinks={[
-              { href: '/ap-eapcet/college-wise-allotments/', label: 'AP EAPCET 2026 College-Wise Allotments' },
+              { href: '/ap-eapcet/college-wise-allotments/', label: 'AP EAPCET Allotment Records · 2025–2026' },
               { href: '/tg-eapcet/name-wise-allotments/', label: 'TG Name-Wise Allotments' },
               { href: '/#ap-predictor', label: 'AP EAPCET College Predictor' }
             ]}
@@ -1132,9 +1137,9 @@ export default function App() {
           />
         ) : getSeoLandingPath() === 'apPredictor' ? (
           <SeoLandingPage
-            eyebrow="AP EAPCET 2026 · College Prediction"
-            title="AP EAPCET College Predictor 2026"
-            description="Use the Naa College AP EAPCET College Predictor to explore colleges and branches that match your entered rank, category, gender, region and preferences. It is designed to help students explore available options using the project's 2026 allotment data."
+            eyebrow="AP EAPCET · 2027 Planning with Historical Rank Data"
+            title="AP EAPCET College Predictor for 2027 Planning"
+            description="Explore college and branch matches for 2027 admission planning using the available 2026 historical allotment data, rank, category, gender, region and preferences. This page is not an official 2027 cutoff prediction."
             tool={<ApCollegePredictor initialCollegeCode="ALL" initialBranchCode="ALL" />}
             toolIntro="Enter your AP EAPCET rank and preferences, then use the interactive predictor to explore matching college and branch options."
             howTo={[
