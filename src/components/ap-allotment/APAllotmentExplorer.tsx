@@ -292,13 +292,13 @@ export const APAllotmentExplorer: React.FC<APAllotmentExplorerProps> = ({
         <div className="text-center space-y-2 sm:space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-700 dark:text-cyan-400 text-xs font-semibold tracking-wide shadow-sm">
             <Flame className="w-4 h-4 text-cyan-600 dark:text-cyan-500 fill-cyan-500 animate-pulse" />
-            <span>AP EAPCET 2026 College-Wise Allotments</span>
+            <span>AP EAPCET · 2027 Planning from Historical Records</span>
           </div>
           <h1 className="text-xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            AP EAPCET 2026 College-Wise Allotments
+            AP EAPCET Allotment Records · 2027 Planning
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed px-1">
-            ఆంధ్రప్రదేశ్ ఇంజనీరింగ్ కాలేజీల వారీగా, బ్రాంచ్ వారీగా విద్యార్థుల అలాట్‌మెంట్ జాబితా &amp; కట్-ఆఫ్ ర్యాంకులు (260+ కాలేజీలు, 1,00,000+ సీట్లు)
+            ఆంధ్రప్రదేశ్ కాలేజీలు, బ్రాంచ్‌లు మరియు ర్యాంకుల historical records చూడండి. ఈ tool లో అందుబాటులో ఉన్న 2025/2026 data మాత్రమే ఉంది; ఇది official 2027 cutoffs కాదు.
           </p>
         </div>
 
