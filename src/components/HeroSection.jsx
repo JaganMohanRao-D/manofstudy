@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import './kineticMOS.css';
 import './NaaHomepageRedesign.css';
+import './NaaDesignFoundation.css';
 import { NaaCollegeAssistant } from './NaaCollegeAssistant';
 import { WORKSPACES, FLAGSHIP_FEATURES } from './FeaturesHub';
 import articlesData from '../data/blogArticles.json';
