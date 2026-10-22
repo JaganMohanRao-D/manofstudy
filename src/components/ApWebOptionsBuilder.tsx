@@ -446,7 +446,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
       pdf.setFontSize(6.8);
       pdf.setTextColor(207, 224, 212);
       pdf.text('A personalised list • Four rank-context groups • Editable preference draft', margin + 7, 71);
-      pdf.link({ x: margin, y: 33, w: contentWidth, h: 45, url: WEB_OPTIONS_URL });
+      pdf.link(margin, 33, contentWidth, 45, { url: WEB_OPTIONS_URL });
 
       const statGap = 3;
       const statWidth = (contentWidth - statGap * 3) / 4;
@@ -462,7 +462,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
         pdf.setFontSize(5.8);
         pdf.setTextColor(57, 73, 63);
         pdf.text(group.title, x + 4, 97);
-        pdf.link({ x, y: 83, w: statWidth, h: 19, url: WEB_OPTIONS_URL });
+        pdf.link(x, 83, statWidth, 19, { url: WEB_OPTIONS_URL });
       });
 
       pdf.setFont('helvetica', 'normal');
@@ -500,7 +500,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
         pdf.setFontSize(8.4);
         pdf.setTextColor(...group.pdfAccent);
         pdf.text(String(items.length), pageWidth - margin - 4, y + 6.5, { align: 'right' });
-        pdf.link({ x: margin, y, w: contentWidth, h: 13, url: WEB_OPTIONS_URL });
+        pdf.link(margin, y, contentWidth, 13, { url: WEB_OPTIONS_URL });
         y += 15;
 
         for (const option of items) {
@@ -559,7 +559,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
             contextText = 'Entered rank is ' + formatRank(option.profileRank - option.closingRank) + ' places beyond the observed closing rank';
           }
           pdf.text(pdf.splitTextToSize(contextText, contentWidth - 20).slice(0, 1), x + 15, y + 29);
-          pdf.link({ x, y, w: contentWidth, h: cardHeight, url: WEB_OPTIONS_URL });
+          pdf.link(x, y, contentWidth, cardHeight, { url: WEB_OPTIONS_URL });
           y += cardHeight + cardGap;
         }
       }
@@ -578,7 +578,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
         pdf.setFontSize(6);
         pdf.setTextColor(119, 132, 122);
         pdf.text('Page ' + page + ' of ' + pageCount, pageWidth - margin, pageHeight - 7, { align: 'right' });
-        pdf.link({ x: margin, y: pageHeight - 11, w: contentWidth, h: 8, url: WEB_OPTIONS_URL });
+        pdf.link(margin, pageHeight - 11, contentWidth, 8, { url: WEB_OPTIONS_URL });
       }
 
       pdf.save('Naa-College-AP-EAPCET-Web-Options.pdf');
