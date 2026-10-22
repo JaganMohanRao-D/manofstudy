@@ -41,9 +41,9 @@ const WEB_OPTIONS_URL = 'https://naacollege.in/ap-eapcet/web-options-builder';
 const PLANNING_YEAR = 2027;
 const HISTORICAL_DATA_YEAR = 2026;
 const WEB_OPTION_GROUPS: WebOptionGroup[] = [
-  { key: 'dream', title: 'Dream Options', badge: 'AIM HIGH', description: 'Aspirational, highly competitive choices — including your manually prioritised colleges.', explanation: 'These options have a tighter observed 2026 closing rank than your entered rank would meet. Your priority choices stay here by design.', pdfAccent: [157, 111, 20], pdfTint: [255, 248, 226] },
-  { key: 'borderline', title: 'Borderline Chance', badge: 'CLOSE TO CUTOFF', description: 'Your rank is moderately beyond the available 2026 closing-rank reference.', explanation: 'Rank falls within the predictor’s existing 10–35% historical comparison band. This is a borderline context, not a probability.', pdfAccent: [176, 99, 37], pdfTint: [255, 244, 232] },
-  { key: 'available', title: 'Available for Rank', badge: 'WITHIN OBSERVED RANGE', description: 'Your rank is at or better than the observed closing rank, without the larger backup buffer.', explanation: 'Your rank is within this category/gender/region-filtered 2026 observed closing-rank value. It does not guarantee a future allotment.', pdfAccent: [36, 112, 77], pdfTint: [235, 248, 239] },
+  { key: 'dream', title: 'Dream Options', badge: 'AIM HIGH', description: 'Aspirational options whose observed cutoff is far more competitive than your entered rank, plus any colleges you personally put first.', explanation: 'Your entered rank is more than 35% beyond the observed 2026 closing rank, or you manually chose the college as a priority. This is an aspirational comparison, not a prediction.', pdfAccent: [157, 111, 20], pdfTint: [255, 248, 226] },
+  { key: 'borderline', title: 'Borderline Chance', badge: 'CLOSE TO CUTOFF', description: 'Your entered rank is 10–35% beyond the available historical closing-rank value.', explanation: 'Rank falls within the predictor’s existing 10–35% historical comparison band. This is a borderline context, not a probability.', pdfAccent: [176, 99, 37], pdfTint: [255, 244, 232] },
+  { key: 'available', title: 'Available for Rank', badge: 'WITHIN OBSERVED RANGE', description: 'Your rank is within the observed closing-rank range or up to 10% beyond it, without the larger backup buffer.', explanation: 'Your entered rank is within or close to the category/gender/region-filtered 2026 observed closing-rank value. It does not guarantee a future allotment.', pdfAccent: [36, 112, 77], pdfTint: [235, 248, 239] },
   { key: 'safe-backup', title: 'Safe Backup', badge: 'LARGER HISTORICAL BUFFER', description: 'Options where the observed closing rank is at least 35% higher than your entered rank.', explanation: 'This is a larger historical rank buffer only — no college or seat can be guaranteed safe in a future counselling round.', pdfAccent: [48, 101, 143], pdfTint: [236, 245, 252] },
 ];
 const GROUP_ORDER: Record<WebOptionGroupKey, number> = { dream: 0, borderline: 1, available: 2, 'safe-backup': 3 };
@@ -80,9 +80,9 @@ const statusLabel: Record<ObservedStatus, string> = {
 
 const makeExportText = (options: GeneratedOption[], profile: GeneratedProfile | null) => {
   const header = [
-    'Naa College — AP Web Options Priority Draft',
-    'Prepared from the available AP EAPCET 2026 rank index' + (profile ? ' for rank ' + formatRank(profile.rank) : '') + '.',
-    'This is a personal preference list, not an official counselling submission or a guarantee of allotment.',
+    'Naa College — AP EAPCET 2027 Planning Web Options Draft',
+    'Prepared for 2027 admission planning from the available AP EAPCET 2026 historical rank index' + (profile ? ' for rank ' + formatRank(profile.rank) : '') + '.',
+    'This is a personal preference list, not an official 2027 cutoff, counselling submission or guarantee of allotment.',
     '',
   ];
   const entries = options.map((item, index) => {
@@ -405,11 +405,11 @@ export const ApWebOptionsBuilder: React.FC = () => {
         pdf.setFont('helvetica', 'bold');
         pdf.setFontSize(7.2);
         pdf.setTextColor(30, 68, 49);
-        pdf.text('2027 ADMISSION PLANNING', 54, 11.5);
+        pdf.text(PLANNING_YEAR + ' ADMISSION PLANNING', 54, 11.5);
         pdf.setFont('helvetica', 'normal');
         pdf.setFontSize(6.2);
         pdf.setTextColor(98, 116, 105);
-        pdf.text('BASED ON HISTORICAL 2026 DATA', 54, 17);
+        pdf.text('BASED ON HISTORICAL ' + HISTORICAL_DATA_YEAR + ' DATA', 54, 17);
         pdf.setFont('helvetica', 'bold');
         pdf.setFontSize(6.3);
         pdf.setTextColor(34, 101, 69);
@@ -433,7 +433,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
       pdf.setFont('helvetica', 'bold');
       pdf.setFontSize(7.1);
       pdf.setTextColor(229, 208, 125);
-      pdf.text('AP EAPCET 2027 PLANNING  /  HISTORICAL DATA: 2026', margin + 7, 42);
+      pdf.text('AP EAPCET ' + PLANNING_YEAR + ' PLANNING  /  HISTORICAL DATA: ' + HISTORICAL_DATA_YEAR, margin + 7, 42);
       pdf.setFontSize(23);
       pdf.setTextColor(255, 255, 255);
       pdf.text('WEB OPTIONS', margin + 7, 54);
