@@ -84,7 +84,7 @@ function checkRateLimit(ip) {
 
 function normaliseMessages(input) {
   if (!Array.isArray(input)) return [];
-  return input
+  const messages = input
     .slice(-MAX_MESSAGES)
     .map((message) => {
       if (!message || typeof message !== "object") return null;
@@ -94,6 +94,9 @@ function normaliseMessages(input) {
       return role && text ? { role, parts: [{ text }] } : null;
     })
     .filter(Boolean);
+  // Gemini chat contents should start with a user turn; discard the local welcome message.
+  const firstUser = messages.findIndex((message) => message.role === "user");
+  return firstUser >= 0 ? messages.slice(firstUser) : [];
 }
 
 exports.websiteAssistantChat = onRequest(
