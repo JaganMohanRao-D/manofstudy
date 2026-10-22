@@ -1,12 +1,7 @@
 /**
- * Naa College website-aware AI assistant.
- * The Gemini API key is kept in Firebase Secret Manager and never sent to the browser.
+ * NaaCox AI website assistant. Uses a deterministic local answer engine and public website context; no model API key is required.
  */
 const { onRequest } = require("firebase-functions/v2/https");
-const { defineSecret } = require("firebase-functions/params");
-
-const geminiApiKey = defineSecret("GEMINI_API_KEY");
-const MODEL = "gemini-3.8-flash";
 const WINDOW_MS = 60 * 1000;
 const MAX_REQUESTS_PER_WINDOW = 10;
 const MAX_MESSAGES = 8;
@@ -360,12 +355,64 @@ function normaliseMessages(input) {
   return firstUser >= 0 ? messages.slice(firstUser) : [];
 }
 
+
+function buildLocalAnswer(question, currentPath, retrievedContext) {
+  const q = String(question || "").trim();
+  const lower = q.toLowerCase();
+  const telugu = /[\u0C00-\u0C7F]/.test(q);
+  const teluguEnglish = /\b(ela|enti|enduku|cheppu|cheppandi|undha|undi|bro|naaku|nenu|meeru|kavali|avuthundi|avutundi|chesukovali|ekkada|eppudu|yela|manchi|emiti|ante|ivvu|ivvandi|chesey|chestha)\b/i.test(q);
+  const casual = /\b(hi|hello|hey|hai|namaste|namaskaram|good morning|good evening|how are you)\b/i.test(lower);
+  const link = (label, path) => "[" + label + "](" + path + ")";
+  const intro = telugu || teluguEnglish
+    ? "Bro, simple ga cheptha:\n"
+    : "";
+  const site = "Naa College is a student-focused website for AP and Telangana students, with EAPCET allotment exploration, college discovery, scholarships, attendance/CGPA tools, roadmaps, blogs and other learning resources.";
+  let answer = "";
+
+  if (casual) {
+    answer = "Hi! I’m NaaCox AI from Naa College 😊 I can help with college choices, AP/TG EAPCET, scholarships, programming, study plans, careers, and how to use naacollege.in. Ask in English, Telugu, or Telugu-English.";
+  } else if (/\b(who are you|your name|what is your name|introduce yourself|who made you|who created you|who founded naa college|founder of naa college|naa college founder)\b/i.test(lower)) {
+    answer = "I’m NaaCox AI, the student assistant for Naa College. Naa College was founded by Jagan Mohan Rao Dunna. I’m a software assistant, not a human, and I don’t have personal experiences.";
+  } else if (/\b(naa ?cox|naa ?college|website|site|features|what can you do|what do you do|help me use)\b/i.test(lower) && !/\b(code|program|python|javascript|java|c language|essay|translate|meaning)\b/i.test(lower)) {
+    answer = site + "\n\nUseful starting points:\n• " + link("Scholarships", "/scholarships/") + "\n• " + link("Blogs and guides", "/blog/") + "\n• " + link("Engineering roadmaps", "/engineering-roadmaps/") + "\n• " + link("AI Student Gap Analyzer", "/ai-gap-analyzer") + "\n• " + link("Autonomous colleges", "/autonomous-colleges/") + "\n\nFor AP or Telangana allotment tools, open the matching “For AP” or “For TG” menu. Always confirm final admission and scholarship decisions with official notices.";
+  } else if (/\b(scholarship|financial aid|stipend|fee reimbursement|fee waiver|tuition|scholarships)\b/i.test(lower) || /స్కాలర్|విద్యార్థి వేతనం/.test(q)) {
+    answer = "You can browse " + link("Naa College Scholarships", "/scholarships/") + " to explore schemes and their listed eligibility, award details and provider links. Before applying, check the official provider's current notice for eligibility, dates, required documents and application status—these can change. If you share your state (AP/Telangana), course/year and the scheme name, I can help you understand what to verify. Don’t share Aadhaar numbers, passwords or OTPs.";
+  } else if (/\b(ap eapcet|apeapcet|andhra pradesh|ap allotment|ap counselling|ap counseling|ap rank|ap college predictor)\b/i.test(lower)) {
+    answer = "For Andhra Pradesh EAPCET, use the AP tools under the “For AP” menu to explore published allotments, college/branch options and historical rank trends. Treat predictor results as estimates, not guaranteed allotments. Confirm current seat matrix, web-option schedule, fees and eligibility through the official AP EAPCET counselling portal.";
+  } else if (/\b(tg eapcet|tgeapcet|ts eamcet|telangana|tg allotment|telangana allotment|tg rank|tg college predictor)\b/i.test(lower)) {
+    answer = "For Telangana EAPCET, open the “For TG” menu to explore available allotment records, college discovery and related tools. Historical data can help with shortlisting but cannot guarantee a future seat. Verify current counselling dates, seat matrix, fee and eligibility with the official Telangana counselling portal.";
+  } else if (/\b(attendance|bunk|classes attended|attendance percentage)\b/i.test(lower)) {
+    answer = "Use the Attendance Calculator on Naa College to estimate your attendance. Enter classes conducted and attended, then check the result against your college's official attendance policy. If you tell me total classes held, classes attended and your required percentage, I can calculate the estimate here too.";
+  } else if (/\b(cgpa|sgpa|gpa|grade point|semester marks)\b/i.test(lower)) {
+    answer = "I can help calculate or explain CGPA/SGPA. The exact formula depends on your university's credit and grade rules. Share only the subject credits and grades/grade points (no personal ID), and mention your university's formula if available. You can also use the academic calculators on Naa College.";
+  } else if (/\b(c programming|c language|python|javascript|java|html|css|react|programming|coding|debug|error in code|compiler)\b/i.test(lower)) {
+    answer = "For programming questions, I can help explain concepts, plan a solution, review a small code snippet, and debug common errors. A good way to ask is: (1) language, (2) what you expect, (3) exact error/output, and (4) relevant code. Start with one small example and build up. Paste code here, but remove passwords, API keys and private data.";
+  } else if (/\b(dsa|data structures|algorithms|leetcode|competitive programming|cp)\b/i.test(lower)) {
+    answer = "A beginner-friendly DSA path is: learn one language well → arrays and strings → searching/sorting → recursion → linked lists, stacks and queues → hashing → trees and graphs → dynamic programming. For each topic, understand the idea, implement it yourself, solve a few easy problems, then revisit mistakes. Consistency and understanding matter more than copying solutions.";
+  } else if (/\b(internship|job|placement|resume|portfolio|github|linkedin|career|roadmap|software engineer|web development|ai ml|machine learning)\b/i.test(lower)) {
+    answer = "A practical student career plan is: choose one track, learn its fundamentals, build 2–3 small but complete projects, put readable code and a clear README on GitHub, create a simple portfolio, and apply to suitable internships while practising interview basics. Avoid paying for guaranteed-placement promises. Naa College also has " + link("engineering roadmaps", "/engineering-roadmaps/") + " and the " + link("AI Student Gap Analyzer", "/ai-gap-analyzer") + " to help plan next steps. Tell me your current year and chosen track for a more focused plan.";
+  } else if (/\b(study plan|timetable|exam preparation|prepare for exam|study tips|first year|sgpa|semester)\b/i.test(lower)) {
+    answer = "A useful study routine is to review the day's lecture, practise problems without looking at solutions, write down doubts, and revise older topics regularly. Break a session into focused blocks and keep a weekly review. Tell me your subject, exam date and how much time you have each day, and I can create a realistic plan.";
+  } else if (/\b(college|branch|cse|ece|mechanical|civil|choose branch|engineering college|cutoff|rank|seat)\b/i.test(lower)) {
+    answer = "When comparing colleges or branches, check the official curriculum, total fees, commute/hostel costs, accreditation, actual placement reports, internship access and the skills you can build there. Use historical allotment data only as a guide, not a promise. For AP/TG choices, open the matching menu on Naa College and verify current counselling information from the official portal. If you share your state, rank range, preferred branches and budget range, I can help build a comparison checklist.";
+  } else if (/\b(translate|meaning of|what does .* mean|explain|how does|why does|what is|define|difference between|compare|steps to|how to)\b/i.test(lower)) {
+    answer = "I can help explain concepts, compare options, translate short text, outline steps and work through study or coding questions. To make the answer accurate, I’ll use the details in your question and distinguish general guidance from current official information. " +
+      (retrievedContext ? "I also found related public Naa College page content that may be useful: " + retrievedContext.slice(0, 850) : "Tell me the exact topic and your goal, and I’ll break it down into clear steps.");
+  } else {
+    const pageHint = currentPath && currentPath !== "/" ? " You’re currently on " + currentPath + ", so I can also help explain that page." : "";
+    answer = "I can help with Naa College tools, AP/Telangana EAPCET, scholarships, college comparisons, study planning, programming, DSA, projects, internships and general learning questions." + pageHint + "\n\n" +
+      (retrievedContext ? "Here is related public information I could retrieve:\n" + retrievedContext.slice(0, 1050) + "\n\n" : "") +
+      "For the best answer, tell me the goal and any important details. I’ll give a useful starting point, explain what is known, and flag anything that needs official/current verification rather than inventing facts.";
+  }
+
+  return intro + answer;
+}
+
 exports.websiteAssistantChat = onRequest(
   {
     region: "asia-southeast1",
     timeoutSeconds: 35,
     memory: "256MiB",
-    secrets: [geminiApiKey],
   },
   async (req, res) => {
     setCors(req, res);
@@ -399,14 +446,6 @@ exports.websiteAssistantChat = onRequest(
       return res.status(429).json({ error: "You're sending messages too quickly. Please wait a minute and try again." });
     }
 
-    const apiKey = geminiApiKey.value();
-    if (!apiKey) {
-      return res.status(503).json({
-        code: "SETUP_REQUIRED",
-        error: "The secure AI key has not been configured for this deployment yet.",
-      });
-    }
-
     const pagePath = typeof rawBody.pagePath === "string" && rawBody.pagePath.startsWith("/")
       ? rawBody.pagePath.slice(0, 120)
       : "/";
@@ -416,56 +455,14 @@ exports.websiteAssistantChat = onRequest(
 
     const currentQuestion = messages[messages.length - 1].parts[0].text;
     const retrievedContext = await getRetrievedContext(currentQuestion, pagePath);
-    const systemInstruction = SYSTEM_PROMPT +
-      "\n\nVisitor page context:\n- Current path: " + pagePath +
-      "\n- Current document title: " + pageTitle +
-      (retrievedContext ? "\n\nRetrieved public website data for this question:\n" + retrievedContext : "");
-
     try {
-      const providerResponse = await fetch(
-        "https://generativelanguage.googleapis.com/v1beta/models/" + MODEL + ":generateContent",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-goog-api-key": apiKey,
-          },
-          body: JSON.stringify({
-            systemInstruction: { parts: [{ text: systemInstruction }] },
-            contents: messages,
-            generationConfig: {
-              temperature: 0.25,
-              maxOutputTokens: 700,
-            },
-          }),
-          signal: AbortSignal.timeout(27000),
-        }
-      );
-
-      if (!providerResponse.ok) {
-        console.error("[NaaCollegeAssistant] Gemini request failed with status:", providerResponse.status);
-        if (providerResponse.status === 429) {
-          return res.status(503).json({ error: "The assistant is busy right now. Please try again shortly." });
-        }
-        return res.status(502).json({ error: "The assistant could not answer just now. Please try again." });
-      }
-
-      const data = await providerResponse.json();
-      const answer = (data.candidates || [])
-        .flatMap((candidate) => (candidate.content && candidate.content.parts) || [])
-        .map((part) => typeof part.text === "string" ? part.text.trim() : "")
-        .filter(Boolean)
-        .join("\n")
-        .slice(0, 6500);
-
-      if (!answer) {
-        return res.status(502).json({ error: "No answer was returned. Please try asking in a different way." });
-      }
-
+      const answer = buildLocalAnswer(currentQuestion, pagePath, retrievedContext).slice(0, 6500);
       return res.status(200).json({ answer });
     } catch (error) {
-      console.error("[NaaCollegeAssistant] Request failed:", error && error.name ? error.name : "Unknown error");
-      return res.status(504).json({ error: "The assistant is taking too long to respond. Please try again." });
+      console.error("[NaaCollegeAssistant] Local answer failed:", error && error.name ? error.name : "Unknown error");
+      return res.status(200).json({
+        answer: "I can help with Naa College, AP/Telangana EAPCET, scholarships, study plans, programming and careers. Please rephrase your question with one or two key details, and I’ll try a more targeted response."
+      });
     }
   }
 );
