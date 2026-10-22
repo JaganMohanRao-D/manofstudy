@@ -266,6 +266,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
     setGeneratedOptions((current) => {
       const target = direction === 'up' ? index - 1 : index + 1;
       if (target < 0 || target >= current.length) return current;
+      if (current[index].groupKey !== current[target].groupKey) return current;
       const next = [...current];
       [next[index], next[target]] = [next[target], next[index]];
       return next;
@@ -725,28 +726,43 @@ export const ApWebOptionsBuilder: React.FC = () => {
           </form>
 
           {generatedProfile && <section className="apwo-results" aria-labelledby="apwo-results-heading">
-            <div className="apwo-results-head"><div><span className="apwo-results-kicker"><CheckCircle2 size={15} /> YOUR OPTIONS DRAFT IS READY</span><h2 id="apwo-results-heading">Your priority ladder</h2><p>{'Rank ' + formatRank(generatedProfile.rank) + ' · ' + generatedProfile.category + ' · ' + (generatedProfile.gender === 'M' ? 'Male' : 'Female') + ' · ' + generatedProfile.region + ' · Special: ' + generatedProfile.specialCategory}</p></div><div className="apwo-results-actions"><button type="button" className="apwo-secondary-button" onClick={() => void copyOptions()} disabled={!generatedOptions.length}><Copy size={15} /> Copy list</button><button type="button" className="apwo-download-button" onClick={downloadOptions} disabled={!generatedOptions.length}><Download size={15} /> Download .txt</button></div></div>
-            <div className="apwo-results-summary"><div><strong>{generatedOptions.length}</strong><span>options in current order</span></div><div><strong>{generatedProfile.priorityCount}</strong><span>your priority choices</span></div><div><strong>{generatedProfile.displayedAlternatives}</strong><span>data-backed alternatives shown</span></div></div>
-            <div className="apwo-observed-note"><Info size={16} /><span>Your chosen priority order is preserved. Alternatives sort using only the rank index: options within observed closing rank first, then options beyond the observed closing rank with the smallest rank gap. This is not a college-quality ranking or a probability estimate.</span></div>
-            {generatedOptions.length ? <ol className="apwo-generated-list">{generatedOptions.map((option, index) => {
-              const gap = option.closingRank ? option.profileRank - option.closingRank : null;
-              return <li key={option.id + (option.isUserPriority ? '-priority' : '-suggestion')} className={'apwo-generated-item' + (option.isUserPriority ? ' is-priority' : '')}>
-                <span className={'apwo-generated-number' + (option.isUserPriority ? ' is-priority-number' : '')}>{String(index + 1).padStart(2, '0')}</span>
-                <div className="apwo-generated-main">
-                  <div className="apwo-generated-overline">{option.isUserPriority ? <span className="apwo-top-badge"><Sparkles size={12} /> YOUR PRIORITY</span> : <span className="apwo-alt-badge">DATA-BACKED ALTERNATIVE</span>}{option.district && <span className="apwo-location-pill"><MapPin size={12} /> {option.district}</span>}</div>
-                  <h3>{option.collegeName}</h3><p className="apwo-generated-branch">{option.branchCode} <span>·</span> {option.branchName}</p>
-                  <div className="apwo-observed-line">
-                    {option.observedStatus === 'within' ? <span className="apwo-status apwo-status-within"><CheckCircle2 size={14} /> {statusLabel.within}</span> : option.observedStatus === 'beyond' ? <span className="apwo-status apwo-status-beyond"><Target size={14} /> {statusLabel.beyond}</span> : <span className="apwo-status apwo-status-missing"><Info size={14} /> {statusLabel.missing}</span>}
-                    {option.closingRank ? <span className="apwo-closing-rank">2026 observed closing rank <strong>{formatRank(option.closingRank)}</strong></span> : <span className="apwo-no-cutoff">No eligible closing-rank value returned for these filters</span>}
-                    {option.matchedRecords > 0 && <span className="apwo-record-count">{option.matchedRecords.toLocaleString('en-IN')} matching observations</span>}
+            <div className="apwo-results-head"><div><span className="apwo-results-kicker"><CheckCircle2 size={15} /> YOUR OPTIONS DRAFT IS READY</span><h2 id="apwo-results-heading">Your priority ladder</h2><p>{'Rank ' + formatRank(generatedProfile.rank) + ' · ' + generatedProfile.category + ' · ' + (generatedProfile.gender === 'M' ? 'Male' : 'Female') + ' · ' + generatedProfile.region + ' · Special: ' + generatedProfile.specialCategory}</p></div><div className="apwo-results-actions"><button type="button" className="apwo-pdf-button" onClick={() => void downloadPdfOptions()} disabled={!generatedOptions.length || isExportingPdf}>{isExportingPdf ? <><RefreshCw size={15} className="apwo-spin" /> Preparing PDF…</> : <><FileDown size={15} /> Download premium PDF</>}</button><button type="button" className="apwo-secondary-button" onClick={() => void copyOptions()} disabled={!generatedOptions.length}><Copy size={15} /> Copy list</button><button type="button" className="apwo-download-button" onClick={downloadOptions} disabled={!generatedOptions.length}><Download size={15} /> Download .txt</button></div></div>
+            <div className="apwo-results-summary"><div><strong>{generatedOptions.length}</strong><span>options in current order</span></div><div><strong>{generatedOptions.filter((option) => option.isUserPriority).length}</strong><span>your priority choices</span></div><div><strong>{generatedOptions.filter((option) => !option.isUserPriority).length}</strong><span>data-backed alternatives shown</span></div></div>
+            <div className="apwo-observed-note"><Info size={16} /><span>Options are separated into four sections. Dream Options show the most competitive observed cutoffs first; Borderline Chance uses the existing 10–35% rank-comparison band; Available for Rank means the entered rank is within the observed cutoff; Safe Backup means a larger historical buffer. Manually prioritised colleges always stay at the top of Dream Options. None is a future seat guarantee.</span></div>
+            {generatedOptions.length ? WEB_OPTION_GROUPS.map((group) => {
+              const groupOptions = generatedOptions.filter((item) => item.groupKey === group.key);
+              if (!groupOptions.length) return null;
+              return <section key={group.key} className={'apwo-result-group apwo-group-' + group.key}>
+                <header className={'apwo-result-group-heading apwo-heading-' + group.key}>
+                  <div className="apwo-result-group-copy">
+                    <span className="apwo-result-group-badge">{group.badge}</span>
+                    <h3>{group.title}</h3>
+                    <p>{group.description}</p>
                   </div>
-                  {option.observedStatus === 'beyond' && gap !== null && <p className="apwo-gap-detail">{'Your entered rank is ' + formatRank(gap) + ' places beyond the observed closing rank. ' + (option.isUserPriority ? 'Kept here because you explicitly prioritised this choice.' : 'Included as an alternative for comparison; future allotment is not predictable from this value alone.')}</p>}
-                  {option.observedStatus === 'within' && option.closingRank && <p className="apwo-gap-detail">{formatRank(option.closingRank - option.profileRank) + ' rank places between your entered rank and the observed closing rank. This historical comparison is not a seat guarantee.'}</p>}
-                  {option.observedStatus === 'missing' && <p className="apwo-gap-detail">This college and branch exists in the loaded selector, but the selected candidate filters did not return a usable closing-rank value. No rank value is inferred or filled in.</p>}
-                </div>
-                <div className="apwo-generated-actions"><button type="button" onClick={() => moveGeneratedOption(index, 'up')} disabled={index === 0} aria-label={'Move option ' + (index + 1) + ' up'} title="Move option up"><ArrowUp size={16} /></button><button type="button" onClick={() => moveGeneratedOption(index, 'down')} disabled={index === generatedOptions.length - 1} aria-label={'Move option ' + (index + 1) + ' down'} title="Move option down"><ArrowDown size={16} /></button><button type="button" onClick={() => setGeneratedOptions((current) => current.filter((item) => item.id !== option.id))} aria-label={'Remove option ' + (index + 1)} title="Remove option"><X size={16} /></button></div>
-              </li>;
-            })}</ol> : <div className="apwo-no-results"><Search size={23} /><strong>No options matched the selected filters.</strong><p>Change your district or branch filters, add a personal priority choice, and generate again.</p></div>}
+                  <span className="apwo-result-group-count">{groupOptions.length}</span>
+                </header>
+                <ol className="apwo-generated-list">{groupOptions.map((option, groupIndex) => {
+                  const index = generatedOptions.findIndex((item) => item.id === option.id);
+                  const gap = option.closingRank ? option.profileRank - option.closingRank : null;
+                  return <li key={option.id + (option.isUserPriority ? '-priority' : '-suggestion')} className={'apwo-generated-item' + (option.isUserPriority ? ' is-priority' : '')}>
+                    <span className={'apwo-generated-number' + (option.isUserPriority ? ' is-priority-number' : '')}>{String(index + 1).padStart(2, '0')}</span>
+                    <div className="apwo-generated-main">
+                      <div className="apwo-generated-overline">{option.isUserPriority ? <span className="apwo-top-badge"><Sparkles size={12} /> YOUR PRIORITY</span> : <span className="apwo-alt-badge">DATA-BACKED ALTERNATIVE</span>}{option.district && <span className="apwo-location-pill"><MapPin size={12} /> {option.district}</span>}</div>
+                      <h3>{option.collegeName}</h3><p className="apwo-generated-branch">{option.branchCode} <span>·</span> {option.branchName}</p>
+                      <div className="apwo-observed-line">
+                        {option.observedStatus === 'within' ? <span className="apwo-status apwo-status-within"><CheckCircle2 size={14} /> {statusLabel.within}</span> : option.observedStatus === 'beyond' ? <span className="apwo-status apwo-status-beyond"><Target size={14} /> {statusLabel.beyond}</span> : <span className="apwo-status apwo-status-missing"><Info size={14} /> {statusLabel.missing}</span>}
+                        {option.closingRank ? <span className="apwo-closing-rank">2026 observed closing rank <strong>{formatRank(option.closingRank)}</strong></span> : <span className="apwo-no-cutoff">No eligible closing-rank value returned for these filters</span>}
+                        {option.matchedRecords > 0 && <span className="apwo-record-count">{option.matchedRecords.toLocaleString('en-IN')} matching observations</span>}
+                      </div>
+                      {option.observedStatus === 'beyond' && gap !== null && <p className="apwo-gap-detail">{'Your entered rank is ' + formatRank(gap) + ' places beyond the observed closing rank. ' + (option.isUserPriority ? 'Kept here because you explicitly prioritised this choice.' : 'Included as an aspirational comparison; future allotment is not predictable from this value alone.')}</p>}
+                      {option.observedStatus === 'within' && option.closingRank && <p className="apwo-gap-detail">{formatRank(option.closingRank - option.profileRank) + ' rank places between your entered rank and the observed closing rank. This historical comparison is not a seat guarantee.'}</p>}
+                      {option.observedStatus === 'missing' && <p className="apwo-gap-detail">This college and branch exists in the loaded selector, but the selected candidate filters did not return a usable closing-rank value. No rank value is inferred or filled in.</p>}
+                    </div>
+                    <div className="apwo-generated-actions"><button type="button" onClick={() => moveGeneratedOption(index, 'up')} disabled={groupIndex === 0} aria-label={'Move option ' + (index + 1) + ' up'} title="Move up within this section"><ArrowUp size={16} /></button><button type="button" onClick={() => moveGeneratedOption(index, 'down')} disabled={groupIndex === groupOptions.length - 1} aria-label={'Move option ' + (index + 1) + ' down'} title="Move down within this section"><ArrowDown size={16} /></button><button type="button" onClick={() => setGeneratedOptions((current) => current.filter((item) => item.id !== option.id))} aria-label={'Remove option ' + (index + 1)} title="Remove option"><X size={16} /></button></div>
+                  </li>;
+                })}</ol>
+              </section>;
+            }) : <div className="apwo-no-results"><Search size={23} /><strong>No options matched the selected filters.</strong><p>Change your district or branch filters, add a personal priority choice, and generate again.</p></div>}
             {generatedProfile.totalFilteredMatches > generatedProfile.displayedAlternatives && <p className="apwo-truncation-note">{'Showing ' + generatedProfile.displayedAlternatives + ' of ' + generatedProfile.totalFilteredMatches.toLocaleString('en-IN') + ' eligible data-backed alternatives, in addition to your priority choices. Refine district or branch filters to narrow the list.'}</p>}
             {copyMessage && <p className="apwo-copy-status" role="status"><CheckCircle2 size={15} /> {copyMessage}</p>}
             <div className="apwo-results-footer"><ShieldCheck size={17} /><p>Use this editable draft to organise your preferences. It does not log in to, or submit choices on, the official AP EAPCET counselling portal. Review the current counselling instructions before submission.</p></div>
