@@ -381,8 +381,8 @@ export const ApWebOptionsBuilder: React.FC = () => {
       const bottomLimit = pageHeight - 18;
       const rank = generatedProfile?.rank || generatedOptions[0]?.profileRank || 0;
       pdf.setProperties({
-        title: 'AP EAPCET 2026 Web Options — Naa College',
-        subject: 'Personal college and branch preference list based on the available AP EAPCET 2026 rank index',
+        title: 'AP EAPCET 2027 Planning Web Options — Naa College',
+        subject: 'Personal preference list for 2027 admission planning using available AP EAPCET 2026 historical rank data',
         author: 'Naa College',
         creator: 'Naa College Web Options Builder',
         keywords: 'AP EAPCET, web options, college preferences, Naa College',
@@ -392,7 +392,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
         // Repeat a faint watermark across each page without clipping it over content.
         pdf.setFont('helvetica', 'bold');
         pdf.setFontSize(16);
-        pdf.setTextColor(247, 249, 247);
+        pdf.setTextColor(237, 242, 238);
         for (let y = 44; y < pageHeight - 18; y += 62) {
           for (let x = 13; x < pageWidth - 34; x += 92) {
             pdf.text('NAA COLLEGE', x, y, { angle: -28 });
@@ -405,11 +405,11 @@ export const ApWebOptionsBuilder: React.FC = () => {
         pdf.setFont('helvetica', 'bold');
         pdf.setFontSize(7.2);
         pdf.setTextColor(30, 68, 49);
-        pdf.text('AP EAPCET 2026', 54, 11.5);
+        pdf.text('2027 ADMISSION PLANNING', 54, 11.5);
         pdf.setFont('helvetica', 'normal');
         pdf.setFontSize(6.2);
         pdf.setTextColor(98, 116, 105);
-        pdf.text('PERSONAL WEB OPTIONS PLAN', 54, 17);
+        pdf.text('BASED ON HISTORICAL 2026 DATA', 54, 17);
         pdf.setFont('helvetica', 'bold');
         pdf.setFontSize(6.3);
         pdf.setTextColor(34, 101, 69);
@@ -433,7 +433,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
       pdf.setFont('helvetica', 'bold');
       pdf.setFontSize(7.1);
       pdf.setTextColor(229, 208, 125);
-      pdf.text('AP EAPCET 2026  /  STUDENT PREFERENCE PLAN', margin + 7, 42);
+      pdf.text('AP EAPCET 2027 PLANNING  /  HISTORICAL DATA: 2026', margin + 7, 42);
       pdf.setFontSize(23);
       pdf.setTextColor(255, 255, 255);
       pdf.text('WEB OPTIONS', margin + 7, 54);
@@ -448,7 +448,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
       pdf.setFont('helvetica', 'normal');
       pdf.setFontSize(6.8);
       pdf.setTextColor(207, 224, 212);
-      pdf.text('A personalised list • Four rank-context groups • Editable preference draft', margin + 7, 71);
+      pdf.text('A personalised list • Historical rank context • Editable preference draft', margin + 7, 71);
       pdf.link(margin, 33, contentWidth, 45, { url: WEB_OPTIONS_URL });
 
       const statGap = 3;
@@ -473,7 +473,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
       pdf.setTextColor(93, 108, 99);
       pdf.text(
         pdf.splitTextToSize(
-          'How to read this plan: observed 2026 closing ranks are historical comparisons, not future cutoffs. Four groups show rank context, not admission probabilities. Within each group, the site-owner priority shortlist is shown first; other entries follow from lower to higher observed closing rank. This is not an official college-quality ranking. “Safe Backup” means a larger historical buffer only, never a guarantee.',
+          '2026 closing ranks are historical references for 2027 planning, not future cutoffs. The four groups are based on rank-to-cutoff gaps, not admission probabilities. Within each group, lower observed branch closing ranks come first as a historical demand signal; no college is boosted by name. This is not an overall college-quality ranking. “Safe Backup” means a larger historical buffer only, never a guarantee.',
           contentWidth,
         ),
         margin, 110,
@@ -545,13 +545,13 @@ export const ApWebOptionsBuilder: React.FC = () => {
 
           pdf.setFontSize(6);
           pdf.setTextColor(102, 116, 106);
-          pdf.text('District: ' + (option.district || 'Not listed in rank index') + (option.isUserPriority ? '  ·  YOUR PRIORITY' : option.isInstitutionPriority ? '  ·  PREFERRED INSTITUTION' : ''), x + 15, y + 20.1);
+          pdf.text('District: ' + (option.district || 'Not listed in rank index') + (option.isUserPriority ? '  ·  YOUR PRIORITY' : ''), x + 15, y + 20.1);
 
           const cutoffText = option.closingRank ? formatRank(option.closingRank) : 'Not available';
           pdf.setFont('helvetica', 'bold');
           pdf.setFontSize(6.2);
           pdf.setTextColor(49, 69, 56);
-          pdf.text('2026 observed closing rank: ' + cutoffText, x + 15, y + 25.5);
+          pdf.text('2026 historical closing rank: ' + cutoffText, x + 15, y + 25.5);
           pdf.setFont('helvetica', 'normal');
           pdf.setFontSize(5.7);
           pdf.setTextColor(105, 116, 107);
@@ -624,11 +624,11 @@ export const ApWebOptionsBuilder: React.FC = () => {
         <div className="apwo-hero-glow apwo-hero-glow-one" aria-hidden="true" />
         <div className="apwo-hero-glow apwo-hero-glow-two" aria-hidden="true" />
         <div className="apwo-hero-inner">
-          <div className="apwo-kicker"><span className="apwo-kicker-icon"><ListOrdered size={16} /></span> AP EAPCET 2026 · PRIORITY PLANNER</div>
+          <div className="apwo-kicker"><span className="apwo-kicker-icon"><ListOrdered size={16} /></span> AP EAPCET 2027 · ADMISSION PLANNING</div>
           <h1>Build your <span>web options.</span></h1>
-          <p>Turn your rank and preferences into an editable college-and-branch priority list, grounded in the AP EAPCET 2026 rank data already available on Naa College.</p>
+          <p>Prepare an editable college-and-branch preference list for 2027 admissions using available 2026 historical allotment ranks. Official 2027 closing-rank data is not assumed or invented.</p>
           <div className="apwo-hero-pills">
-            <span><ShieldCheck size={15} /> Existing dataset only</span>
+            <span><ShieldCheck size={15} /> Historical data labelled clearly</span>
             <span><MapPin size={15} /> District-aware</span>
             <span><ListOrdered size={15} /> Your order comes first</span>
           </div>
@@ -648,8 +648,8 @@ export const ApWebOptionsBuilder: React.FC = () => {
       <section className="apwo-rule-note" aria-label="How priority order works">
         <span className="apwo-rule-icon"><Target size={19} /></span>
         <div>
-          <strong>Your preferred college can stay at the top—even if your rank is beyond its observed closing rank.</strong>
-          <p>We keep your manually ordered choices first and show their historical rank context honestly. Alternatives are listed afterward. Nothing here is an official seat guarantee or a submitted counselling form.</p>
+          <strong>Your own priorities come first. Automatic options follow the observed rank data.</strong>
+          <p>Add any college-and-branch combination you personally prefer; it will stay at the top because you chose it, not because the tool promotes a particular college. Automatic suggestions are sorted by the matching 2026 closing-rank data within each section.</p>
         </div>
       </section>
 
@@ -729,9 +729,9 @@ export const ApWebOptionsBuilder: React.FC = () => {
           </form>
 
           {generatedProfile && <section className="apwo-results" aria-labelledby="apwo-results-heading">
-            <div className="apwo-results-head"><div><span className="apwo-results-kicker"><CheckCircle2 size={15} /> YOUR OPTIONS DRAFT IS READY</span><h2 id="apwo-results-heading">Your priority ladder</h2><p>{'Rank ' + formatRank(generatedProfile.rank) + ' · ' + generatedProfile.category + ' · ' + (generatedProfile.gender === 'M' ? 'Male' : 'Female') + ' · ' + generatedProfile.region + ' · Special: ' + generatedProfile.specialCategory}</p></div><div className="apwo-results-actions"><button type="button" className="apwo-pdf-button" onClick={() => void downloadPdfOptions()} disabled={!generatedOptions.length || isExportingPdf}>{isExportingPdf ? <><RefreshCw size={15} className="apwo-spin" /> Preparing PDF…</> : <><FileDown size={15} /> Download premium PDF</>}</button><button type="button" className="apwo-secondary-button" onClick={() => void copyOptions()} disabled={!generatedOptions.length}><Copy size={15} /> Copy list</button><button type="button" className="apwo-download-button" onClick={downloadOptions} disabled={!generatedOptions.length}><Download size={15} /> Download .txt</button></div></div>
+            <div className="apwo-results-head"><div><span className="apwo-results-kicker"><CheckCircle2 size={15} /> YOUR OPTIONS DRAFT IS READY</span><h2 id="apwo-results-heading">Your priority ladder</h2><p>{'Rank ' + formatRank(generatedProfile.rank) + ' · ' + generatedProfile.category + ' · ' + (generatedProfile.gender === 'M' ? 'Male' : 'Female') + ' · ' + generatedProfile.region + ' · Special: ' + generatedProfile.specialCategory}</p></div><div className="apwo-results-actions"><button type="button" className="apwo-pdf-button" onClick={() => void downloadPdfOptions()} disabled={!generatedOptions.length || isExportingPdf || isGeneratedDraftOutdated}>{isExportingPdf ? <><RefreshCw size={15} className="apwo-spin" /> Preparing PDF…</> : <><FileDown size={15} /> Download premium PDF</>}</button><button type="button" className="apwo-secondary-button" onClick={() => void copyOptions()} disabled={!generatedOptions.length || isGeneratedDraftOutdated}><Copy size={15} /> Copy list</button><button type="button" className="apwo-download-button" onClick={downloadOptions} disabled={!generatedOptions.length || isGeneratedDraftOutdated}><Download size={15} /> Download .txt</button></div></div>
             <div className="apwo-results-summary"><div><strong>{generatedOptions.length}</strong><span>options in current order</span></div><div><strong>{generatedOptions.filter((option) => option.isUserPriority).length}</strong><span>your priority choices</span></div><div><strong>{generatedOptions.filter((option) => !option.isUserPriority).length}</strong><span>data-backed alternatives shown</span></div></div>
-            <div className="apwo-observed-note"><Info size={16} /><span>Options are grouped by rank context. Within each group, your named priority institutions (PVP Siddhartha, Vishnu, SRKR and the matching V V I T entry in the loaded source index) are shown first; remaining options are sorted from lower to higher observed closing rank so highly selective options are not buried below late-closing entries. This is a preference order from the requested shortlist and historical data, not an official college-quality ranking or a future seat guarantee.</span></div>
+            <div className="apwo-observed-note"><Info size={16} /><span>No college is promoted just because of its name. Automatic options are ordered using the matching 2026 closing rank for the selected branch and candidate filters; lower closing ranks appear first within each section. This is a branch-demand signal from historical allotments, not an overall college-quality score. Your manually selected choices appear first only because you explicitly chose them.</span></div>
             {generatedOptions.length ? WEB_OPTION_GROUPS.map((group) => {
               const groupOptions = generatedOptions.filter((item) => item.groupKey === group.key);
               if (!groupOptions.length) return null;
@@ -750,7 +750,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
                   return <li key={option.id + (option.isUserPriority ? '-priority' : '-suggestion')} className={'apwo-generated-item' + (option.isUserPriority ? ' is-priority' : '')}>
                     <span className={'apwo-generated-number' + (option.isUserPriority ? ' is-priority-number' : '')}>{String(index + 1).padStart(2, '0')}</span>
                     <div className="apwo-generated-main">
-                      <div className="apwo-generated-overline">{option.isUserPriority ? <span className="apwo-top-badge"><Sparkles size={12} /> YOUR PRIORITY</span> : <span className="apwo-alt-badge">DATA-BACKED ALTERNATIVE</span>}{option.isInstitutionPriority && <span className="apwo-featured-badge">PREFERRED INSTITUTION</span>}{option.district && <span className="apwo-location-pill"><MapPin size={12} /> {option.district}</span>}</div>
+                      <div className="apwo-generated-overline">{option.isUserPriority ? <span className="apwo-top-badge"><Sparkles size={12} /> YOUR PRIORITY</span> : <span className="apwo-alt-badge">DATA-BACKED ALTERNATIVE</span>}{option.district && <span className="apwo-location-pill"><MapPin size={12} /> {option.district}</span>}</div>
                       <h3>{option.collegeName}</h3><p className="apwo-generated-branch">{option.branchCode} <span>·</span> {option.branchName}</p>
                       <div className="apwo-observed-line">
                         {option.observedStatus === 'within' ? <span className="apwo-status apwo-status-within"><CheckCircle2 size={14} /> {statusLabel.within}</span> : option.observedStatus === 'beyond' ? <span className="apwo-status apwo-status-beyond"><Target size={14} /> {statusLabel.beyond}</span> : <span className="apwo-status apwo-status-missing"><Info size={14} /> {statusLabel.missing}</span>}
@@ -772,7 +772,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
           </section>}
         </>
       )}
-      <footer className="apwo-page-footer"><GraduationCap size={18} /><span>Built around the available AP EAPCET 2026 rank data · Personal preference order stays yours.</span></footer>
+      <footer className="apwo-page-footer"><GraduationCap size={18} /><span>For AP EAPCET 2027 admission planning · historical 2026 rank data · your preferences remain yours.</span></footer>
     </main>
   );
 };
