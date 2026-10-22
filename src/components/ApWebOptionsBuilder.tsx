@@ -19,12 +19,17 @@ interface PriorityChoice {
 }
 type ObservedStatus = 'within' | 'beyond' | 'missing';
 type WebOptionGroupKey = 'dream' | 'borderline' | 'available' | 'safe-backup';
+
+// Site-owner priority order requested for these exact entries in the AP 2026 index.
+// This is a display preference, not an official college-quality ranking.
+const PREFERRED_COLLEGE_ORDER: Record<string, number> = { PPSV: 0, VITB: 1, SRKR: 2, VVITPU: 3 };
+const getPreferredCollegeOrder = (collegeCode: string) => PREFERRED_COLLEGE_ORDER[String(collegeCode || '').trim().toUpperCase()] ?? 99;
 interface WebOptionGroup {
   key: WebOptionGroupKey; title: string; badge: string; description: string;
   explanation: string; pdfAccent: [number, number, number]; pdfTint: [number, number, number];
 }
 interface GeneratedOption extends PriorityChoice {
-  closingRank: number | null; matchedRecords: number; isUserPriority: boolean;
+  closingRank: number | null; matchedRecords: number; isUserPriority: boolean; isInstitutionPriority: boolean;
   observedStatus: ObservedStatus; groupKey: WebOptionGroupKey; profileRank: number; category: string;
   gender: 'M' | 'F'; region: string; specialCategory: string;
 }
@@ -307,7 +312,9 @@ export const ApWebOptionsBuilder: React.FC = () => {
         const closingRank = match && match.closingRank > 0 ? match.closingRank : null;
         return {
           ...choice, closingRank, matchedRecords: match?.matchingRecordCount || 0,
-          isUserPriority, observedStatus: getObservedStatus(rank, closingRank),
+          isUserPriority,
+          isInstitutionPriority: getPreferredCollegeOrder(choice.collegeCode) < 99,
+          observedStatus: getObservedStatus(rank, closingRank),
           groupKey: isUserPriority ? 'dream' : getWebOptionGroup(rank, closingRank),
           profileRank: rank, category, gender, region, specialCategory,
         };
@@ -325,14 +332,15 @@ export const ApWebOptionsBuilder: React.FC = () => {
         const groupA = getWebOptionGroup(rank, a.closingRank);
         const groupB = getWebOptionGroup(rank, b.closingRank);
         if (GROUP_ORDER[groupA] !== GROUP_ORDER[groupB]) return GROUP_ORDER[groupA] - GROUP_ORDER[groupB];
-        if (groupA === 'dream' && a.closingRank !== b.closingRank) return a.closingRank - b.closingRank;
-        if (groupA === 'borderline') {
-          const gapA = Math.abs(rank - a.closingRank);
-          const gapB = Math.abs(rank - b.closingRank);
-          if (gapA !== gapB) return gapA - gapB;
-        }
-        if (groupA === 'available' && a.closingRank !== b.closingRank) return a.closingRank - b.closingRank;
-        if (groupA === 'safe-backup' && a.closingRank !== b.closingRank) return b.closingRank - a.closingRank;
+
+        // Promoted colleges must survive the per-section cap; weaker late-closing options follow.
+        const preferredA = getPreferredCollegeOrder(a.collegeCode);
+        const preferredB = getPreferredCollegeOrder(b.collegeCode);
+        if (preferredA !== preferredB) return preferredA - preferredB;
+
+        // Lower observed closing rank means more selective in this historical dataset.
+        if (a.closingRank !== b.closingRank) return a.closingRank - b.closingRank;
+
         if (selectedBranches.length) {
           const difference = selectedBranches.indexOf(a.branchCode) - selectedBranches.indexOf(b.branchCode);
           if (difference !== 0) return difference;
@@ -387,11 +395,12 @@ export const ApWebOptionsBuilder: React.FC = () => {
       });
 
       const drawWatermark = () => {
+        // Repeat a faint watermark across each page without clipping it over content.
         pdf.setFont('helvetica', 'bold');
-        pdf.setFontSize(23);
-        pdf.setTextColor(238, 243, 239);
-        for (let y = 40; y < pageHeight + 20; y += 55) {
-          for (let x = -18; x < pageWidth + 28; x += 76) {
+        pdf.setFontSize(16);
+        pdf.setTextColor(247, 249, 247);
+        for (let y = 44; y < pageHeight - 18; y += 62) {
+          for (let x = 13; x < pageWidth - 34; x += 92) {
             pdf.text('NAA COLLEGE', x, y, { angle: -28 });
           }
         }
@@ -410,7 +419,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
         pdf.setFont('helvetica', 'bold');
         pdf.setFontSize(6.3);
         pdf.setTextColor(34, 101, 69);
-        pdf.textWithLink('OPEN WEB OPTIONS  ↗', pageWidth - margin, 13, { url: WEB_OPTIONS_URL, align: 'right' });
+        pdf.textWithLink('OPEN WEB OPTIONS', pageWidth - margin, 13, { url: WEB_OPTIONS_URL, align: 'right' });
         pdf.setDrawColor(213, 226, 216);
         pdf.setLineWidth(0.35);
         pdf.line(margin, 27, pageWidth - margin, 27);
@@ -533,7 +542,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
           pdf.text(titleLines, x + 15, y + 6.5);
           pdf.setFontSize(5.7);
           pdf.setTextColor(...group.pdfAccent);
-          pdf.textWithLink('OPEN ↗', pageWidth - margin - 4, y + 6.5, { url: WEB_OPTIONS_URL, align: 'right' });
+          pdf.textWithLink('OPEN', pageWidth - margin - 4, y + 6.5, { url: WEB_OPTIONS_URL, align: 'right' });
 
           pdf.setFont('helvetica', 'normal');
           pdf.setFontSize(6.4);
@@ -542,7 +551,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
 
           pdf.setFontSize(6);
           pdf.setTextColor(102, 116, 106);
-          pdf.text('District: ' + (option.district || 'Not listed in rank index') + (option.isUserPriority ? '  ·  YOUR PRIORITY' : ''), x + 15, y + 20.1);
+          pdf.text('District: ' + (option.district || 'Not listed in rank index') + (option.isUserPriority ? '  ·  YOUR PRIORITY' : option.isInstitutionPriority ? '  ·  PREFERRED INSTITUTION' : ''), x + 15, y + 20.1);
 
           const cutoffText = option.closingRank ? formatRank(option.closingRank) : 'Not available';
           pdf.setFont('helvetica', 'bold');
@@ -573,7 +582,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
         pdf.setFont('helvetica', 'bold');
         pdf.setFontSize(6);
         pdf.setTextColor(56, 95, 69);
-        pdf.textWithLink('NAACOLLEGE.IN  ·  OPEN WEB OPTIONS ↗', margin, pageHeight - 7, { url: WEB_OPTIONS_URL });
+        pdf.textWithLink('NAACOLLEGE.IN  ·  OPEN WEB OPTIONS', margin, pageHeight - 7, { url: WEB_OPTIONS_URL });
         pdf.setFont('helvetica', 'normal');
         pdf.setFontSize(6);
         pdf.setTextColor(119, 132, 122);
@@ -747,7 +756,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
                   return <li key={option.id + (option.isUserPriority ? '-priority' : '-suggestion')} className={'apwo-generated-item' + (option.isUserPriority ? ' is-priority' : '')}>
                     <span className={'apwo-generated-number' + (option.isUserPriority ? ' is-priority-number' : '')}>{String(index + 1).padStart(2, '0')}</span>
                     <div className="apwo-generated-main">
-                      <div className="apwo-generated-overline">{option.isUserPriority ? <span className="apwo-top-badge"><Sparkles size={12} /> YOUR PRIORITY</span> : <span className="apwo-alt-badge">DATA-BACKED ALTERNATIVE</span>}{option.district && <span className="apwo-location-pill"><MapPin size={12} /> {option.district}</span>}</div>
+                      <div className="apwo-generated-overline">{option.isUserPriority ? <span className="apwo-top-badge"><Sparkles size={12} /> YOUR PRIORITY</span> : <span className="apwo-alt-badge">DATA-BACKED ALTERNATIVE</span>}{option.isInstitutionPriority && <span className="apwo-featured-badge">PREFERRED INSTITUTION</span>}{option.district && <span className="apwo-location-pill"><MapPin size={12} /> {option.district}</span>}</div>
                       <h3>{option.collegeName}</h3><p className="apwo-generated-branch">{option.branchCode} <span>·</span> {option.branchName}</p>
                       <div className="apwo-observed-line">
                         {option.observedStatus === 'within' ? <span className="apwo-status apwo-status-within"><CheckCircle2 size={14} /> {statusLabel.within}</span> : option.observedStatus === 'beyond' ? <span className="apwo-status apwo-status-beyond"><Target size={14} /> {statusLabel.beyond}</span> : <span className="apwo-status apwo-status-missing"><Info size={14} /> {statusLabel.missing}</span>}
