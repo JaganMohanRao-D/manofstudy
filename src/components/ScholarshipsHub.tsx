@@ -311,6 +311,16 @@ export const ScholarshipsHub: React.FC = () => {
   const totalClosing = scholarships.filter(s => scholarshipDeadlineState(s) === 'closing').length;
   const totalExpired = scholarships.filter(s => scholarshipDeadlineState(s) === 'expired').length;
   const visibleItems = filtered.slice(0, visibleCount);
+  const miniScholarship = useMemo(() => {
+    const today = TODAY();
+    return scholarships
+      .filter((item) => {
+        const date = deadlineDate(item);
+        const state = scholarshipDeadlineState(item);
+        return date && date >= today && (state === 'open' || state === 'closing');
+      })
+      .sort((a, b) => (deadlineDate(a)?.getTime() ?? Number.MAX_SAFE_INTEGER) - (deadlineDate(b)?.getTime() ?? Number.MAX_SAFE_INTEGER))[0] || null;
+  }, [scholarships]);
   const activeChips: { label: string; clear: () => void }[] = [];
   if (debouncedQuery) activeChips.push({ label: 'Search: ' + searchQuery, clear: () => setSearchQuery('') });
   if (mainFilter !== 'all') activeChips.push({ label: mainFilter === 'saved' ? 'Saved' : mainFilter === 'closing' ? 'Closing soon' : mainFilter === 'expired' ? 'Expired' : 'Open', clear: () => setMainFilter('all') });
@@ -332,22 +342,53 @@ export const ScholarshipsHub: React.FC = () => {
   );
 
   return (
-    <section className="mos-scholarships-hub mx-auto w-full max-w-7xl space-y-7 px-3 py-5 text-[var(--mos-text-primary)] sm:px-5 sm:py-8 lg:px-8">
-      <header className="mos-scholarship-hero relative overflow-hidden rounded-[24px] border border-[var(--mos-border)] p-5 shadow-sm sm:rounded-[28px] sm:p-8 lg:p-10">
-        <div aria-hidden="true" className="mos-scholarship-orbit mos-scholarship-orbit-one pointer-events-none absolute -right-14 -top-20 h-64 w-64 rounded-full blur-3xl" /><div aria-hidden="true" className="mos-scholarship-orbit mos-scholarship-orbit-two pointer-events-none absolute -bottom-24 right-1/3 h-40 w-40 rounded-full blur-3xl" />
+    <section className="mos-scholarships-hub mx-auto w-full max-w-none space-y-4 px-3 py-3 text-[var(--mos-text-primary)] sm:px-4 sm:py-4 lg:px-5">
+      <header className="mos-scholarship-hero relative grid gap-4 overflow-hidden rounded-[20px] border border-[var(--mos-border)] p-4 shadow-sm sm:rounded-[22px] sm:p-5 md:grid-cols-[minmax(0,1fr)_minmax(270px,.82fr)] md:items-center md:gap-5">
+        
         <div className="relative z-10 max-w-4xl">
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[.14em] text-emerald-700 dark:text-emerald-300"><Sparkles className="h-3.5 w-3.5" /> Scholarship finder · 2026–27</div>
-          <h1 className="mt-4 max-w-3xl text-3xl font-black leading-tight tracking-tight sm:text-4xl lg:text-5xl">Big dreams deserve <span className="mos-scholarship-gradient-text">opportunities.</span></h1>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--mos-text-secondary)] sm:text-base">Discover scholarships, understand your options, and find funding opportunities for your educational journey.</p>
-          <div className="mt-6 flex flex-wrap items-center gap-2 text-xs text-[var(--mos-text-muted)]"><span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-3 py-1.5"><ShieldCheck className="h-3.5 w-3.5 text-emerald-600" /> Official-source links where available</span><span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-3 py-1.5"><Bookmark className="h-3.5 w-3.5" /> Save for later</span></div>
+          <h1 className="mt-2 max-w-3xl text-2xl font-black leading-tight tracking-tight sm:text-3xl lg:text-4xl">Big dreams deserve <span className="mos-scholarship-gradient-text">opportunities.</span></h1>
+          <p className="mt-2 max-w-2xl text-xs leading-5 text-[var(--mos-text-secondary)] sm:text-sm sm:leading-6">Discover scholarships, understand your options, and find funding opportunities for your educational journey.</p>
+          <div className="mt-3 flex flex-wrap items-center gap-2 text-[10px] text-[var(--mos-text-muted)] sm:text-xs"><span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-3 py-1.5"><ShieldCheck className="h-3.5 w-3.5 text-emerald-600" /> Official-source links where available</span><span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-3 py-1.5"><Bookmark className="h-3.5 w-3.5" /> Save for later</span></div>
         </div>
-        <div className="relative z-10 mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="mos-scholarship-stats relative z-10 hidden grid-cols-2 gap-2 md:grid">
           {[{ label: 'In the directory', value: scholarships.length, icon: GraduationCap }, { label: 'Open · verify portal', value: totalOpen, icon: Check }, { label: 'Closing in 7 days', value: totalClosing, icon: Clock3 }, { label: 'Expired / closed', value: totalExpired, icon: CalendarDays }].map((item) => {
             const Icon = item.icon;
-            return <div key={item.label} className="rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)]/75 p-3.5 sm:p-4"><div className="flex items-center justify-between gap-2"><span className="text-[10px] font-medium text-[var(--mos-text-muted)] sm:text-xs">{item.label}</span><Icon className="h-4 w-4 text-emerald-600 dark:text-emerald-300" /></div><div className="mt-2 text-2xl font-black tracking-tight sm:text-3xl">{loading ? '—' : item.value}</div></div>;
+            return <div key={item.label} className="rounded-xl border border-[var(--mos-border)] bg-[var(--mos-surface-muted)]/75 p-2.5"><div className="flex items-center justify-between gap-2"><span className="text-[10px] font-medium text-[var(--mos-text-muted)] sm:text-xs">{item.label}</span><Icon className="h-4 w-4 text-emerald-600 dark:text-emerald-300" /></div><div className="mt-1 text-xl font-black tracking-tight sm:text-2xl">{loading ? '—' : item.value}</div></div>;
           })}
         </div>
       </header>
+
+      <section className="mos-mini-scholarships" aria-labelledby="mos-mini-scholarships-title">
+        <div className="mos-mini-scholarships-heading">
+          <div>
+            <span className="mos-mini-scholarships-eyebrow"><Sparkles className="h-3.5 w-3.5" /> UPCOMING OPPORTUNITY</span>
+            <h2 id="mos-mini-scholarships-title">Mini Scholarships</h2>
+          </div>
+          <a href="/scholarships/" className="mos-mini-scholarships-all">View directory <ArrowUpRight className="h-4 w-4" /></a>
+        </div>
+        {loading ? (
+          <div className="mos-mini-scholarship-loading" aria-label="Loading scholarship details" />
+        ) : miniScholarship ? (
+          <a className="mos-mini-scholarship-card" href={'/scholarships/' + scholarshipSlug(miniScholarship.title) + '/'}>
+            <div className="mos-mini-scholarship-main">
+              <span className="mos-mini-scholarship-status"><Check className="h-3.5 w-3.5" /> Upcoming / listed open</span>
+              <h3>{miniScholarship.title}</h3>
+              <div className="mos-mini-scholarship-facts">
+                <div><span><Wallet className="h-3.5 w-3.5" /> AMOUNT / AWARD</span><strong>{miniScholarship.amount || 'Amount not confirmed'}</strong></div>
+                <div><span><CalendarDays className="h-3.5 w-3.5" /> DEADLINE</span><strong>{miniScholarship.deadline || 'Confirm with provider'}</strong></div>
+              </div>
+            </div>
+            <div className="mos-mini-scholarship-details">
+              <div><h4><FileText className="h-3.5 w-3.5" /> SCHOLARSHIP DETAILS</h4><p>{miniScholarship.description || miniScholarship.target || 'Review the official scheme details.'}</p></div>
+              <div><h4><GraduationCap className="h-3.5 w-3.5" /> ELIGIBILITY</h4><p>{miniScholarship.eligibility || miniScholarship.target || 'Check the provider guidelines for current eligibility.'}</p></div>
+              <span className="mos-mini-scholarship-cta">View full scholarship details <ArrowUpRight className="h-4 w-4" /></span>
+            </div>
+          </a>
+        ) : (
+          <div className="mos-mini-scholarship-empty">No upcoming scholarship deadline is confirmed in the current dataset. Open the full directory to review every listing.</div>
+        )}
+      </section>
 
       <section className="mos-scholarship-controls rounded-2xl border border-[var(--mos-border)] bg-[var(--mos-surface)] p-3 shadow-sm sm:p-4" aria-label="Scholarship search and filters">
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(280px,1.15fr)_auto] lg:items-start">
