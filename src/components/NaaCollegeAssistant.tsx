@@ -195,6 +195,7 @@ export function NaaCollegeAssistant() {
     <div className="nca-assistant-root">
       {open && (
         <section
+          id="nca-chat-panel"
           className="nca-chat-panel"
           role="dialog"
           aria-modal="false"
