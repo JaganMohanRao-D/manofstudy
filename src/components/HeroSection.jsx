@@ -21,6 +21,7 @@ import {
   Target,
   Clock3,
   ShieldCheck,
+  Zap,
   CalendarDays,
   Wallet,
   CheckCircle2 as VerifiedIcon,
@@ -359,10 +360,10 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
                 <div className="nc-home-calculator"><div className="nc-home-calculator-screen">A+</div><span /><span /><span /><span /><span /><span /></div>
                 <div className="nc-home-calculator-note"><CheckCircle2 size={18} /><b>Plan clearly</b></div>
               </div>
-              <h3>Attendance &amp; Grade Planning</h3>
-              <p>Check attendance scenarios and organise CGPA or SGPA calculations around your college rules.</p>
-              <div className="nc-home-tool-tags"><span>Attendance</span><span>CGPA · SGPA</span></div>
-              <button type="button" className="nc-home-card-action" onClick={() => go('attendance')}>Open academic tools <ArrowRight size={16} /></button>
+              <h3>Attendance Planner</h3>
+              <p>Estimate attendance scenarios and understand how many classes you may need to attend to reach your target.</p>
+              <div className="nc-home-tool-tags"><span>Attendance</span><span>Attendance target</span></div>
+              <button type="button" className="nc-home-card-action" onClick={() => go('attendance')}>Open attendance planner <ArrowRight size={16} /></button>
             </article>
           </div>
           <div className="nc-home-tools-bottom"><span>Need something else?</span><button type="button" onClick={() => go('utilities')}>Browse the full student toolkit <ArrowUpRight size={15} /></button></div>
