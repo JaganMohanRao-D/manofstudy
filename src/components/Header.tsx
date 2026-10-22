@@ -16,12 +16,12 @@ export interface HeaderProps {
 type NavItem = { label: string; workspace: WorkspaceView; tab?: ToolTab; icon: React.ComponentType<{ className?: string }> };
 
 const AP_TOOLS: NavItem[] = [
-  { label: 'AP EAPCET College Predictor', workspace: 'ap-predictor', icon: Map },
-  { label: 'AP EAPCET Web Options Builder', workspace: 'ap-web-options', icon: ClipboardCheck },
-  { label: 'AP EAPCET Rank Predictor', workspace: 'ap-rank-predictor', icon: Calculator },
-  { label: 'AP Top B.Tech Colleges', workspace: 'ap-top-colleges', icon: Trophy },
-  { label: 'AP EAPCET 2026 College-Wise Allotments', workspace: 'ap-allotments', icon: ClipboardCheck },
-  { label: 'AP EAPCET Vacancy Radar', workspace: 'eapcet-radar', icon: Search },
+  { label: 'AP College Predictor · 2027 Planning', workspace: 'ap-predictor', icon: Map },
+  { label: 'AP Web Options · 2027 Planning', workspace: 'ap-web-options', icon: ClipboardCheck },
+  { label: 'AP Rank Predictor · 2027 Planning', workspace: 'ap-rank-predictor', icon: Calculator },
+  { label: 'AP B.Tech Colleges · 2027 Planning', workspace: 'ap-top-colleges', icon: Trophy },
+  { label: 'AP Allotment Records · 2025–2026', workspace: 'ap-allotments', icon: ClipboardCheck },
+  { label: 'AP Seat & Fee Radar · 2027 Planning', workspace: 'eapcet-radar', icon: Search },
 ];
 const TG_TOOLS: NavItem[] = [
   { label: 'TG EAPCET College Predictor', workspace: 'tg-predictor', icon: Map },
