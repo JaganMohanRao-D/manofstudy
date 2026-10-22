@@ -79,6 +79,56 @@ function renderMessage(content: string): React.ReactNode {
   ));
 }
 
+
+function localNaaCoxFallback(question: string, pagePath: string): string {
+  const q = question.toLowerCase();
+  const teluguEnglish = /\b(ela|enti|enduku|cheppu|cheppandi|undha|undi|bro|naaku|nenu|meeru|kavali|ekkada|eppudu|ante|ivvu|ivvandi)\b/i.test(q);
+  const prefix = teluguEnglish ? "Bro, simple ga cheptha:\n" : "";
+  const link = (label: string, path: string) => "[" + label + "](" + path + ")";
+  if (/\b(hi|hello|hey|hai|namaste|namaskaram|how are you)\b/i.test(q)) {
+    return "Hi! I’m NaaCox AI from Naa College 😊 Ask me about AP/TG EAPCET, scholarships, college choices, study plans, programming, DSA, projects, internships, or website tools. You can type in English or Telugu-English.";
+  }
+  if (/\b(who are you|your name|founder|who founded|who created naa college)\b/i.test(q)) {
+    return "I’m NaaCox AI, the student assistant for Naa College. Naa College was founded by Jagan Mohan Rao Dunna. I’m a software assistant, not a human.";
+  }
+  if (/scholarship|stipend|fee reimbursement|fee waiver|financial aid/.test(q)) {
+    return "Explore " + link("Naa College Scholarships", "/scholarships/") + " for listed schemes and provider links. Always verify current eligibility, deadlines, required documents and application status on the official provider portal. If you share your state, course/year and scheme name, I can help you identify what to check.";
+  }
+  if (/ap eapcet|andhra pradesh|ap allotment|ap counselling|ap counseling/.test(q)) {
+    return "Open the “For AP” menu to find AP EAPCET allotment and college exploration tools. Historical ranks are guides, not guaranteed seats; verify current dates, fees and seat matrix on the official counselling portal.";
+  }
+  if (/tg eapcet|ts eamcet|telangana|tg allotment/.test(q)) {
+    return "Open the “For TG” menu to find Telangana EAPCET allotment and college discovery tools. Check the official counselling portal for current dates, fees, seat matrix and eligibility.";
+  }
+  if (/attendance|bunk/.test(q)) {
+    return "Use the Attendance Calculator on Naa College. Enter classes held and attended, then confirm the required percentage with your college. Share those two numbers and your target percentage if you want me to calculate an estimate.";
+  }
+  if (/cgpa|sgpa|gpa|grade point/.test(q)) {
+    return "I can help with CGPA/SGPA calculations. Share your subject credits and grade points, plus your university's formula if known. Don’t include your student ID or other private details.";
+  }
+  if (/programming|coding|python|javascript|java|c language|html|css|react|error|debug/.test(q)) {
+    return "I can help explain programming concepts and debug common issues. Send the language, what you expected, the exact error/output and a small relevant code snippet. Remove API keys, passwords and private data before sharing.";
+  }
+  if (/dsa|data structures|algorithm|leetcode|competitive programming/.test(q)) {
+    return "Begin DSA with arrays and strings, searching/sorting, recursion, linked lists, stacks/queues, hashing, trees/graphs and then dynamic programming. For each topic, understand it, implement it yourself and solve small problems before moving on.";
+  }
+  if (/internship|placement|resume|portfolio|github|career|roadmap|web development|machine learning|ai ml/.test(q)) {
+    return "A practical path is to choose one track, learn fundamentals, build 2–3 complete projects, document them on GitHub, create a portfolio and apply to relevant internships. Explore " + link("engineering roadmaps", "/engineering-roadmaps/") + " and the " + link("AI Student Gap Analyzer", "/ai-gap-analyzer") + ". Tell me your year and preferred track for a focused plan.";
+  }
+  if (/college|branch|cse|ece|rank|cutoff|seat|engineering/.test(q)) {
+    return "Compare colleges using total fees, curriculum, commute/hostel costs, verified placement reports, internship opportunities and your interest in the branch. Use Naa College’s “For AP” or “For TG” tools for available historical data, and verify current counselling details officially. Share your state, rank range, preferred branches and budget range for a useful shortlist.";
+  }
+  if (/study plan|timetable|exam|study tips|first year/.test(q)) {
+    return "Start with short focused blocks: revise today’s class, practise questions without looking at solutions, note doubts and review older topics weekly. Tell me the subject, exam date and daily available time, and I can make a realistic schedule.";
+  }
+  if (/naa college|website|what can you do|features|help me/.test(q)) {
+    return "Naa College brings together AP/TG allotment exploration, scholarships, attendance and CGPA tools, student blogs, roadmaps and learning resources. Start with " + link("Scholarships", "/scholarships/") + ", " + link("Blogs", "/blog/") + ", " + link("Engineering roadmaps", "/engineering-roadmaps/") + ", or " + link("AI Student Gap Analyzer", "/ai-gap-analyzer") + ".";
+  }
+  return prefix + "I can help with Naa College tools, AP/TG EAPCET, scholarships, college choices, study planning, programming, DSA, projects, internships and general learning questions. " +
+    (pagePath && pagePath !== "/" ? "You’re currently on " + pagePath + ". " : "") +
+    "Tell me the goal and a little context, and I’ll try a more targeted answer. For current admission or scholarship decisions, always verify official notices.";
+}
+
 export function NaaCollegeAssistant() {
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState("");
@@ -158,20 +208,16 @@ export function NaaCollegeAssistant() {
         { id: "nca-" + Date.now() + "-assistant", role: "assistant", content: answer },
       ]);
     } catch (error) {
-      const message =
-        error instanceof Error && error.message === "SETUP_REQUIRED"
-          ? "The chat interface is ready, but its secure AI connection still needs to be configured. Please check back soon."
-          : error instanceof Error && error.message
-            ? error.message
-            : "Network connection failed. Please try again.";
-
-      setConnectionMessage(message);
+      // Keep the chat useful even if the remote endpoint is temporarily unreachable.
+      // This local knowledge fallback does not require an API key or network access.
+      const fallbackAnswer = localNaaCoxFallback(cleaned, window.location.pathname);
+      setConnectionMessage("");
       setMessages((current) => [
         ...current,
         {
-          id: "nca-" + Date.now() + "-error",
+          id: "nca-" + Date.now() + "-assistant-fallback",
           role: "assistant",
-          content: message,
+          content: fallbackAnswer,
         },
       ]);
     } finally {
@@ -267,12 +313,6 @@ export function NaaCollegeAssistant() {
                   {question}
                 </button>
               ))}
-            </div>
-          )}
-
-          {connectionMessage && connectionMessage.includes("configured") && (
-            <div className="nca-chat-setup-note" role="status">
-              The secure server key must be added before AI replies can work.
             </div>
           )}
 
