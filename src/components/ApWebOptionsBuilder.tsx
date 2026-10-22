@@ -364,6 +364,231 @@ export const ApWebOptionsBuilder: React.FC = () => {
     }
   };
 
+  const downloadPdfOptions = async () => {
+    if (!generatedOptions.length || isExportingPdf) return;
+    setIsExportingPdf(true);
+    setCopyMessage('');
+    try {
+      const logoData = await loadLogoAsPng('/Naacollege_fulllogo.webp');
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true });
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 14;
+      const contentWidth = pageWidth - margin * 2;
+      const bottomLimit = pageHeight - 18;
+      const rank = generatedProfile?.rank || generatedOptions[0]?.profileRank || 0;
+      pdf.setProperties({
+        title: 'AP EAPCET 2026 Web Options — Naa College',
+        subject: 'Personal college and branch preference list based on the available AP EAPCET 2026 rank index',
+        author: 'Naa College',
+        creator: 'Naa College Web Options Builder',
+        keywords: 'AP EAPCET, web options, college preferences, Naa College',
+      });
+
+      const drawWatermark = () => {
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(23);
+        pdf.setTextColor(238, 243, 239);
+        for (let y = 40; y < pageHeight + 20; y += 55) {
+          for (let x = -18; x < pageWidth + 28; x += 76) {
+            pdf.text('NAA COLLEGE', x, y, { angle: -28 });
+          }
+        }
+      };
+
+      const drawHeader = () => {
+        pdf.addImage(logoData, 'PNG', margin, 5.5, 36, 18, 'naa-college-logo', 'FAST');
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(7.2);
+        pdf.setTextColor(30, 68, 49);
+        pdf.text('AP EAPCET 2026', 54, 11.5);
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(6.2);
+        pdf.setTextColor(98, 116, 105);
+        pdf.text('PERSONAL WEB OPTIONS PLAN', 54, 17);
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(6.3);
+        pdf.setTextColor(34, 101, 69);
+        pdf.textWithLink('OPEN WEB OPTIONS  ↗', pageWidth - margin, 13, { url: WEB_OPTIONS_URL, align: 'right' });
+        pdf.setDrawColor(213, 226, 216);
+        pdf.setLineWidth(0.35);
+        pdf.line(margin, 27, pageWidth - margin, 27);
+      };
+
+      const startNewPage = () => {
+        pdf.addPage();
+        drawWatermark();
+        drawHeader();
+      };
+
+      drawWatermark();
+      drawHeader();
+
+      pdf.setFillColor(20, 57, 45);
+      pdf.roundedRect(margin, 33, contentWidth, 45, 4, 4, 'F');
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(7.1);
+      pdf.setTextColor(229, 208, 125);
+      pdf.text('AP EAPCET 2026  /  STUDENT PREFERENCE PLAN', margin + 7, 42);
+      pdf.setFontSize(23);
+      pdf.setTextColor(255, 255, 255);
+      pdf.text('WEB OPTIONS', margin + 7, 54);
+      pdf.setFontSize(8);
+      pdf.setTextColor(230, 239, 232);
+      pdf.text(
+        'Rank ' + formatRank(rank) + '  ·  ' + (generatedProfile?.category || generatedOptions[0]?.category || '') +
+        '  ·  ' + ((generatedProfile?.gender || generatedOptions[0]?.gender) === 'F' ? 'Female' : 'Male') +
+        '  ·  ' + (generatedProfile?.region || generatedOptions[0]?.region || ''),
+        margin + 7, 62,
+      );
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(6.8);
+      pdf.setTextColor(207, 224, 212);
+      pdf.text('A personalised list • Four rank-context groups • Editable preference draft', margin + 7, 71);
+      pdf.link({ x: margin, y: 33, w: contentWidth, h: 45, url: WEB_OPTIONS_URL });
+
+      const statGap = 3;
+      const statWidth = (contentWidth - statGap * 3) / 4;
+      WEB_OPTION_GROUPS.forEach((group, index) => {
+        const count = generatedOptions.filter((option) => option.groupKey === group.key).length;
+        const x = margin + index * (statWidth + statGap);
+        pdf.setFillColor(...group.pdfTint);
+        pdf.roundedRect(x, 83, statWidth, 19, 2, 2, 'F');
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(13);
+        pdf.setTextColor(...group.pdfAccent);
+        pdf.text(String(count), x + 4, 91.5);
+        pdf.setFontSize(5.8);
+        pdf.setTextColor(57, 73, 63);
+        pdf.text(group.title, x + 4, 97);
+        pdf.link({ x, y: 83, w: statWidth, h: 19, url: WEB_OPTIONS_URL });
+      });
+
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(6.6);
+      pdf.setTextColor(93, 108, 99);
+      pdf.text(
+        pdf.splitTextToSize(
+          'How to read this plan: observed 2026 closing ranks are historical comparisons, not future cutoffs. Dream, borderline, available and backup groups use rank-to-closing-rank comparisons; they are not admission probabilities. “Safe Backup” means a larger historical buffer only, never a guarantee. Your manually prioritised choices remain in Dream Options.',
+          contentWidth,
+        ),
+        margin, 110,
+      );
+
+      let y = 125;
+      let overallNumber = 0;
+      const cardHeight = 31;
+      const cardGap = 2.2;
+      for (const group of WEB_OPTION_GROUPS) {
+        const items = generatedOptions.filter((option) => option.groupKey === group.key);
+        if (!items.length) continue;
+        if (y + 15 + cardHeight > bottomLimit) {
+          startNewPage();
+          y = 35;
+        }
+        pdf.setFillColor(...group.pdfTint);
+        pdf.roundedRect(margin, y, contentWidth, 13, 2, 2, 'F');
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(9.1);
+        pdf.setTextColor(...group.pdfAccent);
+        pdf.text(group.title, margin + 4, y + 5.5);
+        pdf.setFontSize(6.4);
+        pdf.setTextColor(76, 91, 82);
+        const sectionDescription = pdf.splitTextToSize(group.description, contentWidth - 37).slice(0, 1);
+        pdf.text(sectionDescription, margin + 4, y + 10.2);
+        pdf.setFontSize(8.4);
+        pdf.setTextColor(...group.pdfAccent);
+        pdf.text(String(items.length), pageWidth - margin - 4, y + 6.5, { align: 'right' });
+        pdf.link({ x: margin, y, w: contentWidth, h: 13, url: WEB_OPTIONS_URL });
+        y += 15;
+
+        for (const option of items) {
+          if (y + cardHeight > bottomLimit) {
+            startNewPage();
+            y = 35;
+          }
+          overallNumber += 1;
+          const titleLines = pdf.splitTextToSize(option.collegeName, contentWidth - 55).slice(0, 2);
+          const branchLine = pdf.splitTextToSize(option.branchCode + ' · ' + option.branchName, contentWidth - 16).slice(0, 1);
+          const x = margin;
+          pdf.setDrawColor(218, 226, 220);
+          pdf.setLineWidth(0.32);
+          // Outline-only option cards keep the repeating watermark visible beneath the content.
+          pdf.roundedRect(x, y, contentWidth, cardHeight, 2, 2, 'S');
+          pdf.setDrawColor(...group.pdfAccent);
+          pdf.setLineWidth(1.15);
+          pdf.line(x + 1, y + 3, x + 1, y + cardHeight - 3);
+
+          pdf.setFillColor(...group.pdfTint);
+          pdf.roundedRect(x + 4, y + 4, 8, 8, 1.6, 1.6, 'F');
+          pdf.setFont('helvetica', 'bold');
+          pdf.setFontSize(7);
+          pdf.setTextColor(...group.pdfAccent);
+          pdf.text(String(overallNumber).padStart(2, '0'), x + 8, y + 9.2, { align: 'center' });
+
+          pdf.setFont('helvetica', 'bold');
+          pdf.setFontSize(8.2);
+          pdf.setTextColor(30, 48, 39);
+          pdf.text(titleLines, x + 15, y + 6.5);
+          pdf.setFontSize(5.7);
+          pdf.setTextColor(...group.pdfAccent);
+          pdf.textWithLink('OPEN ↗', pageWidth - margin - 4, y + 6.5, { url: WEB_OPTIONS_URL, align: 'right' });
+
+          pdf.setFont('helvetica', 'normal');
+          pdf.setFontSize(6.4);
+          pdf.setTextColor(77, 94, 83);
+          pdf.text(branchLine, x + 15, y + 14.6);
+
+          pdf.setFontSize(6);
+          pdf.setTextColor(102, 116, 106);
+          pdf.text('District: ' + (option.district || 'Not listed in rank index') + (option.isUserPriority ? '  ·  YOUR PRIORITY' : ''), x + 15, y + 20.1);
+
+          const cutoffText = option.closingRank ? formatRank(option.closingRank) : 'Not available';
+          pdf.setFont('helvetica', 'bold');
+          pdf.setFontSize(6.2);
+          pdf.setTextColor(49, 69, 56);
+          pdf.text('2026 observed closing rank: ' + cutoffText, x + 15, y + 25.5);
+          pdf.setFont('helvetica', 'normal');
+          pdf.setFontSize(5.7);
+          pdf.setTextColor(105, 116, 107);
+          let contextText = 'No matching closing-rank value for these filters';
+          if (option.observedStatus === 'within' && option.closingRank) {
+            contextText = 'Entered rank is within the observed range; this is not a seat guarantee';
+          } else if (option.observedStatus === 'beyond' && option.closingRank) {
+            contextText = 'Entered rank is ' + formatRank(option.profileRank - option.closingRank) + ' places beyond the observed closing rank';
+          }
+          pdf.text(pdf.splitTextToSize(contextText, contentWidth - 20).slice(0, 1), x + 15, y + 29);
+          pdf.link({ x, y, w: contentWidth, h: cardHeight, url: WEB_OPTIONS_URL });
+          y += cardHeight + cardGap;
+        }
+      }
+
+      const pageCount = pdf.getNumberOfPages();
+      for (let page = 1; page <= pageCount; page += 1) {
+        pdf.setPage(page);
+        pdf.setDrawColor(218, 228, 220);
+        pdf.setLineWidth(0.3);
+        pdf.line(margin, pageHeight - 13, pageWidth - margin, pageHeight - 13);
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(6);
+        pdf.setTextColor(56, 95, 69);
+        pdf.textWithLink('NAACOLLEGE.IN  ·  OPEN WEB OPTIONS ↗', margin, pageHeight - 7, { url: WEB_OPTIONS_URL });
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(6);
+        pdf.setTextColor(119, 132, 122);
+        pdf.text('Page ' + page + ' of ' + pageCount, pageWidth - margin, pageHeight - 7, { align: 'right' });
+        pdf.link({ x: margin, y: pageHeight - 11, w: contentWidth, h: 8, url: WEB_OPTIONS_URL });
+      }
+
+      pdf.save('Naa-College-AP-EAPCET-Web-Options.pdf');
+      setCopyMessage('Premium Naa College PDF downloaded. It includes the logo, repeated watermark, four option groups and clickable links back to the Web Options Builder.');
+    } catch (error) {
+      setCopyMessage(error instanceof Error ? 'PDF export failed: ' + error.message : 'PDF export failed. Please try again.');
+    } finally {
+      setIsExportingPdf(false);
+    }
+  };
+
   const copyOptions = async () => {
     if (!generatedOptions.length) return;
     try {
