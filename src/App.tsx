@@ -41,6 +41,7 @@ import { BlogPage, isBlogPath } from './components/BlogPage';
 import { RoadmapFullPage } from './components/RoadmapFullPage';
 import { useAuth } from './context/AuthContext';
 import { AutonomousCollegesDirectory } from './components/AutonomousCollegesDirectory';
+import { NaaCollegeAssistant } from './components/NaaCollegeAssistant';
 
 // Resilient dynamic code splitting with retry logic for network or stale bundle resilience
 const lazyWithRetry = <T extends React.ComponentType<any>>(
@@ -1626,6 +1627,8 @@ export default function App() {
           />
         </Suspense>
       )}
+
+      {!isExamActive && <NaaCollegeAssistant />}
 
     </div>
   );
