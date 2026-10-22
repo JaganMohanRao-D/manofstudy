@@ -1392,3 +1392,232 @@ html.dark .naa-wireframe-home .nc-hero h1 span {
 @media(max-width:1000px){.nc-featured-scholarship-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:650px){.nc-featured-scholarship-grid{grid-template-columns:minmax(0,1fr)}.nc-featured-scholarship-card{padding:16px}.nc-featured-scholarship-title{font-size:17px}}
 @media(prefers-reduced-motion:reduce){.mos-scholarship-shining-title,.nc-featured-scholarship-title{animation:none;background-position:0 center}.nc-featured-scholarship-card,.mos-scholarship-title-link{transition:none}}
+
+
+/* ===== Premium, reference-inspired homepage sections ===== */
+.naa-wireframe-home { --nc-home-ink:#132238; --nc-home-muted:#5e6f82; --nc-home-gold:#c29316; --nc-home-green:#286847; }
+.naa-wireframe-home :is(.nc-home-tools,.nc-home-practice,.nc-home-pathways) { position:relative; padding-block:clamp(52px,7vw,86px); }
+.naa-wireframe-home .nc-page-width { width:min(1220px,calc(100% - 48px)); }
+.nc-home-section-head { display:flex; align-items:flex-end; justify-content:space-between; gap:26px; margin-bottom:28px; }
+.nc-home-kicker { display:inline-flex; align-items:center; gap:8px; color:#326e53; font-size:10px; font-weight:900; letter-spacing:.14em; }
+.nc-home-kicker svg { color:#c29316; }
+.nc-home-section-head h2 { max-width:760px; margin:12px 0 9px; color:#132337 !important; font-family:"Sora","Plus Jakarta Sans",sans-serif !important; font-size:clamp(29px,4vw,47px); font-weight:800; line-height:1.1; letter-spacing:-.045em; }
+.nc-home-section-head h2 span { color:#a87d0d !important; }
+.nc-home-section-head p { max-width:640px; margin:0; color:#637184; font-size:14px; line-height:1.75; }
+.nc-home-head-aside { display:grid; gap:8px; flex:0 0 auto; color:#506577; font-size:11px; font-weight:750; }
+.nc-home-head-aside span { display:flex; align-items:center; gap:8px; }
+.nc-home-head-aside svg { color:#287345; }
+.nc-home-tools { background:#f6f8fb; border-block:1px solid #e8edf2; }
+.nc-home-tools-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+.nc-home-tool-card { --tool-accent:#287345; position:relative; display:flex; min-width:0; flex-direction:column; overflow:hidden; padding:22px; border:1px solid #e1e7ed; border-radius:22px; background:#fff; box-shadow:0 8px 26px rgba(18,34,54,.035); transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease; }
+.nc-home-tool-card-featured { --tool-accent:#98700d; border-color:#d9c68a; box-shadow:0 13px 32px rgba(141,105,17,.08); }
+.nc-home-tool-card:hover { transform:translateY(-4px); border-color:#becbd7; box-shadow:0 18px 40px rgba(18,34,54,.09); }
+.nc-home-tool-card-top { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.nc-home-tool-badge { display:inline-flex; align-items:center; gap:6px; padding:6px 9px; border:1px solid #efe2ba; border-radius:999px; color:#7f5e08; background:#fff9e8; font-size:9px; font-weight:900; letter-spacing:.075em; }
+.nc-home-tool-badge-green { color:#246144; border-color:#cfe8da; background:#f0faf4; }
+.nc-home-tool-badge-blue { color:#285e91; border-color:#cfe2f6; background:#f0f7ff; }
+.nc-home-tool-index { color:#a0aab4; font-size:11px; font-weight:850; font-variant-numeric:tabular-nums; }
+.nc-home-tool-visual { position:relative; display:flex; align-items:center; justify-content:center; height:154px; margin:15px 0 16px; overflow:hidden; border:1px solid #edf1f5; border-radius:16px; background:#f6f8fa; }
+.nc-home-pdf-visual { background:linear-gradient(135deg,#fff9e7,#f4f8fb); }
+.nc-home-image-visual { background:linear-gradient(135deg,#effaf5,#f5f9fe); }
+.nc-home-academic-visual { background:linear-gradient(135deg,#f0f6ff,#fbf8ec); }
+.nc-home-file-sheet { position:relative; z-index:1; display:flex; align-items:center; flex-direction:column; gap:7px; width:80px; height:108px; padding:15px 10px 9px; border:1px solid #dfd6bd; border-radius:8px; background:#fff; color:#b48a1a; box-shadow:0 12px 25px rgba(76,67,43,.1); transform:rotate(-5deg); }
+.nc-home-file-sheet span { display:block; width:100%; height:4px; border-radius:4px; background:#e6eaf0; }
+.nc-home-file-sheet b { color:#203247; font-size:10px; letter-spacing:.16em; }
+.nc-home-visual-orbit { position:absolute; width:146px; height:146px; border:1px solid rgba(176,137,35,.22); border-radius:50%; }
+.nc-home-orbit-two { width:196px; height:196px; }
+.nc-home-photo-sheet { position:relative; display:grid; place-items:center; width:120px; height:85px; overflow:hidden; border:1px solid #c9e3d3; border-radius:10px; background:#fff; color:#287345; box-shadow:0 12px 22px rgba(37,91,67,.1); transform:rotate(3deg); }
+.nc-home-photo-sun { position:absolute; top:16px; right:25px; width:13px; height:13px; border-radius:50%; background:#f0c85b; }
+.nc-home-photo-hill { position:absolute; bottom:-15px; left:8px; width:87px; height:48px; background:#d8f0d9; border-radius:45% 55% 0 0; transform:rotate(-13deg); }
+.nc-home-resize-corner { position:absolute; top:28px; left:calc(50% - 77px); width:13px; height:13px; border-top:2px solid #287345; border-left:2px solid #287345; }
+.nc-home-resize-corner-br { top:auto; bottom:28px; left:auto; right:calc(50% - 77px); border:0; border-right:2px solid #287345; border-bottom:2px solid #287345; }
+.nc-home-calculator { position:relative; display:grid; width:90px; height:112px; grid-template-columns:repeat(3,1fr); gap:7px; padding:12px; border:1px solid #cbd8e7; border-radius:14px; background:#fff; box-shadow:0 12px 26px rgba(39,66,96,.13); transform:rotate(-3deg); }
+.nc-home-calculator-screen { grid-column:1/-1; display:flex; align-items:center; justify-content:flex-end; padding:0 7px; border-radius:6px; background:#eaf4ed; color:#287345; font-size:16px; font-weight:900; }
+.nc-home-calculator>span { border-radius:5px; background:#e9eef5; }
+.nc-home-calculator>span:nth-of-type(2),.nc-home-calculator>span:nth-of-type(5) { background:#e4f4e8; }
+.nc-home-calculator-note { position:absolute; right:calc(50% - 112px); bottom:26px; display:flex; align-items:center; gap:7px; padding:10px 12px; border:1px solid #dce8df; border-radius:11px; color:#287345; background:#fff; box-shadow:0 8px 19px rgba(18,34,54,.08); }
+.nc-home-calculator-note b { color:#26384a; font-size:10px; }
+.nc-home-tool-card h3 { margin:0 0 8px; color:#17283a !important; font-family:"Sora","Plus Jakarta Sans",sans-serif !important; font-size:18px; font-weight:850; line-height:1.3; letter-spacing:-.025em; }
+.nc-home-tool-card p { margin:0; color:#627184; font-size:12px; line-height:1.8; }
+.nc-home-tool-tags { display:flex; flex-wrap:wrap; gap:7px; margin:16px 0 18px; }
+.nc-home-tool-tags span { display:inline-flex; align-items:center; padding:6px 8px; border-radius:7px; background:#f0f3f6; color:#526172; font-size:9px; font-weight:800; }
+.nc-home-card-action { display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; margin-top:auto; padding:13px 0 0; border:0; border-top:1px solid #edf0f3; background:transparent; color:var(--tool-accent); font-size:12px; font-weight:900; text-align:left; cursor:pointer; }
+.nc-home-card-action svg { transition:transform .18s ease; }
+.nc-home-card-action:hover svg { transform:translateX(3px); }
+.nc-home-tools-bottom { display:flex; align-items:center; justify-content:center; gap:9px; margin-top:20px; color:#637184; font-size:12px; }
+.nc-home-tools-bottom button { display:inline-flex; align-items:center; gap:5px; padding:4px; border:0; background:transparent; color:#1d5e41; font-weight:850; cursor:pointer; }
+.nc-home-tools-bottom button:hover { text-decoration:underline; text-underline-offset:3px; }
+
+.nc-home-practice { background:#fff; }
+.nc-practice-hero { position:relative; display:grid; grid-template-columns:minmax(0,1.05fr) minmax(330px,.95fr); gap:40px; align-items:center; overflow:hidden; padding:clamp(26px,4vw,52px); border:1px solid #dbe3ed; border-radius:28px; color:#f7f9fc; background:#101c2c; box-shadow:0 25px 65px rgba(16,28,44,.12); }
+.nc-practice-hero:before { position:absolute; top:-150px; right:-120px; width:480px; height:480px; border:1px solid rgba(233,195,91,.15); border-radius:50%; content:""; pointer-events:none; }
+.nc-practice-copy { position:relative; z-index:1; min-width:0; }
+.nc-practice-kicker { display:inline-flex; align-items:center; gap:8px; color:#edcb68; font-size:10px; font-weight:900; letter-spacing:.14em; }
+.nc-practice-copy h2 { max-width:570px; margin:18px 0 13px; color:#fff !important; font-family:"Sora","Plus Jakarta Sans",sans-serif !important; font-size:clamp(32px,4vw,49px); font-weight:850; letter-spacing:-.05em; line-height:1.07; }
+.nc-practice-copy h2 span { color:#edcb68 !important; }
+.nc-practice-copy p { max-width:570px; margin:0; color:#c6d0dc; font-size:13px; line-height:1.9; }
+.nc-practice-benefits { display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:21px; }
+.nc-practice-benefits span { display:inline-flex; align-items:center; gap:7px; color:#e2e8f0; font-size:10px; font-weight:750; }
+.nc-practice-benefits svg { color:#edcb68; }
+.nc-practice-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:25px; }
+.nc-practice-actions button { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:44px; padding:0 16px; border-radius:10px; font-size:11px; font-weight:900; cursor:pointer; transition:transform .18s ease,background .18s ease; }
+.nc-practice-actions button:hover { transform:translateY(-2px); }
+.nc-practice-primary { border:1px solid #edcb68; background:#edcb68; color:#142033; }
+.nc-practice-primary:hover { background:#f5da82; }
+.nc-practice-secondary { border:1px solid rgba(255,255,255,.23); background:rgba(255,255,255,.055); color:#fff; }
+.nc-practice-secondary:hover { background:rgba(255,255,255,.1); }
+.nc-practice-visual { position:relative; min-width:0; min-height:310px; display:flex; align-items:center; justify-content:center; }
+.nc-practice-glow { position:absolute; width:300px; height:300px; border-radius:50%; background:radial-gradient(circle,rgba(41,113,97,.4),rgba(41,113,97,0) 70%); }
+.nc-practice-monitor { position:relative; z-index:1; width:min(100%,410px); overflow:hidden; border:1px solid #4c6075; border-radius:16px; background:#f7f9fc; box-shadow:0 22px 48px rgba(0,0,0,.25); transform:perspective(850px) rotateY(-5deg) rotateX(2deg); }
+.nc-monitor-top { display:flex; align-items:center; gap:5px; padding:11px 12px; border-bottom:1px solid #dfe6ed; background:#edf1f6; }
+.nc-monitor-top>span { width:6px; height:6px; border-radius:50%; background:#95a2b1; }
+.nc-monitor-top>b { margin-left:8px; color:#58687b; font-size:9px; font-weight:800; }
+.nc-monitor-body { display:grid; grid-template-columns:26px minmax(0,1fr) 64px; gap:12px; min-height:214px; padding:17px; }
+.nc-monitor-sidebar { display:flex; flex-direction:column; gap:8px; padding-top:4px; }
+.nc-monitor-sidebar i { width:22px; height:18px; border:1px solid #d5dee7; border-radius:5px; background:#fff; }
+.nc-monitor-sidebar i:first-child { border-color:#2f805f; background:#e5f4eb; }
+.nc-monitor-content { min-width:0; }
+.nc-monitor-question { display:block; margin-bottom:11px; color:#182b3e; font-size:11px; }
+.nc-monitor-line { display:block; width:66%; height:5px; margin-bottom:6px; border-radius:4px; background:#dce4ec; }
+.nc-monitor-line-long { width:93%; }
+.nc-monitor-option { display:flex; align-items:center; gap:7px; margin-top:8px; padding:7px; border:1px solid #e3e8ee; border-radius:7px; color:#4a5c70; background:#fff; font-size:9px; }
+.nc-monitor-option i { width:10px; height:10px; border:1.5px solid #9cabb9; border-radius:50%; }
+.nc-monitor-option:nth-of-type(4) { border-color:#9bc9ad; background:#eff8f1; }
+.nc-monitor-option:nth-of-type(4) i { border:3px solid #2f805f; }
+.nc-monitor-timer { display:flex; align-items:center; flex-direction:column; gap:5px; align-self:start; padding:9px 5px; border:1px solid #e0e6ed; border-radius:9px; color:#357557; background:#fff; }
+.nc-monitor-timer b { color:#20344a; font-size:10px; }
+.nc-monitor-timer small { color:#748497; font-size:6px; font-weight:900; letter-spacing:.08em; }
+.nc-practice-float { position:absolute; z-index:2; display:flex; align-items:center; gap:9px; padding:11px 13px; border:1px solid #e1e7ee; border-radius:12px; color:#287345; background:#fff; box-shadow:0 12px 28px rgba(0,0,0,.16); }
+.nc-practice-float span { display:grid; gap:2px; }
+.nc-practice-float b { color:#24364b; font-size:9px; }
+.nc-practice-float small { color:#6a7a8d; font-size:8px; }
+.nc-practice-float-score { top:20px; right:-8px; }
+.nc-practice-float-questions { bottom:20px; left:-8px; color:#a27b18; }
+.nc-practice-options { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:18px; }
+.nc-practice-option { display:flex; align-items:center; gap:12px; min-width:0; padding:16px; border:1px solid #e1e7ed; border-radius:15px; background:#fff; color:#233348; text-align:left; cursor:pointer; transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease; }
+.nc-practice-option:hover { transform:translateY(-2px); border-color:#b5c7d7; box-shadow:0 10px 28px rgba(20,40,64,.07); }
+.nc-practice-option>svg { flex:0 0 auto; margin-left:auto; color:#718197; }
+.nc-practice-option-symbol { display:grid; place-items:center; flex:0 0 44px; width:44px; height:44px; border-radius:12px; background:#fff6d9; color:#795c12; font-size:13px; font-weight:950; }
+.nc-practice-option-tg .nc-practice-option-symbol { background:#e6f5eb; color:#286b47; }
+.nc-practice-option-general .nc-practice-option-symbol { background:#eaf2ff; color:#2d5d99; }
+.nc-practice-option-copy { display:grid; gap:5px; min-width:0; }
+.nc-practice-option-copy b { color:#1d2d40; font-size:11px; line-height:1.4; }
+.nc-practice-option-copy small { color:#667689; font-size:9px; line-height:1.6; }
+
+.nc-home-pathways { padding-top:clamp(44px,6vw,78px); }
+.nc-pathways-panel { display:grid; grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr); gap:clamp(26px,5vw,64px); align-items:center; padding:clamp(26px,4vw,54px); overflow:hidden; border:1px solid #dce7ef; border-radius:28px; background:linear-gradient(125deg,#f6fbf7 0%,#f9fbff 63%,#fff9e8 100%); }
+.nc-pathways-copy h2 { max-width:620px; margin:17px 0 13px; color:#15293a !important; font-family:"Sora","Plus Jakarta Sans",sans-serif !important; font-size:clamp(30px,3.7vw,46px); font-weight:850; line-height:1.1; letter-spacing:-.05em; }
+.nc-pathways-copy h2 span { color:#287345 !important; }
+.nc-pathways-copy p { max-width:580px; margin:0; color:#5c6e7e; font-size:13px; line-height:1.9; }
+.nc-pathway-chips { display:flex; flex-wrap:wrap; gap:7px; margin-top:18px; }
+.nc-pathway-chips span { padding:7px 10px; border:1px solid #dae7de; border-radius:999px; color:#42634d; background:rgba(255,255,255,.8); font-size:9px; font-weight:800; }
+.nc-pathways-action { display:inline-flex; align-items:center; justify-content:center; gap:9px; min-height:46px; margin-top:24px; padding:0 17px; border:0; border-radius:11px; background:#1e573d; color:#fff; box-shadow:0 10px 21px rgba(30,87,61,.15); font-size:11px; font-weight:900; cursor:pointer; transition:transform .18s ease,background .18s ease; }
+.nc-pathways-action:hover { transform:translateY(-2px); background:#16452f; }
+.nc-pathways-note { display:block; margin-top:12px; color:#798593; font-size:9px; line-height:1.6; }
+.nc-pathways-board { min-width:0; padding:19px; border:1px solid #253b4b; border-radius:20px; background:#101e2d; box-shadow:0 23px 48px rgba(16,30,45,.15); }
+.nc-pathway-board-top { display:flex; align-items:center; justify-content:space-between; gap:10px; padding-bottom:15px; border-bottom:1px solid #2a3a4b; color:#e1c56d; font-size:9px; font-weight:900; letter-spacing:.1em; }
+.nc-pathway-board-top>span:first-child { display:flex; align-items:center; gap:7px; }
+.nc-pathway-board-live { display:flex; align-items:center; gap:5px; color:#b7c8d6; font-size:7px; letter-spacing:.07em; }
+.nc-pathway-board-live i { width:6px; height:6px; border-radius:50%; background:#67c692; }
+.nc-pathway-step { display:grid; grid-template-columns:35px minmax(0,1fr) 19px; gap:11px; align-items:center; padding:13px 10px; border:1px solid #2a3e4f; border-radius:11px; background:#172839; color:#9fc5ad; }
+.nc-pathway-step-number { display:grid; place-items:center; width:32px; height:32px; border-radius:9px; background:#263d3b; color:#d5bd66; font-size:10px; font-weight:900; }
+.nc-pathway-step>span:nth-child(2) { display:grid; gap:4px; min-width:0; }
+.nc-pathway-step b { color:#f2f5f8; font-size:10px; font-weight:850; }
+.nc-pathway-step small { color:#b3c0ce; font-size:8px; line-height:1.5; }
+.nc-pathway-connector { width:1px; height:11px; margin-left:27px; background:#486252; }
+.nc-pathway-board-footer { display:flex; align-items:center; gap:7px; margin-top:15px; padding-top:13px; border-top:1px solid #2a3a4b; color:#bac7d2; font-size:8px; line-height:1.6; }
+.nc-pathway-board-footer svg { flex:0 0 auto; color:#88c9a0; }
+
+.naa-wireframe-home .nc-featured-scholarships { position:relative; width:min(1360px,calc(100% - 40px)); margin:clamp(46px,6vw,76px) auto 12px; padding:clamp(26px,4vw,52px); overflow:hidden; border:1px solid #253747; border-radius:28px; background:#101b29; color:#f4f7fb; }
+.naa-wireframe-home .nc-featured-scholarships:before { position:absolute; top:-190px; right:-100px; width:420px; height:420px; border:1px solid rgba(220,187,91,.12); border-radius:50%; content:""; pointer-events:none; }
+.naa-wireframe-home .nc-featured-scholarships .nc-section-heading-row h2 { color:#f8fafc !important; font-family:"Sora","Plus Jakarta Sans",sans-serif !important; }
+.naa-wireframe-home .nc-featured-scholarships .nc-section-heading-row h2 span { color:#e8c65d !important; }
+.naa-wireframe-home .nc-featured-scholarships .nc-section-heading-row p { color:#bdc9d6 !important; }
+.naa-wireframe-home .nc-featured-scholarships .nc-section-kicker { color:#d9bd62 !important; }
+.naa-wireframe-home .nc-featured-scholarships .nc-all-blogs-link { color:#edce6a !important; border-color:#465263; }
+.naa-wireframe-home .nc-featured-scholarship-card { border-color:#334658; background:#172536; color:#f4f7fb; box-shadow:0 12px 30px rgba(0,0,0,.13); }
+.naa-wireframe-home .nc-featured-scholarship-card:before { background:#e4c35c; }
+.naa-wireframe-home .nc-featured-scholarship-title { color:#fff !important; font-family:"Sora","Plus Jakarta Sans",sans-serif !important; }
+.naa-wireframe-home .nc-featured-scholarship-topline { color:#e8ca66; }
+.naa-wireframe-home .nc-featured-scholarship-facts>div { border-color:#315749; background:#17372f; }
+.naa-wireframe-home .nc-featured-scholarship-facts>div+div { border-color:#665533; background:#362f1b; }
+.naa-wireframe-home .nc-featured-scholarship-facts strong { color:#f5f7fa; }
+.naa-wireframe-home .nc-featured-scholarship-copy { border-color:#33475b; background:#1e3041; }
+.naa-wireframe-home .nc-featured-scholarship-copy strong { color:#e8d28c; }
+.naa-wireframe-home .nc-featured-scholarship-copy p { color:#c3cfdb; }
+.naa-wireframe-home .nc-featured-scholarship-eligibility { border-color:#314d70; background:#1b304a; }
+.naa-wireframe-home .nc-featured-scholarship-eligibility strong { color:#b7d5ff; }
+.naa-wireframe-home .nc-featured-scholarship-cta { border-color:#3c4a58; color:#f0d26c; }
+.naa-wireframe-home .nc-featured-scholarship-note { color:#c1ccd6 !important; }
+.naa-wireframe-home .nc-featured-scholarship-empty { border-color:#465668; background:#172536; color:#c1ccd6; }
+.naa-wireframe-home .nc-featured-scholarship-note svg { color:#91d5aa; }
+
+@media(max-width:1000px) {
+  .nc-home-head-aside { display:none; }
+  .nc-home-tools-grid { gap:13px; }
+  .nc-home-tool-card { padding:18px; }
+  .nc-practice-hero { gap:22px; }
+  .nc-pathways-panel { grid-template-columns:minmax(0,1fr) minmax(320px,.9fr); gap:24px; }
+}
+@media(max-width:760px) {
+  .naa-wireframe-home .nc-page-width { width:calc(100% - 32px); }
+  .nc-home-section-head { align-items:flex-start; flex-direction:column; gap:13px; margin-bottom:22px; }
+  .nc-home-tools-grid { grid-template-columns:1fr; }
+  .nc-home-tool-card { display:grid; grid-template-columns:88px minmax(0,1fr); grid-template-rows:auto auto auto 1fr auto; column-gap:15px; align-items:start; padding:15px; }
+  .nc-home-tool-card-top { grid-column:1/-1; }
+  .nc-home-tool-visual { grid-column:1; grid-row:2 / span 3; height:94px; margin:12px 0 0; }
+  .nc-home-file-sheet { width:53px; height:74px; padding:8px; gap:4px; }
+  .nc-home-file-sheet svg { width:23px; height:23px; }
+  .nc-home-file-sheet b { font-size:7px; }
+  .nc-home-visual-orbit { width:85px; height:85px; }
+  .nc-home-orbit-two { width:115px; height:115px; }
+  .nc-home-photo-sheet { width:68px; height:56px; }
+  .nc-home-resize-corner { top:13px; left:calc(50% - 42px); }
+  .nc-home-resize-corner-br { top:auto; left:auto; right:calc(50% - 42px); bottom:13px; }
+  .nc-home-calculator { width:57px; height:77px; grid-template-columns:repeat(3,1fr); gap:4px; padding:7px; }
+  .nc-home-calculator-screen { font-size:10px; }
+  .nc-home-calculator-note { right:calc(50% - 82px); bottom:10px; padding:7px; }
+  .nc-home-calculator-note b { font-size:7px; }
+  .nc-home-tool-card h3 { grid-column:2; grid-row:2; align-self:end; margin:11px 0 5px; font-size:14px; }
+  .nc-home-tool-card p { grid-column:2; grid-row:3; font-size:10px; }
+  .nc-home-tool-tags { grid-column:2; grid-row:4; margin:8px 0; gap:5px; }
+  .nc-home-tool-tags span { padding:5px 6px; font-size:8px; }
+  .nc-home-card-action { grid-column:1/-1; grid-row:5; margin-top:10px; padding-top:11px; }
+  .nc-home-tools-bottom { flex-wrap:wrap; text-align:center; font-size:10px; }
+  .nc-practice-hero { grid-template-columns:1fr; gap:12px; padding:23px 19px; border-radius:22px; }
+  .nc-practice-copy h2 { font-size:clamp(30px,8vw,41px); }
+  .nc-practice-copy p { font-size:12px; }
+  .nc-practice-visual { min-height:245px; margin-top:2px; }
+  .nc-practice-monitor { width:calc(100% - 26px); transform:none; }
+  .nc-monitor-body { grid-template-columns:22px minmax(0,1fr) 56px; gap:8px; min-height:175px; padding:12px; }
+  .nc-practice-float-score { top:0; right:0; }
+  .nc-practice-float-questions { bottom:0; left:0; }
+  .nc-practice-options { grid-template-columns:1fr; gap:8px; }
+  .nc-practice-option { padding:12px; }
+  .nc-pathways-panel { grid-template-columns:1fr; gap:26px; padding:22px 17px; border-radius:22px; }
+  .nc-pathways-copy h2 { font-size:clamp(30px,8vw,40px); }
+  .nc-pathways-copy p { font-size:12px; }
+  .nc-pathways-board { padding:13px; }
+  .nc-pathway-step { padding:11px 8px; }
+  .naa-wireframe-home .nc-featured-scholarships { width:calc(100% - 24px); padding:22px 14px; border-radius:22px; }
+  .naa-wireframe-home .nc-featured-scholarships .nc-section-heading-row { align-items:flex-start; flex-direction:column; gap:12px; }
+  .naa-wireframe-home .nc-featured-scholarship-grid { grid-template-columns:1fr; }
+}
+@media(max-width:430px) {
+  .nc-home-tool-card { grid-template-columns:76px minmax(0,1fr); column-gap:11px; }
+  .nc-home-tool-card h3 { font-size:12px; }
+  .nc-home-tool-card p { font-size:9px; line-height:1.6; }
+  .nc-home-tool-tags { flex-direction:column; align-items:flex-start; }
+  .nc-practice-actions { flex-direction:column; }
+  .nc-practice-actions button { width:100%; }
+  .nc-practice-visual { min-height:226px; }
+  .nc-practice-float { padding:8px; }
+  .nc-practice-float b { font-size:8px; }
+  .nc-practice-float small { font-size:7px; }
+  .nc-pathway-board-top { align-items:flex-start; flex-direction:column; }
+  .naa-wireframe-home .nc-featured-scholarship-facts { grid-template-columns:1fr; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .nc-home-tool-card,.nc-home-card-action svg,.nc-practice-actions button,.nc-practice-option,.nc-pathways-action { transition:none !important; }
+  .nc-home-tool-card:hover,.nc-practice-option:hover,.nc-pathways-action:hover { transform:none !important; }
+}

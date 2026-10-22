@@ -16,6 +16,12 @@ import {
   Users,
   BookMarked,
   LibraryBig,
+  FileText,
+  Image as ImageIcon,
+  Target,
+  Clock3,
+  ShieldCheck,
+  Zap,
   CalendarDays,
   Wallet,
   CheckCircle2 as VerifiedIcon,
@@ -154,7 +160,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
     go(item.workspace || 'hub');
   };
 
-  const scrollToTools = () => document.getElementById('features-hub')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const scrollToTools = () => (document.getElementById('nc-student-tools') || document.getElementById('features-hub'))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   const renderTickerItems = (duplicate = false) => TICKER_ITEMS.map((item, index) => {
     const common = {
@@ -174,9 +180,9 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         <div className="nc-page-width nc-hero-grid">
           <div className="nc-hero-copy">
             <p className="nc-eyebrow"><span className="nc-eyebrow-dot" aria-hidden="true" /> Mana AP &amp; Telangana students kosam</p>
-            <h1 id="nc-hero-title">College decisions — <span>ippudu inka clear ga.</span></h1>
+            <h1 id="nc-hero-title">Your next chapter — <span>planned with clarity.</span></h1>
             <p className="nc-hero-description">
-              EAPCET allotments choodandi, colleges compare cheyyandi, scholarships vetakandi — mee engineering journey ki useful tools anni oke chota.
+              Explore AP &amp; Telangana admission data, compare college options, discover funding and find practical tools for your student journey.
             </p>
 
             <div className="nc-state-cards" aria-label="Choose your state">
@@ -243,7 +249,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
 
       <section className="nc-ticker-strip" aria-label="Latest updates and student resources">
         <div className="nc-page-width nc-ticker-inner">
-          <div className="nc-ticker-label"><Sparkles size={16} aria-hidden="true" /><span>LATEST UPDATES</span></div>
+          <div className="nc-ticker-label"><Sparkles size={16} aria-hidden="true" /><span>STUDENT RESOURCE SHORTCUTS</span></div>
           <div className="nc-ticker-viewport">
             <div className="nc-ticker-track">
               <div className="nc-ticker-group">{renderTickerItems(false)}</div>
@@ -255,9 +261,9 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
 
       <section className="nc-quick-section nc-page-width" aria-labelledby="nc-quick-title">
         <div className="nc-quick-heading">
-          <span className="nc-section-kicker">FIND WHAT YOU NEED</span>
-          <h2 id="nc-quick-title">Quick Links<span>.</span></h2>
-          <p>College, scholarship, tool search cheyyandi.</p>
+          <span className="nc-section-kicker">ONE PLACE TO GET STARTED</span>
+          <h2 id="nc-quick-title">Start with what <span>you need.</span></h2>
+          <p>Search student tools, college resources and guidance in one place.</p>
         </div>
         <div className="nc-quick-content">
           <div className="nc-search-wrap">
@@ -311,6 +317,59 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         </div>
       </section>
 
+
+      <section id="nc-student-tools" className="nc-home-tools" aria-labelledby="nc-home-tools-title">
+        <div className="nc-page-width">
+          <div className="nc-home-section-head">
+            <div>
+              <span className="nc-home-kicker"><Wrench size={14} aria-hidden="true" /> STUDENT UTILITY ENGINE</span>
+              <h2 id="nc-home-tools-title">Everyday student tasks, <span>made easier.</span></h2>
+              <p>Useful browser tools for admission forms, documents and the small academic jobs that take too much time.</p>
+            </div>
+            <div className="nc-home-head-aside" aria-label="Tool benefits">
+              <span><ShieldCheck size={14} /> Files stay in your browser where supported</span>
+              <span><Sparkles size={14} /> Free student resources</span>
+            </div>
+          </div>
+          <div className="nc-home-tools-grid">
+            <article className="nc-home-tool-card nc-home-tool-card-featured">
+              <div className="nc-home-tool-card-top"><span className="nc-home-tool-badge"><Zap size={13} /> MOST USED</span><span className="nc-home-tool-index">01</span></div>
+              <div className="nc-home-tool-visual nc-home-pdf-visual" aria-hidden="true">
+                <div className="nc-home-file-sheet"><FileText size={35} /><span /><span /><span /><b>PDF</b></div>
+                <span className="nc-home-visual-orbit nc-home-orbit-one" /><span className="nc-home-visual-orbit nc-home-orbit-two" />
+              </div>
+              <h3>PDF Compress &amp; Document Tools</h3>
+              <p>Reduce the size of certificates, rank cards and application documents, or open the wider PDF toolkit.</p>
+              <div className="nc-home-tool-tags"><span>Admission-ready files</span><span>Browser-based tools</span></div>
+              <button type="button" className="nc-home-card-action" onClick={() => go('utilities')}>Open PDF toolkit <ArrowRight size={16} /></button>
+            </article>
+            <article className="nc-home-tool-card">
+              <div className="nc-home-tool-card-top"><span className="nc-home-tool-badge nc-home-tool-badge-green"><ImageIcon size={13} /> IMAGE PREP</span><span className="nc-home-tool-index">02</span></div>
+              <div className="nc-home-tool-visual nc-home-image-visual" aria-hidden="true">
+                <div className="nc-home-photo-sheet"><ImageIcon size={34} /><span className="nc-home-photo-sun" /><span className="nc-home-photo-hill" /></div>
+                <span className="nc-home-resize-corner" /><span className="nc-home-resize-corner nc-home-resize-corner-br" />
+              </div>
+              <h3>Image &amp; Signature Prep</h3>
+              <p>Find image, scan and document utilities for common application-upload requirements.</p>
+              <div className="nc-home-tool-tags"><span>JPG · PNG · WebP</span><span>Student uploads</span></div>
+              <button type="button" className="nc-home-card-action" onClick={() => go('utilities')}>Explore image tools <ArrowRight size={16} /></button>
+            </article>
+            <article className="nc-home-tool-card">
+              <div className="nc-home-tool-card-top"><span className="nc-home-tool-badge nc-home-tool-badge-blue"><Clock3 size={13} /> ACADEMICS</span><span className="nc-home-tool-index">03</span></div>
+              <div className="nc-home-tool-visual nc-home-academic-visual" aria-hidden="true">
+                <div className="nc-home-calculator"><div className="nc-home-calculator-screen">A+</div><span /><span /><span /><span /><span /><span /></div>
+                <div className="nc-home-calculator-note"><CheckCircle2 size={18} /><b>Plan clearly</b></div>
+              </div>
+              <h3>Attendance Planner</h3>
+              <p>Estimate attendance scenarios and understand how many classes you may need to attend to reach your target.</p>
+              <div className="nc-home-tool-tags"><span>Attendance</span><span>Attendance target</span></div>
+              <button type="button" className="nc-home-card-action" onClick={() => go('attendance')}>Open attendance planner <ArrowRight size={16} /></button>
+            </article>
+          </div>
+          <div className="nc-home-tools-bottom"><span>Need something else?</span><button type="button" onClick={() => go('utilities')}>Browse the full student toolkit <ArrowUpRight size={15} /></button></div>
+        </div>
+      </section>
+
       <section className="nc-discovery-section" aria-label="Explore more student resources">
         <div className="nc-page-width nc-discovery-grid">
           <article className="nc-discovery-card nc-autonomous-card">
@@ -341,11 +400,49 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         </div>
       </section>
 
+
+      <section id="nc-practice-zone" className="nc-home-practice" aria-labelledby="nc-practice-title">
+        <div className="nc-page-width">
+          <div className="nc-practice-hero">
+            <div className="nc-practice-copy">
+              <span className="nc-practice-kicker"><Target size={14} /> PRACTISE WITH PURPOSE</span>
+              <h2 id="nc-practice-title">Walk into the exam <span>better prepared.</span></h2>
+              <p>Get familiar with timed computer-based practice, question navigation and review before exam day. Choose the test that matches your preparation.</p>
+              <div className="nc-practice-benefits"><span><Clock3 size={16} /> Timed practice</span><span><CheckCircle2 size={16} /> Score review</span><span><ShieldCheck size={16} /> Learn at your pace</span></div>
+              <div className="nc-practice-actions">
+                <button type="button" className="nc-practice-primary" onClick={() => go('mock-tests')}>Browse mock tests <ArrowRight size={17} /></button>
+                <button type="button" className="nc-practice-secondary" onClick={() => go('eapcet-cbt')}>Open EAPCET simulator <ArrowUpRight size={16} /></button>
+              </div>
+            </div>
+            <div className="nc-practice-visual" aria-hidden="true">
+              <div className="nc-practice-glow" />
+              <div className="nc-practice-monitor">
+                <div className="nc-monitor-top"><span /><span /><span /><b>Practice workspace</b></div>
+                <div className="nc-monitor-body">
+                  <div className="nc-monitor-sidebar"><i /><i /><i /><i /></div>
+                  <div className="nc-monitor-content"><b className="nc-monitor-question">Question 01</b><span className="nc-monitor-line nc-monitor-line-long" /><span className="nc-monitor-line" />
+                    <div className="nc-monitor-option"><i /> Option A</div><div className="nc-monitor-option"><i /> Option B</div><div className="nc-monitor-option"><i /> Option C</div><div className="nc-monitor-option"><i /> Option D</div>
+                  </div>
+                  <div className="nc-monitor-timer"><Clock3 size={14} /><b>02:45</b><small>TIME LEFT</small></div>
+                </div>
+              </div>
+              <div className="nc-practice-float nc-practice-float-score"><CheckCircle2 size={18} /><span><b>Review your work</b><small>Learn from each attempt</small></span></div>
+              <div className="nc-practice-float nc-practice-float-questions"><Target size={18} /><span><b>Practice mode</b><small>One question at a time</small></span></div>
+            </div>
+          </div>
+          <div className="nc-practice-options" aria-label="Available practice options">
+            <button type="button" onClick={() => go('eapcet-cbt')} className="nc-practice-option nc-practice-option-ap"><span className="nc-practice-option-symbol">AP</span><span className="nc-practice-option-copy"><b>AP EAPCET Practice</b><small>Engineering pattern and rank-context tools</small></span><ArrowUpRight size={18} /></button>
+            <button type="button" onClick={() => go('eapcet-cbt')} className="nc-practice-option nc-practice-option-tg"><span className="nc-practice-option-symbol">TG</span><span className="nc-practice-option-copy"><b>Telangana EAPCET Practice</b><small>Build familiarity with CBT-style questions</small></span><ArrowUpRight size={18} /></button>
+            <button type="button" onClick={() => go('mock-tests')} className="nc-practice-option nc-practice-option-general"><span className="nc-practice-option-symbol"><BookOpen size={21} /></span><span className="nc-practice-option-copy"><b>More Mock Tests</b><small>Explore the available student test library</small></span><ArrowUpRight size={18} /></button>
+          </div>
+        </div>
+      </section>
+
       <section id="naa-recent-blogs" className="nc-blogs-section nc-page-width" aria-labelledby="nc-blogs-title">
         <div className="nc-section-heading-row">
           <div>
             <span className="nc-section-kicker">READ · LEARN · GET AHEAD</span>
-            <h2 id="nc-blogs-title">NAA COLLEGE <span>— RECENT BLOGS</span></h2>
+            <h2 id="nc-blogs-title">STUDENT FIELD NOTES <span>— GUIDES &amp; INSIGHTS</span></h2>
             <p>Student guides and practical explainers, together in one place.</p>
           </div>
           <a className="nc-all-blogs-link" href="/blog/">View all blogs <ArrowRight size={16} aria-hidden="true" /></a>
@@ -418,8 +515,8 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         <div className="nc-section-heading-row">
           <div>
             <span className="nc-section-kicker">FUND YOUR NEXT STEP</span>
-            <h2 id="nc-featured-scholarships-title">FEATURED <span>SCHOLARSHIPS</span></h2>
-            <p>Currently listed opportunities with upcoming deadlines. Open a card for eligibility and application details.</p>
+            <h2 id="nc-featured-scholarships-title">FUND YOUR <span>NEXT STEP</span></h2>
+            <p>Explore listed opportunities, compare eligibility details and follow the provider links before you apply.</p>
           </div>
           <a className="nc-all-blogs-link" href="/scholarships/">Explore all scholarships <ArrowRight size={16} aria-hidden="true" /></a>
         </div>
@@ -445,6 +542,31 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
           </div>
         )}
         <p className="nc-featured-scholarship-note"><VerifiedIcon size={15} aria-hidden="true" /> Dates and eligibility can change. Confirm details on the scholarship provider’s official portal before applying.</p>
+      </section>
+
+
+      <section className="nc-home-pathways" aria-labelledby="nc-pathways-title">
+        <div className="nc-page-width">
+          <div className="nc-pathways-panel">
+            <div className="nc-pathways-copy">
+              <span className="nc-home-kicker nc-pathways-kicker"><Sparkles size={14} /> YOUR NEXT STEP STARTS HERE</span>
+              <h2 id="nc-pathways-title">Not sure what to learn next? <span>Start with a clear plan.</span></h2>
+              <p>Use the AI Student Gap Analyzer to reflect on your current skills, identify learning priorities and organise practical milestones around your goals.</p>
+              <div className="nc-pathway-chips"><span>Skills to strengthen</span><span>Project directions</span><span>Learning milestones</span></div>
+              <button type="button" className="nc-pathways-action" onClick={() => go('gap-analyzer')}>Build my learning plan <ArrowRight size={17} /></button>
+              <small className="nc-pathways-note">Guidance to help you plan—not a guarantee of an internship or placement.</small>
+            </div>
+            <div className="nc-pathways-board" aria-label="Example learning plan stages">
+              <div className="nc-pathway-board-top"><span><Sparkles size={15} /> LEARNING MAP</span><span className="nc-pathway-board-live"><i /> READY TO EXPLORE</span></div>
+              <div className="nc-pathway-step nc-pathway-step-one"><span className="nc-pathway-step-number">01</span><span><b>Understand your starting point</b><small>Skills, interests and current level</small></span><CheckCircle2 size={18} /></div>
+              <div className="nc-pathway-connector" />
+              <div className="nc-pathway-step nc-pathway-step-two"><span className="nc-pathway-step-number">02</span><span><b>Choose priority topics</b><small>Focus on what matters next</small></span><Target size={18} /></div>
+              <div className="nc-pathway-connector" />
+              <div className="nc-pathway-step nc-pathway-step-three"><span className="nc-pathway-step-number">03</span><span><b>Turn learning into projects</b><small>Practise, review and iterate</small></span><ArrowUpRight size={18} /></div>
+              <div className="nc-pathway-board-footer"><ShieldCheck size={14} /> Student-first guidance, one practical step at a time.</div>
+            </div>
+          </div>
+        </div>
       </section>
 
     </main>
