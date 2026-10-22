@@ -1621,3 +1621,98 @@ html.dark .naa-wireframe-home .nc-hero h1 span {
   .nc-home-tool-card,.nc-home-card-action svg,.nc-practice-actions button,.nc-practice-option,.nc-pathways-action { transition:none !important; }
   .nc-home-tool-card:hover,.nc-practice-option:hover,.nc-pathways-action:hover { transform:none !important; }
 }
+
+
+/* ===== NaaCox AI homepage feature: reference-inspired title hierarchy + the real embedded assistant ===== */
+.nc-naacox-section {
+  position:relative; overflow:hidden; padding:clamp(54px,7vw,88px) 0 clamp(56px,7vw,88px);
+  background:
+    radial-gradient(circle at 12% 20%,rgba(226,235,245,.42) 0 1px,transparent 1.5px) 0 0/22px 22px,
+    linear-gradient(180deg,#fff 0%,#fafbfd 100%);
+  border-top:1px solid #edf0f4;
+}
+.nc-naacox-section:before {
+  position:absolute; top:-210px; left:50%; width:min(950px,90vw); height:360px;
+  border:1px solid rgba(194,147,22,.12); border-radius:50%; transform:translateX(-50%);
+  content:""; pointer-events:none;
+}
+.nc-naacox-heading-wrap { position:relative; z-index:1; max-width:900px; margin:0 auto 29px; text-align:center; }
+.nc-naacox-eyebrow {
+  display:inline-flex; align-items:center; justify-content:center; gap:8px; margin-bottom:17px;
+  color:#287345; font-size:10px; font-weight:900; letter-spacing:.15em;
+}
+.nc-naacox-eyebrow svg { color:#b18a1c; }
+.naa-wireframe-home .nc-naacox-display-title {
+  display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:clamp(9px,1.5vw,17px);
+  margin:0; color:#101114 !important; font-family:"Bebas Neue","Arial Narrow",sans-serif !important;
+  font-size:clamp(48px,7.3vw,88px); font-weight:950; letter-spacing:-.025em; line-height:1;
+}
+.naa-wireframe-home .nc-naacox-title-our {
+  color:#d20d2b !important; font-family:Georgia,"Times New Roman",serif !important;
+  font-size:.88em; font-style:italic; font-weight:400; letter-spacing:-.075em;
+}
+.naa-wireframe-home .nc-naacox-title-ai {
+  color:#121317 !important; font-family:"Bebas Neue","Arial Narrow",sans-serif !important;
+  font-size:1.1em; font-weight:950; letter-spacing:-.02em;
+}
+.naa-wireframe-home .nc-naacox-title-chip {
+  display:inline-flex; align-items:center; min-height:.98em; padding:.13em .21em .06em;
+  border:1px solid #ad0b24; border-radius:13px; background:linear-gradient(135deg,#e41535,#b70b28);
+  color:#fff !important; font-family:"Bebas Neue","Arial Narrow",sans-serif !important;
+  font-size:.9em; font-weight:950; letter-spacing:.015em;
+  box-shadow:0 10px 23px rgba(190,18,43,.19);
+}
+.nc-naacox-heading-wrap>p {
+  max-width:760px; margin:19px auto 0; color:#5b6878; font-size:clamp(13px,1.4vw,16px); line-height:1.85;
+}
+.nc-naacox-heading-wrap>p strong { color:#152337; font-weight:900; }
+.nc-naacox-chat-stage {
+  position:relative; z-index:1; width:min(100%,1000px); margin:0 auto; padding:15px;
+  border:1px solid #e2e7ed; border-radius:28px; background:rgba(255,255,255,.94);
+  box-shadow:0 24px 70px rgba(15,30,48,.09);
+}
+.nc-naacox-chat-context {
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;
+  padding:4px 4px 16px;
+}
+.nc-naacox-context-brand { display:flex; align-items:center; gap:11px; min-width:0; }
+.nc-naacox-context-icon {
+  display:grid; place-items:center; flex:0 0 43px; width:43px; height:43px;
+  border:1px solid #e7d99f; border-radius:14px; background:#fff9e8; color:#8b6a12;
+}
+.nc-naacox-context-brand>span:last-child { display:grid; gap:4px; min-width:0; }
+.nc-naacox-context-brand strong { color:#182438; font-size:13px; font-weight:900; }
+.nc-naacox-context-brand small { color:#64748b; font-size:10px; line-height:1.5; }
+.nc-naacox-context-topics { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:6px; }
+.nc-naacox-context-topics span {
+  padding:7px 9px; border:1px solid #e1e7ed; border-radius:999px; background:#f7f9fb;
+  color:#4c5d70; font-size:9px; font-weight:800; white-space:nowrap;
+}
+.nc-naacox-safety-note {
+  display:flex; align-items:flex-start; justify-content:center; gap:7px; margin:17px auto 0;
+  color:#6c7988; font-size:10px; line-height:1.7; text-align:center;
+}
+.nc-naacox-safety-note svg { flex:0 0 auto; margin-top:2px; color:#287345; }
+@media(max-width:720px) {
+  .nc-naacox-section { padding:47px 0 52px; }
+  .nc-naacox-heading-wrap { margin-bottom:22px; }
+  .nc-naacox-eyebrow { margin-bottom:14px; font-size:9px; }
+  .naa-wireframe-home .nc-naacox-display-title { gap:8px; font-size:clamp(42px,10.5vw,67px); }
+  .naa-wireframe-home .nc-naacox-title-chip { border-radius:9px; }
+  .nc-naacox-heading-wrap>p { margin-top:14px; font-size:12px; line-height:1.75; }
+  .nc-naacox-chat-stage { padding:8px; border-radius:20px; }
+  .nc-naacox-chat-context { align-items:flex-start; padding:6px 5px 12px; }
+  .nc-naacox-context-topics { justify-content:flex-start; gap:5px; }
+  .nc-naacox-context-topics span { padding:6px 8px; font-size:8px; }
+  .nc-naacox-safety-note { align-items:flex-start; font-size:9px; }
+}
+@media(max-width:400px) {
+  .naa-wireframe-home .nc-naacox-display-title { gap:6px; font-size:clamp(37px,10.2vw,43px); }
+  .nc-naacox-title-chip { padding-inline:.16em; }
+  .nc-naacox-context-icon { flex-basis:37px; width:37px; height:37px; }
+  .nc-naacox-context-brand strong { font-size:12px; }
+  .nc-naacox-context-brand small { font-size:9px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .nc-naacox-title-chip { box-shadow:none; }
+}

@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import './kineticMOS.css';
 import './NaaHomepageRedesign.css';
+import { NaaCollegeAssistant } from './NaaCollegeAssistant';
 import { WORKSPACES, FLAGSHIP_FEATURES } from './FeaturesHub';
 import articlesData from '../data/blogArticles.json';
 
@@ -545,29 +546,38 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
       </section>
 
 
-      <section className="nc-home-pathways" aria-labelledby="nc-pathways-title">
+      <section className="nc-naacox-section" aria-labelledby="nc-naacox-title">
         <div className="nc-page-width">
-          <div className="nc-pathways-panel">
-            <div className="nc-pathways-copy">
-              <span className="nc-home-kicker nc-pathways-kicker"><Sparkles size={14} /> YOUR NEXT STEP STARTS HERE</span>
-              <h2 id="nc-pathways-title">Not sure what to learn next? <span>Start with a clear plan.</span></h2>
-              <p>Use the AI Student Gap Analyzer to reflect on your current skills, identify learning priorities and organise practical milestones around your goals.</p>
-              <div className="nc-pathway-chips"><span>Skills to strengthen</span><span>Project directions</span><span>Learning milestones</span></div>
-              <button type="button" className="nc-pathways-action" onClick={() => go('gap-analyzer')}>Build my learning plan <ArrowRight size={17} /></button>
-              <small className="nc-pathways-note">Guidance to help you plan—not a guarantee of an internship or placement.</small>
-            </div>
-            <div className="nc-pathways-board" aria-label="Example learning plan stages">
-              <div className="nc-pathway-board-top"><span><Sparkles size={15} /> LEARNING MAP</span><span className="nc-pathway-board-live"><i /> READY TO EXPLORE</span></div>
-              <div className="nc-pathway-step nc-pathway-step-one"><span className="nc-pathway-step-number">01</span><span><b>Understand your starting point</b><small>Skills, interests and current level</small></span><CheckCircle2 size={18} /></div>
-              <div className="nc-pathway-connector" />
-              <div className="nc-pathway-step nc-pathway-step-two"><span className="nc-pathway-step-number">02</span><span><b>Choose priority topics</b><small>Focus on what matters next</small></span><Target size={18} /></div>
-              <div className="nc-pathway-connector" />
-              <div className="nc-pathway-step nc-pathway-step-three"><span className="nc-pathway-step-number">03</span><span><b>Turn learning into projects</b><small>Practise, review and iterate</small></span><ArrowUpRight size={18} /></div>
-              <div className="nc-pathway-board-footer"><ShieldCheck size={14} /> Student-first guidance, one practical step at a time.</div>
-            </div>
+          <div className="nc-naacox-heading-wrap">
+            <span className="nc-naacox-eyebrow"><Sparkles size={14} aria-hidden="true" /> A STUDENT-FIRST AI ASSISTANT</span>
+            <h2 id="nc-naacox-title" className="nc-naacox-display-title">
+              <span className="nc-naacox-title-our">OUR</span>
+              <span className="nc-naacox-title-ai">AI</span>
+              <span className="nc-naacox-title-chip">CHATBOT</span>
+            </h2>
+            <p>Meet <strong>NaaCox AI</strong> — your guide to college choices, AP &amp; Telangana admissions, scholarships, study planning, programming and career questions.</p>
           </div>
+
+          <div className="nc-naacox-chat-stage">
+            <div className="nc-naacox-chat-context">
+              <div className="nc-naacox-context-brand">
+                <span className="nc-naacox-context-icon"><GraduationCap size={22} aria-hidden="true" /></span>
+                <span><strong>Ask NaaCox AI</strong><small>English or Telugu-English · Type your question below</small></span>
+              </div>
+              <div className="nc-naacox-context-topics" aria-label="Example topics">
+                <span>AP / TG EAPCET</span>
+                <span>Scholarships</span>
+                <span>College choices</span>
+                <span>Study &amp; careers</span>
+              </div>
+            </div>
+            <NaaCollegeAssistant embedded />
+          </div>
+          <p className="nc-naacox-safety-note"><CheckCircle2 size={14} aria-hidden="true" /> Use NaaCox for guidance; confirm important admissions and scholarship decisions with official sources.</p>
         </div>
       </section>
+
+
 
     </main>
   );

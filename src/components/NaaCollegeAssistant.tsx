@@ -129,7 +129,7 @@ function localNaaCoxFallback(question: string, pagePath: string): string {
     "Tell me the goal and a little context, and I’ll try a more targeted answer. For current admission or scholarship decisions, always verify official notices.";
 }
 
-export function NaaCollegeAssistant() {
+export function NaaCollegeAssistant({ embedded = false }: { embedded?: boolean } = {}) {
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
@@ -137,14 +137,20 @@ export function NaaCollegeAssistant() {
   const [connectionMessage, setConnectionMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (embedded) {
+      const container = messagesContainerRef.current;
+      if (container) container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+      return;
+    }
     if (open) {
       bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
       const timer = window.setTimeout(() => inputRef.current?.focus(), 120);
       return () => window.clearTimeout(timer);
     }
-  }, [open, messages, sending]);
+  }, [open, embedded, messages, sending]);
 
   useEffect(() => {
     if (!open) return;
@@ -165,7 +171,8 @@ export function NaaCollegeAssistant() {
       role: "user",
       content: cleaned.slice(0, 1200),
     };
-    const nextMessages = [...messages, userMessage];
+    const conversationBase = embedded ? messages.filter((item) => item.id !== WELCOME_MESSAGE.id) : messages;
+    const nextMessages = [...conversationBase, userMessage];
     setMessages(nextMessages);
     setDraft("");
     setSending(true);
@@ -238,21 +245,21 @@ export function NaaCollegeAssistant() {
   };
 
   return (
-    <div className="nca-assistant-root">
-      {open && (
+    <div className={"nca-assistant-root" + (embedded ? " nca-assistant-root-embedded" : "")}>
+      {(open || embedded) && (
         <section
-          id="nca-chat-panel"
-          className="nca-chat-panel"
-          role="dialog"
-          aria-modal="false"
-          aria-labelledby="nca-chat-title"
+          id={embedded ? "nca-chat-panel-embedded" : "nca-chat-panel"}
+          className={"nca-chat-panel" + (embedded ? " nca-chat-panel-embedded" : "")}
+          role={embedded ? "region" : "dialog"}
+          aria-modal={embedded ? undefined : false}
+          aria-labelledby={embedded ? "nca-chat-title-embedded" : "nca-chat-title"}
         >
           <header className="nca-chat-header">
             <div className="nca-chat-brand-icon">
               <GraduationCap size={21} aria-hidden="true" />
             </div>
             <div className="nca-chat-header-copy">
-              <h2 id="nca-chat-title">NaaCox AI</h2>
+              <h2 id={embedded ? "nca-chat-title-embedded" : "nca-chat-title"}>NaaCox AI</h2>
               <p><span className="nca-chat-online-dot" /> Your Naa College student assistant</p>
             </div>
             <div className="nca-chat-header-actions">
@@ -266,20 +273,22 @@ export function NaaCollegeAssistant() {
               >
                 <Trash2 size={16} />
               </button>
-              <button
-                type="button"
-                className="nca-chat-icon-button"
-                onClick={() => setOpen(false)}
-                aria-label="Close assistant"
-                title="Close"
-              >
-                <X size={18} />
-              </button>
+              {!embedded && (
+                <button
+                  type="button"
+                  className="nca-chat-icon-button"
+                  onClick={() => setOpen(false)}
+                  aria-label="Close assistant"
+                  title="Close"
+                >
+                  <X size={18} />
+                </button>
+              )}
             </div>
           </header>
 
-          <div className="nca-chat-messages" aria-live="polite" aria-relevant="additions text">
-            {messages.map((message) => (
+          <div ref={messagesContainerRef} className="nca-chat-messages" aria-live="polite" aria-relevant="additions text">
+            {messages.filter((message) => !embedded || message.id !== WELCOME_MESSAGE.id).map((message) => (
               <div
                 key={message.id}
                 className={"nca-chat-message-row " + (message.role === "user" ? "is-user" : "is-assistant")}
@@ -317,10 +326,10 @@ export function NaaCollegeAssistant() {
           )}
 
           <form className="nca-chat-composer" onSubmit={handleSubmit}>
-            <label className="nca-chat-sr-only" htmlFor="nca-chat-input">Ask a question about Naa College</label>
+            <label className="nca-chat-sr-only" htmlFor={embedded ? "nca-chat-input-embedded" : "nca-chat-input"}>Ask a question about Naa College</label>
             <input
               ref={inputRef}
-              id="nca-chat-input"
+              id={embedded ? "nca-chat-input-embedded" : "nca-chat-input"}
               value={draft}
               onChange={(event) => setDraft(event.target.value)}
               placeholder="Ask NaaCox AI about Naa College…"
@@ -345,7 +354,7 @@ export function NaaCollegeAssistant() {
         </section>
       )}
 
-      <button
+      {!embedded && <button
         type="button"
         className={"nca-chat-launcher " + (open ? "is-open" : "")}
         onClick={() => setOpen((value) => !value)}
@@ -356,7 +365,7 @@ export function NaaCollegeAssistant() {
         {open ? <X size={23} /> : <MessageCircle size={23} />}
         {!open && <span className="nca-chat-launcher-sparkle"><Sparkles size={12} /></span>}
         {!open && <span className="nca-chat-launcher-label">NaaCox AI</span>}
-      </button>
+      </button>}
     </div>
   );
 }
