@@ -104,7 +104,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
         const branches: SourceBranch[] = Object.entries((raw as any)?.branches || {}).map(([branchCode, value]) => {
           const item = value as any;
           const quotas = item?.quotas && typeof item.quotas === 'object' ? item.quotas : {};
-          const quotaCount = Object.values(quotas).reduce((total: number, quota: any) => total + Math.max(0, Number(quota?.count) || 0), 0);
+          const quotaCount = (Object.values(quotas) as any[]).reduce<number>((total, quota) => total + Math.max(0, Number(quota?.count) || 0), 0);
           return { code: branchCode, name: String(item?.name || branchCode).trim(), quotaCount };
         }).sort((a, b) => a.name.localeCompare(b.name) || a.code.localeCompare(b.code));
         return {
