@@ -258,9 +258,14 @@ export const ApWebOptionsBuilder: React.FC = () => {
         rank, category, gender, region, specialCategory,
         collegeCode: 'ALL', branch: 'ALL', collegeQuery: '', sortBy: 'SELECTIVE',
       });
-      const matchById = new Map<string, ApCollegeBranchMatch>(response.matches.map((match) => [match.id, match]));
+      const makeChoiceKey = (collegeCode: string, branchCode: string) => (
+        String(collegeCode).trim().toUpperCase() + '_' + String(branchCode).trim().toUpperCase()
+      );
+      const matchByChoiceKey = new Map<string, ApCollegeBranchMatch>(
+        response.matches.map((match) => [makeChoiceKey(match.collegeCode, match.branchCode), match]),
+      );
       const toGeneratedOption = (choice: PriorityChoice, isUserPriority: boolean): GeneratedOption => {
-        const match = matchById.get(choice.id);
+        const match = matchByChoiceKey.get(makeChoiceKey(choice.collegeCode, choice.branchCode));
         const closingRank = match && match.closingRank > 0 ? match.closingRank : null;
         return {
           ...choice, closingRank, matchedRecords: match?.matchingRecordCount || 0,
@@ -270,7 +275,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
       };
 
       // Keep the student's explicit preference order; historical rank context never silently demotes a dream choice.
-      const priorityIds = new Set(priorityChoices.map((choice) => choice.id));
+      const priorityIds = new Set(priorityChoices.map((choice) => makeChoiceKey(choice.collegeCode, choice.branchCode)));
       const priorityOptions = priorityChoices.map((choice) => toGeneratedOption(choice, true));
       const alternativeMatches = response.matches.filter((match) => {
         if (!match.closingRank || match.closingRank < 1 || priorityIds.has(match.id)) return false;
@@ -467,6 +472,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
                   <div className="apwo-observed-line">
                     {option.observedStatus === 'within' ? <span className="apwo-status apwo-status-within"><CheckCircle2 size={14} /> {statusLabel.within}</span> : option.observedStatus === 'beyond' ? <span className="apwo-status apwo-status-beyond"><Target size={14} /> {statusLabel.beyond}</span> : <span className="apwo-status apwo-status-missing"><Info size={14} /> {statusLabel.missing}</span>}
                     {option.closingRank ? <span className="apwo-closing-rank">2026 observed closing rank <strong>{formatRank(option.closingRank)}</strong></span> : <span className="apwo-no-cutoff">No eligible closing-rank value returned for these filters</span>}
+                    {option.matchedRecords > 0 && <span className="apwo-record-count">{option.matchedRecords.toLocaleString('en-IN')} matching observations</span>}
                   </div>
                   {option.observedStatus === 'beyond' && gap !== null && <p className="apwo-gap-detail">{'Your entered rank is ' + formatRank(gap) + ' places beyond the observed closing rank. ' + (option.isUserPriority ? 'Kept here because you explicitly prioritised this choice.' : 'Included as an alternative for comparison; future allotment is not predictable from this value alone.')}</p>}
                   {option.observedStatus === 'within' && option.closingRank && <p className="apwo-gap-detail">{formatRank(option.closingRank - option.profileRank) + ' rank places between your entered rank and the observed closing rank. This historical comparison is not a seat guarantee.'}</p>}
