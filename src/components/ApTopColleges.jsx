@@ -116,13 +116,13 @@ export default function ApTopColleges({ onSelectCollegeBranch }) {
           <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-cyan-400/15 blur-3xl" />
           <div className="relative">
             <span className="inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-[11px] font-bold text-cyan-700 dark:text-cyan-300">
-              <ShieldCheck className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" /> Grounded in Official AP EAPCET 2026 Allotment Dataset
+              <ShieldCheck className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" /> 2027 Admission Planning · Historical 2026 Data
             </span>
             <h1 className="mt-3 text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-950 dark:text-white">
               Top B.Tech Colleges in <span className="text-cyan-600 dark:text-cyan-400">Andhra Pradesh</span>
             </h1>
             <p className="mt-2 max-w-3xl text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-              Compare observed 2026 AP EAPCET college and branch rank patterns using opening rank, median rank, closing rank, seat capacity, seats filled, and transparent rank-threshold allotment counts.
+              Compare observed 2026 AP EAPCET college and branch rank patterns using opening rank, median rank, closing rank, seat capacity, seats filled and rank-threshold allotment counts. This is historical planning information, not an official 2027 cutoff list or an overall college-quality guarantee.
             </p>
           </div>
         </header>
