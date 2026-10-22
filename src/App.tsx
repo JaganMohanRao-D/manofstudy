@@ -98,6 +98,11 @@ const ApCollegePredictor = lazyWithRetry(() =>
     default: m.ApCollegePredictor || m.default,
   }))
 );
+const ApWebOptionsBuilder = lazyWithRetry(() =>
+  import('./components/ApWebOptionsBuilder').then((m: any) => ({
+    default: m.ApWebOptionsBuilder || m.default,
+  }))
+);
 const ApTopColleges = lazyWithRetry(() => import('./components/ApTopColleges'));
 const ApEapcetRankPredictor = lazyWithRetry(() => import('./components/ApEapcetRankPredictor'));
 const ApEapcet2025AllotmentExplorer = lazyWithRetry(() =>
@@ -265,6 +270,14 @@ export const TOOLS_CONFIG: ToolMeta[] = [
     badge: 'AI Intelligence',
   },
   {
+    id: 'ap-web-options',
+    name: 'AP EAPCET Web Options Builder',
+    shortName: 'AP Web Options',
+    category: 'counselling',
+    description: 'Build and reorder a preferred college-and-branch list using the available 2026 rank index and your priority choices.',
+    badge: '2026 DATA',
+  },
+  {
     id: 'ap-rank-predictor',
     name: 'AP EAPCET Rank Predictor',
     shortName: 'AP Rank Predictor',
@@ -422,6 +435,7 @@ const getWorkspaceFromPath = (): WorkspaceView | null => {
     '/ap-eapcet/phase-2-vacancy-radar': 'eapcet',
     '/ap-eapcet/college-wise-allotments': 'ap-allotments',
     '/ap-eapcet/college-predictor': 'ap-predictor',
+    '/ap-eapcet/web-options-builder': 'ap-web-options',
     '/ap-eapcet/rank-predictor': 'ap-rank-predictor',
     '/ap-eapcet/top-colleges': 'ap-top-colleges',
     '/tg-eapcet/name-wise-allotments': 'tg-allotments',
@@ -590,6 +604,11 @@ export default function App() {
         hash.startsWith('tg_')
       ) {
         setActiveWorkspace('tg-allotments');
+      } else if (
+        hash === 'ap-web-options' ||
+        hash === 'ap-web-options-builder'
+      ) {
+        setActiveWorkspace('ap-web-options');
       } else if (
         hash === 'ap-predictor' ||
         hash === 'ap-college-predictor' ||
@@ -1392,6 +1411,8 @@ export default function App() {
                 {activeWorkspace === 'ap-predictor' && (
                   <ApCollegePredictor initialCollegeCode="ALL" initialBranchCode="ALL" />
                 )}
+
+                {activeWorkspace === 'ap-web-options' && <ApWebOptionsBuilder />}
 
                 {activeWorkspace === 'ap-top-colleges' && (
                   <ApTopColleges />

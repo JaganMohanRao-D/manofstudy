@@ -17,6 +17,7 @@ type NavItem = { label: string; workspace: WorkspaceView; tab?: ToolTab; icon: R
 
 const AP_TOOLS: NavItem[] = [
   { label: 'AP EAPCET College Predictor', workspace: 'ap-predictor', icon: Map },
+  { label: 'AP EAPCET Web Options Builder', workspace: 'ap-web-options', icon: ClipboardCheck },
   { label: 'AP EAPCET Rank Predictor', workspace: 'ap-rank-predictor', icon: Calculator },
   { label: 'AP Top B.Tech Colleges', workspace: 'ap-top-colleges', icon: Trophy },
   { label: 'AP EAPCET 2026 College-Wise Allotments', workspace: 'ap-allotments', icon: ClipboardCheck },
