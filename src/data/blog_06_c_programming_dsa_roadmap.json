@@ -13,12 +13,30 @@
   },
   "editorial_note_te": "ఇది ఒక structured draft. ప్రచురించే ముందు links, course availability ని నిర్ధారించండి. Roadmap ని వేర్వేరు semester syllabi కి అనుగుణంగా మార్చుకునేలా ఉంచండి.",
   "glossary": [
-    {"term": "Compiler", "meaning_te": "మీరు రాసిన code ని computer అర్థం చేసుకునే రూపంలోకి మార్చే tool"},
-    {"term": "Pointer", "meaning_te": "ఒక variable యొక్క memory address ని దాచుకునే variable"},
-    {"term": "DSA", "meaning_te": "Data Structures and Algorithms. సమాచారాన్ని భద్రపరిచే పద్ధతులు, సమస్యలను సమర్థవంతంగా పరిష్కరించే పద్ధతులు"},
-    {"term": "Big-O", "meaning_te": "input పెరిగేకొద్దీ సమయం లేదా memory ఎంత పెరుగుతుందో చెప్పే సంజ్ఞ"},
-    {"term": "Recursion", "meaning_te": "ఒక function తనను తానే పిలుచుకోవడం"},
-    {"term": "Edge case", "meaning_te": "సాధారణ కాకుండా అంచు పరిస్థితులు (ఖాళీ input, 0, చాలా పెద్ద సంఖ్య మొదలైనవి)"}
+    {
+      "term": "Compiler",
+      "meaning_te": "మీరు రాసిన code ని computer అర్థం చేసుకునే రూపంలోకి మార్చే tool"
+    },
+    {
+      "term": "Pointer",
+      "meaning_te": "ఒక variable యొక్క memory address ని దాచుకునే variable"
+    },
+    {
+      "term": "DSA",
+      "meaning_te": "Data Structures and Algorithms. సమాచారాన్ని భద్రపరిచే పద్ధతులు, సమస్యలను సమర్థవంతంగా పరిష్కరించే పద్ధతులు"
+    },
+    {
+      "term": "Big-O",
+      "meaning_te": "input పెరిగేకొద్దీ సమయం లేదా memory ఎంత పెరుగుతుందో చెప్పే సంజ్ఞ"
+    },
+    {
+      "term": "Recursion",
+      "meaning_te": "ఒక function తనను తానే పిలుచుకోవడం"
+    },
+    {
+      "term": "Edge case",
+      "meaning_te": "సాధారణ కాకుండా అంచు పరిస్థితులు (ఖాళీ input, 0, చాలా పెద్ద సంఖ్య మొదలైనవి)"
+    }
   ],
   "sections": [
     {
@@ -89,15 +107,47 @@
         "ప్రతి structure యొక్క operations, implementation, complexity, బలాలు, పరిమితులు నేర్చుకోండి. అర్థం చేసుకోకుండా complexity tables ని బట్టీ పట్టకండి. ఆ operations కి ఎందుకు అంత పని అవసరమో తెలుసుకోండి."
       ],
       "table": {
-        "headers": ["Structure", "సాధారణ ఉపయోగం", "ముఖ్య భావన"],
+        "headers": [
+          "Structure",
+          "సాధారణ ఉపయోగం",
+          "ముఖ్య భావన"
+        ],
         "rows": [
-          ["Array", "Indexed collection", "Contiguous storage, indexed access"],
-          ["Linked list", "Dynamic sequence", "Nodes, links; traversal cost"],
-          ["Stack", "Undo, parsing, call behavior", "Last in, first out"],
-          ["Queue", "Scheduling, buffering", "First in, first out"],
-          ["Hash table", "Key తో lookup", "Hashing, collision handling"],
-          ["Tree", "Hierarchies, ordered data", "Parent / child సంబంధాలు"],
-          ["Graph", "Routes, networks", "Vertices, edges, traversal"]
+          [
+            "Array",
+            "Indexed collection",
+            "Contiguous storage, indexed access"
+          ],
+          [
+            "Linked list",
+            "Dynamic sequence",
+            "Nodes, links; traversal cost"
+          ],
+          [
+            "Stack",
+            "Undo, parsing, call behavior",
+            "Last in, first out"
+          ],
+          [
+            "Queue",
+            "Scheduling, buffering",
+            "First in, first out"
+          ],
+          [
+            "Hash table",
+            "Key తో lookup",
+            "Hashing, collision handling"
+          ],
+          [
+            "Tree",
+            "Hierarchies, ordered data",
+            "Parent / child సంబంధాలు"
+          ],
+          [
+            "Graph",
+            "Routes, networks",
+            "Vertices, edges, traversal"
+          ]
         ]
       },
       "example_te": "ఉదాహరణ: Browser లో Back బటన్ stack లాగా పనిచేస్తుంది (చివరి page మొదట తిరిగి వస్తుంది). Printer లో printing jobs queue లాగా పనిచేస్తాయి (ముందు వచ్చినది ముందు print అవుతుంది)."
@@ -141,14 +191,42 @@
         "ప్రతి వారం code రాయడం, debugging, review, problems solve చేయడం ఉండాలి. కేవలం tutorials చూడటం సరిపోదు."
       ],
       "table": {
-        "headers": ["వారాలు", "దృష్టి (Focus)", "ఫలితం (Deliverable)"],
+        "headers": [
+          "వారాలు",
+          "దృష్టి (Focus)",
+          "ఫలితం (Deliverable)"
+        ],
         "rows": [
-          ["1–3", "Syntax, input/output, conditions, loops", "15–20 చిన్న programs"],
-          ["4–6", "Functions, arrays, strings", "Array, string utilities"],
-          ["7–9", "Pointers, structures, files", "Record manager"],
-          ["10–12", "Complexity, searching, sorting, recursion", "వివరణలతో practice set"],
-          ["13–14", "Lists, stacks, queues, trees basics", "Core operations implement చేయడం"],
-          ["15–16", "Revision, project polish", "Documented project, review notes"]
+          [
+            "1–3",
+            "Syntax, input/output, conditions, loops",
+            "15–20 చిన్న programs"
+          ],
+          [
+            "4–6",
+            "Functions, arrays, strings",
+            "Array, string utilities"
+          ],
+          [
+            "7–9",
+            "Pointers, structures, files",
+            "Record manager"
+          ],
+          [
+            "10–12",
+            "Complexity, searching, sorting, recursion",
+            "వివరణలతో practice set"
+          ],
+          [
+            "13–14",
+            "Lists, stacks, queues, trees basics",
+            "Core operations implement చేయడం"
+          ],
+          [
+            "15–16",
+            "Revision, project polish",
+            "Documented project, review notes"
+          ]
         ]
       }
     },
@@ -190,12 +268,7 @@
       "a_te": "ఉపయోగకరమైనది చేయడానికి సరిపోయేంత basics తెలిసిన వెంటనే చిన్న projects మొదలుపెట్టండి."
     }
   ],
-  "resources": [
-    {"name": "C reference (cppreference)", "url": "https://en.cppreference.com/w/c", "description_te": "C features, library ప్రవర్తనను తనిఖీ చేయడానికి language reference"},
-    {"name": "Learn-C.org", "url": "https://www.learn-c.org/", "description_te": "Beginners కోసం interactive C exercises"},
-    {"name": "CS50", "url": "https://cs50.harvard.edu/x/", "description_te": "Lectures, problem sets తో computer science course"},
-    {"name": "VisuAlgo", "url": "https://visualgo.net/", "description_te": "కొన్ని data structures, algorithms యొక్క visual వివరణలు"}
-  ],
+  "resources": [],
   "publication_checklist_te": [
     "ప్రచురణకు ముందు links, course availability ని నిర్ధారించండి.",
     "అసురక్షిత memory పద్ధతులను లేదా కాపీ చేసిన code ను సిఫారసు చేయవద్దు.",
