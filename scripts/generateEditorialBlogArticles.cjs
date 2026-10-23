@@ -17,6 +17,13 @@ const specs = [
   { path: 'src/data/blog_10_first_tech_internship_second_year.json', category: 'Internships & Careers', tags: ['internships','second year','resume','GitHub','projects','career'], toolLinks: [{label:'Explore Engineering Roadmaps',href:'/engineering-roadmaps/'}] }
 ];
 
+const structuredSpecs = [
+  { path: 'src/data/blog-1-chatgpt-vs-claude.json', slug: 'chatgpt-vs-claude-which-ai-is-better-for-students' },
+  { path: 'src/data/blog-2-gemini-chatgpt-grok-meta-claude.json', slug: 'gemini-vs-chatgpt-vs-grok-meta-ai-vs-claude' },
+  { path: 'src/data/blog-3-iiit-hyderabad-admission-ugee.json', slug: 'how-to-join-iiit-hyderabad-without-jee-main-ugee' },
+  { path: 'src/data/blog-4-github-basics.json', slug: 'github-basics-for-beginners-complete-guide' }
+];
+
 function readJson(relativePath) {
   const filePath = path.join(root, relativePath);
   if (!fs.existsSync(filePath)) throw new Error('[Blog integration] Missing source file: ' + relativePath);
@@ -38,6 +45,14 @@ function str(value) {
 function paragraphs(value) { return asArray(value).map(str).filter(Boolean).join('\n\n'); }
 function sanitizeBlogContent(input) {
   let content = String(input || '');
+  // Code examples are not source/reference links. Keep their exact commands
+  // intact (especially the Git remote URL), while preventing clickable or
+  // loose third-party URLs from appearing in ordinary article prose.
+  const codeBlocks = [];
+  content = content.replace(/```[^\n]*\n[\s\S]*?```/g, (block) => {
+    const index = codeBlocks.push(block) - 1;
+    return '__NAA_EDITORIAL_CODE_BLOCK_' + index + '__';
+  });
   const sourceHeading = /^\s*#{2,4}\s*(?:(?:official\s+(?:and\s+)?(?:reference\s+)?)|(?:reference\s+)|(?:external\s+)|(?:additional\s+))?(?:sources?|references?|resources|further reading|reference links|official links)(?:\s*(?:&|and)\s*(?:further reading|references?|sources?))?\s*$/im;
   const match = sourceHeading.exec(content);
   if (match) content = content.slice(0, match.index);
@@ -45,6 +60,7 @@ function sanitizeBlogContent(input) {
   content = content.replace(/<https?:\/\/[^>]+>/gi, '');
   content = content.replace(/\bhttps?:\/\/[^\s)\]]+/gi, '');
   content = content.replace(/\bwww\.[^\s)\]]+/gi, '');
+  content = content.replace(/__NAA_EDITORIAL_CODE_BLOCK_(\d+)__/g, (_, index) => codeBlocks[Number(index)] || '');
   return content.replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
 }
 function tableMarkdown(table) {
@@ -128,25 +144,115 @@ function normalize(raw, spec) {
   };
 }
 
+
+function structuredTableMarkdown(table) {
+  if (!table || !Array.isArray(table.rows)) return '';
+  const headers = Array.isArray(table.columns) ? table.columns : table.headers;
+  if (!Array.isArray(headers)) return '';
+  return tableMarkdown({ headers, rows: table.rows });
+}
+function structuredSectionMarkdown(section) {
+  const parts = [];
+  const heading = str(section.heading || section.title);
+  if (heading) parts.push('## ' + heading);
+  const before = paragraphs(section.paragraphs);
+  if (before) parts.push(before);
+  const points = bullets(section.list);
+  if (points) parts.push(points);
+  const steps = numbered(section.steps);
+  if (steps) parts.push(steps);
+  const table = structuredTableMarkdown(section.table);
+  if (table) parts.push(table);
+  if (section.code) parts.push('```text\n' + String(section.code).replace(/\s+$/,'') + '\n```');
+  const after = paragraphs(section.paragraphs_after);
+  if (after) parts.push(after);
+  const takeaway = str(section.takeaway);
+  if (takeaway) parts.push('> **Takeaway:** ' + takeaway.replace(/\n/g, ' '));
+  const note = str(section.note);
+  if (note) parts.push('> **Note:** ' + note.replace(/\n/g, ' '));
+  return parts.filter(Boolean).join('\n\n');
+}
+function normalizeStructured(raw) {
+  const parts = [];
+  const importantNote = str(raw.important_note);
+  if (importantNote) parts.push('> **Important note:** ' + importantNote.replace(/\n/g, ' '));
+  for (const section of asArray(raw.sections)) {
+    const rendered = structuredSectionMarkdown(section);
+    if (rendered) parts.push(rendered);
+  }
+  const conclusion = str(raw.conclusion);
+  if (conclusion) parts.push('## Conclusion\n\n' + conclusion);
+  const faq = faqs(raw.faq);
+  if (faq) parts.push('## Frequently Asked Questions\n\n' + faq);
+  const disclaimer = str(raw.disclaimer);
+  if (disclaimer) parts.push('> **Disclaimer:** ' + disclaimer.replace(/\n/g, ' '));
+  // Do not import raw.official_sources: published blog pages intentionally do
+  // not render third-party source/reference link sections.
+  const content = sanitizeBlogContent(parts.join('\n\n').replace(/\n{3,}/g, '\n\n').trim());
+  const publishedAt = str(raw.published_date) || contentDate;
+  return {
+    slug: str(raw.slug).replace(/^\\/+|\\/+$/g, ''),
+    title: str(raw.title),
+    metaTitle: str(raw.meta_title || raw.title),
+    metaDescription: str(raw.meta_description || raw.excerpt || raw.title),
+    category: str(raw.category) || 'Student Guides',
+    tags: [...new Set(asArray(raw.tags).map(str).filter(Boolean))],
+    status: 'published',
+    publishedAt,
+    updatedAt: str(raw.updated_date || raw.published_date) || contentDate,
+    featured: false,
+    author: str(raw.author) || 'Naa College Editorial Desk',
+    readingTimeMinutes: Number(raw.reading_time_minutes) || null,
+    summary: str(raw.excerpt || raw.meta_description || raw.title),
+    content,
+    sources: [],
+    toolLinks: []
+  };
+}
+
 const existing = readJson('src/data/blogArticles.json');
 if (!Array.isArray(existing)) throw new Error('[Blog integration] Existing blog data must be an array.');
 const alternateCse = readJson(alternateCsePath);
 if (!Array.isArray(alternateCse.sections) || !alternateCse.seo) throw new Error('[Blog integration] Alternate CSE JSON failed its structure check.');
 const slugs = new Set(existing.map(article => article.slug));
-const articles = specs.map(spec => {
-  const raw = readJson(spec.path);
-  if (!raw.seo?.slug || !Array.isArray(raw.sections) || raw.sections.length < 4) throw new Error('[Blog integration] Missing SEO slug/sections in ' + spec.path);
-  const article = normalize(raw, spec);
-  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(article.slug)) throw new Error('[Blog integration] Invalid slug: ' + article.slug);
+function registerArticle(article, sourcePath) {
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(article.slug || '')) {
+    throw new Error('[Blog integration] Invalid slug in ' + sourcePath + ': ' + (article.slug || '(missing)'));
+  }
   if (slugs.has(article.slug)) throw new Error('[Blog integration] Duplicate slug: ' + article.slug);
   slugs.add(article.slug);
   const wordCount = article.content.split(/\s+/).filter(Boolean).length;
   const headingCount = (article.content.match(/^##\s+.+$/gm) || []).length;
-  if (!article.title || !article.summary || article.content.length < 1200 || wordCount < 250 || headingCount < 4) throw new Error('[Blog integration] Incomplete article: ' + article.slug);
-  if (!Array.isArray(article.sources) || article.sources.length !== 0) throw new Error('[Blog integration] Third-party source links must remain disabled: ' + article.slug);
-  if (article.toolLinks.some(link => !link.href || !link.href.startsWith('/'))) throw new Error('[Blog integration] Non-local tool link: ' + article.slug);
+  if (!article.title || !article.summary || article.content.length < 1200 || wordCount < 250 || headingCount < 4) {
+    throw new Error('[Blog integration] Incomplete article: ' + article.slug + ' (' + wordCount + ' words; ' + headingCount + ' H2 headings)');
+  }
+  if (!Array.isArray(article.sources) || article.sources.length !== 0) {
+    throw new Error('[Blog integration] Third-party source links must remain disabled: ' + article.slug);
+  }
+  if (!Array.isArray(article.toolLinks) || article.toolLinks.some(link => !link.label || !link.href || !link.href.startsWith('/'))) {
+    throw new Error('[Blog integration] Tool links must be named site-local paths: ' + article.slug);
+  }
   return article;
+}
+
+const legacyArticles = specs.map(spec => {
+  const raw = readJson(spec.path);
+  if (!raw.seo?.slug || !Array.isArray(raw.sections) || raw.sections.length < 4) {
+    throw new Error('[Blog integration] Missing SEO slug/sections in ' + spec.path);
+  }
+  return registerArticle(normalize(raw, spec), spec.path);
 });
+const structuredArticles = structuredSpecs.map(spec => {
+  const raw = readJson(spec.path);
+  if (raw.site !== 'naacollege.in' || raw.slug !== spec.slug || !raw.meta_title || !raw.meta_description ||
+      !raw.title || !raw.excerpt || !Array.isArray(raw.sections) || raw.sections.length < 4) {
+    throw new Error('[Blog integration] Missing title, SEO metadata, excerpt, or article sections in ' + spec.path);
+  }
+  return registerArticle(normalizeStructured(raw), spec.path);
+});
+const articles = [...legacyArticles, ...structuredArticles];
 fs.writeFileSync(outputPath, JSON.stringify(articles, null, 2) + '\n', 'utf8');
 console.log('[Blog integration] Generated ' + articles.length + ' articles from structured src/data JSON.');
+console.log('[Blog integration] Preserved the four new English-only articles and their SEO metadata without translating them.');
+console.log('[Blog integration] Excluded raw third-party source lists; retained non-clickable URLs only inside fenced code examples.');
 console.log('[Blog integration] Excluded alternate CSE JSON from publication to prevent duplicate-topic content and a slugless route.');
