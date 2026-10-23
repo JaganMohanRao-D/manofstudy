@@ -299,7 +299,7 @@ export const convertExcelToPdf = async (excelFile, options = {}) => {
         doc.setFontSize(8);
         doc.setTextColor(100, 116, 139);
         doc.text(
-          'Man of Study • ' + sheetName,
+          sheetName,
           margin,
           pageHeight - 14
         );
