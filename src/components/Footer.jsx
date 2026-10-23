@@ -28,11 +28,6 @@ export const Footer = ({ onOpenLegalModal, onOpenSupportModal }) => (
           </div>
         </div>
       </div>
-      <div className="mt-10 rounded-xl border border-white/10 bg-black/5 px-4 py-4 text-xs leading-6 text-[#777b82] dark:bg-white/[0.03]">
-        <div className="font-semibold uppercase tracking-[.12em] text-[#858990]">Advertisement disclosure</div>
-        <p className="mt-1">The link below is a third-party advertisement, not an official Naa College tool or recommendation. It is optional—please do not click it unless you intend to visit the advertiser. If you do open it, review the destination carefully.</p>
-        <a href="https://uplcm.com/4/12098980" target="_blank" rel="sponsored nofollow noopener noreferrer" className="mt-2 inline-flex items-center gap-1 underline underline-offset-4 hover:text-[#22d3ee]">Sponsored advertisement link <ArrowUpRight size={12}/></a>
-      </div>
       <div className="mt-12 border-t border-white/10 pt-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <div className="mk-built">Built by Jagan Mohan Rao Dunna</div>
