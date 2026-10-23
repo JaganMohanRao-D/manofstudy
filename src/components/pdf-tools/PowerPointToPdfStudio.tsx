@@ -228,7 +228,7 @@ export const PowerPointToPdfStudio: React.FC<PowerPointToPdfStudioProps> = ({ on
   const [preserveImages, setPreserveImages] = useState<boolean>(true);
   const [preserveTables, setPreserveTables] = useState<boolean>(true);
   const [includeSlideNumbers, setIncludeSlideNumbers] = useState<boolean>(true);
-  const [customFooterText, setCustomFooterText] = useState<string>('MAN OF STUDY • Presentation Handout');
+  const [customFooterText, setCustomFooterText] = useState<string>('');
 
   // Processing & Result
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
