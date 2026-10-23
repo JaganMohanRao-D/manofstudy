@@ -258,6 +258,14 @@ const renderStaticArticle = (article) => {
   while (i < lines.length) {
     const line = lines[i].trim();
     if (!line) { i++; continue; }
+    if (line.startsWith('```')) {
+      const code = [];
+      i++;
+      while (i < lines.length && !lines[i].trim().startsWith('```')) code.push(lines[i++]);
+      if (i < lines.length) i++;
+      blocks.push('<pre class="my-5 overflow-x-auto rounded-xl border border-slate-800 bg-slate-950 p-4 text-sm leading-6 text-slate-100"><code>' + htmlEscape(code.join('\n')) + '</code></pre>');
+      continue;
+    }
     if (isMarkdownTableRow(line) && i + 1 < lines.length && isMarkdownTableSeparator(lines[i + 1].trim())) {
       const rows = [parseMarkdownTableRow(line)];
       i += 2;
@@ -288,8 +296,8 @@ const renderStaticArticle = (article) => {
   }
   return '<article class="mx-auto max-w-4xl px-4 py-6 sm:px-8"><p class="mb-5 text-sm"><a href="/blog/" class="text-cyan-700 underline">Naa College Blog</a> / ' + htmlEscape(article.category) +
     '</p><h1 class="mb-4 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">' + htmlEscape(article.title) + '</h1><p class="mb-5 text-lg leading-8 text-slate-600">' + htmlEscape(article.summary) +
-    '</p><p class="mb-8 text-sm text-slate-500">Updated ' + htmlEscape(article.updatedAt) + ' · By Naa College Editorial Desk · ' +
-    Math.max(2, Math.ceil(String(article.content || '').trim().split(/\s+/).filter(Boolean).length / 220)) + ' min read</p><div class="blog-prose">' + blocks.join('\n') + '</div>' +
+    '</p><p class="mb-8 text-sm text-slate-500">Updated ' + htmlEscape(article.updatedAt) + ' · By ' + htmlEscape(article.author || 'Naa College Editorial Desk') + ' · ' +
+    (article.readingTimeMinutes || Math.max(2, Math.ceil(String(article.content || '').trim().split(/\s+/).filter(Boolean).length / 220))) + ' min read</p><div class="blog-prose">' + blocks.join('\n') + '</div>' +
     (article.sources && article.sources.length ? '<h2 class="mt-10 text-xl font-semibold">Official and reference sources</h2><ul class="my-4 list-disc space-y-2 pl-6">' +
       article.sources.map((source) => '<li><a href="' + htmlEscape(source.url) + '" rel="noopener noreferrer" class="text-cyan-700 underline">' + htmlEscape(source.label) + '</a></li>').join('') + '</ul>' : '') +
     '<p class="mt-10 border-t pt-5 text-sm leading-7 text-slate-500">Educational information only. Verify time-sensitive details with the relevant official authority or product documentation.</p></article>';
@@ -332,14 +340,14 @@ publishedBlogArticles.forEach((article) => {
   const canonical = 'https://naacollege.in/blog/' + article.slug + '/';
   routes.push({
     path: '/blog/' + article.slug + '/',
-    title: article.title + ' | Naa College',
-    description: String(article.summary || '').slice(0, 158),
+    title: article.metaTitle || (article.title + ' | Naa College'),
+    description: String(article.metaDescription || article.summary || '').slice(0, 158),
     staticBody: renderStaticArticle(article),
     schema: {
       '@context': 'https://schema.org', '@type': 'BlogPosting', headline: article.title,
-      description: article.summary, datePublished: article.publishedAt, dateModified: article.updatedAt,
+      description: article.metaDescription || article.summary, datePublished: article.publishedAt, dateModified: article.updatedAt,
       mainEntityOfPage: canonical,
-      author: { '@type': 'Organization', name: 'Naa College Editorial Desk', url: 'https://naacollege.in/' },
+      author: { '@type': 'Organization', name: article.author || 'Naa College Editorial Desk', url: 'https://naacollege.in/' },
       publisher: { '@type': 'Organization', name: 'Naa College', url: 'https://naacollege.in/' }
     }
   });
