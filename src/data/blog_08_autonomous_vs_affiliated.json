@@ -13,12 +13,30 @@
   },
   "editorial_note_te": "ప్రచురించే ముందు నిర్దిష్ట institution యొక్క ప్రస్తుత regulations, autonomy status ని నిర్ధారించండి. సాధారణ ధోరణులను అందరికీ వర్తించే నియమాలుగా చూపవద్దు. Degree-awarding ఏర్పాటును నేరుగా verify చేయండి.",
   "glossary": [
-    {"term": "Autonomous college", "meaning_te": "నిర్దిష్ట పరిధిలో curriculum, exams, evaluation విషయంలో స్వేచ్ఛ ఉన్న college"},
-    {"term": "Affiliated college", "meaning_te": "ఒక university (JNTU, Andhra University వంటివి) చట్రంలో పనిచేసే college"},
-    {"term": "Regulation", "meaning_te": "మీ admission సంవత్సరానికి వర్తించే academic నిబంధనల పత్రం"},
-    {"term": "Revaluation", "meaning_te": "జవాబు పత్రాన్ని మళ్లీ దిద్దించుకునే అవకాశం"},
-    {"term": "Elective", "meaning_te": "మీరు ఎంచుకోగల ఐచ్ఛిక subjects"},
-    {"term": "Degree-awarding body", "meaning_te": "మీ degree certificate ని అధికారికంగా ఇచ్చే సంస్థ"}
+    {
+      "term": "Autonomous college",
+      "meaning_te": "నిర్దిష్ట పరిధిలో curriculum, exams, evaluation విషయంలో స్వేచ్ఛ ఉన్న college"
+    },
+    {
+      "term": "Affiliated college",
+      "meaning_te": "ఒక university (JNTU, Andhra University వంటివి) చట్రంలో పనిచేసే college"
+    },
+    {
+      "term": "Regulation",
+      "meaning_te": "మీ admission సంవత్సరానికి వర్తించే academic నిబంధనల పత్రం"
+    },
+    {
+      "term": "Revaluation",
+      "meaning_te": "జవాబు పత్రాన్ని మళ్లీ దిద్దించుకునే అవకాశం"
+    },
+    {
+      "term": "Elective",
+      "meaning_te": "మీరు ఎంచుకోగల ఐచ్ఛిక subjects"
+    },
+    {
+      "term": "Degree-awarding body",
+      "meaning_te": "మీ degree certificate ని అధికారికంగా ఇచ్చే సంస్థ"
+    }
   ],
   "sections": [
     {
@@ -58,14 +76,42 @@
         "విద్యార్థులు అడగాల్సిన ప్రశ్నలు: syllabus ఎంత తరచుగా update అవుతుంది? Assessments ఎలా రూపొందిస్తారు? Practical learning నిజంగా అర్థవంతంగా ఉందా? Backlogs, revaluation ఎలా నిర్వహిస్తారు? కేవలం లేబుల్ ఈ ప్రశ్నలకు జవాబు చెప్పదు."
       ],
       "table": {
-        "headers": ["అంశం", "Autonomous college (సాధారణ ధోరణి)", "Affiliated college (సాధారణ ధోరణి)"],
+        "headers": [
+          "అంశం",
+          "Autonomous college (సాధారణ ధోరణి)",
+          "Affiliated college (సాధారణ ధోరణి)"
+        ],
         "rows": [
-          ["Curriculum", "Institution స్థాయిలో ఎక్కువ సౌలభ్యం ఉండవచ్చు", "తరచుగా university నిర్దేశించిన framework"],
-          ["Examinations", "Autonomy నిబంధనల కింద exams నిర్వహించవచ్చు", "University exam system ను అనుసరించవచ్చు"],
-          ["Electives", "స్థానికంగా రూపొందించిన ఎంపికలు ఎక్కువ ఉండవచ్చు", "University, college అందించేదాన్ని బట్టి"],
-          ["Degree / affiliation", "ఖచ్చితమైన degree-awarding ఏర్పాటును తనిఖీ చేయండి", "Degree, academic పర్యవేక్షణ affiliating university తో ముడిపడి ఉంటాయి"],
-          ["Quality", "College ని బట్టి మారుతుంది", "College ని బట్టి మారుతుంది"],
-          ["ఉత్తమ మూల్యాంకన పద్ధతి", "Regulations, బోధన, ఫలితాలు, ఖర్చులను పరిశీలించండి", "Regulations, బోధన, ఫలితాలు, ఖర్చులను పరిశీలించండి"]
+          [
+            "Curriculum",
+            "Institution స్థాయిలో ఎక్కువ సౌలభ్యం ఉండవచ్చు",
+            "తరచుగా university నిర్దేశించిన framework"
+          ],
+          [
+            "Examinations",
+            "Autonomy నిబంధనల కింద exams నిర్వహించవచ్చు",
+            "University exam system ను అనుసరించవచ్చు"
+          ],
+          [
+            "Electives",
+            "స్థానికంగా రూపొందించిన ఎంపికలు ఎక్కువ ఉండవచ్చు",
+            "University, college అందించేదాన్ని బట్టి"
+          ],
+          [
+            "Degree / affiliation",
+            "ఖచ్చితమైన degree-awarding ఏర్పాటును తనిఖీ చేయండి",
+            "Degree, academic పర్యవేక్షణ affiliating university తో ముడిపడి ఉంటాయి"
+          ],
+          [
+            "Quality",
+            "College ని బట్టి మారుతుంది",
+            "College ని బట్టి మారుతుంది"
+          ],
+          [
+            "ఉత్తమ మూల్యాంకన పద్ధతి",
+            "Regulations, బోధన, ఫలితాలు, ఖర్చులను పరిశీలించండి",
+            "Regulations, బోధన, ఫలితాలు, ఖర్చులను పరిశీలించండి"
+          ]
         ]
       }
     },
@@ -135,12 +181,7 @@
       "a_te": "ప్రతిదానికీ ఒకే ప్రమాణాలు, ఆధారాలు వాడండి: curriculum, faculty, labs, placements, fees, student support."
     }
   ],
-  "resources": [
-    {"name": "UGC", "url": "https://www.ugc.gov.in/", "description_te": "ఉన్నత విద్య నిబంధనలు, institutions సమాచారం"},
-    {"name": "AICTE", "url": "https://www.aicte-india.org/", "description_te": "సాంకేతిక విద్య సమాచారం, వర్తించే ఆమోదాలు"},
-    {"name": "JNTU Kakinada", "url": "https://www.jntuk.edu.in/", "description_te": "University notices, regulations, academic సమాచారం"},
-    {"name": "Andhra University", "url": "https://www.andhrauniversity.edu.in/", "description_te": "University, academic సమాచారం"}
-  ],
+  "resources": [],
   "publication_checklist_te": [
     "నిర్దిష్ట institution యొక్క ప్రస్తుత regulations, autonomy status ని తనిఖీ చేయండి.",
     "సాధారణ ధోరణులను సార్వత్రిక నియమాలుగా చూపవద్దు.",
