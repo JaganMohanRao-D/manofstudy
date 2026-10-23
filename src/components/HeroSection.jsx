@@ -535,7 +535,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
           <div>
             <span className="nc-section-kicker">FUND YOUR NEXT STEP</span>
             <h2 id="nc-featured-scholarships-title">FUND YOUR <span>NEXT STEP</span></h2>
-            <p>Explore listed opportunities, compare eligibility details and follow the provider links before you apply.</p>
+            <p>Browse the cards horizontally to explore listed scholarships, compare eligibility details and confirm current application status before applying.</p>
           </div>
           <a className="nc-all-blogs-link" href="/scholarships/">Explore all scholarships <ArrowRight size={16} aria-hidden="true" /></a>
         </div>
