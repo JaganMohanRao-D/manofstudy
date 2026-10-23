@@ -34,12 +34,30 @@
     "18. ముగింపు"
   ],
   "glossary": [
-    {"term": "Specialization", "meaning_te": "ఒక నిర్దిష్ట రంగానికి (AI, Data, Security) అదనపు ప్రాధాన్యం ఇచ్చే CSE రూపం"},
-    {"term": "Syllabus audit", "meaning_te": "ప్రతి foundational subject ను strong, introductory, elective లేదా absent అని గుర్తించి colleges ను పోల్చడం"},
-    {"term": "Data leakage", "meaning_te": "Test data సమాచారం పొరపాటున training లోకి చేరి ఫలితాలు తప్పుగా మంచిగా కనిపించడం"},
-    {"term": "Baseline", "meaning_te": "కొత్త model ను పోల్చడానికి ఉపయోగించే సరళమైన ప్రారంభ model"},
-    {"term": "Threat modelling", "meaning_te": "ఒక system కు ఏ ముప్పులు రావచ్చో ముందే ఆలోచించి నమోదు చేయడం"},
-    {"term": "Reproducible", "meaning_te": "ఇతరులు అదే దశలను అనుసరించి అదే ఫలితాన్ని తిరిగి పొందగలిగేలా ఉండటం"}
+    {
+      "term": "Specialization",
+      "meaning_te": "ఒక నిర్దిష్ట రంగానికి (AI, Data, Security) అదనపు ప్రాధాన్యం ఇచ్చే CSE రూపం"
+    },
+    {
+      "term": "Syllabus audit",
+      "meaning_te": "ప్రతి foundational subject ను strong, introductory, elective లేదా absent అని గుర్తించి colleges ను పోల్చడం"
+    },
+    {
+      "term": "Data leakage",
+      "meaning_te": "Test data సమాచారం పొరపాటున training లోకి చేరి ఫలితాలు తప్పుగా మంచిగా కనిపించడం"
+    },
+    {
+      "term": "Baseline",
+      "meaning_te": "కొత్త model ను పోల్చడానికి ఉపయోగించే సరళమైన ప్రారంభ model"
+    },
+    {
+      "term": "Threat modelling",
+      "meaning_te": "ఒక system కు ఏ ముప్పులు రావచ్చో ముందే ఆలోచించి నమోదు చేయడం"
+    },
+    {
+      "term": "Reproducible",
+      "meaning_te": "ఇతరులు అదే దశలను అనుసరించి అదే ఫలితాన్ని తిరిగి పొందగలిగేలా ఉండటం"
+    }
   ],
   "sections": [
     {
@@ -77,13 +95,49 @@
       "heading_te": "ఒక్క చూపులో పోలిక",
       "heading_en": "Comparison at a Glance",
       "table": {
-        "headers": ["అంశం", "CSE Core", "AI/ML", "Data Science", "Cyber Security"],
+        "headers": [
+          "అంశం",
+          "CSE Core",
+          "AI/ML",
+          "Data Science",
+          "Cyber Security"
+        ],
         "rows": [
-          ["ప్రధాన ప్రాధాన్యం", "విస్తృత computing", "AI, learning systems", "Data విశ్లేషణ, ఆధారాలు", "Systems, సమాచార రక్షణ"],
-          ["సాధారణ పునాదులు", "Programming, algorithms, systems", "Programming, గణితం, statistics", "SQL, statistics, programming", "Networks, OS, programming"],
-          ["ఉపయోగకరమైన అలవాట్లు", "అనేక domains ను అన్వేషించడం", "Models తో ప్రయోగాలు, మూల్యాంకనం", "Data ను ప్రశ్నించడం, communicate చేయడం", "జాగ్రత్తగా దర్యాప్తు చేసి document చేయడం"],
-          ["Project ఉదాహరణలు", "Apps, APIs, systems tools", "Model evaluation project", "Reproducible data analysis", "Defensive review లేదా log analysis"],
-          ["ప్రధాన జాగ్రత్త", "లోతును ఉద్దేశపూర్వకంగా నిర్మించుకోవాలి", "నిజమైన గణితం, data పునాది అవసరం", "Data నాణ్యత లోపాలు తీర్మానాలను వక్రీకరించగలవు", "Practice అధికారం ఉన్న, నైతిక పరిధిలోనే జరగాలి"]
+          [
+            "ప్రధాన ప్రాధాన్యం",
+            "విస్తృత computing",
+            "AI, learning systems",
+            "Data విశ్లేషణ, ఆధారాలు",
+            "Systems, సమాచార రక్షణ"
+          ],
+          [
+            "సాధారణ పునాదులు",
+            "Programming, algorithms, systems",
+            "Programming, గణితం, statistics",
+            "SQL, statistics, programming",
+            "Networks, OS, programming"
+          ],
+          [
+            "ఉపయోగకరమైన అలవాట్లు",
+            "అనేక domains ను అన్వేషించడం",
+            "Models తో ప్రయోగాలు, మూల్యాంకనం",
+            "Data ను ప్రశ్నించడం, communicate చేయడం",
+            "జాగ్రత్తగా దర్యాప్తు చేసి document చేయడం"
+          ],
+          [
+            "Project ఉదాహరణలు",
+            "Apps, APIs, systems tools",
+            "Model evaluation project",
+            "Reproducible data analysis",
+            "Defensive review లేదా log analysis"
+          ],
+          [
+            "ప్రధాన జాగ్రత్త",
+            "లోతును ఉద్దేశపూర్వకంగా నిర్మించుకోవాలి",
+            "నిజమైన గణితం, data పునాది అవసరం",
+            "Data నాణ్యత లోపాలు తీర్మానాలను వక్రీకరించగలవు",
+            "Practice అధికారం ఉన్న, నైతిక పరిధిలోనే జరగాలి"
+          ]
         ]
       }
     },
@@ -207,12 +261,30 @@
       "heading_te": "సాధారణ అపోహలు",
       "heading_en": "Common Myths",
       "myths": [
-        {"myth_te": "Specialization ప్రత్యేకమైన ఉద్యోగానికి హామీ ఇస్తుంది.", "reality_te": "డిగ్రీ నిర్మాణం ఇవ్వగలదు, కానీ employers ఇంకా skills, ఆధారాలను అంచనా వేస్తారు."},
-        {"myth_te": "Core విద్యార్థులు AI లేదా Cyber Security లోకి వెళ్లలేరు.", "reality_te": "Electives, projects, అనుభవం ద్వారా సంబంధిత skills ను నిర్మించవచ్చు, కానీ role అవసరాలను తీర్చాలి."},
-        {"myth_te": "ప్రతి AI ఉద్యోగం అత్యంత గణితపరమైన research.", "reality_te": "Roles చాలా భిన్నంగా ఉంటాయి. కొన్ని engineering, data pipelines, మూల్యాంకనం లేదా applications పై ఎక్కువ దృష్టి పెడతాయి."},
-        {"myth_te": "ప్రకటించిన అత్యధిక package ఉన్న branch ఎల్లప్పుడూ ఉత్తమం.", "reality_te": "వేరుపడిన జీతం సంఖ్యలు సాధారణ ఫలితాలను, భరించగలగడం, learning నాణ్యత లేదా తగినతనాన్ని వివరించవు."},
-        {"myth_te": "Certificates మాత్రమే సామర్థ్యాన్ని నిరూపిస్తాయి.", "reality_te": "Certificates learning ను నిర్మాణాత్మకంగా చేయగలవు, కానీ చూపించగల projects, సరైన వివరణలు విలువైన ఆధారాలు."},
-        {"myth_te": "Branch ఎంపిక ఇతర అన్ని మార్గాలను శాశ్వతంగా మూసివేస్తుంది.", "reality_te": "మార్గాలు మారవచ్చు, కానీ రంగాలు మారడానికి ఉద్దేశపూర్వక learning, కృషి అవసరం."}
+        {
+          "myth_te": "Specialization ప్రత్యేకమైన ఉద్యోగానికి హామీ ఇస్తుంది.",
+          "reality_te": "డిగ్రీ నిర్మాణం ఇవ్వగలదు, కానీ employers ఇంకా skills, ఆధారాలను అంచనా వేస్తారు."
+        },
+        {
+          "myth_te": "Core విద్యార్థులు AI లేదా Cyber Security లోకి వెళ్లలేరు.",
+          "reality_te": "Electives, projects, అనుభవం ద్వారా సంబంధిత skills ను నిర్మించవచ్చు, కానీ role అవసరాలను తీర్చాలి."
+        },
+        {
+          "myth_te": "ప్రతి AI ఉద్యోగం అత్యంత గణితపరమైన research.",
+          "reality_te": "Roles చాలా భిన్నంగా ఉంటాయి. కొన్ని engineering, data pipelines, మూల్యాంకనం లేదా applications పై ఎక్కువ దృష్టి పెడతాయి."
+        },
+        {
+          "myth_te": "ప్రకటించిన అత్యధిక package ఉన్న branch ఎల్లప్పుడూ ఉత్తమం.",
+          "reality_te": "వేరుపడిన జీతం సంఖ్యలు సాధారణ ఫలితాలను, భరించగలగడం, learning నాణ్యత లేదా తగినతనాన్ని వివరించవు."
+        },
+        {
+          "myth_te": "Certificates మాత్రమే సామర్థ్యాన్ని నిరూపిస్తాయి.",
+          "reality_te": "Certificates learning ను నిర్మాణాత్మకంగా చేయగలవు, కానీ చూపించగల projects, సరైన వివరణలు విలువైన ఆధారాలు."
+        },
+        {
+          "myth_te": "Branch ఎంపిక ఇతర అన్ని మార్గాలను శాశ్వతంగా మూసివేస్తుంది.",
+          "reality_te": "మార్గాలు మారవచ్చు, కానీ రంగాలు మారడానికి ఉద్దేశపూర్వక learning, కృషి అవసరం."
+        }
       ]
     },
     {
@@ -237,12 +309,30 @@
       "heading_te": "తరచూ అడిగే ప్రశ్నలు (FAQ)",
       "heading_en": "Frequently Asked Questions",
       "faq": [
-        {"q_te": "CSE Core, CSE AI/ML కంటే మంచిదా?", "a_te": "ఏదీ ఆటోమేటిక్‌గా మంచిది కాదు. Syllabus, faculty, practical పని, సౌలభ్యం, ఖర్చు, మీ ఆసక్తులను పోల్చండి."},
-        {"q_te": "Data Science విద్యార్థి software developer jobs కు దరఖాస్తు చేయవచ్చా?", "a_te": "తరచుగా అవును, employer eligibility నియమాలు అనుమతిస్తే, విద్యార్థికి అవసరమైన programming, data structures, algorithms, project skills ఉంటే. ప్రతి employer ప్రమాణాలను verify చేయండి."},
-        {"q_te": "Cyber Security అంటే hacking మాత్రమేనా?", "a_te": "కాదు. ఇందులో నివారణ, secure engineering, monitoring, incident response, risk management, governance, recovery ఉన్నాయి."},
-        {"q_te": "AI/ML కు నేను గణితంలో అద్భుతంగా ఉండాలా?", "a_te": "గణిత పునాదులు ముఖ్యం, ముఖ్యంగా లోతైన పనికి. Algebra, functions, probability, statistics, linear algebra తో మొదలుపెట్టి క్రమంగా నిర్మించుకోండి."},
-        {"q_te": "ప్రజాదరణ ఉందని specialization ఎంచుకోవాలా?", "a_te": "ప్రజాదరణ మాత్రమే బలహీనమైన కారణం. Curriculum నాణ్యత, తగినతనం, ఆధారాలు, practice చేసే సిద్ధత ఆధారంగా ఎంచుకోండి."},
-        {"q_te": "తర్వాత నా దృష్టిని మార్చుకోవచ్చా?", "a_te": "తరచుగా చేయవచ్చు, కానీ మార్పుకు అదనపు చదువు, projects అవసరం, కొన్ని roles కు అధికారిక prerequisites ఉంటాయి. Branch పేరు పని చేస్తుందని అనుకోకుండా skills నిర్మించడానికి ప్లాన్ చేయండి."}
+        {
+          "q_te": "CSE Core, CSE AI/ML కంటే మంచిదా?",
+          "a_te": "ఏదీ ఆటోమేటిక్‌గా మంచిది కాదు. Syllabus, faculty, practical పని, సౌలభ్యం, ఖర్చు, మీ ఆసక్తులను పోల్చండి."
+        },
+        {
+          "q_te": "Data Science విద్యార్థి software developer jobs కు దరఖాస్తు చేయవచ్చా?",
+          "a_te": "తరచుగా అవును, employer eligibility నియమాలు అనుమతిస్తే, విద్యార్థికి అవసరమైన programming, data structures, algorithms, project skills ఉంటే. ప్రతి employer ప్రమాణాలను verify చేయండి."
+        },
+        {
+          "q_te": "Cyber Security అంటే hacking మాత్రమేనా?",
+          "a_te": "కాదు. ఇందులో నివారణ, secure engineering, monitoring, incident response, risk management, governance, recovery ఉన్నాయి."
+        },
+        {
+          "q_te": "AI/ML కు నేను గణితంలో అద్భుతంగా ఉండాలా?",
+          "a_te": "గణిత పునాదులు ముఖ్యం, ముఖ్యంగా లోతైన పనికి. Algebra, functions, probability, statistics, linear algebra తో మొదలుపెట్టి క్రమంగా నిర్మించుకోండి."
+        },
+        {
+          "q_te": "ప్రజాదరణ ఉందని specialization ఎంచుకోవాలా?",
+          "a_te": "ప్రజాదరణ మాత్రమే బలహీనమైన కారణం. Curriculum నాణ్యత, తగినతనం, ఆధారాలు, practice చేసే సిద్ధత ఆధారంగా ఎంచుకోండి."
+        },
+        {
+          "q_te": "తర్వాత నా దృష్టిని మార్చుకోవచ్చా?",
+          "a_te": "తరచుగా చేయవచ్చు, కానీ మార్పుకు అదనపు చదువు, projects అవసరం, కొన్ని roles కు అధికారిక prerequisites ఉంటాయి. Branch పేరు పని చేస్తుందని అనుకోకుండా skills నిర్మించడానికి ప్లాన్ చేయండి."
+        }
       ]
     },
     {
