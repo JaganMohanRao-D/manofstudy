@@ -80,8 +80,8 @@ const statusLabel: Record<ObservedStatus, string> = {
 
 const makeExportText = (options: GeneratedOption[], profile: GeneratedProfile | null) => {
   const header = [
-    'Naa College — AP EAPCET 2027 Planning Web Options Draft',
-    'Prepared for 2027 admission planning from the available AP EAPCET 2026 historical rank index' + (profile ? ' for rank ' + formatRank(profile.rank) : '') + '.',
+    'Naa College — EAPCET Web Options Draft',
+    'Prepared from the available AP EAPCET 2026 historical rank index' + (profile ? ' for rank ' + formatRank(profile.rank) : '') + '.',
     'This is a personal preference list, not an official 2027 cutoff, counselling submission or guarantee of allotment.',
     '',
   ];
@@ -381,8 +381,8 @@ export const ApWebOptionsBuilder: React.FC = () => {
       const bottomLimit = pageHeight - 18;
       const rank = generatedProfile?.rank || generatedOptions[0]?.profileRank || 0;
       pdf.setProperties({
-        title: 'AP EAPCET 2027 Planning Web Options — Naa College',
-        subject: 'Personal preference list for 2027 admission planning using available AP EAPCET 2026 historical rank data',
+        title: 'EAPCET Web Options Generator — Naa College',
+        subject: 'Personal preference list using available AP EAPCET 2026 historical rank data',
         author: 'Naa College',
         creator: 'Naa College Web Options Builder',
         keywords: 'AP EAPCET, web options, college preferences, Naa College',
@@ -473,7 +473,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
       pdf.setTextColor(93, 108, 99);
       pdf.text(
         pdf.splitTextToSize(
-          '2026 closing ranks are historical references for 2027 planning, not future cutoffs. The four groups are based on rank-to-cutoff gaps, not admission probabilities. Within each group, lower observed branch closing ranks come first as a historical demand signal; no college is boosted by name. This is not an overall college-quality ranking. “Safe Backup” means a larger historical buffer only, never a guarantee.',
+          '2026 closing ranks are historical references, not current or future cutoffs. The four groups are based on rank-to-cutoff gaps, not admission probabilities. Within each group, lower observed branch closing ranks come first as a historical demand signal; no college is boosted by name. This is not an overall college-quality ranking. “Safe Backup” means a larger historical buffer only, never a guarantee.',
           contentWidth,
         ),
         margin, 110,
@@ -775,7 +775,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
       )}
       <section className="apwo-guide" id="apwo-guide" aria-labelledby="apwo-guide-title">
         <header className="apwo-guide-header">
-          <span className="apwo-guide-eyebrow"><BookOpenCheck size={15} /> STUDENT GUIDE · 2027 ADMISSION PLANNING</span>
+          <span className="apwo-guide-eyebrow"><BookOpenCheck size={15} /> STUDENT GUIDE · WEB OPTIONS</span>
           <h2 id="apwo-guide-title">Understand your AP EAPCET web options</h2>
           <p>This planner helps organise preferences using the rank records currently available on Naa College. It does not invent official 2027 cutoffs or decide which college is best for every student.</p>
         </header>
@@ -842,7 +842,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
         </aside>
         <p className="apwo-guide-source-note">Naa College · AP EAPCET {PLANNING_YEAR} admission planning · Rank reference currently available: {HISTORICAL_DATA_YEAR} · Verify official counselling information.</p>
       </section>
-      <footer className="apwo-page-footer"><GraduationCap size={18} /><span>For AP EAPCET 2027 admission planning · historical 2026 rank data · your preferences remain yours.</span></footer>
+      <footer className="apwo-page-footer"><GraduationCap size={18} /><span>AP EAPCET · historical 2026 rank data · your preferences remain yours.</span></footer>
     </main>
   );
 };
