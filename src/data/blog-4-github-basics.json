@@ -2,10 +2,17 @@
   "site": "naacollege.in",
   "slug": "github-basics-for-beginners-complete-guide",
   "title": "GitHub Basics for Beginners: A Complete Step-by-Step Guide for Students",
-  "meta_title": "GitHub Basics for Beginners: Git, Repositories, Commits, Branches and Pull Requests Explained",
-  "meta_description": "Learn GitHub from scratch: what Git and GitHub are, how to create a repository, commit code, use branches, make pull requests and build a strong student profile.",
+  "meta_title": "GitHub Basics for Beginners: A Complete Guide",
+  "meta_description": "Learn Git and GitHub from scratch, including repositories, commits, branches, pull requests and building a student portfolio.",
   "category": "Programming",
-  "tags": ["GitHub", "Git", "version control", "beginners", "open source", "programming for students"],
+  "tags": [
+    "GitHub",
+    "Git",
+    "version control",
+    "beginners",
+    "open source",
+    "programming for students"
+  ],
   "author": "naacollege.in Editorial Team",
   "published_date": "2026-10-23",
   "reading_time_minutes": 12,
@@ -40,18 +47,51 @@
     {
       "heading": "Key Terms You Must Know",
       "table": {
-        "columns": ["Term", "Meaning"],
+        "columns": [
+          "Term",
+          "Meaning"
+        ],
         "rows": [
-          ["Repository (repo)", "A project folder tracked by Git"],
-          ["Commit", "A saved snapshot of your changes with a message"],
-          ["Branch", "A separate line of work, so you can try things safely"],
-          ["Merge", "Combining changes from one branch into another"],
-          ["Clone", "Copying a remote repository to your computer"],
-          ["Fork", "Your own copy of someone else's repository on GitHub"],
-          ["Push", "Sending your local commits to GitHub"],
-          ["Pull", "Getting the latest changes from GitHub"],
-          ["Pull request (PR)", "A request to merge your changes into another branch or repo"],
-          ["Issue", "A task, bug or idea logged in a repository"]
+          [
+            "Repository (repo)",
+            "A project folder tracked by Git"
+          ],
+          [
+            "Commit",
+            "A saved snapshot of your changes with a message"
+          ],
+          [
+            "Branch",
+            "A separate line of work, so you can try things safely"
+          ],
+          [
+            "Merge",
+            "Combining changes from one branch into another"
+          ],
+          [
+            "Clone",
+            "Copying a remote repository to your computer"
+          ],
+          [
+            "Fork",
+            "Your own copy of someone else's repository on GitHub"
+          ],
+          [
+            "Push",
+            "Sending your local commits to GitHub"
+          ],
+          [
+            "Pull",
+            "Getting the latest changes from GitHub"
+          ],
+          [
+            "Pull request (PR)",
+            "A request to merge your changes into another branch or repo"
+          ],
+          [
+            "Issue",
+            "A task, bug or idea logged in a repository"
+          ]
         ]
       }
     },
@@ -104,20 +144,59 @@
     {
       "heading": "Most Useful Git Commands",
       "table": {
-        "columns": ["Command", "What it does"],
+        "columns": [
+          "Command",
+          "What it does"
+        ],
         "rows": [
-          ["git status", "Shows changed and staged files"],
-          ["git add file", "Stages a file for the next commit"],
-          ["git commit -m \"msg\"", "Saves staged changes"],
-          ["git log --oneline", "Shows a short commit history"],
-          ["git diff", "Shows what changed in your files"],
-          ["git clone url", "Copies a repo to your computer"],
-          ["git pull", "Downloads and merges the latest changes"],
-          ["git push", "Uploads your commits"],
-          ["git branch", "Lists branches"],
-          ["git switch -c name", "Creates and moves to a new branch"],
-          ["git merge name", "Merges a branch into the current one"],
-          ["git restore file", "Discards unstaged changes in a file"]
+          [
+            "git status",
+            "Shows changed and staged files"
+          ],
+          [
+            "git add file",
+            "Stages a file for the next commit"
+          ],
+          [
+            "git commit -m \"msg\"",
+            "Saves staged changes"
+          ],
+          [
+            "git log --oneline",
+            "Shows a short commit history"
+          ],
+          [
+            "git diff",
+            "Shows what changed in your files"
+          ],
+          [
+            "git clone url",
+            "Copies a repo to your computer"
+          ],
+          [
+            "git pull",
+            "Downloads and merges the latest changes"
+          ],
+          [
+            "git push",
+            "Uploads your commits"
+          ],
+          [
+            "git branch",
+            "Lists branches"
+          ],
+          [
+            "git switch -c name",
+            "Creates and moves to a new branch"
+          ],
+          [
+            "git merge name",
+            "Merges a branch into the current one"
+          ],
+          [
+            "git restore file",
+            "Discards unstaged changes in a file"
+          ]
         ]
       }
     },
@@ -190,12 +269,27 @@
     {
       "heading": "30-Day Practice Plan",
       "table": {
-        "columns": ["Week", "Goal"],
+        "columns": [
+          "Week",
+          "Goal"
+        ],
         "rows": [
-          ["Week 1", "Create account, install Git, make your first repo, practise add, commit and push"],
-          ["Week 2", "Learn branches, merging and resolving a simple conflict"],
-          ["Week 3", "Fork a practice repo, open your first pull request, write good READMEs"],
-          ["Week 4", "Publish a portfolio with GitHub Pages and make a profile README"]
+          [
+            "Week 1",
+            "Create account, install Git, make your first repo, practise add, commit and push"
+          ],
+          [
+            "Week 2",
+            "Learn branches, merging and resolving a simple conflict"
+          ],
+          [
+            "Week 3",
+            "Fork a practice repo, open your first pull request, write good READMEs"
+          ],
+          [
+            "Week 4",
+            "Publish a portfolio with GitHub Pages and make a profile README"
+          ]
         ]
       }
     }
