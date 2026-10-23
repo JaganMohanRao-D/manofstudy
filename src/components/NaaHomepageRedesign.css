@@ -1395,6 +1395,40 @@ html.dark .naa-wireframe-home .nc-hero h1 span {
 .nc-featured-scholarship-grid::-webkit-scrollbar-thumb{border:2px solid #fff1f2;border-radius:999px;background:#e87991}
 .nc-featured-scholarship-grid::-webkit-scrollbar-thumb:hover{background:#be123c}
 @media(prefers-reduced-motion:reduce){.mos-scholarship-shining-title,.nc-featured-scholarship-title{animation:none;background-position:0 center}.nc-featured-scholarship-card,.mos-scholarship-title-link{transition:none}}
+ 
+/* Latest article feature shown immediately after the homepage scholarship directory. */
+.nc-latest-blog-section{padding-block:clamp(34px,5vw,64px) clamp(48px,6vw,76px)}
+.nc-latest-blog-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:26px;margin-bottom:21px}
+.nc-latest-blog-heading-copy{max-width:760px;min-width:0}
+.nc-latest-blog-heading h2{margin:10px 0 9px;color:#132337;font-family:"Sora","Plus Jakarta Sans",sans-serif;font-size:clamp(27px,3.4vw,39px);font-weight:800;line-height:1.15;letter-spacing:-.04em}
+.nc-latest-blog-heading h2 span{color:#a87d0d}
+.nc-latest-blog-heading p{max-width:690px;margin:0;color:#637184;font-size:13px;line-height:1.8}
+.nc-latest-blog-view-all{display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;gap:9px;min-height:43px;margin-bottom:3px;padding:0 15px;border:1px solid #dce7f5;border-radius:12px;background:#fff;color:#24527e;font-size:12px;font-weight:850;text-decoration:none;box-shadow:0 5px 17px rgba(25,64,115,.045);transition:background .18s ease,border-color .18s ease,transform .18s ease}
+.nc-latest-blog-view-all:hover{transform:translateY(-2px);border-color:#b8d2f2;background:#f3f8ff}
+.nc-latest-blog-card{display:grid;grid-template-columns:minmax(210px,.72fr) minmax(0,1.5fr);min-width:0;overflow:hidden;border:1px solid #e1e8ed;border-radius:22px;background:#fff;box-shadow:0 12px 32px rgba(19,35,55,.055);transition:border-color .2s ease,box-shadow .2s ease}
+.nc-latest-blog-card:hover{border-color:#cbd9e6;box-shadow:0 17px 38px rgba(19,35,55,.085)}
+.nc-latest-blog-visual{position:relative;display:flex;min-height:250px;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(135deg,#f0f7ff 0%,#eaf7f1 100%);text-decoration:none}
+.nc-latest-blog-visual-orbit{position:absolute;left:50%;top:50%;border:1px solid rgba(36,107,214,.15);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none}
+.nc-latest-blog-visual-orbit-one{width:244px;height:244px}
+.nc-latest-blog-visual-orbit-two{width:174px;height:174px;border-color:rgba(40,104,71,.18)}
+.nc-latest-blog-book-icon{position:relative;z-index:1;display:grid;width:100px;height:100px;place-items:center;border:1px solid rgba(36,107,214,.15);border-radius:26px;background:rgba(255,255,255,.92);color:#246bd6;box-shadow:0 17px 35px rgba(36,107,214,.12);transform:rotate(-4deg);transition:transform .2s ease}
+.nc-latest-blog-card:hover .nc-latest-blog-book-icon{transform:rotate(0) translateY(-3px)}
+.nc-latest-blog-visual-label{position:absolute;right:15px;bottom:15px;left:15px;display:flex;align-items:center;justify-content:center;gap:7px;color:#2a6549;font-size:9px;font-weight:900;letter-spacing:.13em;text-align:center}
+.nc-latest-blog-content{display:flex;min-width:0;flex-direction:column;align-items:flex-start;justify-content:center;padding:clamp(22px,4vw,40px)}
+.nc-latest-blog-meta{display:flex;flex-wrap:wrap;align-items:center;gap:9px;color:#456b8d;font-size:10px;font-weight:850;letter-spacing:.035em}
+.nc-latest-blog-meta-dot{width:4px;height:4px;border-radius:50%;background:#36a87f}
+.nc-latest-blog-content h3{max-width:800px;margin:12px 0 10px;color:#132337;font-family:"Sora","Plus Jakarta Sans",sans-serif;font-size:clamp(21px,2.45vw,30px);font-weight:800;line-height:1.28;letter-spacing:-.035em}
+.nc-latest-blog-content h3 a{color:inherit;text-decoration:none;text-underline-offset:4px}
+.nc-latest-blog-content h3 a:hover{color:#245fae;text-decoration:underline}
+.nc-latest-blog-content>p{display:-webkit-box;max-width:760px;margin:0;color:#637184;font-size:13px;line-height:1.85;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+.nc-latest-blog-read{display:inline-flex;align-items:center;gap:8px;margin-top:20px;color:#246bd6;font-size:12px;font-weight:900;text-decoration:none}
+.nc-latest-blog-read svg,.nc-latest-blog-view-all svg{transition:transform .18s ease}
+.nc-latest-blog-read:hover svg,.nc-latest-blog-view-all:hover svg{transform:translateX(3px)}
+.nc-latest-blog-empty{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding:20px 22px;border:1px dashed #dce7f5;border-radius:16px;background:#f8fbff;color:#526579;font-size:13px;line-height:1.7}
+.nc-latest-blog-empty a{display:inline-flex;align-items:center;gap:7px;color:#245fae;font-weight:850;text-decoration:none}
+@media(max-width:760px){.nc-latest-blog-heading{align-items:flex-start;flex-direction:column;gap:15px}.nc-latest-blog-card{grid-template-columns:minmax(0,1fr)}.nc-latest-blog-visual{min-height:180px}.nc-latest-blog-visual-orbit-one{width:220px;height:220px}.nc-latest-blog-visual-orbit-two{width:152px;height:152px}.nc-latest-blog-content{padding:23px}.nc-latest-blog-content h3{font-size:23px}.nc-latest-blog-view-all{margin-bottom:0}}
+@media(prefers-reduced-motion:reduce){.nc-latest-blog-card,.nc-latest-blog-view-all,.nc-latest-blog-book-icon,.nc-latest-blog-read svg,.nc-latest-blog-view-all svg{transition:none}.nc-latest-blog-card:hover .nc-latest-blog-book-icon{transform:rotate(-4deg)}.nc-latest-blog-view-all:hover{transform:none}}
+
 
 
 /* ===== Premium, reference-inspired homepage sections ===== */
