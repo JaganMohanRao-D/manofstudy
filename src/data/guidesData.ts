@@ -152,7 +152,7 @@ Understanding this dynamic is critical: **Phase-2 is not a leftover scrap round;
         callout: {
           type: 'checklist',
           title: 'The Safe Bunk Formula',
-          text: 'If your current attendance is A out of C total periods, the maximum safe bunks B you can take while staying above 75% is: B = floor((A - 0.75 * C) / 0.75). Use MAN OF STUDY’s Attendance Defender tool for exact dynamic calculations.',
+          text: 'If your current attendance is A out of C total periods, the maximum safe bunks B you can take while staying above 75% is: B = floor((A - 0.75 * C) / 0.75). Use Naa College’s Attendance Defender tool for exact dynamic calculations.',
         },
       },
       {
