@@ -748,6 +748,8 @@ export async function wordTextToPdf(
     const looksLikeHtml = /<(?:!doctype|html|head|body|div|p|h[1-6]|table|style|meta)\b/i.test(raw);
     if ((isLegacyDoc || extension === 'html' || extension === 'htm') && looksLikeHtml) {
       html = raw;
+    } else if (isLegacyDoc && !looksLikeHtml) {
+      throw new Error('This appears to be a legacy binary .doc file, which cannot be safely converted in the browser. Open it in Word or LibreOffice and save it as .docx, then try again.');
     } else {
       plainText = raw.replace(/\r\n?/g, '\n');
     }
