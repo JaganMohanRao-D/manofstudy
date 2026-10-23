@@ -191,7 +191,7 @@ export default function TgTopColleges({
   // Copy college details
   const handleCopyCollege = (item, e) => {
     e.stopPropagation();
-    const text = `TG EAPCET 2026 Observed OC Rank [${item.collegeCode} - ${item.branchCode}]\nMedian OC Rank: ${formatRank(item.stats.medianRank)}\nHighest Observed OC: #${formatRank(item.stats.highestRank)}\nLowest Observed OC: #${formatRank(item.stats.lowestRank)}\nValid OC Allotments: ${item.stats.validAllotments} students\nDistrict: ${item.district}\nSource: Man of Study (Official 2026 Allotment Dataset)`;
+    const text = `TG EAPCET 2026 Observed OC Rank [${item.collegeCode} - ${item.branchCode}]\nMedian OC Rank: ${formatRank(item.stats.medianRank)}\nHighest Observed OC: #${formatRank(item.stats.highestRank)}\nLowest Observed OC: #${formatRank(item.stats.lowestRank)}\nValid OC Allotments: ${item.stats.validAllotments} students\nDistrict: ${item.district}\nSource: Naa College (2026 Allotment Dataset)`;
     navigator.clipboard?.writeText(text);
     setCopiedCollegeCode(item.collegeCode);
     setTimeout(() => setCopiedCollegeCode(null), 2000);
