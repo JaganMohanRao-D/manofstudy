@@ -19,16 +19,39 @@ const sourcePaths = [
   'src/data/blog_05_score_9_sgpa_first_year.json',
   'src/data/blog_06_c_programming_dsa_roadmap.json',
   'src/data/blog_08_autonomous_vs_affiliated.json',
-  'src/data/blog_10_first_tech_internship_second_year.json'
+  'src/data/blog_10_first_tech_internship_second_year.json',
+  'src/data/blog-1-chatgpt-vs-claude.json',
+  'src/data/blog-2-gemini-chatgpt-grok-meta-claude.json',
+  'src/data/blog-3-iiit-hyderabad-admission-ugee.json',
+  'src/data/blog-4-github-basics.json'
 ];
 for (const sourcePath of sourcePaths) readJson(sourcePath);
 
 if (!Array.isArray(baseline) || baseline.length === 0) throw new Error('[Blog] Existing article data must be a non-empty array.');
-if (!Array.isArray(editorial) || editorial.length !== 7) {
-  throw new Error('[Blog] Expected seven normalized editorial articles; found ' + (editorial?.length ?? 'invalid data'));
+if (!Array.isArray(editorial) || editorial.length !== 11) {
+  throw new Error('[Blog] Expected eleven normalized editorial articles; found ' + (editorial?.length ?? 'invalid data'));
 }
 
 const articles = [...baseline, ...editorial];
+const requiredEnglishBlogs = [
+  { slug: 'chatgpt-vs-claude-which-ai-is-better-for-students', path: 'src/data/blog-1-chatgpt-vs-claude.json' },
+  { slug: 'gemini-vs-chatgpt-vs-grok-meta-ai-vs-claude', path: 'src/data/blog-2-gemini-chatgpt-grok-meta-claude.json' },
+  { slug: 'how-to-join-iiit-hyderabad-without-jee-main-ugee', path: 'src/data/blog-3-iiit-hyderabad-admission-ugee.json' },
+  { slug: 'github-basics-for-beginners-complete-guide', path: 'src/data/blog-4-github-basics.json' }
+];
+for (const expected of requiredEnglishBlogs) {
+  const source = readJson(expected.path);
+  const article = editorial.find((item) => item.slug === expected.slug);
+  if (source.slug !== expected.slug || !source.meta_title || !source.meta_description) {
+    throw new Error('[Blog] English source/SEO metadata is invalid: ' + expected.path);
+  }
+  if (!article) throw new Error('[Blog] New English article was not integrated: ' + expected.slug);
+  if (!article.metaTitle || !article.metaDescription) throw new Error('[Blog] SEO metadata missing after normalization: ' + expected.slug);
+  if (/[\u0C00-\u0C7F]/.test([article.title, article.summary, article.content].join(' '))) {
+    throw new Error('[Blog] New article must remain English-only: ' + expected.slug);
+  }
+  if ((article.sources || []).length !== 0) throw new Error('[Blog] Third-party source lists must not be rendered: ' + expected.slug);
+}
 const slugs = new Set();
 const errors = [];
 for (const article of articles) {
