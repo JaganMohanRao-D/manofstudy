@@ -373,7 +373,7 @@ const SiteUxFixes: React.FC = () => {
       body.mos-regional-light #main-header { background:rgba(255,255,255,.96) !important; color:#172033 !important; border-bottom-color:#e2e8f0 !important; box-shadow:0 4px 18px rgba(15,23,42,.06) !important; }
       body.mos-regional-light #brand-logo { color:#172033 !important; }
       body.mos-regional-light #brand-logo .mos-brand-mark { background:#fff !important; border-color:#dbe3ec !important; box-shadow:0 2px 8px rgba(15,23,42,.06) !important; }
-      body.mos-regional-light #brand-logo .mos-brand-mark img { content:url('/MANOFSTUDY_LOGO.png') !important; }
+      body.mos-regional-light #brand-logo .mos-brand-mark img { content:url('/Naa%20College%20logo.webp') !important; }
       body.mos-regional-light #brand-logo .mos-brand-wordmark { color:#0f172a !important; text-shadow:none !important; }
       body.mos-regional-light #brand-logo .mos-brand-tagline { color:#64748b !important; opacity:1 !important; }
       body.mos-regional-light #brand-logo:hover .mos-brand-wordmark { color:#0e7490 !important; }
