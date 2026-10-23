@@ -117,7 +117,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
 
   // HTML content for HTML to PDF
   const [htmlCode, setHtmlCode] = useState<string>(
-    '<h1>Student Project Report</h1>\n<p>Generated smoothly with MAN OF STUDY client-side engine.</p>'
+    '<h1>Student Project Report</h1>\n<p>Document content goes here.</p>'
   );
 
   // Sign Pad State
@@ -659,7 +659,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
         }
 
         case 'html-to-pdf': {
-          const res = await htmlToPdf(htmlCode, 'MAN OF STUDY Document', (pct, msg) => {
+          const res = await htmlToPdf(htmlCode, 'Converted Document', (pct, msg) => {
             setProgress((prev) => ({ ...prev, progressPercent: pct, statusMessage: msg }));
           });
           const downloadUrl = URL.createObjectURL(res.blob);
@@ -1370,7 +1370,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
                   type="text"
                   value={watermarkText}
                   onChange={(e) => setWatermarkText(e.target.value)}
-                  placeholder="CONFIDENTIAL / MAN OF STUDY"
+                  placeholder="Enter optional watermark text"
                   className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 font-bold uppercase tracking-wider"
                 />
               </div>
