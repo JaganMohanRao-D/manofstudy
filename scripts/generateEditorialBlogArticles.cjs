@@ -36,6 +36,17 @@ function str(value) {
   return '';
 }
 function paragraphs(value) { return asArray(value).map(str).filter(Boolean).join('\n\n'); }
+function sanitizeBlogContent(input) {
+  let content = String(input || '');
+  const sourceHeading = /^\s*#{2,4}\s*(?:(?:official\s+(?:and\s+)?(?:reference\s+)?)|(?:reference\s+)|(?:external\s+)|(?:additional\s+))?(?:sources?|references?|resources|further reading|reference links|official links)(?:\s*(?:&|and)\s*(?:further reading|references?|sources?))?\s*$/im;
+  const match = sourceHeading.exec(content);
+  if (match) content = content.slice(0, match.index);
+  content = content.replace(/\[([^\]]+)\]\(\s*https?:\/\/[^)\s]+[^)]*\)/gi, '$1');
+  content = content.replace(/<https?:\/\/[^>]+>/gi, '');
+  content = content.replace(/\bhttps?:\/\/[^\s)\]]+/gi, '');
+  content = content.replace(/\bwww\.[^\s)\]]+/gi, '');
+  return content.replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+}
 function tableMarkdown(table) {
   if (!table || !Array.isArray(table.headers) || !Array.isArray(table.rows)) return '';
   const cell = value => str(value).replace(/\s+/g, ' ').replace(/\|/g, '\\|').trim();
@@ -104,17 +115,10 @@ function normalize(raw, spec) {
   const checklist = bullets(raw.final_checklist_te); if (checklist) parts.push('## Final Checklist\n\n' + checklist);
   const conclusion = paragraphs(raw.conclusion_te); if (conclusion) parts.push('## Conclusion\n\n' + conclusion);
   const faq = faqs(raw.faq); if (faq) parts.push('## Frequently Asked Questions\n\n' + faq);
-  const content = parts.join('\n\n').replace(/\n{3,}/g, '\n\n').trim();
+  const content = sanitizeBlogContent(parts.join('\n\n').replace(/\n{3,}/g, '\n\n').trim());
   const slug = String(raw.seo?.slug || '').replace(/^\/+|\/+$/g, '');
   const tags = [...new Set([...spec.tags, raw.seo?.primary_keyword, ...asArray(raw.seo?.secondary_keywords)].map(str).filter(Boolean))];
-  const references = asArray(raw.resources).map(resource => ({
-    label: str(resource.name || resource.label), url: str(resource.url)
-  })).filter(item => item.label && /^https?:\/\//i.test(item.url));
-  if (spec.path === 'src/data/blog_01_cse_core_vs_specializations.json') references.push(
-    {label:'AP EAPCET official portal',url:'https://cets.apsche.ap.gov.in/EAPCET/Eapcet/EAPCET_HomePage'},
-    {label:'TG EAPCET official portal',url:'https://tgeapcet.nic.in/default.aspx'}
-  );
-  const sources = [...new Map(references.map(item => [item.url, item])).values()];
+  const sources = [];
   return {
     slug, title: str(raw.title_te || raw.title_en || raw.seo?.title),
     category: spec.category, tags, status: 'published',
@@ -139,7 +143,7 @@ const articles = specs.map(spec => {
   const wordCount = article.content.split(/\s+/).filter(Boolean).length;
   const headingCount = (article.content.match(/^##\s+.+$/gm) || []).length;
   if (!article.title || !article.summary || article.content.length < 1200 || wordCount < 250 || headingCount < 4) throw new Error('[Blog integration] Incomplete article: ' + article.slug);
-  if (!article.sources.length || article.sources.some(source => !/^https?:\/\//i.test(source.url))) throw new Error('[Blog integration] Missing/invalid references: ' + article.slug);
+  if (!Array.isArray(article.sources) || article.sources.length !== 0) throw new Error('[Blog integration] Third-party source links must remain disabled: ' + article.slug);
   if (article.toolLinks.some(link => !link.href || !link.href.startsWith('/'))) throw new Error('[Blog integration] Non-local tool link: ' + article.slug);
   return article;
 });
