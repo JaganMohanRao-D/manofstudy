@@ -44,6 +44,8 @@ const publishedArticles = [...articlesData, ...editorialArticlesData]
   )
   .slice(0, 3);
 
+const latestBlogArticle = publishedArticles[0] || null;
+
 const scholarshipDeadlineDate = (value) => {
   const text = String(value || '');
   const iso = text.match(/\b(20\d{2})-(\d{1,2})-(\d{1,2})\b/);
@@ -568,6 +570,50 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         <p className="nc-featured-scholarship-note"><VerifiedIcon size={15} aria-hidden="true" /> Dates and eligibility can change. Confirm details on the scholarship provider’s official portal before applying.</p>
       </section>
 
+      <section id="nc-latest-blog-after-scholarship" className="nc-latest-blog-section nc-page-width" aria-labelledby="nc-latest-blog-title">
+        <div className="nc-latest-blog-heading">
+          <div className="nc-latest-blog-heading-copy">
+            <span className="nc-section-kicker">LATEST FROM THE BLOG</span>
+            <h2 id="nc-latest-blog-title">Fresh guides for your <span>next step.</span></h2>
+            <p>Practical reads on AI tools, college admissions, programming and student life — written to help you make informed decisions.</p>
+          </div>
+          <a className="nc-latest-blog-view-all" href="/blog/" aria-label="View all Naa College blogs">
+            View all blogs <ArrowRight size={17} aria-hidden="true" />
+          </a>
+        </div>
+
+        {latestBlogArticle ? (
+          <article className="nc-latest-blog-card">
+            <a
+              className="nc-latest-blog-visual"
+              href={'/blog/' + latestBlogArticle.slug + '/'}
+              aria-label={'Read ' + latestBlogArticle.title}
+            >
+              <span className="nc-latest-blog-visual-orbit nc-latest-blog-visual-orbit-one" aria-hidden="true" />
+              <span className="nc-latest-blog-visual-orbit nc-latest-blog-visual-orbit-two" aria-hidden="true" />
+              <span className="nc-latest-blog-book-icon" aria-hidden="true"><BookOpen size={42} strokeWidth={1.5} /></span>
+              <span className="nc-latest-blog-visual-label"><Sparkles size={13} aria-hidden="true" /> STUDENT KNOWLEDGE HUB</span>
+            </a>
+            <div className="nc-latest-blog-content">
+              <div className="nc-latest-blog-meta">
+                <span>{latestBlogArticle.category || 'Student guide'}</span>
+                <span className="nc-latest-blog-meta-dot" aria-hidden="true" />
+                <span>{latestBlogArticle.readingTimeMinutes || Math.max(2, Math.ceil(String(latestBlogArticle.content || '').split(/\s+/).filter(Boolean).length / 220))} min read</span>
+              </div>
+              <h3><a href={'/blog/' + latestBlogArticle.slug + '/'}>{latestBlogArticle.title}</a></h3>
+              <p>{latestBlogArticle.summary}</p>
+              <a className="nc-latest-blog-read" href={'/blog/' + latestBlogArticle.slug + '/'}>
+                Read the latest article <ArrowRight size={17} aria-hidden="true" />
+              </a>
+            </div>
+          </article>
+        ) : (
+          <div className="nc-latest-blog-empty">
+            New student guides are being prepared. Visit the blog to explore published articles.
+            <a href="/blog/">View all blogs <ArrowRight size={16} aria-hidden="true" /></a>
+          </div>
+        )}
+      </section>
 
       <section className="nc-naacox-section" aria-labelledby="nc-naacox-title">
         <div className="nc-page-width">
