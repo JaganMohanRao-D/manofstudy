@@ -172,10 +172,10 @@ export default function ApEapcetRankPredictor() {
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="max-w-3xl">
             <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-white/80 px-3 py-1.5 text-[10px] font-black uppercase tracking-[.16em] text-cyan-800 dark:border-cyan-800 dark:bg-slate-900/80 dark:text-cyan-300">
-              <TrendingUp className="h-3.5 w-3.5" /> AP EAPCET · 2027 Planning
+              <TrendingUp className="h-3.5 w-3.5" /> AP EAPCET · Historical Data
             </div>
-            <h1 className="text-2xl font-black tracking-tight text-slate-950 dark:text-white sm:text-3xl">AP EAPCET Rank Predictor · 2027 Planning</h1>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">Estimate a possible rank range for 2027 planning from EAPCET subject marks and Intermediate/board marks using the supplied 75:25 weighting and calibration anchors. This is an estimate, not an official rank result.</p>
+            <h1 className="text-2xl font-black tracking-tight text-slate-950 dark:text-white sm:text-3xl">AP Rank Predictor</h1>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">Estimate a possible rank range from EAPCET subject marks and Intermediate/board marks using the supplied 75:25 weighting and calibration anchors. This is an estimate, not an official rank result.</p>
           </div>
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-cyan-200 bg-white text-cyan-700 shadow-sm dark:border-cyan-800 dark:bg-slate-900 dark:text-cyan-300">
             <Calculator className="h-7 w-7" />
