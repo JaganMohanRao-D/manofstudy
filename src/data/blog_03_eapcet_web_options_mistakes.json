@@ -17,12 +17,30 @@
     "గమనిక: ఇక్కడ ఉన్న సమాచారం సాధారణ మార్గదర్శకం మాత్రమే. తేదీలు, rules, fees ప్రతి సంవత్సరం మారవచ్చు. కాబట్టి ఎప్పుడూ official portal లోనే చూసి నిర్ధారించుకోండి."
   ],
   "glossary": [
-    {"term": "Web options", "meaning_te": "మీకు నచ్చిన colleges, branches ని preference order లో online లో ఎంచుకునే list"},
-    {"term": "Counselling", "meaning_te": "rank ఆధారంగా seat ఇచ్చే official ప్రక్రియ"},
-    {"term": "Allotment", "meaning_te": "మీకు ఒక college లో seat కేటాయించడం"},
-    {"term": "College code", "meaning_te": "ప్రతి college కి ఉండే ప్రత్యేక కోడ్. పేర్లు ఒకేలా ఉన్నా code వేరుగా ఉంటుంది"},
-    {"term": "Cutoff / Closing rank", "meaning_te": "గత సంవత్సరం ఒక branch లో చివరి seat ఏ rank కి వచ్చిందో చెప్పే సంఖ్య"},
-    {"term": "Reporting", "meaning_te": "seat వచ్చాక college లో లేదా portal లో చేరినట్టు నిర్ధారించడం"}
+    {
+      "term": "Web options",
+      "meaning_te": "మీకు నచ్చిన colleges, branches ని preference order లో online లో ఎంచుకునే list"
+    },
+    {
+      "term": "Counselling",
+      "meaning_te": "rank ఆధారంగా seat ఇచ్చే official ప్రక్రియ"
+    },
+    {
+      "term": "Allotment",
+      "meaning_te": "మీకు ఒక college లో seat కేటాయించడం"
+    },
+    {
+      "term": "College code",
+      "meaning_te": "ప్రతి college కి ఉండే ప్రత్యేక కోడ్. పేర్లు ఒకేలా ఉన్నా code వేరుగా ఉంటుంది"
+    },
+    {
+      "term": "Cutoff / Closing rank",
+      "meaning_te": "గత సంవత్సరం ఒక branch లో చివరి seat ఏ rank కి వచ్చిందో చెప్పే సంఖ్య"
+    },
+    {
+      "term": "Reporting",
+      "meaning_te": "seat వచ్చాక college లో లేదా portal లో చేరినట్టు నిర్ధారించడం"
+    }
   ],
   "sections": [
     {
@@ -166,11 +184,7 @@
     "Save చేసిన list ని screenshot / print తీసుకున్నాను",
     "Allotment, reporting తేదీలను calendar లో నోట్ చేసుకున్నాను"
   ],
-  "resources": [
-    {"name": "AP EAPCET official portal", "url": "https://cets.apsche.ap.gov.in/eapcet/Eapcet/EAPCET_HomePage", "description_te": "అధికారిక exam సమాచారం, notices"},
-    {"name": "AP Common Admissions Portal", "url": "https://cap.apcfss.in/", "description_te": "AP admissions, college, course వివరాలు"},
-    {"name": "TG EAPCET counselling portal", "url": "https://www.tgeapcet.nic.in/", "description_te": "Telangana counselling user guide, option entry, allotment, notices"}
-  ],
+  "resources": [],
   "publication_checklist_te": [
     "ప్రస్తుత admission year కి తేదీలు, process వివరాలు update చేయండి.",
     "Option-entry, allotment rules ని official guide లో చూసుకోవాలని స్పష్టంగా చెప్పండి.",
