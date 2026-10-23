@@ -3,7 +3,6 @@ import {
   Sparkles,
   Compass,
   Award,
-  Flame,
   ShieldCheck,
   ShieldAlert,
   BookOpen,
@@ -343,13 +342,13 @@ export const FeaturesHub = ({
     },
     {
       title: 'FOR AP STUDENTS',
-      subtitle: 'AP EAPCET 2025–2026 historical allotment data for 2027 admission planning.',
+      subtitle: 'AP EAPCET historical allotment data and college exploration tools.',
       tools: [
-        { workspace: 'ap-allotments', title: 'AP Allotment Records · 2025–2026', description: 'Explore historical college, branch, district and candidate records to inform 2027 planning.', icon: Database },
-        { workspace: 'ap-predictor', title: 'AP College Predictor · 2027 Planning', description: 'Explore rank matches with the available 2026 historical allotment data; actual 2027 cutoffs may differ.', icon: Compass },
-        { workspace: 'ap-web-options', title: 'AP Web Options Builder · 2027 Planning', description: 'Build an editable preference ladder from 2026 historical closing ranks; no institution is promoted by name.', icon: ClipboardCheck },
-        { workspace: 'ap-rank-predictor', title: 'AP Rank Predictor · 2027 Planning', description: 'Estimate a possible rank from marks and the tool’s stated anchors; not an official rank result.', icon: Award },
-        { workspace: 'ap-top-colleges', title: 'AP B.Tech Colleges', description: 'Compare observed 2026 branch-wise rank patterns to inform planning; this is not a 2027 college-quality ranking.', icon: Award },
+        { workspace: 'ap-allotments', title: 'AP EAPCET College-Wise Allotments', description: 'Explore historical college, branch, district and candidate records from the available 2025–2026 dataset.', icon: Database },
+        { workspace: 'ap-predictor', title: 'AP College Predictor', description: 'Explore rank matches with the available 2026 historical allotment data; future cutoffs may differ.', icon: Compass },
+        { workspace: 'ap-web-options', title: 'EAPCET Web Options Generator', description: 'Build an editable preference list from 2026 historical closing ranks; no institution is promoted by name.', icon: ClipboardCheck },
+        { workspace: 'ap-rank-predictor', title: 'AP Rank Predictor', description: 'Estimate a possible rank from marks and the tool’s stated anchors; not an official rank result.', icon: Award },
+        { workspace: 'ap-top-colleges', title: 'AP B.Tech Colleges', description: 'Compare observed 2026 branch-wise rank patterns; this is not an overall college-quality ranking.', icon: Award },
       ],
     },
   ];
