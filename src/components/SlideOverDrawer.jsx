@@ -192,26 +192,6 @@ export const SlideOverDrawer = ({
                 <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 group-hover:text-slate-700 dark:group-hover:text-slate-300 shrink-0" />
               </button>
 
-              <button
-                type="button"
-                id="drawer-counseling-eapcet-btn"
-                onClick={() => handleNavigate('eapcet')}
-                className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 dark:bg-slate-900/60 dark:hover:bg-slate-800/60 dark:border-slate-800 text-left transition-colors cursor-pointer group shadow-2xs"
-              >
-                <div className="flex items-start gap-2.5">
-                  <Flame className="w-4 h-4 text-amber-500 dark:text-amber-400 shrink-0 mt-0.5" />
-                  <div>
-                    <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition-colors flex items-center gap-1.5">
-                      <span>EAPCET Phase-2 Seat Radar</span>
-                      <span className="text-[9px] bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300 border border-amber-200 dark:border-amber-500/30 px-1.5 py-0.2 rounded font-mono font-semibold">LIVE</span>
-                    </div>
-                    <div className="text-[10px] text-slate-600 dark:text-slate-400 leading-normal mt-0.5">
-                      College branch cutoffs, vacant seat allotment &amp; fee tier checker
-                    </div>
-                  </div>
-                </div>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 group-hover:text-slate-700 dark:group-hover:text-slate-300 shrink-0" />
-              </button>
 
               <button
                 type="button"
@@ -223,7 +203,7 @@ export const SlideOverDrawer = ({
                   <Award className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                   <div>
                     <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
-                      <span>AP Allotments (Namewise)</span>
+                      <span>AP EAPCET College-Wise Allotments</span>
                       <span className="text-[9px] bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 px-1.5 py-0.2 rounded font-mono font-semibold">Namewise</span>
                     </div>
                     <div className="text-[10px] text-slate-600 dark:text-slate-400 leading-normal mt-0.5">
