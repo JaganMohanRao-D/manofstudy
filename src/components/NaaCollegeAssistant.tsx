@@ -5,7 +5,6 @@ import {
   Check,
   GraduationCap,
   LoaderCircle,
-  MessageCircle,
   Send,
   Sparkles,
   Trash2,
