@@ -35,7 +35,7 @@ if (!Array.isArray(editorial) || editorial.length !== 11) {
 const articles = [...baseline, ...editorial];
 const requiredEnglishBlogs = [
   { slug: 'chatgpt-vs-claude-which-ai-is-better-for-students', path: 'src/data/blog-1-chatgpt-vs-claude.json' },
-  { slug: 'gemini-vs-chatgpt-vs-grok-meta-ai-vs-claude', path: 'src/data/blog-2-gemini-chatgpt-grok-meta-claude.json' },
+  { slug: 'gemini-vs-chatgpt-vs-grok-vs-meta-ai-vs-claude', path: 'src/data/blog-2-gemini-chatgpt-grok-meta-claude.json' },
   { slug: 'how-to-join-iiit-hyderabad-without-jee-main-ugee', path: 'src/data/blog-3-iiit-hyderabad-admission-ugee.json' },
   { slug: 'github-basics-for-beginners-complete-guide', path: 'src/data/blog-4-github-basics.json' }
 ];
