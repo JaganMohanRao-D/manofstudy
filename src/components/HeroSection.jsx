@@ -32,11 +32,16 @@ import './NaaDesignFoundation.css';
 import { NaaCollegeAssistant } from './NaaCollegeAssistant';
 import { WORKSPACES, FLAGSHIP_FEATURES } from './FeaturesHub';
 import articlesData from '../data/blogArticles.json';
+import editorialArticlesData from '../data/editorialBlogArticles.generated.json';
 
-const publishedArticles = articlesData
+const publishedArticles = [...articlesData, ...editorialArticlesData]
   .filter((article) => article.status === 'published')
   .slice()
-  .sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)) || String(b.updatedAt || b.publishedAt).localeCompare(String(a.updatedAt || a.publishedAt)))
+  .sort((a, b) =>
+    String(b.publishedAt || '').localeCompare(String(a.publishedAt || '')) ||
+    String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')) ||
+    a.title.localeCompare(b.title)
+  )
   .slice(0, 3);
 
 const scholarshipDeadlineDate = (value) => {
