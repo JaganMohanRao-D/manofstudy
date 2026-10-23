@@ -75,7 +75,7 @@ export default function TgOverallRankInsights({ className = '' }) {
     const girlsText = item.girls.topRank !== null 
       ? `Girls Top: #${item.girls.topRank?.toLocaleString()} | Last: #${item.girls.lastRank?.toLocaleString()} (${item.girls.recordCount.toLocaleString()} candidates)`
       : 'Girls: N/A';
-    const text = `TG EAPCET 2026 Observed Rank Range [${item.displayLabel} - ${item.categoryName}]\n${boysText}\n${girlsText}\nTotal: ${item.totalRecords.toLocaleString()} across ${item.collegesRepresented} colleges (Source: Man of Study)`;
+    const text = `TG EAPCET 2026 Observed Rank Range [${item.displayLabel} - ${item.categoryName}]\n${boysText}\n${girlsText}\nTotal: ${item.totalRecords.toLocaleString()} across ${item.collegesRepresented} colleges (Source: Naa College)`;
 
     navigator.clipboard.writeText(text);
     setCopiedKey(item.category);
