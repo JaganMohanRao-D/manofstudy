@@ -681,7 +681,8 @@ export async function wordTextToPdf(
   const extension = file.name.toLowerCase().split('.').pop() || '';
   const isDocx = extension === 'docx';
   const isLegacyDoc = extension === 'doc';
-  const cleanTitle = file.name.replace(/\.[^/.]+$/, '');
+  const rawTitle = file.name.replace(/\.[^/.]+$/, '');
+  const cleanTitle = rawTitle.replace(/(?:^|[_\s-])(?:StudyMacha|ManOfStudy|Man\s+of\s+Study|NaaCollege|Naa\s+College|studymacha\.pages\.dev|naacollege\.in)(?=$|[_\s.-])/gi, ' ').replace(/[_\s-]+/g, ' ').trim() || 'Converted Document';
   onProgress?.(12, isDocx ? 'Reading Word document structure...' : 'Reading document content...');
 
   const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4', compress: true });
@@ -780,15 +781,19 @@ export async function wordTextToPdf(
       onProgress?.(Math.round(40 + (i / Math.max(1, renderBlocks.length)) * 50), 'Rendering content block ' + (i + 1) + ' of ' + renderBlocks.length + '...');
       const textParts = text.split(/\n+/).map((part) => part.replace(/\s+/g, ' ').trim()).filter(Boolean);
       for (const part of textParts) {
-        // Strip only legacy branding lines inserted by this site's old document converter.
+        // Strip legacy site branding from HTML-based .doc files created by the old converter.
         if (/^(?:StudyMacha\s*[—-]\s*All-in-One Student & Career Utility Hub\s*studymacha\.pages\.dev|STUDYMACHA\s*[•·]\s*studymacha\.pages\.dev|Official Career Guide\s*•.*studymacha\.pages\.dev.*Page\s+\d+\s+of\s+\d+)$/i.test(part)) continue;
-        if (tag === 'h1') drawParagraph(part, 17, true, [15, 23, 42]);
-        else if (tag === 'h2') drawParagraph(part, 14, true, [30, 41, 59]);
-        else if (tag === 'h3') drawParagraph(part, 12, true, [30, 41, 59]);
-        else if (tag === 'h4') drawParagraph(part, 11, true, [30, 41, 59]);
-        else if (tag === 'li') drawParagraph('•  ' + part, 10, false, [51, 65, 85], 10);
-        else if (tag === 'pre') drawParagraph(part, 9, false, [30, 41, 59]);
-        else drawParagraph(part, 10, false, [51, 65, 85]);
+        const safePart = isLegacyDoc
+          ? part.replace(/StudyMacha|studymacha\.pages\.dev|Man\s+of\s+Study|ManOfStudy|Naa\s+College|NaaCollege|naacollege\.in/gi, '').replace(/[_•·]+/g, ' ').replace(/\s{2,}/g, ' ').trim()
+          : part;
+        if (!safePart) continue;
+        if (tag === 'h1') drawParagraph(safePart, 17, true, [15, 23, 42]);
+        else if (tag === 'h2') drawParagraph(safePart, 14, true, [30, 41, 59]);
+        else if (tag === 'h3') drawParagraph(safePart, 12, true, [30, 41, 59]);
+        else if (tag === 'h4') drawParagraph(safePart, 11, true, [30, 41, 59]);
+        else if (tag === 'li') drawParagraph('•  ' + safePart, 10, false, [51, 65, 85], 10);
+        else if (tag === 'pre') drawParagraph(safePart, 9, false, [30, 41, 59]);
+        else drawParagraph(safePart, 10, false, [51, 65, 85]);
       }
     }
   } else {
