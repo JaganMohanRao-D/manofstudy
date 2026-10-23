@@ -11,7 +11,14 @@
     "meta_description_te": "CSE Core, AI/ML, Data Science, Cyber Security ను curriculum, skills, projects, career paths, flexibility, college ఎంపిక అంశాల ఆధారంగా పోల్చండి.",
     "slug": "/cse-core-vs-ai-ml-vs-data-science-vs-cyber-security",
     "primary_keyword": "CSE Core vs AI/ML vs Data Science vs Cyber Security",
-    "secondary_keywords": ["best CSE specialization", "B.Tech CSE branches", "AI and ML engineering", "data science degree", "cyber security engineering", "computer science career options"]
+    "secondary_keywords": [
+      "best CSE specialization",
+      "B.Tech CSE branches",
+      "AI and ML engineering",
+      "data science degree",
+      "cyber security engineering",
+      "computer science career options"
+    ]
   },
   "intro_te": [
     "Engineering branch ఎంచుకోవడం మీ మొత్తం భవిష్యత్తును ఎంచుకున్నట్టు అనిపించవచ్చు. విద్యార్థులు తరచుగా Computer Science and Engineering (CSE) Core ను CSE (AI/ML), CSE (Data Science), CSE (Cyber Security) వంటి కొత్త డిగ్రీ పేర్లతో పోల్చుతారు.",
@@ -22,14 +29,38 @@
   ],
   "quick_answer_te": "మీకు నిర్ణయించుకోవడం కష్టంగా ఉంటే, CSE Core సాధారణంగా అత్యంత విస్తృతమైన, సౌకర్యవంతమైన ఆరంభం. గణితం, intelligent systems ఇష్టపడేవారికి AI/ML సరిపోవచ్చు. Statistics, విశ్లేషణ, data లో patterns వెతకడం ఇష్టపడేవారికి Data Science సరిపోవచ్చు. Networks, operating systems, digital investigation, secure systems పట్ల ఆసక్తి ఉన్నవారికి Cyber Security సరిపోవచ్చు. కానీ నిర్ణయించే ముందు అసలు syllabus, college నాణ్యతను తప్పకుండా చూడండి.",
   "glossary": [
-    {"term": "CSE Core", "meaning_te": "కంప్యూటర్ సైన్స్ లో విస్తృతమైన ప్రాథమిక డిగ్రీ"},
-    {"term": "AI", "meaning_te": "Artificial Intelligence. ఆలోచించడం, గుర్తించడం, అంచనా వేయడం వంటి పనులు చేసే systems"},
-    {"term": "ML", "meaning_te": "Machine Learning. Data నుంచి patterns ను యంత్రం స్వయంగా నేర్చుకునే పద్ధతి"},
-    {"term": "Data Science", "meaning_te": "Data నుంచి ఉపయోగకరమైన విషయాలను కనుగొని వివరించే రంగం"},
-    {"term": "Cyber Security", "meaning_te": "Systems, networks, సమాచారాన్ని అనధికార ప్రవేశం నుంచి కాపాడే రంగం"},
-    {"term": "DSA", "meaning_te": "Data Structures and Algorithms"},
-    {"term": "Median salary", "meaning_te": "అందరి జీతాల వరుసలో మధ్యలో ఉండే జీతం"},
-    {"term": "Syllabus audit", "meaning_te": "Subjects ను semester వారీగా పరిశీలించి బలాలు, లోపాలను గుర్తించడం"}
+    {
+      "term": "CSE Core",
+      "meaning_te": "కంప్యూటర్ సైన్స్ లో విస్తృతమైన ప్రాథమిక డిగ్రీ"
+    },
+    {
+      "term": "AI",
+      "meaning_te": "Artificial Intelligence. ఆలోచించడం, గుర్తించడం, అంచనా వేయడం వంటి పనులు చేసే systems"
+    },
+    {
+      "term": "ML",
+      "meaning_te": "Machine Learning. Data నుంచి patterns ను యంత్రం స్వయంగా నేర్చుకునే పద్ధతి"
+    },
+    {
+      "term": "Data Science",
+      "meaning_te": "Data నుంచి ఉపయోగకరమైన విషయాలను కనుగొని వివరించే రంగం"
+    },
+    {
+      "term": "Cyber Security",
+      "meaning_te": "Systems, networks, సమాచారాన్ని అనధికార ప్రవేశం నుంచి కాపాడే రంగం"
+    },
+    {
+      "term": "DSA",
+      "meaning_te": "Data Structures and Algorithms"
+    },
+    {
+      "term": "Median salary",
+      "meaning_te": "అందరి జీతాల వరుసలో మధ్యలో ఉండే జీతం"
+    },
+    {
+      "term": "Syllabus audit",
+      "meaning_te": "Subjects ను semester వారీగా పరిశీలించి బలాలు, లోపాలను గుర్తించడం"
+    }
   ],
   "sections": [
     {
@@ -206,16 +237,70 @@
       "heading_te": "పక్కపక్కనే పోలిక (Side-by-side comparison)",
       "heading_en": "Side-by-side comparison",
       "table": {
-        "headers": ["అంశం", "CSE Core", "CSE AI/ML", "CSE Data Science", "CSE Cyber Security"],
+        "headers": [
+          "అంశం",
+          "CSE Core",
+          "CSE AI/ML",
+          "CSE Data Science",
+          "CSE Cyber Security"
+        ],
         "rows": [
-          ["ప్రధాన దృష్టి", "విస్తృత computing పునాదులు", "Learning systems, intelligent applications", "Data నుంచి insights, విలువ", "Systems, సమాచార రక్షణ"],
-          ["గణితం", "ముఖ్యం", "తరచుగా ఎక్కువ ప్రాధాన్యం", "Statistics కు ఎక్కువ ప్రాధాన్యం", "ఉపయోగకరం; subfield ని బట్టి మారుతుంది"],
-          ["Programming", "తప్పనిసరి", "తప్పనిసరి", "తప్పనిసరి", "తప్పనిసరి"],
-          ["సాధారణ tools", "Languages, Git, DBMS, IDEs", "Python, ML libraries, notebooks", "Python, SQL, visualization tools", "Linux, network tools, security labs"],
-          ["ఉదాహరణ project", "Web app లేదా system tool", "Classifier లేదా prediction model", "విశ్లేషణ, dashboard", "Log analysis లేదా secure app lab"],
-          ["సౌలభ్యం (Flexibility)", "సాధారణంగా అత్యంత విస్తృతం", "Core subjects బలంగా ఉంటే విస్తృతం", "Core subjects బలంగా ఉంటే విస్తృతం", "Systems fundamentals బలంగా ఉంటే విస్తృతం"],
-          ["సాధ్యమైన ప్రవేశ మార్గాలు", "Software, backend, systems, cloud", "Software, ML-adjacent, AI applications", "Analytics, BI, data engineering", "SOC, security, application security"],
-          ["ఎవరికి సరిపోతుంది", "నిర్ణయించుకోనివారు లేదా ఎంపికలు కావాలనుకునేవారు", "గణితం, ప్రయోగాలు ఇష్టపడేవారు", "Evidence, patterns ఇష్టపడేవారు", "Systems, రక్షణ ఇష్టపడేవారు"]
+          [
+            "ప్రధాన దృష్టి",
+            "విస్తృత computing పునాదులు",
+            "Learning systems, intelligent applications",
+            "Data నుంచి insights, విలువ",
+            "Systems, సమాచార రక్షణ"
+          ],
+          [
+            "గణితం",
+            "ముఖ్యం",
+            "తరచుగా ఎక్కువ ప్రాధాన్యం",
+            "Statistics కు ఎక్కువ ప్రాధాన్యం",
+            "ఉపయోగకరం; subfield ని బట్టి మారుతుంది"
+          ],
+          [
+            "Programming",
+            "తప్పనిసరి",
+            "తప్పనిసరి",
+            "తప్పనిసరి",
+            "తప్పనిసరి"
+          ],
+          [
+            "సాధారణ tools",
+            "Languages, Git, DBMS, IDEs",
+            "Python, ML libraries, notebooks",
+            "Python, SQL, visualization tools",
+            "Linux, network tools, security labs"
+          ],
+          [
+            "ఉదాహరణ project",
+            "Web app లేదా system tool",
+            "Classifier లేదా prediction model",
+            "విశ్లేషణ, dashboard",
+            "Log analysis లేదా secure app lab"
+          ],
+          [
+            "సౌలభ్యం (Flexibility)",
+            "సాధారణంగా అత్యంత విస్తృతం",
+            "Core subjects బలంగా ఉంటే విస్తృతం",
+            "Core subjects బలంగా ఉంటే విస్తృతం",
+            "Systems fundamentals బలంగా ఉంటే విస్తృతం"
+          ],
+          [
+            "సాధ్యమైన ప్రవేశ మార్గాలు",
+            "Software, backend, systems, cloud",
+            "Software, ML-adjacent, AI applications",
+            "Analytics, BI, data engineering",
+            "SOC, security, application security"
+          ],
+          [
+            "ఎవరికి సరిపోతుంది",
+            "నిర్ణయించుకోనివారు లేదా ఎంపికలు కావాలనుకునేవారు",
+            "గణితం, ప్రయోగాలు ఇష్టపడేవారు",
+            "Evidence, patterns ఇష్టపడేవారు",
+            "Systems, రక్షణ ఇష్టపడేవారు"
+          ]
         ]
       }
     },
@@ -288,14 +373,42 @@
         {
           "heading_te": "ఆచరణాత్మక decision matrix",
           "table": {
-            "headers": ["ప్రశ్న", "ఎందుకు ముఖ్యం", "సేకరించాల్సిన ఆధారాలు"],
+            "headers": [
+              "ప్రశ్న",
+              "ఎందుకు ముఖ్యం",
+              "సేకరించాల్సిన ఆధారాలు"
+            ],
             "rows": [
-              ["Institution విశ్వసనీయమైనదా, గుర్తింపు పొందినదా?", "Degree వర్తించే నియంత్రణ అవసరాలను తీర్చాలి", "అధికారిక institution, regulator రికార్డులు"],
-              ["Core curriculum బలంగా ఉందా?", "Core skills అనేక technology roles లో ఉపయోగపడతాయి", "ప్రస్తుత semester-wise syllabus"],
-              ["ఫలితాలు పారదర్శకంగా ఉన్నాయా?", "Marketing సంఖ్యలు సందర్భాన్ని వదిలేయవచ్చు", "Official placement report, batch data"],
-              ["మొత్తం ఖర్చు భరించగలనా?", "అప్పు లేదా ఆర్థిక ఒత్తిడి ఎంపికలను పరిమితం చేయగలవు", "Tuition, hostel, ప్రయాణం, ఇతర fees"],
-              ["నాకు ఆ subjects ఇష్టమవుతాయా?", "ఆసక్తి నిరంతర learning కు తోడ్పడుతుంది", "Syllabus, పరిచయ courses, నమూనా projects"],
-              ["నేను అనుభవం పొందగలనా?", "Projects, internships skills ను నిరూపిస్తాయి", "Labs, clubs, mentors, internship ప్రక్రియ"]
+              [
+                "Institution విశ్వసనీయమైనదా, గుర్తింపు పొందినదా?",
+                "Degree వర్తించే నియంత్రణ అవసరాలను తీర్చాలి",
+                "అధికారిక institution, regulator రికార్డులు"
+              ],
+              [
+                "Core curriculum బలంగా ఉందా?",
+                "Core skills అనేక technology roles లో ఉపయోగపడతాయి",
+                "ప్రస్తుత semester-wise syllabus"
+              ],
+              [
+                "ఫలితాలు పారదర్శకంగా ఉన్నాయా?",
+                "Marketing సంఖ్యలు సందర్భాన్ని వదిలేయవచ్చు",
+                "Official placement report, batch data"
+              ],
+              [
+                "మొత్తం ఖర్చు భరించగలనా?",
+                "అప్పు లేదా ఆర్థిక ఒత్తిడి ఎంపికలను పరిమితం చేయగలవు",
+                "Tuition, hostel, ప్రయాణం, ఇతర fees"
+              ],
+              [
+                "నాకు ఆ subjects ఇష్టమవుతాయా?",
+                "ఆసక్తి నిరంతర learning కు తోడ్పడుతుంది",
+                "Syllabus, పరిచయ courses, నమూనా projects"
+              ],
+              [
+                "నేను అనుభవం పొందగలనా?",
+                "Projects, internships skills ను నిరూపిస్తాయి",
+                "Labs, clubs, mentors, internship ప్రక్రియ"
+              ]
             ]
           }
         }
@@ -343,14 +456,42 @@
         "ఈ నమూనా roadmap college తో పాటు నిలకడగా చదవగలిగే beginner కోసం రూపొందించింది. మీ syllabus, పని భారానికి అనుగుణంగా వేగాన్ని సర్దుకోండి. ముందుగా పునాదులను నిర్మించి, తర్వాత ఒక రంగాన్ని లోతుగా అన్వేషించడం లక్ష్యం."
       ],
       "table": {
-        "headers": ["కాలం", "దృష్టి (Focus)", "సూచించిన ఫలితం"],
+        "headers": [
+          "కాలం",
+          "దృష్టి (Focus)",
+          "సూచించిన ఫలితం"
+        ],
         "rows": [
-          ["Months 1–2", "Programming basics, debugging, Git basics", "20–30 చిన్న programs, శుభ్రమైన repository"],
-          ["Months 3–4", "Data structures, algorithms, complexity basics", "వివరణలు, సవరణలతో practice problems"],
-          ["Months 5–6", "SQL, DBMS, web/API basics, teamwork", "Data ను నిల్వ చేసి తిరిగి తెచ్చే చిన్న application"],
-          ["Months 7–8", "పరిచయ projects ద్వారా రెండు domains ను అన్వేషించడం", "ఒక చిన్న AI/data/security ప్రయోగం, ఆలోచనల సమీక్ష"],
-          ["Months 9–10", "దిశను ఎంచుకుని, బాధ్యతగా tools నేర్చుకోవడం", "Requirements, tests ను document చేసిన project"],
-          ["Months 11–12", "Portfolio polish, feedback, అవకాశాలకు దరఖాస్తు", "రెండు మూడు బాగా document చేసిన projects, కేంద్రీకృత resume"]
+          [
+            "Months 1–2",
+            "Programming basics, debugging, Git basics",
+            "20–30 చిన్న programs, శుభ్రమైన repository"
+          ],
+          [
+            "Months 3–4",
+            "Data structures, algorithms, complexity basics",
+            "వివరణలు, సవరణలతో practice problems"
+          ],
+          [
+            "Months 5–6",
+            "SQL, DBMS, web/API basics, teamwork",
+            "Data ను నిల్వ చేసి తిరిగి తెచ్చే చిన్న application"
+          ],
+          [
+            "Months 7–8",
+            "పరిచయ projects ద్వారా రెండు domains ను అన్వేషించడం",
+            "ఒక చిన్న AI/data/security ప్రయోగం, ఆలోచనల సమీక్ష"
+          ],
+          [
+            "Months 9–10",
+            "దిశను ఎంచుకుని, బాధ్యతగా tools నేర్చుకోవడం",
+            "Requirements, tests ను document చేసిన project"
+          ],
+          [
+            "Months 11–12",
+            "Portfolio polish, feedback, అవకాశాలకు దరఖాస్తు",
+            "రెండు మూడు బాగా document చేసిన projects, కేంద్రీకృత resume"
+          ]
         ]
       },
       "paragraphs_after_te": [
@@ -388,12 +529,30 @@
       "heading_te": "సాధారణ అపోహలు, వాస్తవాలు",
       "heading_en": "Common myths and the reality",
       "myths": [
-        {"myth_te": "AI/ML ఆటోమేటిక్‌గా CSE Core కంటే మంచిది.", "reality_te": "సరైన విద్యార్థికి AI/ML విలువైనదే, కానీ మీరు ఎంత సిద్ధమవుతారో course నాణ్యత, పునాదులు, projects, అనుభవం నిర్ణయిస్తాయి."},
-        {"myth_te": "Data Science అంటే Python నేర్చుకోవడమే.", "reality_te": "Data పనికి statistics, SQL, data quality, విశ్లేషణాత్మక తర్కం, visualization, communication కూడా కావాలి."},
-        {"myth_te": "Cyber Security అంటే ethical hacking మాత్రమే.", "reality_te": "Security లో రక్షణ, secure engineering, incident response, cloud security, governance, forensics, risk ఉంటాయి."},
-        {"myth_te": "Specializations ప్రాచుర్యం పొందాయి కాబట్టి CSE Core కు భవిష్యత్తు లేదు.", "reality_te": "Core computing భావనలు software, systems, cloud, AI, data, security అన్నిటిలో ఉపయోగపడతాయి."},
-        {"myth_te": "ఒక branch అధిక జీతానికి హామీ ఇస్తుంది.", "reality_te": "ఏ branch ఉద్యోగానికి లేదా జీతానికి హామీ ఇవ్వదు. Hiring పరిస్థితులు, వ్యక్తిగత తయారీ మారుతాయి."},
-        {"myth_te": "ప్రవేశ సమయంలోనే జీవితాంతం career ను నిర్ణయించుకోవాలి.", "reality_te": "చాలా skills ఒకదానితో ఒకటి కలుస్తాయి. Electives, projects, internships, further study మీ దిశను మెరుగుపరుచుకోవడానికి సహాయపడతాయి."}
+        {
+          "myth_te": "AI/ML ఆటోమేటిక్‌గా CSE Core కంటే మంచిది.",
+          "reality_te": "సరైన విద్యార్థికి AI/ML విలువైనదే, కానీ మీరు ఎంత సిద్ధమవుతారో course నాణ్యత, పునాదులు, projects, అనుభవం నిర్ణయిస్తాయి."
+        },
+        {
+          "myth_te": "Data Science అంటే Python నేర్చుకోవడమే.",
+          "reality_te": "Data పనికి statistics, SQL, data quality, విశ్లేషణాత్మక తర్కం, visualization, communication కూడా కావాలి."
+        },
+        {
+          "myth_te": "Cyber Security అంటే ethical hacking మాత్రమే.",
+          "reality_te": "Security లో రక్షణ, secure engineering, incident response, cloud security, governance, forensics, risk ఉంటాయి."
+        },
+        {
+          "myth_te": "Specializations ప్రాచుర్యం పొందాయి కాబట్టి CSE Core కు భవిష్యత్తు లేదు.",
+          "reality_te": "Core computing భావనలు software, systems, cloud, AI, data, security అన్నిటిలో ఉపయోగపడతాయి."
+        },
+        {
+          "myth_te": "ఒక branch అధిక జీతానికి హామీ ఇస్తుంది.",
+          "reality_te": "ఏ branch ఉద్యోగానికి లేదా జీతానికి హామీ ఇవ్వదు. Hiring పరిస్థితులు, వ్యక్తిగత తయారీ మారుతాయి."
+        },
+        {
+          "myth_te": "ప్రవేశ సమయంలోనే జీవితాంతం career ను నిర్ణయించుకోవాలి.",
+          "reality_te": "చాలా skills ఒకదానితో ఒకటి కలుస్తాయి. Electives, projects, internships, further study మీ దిశను మెరుగుపరుచుకోవడానికి సహాయపడతాయి."
+        }
       ]
     },
     {
@@ -401,13 +560,37 @@
       "heading_te": "వివిధ విద్యార్థి ప్రొఫైళ్లకు branch ఎంపిక",
       "heading_en": "Branch selection for different student profiles",
       "table": {
-        "headers": ["మీరు ఇలా అయితే…", "పరిగణించండి…", "కానీ ఇది నిర్ధారించుకోండి"],
+        "headers": [
+          "మీరు ఇలా అయితే…",
+          "పరిగణించండి…",
+          "కానీ ఇది నిర్ధారించుకోండి"
+        ],
         "rows": [
-          ["గరిష్ట సౌలభ్యం కావాలి, ఇంకా నిర్ణయించుకోలేదు", "CSE Core", "College లో మంచి electives, practical learning ఉన్నాయో చూడండి."],
-          ["గణితం, ప్రయోగాలు, model building ఇష్టం", "CSE AI/ML", "Statistics, linear algebra, programming చదవడానికి సిద్ధంగా ఉండండి."],
-          ["సంఖ్యలు, evidence, dashboards, patterns ఇష్టం", "CSE Data Science", "Charts చేయడమే కాకుండా data ను శుభ్రం చేయడం, ఫలితాలను వివరించడం కూడా ఇష్టపడాలి."],
-          ["Networks, systems, troubleshooting, రక్షణ ఇష్టం", "CSE Cyber Security", "చట్టబద్ధంగా practice చేసి, operating systems, networking నేర్చుకోండి."],
-          ["Software development కావాలి, specialist branch ఎంపిక ఉంది", "Curricula ని నేరుగా పోల్చండి", "DSA, DBMS, OS, networks, software engineering బలంగా ఉన్నాయో చూడండి."]
+          [
+            "గరిష్ట సౌలభ్యం కావాలి, ఇంకా నిర్ణయించుకోలేదు",
+            "CSE Core",
+            "College లో మంచి electives, practical learning ఉన్నాయో చూడండి."
+          ],
+          [
+            "గణితం, ప్రయోగాలు, model building ఇష్టం",
+            "CSE AI/ML",
+            "Statistics, linear algebra, programming చదవడానికి సిద్ధంగా ఉండండి."
+          ],
+          [
+            "సంఖ్యలు, evidence, dashboards, patterns ఇష్టం",
+            "CSE Data Science",
+            "Charts చేయడమే కాకుండా data ను శుభ్రం చేయడం, ఫలితాలను వివరించడం కూడా ఇష్టపడాలి."
+          ],
+          [
+            "Networks, systems, troubleshooting, రక్షణ ఇష్టం",
+            "CSE Cyber Security",
+            "చట్టబద్ధంగా practice చేసి, operating systems, networking నేర్చుకోండి."
+          ],
+          [
+            "Software development కావాలి, specialist branch ఎంపిక ఉంది",
+            "Curricula ని నేరుగా పోల్చండి",
+            "DSA, DBMS, OS, networks, software engineering బలంగా ఉన్నాయో చూడండి."
+          ]
         ]
       }
     },
@@ -436,16 +619,46 @@
       "heading_te": "తరచూ అడిగే ప్రశ్నలు (FAQ)",
       "heading_en": "Frequently asked questions",
       "faq": [
-        {"q_te": "CSE Core, CSE AI/ML కంటే మంచిదా?", "a_te": "ఏదీ సార్వత్రికంగా మంచిది కాదు. CSE Core సాధారణంగా ఎక్కువ సౌలభ్యం ఇస్తుంది. AI/ML intelligent systems లో కేంద్రీకృత అధ్యయనాన్ని జోడిస్తుంది. అసలైన curriculum, college ను పోల్చండి."},
-        {"q_te": "CSE Core విద్యార్థి AI engineer అవ్వగలడా?", "a_te": "అవును. విద్యార్థి అవసరమైన గణితం, programming, machine-learning, project అనుభవాన్ని నిర్మించి, employer అవసరాలను తీరిస్తే."},
-        {"q_te": "Data Science విద్యార్థి software developer అవ్వగలడా?", "a_te": "తరచుగా అవును. Software roles కు సాధారణంగా programming, DSA, databases, development పద్ధతులు, interview తయారీ అవసరం. ప్రతి recruiter eligibility నియమాలను తనిఖీ చేయండి."},
-        {"q_te": "Cyber Security విద్యార్థి software jobs కు దరఖాస్తు చేయవచ్చా?", "a_te": "చాలామంది చేయగలరు, ముఖ్యంగా బలమైన programming, DSA, databases, software development skills నిలబెట్టుకుంటే. Hiring అవసరాలు మారుతాయి."},
-        {"q_te": "ఏ branch కు గణితం ఎక్కువగా అవసరం?", "a_te": "AI/ML, Data Science లో తరచుగా linear algebra, probability, statistics, optimization మరింత స్పష్టంగా వాడతారు. Cyber Security, Core CSE లో కూడా గణిత తర్కం ఉంటుంది, కానీ సమతుల్యత course, role ను బట్టి మారుతుంది."},
-        {"q_te": "ఏ branch సులభం?", "a_te": "సార్వత్రిక సమాధానం లేదు. కష్టం మీ బలాలు, బోధన నాణ్యత, assessment శైలి, ఆసక్తిపై ఆధారపడుతుంది. గణితం లేకపోతే AI/ML కష్టంగా అనిపించవచ్చు, systems జ్ఞానం లేకపోతే security, statistics లేకపోతే data science."},
-        {"q_te": "Employers కు ఖచ్చితమైన branch పేరు ముఖ్యమా?", "a_te": "కొందరికి ముఖ్యం, ముఖ్యంగా role కు నిర్దిష్ట eligibility అవసరాలు ఉన్నప్పుడు. మరికొందరు skills, projects, అనుభవం, interviews పై ఎక్కువ దృష్టి పెడతారు. మీ లక్ష్య colleges కు సంబంధించిన employers ను తనిఖీ చేయండి."},
-        {"q_te": "Trending గా ఉందని specialization ఎంచుకోవాలా?", "a_te": "Trends పరిశోధనకు తెలియజేయవచ్చు, కానీ fit అంచనాకు ప్రత్యామ్నాయం కాకూడదు. మీరు లోతుగా చదవగలిగే, బదిలీ చేయగల fundamentals బోధించే program ను ఎంచుకోండి."},
-        {"q_te": "Higher studies కు specialization degree అంగీకరిస్తారా?", "a_te": "అర్హత university, program, accreditation, prerequisites, ప్రవేశ నియమాలపై ఆధారపడుతుంది. లక్ష్య postgraduate program అధికారిక అవసరాలను సమీక్షించండి."},
-        {"q_te": "తప్పు branch ఎంచుకుంటే ఏమవుతుంది?", "a_te": "తరచుగా electives, projects, internships, certifications, postgraduate చదువు ద్వారా దిశను మార్చుకోవచ్చు. కొన్ని మార్పులకు అదనపు prerequisites కావాలి, కాబట్టి ప్రతి మార్పు ఆటోమేటిక్ అని అనుకోకుండా ఉద్దేశపూర్వకంగా ప్లాన్ చేయండి."}
+        {
+          "q_te": "CSE Core, CSE AI/ML కంటే మంచిదా?",
+          "a_te": "ఏదీ సార్వత్రికంగా మంచిది కాదు. CSE Core సాధారణంగా ఎక్కువ సౌలభ్యం ఇస్తుంది. AI/ML intelligent systems లో కేంద్రీకృత అధ్యయనాన్ని జోడిస్తుంది. అసలైన curriculum, college ను పోల్చండి."
+        },
+        {
+          "q_te": "CSE Core విద్యార్థి AI engineer అవ్వగలడా?",
+          "a_te": "అవును. విద్యార్థి అవసరమైన గణితం, programming, machine-learning, project అనుభవాన్ని నిర్మించి, employer అవసరాలను తీరిస్తే."
+        },
+        {
+          "q_te": "Data Science విద్యార్థి software developer అవ్వగలడా?",
+          "a_te": "తరచుగా అవును. Software roles కు సాధారణంగా programming, DSA, databases, development పద్ధతులు, interview తయారీ అవసరం. ప్రతి recruiter eligibility నియమాలను తనిఖీ చేయండి."
+        },
+        {
+          "q_te": "Cyber Security విద్యార్థి software jobs కు దరఖాస్తు చేయవచ్చా?",
+          "a_te": "చాలామంది చేయగలరు, ముఖ్యంగా బలమైన programming, DSA, databases, software development skills నిలబెట్టుకుంటే. Hiring అవసరాలు మారుతాయి."
+        },
+        {
+          "q_te": "ఏ branch కు గణితం ఎక్కువగా అవసరం?",
+          "a_te": "AI/ML, Data Science లో తరచుగా linear algebra, probability, statistics, optimization మరింత స్పష్టంగా వాడతారు. Cyber Security, Core CSE లో కూడా గణిత తర్కం ఉంటుంది, కానీ సమతుల్యత course, role ను బట్టి మారుతుంది."
+        },
+        {
+          "q_te": "ఏ branch సులభం?",
+          "a_te": "సార్వత్రిక సమాధానం లేదు. కష్టం మీ బలాలు, బోధన నాణ్యత, assessment శైలి, ఆసక్తిపై ఆధారపడుతుంది. గణితం లేకపోతే AI/ML కష్టంగా అనిపించవచ్చు, systems జ్ఞానం లేకపోతే security, statistics లేకపోతే data science."
+        },
+        {
+          "q_te": "Employers కు ఖచ్చితమైన branch పేరు ముఖ్యమా?",
+          "a_te": "కొందరికి ముఖ్యం, ముఖ్యంగా role కు నిర్దిష్ట eligibility అవసరాలు ఉన్నప్పుడు. మరికొందరు skills, projects, అనుభవం, interviews పై ఎక్కువ దృష్టి పెడతారు. మీ లక్ష్య colleges కు సంబంధించిన employers ను తనిఖీ చేయండి."
+        },
+        {
+          "q_te": "Trending గా ఉందని specialization ఎంచుకోవాలా?",
+          "a_te": "Trends పరిశోధనకు తెలియజేయవచ్చు, కానీ fit అంచనాకు ప్రత్యామ్నాయం కాకూడదు. మీరు లోతుగా చదవగలిగే, బదిలీ చేయగల fundamentals బోధించే program ను ఎంచుకోండి."
+        },
+        {
+          "q_te": "Higher studies కు specialization degree అంగీకరిస్తారా?",
+          "a_te": "అర్హత university, program, accreditation, prerequisites, ప్రవేశ నియమాలపై ఆధారపడుతుంది. లక్ష్య postgraduate program అధికారిక అవసరాలను సమీక్షించండి."
+        },
+        {
+          "q_te": "తప్పు branch ఎంచుకుంటే ఏమవుతుంది?",
+          "a_te": "తరచుగా electives, projects, internships, certifications, postgraduate చదువు ద్వారా దిశను మార్చుకోవచ్చు. కొన్ని మార్పులకు అదనపు prerequisites కావాలి, కాబట్టి ప్రతి మార్పు ఆటోమేటిక్ అని అనుకోకుండా ఉద్దేశపూర్వకంగా ప్లాన్ చేయండి."
+        }
       ]
     },
     {
@@ -469,11 +682,6 @@
     "ఉత్తమ ఎంపిక అంటే మంచి computing పునాది, విశ్వసనీయ బోధన, ఉపయోగకరమైన practical అనుభవం, సహేతుకమైన ఖర్చు, మీరు ప్రేరణతో కొనసాగగల subject దృష్టిని కలిపే program. Official syllabus, verified college సమాచారాన్ని పోల్చండి. తర్వాత projects, practice, సహకారం, internships ద్వారా నిలకడగా skills నిర్మించండి.",
     "గుర్తుంచుకోండి: Branch మీ ప్రారంభ స్థానం మాత్రమే, మీ మొత్తం ఇంజినీర్ గుర్తింపు కాదు."
   ],
-  "resources": [
-    {"name": "IIT Jodhpur UG CSE, AI/Data Science program information", "url": "https://www.iitj.ac.in/computer-science-engineering/en/undergraduate-programs", "description_te": "Undergraduate CSE, AI/Data Science program సమాచారం"},
-    {"name": "VTU syllabus index", "url": "https://vtu.ac.in/en/b-e-scheme-syllabus/", "description_te": "Program, regulation ను బట్టి curricula ఎలా మారతాయో చూపే syllabus index"},
-    {"name": "Osmania University UG syllabus", "url": "https://osmania.ac.in/syllabus-ug.php", "description_te": "ప్రస్తుత program-specific syllabus notices"},
-    {"name": "NIELIT syllabus page", "url": "https://www.nielit.ac.in/syllabus.php", "description_te": "National Institute of Electronics and Information Technology syllabus పేజీ"}
-  ],
+  "resources": [],
   "editorial_note_te": "ఈ వ్యాసం జీతం ఫలితాలను వాగ్దానం చేయడం లేదా branches కు సార్వత్రిక placement ర్యాంకింగ్ ఇవ్వడం ఉద్దేశపూర్వకంగా నివారిస్తుంది. Course నిర్మాణాలు university ని బట్టి మారతాయి, కాలక్రమేణా మారతాయి. ప్రచురణకు ముందు, blog AP, Telangana విద్యార్థులను లక్ష్యంగా చేసుకుంటే ప్రస్తుత official AP EAPCET, TG EAPCET counselling portals కు links జోడించండి."
 }
