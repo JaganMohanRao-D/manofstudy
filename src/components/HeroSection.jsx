@@ -48,25 +48,39 @@ const scholarshipDeadlineDate = (value) => {
   const months = ['january','february','march','april','may','june','july','august','september','october','november','december'];
   return new Date(Number(long[3]), months.indexOf(long[2].toLowerCase()), Number(long[1]));
 };
-const getActiveFeaturedScholarships = (items) => {
+const getFeaturedScholarships = (items) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+  const getPriority = (item) => {
+    const status = String(item.status || '').toLowerCase();
+    const deadline = item._deadlineDate;
+    const explicitlyClosed = /closed|expired|ended/.test(status);
+    const uncertain = /not confirmed|not verified|unknown/.test(status);
+    const currentlyOpen = deadline && deadline >= today &&
+      /open|live|registration|renewal/.test(status) &&
+      !explicitlyClosed && !uncertain;
+    if (currentlyOpen) return 0;
+    if (!explicitlyClosed && !uncertain && (!deadline || deadline >= today)) return 1;
+    if (uncertain) return 2;
+    return 3;
+  };
   return items
+    .filter((item) => item && item.title)
     .map((item) => ({ ...item, _deadlineDate: scholarshipDeadlineDate(item.deadline) }))
-    .filter((item) => {
-      const status = String(item.status || '').toLowerCase();
-      return item._deadlineDate && item._deadlineDate >= today &&
-        /open|live|registration|renewal/.test(status) &&
-        !/closed|expired|ended|not confirmed/.test(status);
-    })
-    .sort((a, b) => a._deadlineDate - b._deadlineDate)
-    .slice(0, 3);
+    .sort((a, b) => {
+      const priorityDifference = getPriority(a) - getPriority(b);
+      if (priorityDifference) return priorityDifference;
+      const aDate = a._deadlineDate ? a._deadlineDate.getTime() : Number.POSITIVE_INFINITY;
+      const bDate = b._deadlineDate ? b._deadlineDate.getTime() : Number.POSITIVE_INFINITY;
+      if (aDate !== bDate) return aDate - bDate;
+      return String(a.title).localeCompare(String(b.title));
+    });
 };
 
 const TICKER_ITEMS = [
-  { label: 'AP EAPCET · 2027 planning', detail: 'Explore available 2025–2026 historical allotments', workspace: 'ap-allotments' },
-  { label: 'AP Web Options · 2027 planning', detail: 'Organise preferences using available 2026 rank data', workspace: 'ap-web-options' },
-  { label: 'AP College Predictor · 2027 planning', detail: 'Explore rank matches using historical data', workspace: 'ap-predictor' },
+  { label: 'AP EAPCET College-Wise Allotments', detail: 'Explore available historical allotment records', workspace: 'ap-allotments' },
+  { label: 'EAPCET Web Options Generator', detail: 'Organise your college and branch preferences', workspace: 'ap-web-options' },
+  { label: 'AP College Predictor', detail: 'Explore rank matches using historical data', workspace: 'ap-predictor' },
   { label: 'TG EAPCET name-wise allotments', detail: 'Search Telangana allotment records', workspace: 'tg-allotments' },
   { label: 'Scholarships hub', detail: 'Find student funding information', workspace: 'scholarships' },
   { label: 'Autonomous colleges directory', detail: 'Browse autonomy information', href: '/autonomous-colleges/' },
@@ -87,7 +101,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         return response.json();
       })
       .then((items) => {
-        if (active && Array.isArray(items)) setFeaturedScholarships(getActiveFeaturedScholarships(items));
+        if (active && Array.isArray(items)) setFeaturedScholarships(getFeaturedScholarships(items));
       })
       .catch(() => { if (active) setFeaturedScholarships([]); })
       .finally(() => { if (active) setScholarshipsLoaded(true); });
@@ -95,10 +109,10 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
   }, []);
 
   const shortcuts = [
-    { title: 'AP College Predictor · 2027 Planning', detail: 'Explore rank matches with available 2026 data', icon: Landmark, workspace: 'ap-predictor' },
+    { title: 'AP College Predictor', detail: 'Explore rank matches with available historical data', icon: Landmark, workspace: 'ap-predictor' },
     { title: 'Telangana College Predictor', detail: 'Explore TG college and branch options', icon: GraduationCap, workspace: 'tg-predictor' },
-    { title: 'AP Web Options · 2027 Planning', detail: 'Build a preference draft from historical ranks', icon: ClipboardCheck, workspace: 'ap-web-options' },
-    { title: 'AP B.Tech Colleges · 2027 Planning', detail: 'Compare observed 2026 branch-rank patterns', icon: LibraryBig, workspace: 'ap-top-colleges' },
+    { title: 'EAPCET Web Options Generator', detail: 'Build a preference draft from historical ranks', icon: ClipboardCheck, workspace: 'ap-web-options' },
+    { title: 'AP B.Tech Colleges', detail: 'Compare available branch-rank patterns', icon: LibraryBig, workspace: 'ap-top-colleges' },
     { title: 'Scholarships', detail: 'Browse student funding resources', icon: BookMarked, workspace: 'scholarships' },
     { title: 'Student Tools', detail: 'Attendance, GPA, PDF and image tools', icon: Wrench, workspace: 'utilities' },
   ];
@@ -529,7 +543,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
           <div className="nc-featured-scholarship-grid">
             {featuredScholarships.map((item) => (
               <a className="nc-featured-scholarship-card" key={item.id} href={'/scholarships/' + String(item.title).toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') + '/'}>
-                <div className="nc-featured-scholarship-topline"><span><Sparkles size={14} /> ACTIVE LISTING</span><ArrowUpRight size={18} aria-hidden="true" /></div>
+                <div className="nc-featured-scholarship-topline"><span><Sparkles size={14} /> SCHOLARSHIP LISTING</span><ArrowUpRight size={18} aria-hidden="true" /></div>
                 <h3 className="nc-featured-scholarship-title">{item.title}</h3>
                 <div className="nc-featured-scholarship-facts">
                   <div><span><Wallet size={14} /> AMOUNT / AWARD</span><strong>{item.amount || 'Amount not confirmed'}</strong></div>
