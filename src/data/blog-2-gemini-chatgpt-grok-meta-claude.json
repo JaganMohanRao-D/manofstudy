@@ -2,10 +2,18 @@
   "site": "naacollege.in",
   "slug": "gemini-vs-chatgpt-vs-grok-vs-meta-ai-vs-claude",
   "title": "Gemini vs ChatGPT vs Grok vs Meta AI vs Claude: The Complete Comparison",
-  "meta_title": "Gemini vs ChatGPT vs Grok vs Meta AI vs Claude: Which AI Should You Use?",
-  "meta_description": "A detailed five-way comparison of Google Gemini, ChatGPT, Grok, Meta AI and Claude for students, coders and creators, covering strengths, weaknesses and best use cases.",
+  "meta_title": "Gemini vs ChatGPT vs Grok vs Meta AI vs Claude",
+  "meta_description": "Compare Gemini, ChatGPT, Grok, Meta AI and Claude for writing, coding, research, image tools and everyday student tasks.",
   "category": "AI Tools",
-  "tags": ["Gemini", "ChatGPT", "Grok", "Meta AI", "Claude", "AI comparison", "AI for students"],
+  "tags": [
+    "Gemini",
+    "ChatGPT",
+    "Grok",
+    "Meta AI",
+    "Claude",
+    "AI comparison",
+    "AI for students"
+  ],
   "author": "naacollege.in Editorial Team",
   "published_date": "2026-10-23",
   "reading_time_minutes": 11,
@@ -81,16 +89,79 @@
     {
       "heading": "Head-to-Head Comparison",
       "table": {
-        "columns": ["Feature", "Gemini", "ChatGPT", "Grok", "Meta AI", "Claude"],
+        "columns": [
+          "Feature",
+          "Gemini",
+          "ChatGPT",
+          "Grok",
+          "Meta AI",
+          "Claude"
+        ],
         "rows": [
-          ["Made by", "Google", "OpenAI", "xAI", "Meta", "Anthropic"],
-          ["Writing quality", "Good", "Very good", "Good", "Basic to good", "Excellent"],
-          ["Coding", "Very good", "Very good", "Good", "Basic to good", "Excellent"],
-          ["Real-time information", "Strong via Google", "Web search available", "Strong via X", "Limited", "Web search available"],
-          ["Image and media features", "Strong", "Strong", "Available", "Available", "Limited focus"],
-          ["Ecosystem integration", "Google apps", "Many apps and tools", "X platform", "WhatsApp and Instagram", "Developer tools and connectors"],
-          ["Open models", "Some open models", "Limited", "Limited", "Yes, Llama", "No"],
-          ["Safety and tone", "Moderate", "Strong", "Looser, edgy", "Moderate", "Very careful"]
+          [
+            "Made by",
+            "Google",
+            "OpenAI",
+            "xAI",
+            "Meta",
+            "Anthropic"
+          ],
+          [
+            "Writing quality",
+            "Good",
+            "Very good",
+            "Good",
+            "Basic to good",
+            "Excellent"
+          ],
+          [
+            "Coding",
+            "Very good",
+            "Very good",
+            "Good",
+            "Basic to good",
+            "Excellent"
+          ],
+          [
+            "Real-time information",
+            "Strong via Google",
+            "Web search available",
+            "Strong via X",
+            "Limited",
+            "Web search available"
+          ],
+          [
+            "Image and media features",
+            "Strong",
+            "Strong",
+            "Available",
+            "Available",
+            "Limited focus"
+          ],
+          [
+            "Ecosystem integration",
+            "Google apps",
+            "Many apps and tools",
+            "X platform",
+            "WhatsApp and Instagram",
+            "Developer tools and connectors"
+          ],
+          [
+            "Open models",
+            "Some open models",
+            "Limited",
+            "Limited",
+            "Yes, Llama",
+            "No"
+          ],
+          [
+            "Safety and tone",
+            "Moderate",
+            "Strong",
+            "Looser, edgy",
+            "Moderate",
+            "Very careful"
+          ]
         ]
       },
       "note": "These ratings are general impressions and change as each company releases new models. Test on your own tasks."
