@@ -71,7 +71,7 @@ const requiredEditorialBlogSlugs = [
   'autonomous-colleges-vs-jntu-au-affiliated-colleges',
   'how-to-land-your-first-tech-internship-in-2nd-year',
   'chatgpt-vs-claude-which-ai-is-better-for-students',
-  'gemini-vs-chatgpt-vs-grok-meta-ai-vs-claude',
+  'gemini-vs-chatgpt-vs-grok-vs-meta-ai-vs-claude',
   'how-to-join-iiit-hyderabad-without-jee-main-ugee',
   'github-basics-for-beginners-complete-guide'
 ];
