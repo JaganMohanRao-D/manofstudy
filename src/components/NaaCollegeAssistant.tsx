@@ -362,9 +362,21 @@ export function NaaCollegeAssistant({ embedded = false }: { embedded?: boolean }
         aria-expanded={open}
         aria-controls="nca-chat-panel"
       >
-        {open ? <X size={23} /> : <MessageCircle size={23} />}
-        {!open && <span className="nca-chat-launcher-sparkle"><Sparkles size={12} /></span>}
-        {!open && <span className="nca-chat-launcher-label">NaaCox AI</span>}
+        {open ? (
+          <X size={23} />
+        ) : (
+          <>
+            <img
+              src="/robot-head-3d-icon-png-download-13156297.png"
+              alt=""
+              width={48}
+              height={48}
+              className="nca-chat-launcher-robot"
+              draggable={false}
+            />
+            <span className="nca-chat-launcher-label">NaaCox AI</span>
+          </>
+        )}
       </button>}
     </div>
   );
