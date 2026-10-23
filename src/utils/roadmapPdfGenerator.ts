@@ -1,49 +1,19 @@
 import { jsPDF } from 'jspdf';
 import { BranchRoadmap } from '../types';
 
-async function loadNaaCollegeLogo(): Promise<{ dataUrl: string; width: number; height: number } | null> {
-  let objectUrl: string | null = null;
-  try {
-    const response = await fetch('/Naa%20College%20logo.webp');
-    if (!response.ok) return null;
-    objectUrl = URL.createObjectURL(await response.blob());
-    const image = await new Promise<HTMLImageElement>((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => resolve(img);
-      img.onerror = () => reject(new Error('Naa College logo could not be loaded'));
-      img.src = objectUrl as string;
-    });
-    const width = image.naturalWidth || image.width;
-    const height = image.naturalHeight || image.height;
-    if (!width || !height) return null;
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    const context = canvas.getContext('2d');
-    if (!context) return null;
-    context.drawImage(image, 0, 0, width, height);
-    return { dataUrl: canvas.toDataURL('image/png'), width, height };
-  } catch {
-    return null;
-  } finally {
-    if (objectUrl) URL.revokeObjectURL(objectUrl);
-  }
-}
-
 /**
- * Naa College - Professional Career Roadmap PDF Document Generator
+ * Professional Career Roadmap PDF Document Generator
  * 
  * Rebuilt from first principles as an authoritative, print-oriented A4 document:
  * - Fixed A4 Portrait Geometry: 210mm x 297mm
  * - Margins: Left/Right: 14mm, Content Width: 182mm (Safe printable area)
  * - Page 1: Dedicated Executive Cover Page with 4 structured direction blocks
  * - Pages 2+: Content sections with strict deterministic flow
- * - Subtle Watermark (5.5% visual intensity) on every page: "Naa College"
  * - Running Header & Non-Colliding Footer (Page X of Y) on all content pages
  * - Atomic Semester Cards with Strict Orphan Prevention (break-inside: avoid)
  * - Dynamic Text Splitting & Pre-Measured Box Heights (No text clipping or collisions)
  * - Sanitized currency symbols (Rs. / INR instead of broken Unicode glyphs)
- * - Safe Dynamic Filename: [BRANCH_NAME]_Roadmap_by_Naa_College.pdf
+ * - Neutral output filename without site branding
  */
 
 export function getRoadmapPdfFilename(branch: BranchRoadmap): string {
@@ -85,7 +55,7 @@ export function getRoadmapPdfFilename(branch: BranchRoadmap): string {
     .replace(/_+/g, '_')
     .replace(/^[_-]+|[_-]+$/g, '') || 'ENGINEERING';
 
-  return `naacollege-${branchCode}_ROADMAP.pdf`;
+  return `${branchCode}_ROADMAP.pdf`;
 }
 
 export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly = false): Promise<jsPDF> {
@@ -103,10 +73,6 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
   const minY = 22; // Safe start below running header
   const maxY = 276; // Safe content cutoff, leaving buffer above footer line at 283mm
 
-  const BRAND_NAME = 'Naa College';
-  const TARGET_URL = 'https://naacollege.in/';
-  const EXPLORE_URL = 'https://naacollege.in/#career-blueprints';
-  const naaCollegeLogo = await loadNaaCollegeLogo();
 
   let currentY = minY;
 
@@ -188,39 +154,7 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
 
   let coverY = 16;
 
-  // Header Brand Pill
-  doc.setFillColor(15, 23, 42); // Slate 900
-  doc.setDrawColor(51, 65, 85);
-  doc.setLineWidth(0.2);
-  doc.roundedRect(marginLeft, coverY, 58, 15.0, 2.2, 2.2, 'FD');
-
-  // Canonical Naa College logo. Preserve its intrinsic aspect ratio within the brand pill.
-  if (naaCollegeLogo) {
-    const logoBox = 11.5;
-    const scale = Math.min(logoBox / naaCollegeLogo.width, logoBox / naaCollegeLogo.height);
-    const logoWidth = naaCollegeLogo.width * scale;
-    const logoHeight = naaCollegeLogo.height * scale;
-    doc.addImage(
-      naaCollegeLogo.dataUrl,
-      'PNG',
-      marginLeft + 1.5 + (logoBox - logoWidth) / 2,
-      coverY + 1.5 + (logoBox - logoHeight) / 2,
-      logoWidth,
-      logoHeight,
-      undefined,
-      'FAST'
-    );
-    doc.link(marginLeft + 1.0, coverY + 1.0, 12.5, 12.5, { url: TARGET_URL });
-  } else {
-    doc.setFillColor(6, 182, 212);
-    doc.circle(marginLeft + 6.5, coverY + 7.5, 2.0, 'F');
-  }
-
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(13);
-  doc.setTextColor(255, 255, 255);
-  doc.text(BRAND_NAME, marginLeft + 15.5, coverY + 9.6);
-
+  // Neutral document series label (no website branding).
   // Series Label
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8.5);
@@ -414,7 +348,7 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8.2);
   doc.setTextColor(15, 23, 42);
-  doc.text('Naa College • Student Career Planning Platform', marginLeft + 8, coverFooterY + 5.5);
+  doc.text('4-Year Career Planning Roadmap', marginLeft + 8, coverFooterY + 5.5);
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(7.4);
@@ -454,26 +388,8 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
     }
   };
 
-  // Helper: Interactive banner to explore all blueprints
-  const renderExploreBanner = () => {
-    ensureSpace(12);
-    doc.setFillColor(238, 242, 255);
-    doc.setDrawColor(199, 210, 254);
-    doc.setLineWidth(0.22);
-    doc.roundedRect(marginLeft, currentY, contentWidth, 8.5, 1.8, 1.8, 'FD');
-
-    doc.setFontSize(7.8);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(67, 56, 202);
-    // @ts-ignore
-    doc.textWithLink(
-      'Click here to explore & download all 24+ Engineering & Degree Roadmaps on Naa College',
-      105,
-      currentY + 5.5,
-      { url: EXPLORE_URL, align: 'center' }
-    );
-    currentY += 12.0;
-  };
+  // No promotional website banner is added to exported documents.
+  const renderExploreBanner = () => {};
 
   // =========================================================================
   // SECTION 2: STRATEGIC CAREER OVERVIEW & INDUSTRY SCOPE
@@ -949,7 +865,7 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
     'Print & Pin: Keep a physical copy of this 8-semester roadmap near your primary study workstation.',
     'Version Control Audit: Initialize your professional GitHub account and push code daily following semester targets.',
     'Peer Study Group: Form a 3-4 member peer circle to tackle semester capstone projects and competitive challenges.',
-    'Explore More Disciplines: Access complementary engineering and degree roadmaps on the Naa College platform.',
+    'Explore complementary engineering disciplines and related career pathways.',
   ];
 
   nextSteps.forEach((step, idx) => {
@@ -981,26 +897,7 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
   for (let i = 1; i <= totalPages; i++) {
     doc.setPage(i);
 
-    // 1. Watermark on EVERY page (Subtle 5.5% visual intensity)
-    doc.saveGraphicsState();
-    try {
-      // @ts-ignore
-      if (typeof doc.GState === 'function') {
-        // @ts-ignore
-        doc.setGState(new doc.GState({ opacity: 0.055 }));
-      }
-    } catch {
-      // Fallback
-    }
-
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(38);
-    doc.setTextColor(148, 163, 184); // Slate 400
-    doc.text('NAA COLLEGE', 105, 148.5, {
-      align: 'center',
-      angle: -45,
-    });
-    doc.restoreGraphicsState();
+    // Keep exported documents free of added logos, watermarks, and website branding.
 
     // 2. Running Header on Pages 2..N
     if (i >= 2) {
@@ -1019,7 +916,7 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(7.5);
       doc.setTextColor(30, 27, 75);
-      doc.text(BRAND_NAME, marginLeft, 9.5);
+      doc.text('ENGINEERING ROADMAP', marginLeft, 9.5);
 
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(7.0);
@@ -1054,17 +951,7 @@ export async function generateRoadmapPdf(roadmap: BranchRoadmap, returnDocOnly =
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7.2);
     doc.setTextColor(100, 116, 139);
-    doc.text('Naa College • Student Career Planning Platform', marginLeft, pageHeight - 7.5);
-
-    // Center: Interactive Brand Link
-    doc.setTextColor(2, 132, 199);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(7.5);
-    // @ts-ignore
-    doc.textWithLink('naacollege.in', 105, pageHeight - 7.5, {
-      url: TARGET_URL,
-      align: 'center',
-    });
+    doc.text('Career Roadmap', marginLeft, pageHeight - 7.5);
 
     // Right: Accurate Page Counter
     doc.setFont('helvetica', 'normal');
