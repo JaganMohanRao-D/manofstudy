@@ -3,7 +3,7 @@
 .nca-chat-launcher {
   position: fixed; right: 22px; bottom: 22px; z-index: 9999;
   display: inline-flex; align-items: center; justify-content: center; gap: 9px;
-  min-height: 54px; padding: 0 17px; border: 1px solid #126b55; border-radius: 999px;
+  min-height: 62px; padding: 6px 15px 6px 7px; border: 1px solid #126b55; border-radius: 999px;
   background: #087f5b; color: #fff; box-shadow: 0 8px 26px rgba(15, 80, 65, .22);
   font: inherit; font-size: 13px; font-weight: 800; cursor: pointer;
   transition: background-color .16s ease, box-shadow .16s ease, transform .16s ease;
@@ -13,6 +13,20 @@
   outline: 3px solid #93c5fd; outline-offset: 3px;
 }
 .nca-chat-launcher.is-open { width: 52px; min-height: 52px; padding: 0; background: #243447; border-color: #243447; }
+.nca-chat-launcher-robot {
+  display: block; flex: 0 0 auto; width: 48px; height: 48px; object-fit: contain;
+  transform-origin: 50% 90%;
+  filter: drop-shadow(0 4px 5px rgba(8, 38, 33, .24));
+  animation: nca-robot-hop 3.2s ease-in-out infinite;
+  user-select: none; pointer-events: none;
+}
+@keyframes nca-robot-hop {
+  0%, 72%, 100% { transform: translateY(0) rotate(0deg); }
+  77% { transform: translateY(-7px) rotate(-4deg); }
+  82% { transform: translateY(0) rotate(0deg); }
+  88% { transform: translateY(-3px) rotate(2deg); }
+  94% { transform: translateY(0) rotate(0deg); }
+}
 .nca-chat-launcher-label { white-space: nowrap; }
 .nca-chat-launcher-sparkle { display: inline-flex; margin-left: -3px; color: #fef3c7; }
 .nca-chat-panel {
@@ -62,7 +76,8 @@
 .nca-chat-disclaimer svg { flex: 0 0 auto; margin-top: 1px; color: #087f5b; }
 .nca-chat-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 @media (max-width: 600px) {
-  .nca-chat-launcher { right: 14px; bottom: 14px; min-height: 50px; padding: 0 14px; }
+  .nca-chat-launcher { right: 14px; bottom: 14px; min-height: 58px; padding: 5px 12px 5px 5px; }
+  .nca-chat-launcher-robot { width: 46px; height: 46px; }
   .nca-chat-launcher.is-open { min-height: 48px; width: 48px; }
   .nca-chat-panel { right: 10px; bottom: 76px; width: calc(100vw - 20px); max-height: min(640px, calc(100dvh - 94px)); min-height: min(440px, calc(100dvh - 110px)); border-radius: 17px; }
   .nca-chat-header { padding: 12px; }
@@ -72,6 +87,7 @@
   .nca-chat-panel { animation: none; }
   .nca-chat-spinner { animation-duration: 2.5s; }
   .nca-chat-launcher { transition: none; }
+  .nca-chat-launcher-robot { animation: none; }
 }
 
 .nca-chat-footer-note {
