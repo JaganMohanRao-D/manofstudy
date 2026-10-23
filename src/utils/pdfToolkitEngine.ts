@@ -1282,8 +1282,8 @@ export async function powerpointToPdf(
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(8);
       doc.setTextColor(148, 163, 184);
-      const footerBrand = opts.customFooterText || 'MAN OF STUDY • Presentation';
-      doc.text(footerBrand, 24, targetHeight - 14);
+      const footerBrand = (opts.customFooterText || '').trim();
+      if (footerBrand) doc.text(footerBrand, 24, targetHeight - 14);
       doc.text(`Slide ${slideDisplayNumber} of ${totalToRender}`, targetWidth - 24, targetHeight - 14, { align: 'right' });
     }
   }
@@ -1474,7 +1474,7 @@ export async function excelToPdf(
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(8);
         doc.setTextColor(100, 116, 139);
-        doc.text('Man of Study • ' + sheetName, margin, pageHeight - 14);
+        doc.text(sheetName, margin, pageHeight - 14);
         doc.text(
           'Page ' + pageNumber,
           pageWidth - margin,
@@ -1706,7 +1706,7 @@ export async function signPdfDocument(
 // ============================================================================
 export async function watermarkPdf(
   file: File,
-  watermarkText: string = 'MAN OF STUDY CONFIDENTIAL',
+  watermarkText: string = '',
   options: {
     opacity: number;
     angle: number;
@@ -1884,8 +1884,8 @@ export async function protectPdf(
 
   // Set document security metadata
   pdfDoc.setTitle(`[PROTECTED] ${file.name}`);
-  pdfDoc.setSubject(`Encrypted via MAN OF STUDY Security Suite`);
-  pdfDoc.setProducer(`MAN OF STUDY Client Security Engine`);
+  pdfDoc.setSubject('Password-protected PDF document');
+  pdfDoc.setProducer('PDF document utility');
 
   onProgress?.(80, 'Applying cryptographic structure...');
   const pdfBytes = await pdfDoc.save();
@@ -1953,8 +1953,8 @@ export async function convertToPdfA(
 
   onProgress?.(60, 'Standardizing metadata and stripping dynamic scripts...');
   pdfDoc.setTitle(file.name.replace(/\.pdf$/i, ''));
-  pdfDoc.setAuthor('MAN OF STUDY Archival Engine (PDF/A-1b Standard)');
-  pdfDoc.setProducer('MAN OF STUDY Long-Term Archival Compiler');
+  pdfDoc.setAuthor('');
+  pdfDoc.setProducer('PDF document utility');
   pdfDoc.setCreationDate(new Date());
   pdfDoc.setModificationDate(new Date());
 
@@ -2375,7 +2375,7 @@ export async function exportPdfToMarkdown(
 
   onProgress?.(75, 'Formatting into clean Markdown document...');
   let md = `# ${file.name.replace(/\.pdf$/i, '')}\n\n`;
-  md += `> **Source**: Extracted via MAN OF STUDY PDF Engine\n`;
+  md += `> **Source**: Extracted from the supplied PDF document\n`;
   md += `> **Pages**: ${pageCount} | **Export Date**: ${new Date().toLocaleDateString()}\n\n---\n\n`;
 
   pageTexts.forEach((text, idx) => {
