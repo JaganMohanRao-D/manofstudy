@@ -2,10 +2,17 @@
   "site": "naacollege.in",
   "slug": "how-to-join-iiit-hyderabad-without-jee-main-ugee",
   "title": "How to Join IIIT Hyderabad Without JEE Main: Complete UGEE Guide",
-  "meta_title": "IIIT Hyderabad Admission Without JEE Main: UGEE Eligibility, Exam Pattern, Interview and Preparation",
-  "meta_description": "Want to study at IIIT Hyderabad without JEE Main? Learn about UGEE, the exam pattern, selection process, dates, preparation strategy and other admission routes.",
+  "meta_title": "IIIT Hyderabad UGEE: Admission Without JEE Main",
+  "meta_description": "Learn how to join IIIT Hyderabad without JEE Main through UGEE, including eligibility, exam pattern, interviews and preparation.",
   "category": "College Admissions",
-  "tags": ["IIIT Hyderabad", "UGEE", "IIITH admission", "B.Tech admission", "Dual Degree", "entrance exam"],
+  "tags": [
+    "IIIT Hyderabad",
+    "UGEE",
+    "IIITH admission",
+    "B.Tech admission",
+    "Dual Degree",
+    "entrance exam"
+  ],
   "author": "naacollege.in Editorial Team",
   "published_date": "2026-10-23",
   "reading_time_minutes": 10,
@@ -57,13 +64,31 @@
     {
       "heading": "Important Dates (2026 Cycle as a Reference)",
       "table": {
-        "columns": ["Stage", "Date in 2026 cycle"],
+        "columns": [
+          "Stage",
+          "Date in 2026 cycle"
+        ],
         "rows": [
-          ["Application opens", "11 February 2026"],
-          ["Application closes", "31 March 2026"],
-          ["Entrance exam", "2 May 2026"],
-          ["Result of written exam", "11 May 2026"],
-          ["On-campus interviews", "4 to 6 June 2026"]
+          [
+            "Application opens",
+            "11 February 2026"
+          ],
+          [
+            "Application closes",
+            "31 March 2026"
+          ],
+          [
+            "Entrance exam",
+            "2 May 2026"
+          ],
+          [
+            "Result of written exam",
+            "11 May 2026"
+          ],
+          [
+            "On-campus interviews",
+            "4 to 6 June 2026"
+          ]
         ]
       },
       "note": "Some third-party sites list slightly different closing dates. Treat the official IIITH admissions portal as the final source. Future cycles usually follow a similar timeline, so start preparing well before February."
@@ -114,12 +139,27 @@
     {
       "heading": "Sample 6-Month Study Plan",
       "table": {
-        "columns": ["Months", "Focus"],
+        "columns": [
+          "Months",
+          "Focus"
+        ],
         "rows": [
-          ["Month 1 to 2", "Revise Class 11 and 12 maths, learn basic programming"],
-          ["Month 3 to 4", "Reasoning practice, topic tests, official sample papers"],
-          ["Month 5", "Full-length timed mock tests and error analysis"],
-          ["Month 6", "Interview practice, project revision, light revision of weak areas"]
+          [
+            "Month 1 to 2",
+            "Revise Class 11 and 12 maths, learn basic programming"
+          ],
+          [
+            "Month 3 to 4",
+            "Reasoning practice, topic tests, official sample papers"
+          ],
+          [
+            "Month 5",
+            "Full-length timed mock tests and error analysis"
+          ],
+          [
+            "Month 6",
+            "Interview practice, project revision, light revision of weak areas"
+          ]
         ]
       }
     },
@@ -163,6 +203,9 @@
     }
   ],
   "conclusion": "JEE Main is not the only door to IIIT Hyderabad. With strong fundamentals, steady practice and a curious mind, UGEE can take you into one of the country's best research-focused undergraduate programmes. Start early, follow the official website, and prepare for the interview as seriously as the written test.",
-  "official_sources": ["https://ugadmissions.iiit.ac.in", "https://www.iiit.ac.in"],
+  "official_sources": [
+    "https://ugadmissions.iiit.ac.in",
+    "https://www.iiit.ac.in"
+  ],
   "disclaimer": "Information is based on publicly reported details of the 2026 admission cycle and may change. naacollege.in is not affiliated with IIIT Hyderabad. Verify everything on the official website."
 }
