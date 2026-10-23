@@ -13,12 +13,30 @@
   },
   "editorial_note_te": "ఈ వ్యాసం ఒక సమగ్ర draft. ప్రచురించే ముందు ప్రస్తుత సంవత్సరపు college shortlist ని official records తో చూసి verify చేయండి. Placement, fee గణాంకాలకు తేదీ రాయండి.",
   "glossary": [
-    {"term": "Tier 1 / 2 / 3", "meaning_te": "విద్యార్థులు వాడే అనధికారిక పదాలు. ఇది అధికారిక national classification కాదు"},
-    {"term": "Accreditation", "meaning_te": "ఒక సంస్థ నాణ్యతను అధికారికంగా గుర్తించే ప్రక్రియ (ఉదా. NBA, NAAC)"},
-    {"term": "Median salary", "meaning_te": "అందరి జీతాలను వరుసగా పెడితే మధ్యలో ఉండే జీతం. సాధారణ student కి వచ్చే ఫలితానికి దగ్గరగా ఉంటుంది"},
-    {"term": "Highest package", "meaning_te": "ఒక్క student కి వచ్చిన అత్యధిక జీతం. అందరికీ వచ్చేది కాదు"},
-    {"term": "Eligible students", "meaning_te": "placement లో పాల్గొనడానికి అర్హత ఉన్న విద్యార్థుల సంఖ్య"},
-    {"term": "Fee reimbursement", "meaning_te": "ప్రభుత్వం కొన్ని వర్గాల విద్యార్థుల fees ని తిరిగి చెల్లించే పథకం"}
+    {
+      "term": "Tier 1 / 2 / 3",
+      "meaning_te": "విద్యార్థులు వాడే అనధికారిక పదాలు. ఇది అధికారిక national classification కాదు"
+    },
+    {
+      "term": "Accreditation",
+      "meaning_te": "ఒక సంస్థ నాణ్యతను అధికారికంగా గుర్తించే ప్రక్రియ (ఉదా. NBA, NAAC)"
+    },
+    {
+      "term": "Median salary",
+      "meaning_te": "అందరి జీతాలను వరుసగా పెడితే మధ్యలో ఉండే జీతం. సాధారణ student కి వచ్చే ఫలితానికి దగ్గరగా ఉంటుంది"
+    },
+    {
+      "term": "Highest package",
+      "meaning_te": "ఒక్క student కి వచ్చిన అత్యధిక జీతం. అందరికీ వచ్చేది కాదు"
+    },
+    {
+      "term": "Eligible students",
+      "meaning_te": "placement లో పాల్గొనడానికి అర్హత ఉన్న విద్యార్థుల సంఖ్య"
+    },
+    {
+      "term": "Fee reimbursement",
+      "meaning_te": "ప్రభుత్వం కొన్ని వర్గాల విద్యార్థుల fees ని తిరిగి చెల్లించే పథకం"
+    }
   ],
   "sections": [
     {
@@ -108,14 +126,42 @@
         "ఈ score ని శాస్త్రీయంగా ఖచ్చితమైన కొలతగా భావించకండి. ఒకే ప్రమాణాలతో options ని పోల్చడానికి ఒక క్రమబద్ధ పద్ధతి మాత్రమే. ప్రతి score వెనుక ఉన్న ఆధారాన్ని రాసుకోండి. తర్వాత మీ అంచనాలను మళ్లీ పరిశీలించుకోవచ్చు."
       ],
       "table": {
-        "headers": ["Criterion", "సూచించిన weight", "ఆధారం (Evidence)"],
+        "headers": [
+          "Criterion",
+          "సూచించిన weight",
+          "ఆధారం (Evidence)"
+        ],
         "rows": [
-          ["Course, teaching quality", "ఎక్కువ", "Syllabus, faculty, labs, student work"],
-          ["Placement transparency", "ఎక్కువ", "Official batch-level reports"],
-          ["Total cost", "ఎక్కువ", "Official fee notices, living expenses"],
-          ["Internships, projects", "మధ్యస్థం నుంచి ఎక్కువ", "College records, student examples"],
-          ["Location, support", "వ్యక్తిగతం", "ప్రయాణం, hostel, భద్రత, కుటుంబ అవసరాలు"],
-          ["Accreditation, recognition", "తప్పనిసరి (Essential)", "Official regulator / institution records"]
+          [
+            "Course, teaching quality",
+            "ఎక్కువ",
+            "Syllabus, faculty, labs, student work"
+          ],
+          [
+            "Placement transparency",
+            "ఎక్కువ",
+            "Official batch-level reports"
+          ],
+          [
+            "Total cost",
+            "ఎక్కువ",
+            "Official fee notices, living expenses"
+          ],
+          [
+            "Internships, projects",
+            "మధ్యస్థం నుంచి ఎక్కువ",
+            "College records, student examples"
+          ],
+          [
+            "Location, support",
+            "వ్యక్తిగతం",
+            "ప్రయాణం, hostel, భద్రత, కుటుంబ అవసరాలు"
+          ],
+          [
+            "Accreditation, recognition",
+            "తప్పనిసరి (Essential)",
+            "Official regulator / institution records"
+          ]
         ]
       },
       "tip_te": "సులభమైన పద్ధతి: ప్రతి criterion కి 1 నుంచి 5 వరకు score ఇవ్వండి, weight తో గుణించండి, మొత్తం కూడండి. కానీ తుది నిర్ణయం ముందు ఒకసారి మీ మనసు ఏమంటుందో కూడా వినండి."
@@ -143,11 +189,7 @@
       "a_te": "సాధించగలడు. బలమైన fundamentals, projects, internships, communication, నిలకడైన కృషి సహాయపడతాయి. అయితే అవకాశాలు, support college ని బట్టి మారతాయి."
     }
   ],
-  "resources": [
-    {"name": "AP Common Admissions Portal", "url": "https://cap.apcfss.in/", "description_te": "AP admissions, college, course సమాచారం"},
-    {"name": "TG EAPCET counselling portal", "url": "https://www.tgeapcet.nic.in/", "description_te": "Telangana counselling, college సమాచారం"},
-    {"name": "National Institutional Ranking Framework (NIRF)", "url": "https://www.nirfindia.org/", "description_te": "ప్రచురించిన ranking పద్ధతి, ఫలితాలు"}
-  ],
+  "resources": [],
   "publication_checklist_te": [
     "అధికారిక రికార్డులను పరిశోధించిన తర్వాత మాత్రమే ప్రస్తుత సంవత్సరపు verified college shortlist ని జోడించండి.",
     "అనధికారిక tier లేబుల్ ని official classification గా చెప్పవద్దు.",
