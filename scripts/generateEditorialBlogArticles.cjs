@@ -191,7 +191,7 @@ function normalizeStructured(raw) {
   const content = sanitizeBlogContent(parts.join('\n\n').replace(/\n{3,}/g, '\n\n').trim());
   const publishedAt = str(raw.published_date) || contentDate;
   return {
-    slug: str(raw.slug).replace(/^\\/+|\\/+$/g, ''),
+    slug: str(raw.slug).replace(/^\/+|\/+$/g, ''),
     title: str(raw.title),
     metaTitle: str(raw.meta_title || raw.title),
     metaDescription: str(raw.meta_description || raw.excerpt || raw.title),
