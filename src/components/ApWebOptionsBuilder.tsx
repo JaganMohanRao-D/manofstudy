@@ -38,7 +38,6 @@ interface GeneratedProfile {
 const MAX_PRIORITY_CHOICES = 30;
 const MAX_AUTO_OPTIONS_PER_GROUP = 30;
 const WEB_OPTIONS_URL = 'https://naacollege.in/ap-eapcet/web-options-builder';
-const PLANNING_YEAR = 2027;
 const HISTORICAL_DATA_YEAR = 2026;
 const WEB_OPTION_GROUPS: WebOptionGroup[] = [
   { key: 'dream', title: 'Dream Options', badge: 'AIM HIGH', description: 'Aspirational options whose observed cutoff is far more competitive than your entered rank, plus any colleges you personally put first.', explanation: 'Your entered rank is more than 35% beyond the observed 2026 closing rank, or you manually chose the college as a priority. This is an aspirational comparison, not a prediction.', pdfAccent: [157, 111, 20], pdfTint: [255, 248, 226] },
@@ -82,7 +81,7 @@ const makeExportText = (options: GeneratedOption[], profile: GeneratedProfile | 
   const header = [
     'Naa College — EAPCET Web Options Draft',
     'Prepared from the available AP EAPCET 2026 historical rank index' + (profile ? ' for rank ' + formatRank(profile.rank) : '') + '.',
-    'This is a personal preference list, not an official 2027 cutoff, counselling submission or guarantee of allotment.',
+    'This is a personal preference list, not an official cutoff, counselling submission or guarantee of allotment.',
     '',
   ];
   const entries = options.map((item, index) => {
@@ -405,7 +404,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
         pdf.setFont('helvetica', 'bold');
         pdf.setFontSize(7.2);
         pdf.setTextColor(30, 68, 49);
-        pdf.text(PLANNING_YEAR + ' ADMISSION PLANNING', 54, 11.5);
+        pdf.text('EAPCET WEB OPTIONS DRAFT', 54, 11.5);
         pdf.setFont('helvetica', 'normal');
         pdf.setFontSize(6.2);
         pdf.setTextColor(98, 116, 105);
@@ -433,7 +432,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
       pdf.setFont('helvetica', 'bold');
       pdf.setFontSize(7.1);
       pdf.setTextColor(229, 208, 125);
-      pdf.text('AP EAPCET ' + PLANNING_YEAR + ' PLANNING  /  HISTORICAL DATA: ' + HISTORICAL_DATA_YEAR, margin + 7, 42);
+      pdf.text('HISTORICAL EAPCET DATA: ' + HISTORICAL_DATA_YEAR, margin + 7, 42);
       pdf.setFontSize(23);
       pdf.setTextColor(255, 255, 255);
       pdf.text('WEB OPTIONS', margin + 7, 54);
@@ -624,9 +623,9 @@ export const ApWebOptionsBuilder: React.FC = () => {
         <div className="apwo-hero-glow apwo-hero-glow-one" aria-hidden="true" />
         <div className="apwo-hero-glow apwo-hero-glow-two" aria-hidden="true" />
         <div className="apwo-hero-inner">
-          <div className="apwo-kicker"><span className="apwo-kicker-icon"><ListOrdered size={16} /></span> AP EAPCET 2027 · ADMISSION PLANNING</div>
+          <div className="apwo-kicker"><span className="apwo-kicker-icon"><ListOrdered size={16} /></span> EAPCET WEB OPTIONS GENERATOR</div>
           <h1>Build your <span>web options.</span></h1>
-          <p>Prepare an editable college-and-branch preference list for 2027 admissions using available 2026 historical allotment ranks. Official 2027 closing-rank data is not assumed or invented.</p>
+          <p>Prepare an editable college-and-branch preference list using available 2026 historical allotment ranks. These are historical references, not current official cutoffs or a guarantee of allotment.</p>
           <div className="apwo-hero-pills">
             <span><ShieldCheck size={15} /> Historical data labelled clearly</span>
             <span><MapPin size={15} /> District-aware</span>
@@ -777,10 +776,10 @@ export const ApWebOptionsBuilder: React.FC = () => {
         <header className="apwo-guide-header">
           <span className="apwo-guide-eyebrow"><BookOpenCheck size={15} /> STUDENT GUIDE · WEB OPTIONS</span>
           <h2 id="apwo-guide-title">Understand your AP EAPCET web options</h2>
-          <p>This planner helps organise preferences using the rank records currently available on Naa College. It does not invent official 2027 cutoffs or decide which college is best for every student.</p>
+          <p>This planner helps organise preferences using the rank records currently available on Naa College. It does not invent current official cutoffs or decide which college is best for every student.</p>
         </header>
         <div className="apwo-guide-stats">
-          <div><strong>{PLANNING_YEAR}</strong><span>admission planning year</span></div>
+          <div><strong>{HISTORICAL_DATA_YEAR}</strong><span>historical data year</span></div>
           <div><strong>{HISTORICAL_DATA_YEAR}</strong><span>historical rank dataset used</span></div>
           <div><strong>4 groups</strong><span>rank-context categories</span></div>
         </div>
@@ -791,7 +790,7 @@ export const ApWebOptionsBuilder: React.FC = () => {
         <section className="apwo-guide-section">
           <h3>How to use it — step by step</h3>
           <ol className="apwo-guide-steps">
-            <li><span>01</span><div><strong>Enter your AP EAPCET rank</strong><p>Use your actual rank when you have it. If you are planning before the {PLANNING_YEAR} results, treat any entered number as a scenario, not a rank prediction.</p></div></li>
+            <li><span>01</span><div><strong>Enter your AP EAPCET rank</strong><p>Use your actual rank when you have it. If official results are not available yet, treat an entered number as a scenario, not a rank prediction.</p></div></li>
             <li><span>02</span><div><strong>Select category, gender, region and special category</strong><p>These fields control how the existing quota-closing data is matched. Choose the options that genuinely apply to your counselling profile.</p></div></li>
             <li><span>03</span><div><strong>Filter districts and branches</strong><p>Search and select only the locations and branches you would consider. Leave filters open to explore more of the records present in the index.</p></div></li>
             <li><span>04</span><div><strong>Add your own priority colleges, if you want</strong><p>Search for an exact college and branch and add it to your preference order. Move your choices up or down. No college is inserted or boosted just because of its name.</p></div></li>
@@ -823,10 +822,10 @@ export const ApWebOptionsBuilder: React.FC = () => {
         </section>
         <section className="apwo-guide-section apwo-guide-faq">
           <h3>Frequently asked questions</h3>
-          <details><summary>Is this tool updated with official AP EAPCET 2027 cutoffs?</summary><p>No. It is designed for {PLANNING_YEAR} admission planning but currently compares available {HISTORICAL_DATA_YEAR} historical allotment data. Official {PLANNING_YEAR} cutoff data is not assumed or fabricated. The data basis should be updated when verified {PLANNING_YEAR} records become available.</p></details>
+          <details><summary>Is this tool updated with current official AP EAPCET cutoffs?</summary><p>No. It currently compares available {HISTORICAL_DATA_YEAR} historical allotment data. It does not invent current official cutoff data; check official counselling announcements for the latest verified information.</p></details>
           <details><summary>Why did a college I expected not appear in my list?</summary><p>Automatic entries must exist in the loaded index, match the selected branch and district filters, and have a usable closing-rank value for your category, gender, region and special-category settings. The builder does not force a college into the list or promote it by name. If the college and branch exist in the selector and you personally want them, add them as a manual priority choice.</p></details>
           <details><summary>Why can a 9,000-rank scenario show colleges under Safe Backup?</summary><p>Safe Backup describes a larger rank buffer, not a ranking of college quality. Within that section, the options are ordered by lower historical branch closing rank first, so more selective observed combinations appear before very late-closing alternatives. Review all four sections before deciding which choices you want to prioritise.</p></details>
-          <details><summary>Does “Available for Rank” mean I will definitely get a seat?</summary><p>No. It means only that the entered rank compares favourably with the observed closing-rank value in the current data. Seat availability, future applicants, category rules, counselling round and official {PLANNING_YEAR} cutoffs can change the outcome.</p></details>
+          <details><summary>Does “Available for Rank” mean I will definitely get a seat?</summary><p>No. It means only that the entered rank compares favourably with the observed closing-rank value in the current data. Seat availability, future applicants, category rules, counselling round and current official cutoffs can change the outcome.</p></details>
           <details><summary>Does “Safe Backup” guarantee admission?</summary><p>No college is guaranteed safe. This label indicates a larger historical numerical buffer only. Include choices you would genuinely be willing to attend and verify official counselling notices.</p></details>
           <details><summary>Why does the builder ask for category, gender and region?</summary><p>The underlying index contains quota-specific records. These inputs let the existing AP predictor engine choose eligible closing-rank observations. If no matching record exists, the builder shows no matching cutoff instead of inventing one.</p></details>
           <details><summary>Can I submit these options directly to APSCHE?</summary><p>No. The builder creates an editable planning draft. It does not log in to, save choices to or submit forms to the official counselling site. Enter your final preference order on the official portal during the relevant counselling window.</p></details>
@@ -836,11 +835,11 @@ export const ApWebOptionsBuilder: React.FC = () => {
           <ShieldCheck size={20} />
           <div><h3>Data source, limitations and important disclaimer</h3>
             <p><strong>Data basis:</strong> the existing AP EAPCET {HISTORICAL_DATA_YEAR} quota-closing-rank index in Naa College and its category/gender/region/special-category matching logic. No handpicked institution order is applied.</p>
-            <p><strong>{PLANNING_YEAR} status:</strong> this is a planning tool for the {PLANNING_YEAR} admission cycle using historical {HISTORICAL_DATA_YEAR} observations. It is not a {PLANNING_YEAR} allotment dataset, official cutoff release, personalised counselling advice or admission guarantee.</p>
+            <p><strong>Data status:</strong> this tool currently uses historical {HISTORICAL_DATA_YEAR} observations. It is not a current allotment dataset, official cutoff release, personalised counselling advice or admission guarantee.</p>
             <p><strong>Before submission:</strong> verify current official AP EAPCET/APSCHE counselling notices, eligibility rules, seat matrices, fees, choice-entry deadlines and reporting instructions. The official authority’s latest notice takes precedence over this draft.</p>
           </div>
         </aside>
-        <p className="apwo-guide-source-note">Naa College · AP EAPCET {PLANNING_YEAR} admission planning · Rank reference currently available: {HISTORICAL_DATA_YEAR} · Verify official counselling information.</p>
+        <p className="apwo-guide-source-note">Naa College · EAPCET Web Options Generator · Historical rank data: {HISTORICAL_DATA_YEAR} · Verify official counselling information.</p>
       </section>
       <footer className="apwo-page-footer"><GraduationCap size={18} /><span>AP EAPCET · historical 2026 rank data · your preferences remain yours.</span></footer>
     </main>
