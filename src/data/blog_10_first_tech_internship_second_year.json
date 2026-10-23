@@ -13,12 +13,30 @@
   },
   "editorial_note_te": "ప్రచురణకు ముందు company eligibility, internship నిబంధనలను తనిఖీ చేయండి. ఏ ప్లాన్ కూడా internship కి హామీ ఇవ్వదు. Project claims నిజాయితీగా ఉంచండి, గోప్యమైన data ను రక్షించండి.",
   "glossary": [
-    {"term": "Internship", "meaning_te": "చదువుతూనే కొంతకాలం వాస్తవ పని అనుభవం పొందే అవకాశం"},
-    {"term": "GitHub", "meaning_te": "మీ code ని భద్రపరచి ఇతరులకు చూపించే website"},
-    {"term": "README", "meaning_te": "Project ఏమిటి, ఎలా run చేయాలో చెప్పే ప్రారంభ పత్రం"},
-    {"term": "Portfolio", "meaning_te": "మీ projects, skills ని చూపే సేకరణ లేదా website"},
-    {"term": "Open source", "meaning_te": "అందరికీ అందుబాటులో ఉండి, ఎవరైనా సహకరించగల software"},
-    {"term": "CRUD", "meaning_te": "Create, Read, Update, Delete. ఒక app లో data పై చేసే ప్రాథమిక పనులు"}
+    {
+      "term": "Internship",
+      "meaning_te": "చదువుతూనే కొంతకాలం వాస్తవ పని అనుభవం పొందే అవకాశం"
+    },
+    {
+      "term": "GitHub",
+      "meaning_te": "మీ code ని భద్రపరచి ఇతరులకు చూపించే website"
+    },
+    {
+      "term": "README",
+      "meaning_te": "Project ఏమిటి, ఎలా run చేయాలో చెప్పే ప్రారంభ పత్రం"
+    },
+    {
+      "term": "Portfolio",
+      "meaning_te": "మీ projects, skills ని చూపే సేకరణ లేదా website"
+    },
+    {
+      "term": "Open source",
+      "meaning_te": "అందరికీ అందుబాటులో ఉండి, ఎవరైనా సహకరించగల software"
+    },
+    {
+      "term": "CRUD",
+      "meaning_te": "Create, Read, Update, Delete. ఒక app లో data పై చేసే ప్రాథమిక పనులు"
+    }
   ],
   "sections": [
     {
@@ -92,11 +110,23 @@
         "దరఖాస్తు చేసే ముందు spelling, తేదీలు, links, స్థిరత్వాన్ని తనిఖీ చేయండి."
       ],
       "table": {
-        "headers": ["బలహీనమైన bullet", "మెరుగైన విధానం"],
+        "headers": [
+          "బలహీనమైన bullet",
+          "మెరుగైన విధానం"
+        ],
         "rows": [
-          ["Worked on a website", "Login, task CRUD, documented setup steps తో చిన్న task-tracking website నిర్మించాను"],
-          ["Know Python and SQL", "Public dataset ను శుభ్రం చేయడానికి Python, ముఖ్య ధోరణులను సంగ్రహించడానికి SQL queries వాడాను"],
-          ["Cybersecurity expert", "Local security lab పూర్తి చేసి, vulnerabilities, mitigations ను document చేశాను"]
+          [
+            "Worked on a website",
+            "Login, task CRUD, documented setup steps తో చిన్న task-tracking website నిర్మించాను"
+          ],
+          [
+            "Know Python and SQL",
+            "Public dataset ను శుభ్రం చేయడానికి Python, ముఖ్య ధోరణులను సంగ్రహించడానికి SQL queries వాడాను"
+          ],
+          [
+            "Cybersecurity expert",
+            "Local security lab పూర్తి చేసి, vulnerabilities, mitigations ను document చేశాను"
+          ]
         ]
       }
     },
@@ -137,15 +167,47 @@
         "ఈ ప్లాన్ విద్యార్థి college తో పాటు చదువుతున్నాడని ఊహిస్తుంది. మీ semester కు అనుగుణంగా సమయాన్ని సర్దుబాటు చేసుకోండి. నిలకడగా పురోగతి సాధించి, నైపుణ్యానికి కనిపించే ఆధారాలను సృష్టించడమే లక్ష్యం."
       ],
       "table": {
-        "headers": ["వారాలు", "దృష్టి (Focus)", "ఫలితం (Deliverable)"],
+        "headers": [
+          "వారాలు",
+          "దృష్టి (Focus)",
+          "ఫలితం (Deliverable)"
+        ],
         "rows": [
-          ["1–2", "Role ఎంపిక, skills అంచనా, fundamentals refresh", "Learning plan, చిన్న coding exercises"],
-          ["3–4", "Project version one నిర్మాణం", "పనిచేసే prototype"],
-          ["5–6", "Tests జోడింపు, features polish, documentation", "పూర్తయిన project, README"],
-          ["7", "Resume, portfolio సమీక్ష", "ఒక పేజీ resume, portfolio links"],
-          ["8", "Interview practice", "Project pitch, technical సమీక్ష"],
-          ["9", "లక్ష్యిత దరఖాస్తులు", "Application tracker, customized submissions"],
-          ["10", "సమీక్ష, మెరుగుదల", "మెరుగైన project, తదుపరి అడుగుల ప్లాన్"]
+          [
+            "1–2",
+            "Role ఎంపిక, skills అంచనా, fundamentals refresh",
+            "Learning plan, చిన్న coding exercises"
+          ],
+          [
+            "3–4",
+            "Project version one నిర్మాణం",
+            "పనిచేసే prototype"
+          ],
+          [
+            "5–6",
+            "Tests జోడింపు, features polish, documentation",
+            "పూర్తయిన project, README"
+          ],
+          [
+            "7",
+            "Resume, portfolio సమీక్ష",
+            "ఒక పేజీ resume, portfolio links"
+          ],
+          [
+            "8",
+            "Interview practice",
+            "Project pitch, technical సమీక్ష"
+          ],
+          [
+            "9",
+            "లక్ష్యిత దరఖాస్తులు",
+            "Application tracker, customized submissions"
+          ],
+          [
+            "10",
+            "సమీక్ష, మెరుగుదల",
+            "మెరుగైన project, తదుపరి అడుగుల ప్లాన్"
+          ]
         ]
       }
     },
@@ -186,12 +248,7 @@
       "a_te": "అందుబాటులో ఉన్నప్పుడు feedback ని గమనించండి, ఒక్కో skill ను బలపరచుకోండి, తగిన roles కి దరఖాస్తు చేస్తూనే ఉండండి."
     }
   ],
-  "resources": [
-    {"name": "GitHub Skills", "url": "https://skills.github.com/", "description_te": "GitHub workflows కు గైడెడ్ practice"},
-    {"name": "Git documentation", "url": "https://git-scm.com/doc", "description_te": "అధికారిక Git reference, tutorials"},
-    {"name": "CS50", "url": "https://cs50.harvard.edu/x/", "description_te": "Computer science fundamentals, project practice"},
-    {"name": "NPTEL", "url": "https://nptel.ac.in/", "description_te": "నిర్మాణాత్మక technical learning courses"}
-  ],
+  "resources": [],
   "publication_checklist_te": [
     "ఒక ప్లాన్ internship కి హామీ ఇస్తుందని చెప్పవద్దు.",
     "దరఖాస్తు చేసే ముందు company eligibility, internship నిబంధనలను తనిఖీ చేయండి.",
