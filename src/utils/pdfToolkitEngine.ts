@@ -758,7 +758,7 @@ export async function wordTextToPdf(
     const parsed = new DOMParser().parseFromString(html, 'text/html');
     parsed.querySelectorAll('script,style,head,meta,link,title,noscript,xml,.page-header,.page-break').forEach((node) => node.remove());
     // Preserve explicit line breaks in legacy HTML-based .doc files without exposing HTML markup.
-    parsed.querySelectorAll('br').forEach((node) => node.replaceWith(parsed.createTextNode('\\n')));
+    parsed.querySelectorAll('br').forEach((node) => node.replaceWith(parsed.createTextNode('\n')));
     const root = parsed.body;
     const blocks = Array.from(root.querySelectorAll('h1,h2,h3,h4,p,li,table,pre,blockquote'));
     const filtered = blocks.filter((node) => !node.parentElement?.closest('h1,h2,h3,h4,p,li,table,pre,blockquote'));
