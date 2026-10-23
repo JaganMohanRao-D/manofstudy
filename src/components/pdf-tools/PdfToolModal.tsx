@@ -90,7 +90,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
   const [compressLevel, setCompressLevel] = useState<number>(0.65);
 
   // Watermark
-  const [watermarkText, setWatermarkText] = useState<string>('MAN OF STUDY');
+  const [watermarkText, setWatermarkText] = useState<string>('NAA COLLEGE');
   const [watermarkOpacity, setWatermarkOpacity] = useState<number>(0.25);
   const [watermarkAngle, setWatermarkAngle] = useState<number>(-45);
   const [watermarkFontSize, setWatermarkFontSize] = useState<number>(56);
@@ -108,7 +108,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
   const [passwordInput, setPasswordInput] = useState<string>('');
 
   // Edit Overlay
-  const [overlayText, setOverlayText] = useState<string>('APPROVED - MAN OF STUDY');
+  const [overlayText, setOverlayText] = useState<string>('APPROVED - NAA COLLEGE');
   const [overlayPage, setOverlayPage] = useState<number>(1);
   const [overlayColor, setOverlayColor] = useState<string>('#0284c7');
 
@@ -117,7 +117,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
 
   // HTML content for HTML to PDF
   const [htmlCode, setHtmlCode] = useState<string>(
-    '<h1>Student Project Report</h1>\n<p>Generated smoothly with MAN OF STUDY client-side engine.</p>'
+    '<h1>Student Project Report</h1>\n<p>Generated smoothly with Naa College client-side engine.</p>'
   );
 
   // Sign Pad State
@@ -659,7 +659,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
         }
 
         case 'html-to-pdf': {
-          const res = await htmlToPdf(htmlCode, 'MAN OF STUDY Document', (pct, msg) => {
+          const res = await htmlToPdf(htmlCode, 'Naa College Document', (pct, msg) => {
             setProgress((prev) => ({ ...prev, progressPercent: pct, statusMessage: msg }));
           });
           const downloadUrl = URL.createObjectURL(res.blob);
@@ -1370,7 +1370,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
                   type="text"
                   value={watermarkText}
                   onChange={(e) => setWatermarkText(e.target.value)}
-                  placeholder="CONFIDENTIAL / MAN OF STUDY"
+                  placeholder="CONFIDENTIAL / NAA COLLEGE"
                   className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 font-bold uppercase tracking-wider"
                 />
               </div>
