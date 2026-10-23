@@ -756,7 +756,9 @@ export async function wordTextToPdf(
   if (html.trim()) {
     onProgress?.(35, 'Rendering document content and layout...');
     const parsed = new DOMParser().parseFromString(html, 'text/html');
-    parsed.querySelectorAll('script,style,head,meta,link,title,noscript,xml').forEach((node) => node.remove());
+    parsed.querySelectorAll('script,style,head,meta,link,title,noscript,xml,.page-header,.page-break').forEach((node) => node.remove());
+    // Preserve explicit line breaks in legacy HTML-based .doc files without exposing HTML markup.
+    parsed.querySelectorAll('br').forEach((node) => node.replaceWith(parsed.createTextNode('\\n')));
     const root = parsed.body;
     const blocks = Array.from(root.querySelectorAll('h1,h2,h3,h4,p,li,table,pre,blockquote'));
     const filtered = blocks.filter((node) => !node.parentElement?.closest('h1,h2,h3,h4,p,li,table,pre,blockquote'));
@@ -771,16 +773,21 @@ export async function wordTextToPdf(
         drawTable(el as HTMLTableElement);
         continue;
       }
-      const text = (el.textContent || '').replace(/\s+/g, ' ').trim();
+      const text = (el.textContent || '').replace(/\u00a0/g, ' ').trim();
       if (!text) continue;
       onProgress?.(Math.round(40 + (i / Math.max(1, renderBlocks.length)) * 50), 'Rendering content block ' + (i + 1) + ' of ' + renderBlocks.length + '...');
-      if (tag === 'h1') drawParagraph(text, 17, true, [15, 23, 42]);
-      else if (tag === 'h2') drawParagraph(text, 14, true, [30, 41, 59]);
-      else if (tag === 'h3') drawParagraph(text, 12, true, [30, 41, 59]);
-      else if (tag === 'h4') drawParagraph(text, 11, true, [30, 41, 59]);
-      else if (tag === 'li') drawParagraph('•  ' + text, 10, false, [51, 65, 85], 10);
-      else if (tag === 'pre') drawParagraph(text, 9, false, [30, 41, 59]);
-      else drawParagraph(text, 10, false, [51, 65, 85]);
+      const textParts = text.split(/\n+/).map((part) => part.replace(/\s+/g, ' ').trim()).filter(Boolean);
+      for (const part of textParts) {
+        // Strip only legacy branding lines inserted by this site's old document converter.
+        if (/^(?:StudyMacha\s*[—-]\s*All-in-One Student & Career Utility Hub\s*studymacha\.pages\.dev|STUDYMACHA\s*[•·]\s*studymacha\.pages\.dev|Official Career Guide\s*•.*studymacha\.pages\.dev.*Page\s+\d+\s+of\s+\d+)$/i.test(part)) continue;
+        if (tag === 'h1') drawParagraph(part, 17, true, [15, 23, 42]);
+        else if (tag === 'h2') drawParagraph(part, 14, true, [30, 41, 59]);
+        else if (tag === 'h3') drawParagraph(part, 12, true, [30, 41, 59]);
+        else if (tag === 'h4') drawParagraph(part, 11, true, [30, 41, 59]);
+        else if (tag === 'li') drawParagraph('•  ' + part, 10, false, [51, 65, 85], 10);
+        else if (tag === 'pre') drawParagraph(part, 9, false, [30, 41, 59]);
+        else drawParagraph(part, 10, false, [51, 65, 85]);
+      }
     }
   } else {
     onProgress?.(40, 'Formatting plain-text content...');
