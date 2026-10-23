@@ -678,179 +678,128 @@ export async function wordTextToPdf(
   file: File,
   onProgress?: (progress: number, msg: string) => void
 ): Promise<{ blob: Blob; filename: string }> {
-  const isDocx = file.name.toLowerCase().endsWith('.docx');
+  const extension = file.name.toLowerCase().split('.').pop() || '';
+  const isDocx = extension === 'docx';
+  const isLegacyDoc = extension === 'doc';
   const cleanTitle = file.name.replace(/\.[^/.]+$/, '');
-  onProgress?.(15, isDocx ? 'Reading Word OpenXML document...' : 'Reading text content...');
+  onProgress?.(12, isDocx ? 'Reading Word document structure...' : 'Reading document content...');
 
-  const doc = new jsPDF({
-    orientation: 'portrait',
-    unit: 'pt',
-    format: 'a4',
-  });
-
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4', compress: true });
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
-  const marginX = 40;
+  const marginX = 44;
+  const marginTop = 48;
+  const marginBottom = 48;
   const contentWidth = pageWidth - marginX * 2;
-  let y = 50;
+  let y = marginTop;
 
-  const checkPage = (requiredSpace: number) => {
-    if (y + requiredSpace > pageHeight - 50) {
+  const ensureSpace = (height: number) => {
+    if (y + height > pageHeight - marginBottom) {
       doc.addPage();
-      y = 50;
+      y = marginTop;
     }
   };
+
+  const drawParagraph = (text: string, size = 10, bold = false, color: [number, number, number] = [51, 65, 85], indent = 0) => {
+    const normalized = (text || '').replace(/\u00a0/g, ' ').replace(/[ \t]+/g, ' ').trim();
+    if (!normalized) return;
+    doc.setFont('helvetica', bold ? 'bold' : 'normal');
+    doc.setFontSize(size);
+    doc.setTextColor(...color);
+    const lines = doc.splitTextToSize(normalized, contentWidth - indent);
+    const lineHeight = size * 1.45;
+    for (const line of lines) {
+      ensureSpace(lineHeight);
+      doc.text(line, marginX + indent, y);
+      y += lineHeight;
+    }
+    y += size * 0.35;
+  };
+
+  const drawTable = (table: HTMLTableElement) => {
+    const rows = Array.from(table.querySelectorAll('tr')).map((tr) =>
+      Array.from(tr.querySelectorAll('th,td')).map((cell) => (cell.textContent || '').replace(/\s+/g, ' ').trim())
+    ).filter((row) => row.some(Boolean));
+    if (!rows.length) return;
+    ensureSpace(28);
+    autoTable(doc, {
+      startY: y,
+      margin: { left: marginX, right: marginX, top: marginTop, bottom: marginBottom },
+      head: table.querySelector('thead') ? rows.slice(0, 1) : [],
+      body: table.querySelector('thead') ? rows.slice(1) : rows,
+      theme: 'grid',
+      styles: { font: 'helvetica', fontSize: 8, cellPadding: 4, overflow: 'linebreak', textColor: [51, 65, 85] },
+      headStyles: { fillColor: [241, 245, 249], textColor: [15, 23, 42], fontStyle: 'bold' },
+    });
+    const last = (doc as any).lastAutoTable;
+    y = (last?.finalY || y + 24) + 12;
+  };
+
+  let html = '';
+  let plainText = '';
 
   if (isDocx) {
-    try {
-      const arrayBuffer = await file.arrayBuffer();
-      onProgress?.(35, 'Parsing Word headings, paragraphs & formatting...');
-      const mammothResult = await mammoth.convertToHtml({ arrayBuffer });
-      const html = mammothResult.value;
-
-      if (html && html.trim().length > 0) {
-        const parser = new DOMParser();
-        const docDom = parser.parseFromString(`<div>${html}</div>`, 'text/html');
-        const elements = Array.from(docDom.body.children);
-
-        // Header Title
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(18);
-        doc.setTextColor(15, 23, 42);
-        doc.text(cleanTitle, marginX, y);
-        y += 24;
-
-        doc.setDrawColor(226, 232, 240);
-        doc.setLineWidth(1);
-        doc.line(marginX, y, pageWidth - marginX, y);
-        y += 20;
-
-        for (let i = 0; i < elements.length; i++) {
-          const el = elements[i];
-          const tag = el.tagName.toLowerCase();
-          const text = el.textContent?.trim() || '';
-          if (!text) continue;
-
-          onProgress?.(
-            Math.round(40 + (i / Math.max(1, elements.length)) * 50),
-            `Rendering element ${i + 1} of ${elements.length}...`
-          );
-
-          if (tag === 'h1') {
-            checkPage(32);
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(15);
-            doc.setTextColor(15, 23, 42);
-            const lines = doc.splitTextToSize(text, contentWidth);
-            doc.text(lines, marginX, y);
-            y += lines.length * 18 + 8;
-          } else if (tag === 'h2') {
-            checkPage(26);
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(13);
-            doc.setTextColor(30, 41, 59);
-            const lines = doc.splitTextToSize(text, contentWidth);
-            doc.text(lines, marginX, y);
-            y += lines.length * 16 + 6;
-          } else if (tag === 'h3') {
-            checkPage(22);
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(11.5);
-            doc.setTextColor(51, 65, 85);
-            const lines = doc.splitTextToSize(text, contentWidth);
-            doc.text(lines, marginX, y);
-            y += lines.length * 15 + 4;
-          } else if (tag === 'ul' || tag === 'ol') {
-            const listItems = Array.from(el.querySelectorAll('li'));
-            for (let liIdx = 0; liIdx < listItems.length; liIdx++) {
-              const liText = listItems[liIdx].textContent?.trim() || '';
-              if (!liText) continue;
-              checkPage(18);
-              doc.setFont('helvetica', 'normal');
-              doc.setFontSize(10);
-              doc.setTextColor(51, 65, 85);
-              const bullet = tag === 'ol' ? `${liIdx + 1}. ` : '• ';
-              doc.text(bullet, marginX + 8, y);
-              const lines = doc.splitTextToSize(liText, contentWidth - 24);
-              doc.text(lines, marginX + 22, y);
-              y += lines.length * 14 + 3;
-            }
-            y += 4;
-          } else if (tag === 'table') {
-            const rows = Array.from(el.querySelectorAll('tr'));
-            if (rows.length > 0) {
-              const tableBody = rows.map((tr) =>
-                Array.from(tr.querySelectorAll('td, th')).map((cell) => cell.textContent?.trim() || '')
-              );
-              // @ts-ignore
-              autoTable(doc, {
-                startY: y,
-                margin: { left: marginX, right: marginX },
-                body: tableBody,
-                theme: 'grid',
-                styles: { fontSize: 9, cellPadding: 4, textColor: [30, 41, 59] },
-                headStyles: { fillColor: [241, 245, 249], textColor: [15, 23, 42], fontStyle: 'bold' },
-              });
-              // @ts-ignore
-              y = (doc.lastAutoTable ? doc.lastAutoTable.finalY : y + 60) + 14;
-            }
-          } else {
-            checkPage(18);
-            doc.setFont('helvetica', 'normal');
-            doc.setFontSize(10);
-            doc.setTextColor(51, 65, 85);
-            const lines = doc.splitTextToSize(text, contentWidth);
-            doc.text(lines, marginX, y);
-            y += lines.length * 14 + 6;
-          }
-        }
-
-        onProgress?.(100, 'Word document converted to PDF successfully!');
-        return {
-          blob: doc.output('blob'),
-          filename: `${cleanTitle}.pdf`,
-        };
-      }
-    } catch (docxErr) {
-      console.warn('Mammoth docx parse fallback:', docxErr);
+    onProgress?.(24, 'Extracting Word paragraphs, headings and tables...');
+    const result = await mammoth.convertToHtml({ arrayBuffer: await file.arrayBuffer() });
+    html = result.value || '';
+    if (!html.trim()) throw new Error('No readable content was found in this Word document.');
+  } else {
+    const raw = await file.text();
+    const looksLikeHtml = /<(?:!doctype|html|head|body|div|p|h[1-6]|table|style|meta)\b/i.test(raw);
+    if ((isLegacyDoc || extension === 'html' || extension === 'htm') && looksLikeHtml) {
+      html = raw;
+    } else {
+      plainText = raw.replace(/\r\n?/g, '\n');
     }
   }
 
-  // Fallback / plain text handling
-  onProgress?.(50, 'Compiling formatted PDF layout...');
-  let text = '';
-  try {
-    text = await file.text();
-  } catch (e) {
-    text = '';
+  if (html.trim()) {
+    onProgress?.(35, 'Rendering document content and layout...');
+    const parsed = new DOMParser().parseFromString(html, 'text/html');
+    parsed.querySelectorAll('script,style,head,meta,link,title,noscript,xml').forEach((node) => node.remove());
+    const root = parsed.body;
+    const blocks = Array.from(root.querySelectorAll('h1,h2,h3,h4,p,li,table,pre,blockquote'));
+    const filtered = blocks.filter((node) => !node.parentElement?.closest('h1,h2,h3,h4,p,li,table,pre,blockquote'));
+    const renderBlocks: Element[] = filtered.length
+      ? filtered
+      : Array.from(root.children).filter((el) => (el.textContent || '').trim());
+
+    for (let i = 0; i < renderBlocks.length; i++) {
+      const el = renderBlocks[i];
+      const tag = el.tagName.toLowerCase();
+      if (tag === 'table') {
+        drawTable(el as HTMLTableElement);
+        continue;
+      }
+      const text = (el.textContent || '').replace(/\s+/g, ' ').trim();
+      if (!text) continue;
+      onProgress?.(Math.round(40 + (i / Math.max(1, renderBlocks.length)) * 50), 'Rendering content block ' + (i + 1) + ' of ' + renderBlocks.length + '...');
+      if (tag === 'h1') drawParagraph(text, 17, true, [15, 23, 42]);
+      else if (tag === 'h2') drawParagraph(text, 14, true, [30, 41, 59]);
+      else if (tag === 'h3') drawParagraph(text, 12, true, [30, 41, 59]);
+      else if (tag === 'h4') drawParagraph(text, 11, true, [30, 41, 59]);
+      else if (tag === 'li') drawParagraph('•  ' + text, 10, false, [51, 65, 85], 10);
+      else if (tag === 'pre') drawParagraph(text, 9, false, [30, 41, 59]);
+      else drawParagraph(text, 10, false, [51, 65, 85]);
+    }
+  } else {
+    onProgress?.(40, 'Formatting plain-text content...');
+    const lines = plainText.split('\n');
+    for (const line of lines) {
+      if (!line.trim()) {
+        y += 6;
+        continue;
+      }
+      drawParagraph(line, 10, false, [51, 65, 85]);
+    }
   }
 
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(16);
-  doc.setTextColor(15, 23, 42);
-  doc.text(cleanTitle, marginX, y);
-  y += 20;
-
-  doc.setDrawColor(226, 232, 240);
-  doc.line(marginX, y, pageWidth - marginX, y);
-  y += 20;
-
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(10);
-  doc.setTextColor(51, 65, 85);
-
-  const lines = doc.splitTextToSize(text || 'Document converted.', contentWidth);
-  for (let i = 0; i < lines.length; i++) {
-    checkPage(15);
-    doc.text(lines[i], marginX, y);
-    y += 14;
+  if (doc.getNumberOfPages() === 1 && y <= marginTop) {
+    throw new Error('No readable document content was found. Please upload a valid .docx, HTML-based .doc, or text file.');
   }
 
-  onProgress?.(100, 'Compiled text into PDF successfully!');
-  return {
-    blob: doc.output('blob'),
-    filename: `${cleanTitle}.pdf`,
-  };
+  onProgress?.(100, 'Document converted to PDF successfully.');
+  return { blob: doc.output('blob'), filename: cleanTitle + '.pdf' };
 }
 
 // ============================================================================
