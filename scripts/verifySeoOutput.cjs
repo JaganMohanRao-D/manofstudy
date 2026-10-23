@@ -61,7 +61,7 @@ for (const requiredPath of requiredUrls) {
 const scholarshipUrls = urls.filter((url) => /^https:\/\/naacollege\.in\/scholarships\/[^/]+\/$/.test(url));
 const blogArticleUrls = urls.filter((url) => /^https:\/\/naacollege\.in\/blog\/(?!category\/)[^/]+\/$/.test(url) && !url.endsWith('/blog/'));
 if (scholarshipUrls.length < 40) fail('expected at least 40 individually generated scholarship records; found ' + scholarshipUrls.length);
-if (blogArticleUrls.length < 35) fail('expected at least 35 published blog article URLs after editorial integration; found ' + blogArticleUrls.length);
+if (blogArticleUrls.length < 39) fail('expected at least 39 published blog article URLs after adding four English articles; found ' + blogArticleUrls.length);
 const requiredEditorialBlogSlugs = [
   'cse-core-vs-ai-ml-vs-data-science-vs-cyber-security',
   'top-mistakes-to-avoid-during-eapcet-web-options-and-counselling',
@@ -69,7 +69,11 @@ const requiredEditorialBlogSlugs = [
   'how-to-score-a-9-sgpa-in-b-tech-first-year',
   'c-programming-and-data-structures-roadmap-for-absolute-beginners',
   'autonomous-colleges-vs-jntu-au-affiliated-colleges',
-  'how-to-land-your-first-tech-internship-in-2nd-year'
+  'how-to-land-your-first-tech-internship-in-2nd-year',
+  'chatgpt-vs-claude-which-ai-is-better-for-students',
+  'gemini-vs-chatgpt-vs-grok-meta-ai-vs-claude',
+  'how-to-join-iiit-hyderabad-without-jee-main-ugee',
+  'github-basics-for-beginners-complete-guide'
 ];
 for (const slug of requiredEditorialBlogSlugs) {
   if (!urlSet.has(SITE + '/blog/' + slug + '/')) fail('new editorial blog route missing from sitemap: ' + slug);
