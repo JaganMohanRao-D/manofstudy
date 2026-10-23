@@ -267,7 +267,7 @@ export const TOOLS_CONFIG: ToolMeta[] = [
     shortName: 'AP Predictor',
     category: 'counselling',
     description: 'Explore rank-based college and branch matches using the available 2026 historical allotment index. Future cutoffs may differ.',
-    badge: '2027 PLANNING',
+    badge: 'PREDICTOR',
   },
   {
     id: 'ap-web-options',
@@ -743,7 +743,7 @@ export default function App() {
     const metadata: Record<string, { title: string; description: string; canonical: string }> = {
       apAllotments: {
         title: 'AP EAPCET College-Wise Allotments | Naa College',
-        description: 'Explore available AP EAPCET 2025–2026 historical allotment records by college, branch, rank and category to inform 2027 planning. This is not official 2027 cutoff data; verify current notices with the AP admissions authority.',
+        description: 'Explore available AP EAPCET 2025–2026 historical allotment records by college, branch, rank and category. These are historical records, not current cutoffs; verify current notices with the AP admissions authority.',
         canonical: 'https://naacollege.in/ap-eapcet/college-wise-allotments/',
       },
       tgAllotments: {
@@ -924,7 +924,7 @@ export default function App() {
         };
       case 'eapcet':
         return {
-          title: 'AP EAPCET Seat & Fee Radar · 2027 Planning',
+          title: 'AP EAPCET Seat & Fee Radar',
           icon: <Flame className="w-4 h-4 text-rose-500" />,
         };
       case 'ap-allotments':
