@@ -13,12 +13,30 @@
   },
   "editorial_note_te": "ఇది ఒక structured draft. ప్రచురించే ముందు మీ university నిబంధనలు, grading, credits ని official handbook లో చూసి update చేయండి. ఏ routine కూడా నిర్దిష్ట grade ని హామీ ఇవ్వదు.",
   "glossary": [
-    {"term": "SGPA", "meaning_te": "Semester Grade Point Average. ఒక semester లో మీ grades సగటు"},
-    {"term": "CGPA", "meaning_te": "అన్ని semesters కలిపిన మొత్తం grade సగటు"},
-    {"term": "Active recall", "meaning_te": "పుస్తకం చూడకుండా గుర్తు తెచ్చుకుని రాయడం లేదా చెప్పడం"},
-    {"term": "Spaced repetition", "meaning_te": "ఒక topic ని పెరుగుతున్న గ్యాప్‌లతో మళ్లీ మళ్లీ revise చేయడం"},
-    {"term": "Internal marks", "meaning_te": "సెమిస్టర్ మధ్యలో tests, assignments, labs ద్వారా వచ్చే మార్కులు"},
-    {"term": "Backlog", "meaning_te": "ఒక subject లో పాస్ కాకపోవడం, దాన్ని తర్వాత మళ్లీ రాయాల్సి రావడం"}
+    {
+      "term": "SGPA",
+      "meaning_te": "Semester Grade Point Average. ఒక semester లో మీ grades సగటు"
+    },
+    {
+      "term": "CGPA",
+      "meaning_te": "అన్ని semesters కలిపిన మొత్తం grade సగటు"
+    },
+    {
+      "term": "Active recall",
+      "meaning_te": "పుస్తకం చూడకుండా గుర్తు తెచ్చుకుని రాయడం లేదా చెప్పడం"
+    },
+    {
+      "term": "Spaced repetition",
+      "meaning_te": "ఒక topic ని పెరుగుతున్న గ్యాప్‌లతో మళ్లీ మళ్లీ revise చేయడం"
+    },
+    {
+      "term": "Internal marks",
+      "meaning_te": "సెమిస్టర్ మధ్యలో tests, assignments, labs ద్వారా వచ్చే మార్కులు"
+    },
+    {
+      "term": "Backlog",
+      "meaning_te": "ఒక subject లో పాస్ కాకపోవడం, దాన్ని తర్వాత మళ్లీ రాయాల్సి రావడం"
+    }
   ],
   "sections": [
     {
@@ -52,12 +70,32 @@
         "అనుకోని పనుల కోసం ఒక buffer block ఉంచండి."
       ],
       "table": {
-        "headers": ["Study block", "ఉద్దేశం", "ఉదాహరణ"],
+        "headers": [
+          "Study block",
+          "ఉద్దేశం",
+          "ఉదాహరణ"
+        ],
         "rows": [
-          ["Same-day review", "అవగాహనను బలపరచడం", "Lecture ని సంక్షిప్తంగా రాసి 2-3 ప్రశ్నలు చేయడం"],
-          ["Deep practice", "కష్టమైన విషయాలపై పని", "Numericals, derivations, programming exercises"],
-          ["Weekly recap", "లోపాలను ముందే కనుగొనడం", "Closed-book quiz, తప్పుల సమీక్ష"],
-          ["Exam revision", "సమయ ఒత్తిడిలో గుర్తు తెచ్చుకోవడం", "Past questions, timed practice"]
+          [
+            "Same-day review",
+            "అవగాహనను బలపరచడం",
+            "Lecture ని సంక్షిప్తంగా రాసి 2-3 ప్రశ్నలు చేయడం"
+          ],
+          [
+            "Deep practice",
+            "కష్టమైన విషయాలపై పని",
+            "Numericals, derivations, programming exercises"
+          ],
+          [
+            "Weekly recap",
+            "లోపాలను ముందే కనుగొనడం",
+            "Closed-book quiz, తప్పుల సమీక్ష"
+          ],
+          [
+            "Exam revision",
+            "సమయ ఒత్తిడిలో గుర్తు తెచ్చుకోవడం",
+            "Past questions, timed practice"
+          ]
         ]
       }
     },
@@ -146,12 +184,32 @@
         "ఇష్టమైన subject కే సమయం మొత్తం ఇవ్వకండి. ప్రతి subject కి ఒక ప్లాన్ చేసిన slot ఇవ్వండి. ఎక్కువ credits ఉన్న లేదా కష్టమైన topics కి అదనపు practice ఇవ్వండి కానీ మిగతావాటిని విస్మరించకండి."
       ],
       "table": {
-        "headers": ["కాలం", "ముఖ్యమైన పని", "ఫలితం (Output)"],
+        "headers": [
+          "కాలం",
+          "ముఖ్యమైన పని",
+          "ఫలితం (Output)"
+        ],
         "rows": [
-          ["Days 1–7", "Syllabus audit, బలహీన topics ను సరిచేయడం", "Topic checklist, doubt list"],
-          ["Days 8–17", "Practice, active recall", "Solved questions, సరిదిద్దిన తప్పులు"],
-          ["Days 18–24", "Mixed revision, past papers", "Timed practice scores"],
-          ["Days 25–30", "Focused review, exam readiness", "Short notes, formulas, diagrams, విశ్రాంతి"]
+          [
+            "Days 1–7",
+            "Syllabus audit, బలహీన topics ను సరిచేయడం",
+            "Topic checklist, doubt list"
+          ],
+          [
+            "Days 8–17",
+            "Practice, active recall",
+            "Solved questions, సరిదిద్దిన తప్పులు"
+          ],
+          [
+            "Days 18–24",
+            "Mixed revision, past papers",
+            "Timed practice scores"
+          ],
+          [
+            "Days 25–30",
+            "Focused review, exam readiness",
+            "Short notes, formulas, diagrams, విశ్రాంతి"
+          ]
         ]
       }
     }
@@ -178,11 +236,7 @@
       "a_te": "తప్పులను త్వరగా విశ్లేషించండి, feedback అడగండి, తర్వాతి assessment కి ముందు study plan ని మార్చుకోండి."
     }
   ],
-  "resources": [
-    {"name": "NPTEL", "url": "https://nptel.ac.in/", "description_te": "ఉచిత learning materials, courses. Certificates కి విడిగా fees ఉండవచ్చు"},
-    {"name": "SWAYAM", "url": "https://swayam.gov.in/", "description_te": "భారతీయ institutions అందించే online courses"},
-    {"name": "AICTE", "url": "https://www.aicte-india.org/", "description_te": "Grading, assessment నియమాల కోసం మీ institution ప్రస్తుత handbook ని వాడండి"}
-  ],
+  "resources": [],
   "publication_checklist_te": [
     "హామీ ఇచ్చే SGPA ఫలితాలను చెప్పవద్దు.",
     "సలహాను విద్యార్థి university, subjects, assessment నిబంధనలకు అనుగుణంగా మార్చండి.",
