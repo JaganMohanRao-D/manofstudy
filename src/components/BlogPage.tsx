@@ -6,14 +6,18 @@ import editorialArticlesData from '../data/editorialBlogArticles.generated.json'
 type BlogArticle = {
   slug: string; title: string; category: string; tags: string[]; status: 'published' | 'draft';
   publishedAt: string; updatedAt: string; featured: boolean; summary: string; content: string;
+  metaTitle?: string; metaDescription?: string; author?: string; readingTimeMinutes?: number | null;
   toolLinks: { label: string; href: string }[];
 };
-const allArticles = [...(articlesData as BlogArticle[]), ...(editorialArticlesData as BlogArticle[])];
+const allArticles = [...(articlesData as BlogArticle[]), ...(editorialArticlesData as BlogArticle[])]
+  .sort((a, b) => String(b.publishedAt || '').localeCompare(String(a.publishedAt || '')) ||
+    String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')) ||
+    a.title.localeCompare(b.title));
 const articles = allArticles.filter((article) => article.status === 'published');
 const SITE = 'https://naacollege.in';
 const categorySlug = (value: string) => value.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const slugFromPath = (path: string) => path.replace(/\/+$/, '').split('/').filter(Boolean).pop() || '';
-const readTime = (article: BlogArticle) => Math.max(2, Math.ceil(article.content.trim().split(/\s+/).filter(Boolean).length / 220));
+const readTime = (article: BlogArticle) => article.readingTimeMinutes || Math.max(2, Math.ceil(article.content.trim().split(/\s+/).filter(Boolean).length / 220));
 const headingId = (value: string) => categorySlug(value);
 const isMarkdownTableRow = (value: string) => /^\|.*\|$/.test(value.trim());
 const isMarkdownTableSeparator = (value: string) => /^\|?\s*:?-{3,}:?\s*(?:\|\s*:?-{3,}:?\s*)+\|?$/.test(value.trim());
@@ -36,11 +40,20 @@ function InlineText({ value }: { value: string }) {
 
 function ArticleBody({ content }: { content: string }) {
   const lines = content.trim().split(/\r?\n/);
-  const blocks: { type: string; value: string[]; rows?: string[][] }[] = [];
+  const blocks: { type: string; value: string[]; rows?: string[][]; language?: string }[] = [];
   let i = 0;
   while (i < lines.length) {
     const line = lines[i].trim();
     if (!line) { i++; continue; }
+    if (line.startsWith('```')) {
+      const language = line.slice(3).trim();
+      const code: string[] = [];
+      i++;
+      while (i < lines.length && !lines[i].trim().startsWith('```')) code.push(lines[i++]);
+      if (i < lines.length) i++;
+      blocks.push({ type: 'code', value: code, language });
+      continue;
+    }
     if (isMarkdownTableRow(line) && i + 1 < lines.length && isMarkdownTableSeparator(lines[i + 1].trim())) {
       const rows = [parseMarkdownTableRow(line)];
       i += 2;
@@ -71,6 +84,7 @@ function ArticleBody({ content }: { content: string }) {
   }
   return <div className="blog-prose space-y-5" onCopy={(event) => event.preventDefault()}>
     {blocks.map((block, index) => {
+      if (block.type === 'code') return <pre key={index} className="my-5 overflow-x-auto rounded-xl border border-slate-800 bg-slate-950 p-4 text-sm leading-6 text-slate-100"><code>{block.value.join('\n')}</code></pre>;
       if (block.type === 'table' && block.rows?.length) return <div key={index} className="my-5 overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700"><table className="w-full min-w-[560px] border-collapse text-left text-sm leading-6"><thead className="bg-slate-50 dark:bg-slate-800/80"><tr>{block.rows[0].map((cell, cellIndex) => <th key={cellIndex} scope="col" className="border-b border-slate-200 px-3 py-3 font-bold text-slate-900 dark:border-slate-700 dark:text-white"><InlineText value={cell} /></th>)}</tr></thead><tbody>{block.rows.slice(1).map((row, rowIndex) => <tr key={rowIndex} className="odd:bg-white even:bg-slate-50/70 dark:odd:bg-slate-900 dark:even:bg-slate-800/40">{block.rows?.[0].map((_, cellIndex) => <td key={cellIndex} className="align-top border-b border-slate-100 px-3 py-3 text-slate-700 dark:border-slate-800 dark:text-slate-300"><InlineText value={row[cellIndex] || ''} /></td>)}</tr>)}</tbody></table></div>;
       if (block.type === 'h2') return <h2 id={headingId(block.value[0])} key={index} className="scroll-mt-24 pt-4 text-xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-2xl">{block.value[0]}</h2>;
       if (block.type === 'h3') return <h3 key={index} className="pt-2 text-lg font-semibold tracking-tight text-slate-900 dark:text-white sm:text-xl">{block.value[0]}</h3>;
@@ -118,7 +132,11 @@ export const BlogPage: React.FC = () => {
     let title = 'Student Blog & Knowledge Hub | Naa College';
     let description = 'Practical guides for EAPCET, student tools, scholarships, programming, and responsible AI-assisted development.';
     let canonical = SITE + '/blog/';
-    if (article) { title = article.title + ' | Naa College'; description = article.summary; canonical = SITE + '/blog/' + article.slug + '/'; }
+    if (article) {
+      title = article.metaTitle || (article.title + ' | Naa College');
+      description = String(article.metaDescription || article.summary).slice(0, 158);
+      canonical = SITE + '/blog/' + article.slug + '/';
+    }
     else if (isCategory && currentCategory) { title = currentCategory + ' Guides | Naa College Blog'; description = 'Practical, student-focused guides in ' + currentCategory + ' from Naa College.'; canonical = SITE + '/blog/category/' + categorySlug(currentCategory) + '/'; }
     document.title = title;
     const setMeta = (selector: string, value: string) => {
@@ -136,9 +154,9 @@ export const BlogPage: React.FC = () => {
     let schema = document.getElementById('naa-blog-schema');
     if (!schema) { schema = document.createElement('script'); schema.id = 'naa-blog-schema'; schema.setAttribute('type', 'application/ld+json'); document.head.appendChild(schema); }
     schema.textContent = JSON.stringify(article ? {
-      '@context': 'https://schema.org', '@type': 'BlogPosting', headline: article.title, description: article.summary,
+      '@context': 'https://schema.org', '@type': 'BlogPosting', headline: article.title, description: article.metaDescription || article.summary,
       datePublished: article.publishedAt, dateModified: article.updatedAt, mainEntityOfPage: canonical,
-      author: { '@type': 'Organization', name: 'Naa College Editorial Desk', url: SITE + '/' },
+      author: { '@type': 'Organization', name: article.author || 'Naa College Editorial Desk', url: SITE + '/' },
       publisher: { '@type': 'Organization', name: 'Naa College Editorial Desk', url: SITE + '/' }
     } : { '@context': 'https://schema.org', '@type': 'Blog', name: 'Naa College Blog', url: SITE + '/blog/' });
     // Remove the static first-paint copy only after BlogPage has committed its
@@ -151,7 +169,7 @@ export const BlogPage: React.FC = () => {
 
   if (article) return <article className="mx-auto max-w-6xl">
     <a href="/blog/" className="inline-flex items-center gap-2 text-sm font-bold text-cyan-800 dark:text-cyan-300"><ArrowLeft className="h-4 w-4" />All articles</a>
-    <header className="mt-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-10"><p className="text-xs font-bold uppercase tracking-[0.16em] text-cyan-700 dark:text-cyan-300">{article.category}</p><h1 className="mt-3 max-w-4xl text-3xl font-semibold leading-tight tracking-tight text-slate-950 dark:text-white sm:text-4xl">{article.title}</h1><p className="mt-5 max-w-3xl text-base leading-7 text-slate-600 dark:text-slate-300">{article.summary}</p><div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs text-slate-500 dark:text-slate-400"><span className="inline-flex items-center gap-1.5"><CalendarDays className="h-4 w-4" />Updated {article.updatedAt}</span><span className="inline-flex items-center gap-1.5"><Clock3 className="h-4 w-4" />{readTime(article)} min read</span><span>By Naa College Editorial Desk</span></div></header>
+    <header className="mt-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-10"><p className="text-xs font-bold uppercase tracking-[0.16em] text-cyan-700 dark:text-cyan-300">{article.category}</p><h1 className="mt-3 max-w-4xl text-3xl font-semibold leading-tight tracking-tight text-slate-950 dark:text-white sm:text-4xl">{article.title}</h1><p className="mt-5 max-w-3xl text-base leading-7 text-slate-600 dark:text-slate-300">{article.summary}</p><div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs text-slate-500 dark:text-slate-400"><span className="inline-flex items-center gap-1.5"><CalendarDays className="h-4 w-4" />Updated {article.updatedAt}</span><span className="inline-flex items-center gap-1.5"><Clock3 className="h-4 w-4" />{readTime(article)} min read</span><span>By {article.author || 'Naa College Editorial Desk'}</span></div></header>
     <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_250px]"><div className="min-w-0 rounded-3xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900 sm:p-9"><ArticleBody content={article.content} />
       {article.toolLinks.length > 0 && <section className="mt-8 rounded-2xl border border-cyan-200 bg-cyan-50/70 p-5 dark:border-cyan-900 dark:bg-cyan-950/30"><h2 className="font-extrabold text-slate-950 dark:text-white">Open a related Naa College tool</h2><div className="mt-3 flex flex-wrap gap-2">{article.toolLinks.map((link) => <a key={link.href} href={link.href} className="inline-flex items-center gap-2 rounded-xl bg-cyan-800 px-3 py-2 text-sm font-bold text-white">{link.label}<ArrowRight className="h-4 w-4" /></a>)}</div></section>}
       <p className="mt-8 border-t border-slate-200 pt-5 text-xs leading-6 text-slate-500 dark:border-slate-800 dark:text-slate-400">Educational information only. Time-sensitive details should be confirmed with the relevant official authority or product documentation.</p>
