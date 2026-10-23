@@ -90,7 +90,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
   const [compressLevel, setCompressLevel] = useState<number>(0.65);
 
   // Watermark
-  const [watermarkText, setWatermarkText] = useState<string>('MAN OF STUDY');
+  const [watermarkText, setWatermarkText] = useState<string>('');
   const [watermarkOpacity, setWatermarkOpacity] = useState<number>(0.25);
   const [watermarkAngle, setWatermarkAngle] = useState<number>(-45);
   const [watermarkFontSize, setWatermarkFontSize] = useState<number>(56);
@@ -108,7 +108,7 @@ export const PdfToolModal: React.FC<PdfToolModalProps> = ({ tool, onClose }) => 
   const [passwordInput, setPasswordInput] = useState<string>('');
 
   // Edit Overlay
-  const [overlayText, setOverlayText] = useState<string>('APPROVED - MAN OF STUDY');
+  const [overlayText, setOverlayText] = useState<string>('');
   const [overlayPage, setOverlayPage] = useState<number>(1);
   const [overlayColor, setOverlayColor] = useState<string>('#0284c7');
 
