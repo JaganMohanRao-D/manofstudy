@@ -250,7 +250,12 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
           </div>
 
           <div className="nc-video-column">
-            <div className="nc-video-frame">
+            <div
+              className="nc-video-frame"
+              onContextMenu={(event) => event.preventDefault()}
+              onDragStart={(event) => event.preventDefault()}
+              onCopy={(event) => event.preventDefault()}
+            >
               <video
                 className="nc-campus-video"
                 autoPlay
@@ -261,6 +266,10 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
                 disablePictureInPicture
                 disableRemotePlayback
                 controlsList="nodownload noplaybackrate noremoteplayback"
+                draggable={false}
+                onContextMenu={(event) => event.preventDefault()}
+                onDragStart={(event) => event.preventDefault()}
+                onCopy={(event) => event.preventDefault()}
                 poster="/Vibrant%20Campus%20Life%20Illustration.webp"
                 aria-label="Naa College introduction video"
               >
