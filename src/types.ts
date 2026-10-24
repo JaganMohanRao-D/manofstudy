@@ -46,6 +46,7 @@ export type ToolTab =
   | 'roadmaps'
   | 'scholarships'
   | 'pdf-tools'
+  | 'video-audio'
   | 'vault'
   | 'backlog'
   | 'compiler'

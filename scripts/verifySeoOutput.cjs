@@ -53,7 +53,7 @@ const requiredUrls = [
   '/legal-safe-harbor/', '/scholarships/', '/blog/',
   '/ap-eapcet/college-wise-allotments/', '/tg-eapcet/name-wise-allotments/',
   '/ap-eapcet/college-predictor/', '/tg-eapcet/college-predictor/',
-  '/tools/attendance-calculator/', '/tools/gpa-calculator/', '/engineering-roadmaps/'
+  '/tools/attendance-calculator/', '/tools/gpa-calculator/', '/tools/video-to-mp3/', '/engineering-roadmaps/'
 ];
 for (const requiredPath of requiredUrls) {
   if (!urlSet.has(SITE + requiredPath)) fail('required public route missing from sitemap: ' + requiredPath);
