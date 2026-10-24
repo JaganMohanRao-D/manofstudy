@@ -101,16 +101,14 @@ export const Footer = ({ onOpenSupportModal }) => (
     </div>
 
     {/* Wide, responsive 2D campus illustration supplied in public/. */}
-    <div className="nc-footer-artwork" aria-label="Illustrated student campus scene">
-      <img
-        src="/Aspiring%20University%20Campus%20Banner.webp"
-        alt="A blue, white and gold illustrated university campus with cartoon students learning, walking and collaborating."
-        width="2048"
-        height="1024"
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
+    <div
+      className="nc-footer-artwork"
+      role="img"
+      aria-label="A blue, white and gold illustrated university campus with cartoon students learning, walking and collaborating."
+      onContextMenu={(event) => event.preventDefault()}
+      onDragStart={(event) => event.preventDefault()}
+      onSelectStart={(event) => event.preventDefault()}
+    />
 
     <div className="nc-footer-bottom">
       <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-4 text-center sm:px-6 md:flex-row md:items-center md:justify-between md:gap-5 md:text-left lg:px-8">
