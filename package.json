@@ -29,7 +29,8 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
-    "vite": "^6.2.3"
+    "vite": "^6.2.3",
+    "@ffmpeg/ffmpeg": "^0.12.15"
   },
   "overrides": {
     "@grpc/grpc-js": "^1.14.5"
