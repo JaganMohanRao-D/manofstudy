@@ -107,7 +107,7 @@ export const Footer = ({ onOpenSupportModal }) => (
       aria-label="A blue, white and gold illustrated university campus with cartoon students learning, walking and collaborating."
       onContextMenu={(event) => event.preventDefault()}
       onDragStart={(event) => event.preventDefault()}
-      onSelectStart={(event) => event.preventDefault()}
+      onCopy={(event) => event.preventDefault()}
     />
 
     <div className="nc-footer-bottom">
