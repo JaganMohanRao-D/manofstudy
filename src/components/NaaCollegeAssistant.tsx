@@ -364,17 +364,14 @@ export function NaaCollegeAssistant({ embedded = false }: { embedded?: boolean }
         {open ? (
           <X size={23} />
         ) : (
-          <>
-            <img
-              src="/robot-head-3d-icon-png-download-13156297.png"
-              alt=""
-              width={48}
-              height={48}
-              className="nca-chat-launcher-robot"
-              draggable={false}
-            />
-            <span className="nca-chat-launcher-label">NaaCox AI</span>
-          </>
+          <img
+            src="/robot-head-3d-icon-png-download-13156297.png"
+            alt=""
+            width={48}
+            height={48}
+            className="nca-chat-launcher-robot"
+            draggable={false}
+          />
         )}
       </button>}
     </div>
