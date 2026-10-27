@@ -69,7 +69,7 @@ export const APGlobalStudentSearch: React.FC<APGlobalStudentSearchProps> = ({ ye
   };
 
   return (
-    <section className="rounded-[1.5rem] border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/85 p-3 sm:p-4 shadow-lg shadow-cyan-950/10 backdrop-blur-xl">
+    <section className="box-border w-full min-w-0 max-w-full rounded-[1.5rem] border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/85 p-3 sm:p-4 shadow-lg shadow-cyan-950/10 backdrop-blur-xl">
       <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
@@ -132,18 +132,18 @@ export const APGlobalStudentSearch: React.FC<APGlobalStudentSearchProps> = ({ ye
               No student allotment found for this name or rank.
             </div>
           ) : (
-            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid w-full min-w-0 max-w-full grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {results.slice(0, 12).map((record, index) => (
-                <article key={`${record.college_code}-${record.branch_code}-${record.rank}-${index}`} className="rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950/80">
-                  <div className="flex items-start justify-between gap-2">
+                <article key={`${record.college_code}-${record.branch_code}-${record.rank}-${index}`} className="box-border w-full min-w-0 max-w-full rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950/80">
+                  <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-2">
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-bold text-slate-900 dark:text-white">{record.cand_name || 'Student'}</p>
-                      <p className="mt-0.5 truncate text-[11px] text-slate-500 dark:text-slate-400">{record.college_name || record.college_code}</p>
+                      <p className="break-words text-sm font-bold leading-snug text-slate-900 dark:text-white [overflow-wrap:anywhere]">{record.cand_name || 'Student'}</p>
+                      <p className="mt-0.5 break-words text-[11px] leading-snug text-slate-500 dark:text-slate-400 [overflow-wrap:anywhere]">{record.college_name || record.college_code}</p>
                     </div>
-                    <span className="shrink-0 rounded-lg bg-cyan-500/10 px-2 py-1 font-mono text-[11px] font-bold text-cyan-700 dark:text-cyan-300">#{record.rank.toLocaleString()}</span>
+                    <span className="max-w-full shrink-0 whitespace-nowrap rounded-lg bg-cyan-500/10 px-2 py-1 font-mono text-[11px] font-bold text-cyan-700 dark:text-cyan-300">#{record.rank.toLocaleString()}</span>
                   </div>
-                  <div className="mt-2 space-y-1 text-[10px] text-slate-500 dark:text-slate-400">
-                    <p className="truncate"><span className="font-semibold text-slate-700 dark:text-slate-300">Branch:</span> {record.branch_name || record.branch_code}</p>
+                  <div className="mt-2 min-w-0 space-y-1 text-[10px] text-slate-500 dark:text-slate-400">
+                    <p className="break-words leading-snug [overflow-wrap:anywhere]"><span className="font-semibold text-slate-700 dark:text-slate-300">Branch:</span> {record.branch_name || record.branch_code}</p>
                     <div className="flex flex-wrap gap-1.5">
                       <span className="rounded-md bg-white px-1.5 py-1 dark:bg-slate-900">{record.category || '—'}</span>
                       <span className="rounded-md bg-white px-1.5 py-1 dark:bg-slate-900">{record.gender || '—'}</span>
