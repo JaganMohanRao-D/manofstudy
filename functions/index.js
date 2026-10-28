@@ -390,56 +390,32 @@ exports.websiteAssistantChat = require("./websiteAssistant").websiteAssistantCha
 
 
 // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 // Private Naa College owner portal authentication.
-// Passwords are scrypt-hashed server-side; raw passwords and the one-time
-// setup key are never written to Firestore, logs, or client bundles.
+// Only the verified Google account jaganmakes@gmail.com may create an admin session.
+// Firebase Auth validates the ID token; this function enforces the owner allowlist
+// server-side before issuing a short-lived opaque session token.
 // ---------------------------------------------------------------------------
 const crypto = require("node:crypto");
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
-const { defineSecret } = require("firebase-functions/params");
 
-const ADMIN_SETUP_KEY = defineSecret("ADMIN_SETUP_KEY");
 const ADMIN_OWNER_EMAIL = "jaganmakes@gmail.com";
 const ADMIN_AUTH_REGION = "asia-southeast1";
 const ADMIN_ALLOWED_ORIGINS = [
   "https://naacollege.in",
   "https://www.naacollege.in",
 ];
-const ADMIN_CREDENTIALS_REF = () => db.collection("private_admin").doc("credentials");
-const ADMIN_SETUP_STATE_REF = () => db.collection("private_admin").doc("setup-state");
 const ADMIN_SESSION_COLLECTION = "private_admin_sessions";
 const ADMIN_RATE_LIMIT_COLLECTION = "private_admin_rate_limits";
 const ADMIN_SESSION_LIFETIME_MS = 8 * 60 * 60 * 1000;
 const ADMIN_RATE_WINDOW_MS = 15 * 60 * 1000;
 const ADMIN_MAX_ATTEMPTS_PER_WINDOW = 8;
 
-function adminCallableOptions(extraOptions = {}) {
+function adminCallableOptions() {
   return {
     region: ADMIN_AUTH_REGION,
     cors: ADMIN_ALLOWED_ORIGINS,
-    ...extraOptions,
   };
-}
-
-function constantTimeTextEqual(left, right) {
-  if (typeof left !== "string" || typeof right !== "string") return false;
-  const leftBuffer = Buffer.from(left, "utf8");
-  const rightBuffer = Buffer.from(right, "utf8");
-  if (leftBuffer.length !== rightBuffer.length) return false;
-  return crypto.timingSafeEqual(leftBuffer, rightBuffer);
-}
-
-function adminPasswordInputIsValid(password) {
-  return typeof password === "string" && password.length >= 12 && password.length <= 256;
-}
-
-function deriveAdminPasswordHash(password, salt) {
-  return new Promise((resolve, reject) => {
-    crypto.scrypt(password, salt, 64, (error, derivedKey) => {
-      if (error) return reject(error);
-      return resolve(derivedKey.toString("hex"));
-    });
-  });
 }
 
 function getAdminRateLimitRef(request, purpose) {
@@ -489,17 +465,40 @@ async function enforceAdminRateLimit(request, purpose) {
   if (decision.blocked) {
     throw new HttpsError(
       "resource-exhausted",
-      "Too many attempts. Please wait 15 minutes before trying again."
+      "Too many sign-in attempts. Please wait 15 minutes before trying again."
     );
   }
   return ref;
+}
+
+function assertOwnerGoogleIdentity(authContext) {
+  const token = authContext && authContext.token;
+  const firebaseClaims = token && token.firebase;
+  const email = typeof (token && token.email) === "string"
+    ? token.email.trim().toLowerCase()
+    : "";
+  const isVerified = Boolean(token && token.email_verified === true);
+  const isGoogleProvider = Boolean(
+    firebaseClaims && firebaseClaims.sign_in_provider === "google.com"
+  );
+
+  if (!authContext || !authContext.uid ||
+      email !== ADMIN_OWNER_EMAIL ||
+      !isVerified ||
+      !isGoogleProvider) {
+    throw new HttpsError(
+      "permission-denied",
+      "Only the verified Google account jaganmakes@gmail.com can access this admin portal."
+    );
+  }
+  return { uid: authContext.uid, email };
 }
 
 function hashAdminSessionToken(token) {
   return crypto.createHash("sha256").update(token, "utf8").digest("hex");
 }
 
-async function getValidAdminSession(sessionToken) {
+async function getValidAdminSession(sessionToken, expectedUid) {
   if (typeof sessionToken !== "string" || sessionToken.length < 40 || sessionToken.length > 128) {
     return null;
   }
@@ -508,149 +507,27 @@ async function getValidAdminSession(sessionToken) {
   if (!snapshot.exists) return null;
 
   const session = snapshot.data() || {};
-  if (Number(session.expiresAtMs) <= Date.now()) {
-    await sessionRef.delete().catch(() => {});
+  if (Number(session.expiresAtMs) <= Date.now() || !expectedUid || session.uid !== expectedUid) {
+    if (Number(session.expiresAtMs) <= Date.now()) {
+      await sessionRef.delete().catch(() => {});
+    }
     return null;
   }
-  return { ref: sessionRef, email: ADMIN_OWNER_EMAIL };
+  return { ref: sessionRef, email: ADMIN_OWNER_EMAIL, uid: session.uid };
 }
 
-exports.adminSetupStatus = onCall(
-  adminCallableOptions(),
-  async () => {
-    const [credentials, setupState] = await Promise.all([
-      ADMIN_CREDENTIALS_REF().get(),
-      ADMIN_SETUP_STATE_REF().get(),
-    ]);
-    // Once setup has been claimed, never reopen it automatically even if an
-    // administrator later deletes the credential document by mistake.
-    return {
-      needsSetup: !credentials.exists && !setupState.exists,
-      ownerEmail: ADMIN_OWNER_EMAIL,
-    };
-  }
-);
-
-exports.initializeNaaAdmin = onCall(
-  adminCallableOptions({ secrets: [ADMIN_SETUP_KEY], timeoutSeconds: 15 }),
+exports.loginWithGoogleNaaAdmin = onCall(
+  { ...adminCallableOptions(), timeoutSeconds: 15 },
   async (request) => {
-    const credentialsRef = ADMIN_CREDENTIALS_REF();
-    const setupStateRef = ADMIN_SETUP_STATE_REF();
-    const [alreadyInitialized, setupState] = await Promise.all([
-      credentialsRef.get(),
-      setupStateRef.get(),
-    ]);
-    if (alreadyInitialized.exists || setupState.exists) {
-      throw new HttpsError("failed-precondition", "The one-time owner setup has already been completed.");
-    }
-
-    const email = typeof request.data?.email === "string"
-      ? request.data.email.trim().toLowerCase()
-      : "";
-    const setupKey = typeof request.data?.setupKey === "string" ? request.data.setupKey : "";
-    const password = request.data?.password;
-
-    if (email !== ADMIN_OWNER_EMAIL) {
-      throw new HttpsError("invalid-argument", "The owner email is fixed and cannot be changed.");
-    }
-    if (!adminPasswordInputIsValid(password)) {
-      throw new HttpsError("invalid-argument", "Choose a password between 12 and 256 characters.");
-    }
-    if (!setupKey || setupKey.length > 512) {
-      throw new HttpsError("permission-denied", "The one-time setup key is invalid.");
-    }
-
-    const rateLimitRef = await enforceAdminRateLimit(request, "setup");
-    let configuredSetupKey = "";
-    try {
-      configuredSetupKey = ADMIN_SETUP_KEY.value();
-    } catch (_) {
-      throw new HttpsError(
-        "failed-precondition",
-        "Owner setup is not configured on the server yet. Contact the site administrator."
-      );
-    }
-
-    if (typeof configuredSetupKey !== "string" || configuredSetupKey.length < 32) {
-      throw new HttpsError(
-        "failed-precondition",
-        "Owner setup is not configured securely on the server yet."
-      );
-    }
-    if (!constantTimeTextEqual(setupKey, configuredSetupKey)) {
-      throw new HttpsError("permission-denied", "The one-time setup key is invalid.");
-    }
-
-    const salt = crypto.randomBytes(16).toString("hex");
-    const passwordHash = await deriveAdminPasswordHash(password, salt);
-    try {
-      await db.runTransaction(async (transaction) => {
-        const [currentCredentials, currentSetupState] = await Promise.all([
-          transaction.get(credentialsRef),
-          transaction.get(setupStateRef),
-        ]);
-        if (currentCredentials.exists || currentSetupState.exists) {
-          throw new HttpsError("failed-precondition", "The one-time owner setup has already been completed.");
-        }
-        transaction.create(credentialsRef, {
-          email: ADMIN_OWNER_EMAIL,
-          passwordSalt: salt,
-          passwordHash,
-          passwordAlgorithm: "scrypt-16384-64",
-          createdAt: FieldValue.serverTimestamp(),
-          credentialVersion: 1,
-        });
-        transaction.create(setupStateRef, {
-          initialized: true,
-          ownerEmail: ADMIN_OWNER_EMAIL,
-          completedAt: FieldValue.serverTimestamp(),
-          credentialVersion: 1,
-        });
-      });
-    } catch (error) {
-      if (error instanceof HttpsError) throw error;
-      console.error("[AdminAuth] Owner setup failed due to a server-side error.");
-      throw new HttpsError("internal", "Owner setup could not be completed. Please try again.");
-    }
-
-    await rateLimitRef.delete().catch(() => {});
-    return { initialized: true };
-  }
-);
-
-exports.loginNaaAdmin = onCall(
-  adminCallableOptions({ timeoutSeconds: 15 }),
-  async (request) => {
-    const rateLimitRef = await enforceAdminRateLimit(request, "login");
-    const identifier = typeof request.data?.identifier === "string"
-      ? request.data.identifier.trim().toLowerCase()
-      : "";
-    const password = request.data?.password;
-
-    const credentialsSnapshot = await ADMIN_CREDENTIALS_REF().get();
-    if (!credentialsSnapshot.exists) {
-      throw new HttpsError("failed-precondition", "Owner setup has not been completed yet.");
-    }
-
-    const credentials = credentialsSnapshot.data() || {};
-    const identifierMatches = constantTimeTextEqual(identifier, ADMIN_OWNER_EMAIL);
-    const passwordIsValidInput = typeof password === "string" && password.length <= 256;
-    let passwordMatches = false;
-
-    if (passwordIsValidInput && typeof credentials.passwordSalt === "string" &&
-        typeof credentials.passwordHash === "string") {
-      const derivedHash = await deriveAdminPasswordHash(password, credentials.passwordSalt);
-      passwordMatches = constantTimeTextEqual(derivedHash, credentials.passwordHash);
-    }
-
-    if (!identifierMatches || !passwordMatches) {
-      throw new HttpsError("unauthenticated", "Invalid username/email or password.");
-    }
+    const rateLimitRef = await enforceAdminRateLimit(request, "google-login");
+    const owner = assertOwnerGoogleIdentity(request.auth);
 
     const sessionToken = crypto.randomBytes(32).toString("base64url");
     const expiresAtMs = Date.now() + ADMIN_SESSION_LIFETIME_MS;
     await db.collection(ADMIN_SESSION_COLLECTION).doc(hashAdminSessionToken(sessionToken)).set({
-      email: ADMIN_OWNER_EMAIL,
+      uid: owner.uid,
+      email: owner.email,
+      provider: "google.com",
       createdAt: FieldValue.serverTimestamp(),
       expiresAtMs,
     });
@@ -659,7 +536,7 @@ exports.loginNaaAdmin = onCall(
     return {
       sessionToken,
       expiresAt: new Date(expiresAtMs).toISOString(),
-      ownerEmail: ADMIN_OWNER_EMAIL,
+      ownerEmail: owner.email,
     };
   }
 );
@@ -667,7 +544,8 @@ exports.loginNaaAdmin = onCall(
 exports.verifyNaaAdminSession = onCall(
   adminCallableOptions(),
   async (request) => {
-    const session = await getValidAdminSession(request.data?.sessionToken);
+    const owner = assertOwnerGoogleIdentity(request.auth);
+    const session = await getValidAdminSession(request.data?.sessionToken, owner.uid);
     if (!session) {
       throw new HttpsError("unauthenticated", "Your admin session has expired. Please sign in again.");
     }
@@ -678,9 +556,14 @@ exports.verifyNaaAdminSession = onCall(
 exports.logoutNaaAdmin = onCall(
   adminCallableOptions(),
   async (request) => {
+    const owner = assertOwnerGoogleIdentity(request.auth);
     const token = request.data?.sessionToken;
     if (typeof token === "string" && token.length >= 40 && token.length <= 128) {
-      await db.collection(ADMIN_SESSION_COLLECTION).doc(hashAdminSessionToken(token)).delete().catch(() => {});
+      const sessionRef = db.collection(ADMIN_SESSION_COLLECTION).doc(hashAdminSessionToken(token));
+      const snapshot = await sessionRef.get();
+      if (snapshot.exists && snapshot.data()?.uid === owner.uid) {
+        await sessionRef.delete();
+      }
     }
     return { success: true };
   }
