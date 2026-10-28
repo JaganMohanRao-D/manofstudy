@@ -1616,10 +1616,7 @@ export default function App() {
 
       {/* Minimalist High-Performance Footer (hidden during active CBT testing) */}
       {!isExamActive && (
-        <Footer
-          onOpenLegalModal={(type) => setLegalModal(type)}
-          onOpenSupportModal={() => setIsSupportModalOpen(true)}
-        />
+        <Footer onOpenSupportModal={() => setIsSupportModalOpen(true)} />
       )}
 
       {/* 6. Legal & Contact Modal */}
