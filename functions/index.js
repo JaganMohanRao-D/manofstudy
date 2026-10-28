@@ -406,6 +406,7 @@ const ADMIN_ALLOWED_ORIGINS = [
   "https://www.naacollege.in",
 ];
 const ADMIN_CREDENTIALS_REF = () => db.collection("private_admin").doc("credentials");
+const ADMIN_SETUP_STATE_REF = () => db.collection("private_admin").doc("setup-state");
 const ADMIN_SESSION_COLLECTION = "private_admin_sessions";
 const ADMIN_RATE_LIMIT_COLLECTION = "private_admin_rate_limits";
 const ADMIN_SESSION_LIFETIME_MS = 8 * 60 * 60 * 1000;
@@ -517,9 +518,14 @@ async function getValidAdminSession(sessionToken) {
 exports.adminSetupStatus = onCall(
   adminCallableOptions(),
   async () => {
-    const credentials = await ADMIN_CREDENTIALS_REF().get();
+    const [credentials, setupState] = await Promise.all([
+      ADMIN_CREDENTIALS_REF().get(),
+      ADMIN_SETUP_STATE_REF().get(),
+    ]);
+    // Once setup has been claimed, never reopen it automatically even if an
+    // administrator later deletes the credential document by mistake.
     return {
-      needsSetup: !credentials.exists,
+      needsSetup: !credentials.exists && !setupState.exists,
       ownerEmail: ADMIN_OWNER_EMAIL,
     };
   }
@@ -529,8 +535,12 @@ exports.initializeNaaAdmin = onCall(
   adminCallableOptions({ secrets: [ADMIN_SETUP_KEY], timeoutSeconds: 15 }),
   async (request) => {
     const credentialsRef = ADMIN_CREDENTIALS_REF();
-    const alreadyInitialized = await credentialsRef.get();
-    if (alreadyInitialized.exists) {
+    const setupStateRef = ADMIN_SETUP_STATE_REF();
+    const [alreadyInitialized, setupState] = await Promise.all([
+      credentialsRef.get(),
+      setupStateRef.get(),
+    ]);
+    if (alreadyInitialized.exists || setupState.exists) {
       throw new HttpsError("failed-precondition", "The one-time owner setup has already been completed.");
     }
 
@@ -575,8 +585,11 @@ exports.initializeNaaAdmin = onCall(
     const passwordHash = await deriveAdminPasswordHash(password, salt);
     try {
       await db.runTransaction(async (transaction) => {
-        const current = await transaction.get(credentialsRef);
-        if (current.exists) {
+        const [currentCredentials, currentSetupState] = await Promise.all([
+          transaction.get(credentialsRef),
+          transaction.get(setupStateRef),
+        ]);
+        if (currentCredentials.exists || currentSetupState.exists) {
           throw new HttpsError("failed-precondition", "The one-time owner setup has already been completed.");
         }
         transaction.create(credentialsRef, {
@@ -585,6 +598,12 @@ exports.initializeNaaAdmin = onCall(
           passwordHash,
           passwordAlgorithm: "scrypt-16384-64",
           createdAt: FieldValue.serverTimestamp(),
+          credentialVersion: 1,
+        });
+        transaction.create(setupStateRef, {
+          initialized: true,
+          ownerEmail: ADMIN_OWNER_EMAIL,
+          completedAt: FieldValue.serverTimestamp(),
           credentialVersion: 1,
         });
       });
