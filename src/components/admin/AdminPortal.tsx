@@ -151,14 +151,17 @@ export default function AdminPortal() {
     setNotice("");
 
     if (setupPassword.length < 12) {
+      form.reset();
       setFormError("Choose a password with at least 12 characters.");
       return;
     }
     if (setupPassword !== setupPasswordConfirm) {
+      form.reset();
       setFormError("The passwords do not match.");
       return;
     }
     if (!setupKey.trim()) {
+      form.reset();
       setFormError("Enter the one-time owner setup key.");
       return;
     }
@@ -170,12 +173,12 @@ export default function AdminPortal() {
         setupKey,
         password: setupPassword,
       });
-      form.reset();
       setNeedsSetup(false);
       setNotice("Owner password saved securely. Sign in with your email and the password you just created.");
     } catch (error) {
       setFormError(readableError(error));
     } finally {
+      form.reset();
       setBusy(false);
     }
   }
@@ -196,12 +199,12 @@ export default function AdminPortal() {
         identifier: loginIdentifier,
         password,
       });
-      form.reset();
       setSessionToken(result.data.sessionToken);
       setOwnerEmail(result.data.ownerEmail || ADMIN_EMAIL);
     } catch (error) {
       setFormError(readableError(error));
     } finally {
+      form.reset();
       setBusy(false);
     }
   }
