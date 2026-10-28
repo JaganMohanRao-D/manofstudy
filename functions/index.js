@@ -391,10 +391,10 @@ exports.websiteAssistantChat = require("./websiteAssistant").websiteAssistantCha
 
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 // Private Naa College owner portal authentication.
-// Only the verified Google account jaganmakes@gmail.com may create an admin session.
-// Firebase Auth validates the ID token; this function enforces the owner allowlist
-// server-side before issuing a short-lived opaque session token.
+// Only one verified Google identity is authorized. Keep its email allowlist
+// here on the server; never return it to the browser/client.
 // ---------------------------------------------------------------------------
 const crypto = require("node:crypto");
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
@@ -486,12 +486,10 @@ function assertOwnerGoogleIdentity(authContext) {
       email !== ADMIN_OWNER_EMAIL ||
       !isVerified ||
       !isGoogleProvider) {
-    throw new HttpsError(
-      "permission-denied",
-      "Only the verified Google account jaganmakes@gmail.com can access this admin portal."
-    );
+    // Deliberately do not reveal the allowed address in client-facing errors.
+    throw new HttpsError("permission-denied", "This Google account is not authorized.");
   }
-  return { uid: authContext.uid, email };
+  return { uid: authContext.uid };
 }
 
 function hashAdminSessionToken(token) {
@@ -513,7 +511,7 @@ async function getValidAdminSession(sessionToken, expectedUid) {
     }
     return null;
   }
-  return { ref: sessionRef, email: ADMIN_OWNER_EMAIL, uid: session.uid };
+  return { ref: sessionRef, uid: session.uid };
 }
 
 exports.loginWithGoogleNaaAdmin = onCall(
@@ -526,17 +524,16 @@ exports.loginWithGoogleNaaAdmin = onCall(
     const expiresAtMs = Date.now() + ADMIN_SESSION_LIFETIME_MS;
     await db.collection(ADMIN_SESSION_COLLECTION).doc(hashAdminSessionToken(sessionToken)).set({
       uid: owner.uid,
-      email: owner.email,
       provider: "google.com",
       createdAt: FieldValue.serverTimestamp(),
       expiresAtMs,
     });
     await rateLimitRef.delete().catch(() => {});
 
+    // The authorized email is intentionally not returned to the client.
     return {
       sessionToken,
       expiresAt: new Date(expiresAtMs).toISOString(),
-      ownerEmail: owner.email,
     };
   }
 );
@@ -549,7 +546,7 @@ exports.verifyNaaAdminSession = onCall(
     if (!session) {
       throw new HttpsError("unauthenticated", "Your admin session has expired. Please sign in again.");
     }
-    return { valid: true, ownerEmail: session.email };
+    return { valid: true };
   }
 );
 
