@@ -1,29 +1,18 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { signInWithPopup, signOut } from "firebase/auth";
-import {
-  AlertCircle,
-  CheckCircle2,
-  LoaderCircle,
-  LogOut,
-  ShieldCheck,
-  LockKeyhole,
-  Globe2,
-} from "lucide-react";
+import { CheckCircle2, LoaderCircle, LogOut, ShieldCheck, AlertCircle } from "lucide-react";
 import { app, auth, googleProvider } from "../../services/firebase";
 
-const ADMIN_EMAIL = "jaganmakes@gmail.com";
 const functions = getFunctions(app, "asia-southeast1");
 
 type LoginResponse = {
   sessionToken: string;
   expiresAt: string;
-  ownerEmail: string;
 };
 
 type SessionResponse = {
   valid: boolean;
-  ownerEmail: string;
 };
 
 const loginWithGoogleCall = httpsCallable<Record<string, never>, LoginResponse>(
@@ -43,36 +32,66 @@ function readableError(error: unknown): string {
   if (error && typeof error === "object" && "code" in error) {
     const code = String((error as { code?: unknown }).code || "");
     if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request") {
-      return "Google sign-in was cancelled.";
+      return "Sign-in cancelled.";
     }
     if (code === "functions/permission-denied" || code === "functions/unauthenticated") {
-      return "Access denied. Only the verified Google account jaganmakes@gmail.com is allowed.";
+      return "This Google account is not authorized.";
+    }
+    if (code === "functions/resource-exhausted") {
+      return "Too many attempts. Please try again later.";
     }
     if (code === "auth/popup-blocked") {
-      return "Your browser blocked the Google sign-in popup. Allow popups for this site and try again.";
+      return "Your browser blocked the Google sign-in window.";
     }
   }
   if (error && typeof error === "object" && "message" in error) {
-    const message = String((error as { message?: unknown }).message || "");
-    if (message.toLowerCase().includes("failed to fetch")) {
-      return "Could not reach the secure sign-in service. Check the deployment and try again.";
+    const message = String((error as { message?: unknown }).message || "").toLowerCase();
+    if (message.includes("failed to fetch")) {
+      return "Sign-in service is temporarily unavailable.";
     }
-    return message.replace(/^FirebaseError:\s*/i, "") || "The request could not be completed.";
   }
-  return "The request could not be completed. Please try again.";
+  return "Sign-in failed. Please try again.";
+}
+
+function GoogleMark() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 48 48" className="h-5 w-5 shrink-0">
+      <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5Z" transform="translate(0 5)" />
+      <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.72 7.18l7.62 5.91c4.45-4.1 7.14-10.15 7.14-17.56Z" transform="translate(0 -1)" />
+      <path fill="#FBBC05" d="M10.53 28.59a14.4 14.4 0 0 1 0-9.18l-7.98-6.19a23.9 23.9 0 0 0 0 21.56l7.98-6.19Z" transform="translate(0 2)" />
+      <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.9-5.79l-7.62-5.91c-2.12 1.42-4.84 2.26-8.28 2.26-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48Z" transform="translate(0 -3)" />
+    </svg>
+  );
+}
+
+function BrandHeader() {
+  return (
+    <header className="mb-8 flex flex-col items-center text-center">
+      <img
+        src="/Naa%20College%20logo.webp"
+        alt="Naa College logo"
+        className="mb-6 h-20 w-20 object-contain drop-shadow-sm"
+        width={80}
+        height={80}
+        fetchPriority="high"
+      />
+      <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-[2.1rem]">
+        Admin Sign In
+      </h1>
+      <div aria-hidden="true" className="mt-4 h-1 w-14 rounded-full bg-emerald-600" />
+    </header>
+  );
 }
 
 export default function AdminPortal() {
   const [busy, setBusy] = useState(false);
   const [formError, setFormError] = useState("");
-  const [notice, setNotice] = useState("");
   const [sessionToken, setSessionToken] = useState<string | null>(null);
   const [sessionChecking, setSessionChecking] = useState(false);
-  const [ownerEmail, setOwnerEmail] = useState(ADMIN_EMAIL);
 
   useEffect(() => {
     const previousTitle = document.title;
-    document.title = "Private Admin | Naa College";
+    document.title = "Admin Sign In | Naa College";
     return () => {
       document.title = previousTitle;
     };
@@ -87,18 +106,10 @@ export default function AdminPortal() {
     setSessionChecking(true);
     verifySessionCall({ sessionToken })
       .then(({ data }) => {
-        if (!active) return;
-        if (!data.valid) {
-          setSessionToken(null);
-          setNotice("Your admin session has ended. Please sign in again.");
-          return;
-        }
-        setOwnerEmail(data.ownerEmail || ADMIN_EMAIL);
+        if (active && !data.valid) setSessionToken(null);
       })
       .catch(() => {
-        if (!active) return;
-        setSessionToken(null);
-        setNotice("Your admin session could not be verified. Please sign in again.");
+        if (active) setSessionToken(null);
       })
       .finally(() => {
         if (active) setSessionChecking(false);
@@ -111,37 +122,14 @@ export default function AdminPortal() {
   async function handleGoogleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setFormError("");
-    setNotice("");
     setBusy(true);
 
     try {
-      // The frontend check provides fast feedback only. The callable function
-      // independently enforces the exact email/provider/verified-email allowlist.
-      const credential = await signInWithPopup(auth, googleProvider);
-      const user = credential.user;
-      const normalizedEmail = (user.email || "").trim().toLowerCase();
-      const isGoogleProvider = user.providerData.some(
-        (provider) => provider.providerId === "google.com"
-      );
-
-      if (
-        normalizedEmail !== ADMIN_EMAIL ||
-        user.emailVerified !== true ||
-        !isGoogleProvider
-      ) {
-        await signOut(auth).catch(() => {});
-        setFormError(
-          "Access denied. Please choose the verified Google account jaganmakes@gmail.com."
-        );
-        return;
-      }
-
-      // Firebase automatically attaches the authenticated ID token to this
-      // callable request. The backend must validate the same allowlist again.
+      // The server is the source of truth and independently validates the
+      // authenticated Google identity, verified email, and exact allowlist.
+      await signInWithPopup(auth, googleProvider);
       const result = await loginWithGoogleCall({});
-      setOwnerEmail(result.data.ownerEmail || ADMIN_EMAIL);
       setSessionToken(result.data.sessionToken);
-      setNotice("");
     } catch (error) {
       await signOut(auth).catch(() => {});
       setFormError(readableError(error));
@@ -154,114 +142,75 @@ export default function AdminPortal() {
     const token = sessionToken;
     setSessionToken(null);
     setFormError("");
-    setNotice("You have signed out.");
     try {
       if (token) await logoutCall({ sessionToken: token });
     } catch {
-      // In-memory token is cleared locally. Server-side sessions also expire.
+      // Clear the local session even if network revocation cannot be confirmed.
     } finally {
       await signOut(auth).catch(() => {});
     }
   }
 
-  const buttonClass =
-    "inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-700 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-700/20 disabled:cursor-not-allowed disabled:opacity-60";
-
   return (
-    <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-10 text-slate-900">
-      <div className="w-full max-w-md">
-        <header className="mb-7 text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-100 bg-emerald-50 text-emerald-700 shadow-sm">
-            <ShieldCheck aria-hidden="true" className="h-7 w-7" />
-          </div>
-          <p className="mt-5 text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">
-            Private owner access
-          </p>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight">Naa College Admin</h1>
-          <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-slate-600">
-            Restricted management access. Only one verified Google account is authorized.
-          </p>
-        </header>
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#f4faf6] px-4 py-10 text-slate-900">
+      <div aria-hidden="true" className="pointer-events-none absolute -left-24 -top-20 h-72 w-72 rounded-full bg-emerald-200/55 blur-3xl" />
+      <div aria-hidden="true" className="pointer-events-none absolute -bottom-28 -right-20 h-80 w-80 rounded-full bg-amber-200/55 blur-3xl" />
+      <div aria-hidden="true" className="pointer-events-none absolute right-[12%] top-[15%] h-24 w-24 rounded-full bg-sky-200/50 blur-2xl" />
 
-        {sessionToken ? (
-          <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="flex items-start gap-3">
-              <CheckCircle2 aria-hidden="true" className="mt-0.5 h-6 w-6 shrink-0 text-emerald-700" />
-              <div>
-                <h2 className="text-lg font-semibold">Owner session active</h2>
-                <p className="mt-1 break-all text-sm text-slate-600">{ownerEmail}</p>
-              </div>
-            </div>
-            {sessionChecking ? (
-              <p className="mt-5 text-sm text-slate-600">Verifying session with the server…</p>
-            ) : (
-              <p className="mt-5 rounded-xl bg-slate-50 p-4 text-sm leading-6 text-slate-700">
-                Your Google identity and admin session are checked by the server. Protected content actions must independently verify the session before writing data.
-              </p>
-            )}
-            <button type="button" className={buttonClass + " mt-5"} onClick={handleLogout}>
-              <LogOut aria-hidden="true" className="h-4 w-4" /> Sign out
-            </button>
-          </section>
-        ) : (
-          <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="mb-5 flex items-start gap-3">
-              <LockKeyhole aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-emerald-700" />
-              <div>
-                <h2 className="text-lg font-semibold">Sign in with Google</h2>
-                <p className="mt-1 text-sm leading-6 text-slate-600">
-                  Only the account listed below can access this private admin portal. All other accounts are rejected.
-                </p>
-              </div>
-            </div>
+      <div className="relative z-10 w-full max-w-[430px]">
+        <div className="rounded-[30px] border border-white bg-white/95 p-7 shadow-[0_24px_70px_-28px_rgba(15,70,49,0.25)] ring-1 ring-emerald-900/5 backdrop-blur-sm sm:p-10">
+          <BrandHeader />
 
-            <div className="mb-5 rounded-xl border border-slate-200 bg-slate-50 p-3">
-              <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                Authorized account
-              </p>
-              <p className="mt-1 break-all text-sm font-semibold text-slate-800">{ADMIN_EMAIL}</p>
-            </div>
-
-            <form onSubmit={handleGoogleLogin}>
-              <button className={buttonClass} type="submit" disabled={busy}>
-                {busy ? (
-                  <LoaderCircle aria-hidden="true" className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Globe2 aria-hidden="true" className="h-4 w-4" />
-                )}
-                {busy ? "Verifying Google account…" : "Continue with Google"}
+          {sessionToken ? (
+            <div className="space-y-4">
+              {sessionChecking ? (
+                <div className="flex justify-center py-3" role="status" aria-label="Verifying session">
+                  <LoaderCircle aria-hidden="true" className="h-6 w-6 animate-spin text-emerald-700" />
+                </div>
+              ) : (
+                <div className="flex items-center justify-center gap-2 rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800">
+                  <CheckCircle2 aria-hidden="true" className="h-5 w-5" />
+                  Signed in
+                </div>
+              )}
+              <button
+                type="button"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3.5 text-sm font-semibold text-slate-700 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700 focus:outline-none focus:ring-4 focus:ring-emerald-600/15"
+                onClick={handleLogout}
+              >
+                <LogOut aria-hidden="true" className="h-4 w-4" />
+                Sign out
               </button>
-            </form>
-            <p className="mt-4 text-xs leading-5 text-slate-500">
-              Google email verification and the owner allowlist are enforced again on the server. No password setup or public signup is available here.
-            </p>
-          </section>
-        )}
+            </div>
+          ) : (
+            <>
+              <form onSubmit={handleGoogleLogin}>
+                <button
+                  className="group flex w-full items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-base font-semibold text-slate-800 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-emerald-300 hover:bg-emerald-50/60 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-emerald-600/15 disabled:cursor-not-allowed disabled:opacity-65"
+                  type="submit"
+                  disabled={busy}
+                >
+                  {busy ? (
+                    <LoaderCircle aria-hidden="true" className="h-5 w-5 animate-spin text-emerald-700" />
+                  ) : (
+                    <GoogleMark />
+                  )}
+                  <span>{busy ? "Signing in…" : "Sign in with Google"}</span>
+                </button>
+              </form>
 
-        {(formError || notice) && (
-          <div
-            className={
-              "mt-4 flex items-start gap-2 rounded-xl border p-3 text-sm leading-6 " +
-              (formError
-                ? "border-rose-200 bg-rose-50 text-rose-800"
-                : "border-emerald-200 bg-emerald-50 text-emerald-900")
-            }
-            role={formError ? "alert" : "status"}
-          >
-            {formError ? (
-              <AlertCircle aria-hidden="true" className="mt-1 h-4 w-4 shrink-0" />
-            ) : (
-              <CheckCircle2 aria-hidden="true" className="mt-1 h-4 w-4 shrink-0" />
-            )}
-            <span>{formError || notice}</span>
-          </div>
-        )}
-
-        <footer className="mt-6 text-center">
-          <p className="text-xs leading-5 text-slate-500">
-            Private route • Exact-email allowlist • Server-side authorization
-          </p>
-        </footer>
+              {formError && (
+                <div
+                  role="alert"
+                  className="mt-4 flex items-start justify-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2.5 text-center text-sm font-medium text-rose-800"
+                >
+                  <AlertCircle aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
+                  <span>{formError}</span>
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
     </main>
   );
