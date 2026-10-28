@@ -5,9 +5,9 @@ The private owner route is `https://naacollege.in/theone`. The only permitted ad
 ## Authentication rules
 
 - The UI uses Firebase Google sign-in only. There is no custom password field, public sign-up, or one-time setup-key flow.
-- The browser makes a local email/provider check for quick feedback, but that check is not the security boundary.
+- The browser page does not display or embed the owner email. The backend alone holds the allowlist; the browser only initiates Google sign-in and calls the authenticated callable function.
 - The callable backend independently requires a valid Firebase-authenticated request whose email exactly matches `jaganmakes@gmail.com`, whose `email_verified` claim is true, and whose Firebase sign-in provider is `google.com`.
-- On successful server verification, the backend issues a random opaque session token, storing only its SHA-256 hash as the document ID, bound to the Firebase UID and expiring after eight hours.
+- On successful server verification, the backend issues a random opaque session token, storing only its SHA-256 hash as the document ID, bound to the Firebase UID and expiring after eight hours. The email is not returned in the browser-facing response.
 - Session verification and logout also require the authenticated owner identity and matching UID.
 - Login attempts are rate-limited server-side. Firestore client rules deny access to unmatched/private admin collections; Cloud Functions use Admin SDK on the server.
 
