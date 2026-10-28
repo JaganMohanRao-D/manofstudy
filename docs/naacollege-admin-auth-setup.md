@@ -8,7 +8,7 @@ The website is served by Cloudflare Pages, while this repository already uses Fi
 
 ## One-time setup
 
-Run these commands locally from the repository root, using the Firebase project that owns the existing functions:
+Run these commands locally from the repository root, using the Firebase project configured in this repository (`manofstudy-live`) or confirm the project ID with your Firebase Console first:
 
 1. Generate a high-entropy key locally:
 
@@ -21,13 +21,13 @@ Run these commands locally from the repository root, using the Firebase project 
 2. Configure the server-side secret. When prompted, paste the generated value:
 
    ```sh
-   firebase functions:secrets:set ADMIN_SETUP_KEY
+   firebase functions:secrets:set ADMIN_SETUP_KEY --project manofstudy-live
    ```
 
 3. Deploy only the new authentication functions (this command does not deploy the website):
 
    ```sh
-   firebase deploy --only functions:adminSetupStatus,functions:initializeNaaAdmin,functions:loginNaaAdmin,functions:verifyNaaAdminSession,functions:logoutNaaAdmin
+   firebase deploy --project manofstudy-live --only functions:adminSetupStatus,functions:initializeNaaAdmin,functions:loginNaaAdmin,functions:verifyNaaAdminSession,functions:logoutNaaAdmin
    ```
 
 4. Deploy the website branch through the normal review/Cloudflare Pages process. After both backend and frontend are deployed, open `https://naacollege.in/theone`, enter the one-time setup key, and create a password of at least 12 characters. The key is never stored in Firestore. The setup is transactionally claimed once, and a separate server-side marker prevents automatic re-opening if the credential record is accidentally removed later.
