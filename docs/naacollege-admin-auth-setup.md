@@ -8,7 +8,7 @@ The private owner route is `https://naacollege.in/theone`. The only permitted ad
 - The browser initiates Google sign-in and calls a callable function. The backend independently checks the authenticated Firebase UID, the exact owner email, `email_verified === true`, and Firebase sign-in provider `google.com`.
 - On successful server verification, the backend issues a random opaque session token, stores only its SHA-256 hash as the Firestore document ID, binds the session to the Firebase UID, and sets an eight-hour expiry.
 - The email allowlist is not returned by callable responses. Auth/session errors displayed to visitors do not expose the owner address or raw server error details.
-- Unexpected backend failures now emit a sanitized `[NaaAdminAuth] Unexpected server failure` log with function name, processing stage, error code, message and stack. The log does not include request bodies, ID tokens, or session tokens.
+- The backend uses Firebase's structured logger for `[NaaAdminAuth] Login callable invoked`, `[NaaAdminAuth] Admin session created`, and sanitized `[NaaAdminAuth] Unexpected server failure` events. Failure logs include function name, processing stage, error code, message and stack. They do not include request bodies, ID tokens, or session tokens. The browser also logs only the failing stage (`google-popup`, `callable-login`, or `session-response`) and Firebase error code under `[AdminSignIn] Login attempt failed`; it does not log the email or tokens.
 - Firestore client rules deny access to unmatched/private collections. Firebase Admin SDK operations use the Cloud Functions runtime service account and are governed by Google Cloud IAM, not client Firestore rules.
 
 ## Diagnose the current `internal [0]` issue
@@ -21,7 +21,7 @@ firebase functions:log --only verifyNaaAdminSession --project manofstudy-live
 firebase functions:list --project manofstudy-live
 ```
 
-Look for `[NaaAdminAuth] Unexpected server failure` and inspect its `stage`:
+Look for `[NaaAdminAuth] Login callable invoked`, `[NaaAdminAuth] Admin session created`, and `[NaaAdminAuth] Unexpected server failure`. If the browser Console shows `stage: google-popup`, investigate Firebase Authentication/domain/provider configuration first. If it shows `stage: callable-login`, inspect the corresponding Cloud Functions invocation. For server-side failures, inspect the log's `stage`:
 - `rate-limit`: Firestore access/transaction for rate limiting failed.
 - `create-session`: Firestore write for the new session failed.
 - `read-session`: Firestore read for session verification failed.

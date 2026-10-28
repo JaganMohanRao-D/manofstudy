@@ -2,6 +2,7 @@ const { onDocumentCreated } = require("firebase-functions/v2/firestore");
 const { initializeApp } = require("firebase-admin/app");
 const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 const { getAuth } = require("firebase-admin/auth");
+const logger = require("firebase-functions/logger");
 
 // Initialize Firebase Admin SDK
 initializeApp();
@@ -426,7 +427,7 @@ function logAdminAuthFailure(functionName, stage, error) {
     ? error.message
     : "Unspecified server error";
   const stack = error && typeof error.stack === "string" ? error.stack : undefined;
-  console.error("[NaaAdminAuth] Unexpected server failure", {
+  logger.error("[NaaAdminAuth] Unexpected server failure", {
     functionName,
     stage,
     code,
@@ -537,6 +538,11 @@ exports.loginWithGoogleNaaAdmin = onCall(
   { ...adminCallableOptions(), timeoutSeconds: 15 },
   async (request) => {
     let stage = "rate-limit";
+    logger.info("[NaaAdminAuth] Login callable invoked", {
+      functionName: "loginWithGoogleNaaAdmin",
+      stage,
+      authenticated: Boolean(request.auth && request.auth.uid),
+    });
     try {
       const rateLimitRef = await enforceAdminRateLimit(request, "google-login");
 
@@ -556,6 +562,10 @@ exports.loginWithGoogleNaaAdmin = onCall(
       stage = "clear-rate-limit";
       await rateLimitRef.delete().catch(() => {});
 
+      logger.info("[NaaAdminAuth] Admin session created", {
+        functionName: "loginWithGoogleNaaAdmin",
+        stage: "session-created",
+      });
       return {
         sessionToken,
         expiresAt: new Date(expiresAtMs).toISOString(),

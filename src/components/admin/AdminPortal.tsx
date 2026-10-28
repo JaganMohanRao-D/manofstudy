@@ -152,17 +152,26 @@ export default function AdminPortal() {
     event.preventDefault();
     setFormError("");
     setBusy(true);
+    let loginStage = "google-popup";
 
     try {
       // Firebase's callable SDK attaches the signed-in user's ID token.
       // The backend independently enforces the one-account allowlist.
       await signInWithPopup(auth, googleProvider);
+      loginStage = "callable-login";
       const result = await loginWithGoogleCall({});
       if (!result.data.sessionToken) {
+        loginStage = "session-response";
         throw new Error("Missing admin session token");
       }
       setSessionToken(result.data.sessionToken);
     } catch (error) {
+      // Record only the failing stage and Firebase error code. Never log the
+      // signed-in email, request payload, ID token, or session token.
+      console.error("[AdminSignIn] Login attempt failed", {
+        stage: loginStage,
+        code: getErrorCode(error) || "unknown",
+      });
       await signOut(auth).catch(() => {});
       setFormError(readableError(error));
     } finally {
