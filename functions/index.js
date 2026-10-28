@@ -418,6 +418,23 @@ function adminCallableOptions() {
   };
 }
 
+// Log only sanitized stage/code/message/stack details needed to diagnose
+// unexpected backend failures. Never log request bodies, ID tokens, or sessions.
+function logAdminAuthFailure(functionName, stage, error) {
+  const code = error && typeof error.code === "string" ? error.code : "unknown";
+  const message = error && typeof error.message === "string"
+    ? error.message
+    : "Unspecified server error";
+  const stack = error && typeof error.stack === "string" ? error.stack : undefined;
+  console.error("[NaaAdminAuth] Unexpected server failure", {
+    functionName,
+    stage,
+    code,
+    message,
+    ...(stack ? { stack } : {}),
+  });
+}
+
 function getAdminRateLimitRef(request, purpose) {
   const rawIp = request && request.rawRequest && request.rawRequest.ip;
   const source = typeof rawIp === "string" && rawIp.length ? rawIp : "unknown";
@@ -488,10 +505,10 @@ function assertOwnerGoogleIdentity(authContext) {
       !isGoogleProvider) {
     throw new HttpsError(
       "permission-denied",
-      "Only the verified Google account jaganmakes@gmail.com can access this admin portal."
+      "This Google account is not authorized."
     );
   }
-  return { uid: authContext.uid, email };
+  return { uid: authContext.uid };
 }
 
 function hashAdminSessionToken(token) {
@@ -513,58 +530,88 @@ async function getValidAdminSession(sessionToken, expectedUid) {
     }
     return null;
   }
-  return { ref: sessionRef, email: ADMIN_OWNER_EMAIL, uid: session.uid };
+  return { ref: sessionRef, uid: session.uid };
 }
 
 exports.loginWithGoogleNaaAdmin = onCall(
   { ...adminCallableOptions(), timeoutSeconds: 15 },
   async (request) => {
-    const rateLimitRef = await enforceAdminRateLimit(request, "google-login");
-    const owner = assertOwnerGoogleIdentity(request.auth);
+    let stage = "rate-limit";
+    try {
+      const rateLimitRef = await enforceAdminRateLimit(request, "google-login");
 
-    const sessionToken = crypto.randomBytes(32).toString("base64url");
-    const expiresAtMs = Date.now() + ADMIN_SESSION_LIFETIME_MS;
-    await db.collection(ADMIN_SESSION_COLLECTION).doc(hashAdminSessionToken(sessionToken)).set({
-      uid: owner.uid,
-      email: owner.email,
-      provider: "google.com",
-      createdAt: FieldValue.serverTimestamp(),
-      expiresAtMs,
-    });
-    await rateLimitRef.delete().catch(() => {});
+      stage = "owner-identity";
+      const owner = assertOwnerGoogleIdentity(request.auth);
 
-    return {
-      sessionToken,
-      expiresAt: new Date(expiresAtMs).toISOString(),
-      ownerEmail: owner.email,
-    };
+      stage = "create-session";
+      const sessionToken = crypto.randomBytes(32).toString("base64url");
+      const expiresAtMs = Date.now() + ADMIN_SESSION_LIFETIME_MS;
+      await db.collection(ADMIN_SESSION_COLLECTION).doc(hashAdminSessionToken(sessionToken)).set({
+        uid: owner.uid,
+        provider: "google.com",
+        createdAt: FieldValue.serverTimestamp(),
+        expiresAtMs,
+      });
+
+      stage = "clear-rate-limit";
+      await rateLimitRef.delete().catch(() => {});
+
+      return {
+        sessionToken,
+        expiresAt: new Date(expiresAtMs).toISOString(),
+      };
+    } catch (error) {
+      if (error instanceof HttpsError) throw error;
+      logAdminAuthFailure("loginWithGoogleNaaAdmin", stage, error);
+      throw new HttpsError(
+        "internal",
+        "Admin sign-in could not be completed. Please try again."
+      );
+    }
   }
 );
 
 exports.verifyNaaAdminSession = onCall(
   adminCallableOptions(),
   async (request) => {
-    const owner = assertOwnerGoogleIdentity(request.auth);
-    const session = await getValidAdminSession(request.data?.sessionToken, owner.uid);
-    if (!session) {
-      throw new HttpsError("unauthenticated", "Your admin session has expired. Please sign in again.");
+    let stage = "owner-identity";
+    try {
+      const owner = assertOwnerGoogleIdentity(request.auth);
+      stage = "read-session";
+      const session = await getValidAdminSession(request.data?.sessionToken, owner.uid);
+      if (!session) {
+        throw new HttpsError("unauthenticated", "Your admin session has expired. Please sign in again.");
+      }
+      return { valid: true };
+    } catch (error) {
+      if (error instanceof HttpsError) throw error;
+      logAdminAuthFailure("verifyNaaAdminSession", stage, error);
+      throw new HttpsError("internal", "Admin session could not be verified. Please sign in again.");
     }
-    return { valid: true, ownerEmail: session.email };
   }
 );
 
 exports.logoutNaaAdmin = onCall(
   adminCallableOptions(),
   async (request) => {
-    const owner = assertOwnerGoogleIdentity(request.auth);
-    const token = request.data?.sessionToken;
-    if (typeof token === "string" && token.length >= 40 && token.length <= 128) {
-      const sessionRef = db.collection(ADMIN_SESSION_COLLECTION).doc(hashAdminSessionToken(token));
-      const snapshot = await sessionRef.get();
-      if (snapshot.exists && snapshot.data()?.uid === owner.uid) {
-        await sessionRef.delete();
+    let stage = "owner-identity";
+    try {
+      const owner = assertOwnerGoogleIdentity(request.auth);
+      const token = request.data?.sessionToken;
+      if (typeof token === "string" && token.length >= 40 && token.length <= 128) {
+        stage = "read-session-for-revocation";
+        const sessionRef = db.collection(ADMIN_SESSION_COLLECTION).doc(hashAdminSessionToken(token));
+        const snapshot = await sessionRef.get();
+        if (snapshot.exists && snapshot.data()?.uid === owner.uid) {
+          stage = "revoke-session";
+          await sessionRef.delete();
+        }
       }
+      return { success: true };
+    } catch (error) {
+      if (error instanceof HttpsError) throw error;
+      logAdminAuthFailure("logoutNaaAdmin", stage, error);
+      throw new HttpsError("internal", "Sign-out could not be fully confirmed. Please try again.");
     }
-    return { success: true };
   }
 );
