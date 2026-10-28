@@ -561,7 +561,7 @@ exports.loginWithGoogleNaaAdmin = onCall(
         expiresAt: new Date(expiresAtMs).toISOString(),
       };
     } catch (error) {
-      if (error instanceof HttpsError) throw error;
+      if (error instanceof HttpsError && error.code !== "internal") throw error;
       logAdminAuthFailure("loginWithGoogleNaaAdmin", stage, error);
       throw new HttpsError(
         "internal",
@@ -584,7 +584,7 @@ exports.verifyNaaAdminSession = onCall(
       }
       return { valid: true };
     } catch (error) {
-      if (error instanceof HttpsError) throw error;
+      if (error instanceof HttpsError && error.code !== "internal") throw error;
       logAdminAuthFailure("verifyNaaAdminSession", stage, error);
       throw new HttpsError("internal", "Admin session could not be verified. Please sign in again.");
     }
@@ -609,7 +609,7 @@ exports.logoutNaaAdmin = onCall(
       }
       return { success: true };
     } catch (error) {
-      if (error instanceof HttpsError) throw error;
+      if (error instanceof HttpsError && error.code !== "internal") throw error;
       logAdminAuthFailure("logoutNaaAdmin", stage, error);
       throw new HttpsError("internal", "Sign-out could not be fully confirmed. Please try again.");
     }
