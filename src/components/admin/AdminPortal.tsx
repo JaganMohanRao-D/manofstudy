@@ -67,11 +67,7 @@ export default function AdminPortal() {
   const [checkingStatus, setCheckingStatus] = useState(true);
   const [statusError, setStatusError] = useState("");
   const [needsSetup, setNeedsSetup] = useState(false);
-  const [setupKey, setSetupKey] = useState("");
-  const [setupPassword, setSetupPassword] = useState("");
-  const [setupPasswordConfirm, setSetupPasswordConfirm] = useState("");
   const [loginIdentifier, setLoginIdentifier] = useState(ADMIN_EMAIL);
-  const [loginPassword, setLoginPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [formError, setFormError] = useState("");
   const [notice, setNotice] = useState("");
@@ -146,6 +142,11 @@ export default function AdminPortal() {
 
   async function handleSetup(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const setupKey = String(formData.get("setupKey") || "");
+    const setupPassword = String(formData.get("setupPassword") || "");
+    const setupPasswordConfirm = String(formData.get("setupPasswordConfirm") || "");
     setFormError("");
     setNotice("");
 
@@ -169,10 +170,8 @@ export default function AdminPortal() {
         setupKey,
         password: setupPassword,
       });
+      form.reset();
       setNeedsSetup(false);
-      setSetupKey("");
-      setSetupPassword("");
-      setSetupPasswordConfirm("");
       setNotice("Owner password saved securely. Sign in with your email and the password you just created.");
     } catch (error) {
       setFormError(readableError(error));
@@ -183,15 +182,21 @@ export default function AdminPortal() {
 
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
+    const password = String(new FormData(form).get("password") || "");
     setFormError("");
     setNotice("");
+    if (!password) {
+      setFormError("Enter your owner password.");
+      return;
+    }
     setBusy(true);
     try {
       const result = await loginCall({
         identifier: loginIdentifier,
-        password: loginPassword,
+        password,
       });
-      setLoginPassword("");
+      form.reset();
       setSessionToken(result.data.sessionToken);
       setOwnerEmail(result.data.ownerEmail || ADMIN_EMAIL);
     } catch (error) {
@@ -204,11 +209,7 @@ export default function AdminPortal() {
   async function handleLogout() {
     const token = sessionToken;
     setSessionToken(null);
-    setLoginPassword("");
     setLoginIdentifier(ADMIN_EMAIL);
-    setSetupPassword("");
-    setSetupPasswordConfirm("");
-    setSetupKey("");
     setFormError("");
     setNotice("You have signed out.");
     if (token) {
@@ -298,8 +299,7 @@ export default function AdminPortal() {
                 className={inputClass}
                 type="password"
                 autoComplete="off"
-                value={setupKey}
-                onChange={(event) => setSetupKey(event.target.value)}
+                name="setupKey"
                 maxLength={512}
                 required
                 spellCheck={false}
@@ -314,8 +314,7 @@ export default function AdminPortal() {
                 className={inputClass}
                 type="password"
                 autoComplete="new-password"
-                value={setupPassword}
-                onChange={(event) => setSetupPassword(event.target.value)}
+                name="setupPassword"
                 minLength={12}
                 maxLength={256}
                 required
@@ -330,8 +329,7 @@ export default function AdminPortal() {
                 className={inputClass}
                 type="password"
                 autoComplete="new-password"
-                value={setupPasswordConfirm}
-                onChange={(event) => setSetupPasswordConfirm(event.target.value)}
+                name="setupPasswordConfirm"
                 minLength={12}
                 maxLength={256}
                 required
@@ -382,14 +380,13 @@ export default function AdminPortal() {
                 className={inputClass}
                 type="password"
                 autoComplete="current-password"
-                value={loginPassword}
-                onChange={(event) => setLoginPassword(event.target.value)}
+                name="password"
                 maxLength={256}
                 required
                 placeholder="Enter your owner password"
               />
 
-              <button className={buttonClass + " mt-5"} type="submit" disabled={busy || !loginPassword}>
+              <button className={buttonClass + " mt-5"} type="submit" disabled={busy}>
                 {busy ? <LoaderCircle aria-hidden="true" className="h-4 w-4 animate-spin" /> : <LockKeyhole aria-hidden="true" className="h-4 w-4" />}
                 Sign in securely
               </button>
