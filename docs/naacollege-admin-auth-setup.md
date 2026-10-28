@@ -1,44 +1,44 @@
-# Naa College private admin authentication
+# Naa College private admin — Google owner authentication
 
-The private route is `/theone`. The owner identifier is fixed to `jaganmakes@gmail.com`; Google login and public registration are not used.
+The private owner route is `https://naacollege.in/theone`. The only permitted admin identity is `jaganmakes@gmail.com`.
 
-## Deployment architecture
+## Authentication rules
 
-The website is served by Cloudflare Pages, while this repository already uses Firebase Cloud Functions for server-side work. The setup key therefore belongs in **Firebase Secret Manager**, consumed only by the `initializeNaaAdmin` function. Do not place it in a Vite variable, frontend `.env` file, source file, GitHub secret that gets injected into the client build, or public JSON.
+- The UI uses Firebase Google sign-in only. There is no custom password field, public sign-up, or one-time setup-key flow.
+- The browser makes a local email/provider check for quick feedback, but that check is not the security boundary.
+- The callable backend independently requires a valid Firebase-authenticated request whose email exactly matches `jaganmakes@gmail.com`, whose `email_verified` claim is true, and whose Firebase sign-in provider is `google.com`.
+- On successful server verification, the backend issues a random opaque session token, storing only its SHA-256 hash as the document ID, bound to the Firebase UID and expiring after eight hours.
+- Session verification and logout also require the authenticated owner identity and matching UID.
+- Login attempts are rate-limited server-side. Firestore client rules deny access to unmatched/private admin collections; Cloud Functions use Admin SDK on the server.
 
-## One-time setup
+## Required Firebase Console settings
 
-Run these commands locally from the repository root, using the Firebase project configured in this repository (`manofstudy-live`) or confirm the project ID with your Firebase Console first:
+In the Firebase project configured by this repository (`manofstudy-live`):
 
-1. Generate a high-entropy key locally:
+1. Open **Authentication → Sign-in method** and ensure the **Google** provider is enabled.
+2. Under **Authentication → Settings → Authorized domains**, ensure `naacollege.in` and `www.naacollege.in` are listed.
+3. Confirm the deployed web app uses this same Firebase project and the existing authentication config.
 
-   ```sh
-   node -e "console.log(require('node:crypto').randomBytes(48).toString('base64url'))"
-   ```
+Do not create a Firebase password account for this admin flow and do not add a public user registration route.
 
-   Keep the output private. Do not paste it into a chat or commit it.
+## Backend deployment
 
-2. Configure the server-side secret. When prompted, paste the generated value:
+After reviewing the pull request, deploy these server functions to the configured Firebase project. This command does not deploy the Cloudflare Pages website:
 
-   ```sh
-   firebase functions:secrets:set ADMIN_SETUP_KEY --project manofstudy-live
-   ```
+```sh
+firebase deploy --project manofstudy-live --only functions:loginWithGoogleNaaAdmin,functions:verifyNaaAdminSession,functions:logoutNaaAdmin
+```
 
-3. Deploy only the new authentication functions (this command does not deploy the website):
+Then deploy the frontend through the normal reviewed Cloudflare Pages process and test:
 
-   ```sh
-   firebase deploy --project manofstudy-live --only functions:adminSetupStatus,functions:initializeNaaAdmin,functions:loginNaaAdmin,functions:verifyNaaAdminSession,functions:logoutNaaAdmin
-   ```
+1. `jaganmakes@gmail.com` signs in with Google and receives an owner session.
+2. A different Google account is signed out and rejected with no admin session.
+3. Unverified email or a non-Google Firebase provider is rejected by the callable backend.
+4. A session from one Firebase UID cannot be reused by another UID, and expired sessions are denied.
+5. Sign-out revokes the session token server-side.
 
-4. Deploy the website branch through the normal review/Cloudflare Pages process. After both backend and frontend are deployed, open `https://naacollege.in/theone`, enter the one-time setup key, and create a password of at least 12 characters. The key is never stored in Firestore. The setup is transactionally claimed once, and a separate server-side marker prevents automatic re-opening if the credential record is accidentally removed later.
+## Scope and limitations
 
-5. Sign in with `jaganmakes@gmail.com` and the password just created. The session token is held in component memory only; refreshing the page requires signing in again. Sessions expire after eight hours. Login and setup attempts are rate-limited by source IP.
+This PR establishes the owner authentication/session layer and isolated login page. It does not yet build the complete CMS/editor or connect publishing actions. Every future private admin write or publish endpoint must validate the server-side session and owner UID before performing its action; checking the route or hiding UI is not enough.
 
-## Security boundaries
-
-- The password is hashed server-side with Node.js scrypt and a per-password random salt. The raw password is not written to Firestore, source files, or build assets.
-- Firestore rules deny direct client access to the private admin records. Functions use the Admin SDK on the server.
-- Every future admin write/publish function must validate the in-memory session token with the server-side session check before changing content. Hiding the route or rendering a dashboard is not authorization.
-- The password input is masked in the UI, but no website can prevent a person with full control of their own browser/devtools from inspecting values they type or requests their browser sends. The security guarantee is that the password is not embedded or persistently stored in the public frontend, and the server stores only a hash.
-- The one-time key must remain private. If it is exposed before setup, rotate the Secret Manager value before using the setup page.
-- Forgot-password recovery is intentionally not exposed as a public endpoint; an owner-controlled server-side recovery procedure must be designed separately rather than permitting open self-service account claiming.
+Google sign-in verifies account identity; it does not protect against someone who already controls the owner’s Google account. Keep that account secured with a unique password and two-step verification.
