@@ -34,7 +34,8 @@ function getErrorCode(error: unknown): string {
 }
 
 function readableError(error: unknown): string {
-  const code = getErrorCode(error);
+  const rawCode = getErrorCode(error);
+  const code = rawCode.startsWith("functions/") ? rawCode.slice("functions/".length) : rawCode;
 
   if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request") {
     return "Sign-in cancelled.";
@@ -46,26 +47,26 @@ function readableError(error: unknown): string {
     return "This website is not configured for Google sign-in yet.";
   }
   if (
-    code === "functions/permission-denied" ||
-    code === "functions/unauthenticated" ||
+    code === "permission-denied" ||
+    code === "unauthenticated" ||
     code === "auth/user-disabled"
   ) {
     return "This Google account is not authorized.";
   }
-  if (code === "functions/resource-exhausted") {
+  if (code === "resource-exhausted") {
     return "Too many sign-in attempts. Please try again later.";
   }
   if (
-    code === "functions/not-found" ||
-    code === "functions/unavailable" ||
-    code === "functions/deadline-exceeded"
+    code === "not-found" ||
+    code === "unavailable" ||
+    code === "deadline-exceeded"
   ) {
     return "The sign-in service is temporarily unavailable. Please try again later.";
   }
   if (
-    code === "functions/internal" ||
-    code === "functions/unknown" ||
-    code === "functions/failed-precondition"
+    code === "internal" ||
+    code === "unknown" ||
+    code === "failed-precondition"
   ) {
     return "Sign-in could not be completed. Please try again later.";
   }
