@@ -70,6 +70,7 @@ export default function AdminPortal() {
   const [setupKey, setSetupKey] = useState("");
   const [setupPassword, setSetupPassword] = useState("");
   const [setupPasswordConfirm, setSetupPasswordConfirm] = useState("");
+  const [loginIdentifier, setLoginIdentifier] = useState(ADMIN_EMAIL);
   const [loginPassword, setLoginPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [formError, setFormError] = useState("");
@@ -187,7 +188,7 @@ export default function AdminPortal() {
     setBusy(true);
     try {
       const result = await loginCall({
-        identifier: ADMIN_EMAIL,
+        identifier: loginIdentifier,
         password: loginPassword,
       });
       setLoginPassword("");
@@ -204,6 +205,7 @@ export default function AdminPortal() {
     const token = sessionToken;
     setSessionToken(null);
     setLoginPassword("");
+    setLoginIdentifier(ADMIN_EMAIL);
     setSetupPassword("");
     setSetupPasswordConfirm("");
     setSetupKey("");
@@ -366,9 +368,10 @@ export default function AdminPortal() {
                 className={inputClass}
                 type="email"
                 autoComplete="username"
-                value={ADMIN_EMAIL}
-                readOnly
-                aria-readonly="true"
+                value={loginIdentifier}
+                onChange={(event) => setLoginIdentifier(event.target.value)}
+                required
+                spellCheck={false}
               />
 
               <label className="mt-4 block text-sm font-medium text-slate-700" htmlFor="owner-login-password">
