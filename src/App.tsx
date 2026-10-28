@@ -25,6 +25,7 @@ import {
   BookOpen,
   ShieldAlert,
   Target,
+  AudioLines,
 } from 'lucide-react';
 import { ToolTab, ToolMeta, WorkspaceView, LegalModalType } from './types';
 import { Header } from './components/Header';
@@ -143,6 +144,11 @@ const InternalExamEstimator = lazyWithRetry(() =>
 const PdfPowerTools = lazyWithRetry(() =>
   import('./components/PdfPowerTools').then((m: any) => ({
     default: m.PdfPowerTools || m.default,
+  }))
+);
+const VideoToAudioConverter = lazyWithRetry(() =>
+  import('./components/VideoToAudioConverter').then((m: any) => ({
+    default: m.VideoToAudioConverter || m.default,
   }))
 );
 const ImageResizer = lazyWithRetry(() =>
@@ -444,6 +450,7 @@ const getWorkspaceFromPath = (): WorkspaceView | null => {
     '/roadmaps': 'roadmaps',
     '/scholarships': 'scholarships',
     '/pdftools': 'utilities',
+    '/tools/video-to-mp3': 'utilities',
     '/imagecompressor': 'utilities',
     '/placement-code-vault': 'vault',
     '/backlog-planner': 'backlog',
@@ -490,11 +497,13 @@ export default function App() {
     if (pathWorkspace === 'mock-tests' || pathWorkspace === 'cbt-mock-test' || pathWorkspace === 'eapcet-cbt') return 'hub';
     return pathWorkspace || 'hub';
   });
-  const [utilitySubTab, setUtilitySubTab] = useState<ToolTab>(() =>
-    typeof window !== 'undefined' && window.location.pathname.replace(/\/+$/, '').toLowerCase() === '/imagecompressor'
-      ? 'resizer'
-      : 'pdf-tools'
-  );
+  const [utilitySubTab, setUtilitySubTab] = useState<ToolTab>(() => {
+    if (typeof window === 'undefined') return 'pdf-tools';
+    const path = window.location.pathname.replace(/\/+$/, '').toLowerCase();
+    if (path === '/imagecompressor') return 'resizer';
+    if (path === '/tools/video-to-mp3') return 'video-audio';
+    return 'pdf-tools';
+  });
   const [eapcetPhase, setEapcetPhase] = useState<EapcetPhaseTab>('phase2');
   const [legalModal, setLegalModal] = useState<LegalModalType | null>(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -567,7 +576,8 @@ export default function App() {
           } else {
             setActiveWorkspace(pathWorkspace);
             if (pathWorkspace === 'utilities') {
-              setUtilitySubTab(pathname.toLowerCase() === '/imagecompressor' ? 'resizer' : 'pdf-tools');
+              const cleanPath = pathname.toLowerCase();
+              setUtilitySubTab(cleanPath === '/imagecompressor' ? 'resizer' : cleanPath === '/tools/video-to-mp3' ? 'video-audio' : 'pdf-tools');
             }
           }
           return;
@@ -1547,6 +1557,7 @@ export default function App() {
                       <div className="flex items-center gap-1 overflow-x-auto no-scrollbar pb-1 text-xs">
                         {[
                           { id: 'pdf-tools' as ToolTab, label: 'free pdf tools for students', icon: FileText },
+                          { id: 'video-audio' as ToolTab, label: 'Video to MP3', icon: AudioLines },
                           { id: 'vault' as ToolTab, label: 'Code & Viva Vault', icon: Terminal },
                           { id: 'resizer' as ToolTab, label: '20KB Image Resizer', icon: ImageIcon },
                           { id: 'gpa' as ToolTab, label: 'Global GPA Hub', icon: Award },
@@ -1578,6 +1589,7 @@ export default function App() {
                     <div>
                       {utilitySubTab === 'vault' && <PlacementCodeVault />}
                       {utilitySubTab === 'pdf-tools' && <PdfPowerTools />}
+                      {utilitySubTab === 'video-audio' && <VideoToAudioConverter />}
                       {utilitySubTab === 'resizer' && <ImageResizer />}
                       {utilitySubTab === 'gpa' && (
                         <GlobalGpaHub onNavigateToStore={() => handleSelectWorkspace('essentials')} />
