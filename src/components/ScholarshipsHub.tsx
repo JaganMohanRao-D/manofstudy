@@ -6,6 +6,7 @@ import {
   MapPin, Wallet, Users, Filter, AlertCircle, FileText
 } from 'lucide-react';
 import { ScholarshipDetailPage, scholarshipSlug } from './ScholarshipDetailPage';
+import { useCmsCollection } from '../context/CmsContentContext';
 
 export interface IndianScholarship {
   id: string;
@@ -166,7 +167,8 @@ const statusStyles = {
 };
 
 export const ScholarshipsHub: React.FC = () => {
-  const [scholarships, setScholarships] = useState<IndianScholarship[]>([]);
+  const [baseScholarships, setBaseScholarships] = useState<IndianScholarship[]>([]);
+  const scholarships = useCmsCollection<IndianScholarship>("scholarships", baseScholarships, "id");
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [mainFilter, setMainFilter] = useState<MainFilter>('all');
@@ -202,7 +204,7 @@ export const ScholarshipsHub: React.FC = () => {
       if (!Array.isArray(data) || data.some((item: any) => !item || !item.id || !item.title || !item.provider || !externalUrl(item.official_source_url || item.apply_link))) {
         throw new Error('Scholarship data has an invalid structure');
       }
-      setScholarships(data as IndianScholarship[]);
+      setBaseScholarships(data as IndianScholarship[]);
     } catch {
       setLoadError('Scholarships could not be loaded. Please retry in a moment.');
     } finally {
