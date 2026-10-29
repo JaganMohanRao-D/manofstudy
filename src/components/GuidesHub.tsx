@@ -20,6 +20,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { GUIDES_CHAPTERS, GuideChapter, GuideSection } from '../data/guidesData';
+import { useCmsCollection } from '../context/CmsContentContext';
 
 // Helper to render bold **text** and inline `code`
 const renderInlineMarkdown = (text: string): React.ReactNode => {
@@ -199,8 +200,9 @@ export const GuidesHub: React.FC<GuidesHubProps> = ({
   onSelectWorkspace,
   initialChapterId,
 }) => {
+  const managedChapters = useCmsCollection<GuideChapter>('guides', GUIDES_CHAPTERS, 'id');
   const [activeChapterId, setActiveChapterId] = useState<string>(
-    initialChapterId || GUIDES_CHAPTERS[0].id
+    initialChapterId || managedChapters[0].id
   );
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -209,7 +211,7 @@ export const GuidesHub: React.FC<GuidesHubProps> = ({
   const categories = ['All', 'Counselling', 'Academic', 'Career', 'Survival', 'Hardware'];
 
   const filteredChapters = useMemo(() => {
-    return GUIDES_CHAPTERS.filter((ch) => {
+    return managedChapters.filter((ch) => {
       const matchesCategory =
         selectedCategory === 'All' || ch.category === selectedCategory;
       const matchesSearch =
@@ -224,14 +226,14 @@ export const GuidesHub: React.FC<GuidesHubProps> = ({
         );
       return matchesCategory && matchesSearch;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [selectedCategory, searchQuery, managedChapters]);
 
   const activeChapter = useMemo(() => {
     return (
-      GUIDES_CHAPTERS.find((ch) => ch.id === activeChapterId) ||
-      GUIDES_CHAPTERS[0]
+      managedChapters.find((ch) => ch.id === activeChapterId) ||
+      managedChapters[0]
     );
-  }, [activeChapterId]);
+  }, [activeChapterId, managedChapters]);
 
   const handleShareChapter = (chapter: GuideChapter) => {
     const url = `${window.location.origin}${window.location.pathname}#guide-${chapter.slug}`;
@@ -586,7 +588,7 @@ export const GuidesHub: React.FC<GuidesHubProps> = ({
             {activeChapter.chapterNumber > 1 ? (
               <button
                 onClick={() => {
-                  const prev = GUIDES_CHAPTERS.find(
+                  const prev = managedChapters.find(
                     (c) => c.chapterNumber === activeChapter.chapterNumber - 1
                   );
                   if (prev) {
@@ -600,10 +602,10 @@ export const GuidesHub: React.FC<GuidesHubProps> = ({
               </button>
             ) : <div />}
 
-            {activeChapter.chapterNumber < GUIDES_CHAPTERS.length && (
+            {activeChapter.chapterNumber < managedChapters.length && (
               <button
                 onClick={() => {
-                  const next = GUIDES_CHAPTERS.find(
+                  const next = managedChapters.find(
                     (c) => c.chapterNumber === activeChapter.chapterNumber + 1
                   );
                   if (next) {
