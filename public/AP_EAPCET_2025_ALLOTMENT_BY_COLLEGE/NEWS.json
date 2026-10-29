@@ -1,0 +1,206 @@
+{
+  "college_name": "NEWTONS INST OF SCI AND TECH",
+  "college_code": "NEWS",
+  "branches": [
+    {
+      "branch_code": "CIV",
+      "branch_name": "CIVIL ENGINEERING",
+      "records": [
+        {
+          "rank": "170381.0",
+          "cand_name": "GURIJALA ANILKUMAR",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "NEWTONS INST OF SCI AND TECH (NEWS)",
+          "branch": "CIVIL ENGINEERING (CIV)"
+        },
+        {
+          "rank": "172499.0",
+          "cand_name": "KUMBHA RAJESH",
+          "gender": "M",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 1,
+          "college": "NEWTONS INST OF SCI AND TECH (NEWS)",
+          "branch": "CIVIL ENGINEERING (CIV)"
+        },
+        {
+          "rank": "173584.0",
+          "cand_name": "NAKSHATRAPU NAVA CHAITANYA",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "NEWTONS INST OF SCI AND TECH (NEWS)",
+          "branch": "CIVIL ENGINEERING (CIV)"
+        },
+        {
+          "rank": "178834.0",
+          "cand_name": "BANAVATH SIVA RAMA KRISHNA NAIK",
+          "gender": "M",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "NEWTONS INST OF SCI AND TECH (NEWS)",
+          "branch": "CIVIL ENGINEERING (CIV)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "records": [
+        {
+          "rank": "77578.0",
+          "cand_name": "MADEM SHAHANTH KALYAN",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "NEWTONS INST OF SCI AND TECH (NEWS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "105475.0",
+          "cand_name": "KOMARTHI ASWITHA",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 1,
+          "college": "NEWTONS INST OF SCI AND TECH (NEWS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "136572.0",
+          "cand_name": "GANIPALLI PRAVALLIKA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "NEWTONS INST OF SCI AND TECH (NEWS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "171875.0",
+          "cand_name": "PEKETI TONY SAMUEEL",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 2,
+          "college": "NEWTONS INST OF SCI AND TECH (NEWS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "172124.0",
+          "cand_name": "BATHYALA  KARTHIK",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "NEWTONS INST OF SCI AND TECH (NEWS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "ECE",
+      "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+      "records": [
+        {
+          "rank": "150534.0",
+          "cand_name": "CHEEMALAPENTA PRAMOD",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "NEWTONS INST OF SCI AND TECH (NEWS)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "MEC",
+      "branch_name": "MECHANICAL ENGINEERING",
+      "records": [
+        {
+          "rank": "165662.0",
+          "cand_name": "PALLI SAI GANESH",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 1,
+          "college": "NEWTONS INST OF SCI AND TECH (NEWS)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        },
+        {
+          "rank": "168414.0",
+          "cand_name": "ERAKAMANU SUBHASH",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "NEWTONS INST OF SCI AND TECH (NEWS)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        },
+        {
+          "rank": "169140.0",
+          "cand_name": "PATHAN ESUB VALI",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "NEWTONS INST OF SCI AND TECH (NEWS)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        },
+        {
+          "rank": "170972.0",
+          "cand_name": "YEDDULA PRASANNA KUMAR",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "NEWTONS INST OF SCI AND TECH (NEWS)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        },
+        {
+          "rank": "175916.0",
+          "cand_name": "MIDDE BHARATH",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "NEWTONS INST OF SCI AND TECH (NEWS)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        },
+        {
+          "rank": "175964.0",
+          "cand_name": "MUDAVATH SAMPATH KUMAR NAIK",
+          "gender": "M",
+          "category": "ST",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "NEWTONS INST OF SCI AND TECH (NEWS)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        }
+      ]
+    }
+  ]
+}

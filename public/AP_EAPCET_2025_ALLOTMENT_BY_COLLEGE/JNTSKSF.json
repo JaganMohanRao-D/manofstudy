@@ -1,0 +1,784 @@
+{
+  "college_name": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE",
+  "college_code": "JNTSKSF",
+  "branches": [
+    {
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "records": [
+        {
+          "rank": "34834.0",
+          "cand_name": "ATHKURI MOHANA SAI PAVAN",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "39427.0",
+          "cand_name": "PUTTURU BHAVESH REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "44983.0",
+          "cand_name": "JEJALAKAMMARA SIVA SAI LAKSHMI MEGHANA",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "47347.0",
+          "cand_name": "THIPPALURU NIKHIL REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "58623.0",
+          "cand_name": "MADDIKA HEMESH REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "72855.0",
+          "cand_name": "RUSHINGAPPAGARI MUNENDRA",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "77290.0",
+          "cand_name": "MALLARAPU DIMPUL",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "78890.0",
+          "cand_name": "BEVARA PRASANNA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GIRLS_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "79473.0",
+          "cand_name": "BANDI RAJ KUMAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "86916.0",
+          "cand_name": "PAMULA MOHAN KRISHNA",
+          "gender": "M",
+          "category": "ST",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "91359.0",
+          "cand_name": "TARIGOPULA JANANI",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "106251.0",
+          "cand_name": "PUNAGANI CHARAN",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "109331.0",
+          "cand_name": "ELLANTI MAHASHWIN",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "110628.0",
+          "cand_name": "KALATHURU MUNIVAIBHAV",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "117863.0",
+          "cand_name": "SHAIK ATHAR MUHAMMAD SULEMAN",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "120566.0",
+          "cand_name": "ARIGALA CHETHAN MANIDEEP",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_PWD_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "121457.0",
+          "cand_name": "BOLLINI HIMAJA",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "124632.0",
+          "cand_name": "SABBU PRASHANTH",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_NCC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "131493.0",
+          "cand_name": "KEERASATHU GUNASREE",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "132890.0",
+          "cand_name": "GENDETI ASHMITHA",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "143388.0",
+          "cand_name": "ELISETTY HIMAVARSHINI",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "143737.0",
+          "cand_name": "GANTA KEERTHANA",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "147264.0",
+          "cand_name": "PILLAPALEM LAKSHMI DEEKSHITH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "147678.0",
+          "cand_name": "SODUBOYINA ASHOK",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "SC_II_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "154398.0",
+          "cand_name": "G YUKEESH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "160033.0",
+          "cand_name": "NEERUGATTI BHARGAV REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "EWS_GEN_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "165275.0",
+          "cand_name": "GENDETI GURULOHITH",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "BC_A_GEN_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "169618.0",
+          "cand_name": "SUGALI  LOKESH NAIK",
+          "gender": "M",
+          "category": "ST",
+          "region": "SVU",
+          "alloted_category": "ST_GEN_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "173590.0",
+          "cand_name": "VANAM GOWRI SANKAR",
+          "gender": "M",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "ST_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "173934.0",
+          "cand_name": "ANDE TEJAPRATHAP",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "EWS_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "177860.0",
+          "cand_name": "GADUPURI SAHIL",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "EWS_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "178486.0",
+          "cand_name": "ARIGELA ASWINI",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_PWD_GIRLS_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "178798.0",
+          "cand_name": "RAJALA SATISH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSD",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+      "records": [
+        {
+          "rank": "33891.0",
+          "cand_name": "M MANISHA",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "68192.0",
+          "cand_name": "MADDUMALA DHARANI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "81718.0",
+          "cand_name": "KOMMALAPUDI SRILEKHA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "112567.0",
+          "cand_name": "R SAI KEERTHANA",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "120477.0",
+          "cand_name": "GEDDAM NISHANTH LARA",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "137816.0",
+          "cand_name": "VENKAT NIKHIL RAJ GEDULA",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "151339.0",
+          "cand_name": "SUDDARASI JAYA SURYA",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "162181.0",
+          "cand_name": "TEMBURU VINAY RAO",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSM",
+      "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+      "records": [
+        {
+          "rank": "20959.0",
+          "cand_name": "PORALLA ROHITH KUMAR REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "49301.0",
+          "cand_name": "EDIGA PRUDHVI RAJU",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "54976.0",
+          "cand_name": "KALATTUR S JAYADHEVA REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "56347.0",
+          "cand_name": "KUMAR SUKANYA",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "56478.0",
+          "cand_name": "MATHI JEEVAN SIVA SAI REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "59334.0",
+          "cand_name": "DESU MANIKANTA KUMAR REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "77677.0",
+          "cand_name": "PATTHIPUTTUR  CHARAN",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "79100.0",
+          "cand_name": "CHALAPAKA SIRI HARINI",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "81370.0",
+          "cand_name": "LINPATRALU KERITHA KESHINI",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "95639.0",
+          "cand_name": "MUDDA REDDY RANI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "101497.0",
+          "cand_name": "GODESI WISHWIN",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "106396.0",
+          "cand_name": "THATIPARTHI   KARTHIK  REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "106952.0",
+          "cand_name": "PAMULURU HEMAKESH",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "108569.0",
+          "cand_name": "PASAM DHAKSHITHA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "112301.0",
+          "cand_name": "ANMOL SAHU",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GIRLS_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "124515.0",
+          "cand_name": "KALLAM REVANTH KUMAR",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "144138.0",
+          "cand_name": "VENGALAPATHI SRI VINAY SUSHANTH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "165106.0",
+          "cand_name": "GURUGUBELLI CHARAN TEJ",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        }
+      ]
+    },
+    {
+      "branch_code": "EEE",
+      "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+      "records": [
+        {
+          "rank": "143531.0",
+          "cand_name": "BHOGIREDDY VIJAY KUMAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "ELECTRICAL AND ELECTRONICS ENGINEERING (EEE)"
+        },
+        {
+          "rank": "158320.0",
+          "cand_name": "T SRAVANI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "ELECTRICAL AND ELECTRONICS ENGINEERING (EEE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "ECE",
+      "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+      "records": [
+        {
+          "rank": "42240.0",
+          "cand_name": "NINDRA DINESH",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "57206.0",
+          "cand_name": "PAGALA LOKASUDARSON REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "70925.0",
+          "cand_name": "YARRA BATANNA GARI SANGEETHA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "84767.0",
+          "cand_name": "KURAPATI SURYA TEJA",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "121946.0",
+          "cand_name": "PODILI BHARATH",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "126951.0",
+          "cand_name": "MURATHOTTI CHARAN TEJA",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "160188.0",
+          "cand_name": "KANDASWAMY ROHITH",
+          "gender": "M",
+          "category": "ST",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "JNTUA- SRI KALAHASTEESWARA INSTITUTE OF TECHNOLOGY-SELF FINANCE (JNTSKSF)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        }
+      ]
+    }
+  ]
+}

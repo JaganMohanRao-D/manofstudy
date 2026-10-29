@@ -1,0 +1,331 @@
+{
+  "college_name": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY",
+  "college_code": "CFSB",
+  "branches": [
+    {
+      "branch_code": "FDT",
+      "branch_name": "FOOD TECHNOLOGY",
+      "records": [
+        {
+          "rank": "26708.0",
+          "cand_name": "KARE YASASWINI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "33038.0",
+          "cand_name": "KARRI HARIKA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "37655.0",
+          "cand_name": "MEDIKURTHI VANDANA",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "SVU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "44183.0",
+          "cand_name": "PENUGONDA YASWANTH SAITEJA",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "66812.0",
+          "cand_name": "BONKURI KHADAR HARIKRISHNA",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "80248.0",
+          "cand_name": "MALLAMPATI PALLAVI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_AU",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "83397.0",
+          "cand_name": "ANNAPUREDDY  NAGA PHANINDRA REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "93124.0",
+          "cand_name": "KARI SATYA SRI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_UR",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "105941.0",
+          "cand_name": "CHAVABATHINA MOSUS PAL",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "117857.0",
+          "cand_name": "BAVANA SRICHARAN",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GEN_AU",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "119216.0",
+          "cand_name": "KONDAVEETI THANMAI SRI",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "120847.0",
+          "cand_name": "MADIKI SUSHMA PRIYA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GIRLS_AU",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "121824.0",
+          "cand_name": "MAILABOINA SANDHYA KUMARI",
+          "gender": "F",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "ST_GEN_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "133508.0",
+          "cand_name": "NETI HARSHA",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "137871.0",
+          "cand_name": "SAMUDRAM DEEPA RANI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GIRLS_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "138285.0",
+          "cand_name": "MEDIKONDA RAKESH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_PWD_GEN_AU",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "141465.0",
+          "cand_name": "MEESALA KARTHIK",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "142305.0",
+          "cand_name": "ISLAVATH NAVYA BAI",
+          "gender": "F",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "ST_GEN_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "147713.0",
+          "cand_name": "AVALA TULASI",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_C_GIRLS_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "148232.0",
+          "cand_name": "DARA REENA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GIRLS_UR",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "148293.0",
+          "cand_name": "KUKKALA YESUVARDHAN REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "151566.0",
+          "cand_name": "CHINNAM SAI PRATHYUSHA",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GIRLS_AU",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "153630.0",
+          "cand_name": "DANDUPROLU SOWMYA",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GIRLS_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "154985.0",
+          "cand_name": "GUDIPALLI VENKATA RATNA SAI KUMAR",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_AU",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "160497.0",
+          "cand_name": "TADIMARRI KURSHEEDA",
+          "gender": "F",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "BC_E_GEN_AU",
+          "phase": 1,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "162183.0",
+          "cand_name": "SUNKARA YAGNA PRIYA",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "166855.0",
+          "cand_name": "YALLA PRASANNA KUMAR",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "177659.0",
+          "cand_name": "LINGALA ABHI",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GIRLS_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        },
+        {
+          "rank": "179629.0",
+          "cand_name": "PATRA JASWANTH MITRA",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GIRLS_AU",
+          "phase": 2,
+          "college": "Dr. N T R COLLEGE OF FOOD SCIENCE AND TECHNOLOGY (CFSB)",
+          "branch": "FOOD TECHNOLOGY (FDT)"
+        }
+      ]
+    }
+  ]
+}

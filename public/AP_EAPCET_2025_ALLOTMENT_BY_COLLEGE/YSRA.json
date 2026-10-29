@@ -1,0 +1,151 @@
+{
+  "college_name": "DR.YSR ARCHITECTURE AND FINE ARTS UNIVERSITY",
+  "college_code": "YSRA",
+  "branches": [
+    {
+      "branch_code": "DTD",
+      "branch_name": "DIGITAL TECHNIQUES FOR DESIGN AND PLANNING",
+      "records": [
+        {
+          "rank": "47259.0",
+          "cand_name": "DOKALA HARSHINI",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GIRLS_UR",
+          "phase": 2,
+          "college": "DR.YSR ARCHITECTURE AND FINE ARTS UNIVERSITY (YSRA)",
+          "branch": "DIGITAL TECHNIQUES FOR DESIGN AND PLANNING (DTD)"
+        },
+        {
+          "rank": "168009.0",
+          "cand_name": "MANDEPUDI VASANTHA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "DR.YSR ARCHITECTURE AND FINE ARTS UNIVERSITY (YSRA)",
+          "branch": "DIGITAL TECHNIQUES FOR DESIGN AND PLANNING (DTD)"
+        }
+      ]
+    },
+    {
+      "branch_code": "FSP",
+      "branch_name": "FACILITIES AND SERVICES PLANNING",
+      "records": [
+        {
+          "rank": "158987.0",
+          "cand_name": "PIDAPARTI YOGITHA REDDY",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "DR.YSR ARCHITECTURE AND FINE ARTS UNIVERSITY (YSRA)",
+          "branch": "FACILITIES AND SERVICES PLANNING (FSP)"
+        }
+      ]
+    },
+    {
+      "branch_code": "GDT",
+      "branch_name": "GAME DESIGN TECHNOLOGY",
+      "records": [
+        {
+          "rank": "36685.0",
+          "cand_name": "THAMMINA BHAVESH RAM",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "DR.YSR ARCHITECTURE AND FINE ARTS UNIVERSITY (YSRA)",
+          "branch": "GAME DESIGN TECHNOLOGY (GDT)"
+        },
+        {
+          "rank": "114022.0",
+          "cand_name": "VARADI RISHITHA PREETHAM",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "DR.YSR ARCHITECTURE AND FINE ARTS UNIVERSITY (YSRA)",
+          "branch": "GAME DESIGN TECHNOLOGY (GDT)"
+        },
+        {
+          "rank": "135474.0",
+          "cand_name": "GUMMADI BHARATH KUMAR",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "DR.YSR ARCHITECTURE AND FINE ARTS UNIVERSITY (YSRA)",
+          "branch": "GAME DESIGN TECHNOLOGY (GDT)"
+        },
+        {
+          "rank": "138578.0",
+          "cand_name": "HARIJANA NANDITH KUMAR",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "NL",
+          "alloted_category": "OC_CAP_GIRLS_UR",
+          "phase": 2,
+          "college": "DR.YSR ARCHITECTURE AND FINE ARTS UNIVERSITY (YSRA)",
+          "branch": "GAME DESIGN TECHNOLOGY (GDT)"
+        },
+        {
+          "rank": "142069.0",
+          "cand_name": "JAVVAJI MANOJ",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "DR.YSR ARCHITECTURE AND FINE ARTS UNIVERSITY (YSRA)",
+          "branch": "GAME DESIGN TECHNOLOGY (GDT)"
+        },
+        {
+          "rank": "156398.0",
+          "cand_name": "B LIKITH",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "NL",
+          "alloted_category": "OC_SCG_GEN_UR",
+          "phase": 1,
+          "college": "DR.YSR ARCHITECTURE AND FINE ARTS UNIVERSITY (YSRA)",
+          "branch": "GAME DESIGN TECHNOLOGY (GDT)"
+        }
+      ]
+    },
+    {
+      "branch_code": "PLG",
+      "branch_name": "PLANNING",
+      "records": [
+        {
+          "rank": "143096.0",
+          "cand_name": "CHUKKA HEMANTH",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "DR.YSR ARCHITECTURE AND FINE ARTS UNIVERSITY (YSRA)",
+          "branch": "PLANNING (PLG)"
+        },
+        {
+          "rank": "173315.0",
+          "cand_name": "ARADYULA BHANU PRASAD",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "DR.YSR ARCHITECTURE AND FINE ARTS UNIVERSITY (YSRA)",
+          "branch": "PLANNING (PLG)"
+        }
+      ]
+    }
+  ]
+}

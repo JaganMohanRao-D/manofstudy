@@ -1,0 +1,734 @@
+{
+  "college_name": "DAMISETTY BALA SURESH INST OF TECHNOLOGY",
+  "college_code": "DSIT",
+  "branches": [
+    {
+      "branch_code": "CAI",
+      "branch_name": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE )",
+      "records": [
+        {
+          "rank": "57169.0",
+          "cand_name": "YELIKAM LALITHA PRANAVANADH",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE ) (CAI)"
+        },
+        {
+          "rank": "105521.0",
+          "cand_name": "KOOLI AASHA LATHA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE ) (CAI)"
+        },
+        {
+          "rank": "117189.0",
+          "cand_name": "ATMAKURU VENKATA AHALYA",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE ) (CAI)"
+        },
+        {
+          "rank": "141256.0",
+          "cand_name": "MALLAPU SANGEETHA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_PWD_GEN_SVU",
+          "phase": 2,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE ) (CAI)"
+        },
+        {
+          "rank": "143843.0",
+          "cand_name": "ANGIREKULA TULASI",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GIRLS_UR",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE ) (CAI)"
+        },
+        {
+          "rank": "164512.0",
+          "cand_name": "CHINTHA RAKESH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_UR",
+          "phase": 2,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE ) (CAI)"
+        },
+        {
+          "rank": "165281.0",
+          "cand_name": "CHINTAPUDI JASWANTH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_SVU",
+          "phase": 2,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE ) (CAI)"
+        },
+        {
+          "rank": "166348.0",
+          "cand_name": "BOLLU PUSHPALATHA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE ) (CAI)"
+        },
+        {
+          "rank": "167434.0",
+          "cand_name": "DEVARAKONDA NEELIMA",
+          "gender": "F",
+          "category": "ST",
+          "region": "SVU",
+          "alloted_category": "ST_GIRLS_SVU",
+          "phase": 2,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE ) (CAI)"
+        },
+        {
+          "rank": "169394.0",
+          "cand_name": "KODAMALA THANU SRI",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE ) (CAI)"
+        },
+        {
+          "rank": "172654.0",
+          "cand_name": "GODDETI ROHITH",
+          "gender": "M",
+          "category": "ST",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE ) (CAI)"
+        },
+        {
+          "rank": "174321.0",
+          "cand_name": "NUNNA PENCHALA NAVA SAI DEEP",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE ) (CAI)"
+        },
+        {
+          "rank": "179325.0",
+          "cand_name": "GALIPOTHU TEJASWINI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMP. SCI. AND ENGG. (ARTIFICIAL INTELLIGENCE ) (CAI)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "records": [
+        {
+          "rank": "46562.0",
+          "cand_name": "BODDU BHAVANI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "75333.0",
+          "cand_name": "SYED ABBU THAHIR",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "94461.0",
+          "cand_name": "NAIDU YUVAN SRE CHARAN",
+          "gender": "M",
+          "category": "OC",
+          "region": "NL",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "105406.0",
+          "cand_name": "LETI HEMANTH",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "111614.0",
+          "cand_name": "YEPURU VENU",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "117217.0",
+          "cand_name": "PALLURU POOJA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "SC_II_GIRLS_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "119685.0",
+          "cand_name": "THATIPARTHI PRAVEEN KUMAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_PWD_GEN_SVU",
+          "phase": 2,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "121830.0",
+          "cand_name": "GANDIKOTA MANOJ",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_B_GIRLS_UR",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "127758.0",
+          "cand_name": "NELLORE VYSHNAVI",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_CAP_GIRLS_UR",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "142576.0",
+          "cand_name": "SHAIK ILIYAZ",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "146472.0",
+          "cand_name": "PASALA KUSUMALATHA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "150476.0",
+          "cand_name": "ONGOLU NARTHANA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "150592.0",
+          "cand_name": "KONDA SURESH",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "153795.0",
+          "cand_name": "SHAIK NAGUR BASHA",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "157470.0",
+          "cand_name": "SHAIK ALLABAKSHU",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "167580.0",
+          "cand_name": "VEGURU ROOPA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "SC_II_GIRLS_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "170127.0",
+          "cand_name": "GOLLA THARUN",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "172662.0",
+          "cand_name": "KOTA AKHILESH",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_PWD_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "173379.0",
+          "cand_name": "PUNNAM VINAY KUMAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "BC_A_GEN_UR",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "179697.0",
+          "cand_name": "MACHA SIVASANKAR",
+          "gender": "M",
+          "category": "ST",
+          "region": "SVU",
+          "alloted_category": "ST_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "EEE",
+      "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+      "records": [
+        {
+          "rank": "156370.0",
+          "cand_name": "ENDOTI VIKYATH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRICAL AND ELECTRONICS ENGINEERING (EEE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "ECE",
+      "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+      "records": [
+        {
+          "rank": "74952.0",
+          "cand_name": "BODDU MANASA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "82072.0",
+          "cand_name": "BADDIPUDI VENKATA PRASAD",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "85074.0",
+          "cand_name": "TAKKERA HARSHAVARDHAN",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "97074.0",
+          "cand_name": "VADDIPALLI VENKATARAMANAMMA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "101571.0",
+          "cand_name": "GUNDALA RAVEENA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "118183.0",
+          "cand_name": "CHERUKURI CHANDU",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GEN_SVU",
+          "phase": 2,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "125854.0",
+          "cand_name": "ANAPALLI JAHNAVI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "125922.0",
+          "cand_name": "MANGALAPURI KAVYA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "134044.0",
+          "cand_name": "PALLIPATI PARASURAM",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "134871.0",
+          "cand_name": "KATTI MOUNIKA",
+          "gender": "F",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "ST_GEN_UR",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "145384.0",
+          "cand_name": "NALAGALA MANEESHA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "145519.0",
+          "cand_name": "KORAMUTLA MAHESH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "146457.0",
+          "cand_name": "KAKANI TANUJA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GIRLS_SVU",
+          "phase": 2,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "147162.0",
+          "cand_name": "AKKILAGUNTA KOMALI",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "SC_II_GIRLS_SVU",
+          "phase": 2,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "153531.0",
+          "cand_name": "VAKATI THANUJA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "154114.0",
+          "cand_name": "NUNE TEJA",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "155779.0",
+          "cand_name": "VALMETI UMA MAHESH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "155852.0",
+          "cand_name": "DASARI GANESH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_SVU",
+          "phase": 2,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "155977.0",
+          "cand_name": "KASULA MADHUKIRAN",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "159448.0",
+          "cand_name": "BODDU JAHNAVI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GIRLS_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "162532.0",
+          "cand_name": "GOLLA  MANASWINI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "162812.0",
+          "cand_name": "PENUBAKU JASWANTH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "166517.0",
+          "cand_name": "PANDITI RAVI CHANDRA",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "SC_II_GEN_SVU",
+          "phase": 2,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "166562.0",
+          "cand_name": "PENAMALA CHARMI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "167552.0",
+          "cand_name": "SARVEPALLI SPANDANA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "168211.0",
+          "cand_name": "KARLAPUDI THANUSHA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_PWD_GIRLS_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "172408.0",
+          "cand_name": "GOWDAPERU SANTHI",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "173948.0",
+          "cand_name": "KUDIRI MARY",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_SVU",
+          "phase": 2,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "179768.0",
+          "cand_name": "MARLAPATI JAGAN",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "OC_PWD_GEN_SVU",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "179867.0",
+          "cand_name": "THATIPARTHI RAJARAM",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "SC_II_GEN_UR",
+          "phase": 1,
+          "college": "DAMISETTY BALA SURESH INST OF TECHNOLOGY (DSIT)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "MAN OF STUDY",
+  "description": "MAN OF STUDY (MOS) is India's 100% free, private, student-first engineering utility portal. Access branch-wise college cutoffs, name-wise seat allotments, viva vaults, and backlog planners with zero paywalls.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
+

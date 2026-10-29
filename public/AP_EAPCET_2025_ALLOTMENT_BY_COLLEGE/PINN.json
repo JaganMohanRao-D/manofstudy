@@ -1,0 +1,73 @@
+{
+  "college_name": "PRIYADARSHINI INST OF TECHNOLOGY",
+  "college_code": "PINN",
+  "branches": [
+    {
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "records": [
+        {
+          "rank": "148632.0",
+          "cand_name": "CHENCHANABOINA GURU CHARAN",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "BC_D_GEN_UR",
+          "phase": 2,
+          "college": "PRIYADARSHINI INST OF TECHNOLOGY (PINN)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "174835.0",
+          "cand_name": "BHUMIREDDY MADHUSUDHAN REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "EWS_GEN_UR",
+          "phase": 2,
+          "college": "PRIYADARSHINI INST OF TECHNOLOGY (PINN)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "176279.0",
+          "cand_name": "MENTHEM SREENIVAS",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_PWD_GEN_SVU",
+          "phase": 1,
+          "college": "PRIYADARSHINI INST OF TECHNOLOGY (PINN)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "ECE",
+      "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+      "records": [
+        {
+          "rank": "155786.0",
+          "cand_name": "METTAKANTI PAVAN KUMAR",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "PRIYADARSHINI INST OF TECHNOLOGY (PINN)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "168021.0",
+          "cand_name": "THOTA HEMANTH",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "BC_A_GEN_UR",
+          "phase": 2,
+          "college": "PRIYADARSHINI INST OF TECHNOLOGY (PINN)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        }
+      ]
+    }
+  ]
+}

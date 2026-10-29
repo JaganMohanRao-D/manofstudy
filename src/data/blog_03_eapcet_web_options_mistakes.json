@@ -1,0 +1,194 @@
+{
+  "id": "blog_03",
+  "source_file": "blog_03_eapcet_web_options_mistakes.pdf",
+  "language": "te (Telugu + simple English words)",
+  "title_te": "EAPCET Web Options & Counselling సమయంలో చేయకూడని తప్పులు",
+  "title_en": "Top Mistakes to Avoid During EAPCET Web Options and Counselling",
+  "subtitle_te": "AP, Telangana ఇంజినీరింగ్ విద్యార్థుల కోసం ఒక practical checklist",
+  "audience_te": "AP EAPCET / TG EAPCET రాసిన విద్యార్థులు, వాళ్ల తల్లిదండ్రులు, ఇంజినీరింగ్‌లో చేరాలనుకునే వాళ్లు",
+  "seo": {
+    "title": "Top Mistakes to Avoid During EAPCET Web Options and Counselling",
+    "slug": "/top-mistakes-to-avoid-during-eapcet-web-options-and-counselling",
+    "meta_description_te": "EAPCET web options పెట్టేటప్పుడు, counselling సమయంలో విద్యార్థులు చేసే ముఖ్యమైన తప్పులు, వాటిని ఎలా తప్పించుకోవాలో సులభంగా తెలుసుకోండి."
+  },
+  "intro_te": [
+    "EAPCET రాసిన తర్వాత అసలైన నిర్ణయాల సమయం మొదలవుతుంది. ఏ college, ఏ branch అనేది మీ నాలుగేళ్ల చదువునీ, ఖర్చునీ, అనుభవాన్నీ ప్రభావితం చేస్తుంది. అందుకే web options చాలా జాగ్రత్తగా పెట్టాలి.",
+    "ఈ గైడ్‌లో చాలామంది విద్యార్థులు చేసే తప్పులు, వాటికి సులభమైన పరిష్కారాలు ఉన్నాయి. చివరిలో ఒక final checklist కూడా ఇచ్చాం.",
+    "గమనిక: ఇక్కడ ఉన్న సమాచారం సాధారణ మార్గదర్శకం మాత్రమే. తేదీలు, rules, fees ప్రతి సంవత్సరం మారవచ్చు. కాబట్టి ఎప్పుడూ official portal లోనే చూసి నిర్ధారించుకోండి."
+  ],
+  "glossary": [
+    {
+      "term": "Web options",
+      "meaning_te": "మీకు నచ్చిన colleges, branches ని preference order లో online లో ఎంచుకునే list"
+    },
+    {
+      "term": "Counselling",
+      "meaning_te": "rank ఆధారంగా seat ఇచ్చే official ప్రక్రియ"
+    },
+    {
+      "term": "Allotment",
+      "meaning_te": "మీకు ఒక college లో seat కేటాయించడం"
+    },
+    {
+      "term": "College code",
+      "meaning_te": "ప్రతి college కి ఉండే ప్రత్యేక కోడ్. పేర్లు ఒకేలా ఉన్నా code వేరుగా ఉంటుంది"
+    },
+    {
+      "term": "Cutoff / Closing rank",
+      "meaning_te": "గత సంవత్సరం ఒక branch లో చివరి seat ఏ rank కి వచ్చిందో చెప్పే సంఖ్య"
+    },
+    {
+      "term": "Reporting",
+      "meaning_te": "seat వచ్చాక college లో లేదా portal లో చేరినట్టు నిర్ధారించడం"
+    }
+  ],
+  "sections": [
+    {
+      "id": 1,
+      "heading_te": "Option entry కి ముందు: సిద్ధంగా ఉండండి, చివరి నిమిషంలో ఆలోచించకండి",
+      "heading_en": "Before option entry: prepare, don't improvise",
+      "paragraphs_te": [
+        "Web options అంటే counselling లో మీరు చేరాలనుకునే colleges, branches జాబితా. ఈ list లోని order చాలా ముఖ్యం. ఎందుకంటే allotment system మీ preferences ని, అందుబాటులో ఉన్న seats ని rules ప్రకారం పరిశీలించి seat ఇస్తుంది.",
+        "చివరి గంటలో తొందరగా list తయారు చేస్తే మంచి options మర్చిపోవచ్చు. లేదా మీరు నిజంగా చేరాలనుకోని options కూడా అందులో చేరిపోవచ్చు.",
+        "Login అవ్వకముందే ఒక spreadsheet (Excel/Google Sheets) తయారు చేసుకోండి. అందులో ఈ columns ఉంచండి: college name, college code, branch, location, మొత్తం fees, hostel / transport ఖర్చు, accreditation లేదా approval వివరాలు, ఇటీవలి placement evidence, మీ సొంత preference. ప్రతి వివరాన్ని official counselling portal తోనూ, ఆ సంవత్సరపు information booklet తోనూ సరిచూసుకోండి."
+      ],
+      "points_te": [
+        "Hall ticket, rank card, registration details, అవసరమైన certificates అన్నీ ముందే సిద్ధంగా పెట్టుకోండి.",
+        "మంచి device, స్థిరమైన internet connection వాడండి. మొబైల్ డేటా మాత్రమే అయితే backup ఉంచుకోండి.",
+        "మీరు ప్లాన్ చేసిన option list కి మీ దగ్గర ఒక personal copy (PDF లేదా screenshot) ఉంచుకోండి."
+      ],
+      "tip_te": "Pro tip: Option entry తేదీలు మొదలవ్వడానికి 1-2 వారాల ముందే మీ spreadsheet తయారు చేయడం మొదలుపెట్టండి. తొందరలో కాకుండా ప్రశాంతంగా ఆలోచిస్తే నిర్ణయాలు మెరుగ్గా ఉంటాయి."
+    },
+    {
+      "id": 2,
+      "heading_te": "తప్పు 1: స్నేహితుడి option list ని కాపీ చేయడం",
+      "heading_en": "Mistake: copying a friend's option list",
+      "paragraphs_te": [
+        "మీ స్నేహితుడి rank, category, local-area status, budget, ప్రయాణ పరిస్థితి, career ఇష్టాలు మీకంటే వేరుగా ఉండవచ్చు. అతనికి సరిపోయిన list మీకు సరిపోవాల్సిన అవసరం లేదు.",
+        "ఒకే college ఇద్దరి list లో ఉన్నా, branch order లో చాలా తేడా ఉండవచ్చు. ఒకరికి CSE మొదటి ఎంపిక కావచ్చు, ఇంకొకరికి ECE కావచ్చు.",
+        "మీ సొంత preference order తయారు చేసుకోండి. సలహాలు తీసుకోండి, కానీ facts ని verify చేసుకుని, official rules మరియు మీ సొంత priorities ఆధారంగా final నిర్ణయం మీరే తీసుకోండి."
+      ],
+      "points_te": [
+        "సలహాను ఒక input గా మాత్రమే చూడండి, మీ నిర్ణయానికి ప్రత్యామ్నాయంగా కాదు.",
+        "ఖర్చు, దూరం, hostel భద్రత, కుటుంబ పరిస్థితులు గురించి ఇంట్లో నిజాయితీగా మాట్లాడండి.",
+        "Exact course, campus code ని సరిచూసుకోండి."
+      ],
+      "example_te": "ఉదాహరణ: రవి rank 8,000, అతను హైదరాబాద్ దగ్గర ఉన్నాడు. సురేష్ rank 25,000, అతనికి hostel తప్పనిసరి. ఇద్దరి list లు పూర్తిగా వేరుగా ఉండాలి. అయినా సురేష్ రవి list ని కాపీ చేస్తే తనకు రాని options తో list నిండిపోతుంది."
+    },
+    {
+      "id": 3,
+      "heading_te": "తప్పు 2: college పేరు లేదా branch trend ని మాత్రమే చూసి ఎంచుకోవడం",
+      "heading_en": "Mistake: choosing only by college name or branch trend",
+      "paragraphs_te": [
+        "పేరున్న college అంటే ప్రతి student కి, ప్రతి branch కి అదే సరైన ఎంపిక అని కాదు. అలాగే ప్రస్తుతం popular గా ఉన్న specialization లో curriculum బలహీనంగా ఉండవచ్చు, లేదా ఆ subject మీకు నిజంగా ఇష్టం లేకపోవచ్చు.",
+        "అసలు syllabus, labs, faculty, placement transparency, మొత్తం ఖర్చు ఇవన్నీ పోల్చి చూడండి.",
+        "Placement గురించి చూసేటప్పుడు highest package కాకుండా median (మధ్యస్థ) outcomes చూడండి. ఆ data మొత్తం batch కి సంబంధించినదా లేక కొందరికేనా, చూపించిన roles ఆ branch కి సంబంధించినవేనా అని అడగండి."
+      ],
+      "points_te": [
+        "ప్రస్తుత syllabus ని చదవండి.",
+        "కేవలం tuition కాదు, నాలుగేళ్ల మొత్తం ఖర్చును పోల్చండి.",
+        "Placement claims official గా ఉన్నాయా, స్పష్టంగా define చేశారా అని చూడండి."
+      ]
+    },
+    {
+      "id": 4,
+      "heading_te": "తప్పు 3: ‘ఇది ఈజీగా వస్తుంది’ అనుకుని options ని order చేయడం",
+      "heading_en": "Mistake: ordering options based on what seems easiest to get",
+      "paragraphs_te": [
+        "చాలా preference-based systems లో సరైన పద్ధతి ఏమిటంటే, official counselling సూచనలను పాటిస్తూ, మీ నిజమైన ఇష్టం ప్రకారం options ని order చేయడం.",
+        "కొందరు ‘ఇది సేఫ్’ అనుకుని తక్కువ ఇష్టమైన option ని మొదటి స్థానంలో పెడతారు. Allotment algorithm ఎలా పని చేస్తుందో అర్థం చేసుకోకుండా ఇలా చేయడం ప్రమాదం. Software ఎలా ప్రవర్తిస్తుందో ఊహించకండి. ప్రస్తుత official guide ని చదవండి.",
+        "మీరు నిజంగా చేరాలనుకునే ambitious options ముందు పెట్టండి. తర్వాత realistic, safe options పెట్టండి. అవి కూడా మీరు సంతోషంగా చేరగలిగేవే అయి ఉండాలి. List పొడవుగా కనిపించడానికి మాత్రమే ఏ college ని, branch ని చేర్చకండి."
+      ],
+      "points_te": [
+        "Official option-order సూచనలను జాగ్రత్తగా చదవండి.",
+        "List లో ఉన్న ప్రతి option మీకు ఆమోదయోగ్యమైనదేనని నిర్ధారించుకోండి.",
+        "Deadline తర్వాత allotment ని మార్చుకోవచ్చని ఊహించుకోకండి."
+      ],
+      "tip_te": "ఒక సులభమైన పరీక్ష: ‘ఈ option కే seat వస్తే నేను నిజంగా చేరతానా?’ అని ప్రతి దానికి మీరే అడగండి. సమాధానం ‘లేదు’ అయితే ఆ option list లో ఉండకూడదు."
+    },
+    {
+      "id": 5,
+      "heading_te": "తప్పు 4: college codes, branch names ని పట్టించుకోకపోవడం",
+      "heading_en": "Mistake: ignoring college codes and branch names",
+      "paragraphs_te": [
+        "ఒకేలా వినిపించే college పేర్లు వేరే campuses, management లేదా ప్రదేశాలను సూచించవచ్చు. Branch short forms కూడా గందరగోళంగా ఉంటాయి. మీరు ఒక program ఎంచుకోవాలనుకుని పొరపాటున వేరే code ఎంచుకునే ప్రమాదం ఉంది.",
+        "Save చేసే ముందు కనిపించే పేరు, campus, branch, course వివరాలను సరిచూసుకోండి.",
+        "పేర్లు ఒకేలా ఉన్నా specializations లో curriculum వేరుగా ఉంటుంది. మీరు ఎంచుకుంటున్నది CSE Core నా, CSE (AI/ML) నా, CSE (Data Science) నా, Information Technology నా లేక మరొక branch నా అని స్పష్టంగా చూసుకోండి."
+      ],
+      "points_te": [
+        "College codes ని official list తో cross-check చేయండి.",
+        "ప్రతి option ని save చేసే ముందు branch name, campus ని చూడండి.",
+        "Portal అనుమతిస్తే, saved list కి screenshot లేదా printout ఉంచుకోండి."
+      ]
+    },
+    {
+      "id": 6,
+      "heading_te": "తప్పు 5: ఖర్చు, practical పరిమితులను పట్టించుకోకపోవడం",
+      "heading_en": "Mistake: leaving out affordability and practical constraints",
+      "paragraphs_te": [
+        "Fees, జీవన ఖర్చులు, ప్రయాణ భారం వల్ల college కి వెళ్లడమే కష్టమైతే, ఆ seat మంచి ఫలితం కాదు. Tuition, hostel, food, transport, books, laptop, exam fees, ఇతర ఖర్చులన్నీ అంచనా వేయండి.",
+        "Scholarship లేదా fee reimbursement కి మీరు అర్హులా కాదా official notices ద్వారా నిర్ధారించుకోండి. ఏ benefit కూడా automatic అని అనుకోకండి.",
+        "రోజువారీ వాస్తవాలను కూడా ఆలోచించండి: ప్రయాణ సమయం, hostel లభ్యత, lab access, భద్రత, చదువులో ఇబ్బంది వచ్చినప్పుడు దొరికే support."
+      ],
+      "points_te": [
+        "ప్రతి serious option కి మొత్తం ఖర్చు అంచనా తయారు చేయండి.",
+        "ప్రస్తుత సంవత్సరానికి scholarship, reimbursement నిబంధనలు verify చేయండి.",
+        "ఫైనల్ చేసే ముందు ప్రయాణం, వసతి గురించి కుటుంబంతో చర్చించండి."
+      ]
+    },
+    {
+      "id": 7,
+      "heading_te": "Options lock చేసే ముందు final review",
+      "heading_en": "Final review before locking options",
+      "paragraphs_te": [
+        "Options ఎంటర్ చేసిన తర్వాత మొదటి నుంచి చివరి వరకు list ని ఒక్కసారి చదవండి. Duplicates, తప్పు codes, మీకు వద్దనుకున్న branches, అనుకోకుండా వదిలేసినవి ఉన్నాయేమో చూడండి.",
+        "Portal సూచనల ప్రకారమే save లేదా freeze చేయండి. Official deadline లోపలే ప్రక్రియ పూర్తి చేసి, submit చేసినదానికి ఆధారం భద్రపరచండి.",
+        "మీ password, OTP, లేదా sensitive login details ని అనధికారిక agents తో ఎప్పుడూ పంచుకోకండి. సమస్య వస్తే portal లో ఉన్న official help desk ని సంప్రదించండి."
+      ],
+      "points_te": [
+        "ప్రతి option ని వరుసగా సమీక్షించండి.",
+        "Submission status ని నిర్ధారించి list ని print చేయండి లేదా save చేయండి.",
+        "Submit చేసిన తర్వాత official allotment, reporting తేదీలను గమనిస్తూ ఉండండి."
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q_te": "అత్యంత ఇష్టమైన college ని మొదటి స్థానంలో పెట్టాలా?",
+      "a_te": "ప్రస్తుత official option-entry rules ని పాటించండి. సాధారణంగా list మీరు నిజంగా కోరుకునేదాన్ని ప్రతిబింబించాలి, ఏది సులభంగా వస్తుందో అనే ఊహలను కాదు."
+    },
+    {
+      "q_te": "ఎన్ని options నింపాలి?",
+      "a_te": "మీకు ఆమోదయోగ్యమైన choices ని ఆలోచనాత్మకంగా కవర్ చేసేంత. Portal rules ప్రకారం. ఏదో ఒక సంఖ్య కోసం కాకుండా quality, order ముఖ్యం."
+    },
+    {
+      "q_te": "గత సంవత్సరం cutoff list ని కాపీ చేయవచ్చా?",
+      "a_te": "దాన్ని కేవలం చారిత్రక సందర్భంగా (reference) వాడండి. ఈ సంవత్సరపు seat availability, closing ranks మారవచ్చు."
+    },
+    {
+      "q_te": "నాకు ఇష్టం లేని option వస్తే ఏం చేయాలి?",
+      "a_te": "నిర్ణయం తీసుకునే ముందు acceptance, self-reporting, withdrawal, sliding లేదా తర్వాతి phases గురించి ప్రస్తుత rules ని అర్థం చేసుకోండి."
+    },
+    {
+      "q_te": "తేదీలను ఎక్కడ చూసుకోవాలి?",
+      "a_te": "అధికారిక AP లేదా Telangana counselling portal లో, ఆ సంవత్సరపు notifications లో మాత్రమే."
+    }
+  ],
+  "final_checklist_te": [
+    "Hall ticket, rank card, certificates సిద్ధంగా ఉన్నాయి",
+    "Spreadsheet లో colleges, codes, fees, hostel, placement evidence రాసుకున్నాను",
+    "నా సొంత preference order తయారు చేసుకున్నాను (స్నేహితుడి list కాపీ కాదు)",
+    "List లో ప్రతి option కి నేను నిజంగా ఒప్పుకుంటాను",
+    "College code, branch name, campus ని official list తో సరిచూశాను",
+    "నాలుగేళ్ల మొత్తం ఖర్చు, scholarship నిబంధనలు చూశాను",
+    "Save చేసిన list ని screenshot / print తీసుకున్నాను",
+    "Allotment, reporting తేదీలను calendar లో నోట్ చేసుకున్నాను"
+  ],
+  "resources": [],
+  "publication_checklist_te": [
+    "ప్రస్తుత admission year కి తేదీలు, process వివరాలు update చేయండి.",
+    "Option-entry, allotment rules ని official guide లో చూసుకోవాలని స్పష్టంగా చెప్పండి.",
+    "అనధికారిక claims ని counselling rules గా ప్రచురించవద్దు."
+  ],
+  "conclusion_te": "Web options అనేది మీ భవిష్యత్తును ప్రభావితం చేసే ముఖ్యమైన నిర్ణయం. ముందుగా సిద్ధం అవ్వండి, మీ సొంత priorities తో list చేయండి, అన్ని వివరాలు official sources తో verify చేయండి, ఏజెంట్ల మాటలు నమ్మి password లేదా OTP ఇవ్వకండి. ప్రశాంతంగా, ఆలోచించి చేసిన list తరచుగా మంచి ఫలితం ఇస్తుంది."
+}

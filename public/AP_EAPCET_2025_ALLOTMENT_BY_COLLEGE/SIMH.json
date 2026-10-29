@@ -1,0 +1,426 @@
+{
+  "college_name": "SIMHADRI EDNL SOC GRP OF INSTNS",
+  "college_code": "SIMH",
+  "branches": [
+    {
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "records": [
+        {
+          "rank": "26658.0",
+          "cand_name": "THURUBILLI PUJITHA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "61632.0",
+          "cand_name": "PORANA RAJYALAXMI",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GIRLS_UR",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "101633.0",
+          "cand_name": "RUTHALA ANANTHA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "102016.0",
+          "cand_name": "PARITI RAMYA",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "102475.0",
+          "cand_name": "REKHA KEERTHANA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GIRLS_AU",
+          "phase": 2,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "103211.0",
+          "cand_name": "GANTA SHARMILA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "104592.0",
+          "cand_name": "DASARI  SAI VIVARDHINI",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "SC_II_GIRLS_AU",
+          "phase": 2,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "110452.0",
+          "cand_name": "KANURI NAGANANDINI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_UR",
+          "phase": 2,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "111888.0",
+          "cand_name": "CHODE PREETHI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "120187.0",
+          "cand_name": "GUDIVADA SHARONI KUMARI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 2,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "121086.0",
+          "cand_name": "ALURI JAHNAVI",
+          "gender": "F",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "ST_GIRLS_AU",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "123397.0",
+          "cand_name": "REBAKA VIJAYA BHANU",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "124691.0",
+          "cand_name": "ADDURI SANDYA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "125904.0",
+          "cand_name": "PAILA HARIPRIYA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GIRLS_AU",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "126580.0",
+          "cand_name": "GARA SUNITHA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GIRLS_AU",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "128443.0",
+          "cand_name": "BURAGABOINA  VENKATESH",
+          "gender": "M",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "ST_GEN_AU",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "135828.0",
+          "cand_name": "YALLABILLI GANGABHAVANI",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_UR",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "135982.0",
+          "cand_name": "BONDAPALLI MANASA",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GEN_AU",
+          "phase": 2,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "136092.0",
+          "cand_name": "VEMULAVALASA BHARGAVI",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GIRLS_AU",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "137218.0",
+          "cand_name": "MYCHARLA DHARANI",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_AU",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "139723.0",
+          "cand_name": "NANDIKA KALYANI",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GIRLS_AU",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "139877.0",
+          "cand_name": "KUPPA VIJAY KUMAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_AU",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "141398.0",
+          "cand_name": "DEVARAPU SANDHYA",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GIRLS_AU",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "148901.0",
+          "cand_name": "KONISA JHANSI",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_AU",
+          "phase": 2,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "162930.0",
+          "cand_name": "MUGI AKSHARA",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GEN_AU",
+          "phase": 2,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "168554.0",
+          "cand_name": "KANDREGULA GOVARDHAN",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_C_GEN_UR",
+          "phase": 2,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "168749.0",
+          "cand_name": "VUDI SURYA GANESH",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_AU",
+          "phase": 2,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "EEE",
+      "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+      "records": [
+        {
+          "rank": "122713.0",
+          "cand_name": "POTIPIREDDI SURYA TEJA",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "ELECTRICAL AND ELECTRONICS ENGINEERING (EEE)"
+        },
+        {
+          "rank": "150461.0",
+          "cand_name": "KANDREGULA JAYA KUMAR",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_SCG_GEN_AU",
+          "phase": 2,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "ELECTRICAL AND ELECTRONICS ENGINEERING (EEE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "ECE",
+      "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+      "records": [
+        {
+          "rank": "36588.1",
+          "cand_name": "KUDAMALA GAYATRI",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "67752.0",
+          "cand_name": "JAMI ANUSHKA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "85173.0",
+          "cand_name": "MERUGU YASODHA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "169402.0",
+          "cand_name": "MUVVALA CHANDU",
+          "gender": "M",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "MEC",
+      "branch_name": "MECHANICAL ENGINEERING",
+      "records": [
+        {
+          "rank": "144015.0",
+          "cand_name": "SAVARAPU NAVEEN",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        },
+        {
+          "rank": "151610.0",
+          "cand_name": "MAMIDI KUMAR",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        },
+        {
+          "rank": "170200.0",
+          "cand_name": "GURLA SRAVAN KUMAR",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "SIMHADRI EDNL SOC GRP OF INSTNS (SIMH)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        }
+      ]
+    }
+  ]
+}

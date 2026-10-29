@@ -1,0 +1,542 @@
+{
+  "college_name": "LENORA COLLEGE OF ENGINEERING",
+  "college_code": "LENO",
+  "branches": [
+    {
+      "branch_code": "CIV",
+      "branch_name": "CIVIL ENGINEERING",
+      "records": [
+        {
+          "rank": "89625.0",
+          "cand_name": "NAMMI MANIKANTA",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GIRLS_UR",
+          "phase": 2,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "CIVIL ENGINEERING (CIV)"
+        },
+        {
+          "rank": "130490.0",
+          "cand_name": "GOMPA NANI",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "CIVIL ENGINEERING (CIV)"
+        },
+        {
+          "rank": "150781.0",
+          "cand_name": "VEERAMREDDI PAVAN GANESH",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "CIVIL ENGINEERING (CIV)"
+        },
+        {
+          "rank": "152706.0",
+          "cand_name": "KINTHADA DINESH",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 2,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "CIVIL ENGINEERING (CIV)"
+        },
+        {
+          "rank": "153194.0",
+          "cand_name": "PENUMALLA VEERARJUNA",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "CIVIL ENGINEERING (CIV)"
+        },
+        {
+          "rank": "162325.0",
+          "cand_name": "PODUGU RAJENDRA PRASAD",
+          "gender": "M",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "CIVIL ENGINEERING (CIV)"
+        },
+        {
+          "rank": "167358.0",
+          "cand_name": "MIRIYALA CHARAN",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "CIVIL ENGINEERING (CIV)"
+        },
+        {
+          "rank": "170033.0",
+          "cand_name": "MYLAPALLI PRAVEEN",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "CIVIL ENGINEERING (CIV)"
+        },
+        {
+          "rank": "173787.0",
+          "cand_name": "POTULA BABI",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "CIVIL ENGINEERING (CIV)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "records": [
+        {
+          "rank": "48592.1",
+          "cand_name": "SAPIREDDY ARJUTHA",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "72451.0",
+          "cand_name": "ARASAVILLI LALITHAPRIYA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "80075.0",
+          "cand_name": "KUNDRAPU BHARATH",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "84816.0",
+          "cand_name": "KATRU PHANEENDRA",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "115762.0",
+          "cand_name": "KAMADI RAM SAI VIGNESH VARMA",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 2,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "124149.0",
+          "cand_name": "KOTHA PRAVEEN REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_UR",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "126008.0",
+          "cand_name": "BADHRI KUMAR NADH",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_AU",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "129225.0",
+          "cand_name": "SABBATHI PARDHA SARADHI",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "131062.0",
+          "cand_name": "KOLLUBOINA VENKATA RAMANA",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_UR",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "139615.0",
+          "cand_name": "PALAVALASA DURGA SAI KOWSHIK",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_UR",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "148143.0",
+          "cand_name": "GUDETI ARUNA KUMARI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GIRLS_AU",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "152957.0",
+          "cand_name": "MANGU VEERESH",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_NCC_GEN_AU",
+          "phase": 2,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "155735.0",
+          "cand_name": "CHINNAM NIRMAL TEJA REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "ST_GEN_AU",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "161389.0",
+          "cand_name": "KALAVALA NAGA DURGA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GIRLS_AU",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "162239.0",
+          "cand_name": "DAVULURI ARAVIND",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_AU",
+          "phase": 2,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "164573.0",
+          "cand_name": "BONDADA DILEEP KUMAR",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "177479.0",
+          "cand_name": "GONIPATI RAHUL",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_PWD_GEN_AU",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "179635.0",
+          "cand_name": "PAMU BALA GOPAL",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_I_GEN_AU",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "EEE",
+      "branch_name": "ELECTRICAL AND ELECTRONICS ENGINEERING",
+      "records": [
+        {
+          "rank": "121231.0",
+          "cand_name": "AMPUJALAPU ASHOK",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "ELECTRICAL AND ELECTRONICS ENGINEERING (EEE)"
+        },
+        {
+          "rank": "156662.0",
+          "cand_name": "VENNA DURGA SWAMY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "ELECTRICAL AND ELECTRONICS ENGINEERING (EEE)"
+        },
+        {
+          "rank": "160125.0",
+          "cand_name": "SUNKARA NAGA GANGA RAMU",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "ELECTRICAL AND ELECTRONICS ENGINEERING (EEE)"
+        },
+        {
+          "rank": "160945.0",
+          "cand_name": "CHINTA RAMUDU",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "ELECTRICAL AND ELECTRONICS ENGINEERING (EEE)"
+        },
+        {
+          "rank": "165074.0",
+          "cand_name": "KAREMPUDI MADHU MANIKANTA SAI",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "ELECTRICAL AND ELECTRONICS ENGINEERING (EEE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "ECE",
+      "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+      "records": [
+        {
+          "rank": "53552.0",
+          "cand_name": "KENGUVA SHANMUKHA RAO",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "74009.0",
+          "cand_name": "SADHANALA HARSHINI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GIRLS_AU",
+          "phase": 2,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "91568.0",
+          "cand_name": "SAMANTHULA MADAN KUMAR",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "128825.0",
+          "cand_name": "VEEDHI LAKSHMI NAGA SANTHOSHINI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "143573.0",
+          "cand_name": "SIVAKOTI ANIL KUMAR",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "153732.0",
+          "cand_name": "POTHULA RAJU",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_UR",
+          "phase": 2,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "161837.0",
+          "cand_name": "PENUMUCHI ANIL KUMAR",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 2,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "172497.0",
+          "cand_name": "SARAGADAM LEELA VARAPRASAD",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_UR",
+          "phase": 2,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "MEC",
+      "branch_name": "MECHANICAL ENGINEERING",
+      "records": [
+        {
+          "rank": "94151.0",
+          "cand_name": "SESETTI SAI VEERA VENKATA RAMANA",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 2,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        },
+        {
+          "rank": "99682.1",
+          "cand_name": "OLETI RAGHURAM",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        },
+        {
+          "rank": "145361.0",
+          "cand_name": "UBA VIVEK",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        },
+        {
+          "rank": "145763.0",
+          "cand_name": "VALLURI RAJU",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        },
+        {
+          "rank": "152687.0",
+          "cand_name": "GUDALA SURESH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 2,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        },
+        {
+          "rank": "165979.0",
+          "cand_name": "BEERA NAVEEN KUMAR",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "LENORA COLLEGE OF ENGINEERING (LENO)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        }
+      ]
+    }
+  ]
+}

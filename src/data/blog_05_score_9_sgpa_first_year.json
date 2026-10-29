@@ -1,0 +1,246 @@
+{
+  "id": "blog_05",
+  "source_file": "blog_05_score_9_sgpa_first_year-1.pdf",
+  "language": "te (Telugu + simple English words)",
+  "title_te": "B.Tech మొదటి సంవత్సరంలో 9+ SGPA ఎలా సాధించాలి?",
+  "title_en": "How to Score a 9+ SGPA in B.Tech First Year",
+  "subtitle_te": "Burnout లేకుండా మంచి గ్రేడ్లు తెచ్చుకోవడానికి ఒక realistic study system",
+  "audience_te": "భారతదేశంలో undergraduate విద్యార్థులు, తల్లిదండ్రులు, ఇంజినీరింగ్ దరఖాస్తుదారులు",
+  "seo": {
+    "title": "How to Score a 9+ SGPA in B.Tech First Year",
+    "slug": "/how-to-score-a-9-sgpa-in-b-tech-first-year",
+    "meta_description_te": "మొదటి సంవత్సరంలో 9+ SGPA కోసం timetable, active recall, spaced repetition, previous papers, burnout నివారణ, 30 రోజుల revision plan."
+  },
+  "editorial_note_te": "ఇది ఒక structured draft. ప్రచురించే ముందు మీ university నిబంధనలు, grading, credits ని official handbook లో చూసి update చేయండి. ఏ routine కూడా నిర్దిష్ట grade ని హామీ ఇవ్వదు.",
+  "glossary": [
+    {
+      "term": "SGPA",
+      "meaning_te": "Semester Grade Point Average. ఒక semester లో మీ grades సగటు"
+    },
+    {
+      "term": "CGPA",
+      "meaning_te": "అన్ని semesters కలిపిన మొత్తం grade సగటు"
+    },
+    {
+      "term": "Active recall",
+      "meaning_te": "పుస్తకం చూడకుండా గుర్తు తెచ్చుకుని రాయడం లేదా చెప్పడం"
+    },
+    {
+      "term": "Spaced repetition",
+      "meaning_te": "ఒక topic ని పెరుగుతున్న గ్యాప్‌లతో మళ్లీ మళ్లీ revise చేయడం"
+    },
+    {
+      "term": "Internal marks",
+      "meaning_te": "సెమిస్టర్ మధ్యలో tests, assignments, labs ద్వారా వచ్చే మార్కులు"
+    },
+    {
+      "term": "Backlog",
+      "meaning_te": "ఒక subject లో పాస్ కాకపోవడం, దాన్ని తర్వాత మళ్లీ రాయాల్సి రావడం"
+    }
+  ],
+  "sections": [
+    {
+      "id": 1,
+      "heading_te": "9+ SGPA కి నిజంగా ఏం కావాలి?",
+      "heading_en": "What does a 9+ SGPA actually require?",
+      "paragraphs_te": [
+        "SGPA అనేది ఒక university నిబంధనల ప్రకారం లెక్కించే semester grade-point సగటు. 9+ లక్ష్యానికి సాధారణంగా అన్ని subjects, labs, assignments, internal assessments, end-semester exams లో నిలకడగా మంచి ప్రదర్శన అవసరం.",
+        "ఖచ్చితమైన లెక్కింపు, grade boundaries, credits, backlog లేదా improvement నియమాలు institution ని బట్టి మారతాయి. కాబట్టి మీ సొంత regulation, course handbook తోనే మొదలుపెట్టండి.",
+        "చివరి వారం మాత్రమే చదివితే సాధారణంగా అధిక SGPA రాదు. అది క్రమం తప్పని అవగాహన, practice, బలహీన topics ని ముందే గుర్తించడం, exam format కి సరిపోయే revision system నుంచి వస్తుంది. రోజంతా చదవాల్సిన అవసరం లేదు. పునరావృతమయ్యే ఒక routine ఉంటే చాలు."
+      ],
+      "points_te": [
+        "Official syllabus, assessment scheme ని download చేసుకోండి.",
+        "Internal marks, lab requirements, assignment deadlines, exam dates రాసుకోండి.",
+        "ఎక్కువ credit weight ఉన్న subjects, మీకు కష్టంగా అనిపించే topics ని గుర్తించండి."
+      ],
+      "tip_te": "ఉదాహరణకు, 4 credits ఉన్న subject లో తక్కువ grade వస్తే 2 credits subject కంటే SGPA పై ఎక్కువ ప్రభావం పడుతుంది. అందుకే credits ని చూసి సమయం పంచుకోండి."
+    },
+    {
+      "id": 2,
+      "heading_te": "వాస్తవికమైన weekly timetable తయారు చేయండి",
+      "heading_en": "Build a realistic weekly timetable",
+      "paragraphs_te": [
+        "మంచి timetable లో lectures, revision, problem-solving, assignments, నిద్ర, భోజనం, వ్యాయామం, స్నేహితులతో సమయం అన్నీ సమతుల్యంగా ఉంటాయి. ముందుగా మార్చలేని commitments (classes, labs) రాయండి. తర్వాత వాటి చుట్టూ చిన్న, ఏకాగ్రమైన study blocks పెట్టండి.",
+        "కష్టమైన lab రోజు ఉంటే ఆ రోజు తేలికపాటి revision మాత్రమే ప్లాన్ చేయండి. ప్రతి రోజూ ఒకే సామర్థ్యం ఉన్నట్టు నటించకండి.",
+        "తరువాత ఏం పూర్తి చేయాలో నిర్ణయించడానికి వారానికి ఒకసారి review చేయండి. Timetable అనేది మార్గదర్శి, అపరాధ భావం కలిగించే సాధనం కాదు. ఒక session మిస్ అయితే ప్లాన్ మొత్తాన్ని వదిలేయకండి. అత్యంత ముఖ్యమైన పనిని తిరిగి షెడ్యూల్ చేయండి."
+      ],
+      "points_te": [
+        "ప్రతి lecture తర్వాత 15 నుంచి 30 నిమిషాలు notes ని చూసి, సందేహాలను మార్క్ చేయండి.",
+        "Numericals, coding, diagrams, lab records కి వారంలో ప్రత్యేక సమయం కేటాయించండి.",
+        "అనుకోని పనుల కోసం ఒక buffer block ఉంచండి."
+      ],
+      "table": {
+        "headers": [
+          "Study block",
+          "ఉద్దేశం",
+          "ఉదాహరణ"
+        ],
+        "rows": [
+          [
+            "Same-day review",
+            "అవగాహనను బలపరచడం",
+            "Lecture ని సంక్షిప్తంగా రాసి 2-3 ప్రశ్నలు చేయడం"
+          ],
+          [
+            "Deep practice",
+            "కష్టమైన విషయాలపై పని",
+            "Numericals, derivations, programming exercises"
+          ],
+          [
+            "Weekly recap",
+            "లోపాలను ముందే కనుగొనడం",
+            "Closed-book quiz, తప్పుల సమీక్ష"
+          ],
+          [
+            "Exam revision",
+            "సమయ ఒత్తిడిలో గుర్తు తెచ్చుకోవడం",
+            "Past questions, timed practice"
+          ]
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "heading_te": "మళ్లీ మళ్లీ చదవడం కాదు, Active గా చదవండి",
+      "heading_en": "Study actively instead of rereading",
+      "paragraphs_te": [
+        "Notes ని మళ్లీ మళ్లీ చదివితే productive గా అనిపిస్తుంది కానీ గుర్తు తెచ్చుకునే శక్తిలో లోపాలు మిగిలిపోతాయి. Active recall అంటే ఒక concept ని వివరించడానికి, ఫలితాన్ని derive చేయడానికి, సమస్యను solve చేయడానికి లేదా ప్రశ్నకు జవాబు చెప్పడానికి solution చూడకుండా ప్రయత్నించడం. తర్వాత జవాబును చెక్ చేసి తప్పులను సరిదిద్దుకోవాలి.",
+        "Spaced repetition అంటే ముఖ్యమైన విషయాన్ని పెరుగుతున్న వ్యవధులతో మళ్లీ చదవడం. ఉదాహరణకు, ఒక topic ని నేర్చుకున్న రోజే ఒకసారి, కొన్ని రోజుల తర్వాత మళ్లీ, వారాంతంలో ఇంకోసారి చూడండి. దీనివల్ల exams కి ముందు అంతా మళ్లీ నేర్చుకోవాల్సిన అవసరం తగ్గుతుంది."
+      ],
+      "points_te": [
+        "పుస్తకం మూసేసి మీకు గుర్తున్నది రాయండి.",
+        "Definitions, formulas, assumptions, చిన్న conceptual ప్రశ్నలకు flashcards వాడండి.",
+        "మళ్లీ మళ్లీ చేసే తప్పుల కోసం ఒక error notebook ఉంచండి."
+      ],
+      "example_te": "ఉదాహరణ: సోమవారం Newton’s laws నేర్చుకుంటే, అదే రోజు 5 ప్రశ్నలు చేయండి. గురువారం పుస్తకం చూడకుండా వివరణ రాయండి. ఆదివారం మళ్లీ 5 కొత్త ప్రశ్నలు చేయండి. ఇలా చేస్తే పరీక్షల వరకు ఆ topic మర్చిపోరు."
+    },
+    {
+      "id": 4,
+      "heading_te": "Engineering subjects కి వేర్వేరు పద్ధతులు",
+      "heading_en": "Prepare for engineering subjects differently",
+      "paragraphs_te": [
+        "Mathematics, numerical subjects కి worked examples, స్వతంత్రంగా practice అవసరం. చివరి formula మాత్రమే కాకుండా assumptions, units ని కూడా అర్థం చేసుకోండి.",
+        "Programming లో పూర్తి answers ని బట్టీ పట్టకుండా code రాసి, test చేయండి. Theory subjects లో concepts ని definitions, diagrams, comparisons, derivations, applications గా విభజించండి. Labs లో procedure, observations, calculations, error sources, viva questions ని అర్థం చేసుకోండి.",
+        "Mechanical, electrical, civil, computer science వంటి branches కి వేర్వేరు technical అవసరాలు ఉన్నా, నేర్చుకునే సూత్రం ఒకటే: assessment ఏ రకమైన ఆలోచనను అడుగుతుందో అదే రకంగా practice చేయండి."
+      ],
+      "points_te": [
+        "Numericals: తెలిసిన data రాయండి, సరైన principle ఎంచుకోండి, units ని గమనించండి, ఫలితాన్ని తనిఖీ చేయండి.",
+        "Coding: output ని ఊహించండి, code run చేయండి, debug చేయండి, అవసరమైన చోట complexity ని వివరించండి.",
+        "Theory: ప్రశ్నకు నేరుగా జవాబివ్వండి, labelled diagrams వాడండి, points ని క్రమబద్ధంగా రాయండి."
+      ]
+    },
+    {
+      "id": 5,
+      "heading_te": "Previous papers ని వ్యూహాత్మకంగా వాడండి",
+      "heading_en": "Use previous papers strategically",
+      "paragraphs_te": [
+        "Previous papers ప్రశ్నల రూపాలను చూపిస్తాయి, సమయ నిర్వహణ practice కి సహాయపడతాయి. కానీ అవే ప్రశ్నలు వస్తాయని హామీ లేదు. Syllabus చదివిన తర్వాత వాటిని వాడండి, syllabus కి ప్రత్యామ్నాయంగా కాదు.",
+        "అనేక papers ని పోల్చి పునరావృతమయ్యే themes ని గుర్తించండి. కానీ పూర్తి official syllabus ని కవర్ చేయడం మాత్రం మానకండి.",
+        "అప్పుడప్పుడు exam పరిస్థితులను అనుకరించండి: timer పెట్టండి, notes చూడకండి, నిజాయితీగా మార్కులు వేసుకోండి. తర్వాత జవాబు ఎందుకు తప్పు లేదా అసంపూర్ణం అయిందో సమీక్షించడానికి సమయం కేటాయించండి."
+      ],
+      "points_te": [
+        "మొదట topic-wise ప్రశ్నలతో మొదలుపెట్టి, తర్వాత పూర్తి papers చేయండి.",
+        "ప్రశ్నలు ప్రస్తుత syllabus, regulation కి సరిపోతున్నాయో చూడండి.",
+        "మార్కులకు తగ్గట్టుగా ప్రశ్నలకు సమయం కేటాయించే అలవాటు చేసుకోండి."
+      ]
+    },
+    {
+      "id": 6,
+      "heading_te": "Internal assessments, labs, assignments కూడా ముఖ్యం",
+      "heading_en": "Internal assessments, labs, and assignments matter",
+      "paragraphs_te": [
+        "కొందరు విద్యార్థులు end-semester exams పైనే దృష్టి పెట్టి, submissions మిస్ అవ్వడం, lab preparation లేకపోవడం, internal test లో తప్పుల వల్ల మార్కులు కోల్పోతారు. ఒకే deadline tracker ఉంచుకోండి.",
+        "Assignments ని ముందే మొదలుపెట్టండి. అప్పుడు ప్రశ్నలు అడగడానికి, formatting తనిఖీ చేయడానికి, లెక్కలు సరిదిద్దడానికి సమయం ఉంటుంది. Group work లో బాధ్యతలను స్పష్టం చేసుకోండి, submit చేసిన పనిని మీరూ అర్థం చేసుకోండి.",
+        "Internal marks ని తర్వాత ఎప్పుడైనా తిరిగి పొందవచ్చని అనుకోవద్దు. Course assessment rules చదివి, semester ప్రారంభంలోనే అవసరాల గురించి instructor ని అడగండి."
+      ],
+      "points_te": [
+        "Lab records ని క్రమం తప్పకుండా నిర్వహించండి.",
+        "వీలైతే deadline కి ముందే submit చేయండి.",
+        "Internal tests నుంచి వచ్చే feedback ఆధారంగా revision ప్రాధాన్యాలను నిర్ణయించండి."
+      ]
+    },
+    {
+      "id": 7,
+      "heading_te": "ఎక్కువ మార్కులు కోరుకుంటూనే Burnout ని నివారించండి",
+      "heading_en": "Avoid burnout while aiming high",
+      "paragraphs_te": [
+        "నిద్ర, ఆహారం, శారీరక కదలిక, విరామాలు కూడా చదువులో భాగమే. తీవ్రంగా నిద్ర తగ్గిస్తే ఏకాగ్రత, గుర్తుంచుకునే శక్తి దెబ్బతింటాయి. నిలకడగా సాగే ప్లాన్‌లో విరామాలు, క్రమమైన భోజనం, నీరు తాగడం, వ్యాయామం, చదువు నుంచి కొంత దూరం ఉండే సమయం ఉంటాయి.",
+        "ఇతరుల బహిరంగ మార్కులతో మీ ఒంటరి కష్టాలను పోల్చుకోకండి.",
+        "ఒత్తిడి కొనసాగుతూ మీ నిద్ర, ఆహారం, attendance లేదా రోజువారీ పనులను ప్రభావితం చేస్తుంటే, నమ్మకమైన వ్యక్తితో, faculty mentor తో, campus counsellor తో లేదా తగిన ఆరోగ్య నిపుణులతో మాట్లాడండి. సహాయం అడగడం బలహీనత కాదు, ఒక ఆచరణాత్మక అడుగు."
+      ],
+      "points_te": [
+        "చిన్న విరామాలతో ఏకాగ్రమైన sessions వాడండి.",
+        "ముఖ్యంగా exams కి ముందు వాస్తవికమైన నిద్ర షెడ్యూల్ ఉంచుకోండి.",
+        "విశ్రాంతికి, మనుషులతో గడపడానికి వారంలో కొంత సమయం కాపాడుకోండి."
+      ],
+      "tip_te": "ఒక సులభమైన పద్ధతి: 25 నిమిషాలు చదివి 5 నిమిషాలు విరామం (Pomodoro). 4 రౌండ్ల తర్వాత 20 నిమిషాల పెద్ద విరామం."
+    },
+    {
+      "id": 8,
+      "heading_te": "30 రోజుల revision plan",
+      "heading_en": "A 30-day revision plan",
+      "paragraphs_te": [
+        "Exams కి 30 రోజుల ముందు, ప్రతి subject ని topics గా విభజించి ప్రతి దానికి strong, moderate, weak అని రేటింగ్ ఇవ్వండి. మొదటి దశలో బలహీన పునాదులను సరిచేసి ప్రశ్నలు సేకరించండి. మధ్య దశలో problems solve చేసి core concepts ని revise చేయండి. చివరి దశలో timed papers, formula sheets, diagrams, error logs వాడండి. Subjects సంఖ్య, exam తేదీలను బట్టి షెడ్యూల్‌ను సర్దుబాటు చేసుకోండి.",
+        "ఇష్టమైన subject కే సమయం మొత్తం ఇవ్వకండి. ప్రతి subject కి ఒక ప్లాన్ చేసిన slot ఇవ్వండి. ఎక్కువ credits ఉన్న లేదా కష్టమైన topics కి అదనపు practice ఇవ్వండి కానీ మిగతావాటిని విస్మరించకండి."
+      ],
+      "table": {
+        "headers": [
+          "కాలం",
+          "ముఖ్యమైన పని",
+          "ఫలితం (Output)"
+        ],
+        "rows": [
+          [
+            "Days 1–7",
+            "Syllabus audit, బలహీన topics ను సరిచేయడం",
+            "Topic checklist, doubt list"
+          ],
+          [
+            "Days 8–17",
+            "Practice, active recall",
+            "Solved questions, సరిదిద్దిన తప్పులు"
+          ],
+          [
+            "Days 18–24",
+            "Mixed revision, past papers",
+            "Timed practice scores"
+          ],
+          [
+            "Days 25–30",
+            "Focused review, exam readiness",
+            "Short notes, formulas, diagrams, విశ్రాంతి"
+          ]
+        ]
+      }
+    }
+  ],
+  "faq": [
+    {
+      "q_te": "అందరూ 9+ SGPA సాధించగలరా?",
+      "a_te": "ఇది grading, తయారీ, course కష్టం, assessment ప్రదర్శనపై ఆధారపడుతుంది. ఏ routine కూడా నిర్దిష్ట grade ని హామీ ఇవ్వదు."
+    },
+    {
+      "q_te": "రోజుకు ఎన్ని గంటలు చదవాలి?",
+      "a_te": "ఉపయోగకరమైన సమయం మీ timetable, ప్రస్తుత స్థాయిపై ఆధారపడుతుంది. నిలకడగా ఏకాగ్రమైన blocks తో మొదలుపెట్టి, అవసరమైన చోట మాత్రమే పెంచండి."
+    },
+    {
+      "q_te": "జవాబులను బట్టీ పట్టాలా?",
+      "a_te": "ముఖ్యమైన definitions, formulas ని గుర్తుంచుకోండి. కానీ అవి ఎప్పుడు, ఎందుకు వర్తిస్తాయో అర్థం చేసుకోండి."
+    },
+    {
+      "q_te": "కేవలం important questions మాత్రమే చదివితే సరిపోతుందా?",
+      "a_te": "వాటిని practice కోసం వాడండి. కానీ రిస్క్ తగ్గించడానికి official syllabus మొత్తం కవర్ చేయండి."
+    },
+    {
+      "q_te": "Internal exam లో తక్కువ మార్కులు వస్తే ఏం చేయాలి?",
+      "a_te": "తప్పులను త్వరగా విశ్లేషించండి, feedback అడగండి, తర్వాతి assessment కి ముందు study plan ని మార్చుకోండి."
+    }
+  ],
+  "resources": [],
+  "publication_checklist_te": [
+    "హామీ ఇచ్చే SGPA ఫలితాలను చెప్పవద్దు.",
+    "సలహాను విద్యార్థి university, subjects, assessment నిబంధనలకు అనుగుణంగా మార్చండి.",
+    "ఆరోగ్యం, నిద్ర సలహాను ఆచరణాత్మకంగా, వైద్యపరం కాకుండా ఉంచండి."
+  ],
+  "conclusion_te": "అధిక SGPA అనేది అదృష్టం కాదు, ఒక వ్యవస్థ. Syllabus ని తెలుసుకోవడం, వాస్తవిక timetable, active recall, spaced repetition, previous papers ని తెలివిగా వాడటం, internals ని నిర్లక్ష్యం చేయకపోవడం, burnout ని నివారించడం. ఇవన్నీ కలిస్తే మంచి grades సాధ్యమవుతాయి. ఒకేసారి అన్నీ కాకుండా, ఈ వారం ఒక అలవాటుతో మొదలుపెట్టండి."
+}

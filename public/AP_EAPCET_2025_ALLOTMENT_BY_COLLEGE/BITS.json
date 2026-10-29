@@ -1,0 +1,629 @@
+{
+  "college_name": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE",
+  "college_code": "BITS",
+  "branches": [
+    {
+      "branch_code": "AI",
+      "branch_name": "ARTIFICIAL INTELLIGENCE",
+      "records": [
+        {
+          "rank": "54358.0",
+          "cand_name": "SIBYALA YOGESH  KUMAR",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ARTIFICIAL INTELLIGENCE (AI)"
+        },
+        {
+          "rank": "66971.0",
+          "cand_name": "MAYANA FATHIMA BEGUM",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ARTIFICIAL INTELLIGENCE (AI)"
+        },
+        {
+          "rank": "73157.0",
+          "cand_name": "SHAIK SHABNOOR",
+          "gender": "F",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ARTIFICIAL INTELLIGENCE (AI)"
+        },
+        {
+          "rank": "79743.0",
+          "cand_name": "CHERLOPALLI SAI LAKSHMI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ARTIFICIAL INTELLIGENCE (AI)"
+        },
+        {
+          "rank": "90784.0",
+          "cand_name": "SHAIK HALEEMA",
+          "gender": "F",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ARTIFICIAL INTELLIGENCE (AI)"
+        },
+        {
+          "rank": "106028.0",
+          "cand_name": "MUTHUKURU JASHIYA",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ARTIFICIAL INTELLIGENCE (AI)"
+        },
+        {
+          "rank": "107847.0",
+          "cand_name": "SYED ZUNAID ALI",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "EWS_GEN_UR",
+          "phase": 2,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ARTIFICIAL INTELLIGENCE (AI)"
+        },
+        {
+          "rank": "111779.0",
+          "cand_name": "YARRAMANI REDDY KEERTHI",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ARTIFICIAL INTELLIGENCE (AI)"
+        },
+        {
+          "rank": "125274.0",
+          "cand_name": "NALLAPUREDDY KARTHIK KUMAR REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ARTIFICIAL INTELLIGENCE (AI)"
+        },
+        {
+          "rank": "131228.0",
+          "cand_name": "SYED ABRAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_SVU",
+          "phase": 2,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ARTIFICIAL INTELLIGENCE (AI)"
+        },
+        {
+          "rank": "135522.0",
+          "cand_name": "YANNAM SWATHI",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "SC_II_GIRLS_SVU",
+          "phase": 2,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ARTIFICIAL INTELLIGENCE (AI)"
+        },
+        {
+          "rank": "147202.0",
+          "cand_name": "ORSU MAHESH BABU",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ARTIFICIAL INTELLIGENCE (AI)"
+        },
+        {
+          "rank": "157033.0",
+          "cand_name": "DUGINEPALLI  ASWINI",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "SC_II_GEN_UR",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ARTIFICIAL INTELLIGENCE (AI)"
+        },
+        {
+          "rank": "157407.0",
+          "cand_name": "SHAIK FAHAD",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "BC_E_GEN_SVU",
+          "phase": 2,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ARTIFICIAL INTELLIGENCE (AI)"
+        },
+        {
+          "rank": "160859.0",
+          "cand_name": "EGUVINTI REDDY SANKAR",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "SC_II_PWD_GEN_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ARTIFICIAL INTELLIGENCE (AI)"
+        },
+        {
+          "rank": "161905.0",
+          "cand_name": "KULLAYI CHAITANYA",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_PWD_GEN_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ARTIFICIAL INTELLIGENCE (AI)"
+        },
+        {
+          "rank": "178018.0",
+          "cand_name": "SHAIK GHOUSE FAYAZ",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "BC_E_GEN_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ARTIFICIAL INTELLIGENCE (AI)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "records": [
+        {
+          "rank": "52250.0",
+          "cand_name": "SHAIK SUHA RAHMAN",
+          "gender": "F",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "OC_CAP_GIRLS_UR",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "58542.1",
+          "cand_name": "PULLAGURA SIVANJANEYULU",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "60790.0",
+          "cand_name": "SHAIK MUSKAN",
+          "gender": "F",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "74055.0",
+          "cand_name": "PATAN AYISHA",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "75468.0",
+          "cand_name": "PASUPULETI SREENIVASULU",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "92741.0",
+          "cand_name": "BAREE JAYASREE",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "93716.0",
+          "cand_name": "SHAIK REEMA",
+          "gender": "F",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "98687.0",
+          "cand_name": "SHAIK SALMA",
+          "gender": "F",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "108653.0",
+          "cand_name": "MUTHYAM NARASIMHA REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "108784.0",
+          "cand_name": "SHAIK TASEENULLA",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "124193.0",
+          "cand_name": "NACCHAKURI REDDY PRASAD",
+          "gender": "M",
+          "category": "ST",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "127244.0",
+          "cand_name": "DERANGULA SRAVANI",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "132305.0",
+          "cand_name": "SEETAKA  SHIVA KUMAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "132512.0",
+          "cand_name": "KONDURU DIVYASREE",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "143201.0",
+          "cand_name": "SHAIK MOHAMMED MUGAIZ",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "145371.0",
+          "cand_name": "BUKKE KEERTHAN NAIK",
+          "gender": "M",
+          "category": "ST",
+          "region": "SVU",
+          "alloted_category": "ST_GEN_SVU",
+          "phase": 2,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "149750.0",
+          "cand_name": "BALINENI GANGADHAR",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "150269.0",
+          "cand_name": "EDIGOTTI TARANADHA",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_PWD_GEN_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "152436.0",
+          "cand_name": "MUDE SAI SIVA NAIK",
+          "gender": "M",
+          "category": "ST",
+          "region": "SVU",
+          "alloted_category": "OC_PWD_GEN_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "152582.0",
+          "cand_name": "VANKIRIPALLI VAZEED",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "SVU",
+          "alloted_category": "BC_B_GEN_UR",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "154311.0",
+          "cand_name": "SHAIK AFFAZ",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "BC_E_GEN_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "158036.0",
+          "cand_name": "RADHA RANI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_UR",
+          "phase": 2,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "159599.0",
+          "cand_name": "SYED FAZAL ALI",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "SC_II_GEN_SVU",
+          "phase": 2,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "163032.0",
+          "cand_name": "PUSAPATI HARIKA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "SC_II_GEN_UR",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "163906.0",
+          "cand_name": "SHAIK MOHAMMAD YOUSUF",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "SC_II_GEN_SVU",
+          "phase": 2,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "164348.0",
+          "cand_name": "KALVA GANESH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GIRLS_UR",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "164514.0",
+          "cand_name": "EDIGA SAI THEERTHA",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "SVU",
+          "alloted_category": "BC_B_GEN_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "164560.0",
+          "cand_name": "SHAIK NASIR BASHA",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "BC_E_GEN_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "171483.0",
+          "cand_name": "BANDI MAHESH KUMAR",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "173136.0",
+          "cand_name": "CHAKALI JAGAN",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "SC_II_GEN_SVU",
+          "phase": 2,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "174289.0",
+          "cand_name": "KETHIREDDY AMRUTHA",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "174709.0",
+          "cand_name": "SHAIK FAYUM",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "BC_E_GEN_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "174913.0",
+          "cand_name": "MALAPATI SUGAN KUMAR",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "178258.0",
+          "cand_name": "AMURI HARISH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "179018.0",
+          "cand_name": "SHAIK FAHED",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "BC_E_GEN_SVU",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "ECE",
+      "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+      "records": [
+        {
+          "rank": "149575.0",
+          "cand_name": "GUNDRE REDDI VARDHAN",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_NCC_GEN_SVU",
+          "phase": 2,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "154179.0",
+          "cand_name": "MALAPATI SUKANYA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_UR",
+          "phase": 1,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "157835.0",
+          "cand_name": "KUNCHAPU GANGA BHAVANI",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_PWD_GIRLS_SVU",
+          "phase": 2,
+          "college": "BHASKAR INSTITUTE OF TECHNOLOGY & SCIENCE (BITS)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        }
+      ]
+    }
+  ]
+}

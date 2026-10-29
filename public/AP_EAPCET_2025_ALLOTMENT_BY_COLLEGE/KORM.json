@@ -1,0 +1,756 @@
+{
+  "college_name": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG.",
+  "college_code": "KORM",
+  "branches": [
+    {
+      "branch_code": "AID",
+      "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+      "records": [
+        {
+          "rank": "62089.0",
+          "cand_name": "UDAPA GANESH",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "93336.0",
+          "cand_name": "POSINA KALYAN KUMAR REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "139316.0",
+          "cand_name": "SIVALINGAM BALAJI",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_SCG_GIRLS_SVU",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "146467.0",
+          "cand_name": "MALLU SPOORTHI",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "151375.0",
+          "cand_name": "MALLU PRANITHA",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "167425.0",
+          "cand_name": "SHAIK KHWAJA JUNAID",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "BC_E_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "175158.0",
+          "cand_name": "DERANGULA ASHOK",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "BC_A_GEN_UR",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        }
+      ]
+    },
+    {
+      "branch_code": "AIM",
+      "branch_name": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING",
+      "records": [
+        {
+          "rank": "57996.0",
+          "cand_name": "PAGADALA PAVANI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "72676.0",
+          "cand_name": "SHAIK SHAMSHUDDIN",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "111482.0",
+          "cand_name": "ERAGAM REDDY YALLAREDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "111653.0",
+          "cand_name": "KATTA VENKATA NEERAJ",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "136336.0",
+          "cand_name": "MUDDALA SIRISHA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "149250.0",
+          "cand_name": "CHEELAPOGU VARUN",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "SC_II_GEN_UR",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "160608.0",
+          "cand_name": "SHAIK MASOOM",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "167497.0",
+          "cand_name": "MUDDANURU NARENDRA",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "OC_PWD_GEN_SVU",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "169807.0",
+          "cand_name": "CHINTAKUNTA SREEHARI",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "SC_II_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "173294.0",
+          "cand_name": "PALEM MASTHAN VALLI",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "BC_A_GEN_SVU",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "179709.0",
+          "cand_name": "PILLACHENNUGANDLA MANIKARTHIK",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "SC_I_GEN_SVU",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "179938.0",
+          "cand_name": "YARLABOYINA VENKATA JASWANTH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_UR",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "records": [
+        {
+          "rank": "91432.0",
+          "cand_name": "GURIGINJAKUNTA HYNDAVI",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "96744.0",
+          "cand_name": "MUMMADIREDDY ANAND REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "103817.0",
+          "cand_name": "PALAGIRI VENKATA SAI THARUN KUMAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "120673.0",
+          "cand_name": "PINNAPU REDDY NIKHITHA REDDY",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "122421.0",
+          "cand_name": "KOPPOLI SINDHU SOWMYA SREE",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "123376.0",
+          "cand_name": "KAVALI SAI TEJ",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_PWD_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "124659.0",
+          "cand_name": "SYED MOHAMMED ISMAIL",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "SC_II_PWD_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "132510.0",
+          "cand_name": "PATAN YASMIN",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "136855.0",
+          "cand_name": "GUDISELA LAKSHMI NARASIMHA",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "SC_II_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "138684.0",
+          "cand_name": "SAYYED SHAFI",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "SC_I_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "140083.0",
+          "cand_name": "TAPPETLA CHETAN",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "NL",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "144836.0",
+          "cand_name": "KALVA PANEESWAR REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "146323.0",
+          "cand_name": "CHINNAIAH GARI KAVYA",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "EWS_GIRLS_UR",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "146882.0",
+          "cand_name": "SIGA GANGA NITHYANAND",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "BC_D_GEN_UR",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "147750.0",
+          "cand_name": "NAGURU JASMINE",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_UR",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "154197.0",
+          "cand_name": "PALLINENI DHANUNJAYA NAIDU",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "EWS_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "155788.0",
+          "cand_name": "GAJULA JASWANTH",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "BC_A_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "156576.0",
+          "cand_name": "CHERUVU MADHU",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "157181.0",
+          "cand_name": "SYED ASRAR HUSSAIN",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "ST_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "158912.0",
+          "cand_name": "BINGI SANDHYA RANI",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "BC_A_GIRLS_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "159815.0",
+          "cand_name": "MALLELA VENKATA SOWMYASREE",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "BC_D_GIRLS_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "162333.0",
+          "cand_name": "MACHIREDDY JAYACHANDRA REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "EWS_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "162619.0",
+          "cand_name": "UBBARA SANKAR REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "EWS_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "163514.0",
+          "cand_name": "REVURI VIJAY KUMAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "EWS_GEN_UR",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "163582.0",
+          "cand_name": "MANTI HARSHITHA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "163666.0",
+          "cand_name": "SYED ABDUL RAHAMAN",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "ST_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "163933.0",
+          "cand_name": "DERANGULA GANGA SAGAR",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "BC_A_GEN_UR",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "167595.0",
+          "cand_name": "KOPPALA KARTHEEK",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "BC_D_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "170394.0",
+          "cand_name": "GITTA SAI THARUN",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "171318.0",
+          "cand_name": "GANGEDDULA ANIL KUMAR",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "SC_II_GEN_SVU",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "172351.0",
+          "cand_name": "PALAVALI BHAVYA SREE",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "EWS_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "174375.0",
+          "cand_name": "LEPAKSHI HASINI",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "174582.0",
+          "cand_name": "MUTHALURUPADU VENKATA RAJESH",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "BC_A_GEN_UR",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "176230.0",
+          "cand_name": "SHAIK FAREEDA",
+          "gender": "F",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "BC_E_GIRLS_UR",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "177085.0",
+          "cand_name": "DUMSA ANUSHA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_PWD_GIRLS_SVU",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "178381.0",
+          "cand_name": "MANNERU AKHILESWAR ROYAL",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "ST_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "179247.0",
+          "cand_name": "SHESAM MASTHANAMMA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "SC_II_GIRLS_UR",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "ECE",
+      "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+      "records": [
+        {
+          "rank": "96411.0",
+          "cand_name": "DOGGALA HIMA VARSHITHA REDDY",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "ST_GIRLS_SVU",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "115736.0",
+          "cand_name": "BOMMEPALLI JASWANTH REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "124867.0",
+          "cand_name": "THODETI HYMA GANGA BHAVANI",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "129159.0",
+          "cand_name": "ULLI MADHAVI",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "132898.0",
+          "cand_name": "GADDAM TEJESWARI",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "139883.0",
+          "cand_name": "TELLADALA VITESH KUMAR",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "OC_PWD_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "140092.0",
+          "cand_name": "VASAM LAKSHMI VENKATA CHAITANYA",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "150827.0",
+          "cand_name": "NIMMAKAYALA SIVA KUMAR REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "SC_II_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "170851.0",
+          "cand_name": "DARSANAM KARTHIK",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "SC_II_GEN_SVU",
+          "phase": 2,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "171104.0",
+          "cand_name": "YEKASI ASHOK",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_SVU",
+          "phase": 1,
+          "college": "KANDULA OBUL REDDY MEMORIAL COLL. OF ENGG. (KORM)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        }
+      ]
+    }
+  ]
+}

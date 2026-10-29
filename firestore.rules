@@ -1,0 +1,214 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    // Test collection for connection validation (read-only)
+    match /test/{docId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Legacy Posts Collection (read-only compatibility for old records)
+    match /posts/{postId} {
+      allow read: if true;
+      allow create, update, delete: if false;
+      match /replies/{replyId} {
+        allow read: if true;
+        allow create, update, delete: if false;
+      }
+    }
+
+    // Campus Posts (Doubt dispatches & questions)
+    match /campus_posts/{postId} {
+      allow read: if true;
+
+      allow create: if isAuthenticated()
+        && request.resource.data.id == postId
+        && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.authorName is string
+        && request.resource.data.displayName is string
+        && request.resource.data.isAnonymous is bool
+        && request.resource.data.title is string
+        && request.resource.data.title.size() <= 300
+        && request.resource.data.content is string
+        && request.resource.data.content.size() <= 12000
+        && request.resource.data.college is string
+        && request.resource.data.college.size() <= 200
+        && request.resource.data.branch is string
+        && request.resource.data.branch.size() <= 160
+        && request.resource.data.type in ['doubt', 'dispatch']
+        && request.resource.data.urgency is string
+        && request.resource.data.codeSnippet is string
+        && request.resource.data.upvotes == 1
+        && request.resource.data.createdAt is string
+        && (!('reportCount' in request.resource.data) || request.resource.data.reportCount == 0)
+        && (!('isHidden' in request.resource.data) || request.resource.data.isHidden == false);
+
+      // Authors may edit their own visible post content, but cannot rewrite
+      // counters, ownership, moderation state, timestamps, or embedded replies.
+      allow update: if isOwner(resource.data.authorUid)
+        && request.resource.data.authorUid == resource.data.authorUid
+        && request.resource.data.id == resource.data.id
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'title', 'content', 'college', 'branch', 'type', 'urgency', 'codeSnippet', 'attachments', 'isAnonymous', 'authorName', 'displayName', 'updatedAt'
+        ]);
+
+      allow delete: if isOwner(resource.data.authorUid);
+
+      match /replies/{replyId} {
+        allow read: if true;
+
+        allow create: if isAuthenticated()
+          && request.resource.data.id == replyId
+          && request.resource.data.postId == postId
+          && request.resource.data.authorUid == request.auth.uid
+          && request.resource.data.authorName is string
+          && request.resource.data.displayName is string
+          && request.resource.data.isAnonymous is bool
+          && request.resource.data.content is string
+          && request.resource.data.content.size() <= 12000
+          && request.resource.data.college is string
+          && request.resource.data.role is string
+          && request.resource.data.upvotes == 1
+          && request.resource.data.isVerifiedSolution == false
+          && request.resource.data.isAdmin == false
+          && request.resource.data.createdAt is string
+          && (!('reportCount' in request.resource.data) || request.resource.data.reportCount == 0)
+          && (!('isHidden' in request.resource.data) || request.resource.data.isHidden == false);
+
+        // Reply authors can edit only their own answer content/metadata.
+        // Server-managed moderation and vote fields remain immutable to clients.
+        allow update: if isOwner(resource.data.authorUid)
+          && request.resource.data.authorUid == resource.data.authorUid
+          && request.resource.data.id == resource.data.id
+          && request.resource.data.postId == resource.data.postId
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+            'content', 'college', 'role', 'isAnonymous', 'authorName', 'displayName', 'updatedAt'
+          ]);
+
+        allow delete: if isOwner(resource.data.authorUid);
+      }
+
+      match /upvotes/{userId} {
+        allow read: if isAuthenticated();
+        allow create: if isAuthenticated()
+          && userId == request.auth.uid
+          && request.resource.data.uid == request.auth.uid;
+        allow delete: if isAuthenticated() && userId == request.auth.uid;
+        allow update: if false;
+      }
+
+      match /replies/{replyId}/upvotes/{userId} {
+        allow read: if isAuthenticated();
+        allow create: if isAuthenticated()
+          && userId == request.auth.uid
+          && request.resource.data.uid == request.auth.uid;
+        allow delete: if isAuthenticated() && userId == request.auth.uid;
+        allow update: if false;
+      }
+    }
+
+    // User Profiles & Problem Solver Reputation
+    // Only the authenticated user can read their own profile document.
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+
+      allow create: if isOwner(userId)
+        && request.resource.data.uid == userId
+        && (!('isAdmin' in request.resource.data) || request.resource.data.isAdmin == false)
+        && (!('isModerator' in request.resource.data) || request.resource.data.isModerator == false)
+        && (!('isBanned' in request.resource.data) || request.resource.data.isBanned == false)
+        && (!('role' in request.resource.data) || request.resource.data.role in ['student', 'user'])
+        && (!('totalReports' in request.resource.data) || request.resource.data.totalReports == 0)
+        && (!('solutionsCount' in request.resource.data) || request.resource.data.solutionsCount <= 1);
+
+      allow update: if isOwner(userId)
+        && request.resource.data.uid == resource.data.uid
+        && (!('email' in resource.data) || request.resource.data.email == resource.data.email)
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+          'isAdmin', 'isModerator', 'isBanned', 'bannedReason', 'bannedAt', 'totalReports', 'role', 'uid'
+        ])
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['solutionsCount'])
+            || request.resource.data.solutionsCount <= resource.data.solutionsCount + 1);
+
+      allow delete: if false;
+    }
+
+    // Community Reports & Auto-Moderation
+    match /reports/{reportId} {
+      allow read: if isAuthenticated() && resource.data.reporterUid == request.auth.uid;
+      allow create: if isAuthenticated()
+        && request.resource.data.reporterUid == request.auth.uid
+        && request.resource.data.targetType in ['post', 'reply']
+        && request.resource.data.targetId is string
+        && request.resource.data.targetId.size() <= 200
+        && request.resource.data.postId is string
+        && request.resource.data.postId.size() <= 200
+        && request.resource.data.reason is string
+        && request.resource.data.reason.size() <= 200
+        && (!('details' in request.resource.data) || request.resource.data.details is string)
+        && request.resource.data.id == reportId
+        && reportId == 'rep_' + request.resource.data.targetType + '_' + request.resource.data.postId + '_' + request.resource.data.targetId + '_' + request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    // In-App Notifications
+    // Client-created notifications are bound to the authenticated sender and
+    // the actual author of the referenced question. Email addresses are never
+    // accepted in client notification documents.
+    match /notifications/{notificationId} {
+      allow read, delete: if isAuthenticated()
+        && resource.data.recipientUid == request.auth.uid;
+
+      allow create: if isAuthenticated()
+        && request.resource.data.keys().hasAll([
+          'recipientUid', 'senderUid', 'questionId', 'questionTitle', 'replySnippet', 'createdAt', 'isRead'
+        ])
+        && request.resource.data.keys().hasOnly([
+          'recipientUid', 'senderUid', 'senderName', 'questionId', 'questionTitle', 'replySnippet', 'createdAt', 'isRead'
+        ])
+        && request.resource.data.senderUid == request.auth.uid
+        && request.resource.data.recipientUid is string
+        && request.resource.data.recipientUid != request.auth.uid
+        && request.resource.data.questionId is string
+        && exists(/databases/$(database)/documents/campus_posts/$(request.resource.data.questionId))
+        && get(/databases/$(database)/documents/campus_posts/$(request.resource.data.questionId)).data.authorUid == request.resource.data.recipientUid
+        && request.resource.data.questionTitle is string
+        && request.resource.data.questionTitle.size() <= 300
+        && request.resource.data.replySnippet is string
+        && request.resource.data.replySnippet.size() <= 500
+        && request.resource.data.senderName is string
+        && request.resource.data.senderName.size() <= 120
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.isRead == false;
+
+      allow update: if isAuthenticated()
+        && resource.data.recipientUid == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead'])
+        && request.resource.data.isRead is bool;
+    }
+
+    // Mail Collection (Firebase Trigger Email extension)
+    // Browser clients can never create, update, or delete transactional mail.
+    match /mail/{notificationId} {
+      allow read: if isAuthenticated() && (
+        ('toUids' in resource.data && request.auth.uid in resource.data.toUids) ||
+        ('recipientUid' in resource.data && request.auth.uid == resource.data.recipientUid)
+      );
+      allow write: if false;
+    }
+
+    // Deny all other unmatched paths by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

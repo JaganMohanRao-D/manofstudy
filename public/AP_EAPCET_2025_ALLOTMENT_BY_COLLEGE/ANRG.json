@@ -1,0 +1,607 @@
+{
+  "college_name": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY",
+  "college_code": "ANRG",
+  "branches": [
+    {
+      "branch_code": "AID",
+      "branch_name": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+      "records": [
+        {
+          "rank": "87513.0",
+          "cand_name": "ALLADA PAVAN TEJA",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "88086.0",
+          "cand_name": "LIKHITHA LODDI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "98971.0",
+          "cand_name": "M SONU",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "101094.0",
+          "cand_name": "BYREDDY JYOTHIKA REDDY",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "127715.0",
+          "cand_name": "RAAVI BAJI BABU",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "137144.0",
+          "cand_name": "MADATHALA MAHENDRA REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "158808.0",
+          "cand_name": "KUMBHA ANUDEEP",
+          "gender": "M",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "164613.0",
+          "cand_name": "VISWANADHAPALLI HITHESH",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "165125.0",
+          "cand_name": "TANDRA KAVYA",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_NCC_GIRLS_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        },
+        {
+          "rank": "171533.0",
+          "cand_name": "GANTA KALYAN",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE (AID)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "records": [
+        {
+          "rank": "59703.0",
+          "cand_name": "DEVANABOINA DHANUSH",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "BC_B_GEN_AU",
+          "phase": 1,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "62014.0",
+          "cand_name": "YENREDDY SUNNYHITH REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "78277.0",
+          "cand_name": "ATMURI PAVAN SUBRAMANI",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "81709.0",
+          "cand_name": "AVALA SUSMITHA",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "102432.0",
+          "cand_name": "POLUKONDA BALASRI",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GIRLS_AU",
+          "phase": 1,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "102889.0",
+          "cand_name": "BATHULA KALYAN",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "107131.0",
+          "cand_name": "NAREPALEM GUNA SHEKAR",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GEN_UR",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "114334.0",
+          "cand_name": "UPPARA MOURYA CHARAN",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "BC_D_GEN_UR",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "121558.0",
+          "cand_name": "SAYALA SAHITYA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GIRLS_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "121673.0",
+          "cand_name": "GUMMADI SNEHALATHA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GIRLS_AU",
+          "phase": 1,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "121795.0",
+          "cand_name": "APPANA JEEVAN KUMAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_AU",
+          "phase": 1,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "123399.0",
+          "cand_name": "GUDE AKHILA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "124069.0",
+          "cand_name": "KARNATI VENKATA DHANA LAKSHMI",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GIRLS_UR",
+          "phase": 1,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "124158.0",
+          "cand_name": "RAJABOYINA LEELA JYOTHI",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_AU",
+          "phase": 1,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "125372.0",
+          "cand_name": "CHINTA UMA NAGA VENKATA MAHESWARA RAO",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "ST_GEN_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "127628.0",
+          "cand_name": "SRAVANAM BHANU PRAKASH",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "139603.0",
+          "cand_name": "MIR MEESAM ABBAS BAQUARY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "141951.0",
+          "cand_name": "KEERTHI RAJESWARI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GIRLS_UR",
+          "phase": 1,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "142167.0",
+          "cand_name": "YADLA LAKSHMI THIRDHA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "147561.0",
+          "cand_name": "KOVURI TWINKLE DISOUZ",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 1,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "150127.0",
+          "cand_name": "POKURI HEMA  SIVA SAI HARSHA VARDHAN",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "158097.0",
+          "cand_name": "LINGABATTINA EMMANUEL RAJU",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "BC_A_GEN_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "160720.0",
+          "cand_name": "JESSICA CHANDRA SODADASI",
+          "gender": "F",
+          "category": "BC_C",
+          "region": "AU",
+          "alloted_category": "BC_B_GIRLS_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "160787.0",
+          "cand_name": "GUJJULA SMILE",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GIRLS_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "165255.0",
+          "cand_name": "MUDU KARTHIK",
+          "gender": "M",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "ST_GEN_UR",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "165573.0",
+          "cand_name": "BATTU GOWTHAM",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "167398.0",
+          "cand_name": "KATURI NANI",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "168842.0",
+          "cand_name": "DASARI ANAND",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "169187.0",
+          "cand_name": "SURAM AKHIL",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_SCG_GEN_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "169507.0",
+          "cand_name": "BEEMADOLU TEJASWINI",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_III_GIRLS_AU",
+          "phase": 1,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "170528.0",
+          "cand_name": "KATHULA PRADEEP",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "ST_GIRLS_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "172884.0",
+          "cand_name": "PAVULURI VANI SIVA NAGA SAI SRI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_AU",
+          "phase": 1,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "173125.0",
+          "cand_name": "CHALLA GOVARDHAN REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "BC_A_GEN_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "174483.0",
+          "cand_name": "PENUMALA AKSHAYA DEEPTHI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GIRLS_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "174623.0",
+          "cand_name": "ERLA BALA BHASKAR",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GEN_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "175145.0",
+          "cand_name": "SHAIK KHADEER",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "AU",
+          "alloted_category": "BC_E_GEN_AU",
+          "phase": 1,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "ECE",
+      "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+      "records": [
+        {
+          "rank": "131713.0",
+          "cand_name": "PUDI NARASIMHA",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_UR",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "132845.0",
+          "cand_name": "PALLEM VENKATA SASTHRULU",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 1,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "145493.0",
+          "cand_name": "ANJURI SANTHOSH",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GEN_UR",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "149696.0",
+          "cand_name": "NAGI REDDY BHARATH",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "153327.0",
+          "cand_name": "BHUMIREDDY BALA NAGA LAKSHMI THIRUPATAMMA",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GIRLS_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "171363.0",
+          "cand_name": "TADANKI AKHIL",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 2,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "171375.0",
+          "cand_name": "MAMIDI SAI TEJA",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 1,
+          "college": "AKKINENI NAGESWARA RAO COLLEGE OF ENGINEERING AND TECHNOLOGY (ANRG)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        }
+      ]
+    }
+  ]
+}

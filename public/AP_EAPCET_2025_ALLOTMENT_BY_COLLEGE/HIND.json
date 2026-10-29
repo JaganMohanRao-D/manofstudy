@@ -1,0 +1,707 @@
+{
+  "college_name": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY",
+  "college_code": "HIND",
+  "branches": [
+    {
+      "branch_code": "AIM",
+      "branch_name": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING",
+      "records": [
+        {
+          "rank": "65783.0",
+          "cand_name": "GUNDALA TEJA",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "69098.0",
+          "cand_name": "TURAGA NAGA VENKATA SRI JAHNAVI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "89958.0",
+          "cand_name": "THUMATI VENKATA SAI RAMABHADRA ANIRUDH",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "119911.0",
+          "cand_name": "MALLELA ADITYA",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "121255.0",
+          "cand_name": "BELLAMKONDA AMRUTHA VARSHINI",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "126246.0",
+          "cand_name": "GOSIKA SAI KARTHIK",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "126674.0",
+          "cand_name": "SEELAM JITHENDRA",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_AU",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "130151.0",
+          "cand_name": "UTLA GIRISH PAVAN",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "136454.0",
+          "cand_name": "KANDHULA JAGAN CHAITANYA",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "136738.0",
+          "cand_name": "SAKHAMURI NIVEDITHA CHOWDARY",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_UR",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "138928.0",
+          "cand_name": "KANAPARTHI ADARSH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "149914.0",
+          "cand_name": "SHAIK BAJI",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "AU",
+          "alloted_category": "BC_E_SCG_GEN_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "152578.0",
+          "cand_name": "BETHAPUDI KRISHNA CHAITANYA",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "153173.0",
+          "cand_name": "GADDE CHARAN ABHIJEET",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "155032.0",
+          "cand_name": "DANNAVARAPU HARIKADEVI",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GEN_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "168741.0",
+          "cand_name": "MANDAPALLI JAHNAVI",
+          "gender": "F",
+          "category": "OC",
+          "region": "NL",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "175420.0",
+          "cand_name": "PALLAPU TEJASWI",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "BC_A_GEN_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        },
+        {
+          "rank": "179103.0",
+          "cand_name": "DEVARAKONDA ABHISHEK DANIEL",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GIRLS_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING (AIM)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "records": [
+        {
+          "rank": "44285.1",
+          "cand_name": "KANDLAVATH ANJALI BAI",
+          "gender": "F",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "71543.0",
+          "cand_name": "VEERAPANENI VYSHNAVI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "72493.0",
+          "cand_name": "REGULAGADDA RAM DHANUSH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "76688.0",
+          "cand_name": "KEERTHANA KOVURI",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "80190.0",
+          "cand_name": "YELLA SAHASRIKA",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "82165.1",
+          "cand_name": "TAMANAM SUKUMAR",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "90542.0",
+          "cand_name": "KHYATHI TEJA  KETHARI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GIRLS_UR",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "93419.0",
+          "cand_name": "BALIJEPALLI NAGA JAHNAVI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GIRLS_AU",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "121256.0",
+          "cand_name": "ANNABATHINA SRUTHI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "SVU",
+          "alloted_category": "BC_B_CAP_GEN_UR",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "123818.0",
+          "cand_name": "KALLURI VARUNKUMAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "125286.0",
+          "cand_name": "CHEEKATI NIKHITHA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GIRLS_UR",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "135394.0",
+          "cand_name": "AVIRENI LAKSHMAN",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_UR",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "140842.0",
+          "cand_name": "SRI RAMAKAVACHAM SANJAY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "149079.0",
+          "cand_name": "PATAN SHARUKHAN",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_NCC_GEN_AU",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "157812.0",
+          "cand_name": "BAKKA ANUSHA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_UR",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "158153.0",
+          "cand_name": "DOGIPARTHY LAKSHMAN",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_UR",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "167570.0",
+          "cand_name": "KOLANEEDI CHARAN TEJA",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_UR",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "172813.0",
+          "cand_name": "SHAIK ASIF BASHA",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "BC_D_GEN_UR",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "173658.0",
+          "cand_name": "SHAIK DADAPEER",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "BC_A_GIRLS_UR",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "177468.0",
+          "cand_name": "CHARAKA SNEHA",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GIRLS_UR",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "179716.0",
+          "cand_name": "ANJAPALLI  ABHISHEK VESLY",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSC",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY)",
+      "records": [
+        {
+          "rank": "111102.0",
+          "cand_name": "PANDITI ARAVINDA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_PWD_GIRLS_AU",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY) (CSC)"
+        },
+        {
+          "rank": "120141.0",
+          "cand_name": "DHARMAVARAPU SUKANYA",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY) (CSC)"
+        },
+        {
+          "rank": "144210.0",
+          "cand_name": "PAMIDIPATI SHAIK BAJI",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY) (CSC)"
+        },
+        {
+          "rank": "146623.0",
+          "cand_name": "NARIPEDDI  SATYA NARAYANA",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_AU",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY) (CSC)"
+        },
+        {
+          "rank": "147719.0",
+          "cand_name": "SHANKAR GARI JASHWANTH",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "SVU",
+          "alloted_category": "BC_A_GEN_UR",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY) (CSC)"
+        },
+        {
+          "rank": "150609.0",
+          "cand_name": "KATHERAPU SIVA REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_AU",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY) (CSC)"
+        },
+        {
+          "rank": "166723.0",
+          "cand_name": "MEKALA SANTHOSHBABU",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_UR",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY) (CSC)"
+        },
+        {
+          "rank": "174889.0",
+          "cand_name": "KATUKURI KHASIM SHARIF",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY) (CSC)"
+        },
+        {
+          "rank": "177690.0",
+          "cand_name": "JETTIBOYINA SOMA SEKHAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "SC_I_GEN_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CYBER SECURITY) (CSC)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CAD",
+      "branch_name": "CSE (ARTIFICIAL INTELLIGENCE & DATA SCEINCE)",
+      "records": [
+        {
+          "rank": "75461.0",
+          "cand_name": "TANKASALA NAGA SIDDHARDHA",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "CSE (ARTIFICIAL INTELLIGENCE & DATA SCEINCE) (CAD)"
+        },
+        {
+          "rank": "107512.0",
+          "cand_name": "YALAGALA SHANMUKHA",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "CSE (ARTIFICIAL INTELLIGENCE & DATA SCEINCE) (CAD)"
+        },
+        {
+          "rank": "125452.0",
+          "cand_name": "RALLAPALLI  VISHAL KUMAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "CSE (ARTIFICIAL INTELLIGENCE & DATA SCEINCE) (CAD)"
+        },
+        {
+          "rank": "169525.0",
+          "cand_name": "SUDARSANAM PRIYADARSINI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "CSE (ARTIFICIAL INTELLIGENCE & DATA SCEINCE) (CAD)"
+        }
+      ]
+    },
+    {
+      "branch_code": "ECE",
+      "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+      "records": [
+        {
+          "rank": "75042.0",
+          "cand_name": "PAREDDY SAI KRISHNA REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "108565.0",
+          "cand_name": "SUGAMANCHI LAHARI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "116956.0",
+          "cand_name": "IRLA AVINASH",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_NCC_GEN_AU",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "126279.0",
+          "cand_name": "PURIMETLA SRI PUJITHA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "130627.0",
+          "cand_name": "VIPPARLA JYOTHI",
+          "gender": "F",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "140847.0",
+          "cand_name": "NALI NAVEEN",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "151445.0",
+          "cand_name": "BASKARA SRIKANTH",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "SC_I_CAP_GEN_UR",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "165046.0",
+          "cand_name": "THIRUMALAPALLI PRAKASH",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 1,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "169761.0",
+          "cand_name": "MANUKONDA SAIRAM",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "HINDU COLLEGE OF ENGINEERING AND TECHNOLOGY (HIND)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        }
+      ]
+    }
+  ]
+}

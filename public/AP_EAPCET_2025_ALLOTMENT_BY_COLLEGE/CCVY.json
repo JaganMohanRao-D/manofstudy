@@ -1,0 +1,106 @@
+{
+  "college_name": "VRS AND YRN COLLEGE OF ENGG. AND TECHNOLOGY",
+  "college_code": "CCVY",
+  "branches": [
+    {
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "records": [
+        {
+          "rank": "155087.0",
+          "cand_name": "KOLAMUDI BHANDAVYA",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "VRS AND YRN COLLEGE OF ENGG. AND TECHNOLOGY (CCVY)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "155761.0",
+          "cand_name": "YARRAJONNA VARSHINI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "VRS AND YRN COLLEGE OF ENGG. AND TECHNOLOGY (CCVY)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "169682.0",
+          "cand_name": "LINGABATHINI ANUSHA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "VRS AND YRN COLLEGE OF ENGG. AND TECHNOLOGY (CCVY)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "176091.0",
+          "cand_name": "MUDAVATH BALU NAYAK",
+          "gender": "M",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "VRS AND YRN COLLEGE OF ENGG. AND TECHNOLOGY (CCVY)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "176363.0",
+          "cand_name": "SYED  NASEEMA",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "VRS AND YRN COLLEGE OF ENGG. AND TECHNOLOGY (CCVY)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "178108.0",
+          "cand_name": "SOWPATI AVINASH",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 2,
+          "college": "VRS AND YRN COLLEGE OF ENGG. AND TECHNOLOGY (CCVY)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "ECE",
+      "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+      "records": [
+        {
+          "rank": "152722.0",
+          "cand_name": "SOWPATI BHUPATHI",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "VRS AND YRN COLLEGE OF ENGG. AND TECHNOLOGY (CCVY)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "166410.0",
+          "cand_name": "CHINTA SATHWIK NIMSHI",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "VRS AND YRN COLLEGE OF ENGG. AND TECHNOLOGY (CCVY)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        }
+      ]
+    }
+  ]
+}

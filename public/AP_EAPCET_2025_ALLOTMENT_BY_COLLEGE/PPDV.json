@@ -1,0 +1,674 @@
+{
+  "college_name": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH",
+  "college_code": "PPDV",
+  "branches": [
+    {
+      "branch_code": "CSE",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING",
+      "records": [
+        {
+          "rank": "17615.0",
+          "cand_name": "GUDE SURAJ",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "56259.0",
+          "cand_name": "TALARI NIKHIL SUBHASH",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "66715.0",
+          "cand_name": "ABJELBEAG GARI JUBEARBEAG",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "BC_B_GEN_UR",
+          "phase": 1,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "66915.0",
+          "cand_name": "CHITTIBOMMA JAHNAVI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_UR",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "77562.0",
+          "cand_name": "SEELAM USHA SRI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "81383.0",
+          "cand_name": "YARAGALLA KAVYASREE",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "87650.0",
+          "cand_name": "PARLA KALYANA RAM VENKAT",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "101869.0",
+          "cand_name": "PILLA SRAVANI",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "102094.0",
+          "cand_name": "PINTU BEHARA",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "103555.0",
+          "cand_name": "DEVANABOINA PAVAN SAI KUMAR",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "110333.0",
+          "cand_name": "TELI KARUNA SRI",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "112474.0",
+          "cand_name": "PANJAGALA MANOJ",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "114487.0",
+          "cand_name": "NATTALA PRAVALLIKA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "117116.0",
+          "cand_name": "PATHURI DINESH",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GEN_AU",
+          "phase": 1,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "123274.0",
+          "cand_name": "KOLUSU MANASWI",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "127748.0",
+          "cand_name": "PINNIBOYINA SINDHU",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GIRLS_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "132635.0",
+          "cand_name": "GULIPALLI PARVATHI SAI MANOJ KUMAR",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GEN_AU",
+          "phase": 1,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "133679.0",
+          "cand_name": "CHAGANTI NIVEDITHA",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "143467.0",
+          "cand_name": "NADIKATTU DEEPTHI REDDY",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GEN_UR",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "143729.0",
+          "cand_name": "PISINI LAXMI MOUNIKA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_GIRLS_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "144028.0",
+          "cand_name": "DOKKU MANIKANTA",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_D_SCG_GEN_AU",
+          "phase": 1,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "145976.0",
+          "cand_name": "GUDIVAKA JOSHITHA",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "150484.0",
+          "cand_name": "DIRISALA KEERTHI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "EWS_GIRLS_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "151576.0",
+          "cand_name": "CHEKKA SAKETH VARMA",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GEN_UR",
+          "phase": 1,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "161472.0",
+          "cand_name": "KADIMI NAMRATHA SRI",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GIRLS_AU",
+          "phase": 1,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "161484.0",
+          "cand_name": "PALADUGU SUMANTH",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "ST_GEN_AU",
+          "phase": 1,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "162265.0",
+          "cand_name": "GULLAPALLI VENKATA DHANUSH",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_AU",
+          "phase": 1,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "163346.0",
+          "cand_name": "SATI     VINAYAK SINGH",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GEN_UR",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "167895.0",
+          "cand_name": "DABBUKOTTU VENKATESWARLU",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "170641.0",
+          "cand_name": "BHUKYA RAMYA",
+          "gender": "F",
+          "category": "ST",
+          "region": "AU",
+          "alloted_category": "ST_GIRLS_AU",
+          "phase": 1,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "173127.0",
+          "cand_name": "BONDILI PARIMALA SINGH",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        },
+        {
+          "rank": "179254.0",
+          "cand_name": "GARIKIMUKKU IMMANUEL",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_GEN_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (CSE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSD",
+      "branch_name": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE)",
+      "records": [
+        {
+          "rank": "28097.0",
+          "cand_name": "CHINTALA RAM CHARAN TEJA",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "41162.0",
+          "cand_name": "PALEM HEMANTH HRITHIK REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "72694.0",
+          "cand_name": "BOBBILI SWATHI",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "84857.0",
+          "cand_name": "BAVARAJU PRASANNA KUMAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "104321.0",
+          "cand_name": "JILLELA  KRISHNA REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "149427.0",
+          "cand_name": "PONUGOTI JASWANTH REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "152350.0",
+          "cand_name": "SIRIKONDA SIRI",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        },
+        {
+          "rank": "172708.0",
+          "cand_name": "THAMMISETTY VENKATA SIVAMANI",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "COMPUTER SCIENCE AND ENGINEERING (DATA SCIENCE) (CSD)"
+        }
+      ]
+    },
+    {
+      "branch_code": "CSM",
+      "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+      "records": [
+        {
+          "rank": "66528.0",
+          "cand_name": "BHAVYA SRI BANDARU",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_CAP_GEN_UR",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "74686.0",
+          "cand_name": "NAGOTI SHANKAR",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "90117.0",
+          "cand_name": "BANDI GANGOTHRI",
+          "gender": "F",
+          "category": "BC_B",
+          "region": "SVU",
+          "alloted_category": "BC_B_GIRLS_UR",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "108402.0",
+          "cand_name": "KAREDLA MEENA",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 1,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "140642.0",
+          "cand_name": "MANTHINA THABITHA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_PWD_GIRLS_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "155777.0",
+          "cand_name": "MALLIPUDI SRAVANI",
+          "gender": "F",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "165100.0",
+          "cand_name": "JONNADULA TANMAY ACHAL",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "BC_B_GEN_UR",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "170960.0",
+          "cand_name": "PULAPALLI MAHESH",
+          "gender": "M",
+          "category": "SC_II",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "175465.0",
+          "cand_name": "BODDU KUMAR VISHNU VARDHAN",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 1,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        },
+        {
+          "rank": "178928.0",
+          "cand_name": "MADUPU TANISHQ",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "AU",
+          "alloted_category": "ST_GEN_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING) (CSM)"
+        }
+      ]
+    },
+    {
+      "branch_code": "ECE",
+      "branch_name": "ELECTRONICS AND COMMUNICATION ENGINEERING",
+      "records": [
+        {
+          "rank": "43258.0",
+          "cand_name": "BASAVA NAGENDRAKUMAR",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "OC_GEN_UR",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "91493.0",
+          "cand_name": "THIRUNAHARI SUNANDANA",
+          "gender": "F",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GIRLS_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "99524.0",
+          "cand_name": "DEGA HANSIKA",
+          "gender": "F",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "OC_CAP_GIRLS_UR",
+          "phase": 1,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "147956.0",
+          "cand_name": "GAMPA  VENKATESH",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "BC_A_GEN_AU",
+          "phase": 1,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "155409.0",
+          "cand_name": "BOLLIGARLA GANESH",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "158725.0",
+          "cand_name": "MANNEMPALLI ABHISHEK PAUL",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        },
+        {
+          "rank": "174871.0",
+          "cand_name": "OMMI VENKAT KARTHIK",
+          "gender": "M",
+          "category": "BC_D",
+          "region": "AU",
+          "alloted_category": "OC_GEN_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "ELECTRONICS AND COMMUNICATION ENGINEERING (ECE)"
+        }
+      ]
+    },
+    {
+      "branch_code": "MEC",
+      "branch_name": "MECHANICAL ENGINEERING",
+      "records": [
+        {
+          "rank": "98830.0",
+          "cand_name": "KOTHAPALLI RAMCHARAN",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "SVU",
+          "alloted_category": "OC_NCC_GEN_AU",
+          "phase": 2,
+          "college": "PALADUGU PARVATHI DEVI COLLEGE OF ENGG AND TECH (PPDV)",
+          "branch": "MECHANICAL ENGINEERING (MEC)"
+        }
+      ]
+    }
+  ]
+}

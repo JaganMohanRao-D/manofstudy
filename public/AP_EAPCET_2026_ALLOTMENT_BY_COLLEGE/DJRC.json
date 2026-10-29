@@ -1,0 +1,31 @@
+{
+  "college_name": "SRI CHAITANYA -DJR COLL OF ENGG AND TECH",
+  "college_code": "DJRC",
+  "records": [
+    {
+      "allot_category": "oc_gen_au",
+      "applicant_name": "ZILLA RAKESH",
+      "branch_code": "CSM",
+      "branch_name": "CSE(ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING)",
+      "community": "SC_II",
+      "course_type": "ENG",
+      "district": "KRISHNA",
+      "fee_with_exemption": 0,
+      "fee_with_no_exemption": 47000,
+      "first_name_blurred": "ZILLA",
+      "gender": "M",
+      "id": 24646,
+      "inst_code": "DJRC",
+      "inst_name": "SRI CHAITANYA -DJR COLL OF ENGG AND TECH",
+      "last_name_visible": "RAKESH",
+      "left_over_seats": 47,
+      "phase": "Third",
+      "rank": 171571,
+      "region": "AU",
+      "roll_no": "960375050010",
+      "roll_no_blurred": "0010",
+      "roll_no_prefix": "96037505",
+      "total_seats": 48
+    }
+  ]
+}

@@ -1,0 +1,348 @@
+{
+  "id": "blog_01_v2",
+  "source_file": "01_CSE_Core_vs_Specializations_Blog.pdf",
+  "language": "te (Telugu + simple English words)",
+  "version": "1.0 | October 2026",
+  "title_te": "CSE Core vs CSE Specializations: AI/ML, Data Science, Cyber Security. ఏది ఎంచుకోవాలి?",
+  "title_en": "CSE Core vs. CSE Specializations: AI/ML, Data Science, Cyber Security: Which Should You Choose?",
+  "subtitle_te": "Curriculum, skills, careers, placements, college ఎంపికపై విద్యార్థి-కేంద్రిత ఆచరణాత్మక గైడ్",
+  "publication_type": "Educational blog article",
+  "audience_te": "Engineering aspirants, మొదటి సంవత్సరం విద్యార్థులు, CSE మార్గాలను పోల్చే కుటుంబాలు",
+  "seo": {
+    "title": "CSE Core vs AI/ML vs Data Science vs Cyber Security: How to Choose",
+    "meta_description_te": "CSE Core, AI/ML, Data Science, Cyber Security ను curriculum, skills, career paths, placement ఆధారాలు, ఆచరణాత్మక నిర్ణయ ప్రమాణాల ద్వారా పోల్చండి."
+  },
+  "editorial_note_te": "Course పేర్లు, syllabi, placement eligibility, ప్రవేశ నియమాలు institution, సంవత్సరాన్ని బట్టి మారతాయి. నిర్ణయం తీసుకునే ముందు ప్రస్తుత అధికారిక college పత్రాలను verify చేయండి.",
+  "table_of_contents_te": [
+    "1. Executive Summary (సారాంశం)",
+    "2. CSE Core అంటే ఏమిటి",
+    "3. CSE Specialization అంటే ఏమిటి",
+    "4. ఒక్క చూపులో పోలిక",
+    "5. AI/ML: మీరు నిజంగా ఏం నేర్చుకుంటారు",
+    "6. Data Science: ముడి data నుంచి ఉపయోగకరమైన ఆధారాల వరకు",
+    "7. Cyber Security: systems ను నిర్మించడం, రక్షించడం",
+    "8. ఉమ్మడి curriculum పునాదులు",
+    "9. Career paths, job titles",
+    "10. Placements: colleges ను న్యాయంగా ఎలా పోల్చాలి",
+    "11. ఏ option ఎవరికి సరిపోతుంది?",
+    "12. నాలుగు వారాల exploration plan",
+    "13. ముఖ్యమైన skills, projects",
+    "14. ప్రవేశానికి ముందు అడగాల్సిన ప్రశ్నలు",
+    "15. సాధారణ అపోహలు",
+    "16. నిర్ణయ framework",
+    "17. తరచూ అడిగే ప్రశ్నలు",
+    "18. ముగింపు"
+  ],
+  "glossary": [
+    {
+      "term": "Specialization",
+      "meaning_te": "ఒక నిర్దిష్ట రంగానికి (AI, Data, Security) అదనపు ప్రాధాన్యం ఇచ్చే CSE రూపం"
+    },
+    {
+      "term": "Syllabus audit",
+      "meaning_te": "ప్రతి foundational subject ను strong, introductory, elective లేదా absent అని గుర్తించి colleges ను పోల్చడం"
+    },
+    {
+      "term": "Data leakage",
+      "meaning_te": "Test data సమాచారం పొరపాటున training లోకి చేరి ఫలితాలు తప్పుగా మంచిగా కనిపించడం"
+    },
+    {
+      "term": "Baseline",
+      "meaning_te": "కొత్త model ను పోల్చడానికి ఉపయోగించే సరళమైన ప్రారంభ model"
+    },
+    {
+      "term": "Threat modelling",
+      "meaning_te": "ఒక system కు ఏ ముప్పులు రావచ్చో ముందే ఆలోచించి నమోదు చేయడం"
+    },
+    {
+      "term": "Reproducible",
+      "meaning_te": "ఇతరులు అదే దశలను అనుసరించి అదే ఫలితాన్ని తిరిగి పొందగలిగేలా ఉండటం"
+    }
+  ],
+  "sections": [
+    {
+      "id": 1,
+      "heading_te": "Executive Summary (సారాంశం)",
+      "heading_en": "Executive Summary",
+      "paragraphs_te": [
+        "ఇంజినీరింగ్ డిగ్రీ ప్రారంభంలో విద్యార్థులు ఎదుర్కొనే అత్యంత సాధారణ నిర్ణయాల్లో ఒకటి: Computer Science and Engineering (CSE) Core ను ఎంచుకోవాలా, లేక Artificial Intelligence and Machine Learning (AI/ML), Data Science లేదా Cyber Security వంటి CSE specialization ను ఎంచుకోవాలా? ఈ ఎంపిక ముఖ్యమే, కానీ అది విద్యార్థి మొత్తం career ను శాశ్వతంగా నిర్ణయించదు. Employers సాధారణంగా fundamentals, practical skills, projects, internships, communication, నేర్చుకుంటూనే ఉండే సామర్థ్యం కలిపి అంచనా వేస్తారు.",
+        "CSE Core సాధారణంగా programming, algorithms, operating systems, databases, computer networks, software engineering, ఇతర computing subjects లో విస్తృత పునాదిని ఇస్తుంది. Specialization ఈ పునాదిలో చాలా భాగాన్ని ఉంచుతూ, నిర్దిష్ట రంగంపై అదనపు శ్రద్ధ ఇస్తుంది. ఖచ్చితమైన సమతుల్యత university, college, regulation, curriculum సంవత్సరాన్ని బట్టి మారుతుంది. కాబట్టి విద్యార్థులు branch పేరుపై మాత్రమే ఆధారపడకుండా అసలు syllabi ను పోల్చాలి.",
+        "ఒక ఉపయోగకరమైన నియమం: మీ ఆసక్తులు, పరిస్థితులకు సరిపోయే curriculum, బోధన నాణ్యత, practical అవకాశాలు, ఖర్చు ఉన్న program ను ఎంచుకోండి. పేరు ఆధునికంగా వినిపిస్తుందని మాత్రమే specialization ను ఎంచుకోవద్దు. అలాగే Core ఆటోమేటిక్‌గా మంచిదని అనుకోవద్దు. కట్టుబడిన faculty, నిజమైన project పని ఉన్న బలమైన program, బలహీనమైన అమలుతో ఉన్న ఫ్యాషనబుల్ పేరు కంటే ఎక్కువ విలువైనది కావచ్చు."
+      ]
+    },
+    {
+      "id": 2,
+      "heading_te": "CSE Core అంటే ఏమిటి?",
+      "heading_en": "What CSE Core Means",
+      "paragraphs_te": [
+        "CSE Core అనేది సాధారణ computer science and engineering మార్గం. Software, computing systems ఎలా రూపొందించబడతాయి, అమలు చేయబడతాయి, test చేయబడతాయి, సురక్షితం చేయబడతాయి, నిర్వహించబడతాయి అనే విస్తృత అవగాహనను నిర్మించడం దీని లక్ష్యం. విద్యార్థులు సాధారణంగా programming, data structures, algorithms, discrete mathematics, database management, operating systems, computer organization, computer networks, software engineering, web లేదా application development చదువుతారు. ఖచ్చితమైన జాబితా, క్రమం institutions మధ్య మారుతాయి.",
+        "విస్తృతి దీని ప్రధాన ప్రయోజనం. అనేక subjects అనుభవించిన తర్వాత విద్యార్థి backend development, mobile applications, cloud infrastructure, systems programming, testing, product engineering, data engineering లేదా security పై ఆసక్తిని కనుగొనవచ్చు. ఆసక్తులు ఇంకా రూపుదిద్దుకుంటున్నప్పుడు, లేదా ఒక రంగానికి కట్టుబడే ముందు అనేక domains ను అన్వేషించాలనుకున్నప్పుడు ఈ సౌలభ్యం ఉపయోగపడుతుంది.",
+        "విస్తృతి అంటే Core విద్యార్థి ఎల్లప్పుడూ generalist గానే ఉండాలని కాదు. Electives, open-source contributions, guided projects, internships, తగిన చోట certifications, కేంద్రీకృత practice ద్వారా విద్యార్థులు లోతును నిర్మించుకోవచ్చు. Core డిగ్రీ మరియు బలమైన AI, data లేదా security projects ఆ రంగాల్లోకి విశ్వసనీయమైన మార్గం కావచ్చు, విద్యార్థి సంబంధిత జ్ఞానాన్ని నిర్మించి, దాన్ని ప్రదర్శించగలిగితే."
+      ]
+    },
+    {
+      "id": 3,
+      "heading_te": "CSE Specialization అంటే ఏమిటి?",
+      "heading_en": "What a CSE Specialization Means",
+      "paragraphs_te": [
+        "Specialization ఒక నిర్దిష్ట computing domain కు అదనపు curriculum ప్రాధాన్యం ఇస్తుంది. ఇది domain-focused subjects ను ముందుగానే పరిచయం చేయవచ్చు, లక్ష్యిత electives అందించవచ్చు లేదా projects ను ఒక theme చుట్టూ ఏర్పాటు చేయవచ్చు. కేవలం లేబుల్ మాత్రం advanced బోధన, మెరుగైన placements లేదా ఎక్కువ practical అనుభవానికి హామీ ఇవ్వదు. Specialization లో గణనీయమైన labs, గణితపరంగా సరైన పునాదులు, తాజా tools, అర్హులైన faculty, సాధారణ demonstrations కంటే ముందుకు సాగే projects ఉన్నాయో లేదో తనిఖీ చేయండి.",
+        "Specializations విద్యార్థులకు learning ను నిర్మాణాత్మకంగా చేయడంలో సహాయపడతాయి. ఉదాహరణకు, AI/ML statistics, linear algebra, optimization, model evaluation అధ్యయనాన్ని ప్రోత్సహించగలదు. Data Science data preparation, విశ్లేషణ, visualization, statistics, data systems ను నొక్కి చెప్పగలదు. Cyber Security networks, operating systems, secure coding, threat modelling, defensive పద్ధతులను నొక్కి చెప్పగలదు. ఇవి ఒకదానితో ఒకటి కలిసే రంగాలు, ఏ ఒక్క డిగ్రీ పేరు ఒక రంగంలోని ప్రతి skill ను కవర్ చేయదు.",
+        "Specialization కు అనేక required domain subjects ఉంటే అది timetable సౌలభ్యాన్ని తగ్గించవచ్చు. ఇది తప్పనిసరిగా ప్రతికూలత కాదు, కానీ syllabus సమీక్ష ముఖ్యం అవుతుంది. Core computing subjects అసలు సంఖ్య, specialization subjects సంఖ్య, elective ఎంపికలు, విద్యార్థులు electives ను మార్చగలరా లేదా cross-domain projects చేయగలరా అని చూడండి."
+      ]
+    },
+    {
+      "id": 4,
+      "heading_te": "ఒక్క చూపులో పోలిక",
+      "heading_en": "Comparison at a Glance",
+      "table": {
+        "headers": [
+          "అంశం",
+          "CSE Core",
+          "AI/ML",
+          "Data Science",
+          "Cyber Security"
+        ],
+        "rows": [
+          [
+            "ప్రధాన ప్రాధాన్యం",
+            "విస్తృత computing",
+            "AI, learning systems",
+            "Data విశ్లేషణ, ఆధారాలు",
+            "Systems, సమాచార రక్షణ"
+          ],
+          [
+            "సాధారణ పునాదులు",
+            "Programming, algorithms, systems",
+            "Programming, గణితం, statistics",
+            "SQL, statistics, programming",
+            "Networks, OS, programming"
+          ],
+          [
+            "ఉపయోగకరమైన అలవాట్లు",
+            "అనేక domains ను అన్వేషించడం",
+            "Models తో ప్రయోగాలు, మూల్యాంకనం",
+            "Data ను ప్రశ్నించడం, communicate చేయడం",
+            "జాగ్రత్తగా దర్యాప్తు చేసి document చేయడం"
+          ],
+          [
+            "Project ఉదాహరణలు",
+            "Apps, APIs, systems tools",
+            "Model evaluation project",
+            "Reproducible data analysis",
+            "Defensive review లేదా log analysis"
+          ],
+          [
+            "ప్రధాన జాగ్రత్త",
+            "లోతును ఉద్దేశపూర్వకంగా నిర్మించుకోవాలి",
+            "నిజమైన గణితం, data పునాది అవసరం",
+            "Data నాణ్యత లోపాలు తీర్మానాలను వక్రీకరించగలవు",
+            "Practice అధికారం ఉన్న, నైతిక పరిధిలోనే జరగాలి"
+          ]
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "heading_te": "AI/ML: మీరు నిజంగా ఏం నేర్చుకుంటారు",
+      "heading_en": "AI/ML: What You Actually Learn",
+      "paragraphs_te": [
+        "Artificial Intelligence అనేది తర్కం, గ్రహణ, భాష, ప్రణాళిక లేదా నిర్ణయ మద్దతుతో ముడిపడిన పనులు చేసే systems కు సంబంధించిన విస్తృత రంగం. Machine Learning అనేది data నుంచి patterns ను నేర్చుకునే పద్ధతులను అభివృద్ధి చేసే AI లోని ప్రధాన విభాగం. Curriculum ను బట్టి విద్యార్థులు probability, statistics, linear algebra, optimization, supervised learning, unsupervised learning, neural networks, natural language processing, computer vision, model evaluation ను ఎదుర్కోవచ్చు.",
+        "AI/ML అంటే కేవలం సిద్ధంగా ఉన్న library ని పిలవడం నేర్చుకోవడం కాదు. నమ్మదగిన పనికి data ను అర్థం చేసుకోవడం, అర్థవంతమైన target ను ఎంచుకోవడం, baseline నిర్మించడం, training, test data ను సరిగ్గా వేరు చేయడం, తగిన metrics ఎంచుకోవడం, leakage లేదా bias ను తనిఖీ చేయడం, పరిమితులను వివరించడం అవసరం. ఒక model ఆకట్టుకునే ఫలితం ఇచ్చి కొత్త ఉదాహరణలపై విఫలమవ్వవచ్చు. కాబట్టి విద్యార్థులు systems ను కేవలం ప్రదర్శించడం కాకుండా మూల్యాంకనం చేయడం నేర్చుకోవాలి.",
+        "ఒక beginner-friendly project public dataset వాడి స్పష్టమైన ఫలితాన్ని అంచనా వేయవచ్చు, సరళమైన baseline ను సంక్లిష్ట model తో పోల్చవచ్చు, ఎంచుకున్న metrics ను వివరించవచ్చు, పరిమితులను document చేయవచ్చు. బలమైన projects లో reproducible notebooks, స్పష్టమైన data sources, తగిన visualizations, model ఏ తీర్మానాలు చేయలేదో నిజాయితీగా చర్చించడం ఉంటాయి. Testing, deployment ఆధారాలు లేకుండా తరగతి model ను production-ready అని చెప్పవద్దు.",
+        "గణితం, ప్రయోగాలు, patterns, పునరావృత సమస్య పరిష్కారం ఇష్టపడే విద్యార్థులు AI/ML ను ఫలవంతంగా భావించవచ్చు. గణిత తర్కం ఇష్టం లేనివారు ఆటోమేటిక్‌గా దాన్ని తోసిపుచ్చకూడదు, కానీ అవసరమైన గణితాన్ని పరిశీలించి, ఎంచుకునే ముందు పరిచయ statistics, programming ను ప్రయత్నించాలి."
+      ]
+    },
+    {
+      "id": 6,
+      "heading_te": "Data Science: ముడి data నుంచి ఉపయోగకరమైన ఆధారాల వరకు",
+      "heading_en": "Data Science: From Raw Data to Useful Evidence",
+      "paragraphs_te": [
+        "Data Science అనేది data సేకరణ, శుభ్రపరచడం, విశ్లేషణ, statistical తర్కం, visualization, domain జ్ఞానం, కొన్నిసార్లు machine learning ను కలుపుతుంది. నిజమైన projects లో పనిలో పెద్ద భాగం modelling కు ముందే జరుగుతుంది: ప్రశ్నను నిర్వచించడం, data ఎలా సేకరించారో అర్థం చేసుకోవడం, లేని లేదా అసమాన విలువలను గుర్తించడం, definitions ను తనిఖీ చేయడం, ఉద్దేశించిన తీర్మానాన్ని data సమర్థించగలదా అని నిర్ణయించడం.",
+        "విద్యార్థులు spreadsheets, SQL, Python లేదా R, probability, statistics, visualization, data wrangling, ప్రయోగ రూపకల్పన, పరిచయ machine learning నేర్చుకోవచ్చు. Database fundamentals, communication ముఖ్యం, ఎందుకంటే విశ్లేషణ దాని assumptions, తీర్మానాలను అర్థం చేసుకోగలిగినప్పుడే ఉపయోగపడుతుంది. ఒక chart ఆటోమేటిక్‌గా కారణాన్ని (causation) రుజువు చేయదు, పెద్ద dataset ఆటోమేటిక్‌గా ప్రాతినిధ్యం వహించదు.",
+        "ఆచరణాత్మక starter project ప్రజా రవాణా ఆలస్యాలు, శక్తి వినియోగం, వాతావరణ పరిశీలనలు లేదా ప్రజా విద్యా గణాంకాలను విశ్లేషించవచ్చు. విద్యార్థి నిర్దిష్ట ప్రశ్నను చెప్పాలి, dataset, దాని పరిమితులను వివరించాలి, data ను పారదర్శకంగా శుభ్రం చేయాలి, తగిన charts చూపాలి, పరిశీలనను ఊహ నుంచి వేరు చేసే చిన్న తీర్మానం రాయాలి. స్పష్టమైన ప్రశ్న లేని dashboard కంటే reproducible project ఎక్కువ సమాచారాన్ని ఇస్తుంది.",
+        "ప్రశ్నలు అడగడం, patterns కనుగొనడం, సంఖ్యలతో పనిచేయడం, ఆధారాలను వివరించడం, సాంకేతిక విశ్లేషణను వాస్తవ ప్రపంచ నిర్ణయాలతో కలపడం ఇష్టపడే విద్యార్థులకు Data Science సరిపోవచ్చు. ఇది data engineering, business intelligence, analytics, machine learning తో కూడా కలుస్తుంది, కానీ ఈ roles ఒకేలా ఉండవు."
+      ]
+    },
+    {
+      "id": 7,
+      "heading_te": "Cyber Security: systems ను నిర్మించడం, రక్షించడం",
+      "heading_en": "Cyber Security: Building and Defending Systems",
+      "paragraphs_te": [
+        "Cyber Security systems, networks, applications, సమాచారాన్ని అనధికార ప్రవేశం, అంతరాయం, దుర్వినియోగం లేదా నష్టం నుంచి రక్షించడంపై దృష్టి పెడుతుంది. దాని పునాదులు operating systems, computer networks, programming, identity and access management, secure software development, cryptography భావనలు, logging, incident response, risk assessment. వేర్వేరు curricula వేర్వేరు రంగాలకు ప్రాధాన్యం ఇస్తాయి, కాబట్టి syllabus ను జాగ్రత్తగా పరిశీలించాలి.",
+        "Security అంటే కేవలం penetration testing కాదు. Defensive పనిలో patch management, secure configuration, monitoring, access reviews, incident documentation, backup planning, vulnerability management, threat modelling, సాధారణ బలహీనతలను నివారించడంలో development teams కు సహాయం చేయడం ఉంటాయి. Security నిపుణులు ప్రమాదాన్ని స్పష్టంగా తెలియజేయాలి, చట్టపరమైన అధికారం, గోప్యత, ఏ test అయినా పరిధిని గౌరవించాలి.",
+        "ఒక సురక్షిత beginner project local practice application ను harden చేయవచ్చు, నమూనా login flow కోసం threat model ను document చేయవచ్చు, synthetic logs ను విశ్లేషించవచ్చు లేదా secure configuration కోసం checklist తయారు చేయవచ్చు. Practice మీ సొంతమైన లేదా test చేయడానికి స్పష్టమైన అనుమతి ఉన్న systems లో మాత్రమే జరగాలి. అనుమతి లేకుండా నిజమైన website, network, account లేదా device ను ఎప్పుడూ test చేయవద్దు.",
+        "Systems ఎలా విఫలమవుతాయో తెలుసుకోవాలనే ఆసక్తి, జాగ్రత్తగా దర్యాప్తు చేయడం ఇష్టం, క్రమబద్ధంగా ఆలోచించే స్వభావం, technologies, ముప్పులు మారుతున్న కొద్దీ నేర్చుకునే సిద్ధత ఉన్న విద్యార్థులకు Cyber Security సరిపోవచ్చు. ఓర్పు, స్పష్టమైన documentation సాంకేతిక ఆసక్తి అంతే ముఖ్యం."
+      ]
+    },
+    {
+      "id": 8,
+      "heading_te": "ఉమ్మడి curriculum పునాదులు",
+      "heading_en": "Common Curriculum Foundations",
+      "paragraphs_te": [
+        "Branch పేరు ఏదైనా, విద్యార్థులకు programming, data structures, algorithms, databases, operating systems, networking, software engineering, గణితం, communication లో బలమైన పునాది ఉపయోగపడుతుంది. కొన్ని specialization programs ఈ subjects సమయాన్ని లేదా లోతును మార్చవచ్చు. Compulsory subjects ను semester వారీగా పోల్చి, మీరు స్వతంత్రంగా పూరించుకోవాల్సిన లోపాలను గుర్తించండి.",
+        "Programming ఆలోచనలను వ్యక్తపరచి test చేసే సాధనం. Data structures సమాచారాన్ని నిర్వహిస్తాయి. Algorithms సమర్థత గురించి తర్కించడానికి సహాయపడతాయి. Databases నిలకడగా ఉండే data ను నిర్వహిస్తాయి. Operating systems, networks software నడిచే వాతావరణాలను వివరిస్తాయి. Software engineering బృందాలు నిర్వహించదగిన products నిర్మించడానికి సహాయపడుతుంది. ఈ పునాదులు AI, data, security, cloud, application development అన్నిటిలో ఉపయోగపడతాయి.",
+        "ఒక సులభమైన syllabus audit ఉపయోగకరం: ప్రతి foundational subject ను strong, introductory, elective లేదా absent అని గుర్తించండి. తర్వాత colleges మధ్య ఫలితాలను పోల్చండి. రెండు programs రెండూ CSE లేబుల్ వాడుతున్నాయని అవి సమానమని అనుకోవద్దు. Lab sessions ఎలా నిర్వహిస్తారు, assignments కు అసలు స్వంత పని అవసరమా, projects ఎలా assess చేస్తారు, విద్యార్థులకు feedback లభిస్తుందా అని అడగండి."
+      ]
+    },
+    {
+      "id": 9,
+      "heading_te": "Career paths, job titles",
+      "heading_en": "Career Paths and Job Titles",
+      "paragraphs_te": [
+        "సంబంధిత skills ఉన్న graduates కు సాధ్యమైన roles: software developer, backend లేదా frontend engineer, mobile developer, QA లేదా test engineer, data analyst, data engineer, machine-learning engineer, security analyst, cloud లేదా platform engineer, అవసరమైన లోతు, తదుపరి చదువును కొనసాగించే విద్యార్థులకు research-oriented roles. ఇవి అవకాశాలు, ఏ branch పేరు నుంచైనా హామీ ఫలితాలు కావు.",
+        "Job titles employer ను బట్టి మారతాయి. Entry-level AI/ML role కు బలమైన programming, statistics, data handling, model evaluation అవసరం కావచ్చు. Data analyst role SQL, spreadsheets, visualization, ఫలితాలను తెలియజేయడంపై దృష్టి పెట్టవచ్చు. Security role networking, operating-system జ్ఞానం, logs, సురక్షిత పద్ధతులను ఆశించవచ్చు. Software engineering role algorithms, programming, testing, సహకారం, స్థాయికి తగిన system design కు ప్రాధాన్యం ఇవ్వవచ్చు.",
+        "విద్యార్థులు అనేక employers నుంచి ప్రస్తుత job descriptions చదివి, ఒక ప్రకటనను సార్వత్రిక ప్రమాణంగా భావించకుండా పునరావృతమయ్యే skills ను నమోదు చేయాలి. Internship అవసరాలు, eligibility ప్రమాణాలు, ప్రదేశం, work authorization, అనుభవ అంచనాలను పోల్చండి. Cohort, role, తేదీ, పద్ధతిని తనిఖీ చేయకుండా జీతం screenshots లేదా వైరల్ placement claims పై ఆధారపడవద్దు."
+      ]
+    },
+    {
+      "id": 10,
+      "heading_te": "Placements: colleges ను న్యాయంగా ఎలా పోల్చాలి",
+      "heading_en": "Placements: How to Compare Colleges Fairly",
+      "paragraphs_te": [
+        "Placement ఫలితాల్లో college యొక్క branch లేబుల్ ఒక అంశం మాత్రమే. సంబంధిత అంశాలు: బోధన నాణ్యత, విద్యార్థుల సమూహం, labs అందుబాటు, internship support, employer సంబంధాలు, ప్రదేశం, alumni network, placement eligibility నియమాలు, విద్యార్థి సొంత తయారీ. ఒకే institution లోనే విద్యార్థులు, job families మధ్య ఫలితాలు గణనీయంగా మారవచ్చు.",
+        "Placement reports ను సమీక్షించేటప్పుడు ఎంతమంది eligible, ఎంతమంది పాల్గొన్నారు, ఎంతమంది placed అయ్యారు, ఎన్ని offers వచ్చాయో తేడా చూడండి. నివేదించిన సంఖ్య median నా లేక average నా, అన్ని branches ను చేర్చిందా, బహుళ offers ను లెక్కించారా, స్పష్టంగా గుర్తించిన graduating cohort ను కవర్ చేస్తుందా అని తనిఖీ చేయండి. Highest package ఒక outlier, దాన్ని ఆశించే ఫలితంగా భావించకూడదు.",
+        "College నుంచి అందుబాటులో ఉన్న ఇటీవలి branch-wise data, ఉపయోగించిన పద్ధతి, internship అందుబాటు, recruiting roles జాబితా, specialization విద్యార్థులు Core విద్యార్థులతో సమానమైన software roles కు అర్హులా అని అడగండి. Data అందుబాటులో లేకపోతే ఊహలతో ఖాళీని నింపకుండా, claims ను జాగ్రత్తగా పరిగణించండి.",
+        "ఆచరణాత్మక comparison scorecard లో curriculum నాణ్యత, faculty అందుబాటు, hands-on projects, internship support, placement పారదర్శకత, మొత్తం ఖర్చు, commute లేదా వసతి, విద్యార్థి శ్రేయస్సు ఉండవచ్చు. మీ ప్రాధాన్యాల ఆధారంగా ప్రతి అంశానికి weight ఇచ్చి, ఆధారాలతో ప్రతి college కు score ఇవ్వండి. Scorecard ఒక నిర్ణయ సహాయం, శాస్త్రీయంగా ఖచ్చితమైన ర్యాంకింగ్ కాదు."
+      ]
+    },
+    {
+      "id": 11,
+      "heading_te": "ఏ option ఎవరికి సరిపోతుంది?",
+      "heading_en": "Which Option Fits Which Student?",
+      "paragraphs_te": [
+        "విస్తృత పరిచయం కోరుకునే, ఏ రంగాన్ని ఎంచుకోవాలో తెలియని, లేదా వివిధ computing roles ను అన్వేషించే స్వేచ్ఛకు విలువ ఇచ్చే విద్యార్థికి CSE Core మంచి ఎంపిక కావచ్చు. Branch పేరు ద్వారా కాకుండా electives, projects ద్వారా specialize అవ్వాలనుకునే విద్యార్థికి కూడా ఇది బలమైన ఎంపిక.",
+        "Programming, గణిత నమూనాలు, ప్రయోగాలు, data నుంచి నేర్చుకోవడంపై ఆసక్తి ఉన్న విద్యార్థికి AI/ML సరిపోవచ్చు. విశ్లేషణ, statistics, visual communication, గందరగోళంగా ఉన్న data ను ఉపయోగకరమైన ఆధారాలుగా మార్చడం ఇష్టపడే విద్యార్థికి Data Science సరిపోవచ్చు. System ప్రవర్తన, defensive ఆలోచన, దర్యాప్తు, సురక్షిత design పై ఆసక్తి ఉన్న విద్యార్థికి Cyber Security సరిపోవచ్చు.",
+        "ఈ వివరణలు అన్వేషణకు సూచనలు, personality tests కాదు. ఒక విద్యార్థి ఒకటి కంటే ఎక్కువ రంగాలను ఇష్టపడవచ్చు, నిజమైన courses చదివాక ఆసక్తులు మారవచ్చు. నిర్ణయించే ముందు రెండు మూడు domains లో చిన్న, beginner-స్థాయి project ను ప్రయత్నించండి. Career యొక్క social media ప్రతిబింబంపై కాకుండా, పని స్వభావంపై శ్రద్ధ పెట్టండి."
+      ]
+    },
+    {
+      "id": 12,
+      "heading_te": "నాలుగు వారాల Exploration Plan",
+      "heading_en": "A Four-Week Exploration Plan",
+      "paragraphs_te": [
+        "Week 1: Programming పునాదులు. Variables, conditions, loops, functions, lists లేదా arrays, debugging practice చేయండి. చిన్న command-line tool నిర్మించి అది ఎలా పనిచేస్తుందో వివరించండి. Code ను చదవడానికి సులభంగా ఉంచి, ఏది కష్టంగా అనిపించిందో చిన్న ఆలోచన రాసి ఉంచండి.",
+        "Week 2: Data, AI. చిన్న public dataset వాడి ఒక స్పష్టమైన ప్రశ్న అడగండి, ఒక chart సృష్టించండి, సముచితమైతే మాత్రమే సరళమైన model ను ప్రయత్నించండి. ఫలితపు పరిమితులను వివరించండి. అధిక accuracy సంఖ్యను వెంబడించడం కాకుండా workflow ను అర్థం చేసుకోవడంపై దృష్టి పెట్టండి.",
+        "Week 3: Security, systems. ప్రాథమిక networking, operating-system భావనలను నేర్చుకోండి. సాధారణ ముప్పుల కోసం నమూనా application design ను సమీక్షించండి లేదా synthetic log records ను విశ్లేషించండి. అన్ని practice ను అనుమతి ఉన్న, వేరుచేసిన learning వాతావరణంలోనే ఉంచండి.",
+        "Week 4: పోల్చండి, ఆలోచించండి. ఆ మూడు అనుభవాలను సమీక్షించండి. ఏ పనులు మిమ్మల్ని కొనసాగించేంత ఆసక్తికరంగా అనిపించాయి? ఏ భావనలు కష్టంగా కానీ తృప్తికరంగా ఉన్నాయి? ఏ subjects ను నిలకడగా practice చేయడానికి మీరు సిద్ధంగా ఉన్నారు? ఈ జవాబులను college curriculum, ఖర్చు సమాచారంతో కలిపి వాడండి."
+      ]
+    },
+    {
+      "id": 13,
+      "heading_te": "ముఖ్యమైన skills, projects",
+      "heading_en": "Skills and Projects That Matter",
+      "paragraphs_te": [
+        "Branch ఏదైనా, నేర్చుకున్నదానికి ఆధారాలను నిర్మించండి. Project లో స్పష్టమైన problem statement, వాస్తవిక పరిధి, చదవగలిగే README, setup సూచనలు, అవసరమైన చోట screenshots లేదా నమూనా output, testing గమనికలు, పరిమితుల చర్చ ఉండాలి. Version control వాడి దశలవారీ పురోగతిని చూపండి. విద్యార్థి వివరించలేని కాపీ చేసిన పెద్ద project కంటే చక్కగా పూర్తిచేసిన చిన్న project ఎక్కువ నేర్పగలదు.",
+        "Core లేదా software development కోసం ఉదాహరణలు: student timetable planner, సాధారణ inventory tracker, notes application లేదా tests తో చిన్న API. Data Science కోసం public data యొక్క జాగ్రత్తగా document చేసిన విశ్లేషణ. AI/ML కోసం baseline ను model తో పోల్చి మూల్యాంకనాన్ని వివరించడం. Cyber Security కోసం defensive configuration సమీక్ష లేదా synthetic logs విశ్లేషణ. చట్టబద్ధంగా, నైతికంగా ఉపయోగించగల data, systems మాత్రమే వాడండి.",
+        "Passwords, API keys, ప్రైవేట్ user data, గోప్యమైన college లేదా employer సమాచారాన్ని public repository లో ప్రచురించవద్దు. మూడో పక్షం code, datasets కు licenses ను సమీక్షించండి. అవసరమైన చోట క్రెడిట్ ఇవ్వండి, మీరు ఏ భాగాలను సృష్టించారో, అనుసరించారో లేదా సహాయంతో పూర్తి చేశారో నిజాయితీగా చెప్పండి."
+      ]
+    },
+    {
+      "id": 14,
+      "heading_te": "ప్రవేశానికి ముందు అడగాల్సిన ప్రశ్నలు",
+      "heading_en": "Questions to Ask Before Admission",
+      "numbered_questions_te": [
+        "ప్రతి semester లో compulsory subjects ఏవి?",
+        "ఎన్ని foundational CSE subjects చేర్చబడ్డాయి?",
+        "ఏ labs, projects తప్పనిసరి?",
+        "Specialization subjects ను ఎవరు బోధిస్తారు?",
+        "Electives సౌకర్యవంతంగా ఉన్నాయా?",
+        "విద్యార్థులు cross-domain projects లో పాల్గొనగలరా?",
+        "ప్రస్తుత placement eligibility నియమాలు ఏమిటి?",
+        "Branch-wise ఫలితాలు పారదర్శకంగా నివేదిస్తారా?",
+        "వసతి, ప్రయాణంతో సహా మొత్తం ఖర్చు ఎంత?",
+        "విద్యార్థులు ఇబ్బంది పడినప్పుడు ఏ academic support ఉంది?"
+      ],
+      "paragraphs_te": [
+        "వీలైన చోట ఆధారాలు అడగండి: ప్రస్తుత syllabus, lab జాబితా, academic calendar, project వివరణలు, placement report, scholarship సమాచారం, fee షెడ్యూల్. వీలైతే ఒకరి కంటే ఎక్కువ ప్రస్తుత విద్యార్థులతో మాట్లాడండి, వ్యక్తిగత అనుభవాలు అసంపూర్ణంగా లేదా పక్షపాతంగా ఉండవచ్చని గుర్తుంచుకోండి. రాతపూర్వక సమాచారాన్ని అసలు campus సౌకర్యాలు, బోధన ఏర్పాట్లతో పోల్చండి."
+      ]
+    },
+    {
+      "id": 15,
+      "heading_te": "సాధారణ అపోహలు",
+      "heading_en": "Common Myths",
+      "myths": [
+        {
+          "myth_te": "Specialization ప్రత్యేకమైన ఉద్యోగానికి హామీ ఇస్తుంది.",
+          "reality_te": "డిగ్రీ నిర్మాణం ఇవ్వగలదు, కానీ employers ఇంకా skills, ఆధారాలను అంచనా వేస్తారు."
+        },
+        {
+          "myth_te": "Core విద్యార్థులు AI లేదా Cyber Security లోకి వెళ్లలేరు.",
+          "reality_te": "Electives, projects, అనుభవం ద్వారా సంబంధిత skills ను నిర్మించవచ్చు, కానీ role అవసరాలను తీర్చాలి."
+        },
+        {
+          "myth_te": "ప్రతి AI ఉద్యోగం అత్యంత గణితపరమైన research.",
+          "reality_te": "Roles చాలా భిన్నంగా ఉంటాయి. కొన్ని engineering, data pipelines, మూల్యాంకనం లేదా applications పై ఎక్కువ దృష్టి పెడతాయి."
+        },
+        {
+          "myth_te": "ప్రకటించిన అత్యధిక package ఉన్న branch ఎల్లప్పుడూ ఉత్తమం.",
+          "reality_te": "వేరుపడిన జీతం సంఖ్యలు సాధారణ ఫలితాలను, భరించగలగడం, learning నాణ్యత లేదా తగినతనాన్ని వివరించవు."
+        },
+        {
+          "myth_te": "Certificates మాత్రమే సామర్థ్యాన్ని నిరూపిస్తాయి.",
+          "reality_te": "Certificates learning ను నిర్మాణాత్మకంగా చేయగలవు, కానీ చూపించగల projects, సరైన వివరణలు విలువైన ఆధారాలు."
+        },
+        {
+          "myth_te": "Branch ఎంపిక ఇతర అన్ని మార్గాలను శాశ్వతంగా మూసివేస్తుంది.",
+          "reality_te": "మార్గాలు మారవచ్చు, కానీ రంగాలు మారడానికి ఉద్దేశపూర్వక learning, కృషి అవసరం."
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "heading_te": "నిర్ణయ Framework",
+      "heading_en": "A Decision Framework",
+      "paragraphs_te": [
+        "ఐదు దశలు వాడండి. మొదట, అసలు syllabi ను పోల్చండి. రెండవది, బోధన, labs, project సంస్కృతి, internship support ను మూల్యాంకనం చేయండి. మూడవది, విశ్వసనీయ placement ఆధారాలు, eligibility నియమాలను సమీక్షించండి. నాల్గవది, మొత్తం ఖర్చును లెక్కించి ప్రదేశం, commute, support systems ను పరిగణించండి. ఐదవది, చిన్న projects, పరిచయ courses ద్వారా మీ ఆసక్తులను పరీక్షించండి.",
+        "రెండు colleges మిగతా విషయాల్లో సమానంగా ఉంటే, విస్తృతమైన Core curriculum నిర్ణయించుకోని విద్యార్థికి సౌలభ్యాన్ని కాపాడవచ్చు. విద్యార్థికి స్పష్టమైన ఆసక్తి ఉండి, curriculum సంబంధిత లోతును నిజంగా అందిస్తే బాగా అమలు చేసిన specialization మెరుగ్గా ఉండవచ్చు. ఒక college లో గణనీయంగా బలమైన బోధన, support, project అవకాశాలు ఉంటే, ఆ తేడా branch పేరు కంటే ఎక్కువ ముఖ్యం కావచ్చు. అసలు ఎంపికలతో సంబంధం లేని సార్వత్రిక సమాధానం లేదు."
+      ],
+      "checklist_te": [
+        "ప్రస్తుత semester-wise syllabi ను పోల్చాను.",
+        "Lab access, faculty, project నాణ్యతను తనిఖీ చేశాను.",
+        "కేవలం highest package కాకుండా placement పద్ధతిని సమీక్షించాను.",
+        "మొత్తం ఖర్చును లెక్కించి scholarship ఎంపికలను తనిఖీ చేశాను.",
+        "నాకు ఆసక్తి ఉన్న రంగంలో కనీసం ఒక beginner project ప్రయత్నించాను.",
+        "ప్రస్తుత official sources ద్వారా claims ను verify చేశాను."
+      ]
+    },
+    {
+      "id": 17,
+      "heading_te": "తరచూ అడిగే ప్రశ్నలు (FAQ)",
+      "heading_en": "Frequently Asked Questions",
+      "faq": [
+        {
+          "q_te": "CSE Core, CSE AI/ML కంటే మంచిదా?",
+          "a_te": "ఏదీ ఆటోమేటిక్‌గా మంచిది కాదు. Syllabus, faculty, practical పని, సౌలభ్యం, ఖర్చు, మీ ఆసక్తులను పోల్చండి."
+        },
+        {
+          "q_te": "Data Science విద్యార్థి software developer jobs కు దరఖాస్తు చేయవచ్చా?",
+          "a_te": "తరచుగా అవును, employer eligibility నియమాలు అనుమతిస్తే, విద్యార్థికి అవసరమైన programming, data structures, algorithms, project skills ఉంటే. ప్రతి employer ప్రమాణాలను verify చేయండి."
+        },
+        {
+          "q_te": "Cyber Security అంటే hacking మాత్రమేనా?",
+          "a_te": "కాదు. ఇందులో నివారణ, secure engineering, monitoring, incident response, risk management, governance, recovery ఉన్నాయి."
+        },
+        {
+          "q_te": "AI/ML కు నేను గణితంలో అద్భుతంగా ఉండాలా?",
+          "a_te": "గణిత పునాదులు ముఖ్యం, ముఖ్యంగా లోతైన పనికి. Algebra, functions, probability, statistics, linear algebra తో మొదలుపెట్టి క్రమంగా నిర్మించుకోండి."
+        },
+        {
+          "q_te": "ప్రజాదరణ ఉందని specialization ఎంచుకోవాలా?",
+          "a_te": "ప్రజాదరణ మాత్రమే బలహీనమైన కారణం. Curriculum నాణ్యత, తగినతనం, ఆధారాలు, practice చేసే సిద్ధత ఆధారంగా ఎంచుకోండి."
+        },
+        {
+          "q_te": "తర్వాత నా దృష్టిని మార్చుకోవచ్చా?",
+          "a_te": "తరచుగా చేయవచ్చు, కానీ మార్పుకు అదనపు చదువు, projects అవసరం, కొన్ని roles కు అధికారిక prerequisites ఉంటాయి. Branch పేరు పని చేస్తుందని అనుకోకుండా skills నిర్మించడానికి ప్లాన్ చేయండి."
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "heading_te": "ముగింపు",
+      "heading_en": "Conclusion",
+      "paragraphs_te": [
+        "CSE Core, AI/ML, Data Science, Cyber Security అన్నీ అర్థవంతమైన technology careers కు దారితీయగలవు. అత్యుత్తమ ఎంపిక నమ్మదగిన పునాది, మంచి బోధన, practical అనుభవం, విశ్వసనీయ విద్యార్థి support, మీ లక్ష్యాలు, బడ్జెట్ కు వాస్తవిక తగినతనం అందించే program. Branch పేర్లు అన్వేషణకు మార్గనిర్దేశం చేయగలవు, కానీ జాగ్రత్తగా చేసిన పరిశోధనకు ప్రత్యామ్నాయం కావు.",
+        "తుది నిర్ణయం తీసుకునే ముందు ప్రస్తుత syllabus చదవండి, నిర్దిష్ట ప్రశ్నలు అడగండి, విశ్వసనీయ ఫలితాలను పోల్చండి, పరిచయ projects ప్రయత్నించండి. ఏ మార్గం ఎంచుకున్నా, programming fundamentals నిర్మించండి, debug చేయడం నేర్చుకోండి, సమస్య పరిష్కారాన్ని practice చేయండి, స్పష్టంగా communicate చేయండి, గౌరవంగా సహకరించండి, మీ పనిని document చేయండి. Technology career లో నిలకడైన learning, సామర్థ్యానికి ఆధారాలు అన్నివేళలా ముఖ్యం."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "college_name": "COLLEGE OF AGRICULTURAL ENGINEERING",
+  "college_code": "CAMS",
+  "branches": [
+    {
+      "branch_code": "AGR",
+      "branch_name": "AGRICULTURAL ENGINEERING",
+      "records": [
+        {
+          "rank": "103359.0",
+          "cand_name": "PARNAPALLI AJAY KUMAR",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "SVU",
+          "alloted_category": "BC_B_GEN_SVU",
+          "phase": 1,
+          "college": "COLLEGE OF AGRICULTURAL ENGINEERING (CAMS)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "110268.0",
+          "cand_name": "GALI YASWANTH",
+          "gender": "M",
+          "category": "BC_B",
+          "region": "SVU",
+          "alloted_category": "OC_GEN_SVU",
+          "phase": 2,
+          "college": "COLLEGE OF AGRICULTURAL ENGINEERING (CAMS)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "114338.0",
+          "cand_name": "TALARI SRAVYA",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "OC_CAP_GIRLS_UR",
+          "phase": 2,
+          "college": "COLLEGE OF AGRICULTURAL ENGINEERING (CAMS)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "140423.0",
+          "cand_name": "RAJALA ROSHAN",
+          "gender": "M",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_III_PWD_GEN_SVU",
+          "phase": 2,
+          "college": "COLLEGE OF AGRICULTURAL ENGINEERING (CAMS)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "142572.0",
+          "cand_name": "PULLALAREVU AMRUTHA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "OC_GIRLS_SVU",
+          "phase": 2,
+          "college": "COLLEGE OF AGRICULTURAL ENGINEERING (CAMS)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "145867.0",
+          "cand_name": "SINGAMSETTY VENKATA SAI",
+          "gender": "M",
+          "category": "OC",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_SVU",
+          "phase": 2,
+          "college": "COLLEGE OF AGRICULTURAL ENGINEERING (CAMS)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "150235.0",
+          "cand_name": "GUMMAPU SRUTHI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "SC_II_GEN_SVU",
+          "phase": 2,
+          "college": "COLLEGE OF AGRICULTURAL ENGINEERING (CAMS)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "152046.0",
+          "cand_name": "SEEGALAPALLI   MOUNIKA",
+          "gender": "F",
+          "category": "SC_II",
+          "region": "SVU",
+          "alloted_category": "SC_II_GEN_SVU",
+          "phase": 1,
+          "college": "COLLEGE OF AGRICULTURAL ENGINEERING (CAMS)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "155905.0",
+          "cand_name": "PAIDI SAI",
+          "gender": "M",
+          "category": "BC_A",
+          "region": "AU",
+          "alloted_category": "BC_A_GEN_UR",
+          "phase": 2,
+          "college": "COLLEGE OF AGRICULTURAL ENGINEERING (CAMS)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "161597.0",
+          "cand_name": "SHAIK MOHAMMAD JUNAID",
+          "gender": "M",
+          "category": "BC_E",
+          "region": "SVU",
+          "alloted_category": "BC_E_GEN_SVU",
+          "phase": 1,
+          "college": "COLLEGE OF AGRICULTURAL ENGINEERING (CAMS)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "168583.0",
+          "cand_name": "GOLLA KRISHNA SRI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "AU",
+          "alloted_category": "ST_GEN_SVU",
+          "phase": 2,
+          "college": "COLLEGE OF AGRICULTURAL ENGINEERING (CAMS)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "169216.0",
+          "cand_name": "ERUGUVAI ASHAJYOTHI",
+          "gender": "F",
+          "category": "SC_III",
+          "region": "SVU",
+          "alloted_category": "SC_III_GEN_SVU",
+          "phase": 2,
+          "college": "COLLEGE OF AGRICULTURAL ENGINEERING (CAMS)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        },
+        {
+          "rank": "176700.0",
+          "cand_name": "KODURU NAGA CHANDRA REDDY",
+          "gender": "M",
+          "category": "OC",
+          "region": "SVU",
+          "alloted_category": "EWS_GEN_SVU",
+          "phase": 1,
+          "college": "COLLEGE OF AGRICULTURAL ENGINEERING (CAMS)",
+          "branch": "AGRICULTURAL ENGINEERING (AGR)"
+        }
+      ]
+    }
+  ]
+}
