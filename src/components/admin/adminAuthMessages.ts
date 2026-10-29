@@ -50,7 +50,8 @@ export function errorCode(error: unknown): string {
 }
 
 function errorReason(error: unknown): string {
-  if (!error || typeof error !== "object" || !("details" in error)) return "";+  const details = (error as { details?: unknown }).details;
+  if (!error || typeof error !== "object" || !("details" in error)) return "";
+  const details = (error as { details?: unknown }).details;
   if (!details || typeof details !== "object" || !("reason" in details)) return "";
   return String((details as { reason?: unknown }).reason || "");
 }
