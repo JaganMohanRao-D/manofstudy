@@ -1,6 +1,13 @@
 import React from 'react';
 import { ArrowUpRight, Heart, ShieldCheck } from 'lucide-react';
 import './Footer.css';
+import { useCmsCollection } from '../context/CmsContentContext';
+
+const FOOTER_BASE = [{ id: 'main_site_content', footerTagline: 'A student-first platform for admissions insights, counselling data, academic tools and career resources — helping students make more informed next steps.' }];
+const FooterTagline = () => {
+  const rows = useCmsCollection('site_content', FOOTER_BASE, 'id');
+  return <p className="nc-footer-brand-copy mt-5 max-w-sm text-[13px]">{rows[0]?.footerTagline || FOOTER_BASE[0].footerTagline}</p>;
+};
 
 const FooterLink = ({ href, children }) => (
   <a href={href} className="nc-footer-link text-[13px] sm:text-sm">
@@ -39,9 +46,7 @@ export const Footer = ({ onOpenSupportModal }) => (
               </span>
             </a>
 
-            <p className="nc-footer-brand-copy mt-5 max-w-sm text-[13px]">
-              A student-first platform for admissions insights, counselling data, academic tools and career resources — helping students make more informed next steps.
-            </p>
+            <FooterTagline />
 
             <div className="nc-footer-disclaimer mt-5 flex max-w-sm items-start gap-2.5 rounded-xl px-3.5 py-3 text-[11px] leading-relaxed">
               <ShieldCheck size={15} className="mt-0.5 shrink-0 text-[#9a782b]" aria-hidden="true" />
