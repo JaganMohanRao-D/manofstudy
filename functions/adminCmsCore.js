@@ -45,7 +45,7 @@ function safeId(value) {
   return id;
 }
 function itemIdFrom(item, supplied) {
-  return safeId(supplied || item.itemId || item.id || item.slug || item.code || item.college_code || item.college_name);
+  return safeId(supplied || item.itemId || item.id || item.slug || item.code || item.college_code || item._key || item.college_name);
 }
 function docId(collectionKey, itemId) {
   return collectionKey + "__" + Buffer.from(itemId, "utf8").toString("base64url");
@@ -162,7 +162,7 @@ function createAdminCms({ db, adminAuthCore, FieldValue, storageBucket = null, l
           continue;
         }
         if (data.status === "published" && data.content && typeof data.content === "object") {
-          publishedItems[itemId] = { ...data.content, id: data.content.id || itemId, status: "published" };
+          publishedItems[itemId] = { ...data.content, id: data.content.id || itemId, _cmsStatus: "published" };
         }
       }
       const draftItems = {};
@@ -170,7 +170,7 @@ function createAdminCms({ db, adminAuthCore, FieldValue, storageBucket = null, l
         const data = doc.data() || {};
         const itemId = safeId(data.itemId);
         if (itemId && data.content && typeof data.content === "object") {
-          draftItems[itemId] = { ...data.content, id: data.content.id || itemId, status: "draft", _draftUpdatedAtMs: data.updatedAtMs || 0 };
+          draftItems[itemId] = { ...data.content, id: data.content.id || itemId, _cmsStatus: "draft", _draftUpdatedAtMs: data.updatedAtMs || 0 };
         }
       }
       collections[key] = { publishedItems, unpublishedIds, draftItems };
@@ -220,7 +220,7 @@ function createAdminCms({ db, adminAuthCore, FieldValue, storageBucket = null, l
     const [pubSnap, draftSnap] = await Promise.all([pubRef.get(), draft.get()]);
     const priorPublished = snapshotData(pubSnap);
     const priorDraft = snapshotData(draftSnap);
-    const content = priorDraft && priorDraft.content ? validateItem(priorDraft.content, itemId).content : suppliedContent;
+    const content = suppliedContent;
     const issues = validatePublication(key, content);
     if (issues.length) return { success: false, errors: issues };
     await writeRevision(uid, key, itemId, "publish", priorPublished, priorDraft);
@@ -259,8 +259,15 @@ function createAdminCms({ db, adminAuthCore, FieldValue, storageBucket = null, l
     const [pubSnap, draftSnap] = await Promise.all([pubRef.get(), draft.get()]);
     const oldPublished = snapshotData(pubSnap);
     const oldDraft = snapshotData(draftSnap);
-    if (!oldPublished && !oldDraft) throw makeError("not-found", "Content item not found.");
-    await writeRevision(uid, key, itemId, "unpublish", oldPublished, oldDraft);
+    const fallback = request.data && request.data.fallbackSnapshot;
+    const fallbackContent = !oldPublished && !oldDraft && fallback && typeof fallback === "object"
+      ? validateItem(fallback, itemId).content : null;
+    const priorPublished = oldPublished || (fallbackContent ? {
+      collectionKey: key, itemId, status: "published", content: fallbackContent,
+      updatedAtMs: now(), updatedBy: OWNER_EMAIL,
+    } : null);
+    if (!priorPublished && !oldDraft) throw makeError("not-found", "Content item not found.");
+    await writeRevision(uid, key, itemId, "unpublish", priorPublished, oldDraft);
     await pubRef.set({
       collectionKey: key, itemId, status: "published",
       content: { __cmsTombstone: true, id: itemId },
@@ -268,7 +275,7 @@ function createAdminCms({ db, adminAuthCore, FieldValue, storageBucket = null, l
       schemaVersion: 1,
     });
     await draft.delete().catch(() => {});
-    await audit(uid, "unpublish", key, itemId, "Unpublished: " + (oldPublished && oldPublished.content ? summarize(oldPublished.content) : itemId));
+    await audit(uid, "unpublish", key, itemId, "Unpublished: " + (priorPublished && priorPublished.content ? summarize(priorPublished.content) : itemId));
     return { success: true };
   }
 
@@ -282,15 +289,22 @@ function createAdminCms({ db, adminAuthCore, FieldValue, storageBucket = null, l
     const [pubSnap, draftSnap] = await Promise.all([pubRef.get(), draftRefValue.get()]);
     const published = snapshotData(pubSnap);
     const draft = snapshotData(draftSnap);
-    if (!published && !draft) throw makeError("not-found", "Content item not found.");
-    await writeRevision(uid, key, itemId, "delete-to-trash", published, draft);
+    const fallback = request.data && request.data.fallbackSnapshot;
+    const fallbackContent = !published && !draft && fallback && typeof fallback === "object"
+      ? validateItem(fallback, itemId).content : null;
+    const priorPublished = published || (fallbackContent ? {
+      collectionKey: key, itemId, status: "published", content: fallbackContent,
+      updatedAtMs: now(), updatedBy: OWNER_EMAIL,
+    } : null);
+    if (!priorPublished && !draft) throw makeError("not-found", "Content item not found.");
+    await writeRevision(uid, key, itemId, "delete-to-trash", priorPublished, draft);
     const trashRef = db.collection(TRASH).doc();
     await trashRef.set({
       trashId: trashRef.id, uid, collectionKey: key, itemId,
-      publishedSnapshot: published, draftSnapshot: draft,
-      wasPublished: Boolean(published && published.content && published.content.__cmsTombstone !== true),
+      publishedSnapshot: priorPublished, draftSnapshot: draft,
+      wasPublished: Boolean(priorPublished && priorPublished.content && priorPublished.content.__cmsTombstone !== true),
       deletedAt: FieldValue.serverTimestamp(), deletedAtMs: now(), deletedBy: OWNER_EMAIL,
-      title: summarize((published && published.content) || (draft && draft.content) || { id: itemId }),
+      title: summarize((priorPublished && priorPublished.content) || (draft && draft.content) || { id: itemId }),
     });
     await pubRef.set({
       collectionKey: key, itemId, status: "published",
