@@ -220,7 +220,7 @@ function createAdminCms({ db, adminAuthCore, FieldValue, storageBucket = null, l
     const [pubSnap, draftSnap] = await Promise.all([pubRef.get(), draft.get()]);
     const priorPublished = snapshotData(pubSnap);
     const priorDraft = snapshotData(draftSnap);
-    const content = suppliedContent;
+    const content = key === "blogs" ? { ...suppliedContent, status: "published" } : suppliedContent;
     const issues = validatePublication(key, content);
     if (issues.length) return { success: false, errors: issues };
     await writeRevision(uid, key, itemId, "publish", priorPublished, priorDraft);
