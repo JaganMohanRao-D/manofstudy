@@ -7,6 +7,7 @@ import './modulePreloader.ts';
 import './scholarshipUx.css';
 import { ThemeProvider } from './context/ThemeContext.tsx';
 import { AuthProvider } from './context/AuthContext.tsx';
+import { CmsContentProvider } from './context/CmsContentContext.tsx';
 import { GoogleAuthModal } from './components/GoogleAuthModal.tsx';
 import { MosStudentExperience } from './components/MosStudentExperience.tsx';
 import MockTestAccountControl from './components/MockTestAccountControl.tsx';
@@ -28,11 +29,13 @@ function AppBootstrap() {
   return (
     <AuthProvider>
       <ThemeProvider>
-        <App />
-        <MosStudentExperience />
-        <MockTestAccountControl />
-        <SiteUxFixes />
-        <GoogleAuthModal />
+        <CmsContentProvider>
+          <App />
+          <MosStudentExperience />
+          <MockTestAccountControl />
+          <SiteUxFixes />
+          <GoogleAuthModal />
+        </CmsContentProvider>
       </ThemeProvider>
     </AuthProvider>
   );
