@@ -2,6 +2,7 @@ const { onDocumentCreated, onDocumentDeleted } = require("firebase-functions/v2/
 const { initializeApp } = require("firebase-admin/app");
 const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 const { getAuth } = require("firebase-admin/auth");
+const { getStorage } = require("firebase-admin/storage");
 
 // Initialize Firebase Admin SDK
 initializeApp();
@@ -432,3 +433,54 @@ exports.logoutNaaAdmin = onCall(
 
 // Every future privileged admin endpoint must call
 // adminAuth.requireAdminSession(request) before doing any work.
+
+
+// ---------------------------------------------------------------------------
+// Private Naa College CMS API. Every callable checks the existing server-side
+// owner session before reading or changing draft, published, revision, trash,
+// audit, or media records. Public clients can only read published documents.
+// ---------------------------------------------------------------------------
+const { createAdminCms } = require("./adminCmsCore");
+const adminCms = createAdminCms({
+  db,
+  adminAuthCore: adminAuth,
+  FieldValue,
+  storageBucket: getStorage().bucket("manofstudy-live.firebasestorage.app"),
+});
+
+exports.adminGetCmsWorkspace = onCall(
+  adminCallableOptions(),
+  (request) => adminCms.getWorkspace(request)
+);
+exports.adminSaveCmsDraft = onCall(
+  adminCallableOptions(),
+  (request) => adminCms.saveDraft(request)
+);
+exports.adminPublishCmsItem = onCall(
+  adminCallableOptions(),
+  (request) => adminCms.publishItem(request)
+);
+exports.adminUnpublishCmsItem = onCall(
+  adminCallableOptions(),
+  (request) => adminCms.unpublishItem(request)
+);
+exports.adminDeleteCmsItem = onCall(
+  adminCallableOptions(),
+  (request) => adminCms.deleteItem(request)
+);
+exports.adminRestoreCmsTrashItem = onCall(
+  adminCallableOptions(),
+  (request) => adminCms.restoreTrashItem(request)
+);
+exports.adminRestoreCmsRevision = onCall(
+  adminCallableOptions(),
+  (request) => adminCms.restoreRevision(request)
+);
+exports.adminRegisterCmsMedia = onCall(
+  adminCallableOptions(),
+  (request) => adminCms.registerMedia(request)
+);
+exports.adminDeleteCmsMedia = onCall(
+  adminCallableOptions(),
+  (request) => adminCms.deleteMedia(request)
+);

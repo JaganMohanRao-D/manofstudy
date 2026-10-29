@@ -206,6 +206,38 @@ service cloud.firestore {
       allow write: if false;
     }
 
+
+    // Naa College CMS: public can read only published records. All writes go
+    // through owner-session-verified Cloud Functions, never directly from clients.
+    match /cms_published/{itemId} {
+      allow read: if resource.data.status == "published";
+      allow create, update, delete: if false;
+    }
+
+    // Private owner-only CMS records. Cloud Functions use Admin SDK + explicit
+    // session checks; client SDK access is deliberately denied.
+    match /private_admin_drafts/{docId} {
+      allow read, write: if false;
+    }
+    match /private_admin_revisions/{docId} {
+      allow read, write: if false;
+    }
+    match /private_admin_trash/{docId} {
+      allow read, write: if false;
+    }
+    match /private_admin_audit_logs/{docId} {
+      allow read, write: if false;
+    }
+    match /private_admin_media/{docId} {
+      allow read, write: if false;
+    }
+    match /private_admin_sessions/{docId} {
+      allow read, write: if false;
+    }
+    match /private_admin_rate_limits/{docId} {
+      allow read, write: if false;
+    }
+
     // Deny all other unmatched paths by default
     match /{document=**} {
       allow read, write: if false;
