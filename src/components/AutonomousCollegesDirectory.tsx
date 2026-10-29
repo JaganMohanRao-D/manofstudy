@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Search, RotateCcw, ChevronLeft, ChevronRight, SlidersHorizontal, ExternalLink, CalendarDays, Building2 } from 'lucide-react';
 import apDataRaw from '../data/ap-autonomous-colleges.json?raw';
 import tgDataRaw from '../data/telangana-autonomous-colleges.json?raw';
+import { useCmsCollection } from '../context/CmsContentContext';
 
 type College = {
   sr_no?: number | string;
@@ -38,6 +39,7 @@ const stateOptions = ['All states', 'Andhra Pradesh', 'Telangana'] as const;
 type StateFilter = typeof stateOptions[number];
 
 export const AutonomousCollegesDirectory: React.FC = () => {
+  const managedRecords = useCmsCollection('autonomous_colleges', sourceRecords, '_key');
   const [query, setQuery] = useState('');
   const [state, setState] = useState<StateFilter>('All states');
   const [university, setUniversity] = useState('All universities');
@@ -58,14 +60,14 @@ export const AutonomousCollegesDirectory: React.FC = () => {
     return () => { document.title = 'Naa College'; };
   }, []);
 
-  const universities = useMemo(() => [...new Set(sourceRecords.map((college) => clean(college.affiliated_to)).filter(Boolean))]
+  const universities = useMemo(() => [...new Set(managedRecords.map((college) => clean(college.affiliated_to)).filter(Boolean))]
     .sort((a, b) => a.localeCompare(b)), []);
-  const years = useMemo(() => [...new Set(sourceRecords.map((college) => getYear(college.autonomy_from)).filter((value): value is number => value !== null))]
+  const years = useMemo(() => [...new Set(managedRecords.map((college) => getYear(college.autonomy_from)).filter((value): value is number => value !== null))]
     .sort((a, b) => b - a), []);
 
   const filtered = useMemo(() => {
     const needle = norm(query);
-    const rows = sourceRecords.filter((college) => {
+    const rows = managedRecords.filter((college) => {
       if (state !== 'All states' && college._state !== state) return false;
       if (university !== 'All universities' && clean(college.affiliated_to) !== university) return false;
       if (year !== 'All years' && getYear(college.autonomy_from) !== Number(year)) return false;
@@ -80,13 +82,13 @@ export const AutonomousCollegesDirectory: React.FC = () => {
       if (sort === 'year-new') return (yearValue(b) ?? Number.NEGATIVE_INFINITY) - (yearValue(a) ?? Number.NEGATIVE_INFINITY);
       return clean(a.college_name).localeCompare(clean(b.college_name));
     });
-  }, [query, state, university, year, sort]);
+  }, [query, state, university, year, sort, managedRecords]);
 
   useEffect(() => setPage(1), [query, state, university, year, sort]);
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const visible = filtered.slice((page - 1) * pageSize, page * pageSize);
-  const apCount = sourceRecords.filter((college) => college._state === 'Andhra Pradesh').length;
-  const tgCount = sourceRecords.filter((college) => college._state === 'Telangana').length;
+  const apCount = managedRecords.filter((college) => college._state === 'Andhra Pradesh').length;
+  const tgCount = managedRecords.filter((college) => college._state === 'Telangana').length;
   const hasFilters = Boolean(query.trim()) || state !== 'All states' || university !== 'All universities' || year !== 'All years';
 
   const reset = () => { setQuery(''); setState('All states'); setUniversity('All universities'); setYear('All years'); setSort('name-asc'); setPage(1); };
@@ -112,7 +114,7 @@ export const AutonomousCollegesDirectory: React.FC = () => {
         </div>
 
         <section aria-label="Dataset totals" className="mt-5 flex flex-wrap items-end gap-x-8 gap-y-4 border-b border-slate-200 pb-5">
-          {[{label:'Andhra Pradesh colleges',value:apCount},{label:'Telangana colleges',value:tgCount},{label:'Total source records',value:sourceRecords.length}].map((item) => (
+          {[{label:'Andhra Pradesh colleges',value:apCount},{label:'Telangana colleges',value:tgCount},{label:'Total source records',value:managedRecords.length}].map((item) => (
             <div key={item.label} className="min-w-[110px]">
               <p className="text-xs font-medium text-slate-500">{item.label}</p>
               <p className="mt-1 text-2xl font-bold tabular-nums text-slate-900">{item.value.toLocaleString('en-IN')}</p>
