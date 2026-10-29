@@ -1,6 +1,7 @@
 import { getApps, initializeApp, type FirebaseApp } from "firebase/app";
 import { getAuth, inMemoryPersistence, initializeAuth, type Auth } from "firebase/auth";
 import { getFunctions, type Functions } from "firebase/functions";
+import { getStorage, type FirebaseStorage } from "firebase/storage";
 import firebaseAppletConfig from "../../firebase-applet-config.json";
 
 /**
@@ -47,3 +48,4 @@ function resolveAdminAuth(app: FirebaseApp): Auth {
 export const adminApp: FirebaseApp = resolveAdminApp();
 export const adminAuth: Auth = resolveAdminAuth(adminApp);
 export const adminFunctions: Functions = getFunctions(adminApp, ADMIN_FUNCTIONS_REGION);
+export const adminStorage: FirebaseStorage = getStorage(adminApp);

@@ -1,377 +1,447 @@
 "use strict";
 
-/**
- * Private Naa College owner-portal authentication core.
- *
- * The browser signs in with Firebase email/password and calls a callable
- * function. Everything that grants access is decided here, on the server:
- *   - the Firebase ID token (already verified by the callable runtime),
- *   - the live Firebase user record (disabled / revoked / provider / verified),
- *   - an opaque server-side session whose SHA-256 hash is the Firestore doc ID.
- *
- * Dependencies are injected so the logic can be unit-tested without Firebase.
- * Nothing in this file logs or stores passwords, ID tokens or raw session tokens.
- */
-
 const crypto = require("node:crypto");
 
-// Resolved lazily so unit tests can run without the Firebase packages installed
-// (they inject a structurally identical stand-in via setHttpsErrorForTesting).
+const COLLECTION_KEYS = new Set([
+  "site_content",
+  "blogs",
+  "scholarships",
+  "guides",
+  "roadmaps",
+  "tools",
+  "seo_settings",
+  "autonomous_colleges",
+  "datasets",
+]);
+const MAX_ITEM_BYTES = 350 * 1024;
+const MAX_COLLECTION_ITEMS = 1000;
+const MAX_MEDIA_BYTES = 25 * 1024 * 1024;
+const ALLOWED_MEDIA_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
+const OWNER_EMAIL = "jaganmakes@gmail.com";
+const PUBLISHED = "cms_published";
+const DRAFTS = "private_admin_drafts";
+const REVISIONS = "private_admin_revisions";
+const TRASH = "private_admin_trash";
+const AUDIT = "private_admin_audit_logs";
+const MEDIA = "private_admin_media";
+
 let HttpsErrorImpl = null;
-function HttpsErrorClass() {
-  if (!HttpsErrorImpl) HttpsErrorImpl = require("firebase-functions/v2/https").HttpsError;
-  return HttpsErrorImpl;
-}
-function setHttpsErrorForTesting(cls) {
-  HttpsErrorImpl = cls;
-}
+function setHttpsErrorForTesting(value) { HttpsErrorImpl = value; }
 function makeError(code, message, details) {
-  return new (HttpsErrorClass())(code, message, details);
+  const Ctor = HttpsErrorImpl || require("firebase-functions/v2/https").HttpsError;
+  return new Ctor(code, message, details);
 }
-
-const ADMIN_OWNER_EMAIL = "jaganmakes@gmail.com";
-const ADMIN_SESSION_COLLECTION = "private_admin_sessions";
-const ADMIN_RATE_LIMIT_COLLECTION = "private_admin_rate_limits";
-const ADMIN_SESSION_LIFETIME_MS = 8 * 60 * 60 * 1000;
-const ADMIN_RATE_WINDOW_MS = 15 * 60 * 1000;
-const ADMIN_MAX_ATTEMPTS_PER_WINDOW = 8;
-// A session may only be minted from a sign-in that happened moments ago.
-const ADMIN_MAX_LOGIN_AGE_MS = 5 * 60 * 1000;
-const ADMIN_PASSWORD_PROVIDER = "password";
-
-const NOT_AUTHORIZED_MESSAGE = "This account is not authorized.";
-
-/**
- * Exact, case-insensitive comparison only. Gmail dot/plus aliasing is
- * deliberately NOT applied: "jagan.makes@gmail.com" is a different Firebase
- * identity and must not be treated as the owner.
- */
+function badRequest(message) { return makeError("invalid-argument", message); }
+function assertCollectionKey(key) {
+  if (typeof key !== "string" || !COLLECTION_KEYS.has(key)) {
+    throw badRequest("Unsupported content collection.");
+  }
+  return key;
+}
+function safeId(value) {
+  if (typeof value !== "string" && typeof value !== "number") return "";
+  const id = String(value).trim();
+  if (!id || id.length > 180 || id.includes("/") || id === "." || id === "..") return "";
+  return id;
+}
+function itemIdFrom(item, supplied) {
+  return safeId(supplied || item.itemId || item.id || item.slug || item.code || item.college_code || item._key || item.college_name);
+}
+function docId(collectionKey, itemId) {
+  return collectionKey + "__" + Buffer.from(itemId, "utf8").toString("base64url");
+}
 function normalizeEmail(value) {
   return typeof value === "string" ? value.trim().toLowerCase() : "";
 }
-
-function denied(reason) {
-  // `reason` is only attached for states the caller has already proven they own
-  // (correct owner email + valid password), never for arbitrary accounts.
-  return makeError(
-    "permission-denied",
-    NOT_AUTHORIZED_MESSAGE,
-    reason ? { reason } : undefined
-  );
+function cleanHtml(input) {
+  let html = String(input);
+  html = html.replace(/<\s*(script|iframe|object|embed|form|style|base|meta|link|svg|math)\b[^>]*>[\s\S]*?<\s*\/\s*\1\s*>/gi, "");
+  html = html.replace(/<\s*(script|iframe|object|embed|form|style|base|meta|link|svg|math)\b[^>]*\/?>/gi, "");
+  html = html.replace(/\s+on[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, "");
+  html = html.replace(/\s+(href|src|xlink:href|action)\s*=\s*(["'])\s*(?:javascript:|data:text\/html)[\s\S]*?\2/gi, ' $1="#"');
+  html = html.replace(/javascript\s*:/gi, "");
+  return html;
 }
-
-/**
- * Pure token-claim evaluation. Returns { ok: true, uid } or { ok: false, error }.
- */
-function evaluateTokenClaims(authContext) {
-  if (!authContext || typeof authContext.uid !== "string" || !authContext.uid) {
-    return {
-      ok: false,
-      error: makeError("unauthenticated", "Please sign in to continue."),
-    };
+function sanitizeValue(value, key = "", depth = 0) {
+  if (depth > 12) throw badRequest("Content is nested too deeply.");
+  if (value === null || typeof value === "boolean" || typeof value === "number") return value;
+  if (typeof value === "string") {
+    if (value.length > 200000) throw badRequest("A content field is too large.");
+    if (/^(content|body|html|articleHtml)$/i.test(key) && /<\s*[a-z][\s\S]*>/i.test(value)) return cleanHtml(value);
+    return value;
   }
-  const token = authContext.token || {};
-  const email = normalizeEmail(token.email);
-  if (email !== ADMIN_OWNER_EMAIL) {
-    return { ok: false, error: denied() };
+  if (Array.isArray(value)) {
+    if (value.length > 2000) throw badRequest("A content list is too large.");
+    return value.map((part) => sanitizeValue(part, key, depth + 1));
   }
-  if (token.email_verified !== true) {
-    return { ok: false, error: denied("email-not-verified") };
+  if (typeof value === "object") {
+    const out = {};
+    for (const [childKey, childValue] of Object.entries(value)) {
+      if (["__proto__", "prototype", "constructor"].includes(childKey)) continue;
+      if (childKey.length > 120) throw badRequest("A content field name is too long.");
+      out[childKey] = sanitizeValue(childValue, childKey, depth + 1);
+    }
+    return out;
   }
-  const provider = token.firebase && token.firebase.sign_in_provider;
-  if (provider !== ADMIN_PASSWORD_PROVIDER) {
-    return { ok: false, error: denied() };
-  }
-  return { ok: true, uid: authContext.uid };
+  throw badRequest("Content contains an unsupported value.");
 }
-
-/**
- * Pure evaluation of the live Firebase user record against the token.
- */
-function evaluateUserRecord(userRecord, authContext) {
-  if (!userRecord) return { ok: false, error: denied() };
-  if (userRecord.disabled === true) return { ok: false, error: denied() };
-  if (normalizeEmail(userRecord.email) !== ADMIN_OWNER_EMAIL) {
-    return { ok: false, error: denied() };
-  }
-  if (userRecord.emailVerified !== true) {
-    return { ok: false, error: denied("email-not-verified") };
-  }
-  const providers = Array.isArray(userRecord.providerData) ? userRecord.providerData : [];
-  if (!providers.some((p) => p && p.providerId === ADMIN_PASSWORD_PROVIDER)) {
-    return { ok: false, error: denied() };
-  }
-  // Reject ID tokens issued before the user's tokens were revoked/reset.
-  const validAfterMs = Date.parse(userRecord.tokensValidAfterTime || "");
-  const authTimeSec = Number(authContext.token && authContext.token.auth_time);
-  if (Number.isFinite(validAfterMs) && Number.isFinite(authTimeSec) &&
-      authTimeSec * 1000 < validAfterMs) {
-    return { ok: false, error: makeError("unauthenticated", "Please sign in again.") };
-  }
-  return { ok: true };
+function validateItem(raw, suppliedId) {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) throw badRequest("Content must be an object.");
+  const item = sanitizeValue(raw);
+  const itemId = itemIdFrom(item, suppliedId);
+  if (!itemId) throw badRequest("Every item needs a stable ID, slug, or code.");
+  const bytes = Buffer.byteLength(JSON.stringify(item), "utf8");
+  if (bytes > MAX_ITEM_BYTES) throw badRequest("This content item is too large. Large datasets must be managed with the validated data pipeline.");
+  return { itemId, content: { ...item, id: item.id || itemId } };
 }
+function titleOf(item) {
+  return String(item.title || item.pageTitle || item.name || item.label || item.id || "Untitled item").slice(0, 200);
+}
+function snapshotData(snapshot) {
+  return snapshot && snapshot.exists ? (snapshot.data() || null) : null;
+}
+function publishedRef(db, key, itemId) {
+  return db.collection(PUBLISHED).doc(docId(key, itemId));
+}
+function draftRef(db, key, itemId) {
+  return db.collection(DRAFTS).doc(docId(key, itemId));
+}
+function summarize(item) { return titleOf(item || {}); }
 
-function createAdminAuth({ db, auth, FieldValue, now = () => Date.now(), logger = console }) {
-  function hashSessionToken(token) {
-    return crypto.createHash("sha256").update(token, "utf8").digest("hex");
+function createAdminCms({ db, adminAuthCore, FieldValue, storageBucket = null, logger = console, now = () => Date.now() }) {
+  if (!db || !adminAuthCore || !FieldValue) throw new Error("Admin CMS dependencies are missing.");
+
+  async function authorize(request) {
+    return adminAuthCore.requireAdminSession(request);
   }
-
-  function isPlausibleSessionToken(token) {
-    return typeof token === "string" && token.length >= 40 && token.length <= 128;
-  }
-
-  // Log only sanitized stage/code/message details. Never request bodies,
-  // ID tokens, passwords or session tokens.
-  function logFailure(functionName, stage, error) {
-    const code = error && typeof error.code === "string" ? error.code : "unknown";
-    const message = error && typeof error.message === "string"
-      ? error.message
-      : "Unspecified server error";
-    const stack = error && typeof error.stack === "string" ? error.stack : undefined;
-    logger.error("[NaaAdminAuth] Unexpected server failure", {
-      functionName,
-      stage,
-      code,
-      message,
-      ...(stack ? { stack } : {}),
-    });
-  }
-
-  function rateLimitRef(purpose, subject) {
-    const id = crypto.createHash("sha256").update(purpose + ":" + subject).digest("hex");
-    return db.collection(ADMIN_RATE_LIMIT_COLLECTION).doc(id);
-  }
-
-  function requestSource(request) {
-    const rawIp = request && request.rawRequest && request.rawRequest.ip;
-    return typeof rawIp === "string" && rawIp.length ? rawIp : "unknown";
-  }
-
-  /**
-   * Fixed-window limiter with a temporary (never permanent) lockout.
-   * Counts every attempt; the caller clears the bucket after a success.
-   */
-  async function enforceRateLimit(purpose, subject) {
-    const ref = rateLimitRef(purpose, subject);
-    const current = now();
-    const decision = await db.runTransaction(async (transaction) => {
-      const snapshot = await transaction.get(ref);
-      const existing = snapshot.exists ? snapshot.data() : {};
-      if (Number(existing.lockedUntilMs) > current) return { blocked: true };
-
-      let windowStartedAtMs = Number(existing.windowStartedAtMs) || current;
-      let attempts = Number(existing.attempts) || 0;
-      if (current - windowStartedAtMs >= ADMIN_RATE_WINDOW_MS) {
-        windowStartedAtMs = current;
-        attempts = 0;
-      }
-      if (attempts >= ADMIN_MAX_ATTEMPTS_PER_WINDOW) {
-        transaction.set(ref, {
-          attempts,
-          windowStartedAtMs,
-          lockedUntilMs: current + ADMIN_RATE_WINDOW_MS,
-          updatedAtMs: current,
-        });
-        return { blocked: true };
-      }
-      transaction.set(ref, {
-        attempts: attempts + 1,
-        windowStartedAtMs,
-        lockedUntilMs: 0,
-        updatedAtMs: current,
-      });
-      return { blocked: false };
-    });
-
-    if (decision.blocked) {
-      throw makeError(
-        "resource-exhausted",
-        "Too many sign-in attempts. Please wait 15 minutes before trying again."
-      );
-    }
-    return ref;
-  }
-
-  /**
-   * Full server-side owner authorization. Never trusts client-supplied
-   * email/uid/role fields: only the verified token and the live user record.
-   */
-  async function assertOwnerIdentity(authContext, { requireFreshLogin = false } = {}) {
-    const claims = evaluateTokenClaims(authContext);
-    if (!claims.ok) throw claims.error;
-
-    if (requireFreshLogin) {
-      const authTimeSec = Number(authContext.token && authContext.token.auth_time);
-      if (!Number.isFinite(authTimeSec) ||
-          now() - authTimeSec * 1000 > ADMIN_MAX_LOGIN_AGE_MS) {
-        throw makeError("unauthenticated", "Please sign in again.", { reason: "reauth-required" });
-      }
-    }
-
-    let userRecord;
-    try {
-      userRecord = await auth.getUser(claims.uid);
-    } catch (error) {
-      if (error && error.code === "auth/user-not-found") throw denied();
-      throw error;
-    }
-    const record = evaluateUserRecord(userRecord, authContext);
-    if (!record.ok) throw record.error;
-    return { uid: claims.uid };
-  }
-
-  async function createSession(uid) {
-    const sessionToken = crypto.randomBytes(32).toString("base64url");
-    const createdAtMs = now();
-    const expiresAtMs = createdAtMs + ADMIN_SESSION_LIFETIME_MS;
-    await db.collection(ADMIN_SESSION_COLLECTION).doc(hashSessionToken(sessionToken)).set({
+  async function audit(uid, action, collectionKey, itemId, summary) {
+    await db.collection(AUDIT).doc().set({
       uid,
-      provider: ADMIN_PASSWORD_PROVIDER,
-      createdAt: FieldValue.serverTimestamp(),
-      createdAtMs,
-      expiresAtMs,
-      // Real timestamp so an optional Firestore TTL policy can purge old sessions.
-      expireAt: new Date(expiresAtMs),
+      email: OWNER_EMAIL,
+      action,
+      collectionKey: collectionKey || null,
+      itemId: itemId || null,
+      summary: String(summary || action).slice(0, 220),
+      timestamp: FieldValue.serverTimestamp(),
+      timestampMs: now(),
     });
-    return { sessionToken, expiresAtMs };
   }
-
-  async function getValidSession(sessionToken, expectedUid) {
-    if (!isPlausibleSessionToken(sessionToken) || !expectedUid) return null;
-    const ref = db.collection(ADMIN_SESSION_COLLECTION).doc(hashSessionToken(sessionToken));
-    const snapshot = await ref.get();
-    if (!snapshot.exists) return null;
-
-    const session = snapshot.data() || {};
-    if (Number(session.expiresAtMs) <= now()) {
-      await ref.delete().catch(() => {});
-      return null;
-    }
-    if (session.uid !== expectedUid || session.provider !== ADMIN_PASSWORD_PROVIDER) {
-      return null;
-    }
-    return { ref, uid: session.uid };
+  async function writeRevision(uid, collectionKey, itemId, action, priorPublished, priorDraft) {
+    if (!priorPublished && !priorDraft) return null;
+    const ref = db.collection(REVISIONS).doc();
+    await ref.set({
+      revisionId: ref.id,
+      uid,
+      collectionKey,
+      itemId,
+      action,
+      publishedSnapshot: priorPublished,
+      draftSnapshot: priorDraft,
+      createdAt: FieldValue.serverTimestamp(),
+      createdAtMs: now(),
+      createdBy: OWNER_EMAIL,
+    });
+    return ref.id;
   }
-
-  /**
-   * Gate for EVERY privileged admin operation (current and future):
-   * owner identity + a live server-side session, both verified here.
-   */
-  async function requireAdminSession(request) {
-    const owner = await assertOwnerIdentity(request.auth);
-    const session = await getValidSession(request.data && request.data.sessionToken, owner.uid);
-    if (!session) {
-      throw makeError("unauthenticated", "Your admin session has expired. Please sign in again.");
-    }
-    return { uid: owner.uid, session };
-  }
-
-  function rethrowSafely(functionName, stage, error, publicMessage) {
-    if (error instanceof (HttpsErrorClass()) && error.code !== "internal") throw error;
-    logFailure(functionName, stage, error);
-    throw makeError("internal", publicMessage);
-  }
-
-  async function login(request) {
-    let stage = "rate-limit-source";
-    try {
-      const sourceRef = await enforceRateLimit("password-login", requestSource(request));
-
-      // Authenticated-but-unauthorized callers (e.g. any student account) are
-      // also throttled per UID, without letting them lock out the owner.
-      let uidRef = null;
-      const callerUid = request.auth && request.auth.uid;
-      if (typeof callerUid === "string" && callerUid) {
-        stage = "rate-limit-uid";
-        uidRef = await enforceRateLimit("password-login-uid", callerUid);
-      }
-
-      stage = "owner-identity";
-      const owner = await assertOwnerIdentity(request.auth, { requireFreshLogin: true });
-
-      stage = "create-session";
-      const { sessionToken, expiresAtMs } = await createSession(owner.uid);
-
-      stage = "clear-rate-limit";
-      await Promise.all([
-        sourceRef.delete().catch(() => {}),
-        uidRef ? uidRef.delete().catch(() => {}) : Promise.resolve(),
+  async function getWorkspace(request) {
+    await authorize(request);
+    const collections = {};
+    for (const key of COLLECTION_KEYS) {
+      const [publishedSnap, draftSnap] = await Promise.all([
+        db.collection(PUBLISHED).where("collectionKey", "==", key).limit(MAX_COLLECTION_ITEMS).get(),
+        db.collection(DRAFTS).where("collectionKey", "==", key).limit(MAX_COLLECTION_ITEMS).get(),
       ]);
-
-      return { sessionToken, expiresAt: new Date(expiresAtMs).toISOString() };
-    } catch (error) {
-      return rethrowSafely(
-        "loginWithPasswordNaaAdmin",
-        stage,
-        error,
-        "Admin sign-in could not be completed. Please try again."
-      );
-    }
-  }
-
-  async function verify(request) {
-    let stage = "session-check";
-    try {
-      await requireAdminSession(request);
-      return { valid: true };
-    } catch (error) {
-      return rethrowSafely(
-        "verifyNaaAdminSession",
-        stage,
-        error,
-        "Admin session could not be verified. Please sign in again."
-      );
-    }
-  }
-
-  async function logout(request) {
-    let stage = "owner-identity";
-    try {
-      const owner = await assertOwnerIdentity(request.auth);
-      const token = request.data && request.data.sessionToken;
-      if (isPlausibleSessionToken(token)) {
-        stage = "read-session-for-revocation";
-        const ref = db.collection(ADMIN_SESSION_COLLECTION).doc(hashSessionToken(token));
-        const snapshot = await ref.get();
-        if (snapshot.exists && snapshot.data() && snapshot.data().uid === owner.uid) {
-          stage = "revoke-session";
-          await ref.delete();
+      const publishedItems = {};
+      const unpublishedIds = [];
+      for (const doc of publishedSnap.docs) {
+        const data = doc.data() || {};
+        const itemId = safeId(data.itemId);
+        if (!itemId) continue;
+        if (data.content && data.content.__cmsTombstone === true) {
+          unpublishedIds.push(itemId);
+          continue;
+        }
+        if (data.status === "published" && data.content && typeof data.content === "object") {
+          publishedItems[itemId] = { ...data.content, id: data.content.id || itemId, _cmsStatus: "published" };
         }
       }
-      return { success: true };
-    } catch (error) {
-      return rethrowSafely(
-        "logoutNaaAdmin",
-        stage,
-        error,
-        "Sign-out could not be fully confirmed. Please try again."
-      );
+      const draftItems = {};
+      for (const doc of draftSnap.docs) {
+        const data = doc.data() || {};
+        const itemId = safeId(data.itemId);
+        if (itemId && data.content && typeof data.content === "object") {
+          draftItems[itemId] = { ...data.content, id: data.content.id || itemId, _cmsStatus: "draft", _draftUpdatedAtMs: data.updatedAtMs || 0 };
+        }
+      }
+      collections[key] = { publishedItems, unpublishedIds, draftItems };
     }
+    const [revisionSnap, trashSnap, auditSnap, mediaSnap] = await Promise.all([
+      db.collection(REVISIONS).orderBy("createdAtMs", "desc").limit(60).get(),
+      db.collection(TRASH).orderBy("deletedAtMs", "desc").limit(60).get(),
+      db.collection(AUDIT).orderBy("timestampMs", "desc").limit(80).get(),
+      db.collection(MEDIA).orderBy("uploadedAtMs", "desc").limit(80).get(),
+    ]);
+    return {
+      collections,
+      revisions: revisionSnap.docs.map((d) => d.data()),
+      trash: trashSnap.docs.map((d) => d.data()),
+      auditLogs: auditSnap.docs.map((d) => d.data()),
+      media: mediaSnap.docs.map((d) => d.data()),
+      generatedAt: new Date(now()).toISOString(),
+    };
+  }
+
+  async function saveDraft(request) {
+    const { uid } = await authorize(request);
+    const key = assertCollectionKey(request.data && request.data.collectionKey);
+    const { itemId, content } = validateItem(request.data && request.data.item, request.data && request.data.itemId);
+    const pubRef = publishedRef(db, key, itemId);
+    const draft = draftRef(db, key, itemId);
+    const [pubSnap, draftSnap] = await Promise.all([pubRef.get(), draft.get()]);
+    const priorPublished = snapshotData(pubSnap);
+    const priorDraft = snapshotData(draftSnap);
+    await writeRevision(uid, key, itemId, "save-draft", priorPublished, priorDraft);
+    const updated = {
+      collectionKey: key, itemId, status: "draft", content,
+      updatedAt: FieldValue.serverTimestamp(), updatedAtMs: now(), updatedBy: OWNER_EMAIL,
+      createdAtMs: priorDraft && priorDraft.createdAtMs ? priorDraft.createdAtMs : now(),
+    };
+    await draft.set(updated);
+    await audit(uid, "save-draft", key, itemId, "Saved draft: " + summarize(content));
+    return { success: true, item: { ...content, id: itemId, status: "draft" } };
+  }
+
+  async function publishItem(request) {
+    const { uid } = await authorize(request);
+    const key = assertCollectionKey(request.data && request.data.collectionKey);
+    const { itemId, content: suppliedContent } = validateItem(request.data && request.data.item, request.data && request.data.itemId);
+    const pubRef = publishedRef(db, key, itemId);
+    const draft = draftRef(db, key, itemId);
+    const [pubSnap, draftSnap] = await Promise.all([pubRef.get(), draft.get()]);
+    const priorPublished = snapshotData(pubSnap);
+    const priorDraft = snapshotData(draftSnap);
+    const content = key === "blogs" ? { ...suppliedContent, status: "published" } : suppliedContent;
+    const issues = validatePublication(key, content);
+    if (issues.length) return { success: false, errors: issues };
+    await writeRevision(uid, key, itemId, "publish", priorPublished, priorDraft);
+    await pubRef.set({
+      collectionKey: key, itemId, status: "published", content,
+      updatedAt: FieldValue.serverTimestamp(), updatedAtMs: now(), updatedBy: OWNER_EMAIL,
+      schemaVersion: 1,
+    });
+    await draft.delete().catch(() => {});
+    await audit(uid, "publish", key, itemId, "Published: " + summarize(content));
+    return { success: true, item: { ...content, id: itemId, status: "published" } };
+  }
+
+  function validatePublication(key, item) {
+    const issues = [];
+    if (key === "blogs") {
+      if (!String(item.slug || item.id || "").trim()) issues.push("Blog needs a slug or stable ID.");
+      if (!String(item.title || "").trim()) issues.push("Blog needs a title.");
+      if (!String(item.content || "").trim()) issues.push("Blog needs content.");
+    }
+    if (key === "scholarships") {
+      if (!String(item.title || "").trim()) issues.push("Scholarship needs a title.");
+      if (!String(item.id || "").trim()) issues.push("Scholarship needs a stable ID.");
+    }
+    if (key === "site_content" && !String(item.id || "").trim()) issues.push("Site content needs an ID.");
+    return issues;
+  }
+
+  async function unpublishItem(request) {
+    const { uid } = await authorize(request);
+    const key = assertCollectionKey(request.data && request.data.collectionKey);
+    const itemId = safeId(request.data && request.data.itemId);
+    if (!itemId) throw badRequest("A valid item ID is required.");
+    const pubRef = publishedRef(db, key, itemId);
+    const draft = draftRef(db, key, itemId);
+    const [pubSnap, draftSnap] = await Promise.all([pubRef.get(), draft.get()]);
+    const oldPublished = snapshotData(pubSnap);
+    const oldDraft = snapshotData(draftSnap);
+    const fallback = request.data && request.data.fallbackSnapshot;
+    const fallbackContent = !oldPublished && !oldDraft && fallback && typeof fallback === "object"
+      ? validateItem(fallback, itemId).content : null;
+    const priorPublished = oldPublished || (fallbackContent ? {
+      collectionKey: key, itemId, status: "published", content: fallbackContent,
+      updatedAtMs: now(), updatedBy: OWNER_EMAIL,
+    } : null);
+    if (!priorPublished && !oldDraft) throw makeError("not-found", "Content item not found.");
+    await writeRevision(uid, key, itemId, "unpublish", priorPublished, oldDraft);
+    await pubRef.set({
+      collectionKey: key, itemId, status: "published",
+      content: { __cmsTombstone: true, id: itemId },
+      updatedAt: FieldValue.serverTimestamp(), updatedAtMs: now(), updatedBy: OWNER_EMAIL,
+      schemaVersion: 1,
+    });
+    await draft.delete().catch(() => {});
+    await audit(uid, "unpublish", key, itemId, "Unpublished: " + (priorPublished && priorPublished.content ? summarize(priorPublished.content) : itemId));
+    return { success: true };
+  }
+
+  async function deleteItem(request) {
+    const { uid } = await authorize(request);
+    const key = assertCollectionKey(request.data && request.data.collectionKey);
+    const itemId = safeId(request.data && request.data.itemId);
+    if (!itemId) throw badRequest("A valid item ID is required.");
+    const pubRef = publishedRef(db, key, itemId);
+    const draftRefValue = draftRef(db, key, itemId);
+    const [pubSnap, draftSnap] = await Promise.all([pubRef.get(), draftRefValue.get()]);
+    const published = snapshotData(pubSnap);
+    const draft = snapshotData(draftSnap);
+    const fallback = request.data && request.data.fallbackSnapshot;
+    const fallbackContent = !published && !draft && fallback && typeof fallback === "object"
+      ? validateItem(fallback, itemId).content : null;
+    const priorPublished = published || (fallbackContent ? {
+      collectionKey: key, itemId, status: "published", content: fallbackContent,
+      updatedAtMs: now(), updatedBy: OWNER_EMAIL,
+    } : null);
+    if (!priorPublished && !draft) throw makeError("not-found", "Content item not found.");
+    await writeRevision(uid, key, itemId, "delete-to-trash", priorPublished, draft);
+    const trashRef = db.collection(TRASH).doc();
+    await trashRef.set({
+      trashId: trashRef.id, uid, collectionKey: key, itemId,
+      publishedSnapshot: priorPublished, draftSnapshot: draft,
+      wasPublished: Boolean(priorPublished && priorPublished.content && priorPublished.content.__cmsTombstone !== true),
+      deletedAt: FieldValue.serverTimestamp(), deletedAtMs: now(), deletedBy: OWNER_EMAIL,
+      title: summarize((priorPublished && priorPublished.content) || (draft && draft.content) || { id: itemId }),
+    });
+    await pubRef.set({
+      collectionKey: key, itemId, status: "published",
+      content: { __cmsTombstone: true, id: itemId },
+      updatedAt: FieldValue.serverTimestamp(), updatedAtMs: now(), updatedBy: OWNER_EMAIL,
+      schemaVersion: 1,
+    });
+    await draftRefValue.delete().catch(() => {});
+    await audit(uid, "delete-to-trash", key, itemId, "Moved to recycle bin: " + trashRef.id);
+    return { success: true, trashId: trashRef.id };
+  }
+
+  async function restoreTrashItem(request) {
+    const { uid } = await authorize(request);
+    const trashId = safeId(request.data && request.data.trashId);
+    if (!trashId) throw badRequest("A valid recycle-bin ID is required.");
+    const trashRef = db.collection(TRASH).doc(trashId);
+    const snap = await trashRef.get();
+    const trash = snapshotData(snap);
+    if (!trash) throw makeError("not-found", "Recycle-bin item not found.");
+    const key = assertCollectionKey(trash.collectionKey);
+    const itemId = safeId(trash.itemId);
+    if (!itemId) throw makeError("failed-precondition", "Recycle-bin record is invalid.");
+    await writeRevision(uid, key, itemId, "restore-from-trash", snapshotData(await publishedRef(db, key, itemId).get()), snapshotData(await draftRef(db, key, itemId).get()));
+    const pubRef = publishedRef(db, key, itemId);
+    const draftRefValue = draftRef(db, key, itemId);
+    const oldPub = trash.publishedSnapshot;
+    const oldDraft = trash.draftSnapshot;
+    if (trash.wasPublished && oldPub && oldPub.content && oldPub.content.__cmsTombstone !== true) {
+      await pubRef.set({ ...oldPub, updatedAt: FieldValue.serverTimestamp(), updatedAtMs: now(), updatedBy: OWNER_EMAIL });
+      if (oldDraft) await draftRefValue.set(oldDraft); else await draftRefValue.delete().catch(() => {});
+    } else if (oldDraft && oldDraft.content) {
+      await draftRefValue.set({ ...oldDraft, updatedAt: FieldValue.serverTimestamp(), updatedAtMs: now(), updatedBy: OWNER_EMAIL });
+      await pubRef.set({ collectionKey: key, itemId, status: "published", content: { __cmsTombstone: true, id: itemId }, updatedAt: FieldValue.serverTimestamp(), updatedAtMs: now(), updatedBy: OWNER_EMAIL });
+    } else {
+      await pubRef.set({ collectionKey: key, itemId, status: "published", content: { __cmsTombstone: true, id: itemId }, updatedAt: FieldValue.serverTimestamp(), updatedAtMs: now(), updatedBy: OWNER_EMAIL });
+    }
+    await trashRef.delete();
+    await audit(uid, "restore-trash", key, itemId, "Restored from recycle bin: " + itemId);
+    return { success: true };
+  }
+
+  async function restoreRevision(request) {
+    const { uid } = await authorize(request);
+    const revisionId = safeId(request.data && request.data.revisionId);
+    if (!revisionId) throw badRequest("A valid revision ID is required.");
+    const snap = await db.collection(REVISIONS).doc(revisionId).get();
+    const revision = snapshotData(snap);
+    if (!revision) throw makeError("not-found", "Revision not found.");
+    const key = assertCollectionKey(revision.collectionKey);
+    const itemId = safeId(revision.itemId);
+    const content = (revision.publishedSnapshot && revision.publishedSnapshot.content) || (revision.draftSnapshot && revision.draftSnapshot.content);
+    if (!itemId || !content || content.__cmsTombstone === true) throw makeError("failed-precondition", "This revision has no restorable content.");
+    const pubRef = publishedRef(db, key, itemId);
+    const draft = draftRef(db, key, itemId);
+    const [pubSnap, draftSnap] = await Promise.all([pubRef.get(), draft.get()]);
+    await writeRevision(uid, key, itemId, "before-restore-revision", snapshotData(pubSnap), snapshotData(draftSnap));
+    if (request.data && request.data.publishImmediately === true) {
+      const issues = validatePublication(key, content);
+      if (issues.length) return { success: false, errors: issues };
+      await pubRef.set({ collectionKey: key, itemId, status: "published", content: sanitizeValue(content), updatedAt: FieldValue.serverTimestamp(), updatedAtMs: now(), updatedBy: OWNER_EMAIL, schemaVersion: 1 });
+      await draft.delete().catch(() => {});
+    } else {
+      await draft.set({ collectionKey: key, itemId, status: "draft", content: sanitizeValue(content), updatedAt: FieldValue.serverTimestamp(), updatedAtMs: now(), updatedBy: OWNER_EMAIL, createdAtMs: now() });
+    }
+    await audit(uid, "restore-revision", key, itemId, "Restored revision " + revisionId);
+    return { success: true };
+  }
+
+  async function registerMedia(request) {
+    const { uid } = await authorize(request);
+    const media = request.data && request.data.media;
+    if (!media || typeof media !== "object") throw badRequest("Media metadata is required.");
+    const mimeType = String(media.mimeType || "");
+    const sizeBytes = Number(media.sizeBytes);
+    const storagePath = String(media.storagePath || "");
+    if (!ALLOWED_MEDIA_TYPES.has(mimeType)) throw badRequest("Only JPEG, PNG, WebP and GIF images are allowed.");
+    if (!Number.isFinite(sizeBytes) || sizeBytes <= 0 || sizeBytes > MAX_MEDIA_BYTES) throw badRequest("Image size must be between 1 byte and 25 MB.");
+    if (!storagePath.startsWith("public/cms-media/") || storagePath.includes("..") || storagePath.length > 500) throw badRequest("Invalid media storage path.");
+    if (storageBucket && typeof storageBucket.file === "function") {
+      const [exists] = await storageBucket.file(storagePath).exists();
+      if (!exists) throw makeError("failed-precondition", "Uploaded media file was not found in storage.");
+    }
+    const ref = db.collection(MEDIA).doc();
+    const record = {
+      mediaId: ref.id, uid, fileName: String(media.fileName || "image").slice(0, 240),
+      altText: String(media.altText || "").slice(0, 500), category: String(media.category || "general").slice(0, 80),
+      mimeType, sizeBytes, url: String(media.url || "").slice(0, 2000), storagePath,
+      uploadedAt: FieldValue.serverTimestamp(), uploadedAtMs: now(), uploadedBy: OWNER_EMAIL,
+    };
+    if (!record.url.startsWith("https://")) throw badRequest("Invalid media URL.");
+    await ref.set(record);
+    await audit(uid, "register-media", "media", ref.id, "Registered media: " + record.fileName);
+    return { success: true, media: record };
+  }
+
+  async function deleteMedia(request) {
+    const { uid } = await authorize(request);
+    const mediaId = safeId(request.data && request.data.mediaId);
+    if (!mediaId) throw badRequest("A valid media ID is required.");
+    const ref = db.collection(MEDIA).doc(mediaId);
+    const snap = await ref.get();
+    const media = snapshotData(snap);
+    if (!media) throw makeError("not-found", "Media item not found.");
+    if (media.storagePath && storageBucket && typeof storageBucket.file === "function") {
+      if (!String(media.storagePath).startsWith("public/cms-media/") || String(media.storagePath).includes("..")) {
+        throw makeError("failed-precondition", "Stored media path is invalid.");
+      }
+      await storageBucket.file(media.storagePath).delete({ ignoreNotFound: true });
+    }
+    await ref.delete();
+    await audit(uid, "delete-media", "media", mediaId, "Deleted media: " + String(media.fileName || mediaId));
+    return { success: true };
   }
 
   return {
-    login,
-    verify,
-    logout,
-    requireAdminSession,
-    assertOwnerIdentity,
-    createSession,
-    getValidSession,
-    hashSessionToken,
+    getWorkspace,
+    saveDraft,
+    publishItem,
+    unpublishItem,
+    deleteItem,
+    restoreTrashItem,
+    restoreRevision,
+    registerMedia,
+    deleteMedia,
   };
 }
 
 module.exports = {
-  createAdminAuth,
-  evaluateTokenClaims,
-  evaluateUserRecord,
-  normalizeEmail,
+  createAdminCms,
   setHttpsErrorForTesting,
-  ADMIN_OWNER_EMAIL,
-  ADMIN_SESSION_COLLECTION,
-  ADMIN_RATE_LIMIT_COLLECTION,
-  ADMIN_SESSION_LIFETIME_MS,
-  ADMIN_RATE_WINDOW_MS,
-  ADMIN_MAX_ATTEMPTS_PER_WINDOW,
-  ADMIN_MAX_LOGIN_AGE_MS,
+  COLLECTION_KEYS,
+  sanitizeValue,
+  cleanHtml,
+  validateItem,
+  docId,
+  OWNER_EMAIL,
+  MAX_ITEM_BYTES,
+  MAX_MEDIA_BYTES,
 };
