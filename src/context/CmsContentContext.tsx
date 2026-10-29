@@ -23,8 +23,9 @@ type PublishedCmsState = {
 const EMPTY_STATE: PublishedCmsState = { byCollection: {}, tombstones: {}, loaded: false, error: false };
 const PublishedCmsContext = createContext<PublishedCmsState>(EMPTY_STATE);
 
-function stableItemId(item: Record<string, unknown>, idKey: string): string {
-  const value = item[idKey] ?? item.id ?? item.slug ?? item.code ?? item.college_code ?? item._key ?? item.college_name;
+function stableItemId(item: object, idKey: string): string {
+  const record = item as Record<string, unknown>;
+  const value = record[idKey] ?? record.id ?? record.slug ?? record.code ?? record.college_code ?? record._key ?? record.college_name;
   return value == null ? "" : String(value).trim();
 }
 
@@ -76,7 +77,7 @@ export function usePublishedCmsContent() {
  * Tombstones deliberately hide bundled baseline records that were unpublished
  * or moved to the recycle bin. Draft documents never enter this public store.
  */
-export function useCmsCollection<T extends Record<string, unknown>>(
+export function useCmsCollection<T extends object>(
   collectionKey: CmsCollectionKey,
   baseItems: T[],
   idKey = "id",
