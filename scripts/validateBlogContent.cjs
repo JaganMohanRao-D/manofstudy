@@ -58,7 +58,8 @@ if (!viteeeArticle || viteeeArticle.status !== 'published' ||
     !viteeeArticle.metaTitle || !viteeeArticle.metaDescription) {
   throw new Error('[Blog] VITEEE 2027 article or its cover-image metadata is missing.');
 }
-const viteeeImagePath = path.resolve(root, 'public', viteeeArticle.coverImage.replace(/^\\//, '').replace(/%20/g, ' '));
+const viteeeImageRelativePath = viteeeArticle.coverImage.startsWith('/') ? viteeeArticle.coverImage.slice(1) : viteeeArticle.coverImage;
+const viteeeImagePath = path.resolve(root, 'public', viteeeImageRelativePath.replace(/%20/g, ' '));
 if (!fs.existsSync(viteeeImagePath)) throw new Error('[Blog] VITEEE cover image is missing: ' + viteeeImagePath);
 
 const slugs = new Set();
