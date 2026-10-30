@@ -160,7 +160,7 @@ html.dark .mos-k-homepage-flow {
 .nc-blog-card { display: flex; flex-direction: column; min-width: 0; overflow: hidden; border: 1px solid var(--nc-line, #dce7f5); border-radius: 16px; background: var(--nc-surface, #fff); box-shadow: 0 7px 23px rgba(25, 64, 115, .04); transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
 .nc-blog-card:hover { transform: translateY(-3px); border-color: #b7cfee; box-shadow: var(--nc-shadow); }
 .nc-blog-art-link { display: block; text-decoration: none; }
-.nc-blog-art { position: relative; display: flex; align-items: center; justify-content: center; min-height: 150px; overflow: hidden; }
+.nc-blog-art { position: relative; display: flex; align-items: center; justify-content: center; min-height: 150px; overflow: hidden; }\n.nc-blog-cover-image { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
 .nc-blog-art-1 { background: linear-gradient(125deg, #d9eaff, #f1f7ff 66%, #e5f1ff); }
 .nc-blog-art-2 { background: linear-gradient(130deg, #d9f2e6, #f2fbf7 65%, #e4f7ef); }
 .nc-blog-art-3 { background: linear-gradient(135deg, #fff1c9, #fff9e7 68%, #f7edcf); }
@@ -1418,7 +1418,7 @@ html.dark .naa-wireframe-home .nc-hero h1 span {
 .nc-latest-blog-view-all:hover{transform:translateY(-2px);border-color:#b8d2f2;background:#f3f8ff}
 .nc-latest-blog-card{display:grid;grid-template-columns:minmax(210px,.72fr) minmax(0,1.5fr);min-width:0;overflow:hidden;border:1px solid #e1e8ed;border-radius:22px;background:#fff;box-shadow:0 12px 32px rgba(19,35,55,.055);transition:border-color .2s ease,box-shadow .2s ease}
 .nc-latest-blog-card:hover{border-color:#cbd9e6;box-shadow:0 17px 38px rgba(19,35,55,.085)}
-.nc-latest-blog-visual{position:relative;display:flex;min-height:250px;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(135deg,#f0f7ff 0%,#eaf7f1 100%);text-decoration:none}
+.nc-latest-blog-visual{position:relative;display:flex;min-height:250px;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(135deg,#f0f7ff 0%,#eaf7f1 100%);text-decoration:none}\n.nc-latest-blog-cover{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover}
 .nc-latest-blog-visual-orbit{position:absolute;left:50%;top:50%;border:1px solid rgba(36,107,214,.15);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none}
 .nc-latest-blog-visual-orbit-one{width:244px;height:244px}
 .nc-latest-blog-visual-orbit-two{width:174px;height:174px;border-color:rgba(40,104,71,.18)}
