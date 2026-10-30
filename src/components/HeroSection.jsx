@@ -496,20 +496,19 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         </div>
       </section>
 
-      <section id="naa-recent-blogs" className="nc-premium-blogs-section" aria-labelledby="nc-blogs-title">
+      <section id="naa-recent-blogs" className="nc-premium-blogs-section nc-phone-blogs-section" aria-labelledby="nc-blogs-title">
         <div className="nc-page-width nc-premium-blogs-inner">
-          <div className="nc-premium-blogs-heading">
-            <div className="nc-premium-blogs-heading-copy">
-              <span className="nc-premium-blogs-kicker"><span aria-hidden="true" /> LATEST FROM NAA COLLEGE</span>
-              <h2 id="nc-blogs-title">RECENT <span>BLOGS</span></h2>
-              <p>Latest admissions updates, education news, exam notifications and practical student guides.</p>
-            </div>
-            <a className="nc-premium-blogs-view-all" href="/blog/">VIEW ALL ARTICLES <ArrowRight size={17} aria-hidden="true" /></a>
+          <div className="nc-premium-blogs-heading nc-phone-blogs-heading">
+            <span className="nc-premium-blogs-kicker"><span aria-hidden="true" /> LATEST STORIES</span>
+            <h2 id="nc-blogs-title">RECENT <span>BLOGS</span></h2>
+            <p>Latest admissions updates, education news, exam notifications and practical student guides.</p>
+            <span className="nc-phone-heading-rule" aria-hidden="true" />
           </div>
           {activeBlogArticle ? (
             <div
-              className="nc-featured-blog-showcase"
+              className="nc-phone-blog-stage"
               aria-label="Featured Naa College articles. Use the arrow keys to browse."
+              tabIndex={0}
               onKeyDown={handleBlogKeyDown}
               onTouchStart={(event) => { blogTouchStartX.current = event.changedTouches[0]?.clientX ?? null; }}
               onTouchEnd={(event) => {
@@ -519,55 +518,82 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
                 blogTouchStartX.current = null;
               }}
             >
-              <div className="nc-featured-blog-topline">
-                <div className="nc-featured-blog-topline-label"><span className="nc-featured-blog-live-dot" aria-hidden="true" />LATEST STORIES</div>
-                <span className="nc-featured-blog-counter">FEATURED {activeBlogIndex + 1} OF {publishedArticles.length}</span>
-              </div>
-              <article className="nc-featured-blog-card" aria-live="polite">
-                <a className="nc-featured-blog-visual" href={'/blog/' + activeBlogArticle.slug + '/'} aria-label={'Read ' + activeBlogArticle.title}>
-                  {activeBlogArticle.coverImage ? (
-                    <img className="nc-featured-blog-cover" src={activeBlogArticle.coverImage} alt="" loading={activeBlogIndex === 0 ? 'eager' : 'lazy'} decoding="async" />
-                  ) : (
-                    <div className="nc-featured-blog-fallback" aria-hidden="true">
-                      <span className="nc-featured-blog-fallback-index">NAA COLLEGE / STUDENT GUIDE</span>
-                      <BookOpen size={58} strokeWidth={1.35} />
-                      <span className="nc-featured-blog-fallback-caption">READ · LEARN · GET AHEAD</span>
+              <div className="nc-phone-blog-device">
+                <div className="nc-phone-blog-side-button nc-phone-blog-side-button-left" aria-hidden="true" />
+                <div className="nc-phone-blog-side-button nc-phone-blog-side-button-right" aria-hidden="true" />
+                <div className="nc-phone-blog-bezel">
+                  <div className="nc-phone-blog-notch" aria-hidden="true"><span /><i /></div>
+                  <div className="nc-phone-blog-screen">
+                    <div className="nc-phone-blog-statusbar" aria-hidden="true">
+                      <span>9:41</span>
+                      <span className="nc-phone-blog-status-icons"><i /><i /><b /></span>
                     </div>
-                  )}
-                  <span className="nc-featured-blog-image-frame" aria-hidden="true" />
-                </a>
-                <div className="nc-featured-blog-copy">
-                  <div className="nc-featured-blog-copy-top">
-                    <span className="nc-featured-blog-category">{activeBlogArticle.category || 'Student guide'}</span>
-                    <span className="nc-featured-blog-editorial-mark">NAA COLLEGE · EDITORIAL</span>
-                  </div>
-                  <h3><a href={'/blog/' + activeBlogArticle.slug + '/'}>{activeBlogArticle.title}</a></h3>
-                  <p className="nc-featured-blog-summary">{activeBlogArticle.summary}</p>
-                  <div className="nc-featured-blog-footer">
-                    <div className="nc-featured-blog-date"><CalendarDays size={15} aria-hidden="true" />
-                      <time dateTime={activeBlogArticle.publishedAt || undefined}>{formatBlogPublishedDate(activeBlogArticle.publishedAt) || 'Recently published'}</time>
+                    <div className="nc-phone-blog-screen-header">
+                      <div className="nc-phone-blog-screen-heading">
+                        <span className="nc-phone-blog-screen-marker" aria-hidden="true" />
+                        <div><h3>Recent Blogs</h3><p>Latest official updates</p></div>
+                      </div>
+                      <a href="/blog/" className="nc-phone-blog-view-all">View all <ArrowRight size={15} aria-hidden="true" /></a>
                     </div>
-                    <a className="nc-featured-blog-read" href={'/blog/' + activeBlogArticle.slug + '/'}>READ ARTICLE <ArrowRight size={17} aria-hidden="true" /></a>
+                    <div className="nc-phone-blog-featured-line">
+                      <span><i aria-hidden="true" /> FEATURED ({activeBlogIndex + 1} OF {publishedArticles.length})</span>
+                      <div className="nc-phone-blog-mini-dots" aria-hidden="true">
+                        {publishedArticles.map((article, index) => <i key={article.slug} className={index === activeBlogIndex ? 'is-active' : ''} />)}
+                      </div>
+                    </div>
+                    <article className="nc-phone-blog-article" aria-live="polite">
+                      <a className="nc-phone-blog-cover-link" href={'/blog/' + activeBlogArticle.slug + '/'} aria-label={'Read ' + activeBlogArticle.title}>
+                        {activeBlogArticle.coverImage ? (
+                          <img
+                            className="nc-phone-blog-cover"
+                            src={activeBlogArticle.coverImage}
+                            alt=""
+                            loading={activeBlogIndex === 0 ? 'eager' : 'lazy'}
+                            decoding="async"
+                          />
+                        ) : (
+                          <div className="nc-phone-blog-cover-fallback" aria-hidden="true">
+                            <BookOpen size={48} strokeWidth={1.4} />
+                            <span>NAA COLLEGE</span>
+                          </div>
+                        )}
+                      </a>
+                      <div className="nc-phone-blog-article-copy">
+                        <span className="nc-phone-blog-category">{activeBlogArticle.category || 'STUDENT GUIDES'}</span>
+                        <h4><a href={'/blog/' + activeBlogArticle.slug + '/'}>{activeBlogArticle.title}</a></h4>
+                        <p>{activeBlogArticle.summary}</p>
+                        <div className="nc-phone-blog-article-footer">
+                          <div className="nc-phone-blog-date"><CalendarDays size={15} aria-hidden="true" /><time dateTime={activeBlogArticle.publishedAt || undefined}>{formatBlogPublishedDate(activeBlogArticle.publishedAt) || 'Recently published'}</time></div>
+                          <a href={'/blog/' + activeBlogArticle.slug + '/'} className="nc-phone-blog-read">READ ARTICLE <ArrowRight size={16} aria-hidden="true" /></a>
+                        </div>
+                      </div>
+                    </article>
+                    <div className="nc-phone-blog-bottom-controls">
+                      <div className="nc-phone-blog-dots" role="group" aria-label="Choose a featured article">
+                        {publishedArticles.map((article, index) => (
+                          <button
+                            key={article.slug}
+                            type="button"
+                            className={'nc-phone-blog-dot' + (index === activeBlogIndex ? ' is-active' : '')}
+                            onClick={() => setActiveBlogIndex(index)}
+                            aria-label={'Show article ' + (index + 1) + ': ' + article.title}
+                            aria-current={index === activeBlogIndex ? 'true' : undefined}
+                          />
+                        ))}
+                      </div>
+                      <div className="nc-phone-blog-arrows">
+                        <button type="button" onClick={() => changeFeaturedBlog(-1)} aria-label="Previous featured article"><ArrowLeft size={17} aria-hidden="true" /></button>
+                        <button type="button" onClick={() => changeFeaturedBlog(1)} aria-label="Next featured article"><ArrowRight size={17} aria-hidden="true" /></button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </article>
-              <div className="nc-featured-blog-controls" aria-label="Featured article navigation">
-                <div className="nc-featured-blog-dots" role="group" aria-label="Choose a featured article">
-                  {publishedArticles.map((article, index) => (
-                    <button key={article.slug} type="button" className={'nc-featured-blog-dot' + (index === activeBlogIndex ? ' is-active' : '')}
-                      onClick={() => setActiveBlogIndex(index)} aria-label={'Show article ' + (index + 1) + ': ' + article.title}
-                      aria-current={index === activeBlogIndex ? 'true' : undefined} />
-                  ))}
-                </div>
-                <div className="nc-featured-blog-arrows">
-                  <button type="button" onClick={() => changeFeaturedBlog(-1)} aria-label="Previous featured article"><ArrowLeft size={18} aria-hidden="true" /></button>
-                  <button type="button" onClick={() => changeFeaturedBlog(1)} aria-label="Next featured article"><ArrowRight size={18} aria-hidden="true" /></button>
                 </div>
               </div>
             </div>
           ) : (
             <div className="nc-featured-blog-empty">No published articles are available yet. <a href="/blog/">Visit all articles <ArrowRight size={15} /></a></div>
           )}
+          <a href="/blog/" className="nc-phone-blog-mobile-view-all">VIEW ALL ARTICLES <ArrowRight size={16} aria-hidden="true" /></a>
         </div>
       </section>
 
