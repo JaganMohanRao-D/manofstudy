@@ -362,7 +362,7 @@ const markdownArticles = markdownSpecs.map(spec => {
 });
 const articles = [...legacyArticles, ...structuredArticles, ...markdownArticles];
 fs.writeFileSync(outputPath, JSON.stringify(articles, null, 2) + '\n', 'utf8');
-console.log('[Blog integration] Generated ' + articles.length + ' articles from structured src/data JSON.');
+console.log('[Blog integration] Generated ' + articles.length + ' articles from structured JSON and Markdown src/data sources.');
 console.log('[Blog integration] Preserved the four new English-only articles and their SEO metadata without translating them.');
 console.log('[Blog integration] Excluded raw third-party source lists; retained non-clickable URLs only inside fenced code examples.');
 console.log('[Blog integration] Excluded alternate CSE JSON from publication to prevent duplicate-topic content and a slugless route.');
