@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { BranchRoadmap } from '../types';
 import { ENGINEERING_ROADMAPS } from '../data/engineeringRoadmapsData';
+import { useCmsCollection } from '../context/CmsContentContext';
 import { generateRoadmapPdf } from '../utils/roadmapPdfGenerator';
 import { BranchCard } from './roadmaps/BranchCard';
 import { RoadmapModal } from './roadmaps/RoadmapModal';
@@ -98,6 +99,7 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
   onSelectBranch,
   onNavigateToStore,
 }) => {
+  const managedRoadmaps = useCmsCollection<BranchRoadmap>('roadmaps', ENGINEERING_ROADMAPS, 'id');
   const [majorTrack, setMajorTrack] = useState<'mpc' | 'bipc'>('mpc');
   const [bipcCategory, setBipcCategory] = useState<string>('all');
   const [selectedStream, setSelectedStream] = useState<string>('all');
@@ -118,12 +120,12 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
     if (typeof window !== 'undefined' && window.location.hash.includes('branch=')) {
       history.replaceState(null, '', window.location.pathname + window.location.search);
     }
-  }, []);
+  }, [managedRoadmaps]);
 
   // Sync when targetBranchId prop changes from parent or Command Palette
   useEffect(() => {
     if (targetBranchId) {
-      const match = ENGINEERING_ROADMAPS.find((b) => b.id === targetBranchId);
+      const match = managedRoadmaps.find((b) => b.id === targetBranchId);
       if (match) {
         if (match.stream === 'bipc') {
           setMajorTrack('bipc');
@@ -133,7 +135,7 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
         window.location.assign(`/engineering-roadmaps/${encodeURIComponent(match.id)}/`);
       }
     }
-  }, [targetBranchId]);
+  }, [targetBranchId, managedRoadmaps]);
 
   // Sync with URL hash if present on load or change (e.g. #branch=cse)
   useEffect(() => {
@@ -141,7 +143,7 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
       const hash = window.location.hash;
       if (hash.includes('branch=')) {
         const branchId = hash.split('branch=')[1]?.split('&')[0];
-        const match = ENGINEERING_ROADMAPS.find((b) => b.id === branchId);
+        const match = managedRoadmaps.find((b) => b.id === branchId);
         if (match) {
           if (match.stream === 'bipc') {
             setMajorTrack('bipc');
@@ -155,28 +157,28 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
     handleHash();
     window.addEventListener('hashchange', handleHash);
     return () => window.removeEventListener('hashchange', handleHash);
-  }, []);
+  }, [managedRoadmaps]);
 
   // Total counts by primary track
-  const mpcCount = useMemo(() => ENGINEERING_ROADMAPS.filter((b) => b.stream !== 'bipc').length, []);
-  const bipcCount = useMemo(() => ENGINEERING_ROADMAPS.filter((b) => b.stream === 'bipc').length, []);
+  const mpcCount = useMemo(() => managedRoadmaps.filter((b) => b.stream !== 'bipc').length, [managedRoadmaps]);
+  const bipcCount = useMemo(() => managedRoadmaps.filter((b) => b.stream === 'bipc').length, [managedRoadmaps]);
 
   // BiPC category counts
   const bipcCategoryCounts = useMemo(() => {
-    const bipcRoadmaps = ENGINEERING_ROADMAPS.filter((b) => b.stream === 'bipc');
+    const bipcRoadmaps = managedRoadmaps.filter((b) => b.stream === 'bipc');
     return {
       all: bipcRoadmaps.length,
       pharma: bipcRoadmaps.filter((b) => b.category === 'pharma').length,
       agri: bipcRoadmaps.filter((b) => b.category === 'agri').length,
       nursing: bipcRoadmaps.filter((b) => b.category === 'nursing').length,
     };
-  }, []);
+  }, [managedRoadmaps]);
 
   // Filtered branches list based on search, majorTrack, stream, and category
   const filteredBranches = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
 
-    return ENGINEERING_ROADMAPS.filter((b) => {
+    return managedRoadmaps.filter((b) => {
       // 1. Major Track Separation
       if (majorTrack === 'bipc') {
         if (b.stream !== 'bipc') return false;
@@ -235,11 +237,11 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
 
       return inCode || inName || inAcronym || inId || inTagline || inDegree || inRoles || inTools;
     });
-  }, [searchQuery, majorTrack, bipcCategory, selectedStream, selectedCategory]);
+  }, [searchQuery, majorTrack, bipcCategory, selectedStream, selectedCategory, managedRoadmaps]);
 
   // Stream counts for MPC track
   const streamCounts = useMemo(() => {
-    const mpcList = ENGINEERING_ROADMAPS.filter((b) => b.stream !== 'bipc');
+    const mpcList = managedRoadmaps.filter((b) => b.stream !== 'bipc');
     return {
       all: mpcList.length,
       engineering: mpcList.filter((b) => !b.stream || b.stream === 'engineering').length,
@@ -247,11 +249,11 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
       commerce: mpcList.filter((b) => b.stream === 'commerce').length,
       humanities: mpcList.filter((b) => b.stream === 'humanities').length,
     };
-  }, []);
+  }, [managedRoadmaps]);
 
   // Category counts (scoped to current stream if engineering or all)
   const categoryCounts = useMemo(() => {
-    const scope = ENGINEERING_ROADMAPS.filter((b) => {
+    const scope = managedRoadmaps.filter((b) => {
       if (b.stream === 'bipc') return false;
       if (selectedStream === 'all') return true;
       return (b.stream || 'engineering') === selectedStream;
@@ -275,7 +277,7 @@ export const EngineeringRoadmaps: React.FC<EngineeringRoadmapsProps> = ({
         (b) => b.category === 'biotech' || b.bannerCategory === 'biotech'
       ).length,
     };
-  }, [selectedStream]);
+  }, [selectedStream, managedRoadmaps]);
 
   const handleOpenBranchModal = (branch: BranchRoadmap) => {
     if (onSelectBranch) onSelectBranch(branch.id);

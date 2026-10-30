@@ -8,9 +8,11 @@ This document separates three things: **A. source-code changes** (in this reposi
 
 | File | Change |
 | --- | --- |
-| `functions/adminAuthCore.js` (new) | All admin authorization, session and rate-limit logic, with injected dependencies so it is unit-testable. |
-| `functions/index.js` | Admin section replaced by thin callable wrappers. `loginWithGoogleNaaAdmin` → **`loginWithPasswordNaaAdmin`**. Also fixes a pre-existing load failure (see below). |
-| `functions/adminAuthCore.test.js` (new) | 28 backend tests (`node --test`). |
+| `functions/adminAuthCore.js` | Owner allowlist, live-account validation, rate limiting, hashed server-side sessions and session verification. |
+| `functions/adminCmsCore.js` (new) | Owner-session-verified CMS workspace, drafts, publish/unpublish, revisions, recycle bin, audit records and media registry. |
+| `functions/index.js` | Keeps existing Functions and adds CMS callable wrappers; includes the `onDocumentDeleted` import fix. |
+| `functions/adminAuthCore.test.js` | Owner authentication/session unit tests. |
+| `functions/adminCmsCore.test.js` (new) | CMS authorization, publishing, unpublishing, revision/trash and sanitization tests. |
 | `src/services/adminFirebase.ts` (new) | Isolated Firebase app + in-memory Auth + Functions client used only by the admin portal. |
 | `src/components/admin/AdminPortal.tsx` | Google button/handler removed; email + password form, show/hide password, forgot-password flow, loading and error states. Branding/layout unchanged. |
 | `src/components/admin/adminAuthMessages.ts` (new) | Pure validation and user-facing error/neutral messages. |
@@ -90,35 +92,79 @@ Never commit, log, share or reuse a password. Do not use a default password.
    Setting `emailVerified: true` is appropriate only because the owner controls that inbox. This script was written for this document and has not been run.
 5. If a *different* unverified password account is ever found for the owner email that the owner did not create, delete it in Console and repeat the steps above.
 
-## C. Deployment (manual — requires Firebase CLI access to `manofstudy-live`)
+## C. Deployment (manual — requires Firebase and Cloudflare access)
 
-Confirm the target first, and see what is currently deployed:
+**Nothing in this PR deploys Firebase resources or the public Cloudflare site automatically.** Complete the checks below before production rollout.
+
+### 1. Confirm the project and current functions
 
 ```sh
 firebase use --project manofstudy-live
 firebase functions:list --project manofstudy-live
 ```
 
-Deploy only the admin auth functions (region `asia-southeast1`). The CLI loads the whole `functions/` codebase to deploy, which is why the `onDocumentDeleted` import fix matters:
+Confirm the project shown is `manofstudy-live`. Do not deploy from an unfamiliar Firebase project.
+
+### 2. Run local checks first
 
 ```sh
-firebase deploy --project manofstudy-live \
-  --only functions:loginWithPasswordNaaAdmin,functions:verifyNaaAdminSession,functions:logoutNaaAdmin
+npm install
+npm run lint
+npm run build
+node --test functions/adminAuthCore.test.js functions/adminCmsCore.test.js
 ```
 
-Then remove the old Google-based login function so it can no longer be called. (Sessions it issued are already rejected by the new `verifyNaaAdminSession`, which requires `provider: "password"`.)
+The backend unit tests use fake auth and in-memory Firestore. They are not a substitute for verifying production Firebase Auth, Firestore, Storage, and email/password sign-in.
+
+### 3. Deploy backend and security rules
+
+The CMS adds nine callable functions and new Firestore and Storage rules. Deploy the current reviewed branch only after the build and tests pass:
 
 ```sh
-firebase functions:delete loginWithGoogleNaaAdmin --region asia-southeast1 --project manofstudy-live
+firebase deploy --project manofstudy-live --only functions,firestore:rules,storage
 ```
 
-Optional housekeeping — let Firestore purge expired sessions automatically (sessions carry an `expireAt` timestamp):
+This deploys the existing Functions codebase as well as the rules. The existing CampusConnect/other Functions are in the same codebase, so review the planned deployment output carefully. Do not continue if Firebase reports unexpected deletions, the wrong project, or build/startup errors.
 
-```sh
-gcloud firestore fields ttls update expireAt --collection-group=private_admin_sessions --enable-ttl --project manofstudy-live
-```
+The CMS callable functions are:
 
-**Frontend:** the GitHub workflows in this repository only audit and build; they do not deploy. Deploy the frontend through your normal Cloudflare Pages process (merge the reviewed change to the production branch configured in Cloudflare Pages — that setting could not be verified from the repository). Deploy the Cloud Functions **before or together with** the frontend; the new UI calls `loginWithPasswordNaaAdmin`. The callables only allow the origins `https://naacollege.in` and `https://www.naacollege.in`, so admin sign-in cannot be tested from a `*.pages.dev` preview URL (the page loads and the form works, but the backend call is blocked by CORS).
+- `adminGetCmsWorkspace`
+- `adminSaveCmsDraft`
+- `adminPublishCmsItem`
+- `adminUnpublishCmsItem`
+- `adminDeleteCmsItem`
+- `adminRestoreCmsTrashItem`
+- `adminRestoreCmsRevision`
+- `adminRegisterCmsMedia`
+- `adminDeleteCmsMedia`
+
+The existing admin auth functions remain `loginWithPasswordNaaAdmin`, `verifyNaaAdminSession`, and `logoutNaaAdmin`.
+
+### 4. Verify Firebase owner credentials
+
+In Firebase Console → Authentication → Sign-in method, enable **Email/Password** and keep **Google** enabled for existing student features. Then inspect Authentication → Users and confirm the authorized owner account has a password provider, a verified email, and is not disabled. Do not assume that resetting the password for a Google-only account necessarily adds the password provider. Preserve the existing Firebase UID and student data; never delete/recreate the account as a shortcut.
+
+Use a strong, unique owner password. No password or service-account key belongs in source control.
+
+### 5. Deploy the frontend separately
+
+After the backend and rules are deployed and verified, publish the reviewed feature through the normal Cloudflare Pages workflow. The repository workflow runs checks/builds; it does not itself publish Firebase resources, and Cloudflare Pages production branch settings must be confirmed in the Cloudflare dashboard.
+
+Use the existing URL `https://naacollege.in/theone`. Firebase callable CORS is configured for `https://naacollege.in` and `https://www.naacollege.in`; a `*.pages.dev` preview is not an accepted origin for the admin callable flow.
+
+### 6. Verify the real production workflow
+
+After both backend and frontend deployments:
+
+1. Owner signs in and reaches the CMS dashboard.
+2. A non-owner account is denied.
+3. Draft saves remain private.
+4. Publishing a blog changes the public blog list; publishing homepage copy changes the homepage hero; scholarship edits update the connected scholarship sections; the footer tagline, guides, roadmaps, and autonomous-college directory update through their connected runtime hooks.
+5. Unpublish hides connected baseline items; restore from recycle bin brings them back.
+6. Media upload succeeds only for the verified owner and allowed image types.
+7. Public Google sign-in and student features still work.
+
+The UI currently manages `tools`, `seo_settings`, and `datasets` metadata in the CMS, but all those fields are **not yet wired to their respective public components**. Large AP/TG allotment indexes remain outside the generic content editor to avoid changing admission calculations or search indexes.
 
 ## Verification
 
@@ -159,4 +205,8 @@ If there are no invocation logs at all, confirm the functions exist in project `
 
 ## Scope and limitations
 
-The repository provides the private owner **authentication and session layer** and a minimal signed-in screen (status, session end time, sign out). It does **not** contain a content-management dashboard, editor or publishing actions; none were invented. Every future admin read/write endpoint must call `requireAdminSession` first. Production behaviour (Firebase sign-in, password reset emails, deployed callables) has not been exercised in this task.
+The repository now contains the private owner authentication/session layer, a CMS dashboard, server-side CMS callable handlers, Firestore/Storage rules, revision and recycle-bin operations, audit records, media registration, and runtime content overrides. Public live-content hooks currently cover homepage hero copy, featured homepage blogs/scholarships, the blog page, footer tagline, admission guides, roadmaps, and the autonomous-college directory. Tool/SEO/dataset records can be stored, but their individual public pages are not all connected to live updates yet. Large AP/TG allotment indexes intentionally remain in the validated repository data pipeline.
+
+The current automated tests use fake auth and in-memory Firestore; they do not prove that production Firebase settings, the owner password provider, Storage permissions, email delivery, or the real deployment are correct. A green build is necessary but not sufficient. Do not describe the CMS as production-ready until the manual verification section above has been completed against the configured Firebase project and the live Cloudflare deployment.
+
+Every future privileged admin operation must call `adminAuthCore.requireAdminSession(request)` on the server before reading or changing protected data. Do not add direct client SDK access to private CMS collections.

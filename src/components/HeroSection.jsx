@@ -33,18 +33,16 @@ import { NaaCollegeAssistant } from './NaaCollegeAssistant';
 import { WORKSPACES, FLAGSHIP_FEATURES } from './FeaturesHub';
 import articlesData from '../data/blogArticles.json';
 import editorialArticlesData from '../data/editorialBlogArticles.generated.json';
+import { useCmsCollection } from '../context/CmsContentContext';
 
-const publishedArticles = [...articlesData, ...editorialArticlesData]
-  .filter((article) => article.status === 'published')
-  .slice()
-  .sort((a, b) =>
-    String(b.publishedAt || '').localeCompare(String(a.publishedAt || '')) ||
-    String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')) ||
-    a.title.localeCompare(b.title)
-  )
-  .slice(0, 3);
-
-const latestBlogArticle = publishedArticles[0] || null;
+const baseBlogArticles = [...articlesData, ...editorialArticlesData];
+const baseHomeContent = [{
+  id: 'main_site_content',
+  heroEyebrow: 'Mana AP & Telangana students kosam',
+  heroTitle: 'Your next chapter — planned with clarity.',
+  heroDescription: 'Explore AP & Telangana admission data, compare college options, discover funding and find practical tools for your student journey.',
+  heroNote: '{homeContent.heroNote || "Student resources, clear context. Important counselling decisions ni official sources tho verify cheyyandi."}',
+}];
 
 const scholarshipDeadlineDate = (value) => {
   const text = String(value || '');
@@ -95,6 +93,14 @@ const TICKER_ITEMS = [
 ];
 
 export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
+  const managedBlogs = useCmsCollection('blogs', baseBlogArticles, 'slug')
+    .filter((article) => article.status === 'published')
+    .slice()
+    .sort((a, b) => String(b.publishedAt || '').localeCompare(String(a.publishedAt || '')) || String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')) || a.title.localeCompare(b.title));
+  const latestBlogArticle = managedBlogs[0] || null;
+  const homeContent = useCmsCollection('site_content', baseHomeContent, 'id')[0] || baseHomeContent[0];
+  const [scholarshipSource, setScholarshipSource] = useState([]);
+  const managedScholarships = useCmsCollection('scholarships', scholarshipSource, 'id');
   const [query, setQuery] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
   const [featuredScholarships, setFeaturedScholarships] = useState([]);
@@ -108,12 +114,16 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         return response.json();
       })
       .then((items) => {
-        if (active && Array.isArray(items)) setFeaturedScholarships(getFeaturedScholarships(items));
+        if (active && Array.isArray(items)) setScholarshipSource(items);
       })
       .catch(() => { if (active) setFeaturedScholarships([]); })
       .finally(() => { if (active) setScholarshipsLoaded(true); });
     return () => { active = false; };
   }, []);
+
+  useEffect(() => {
+    if (scholarshipsLoaded) setFeaturedScholarships(getFeaturedScholarships(managedScholarships));
+  }, [managedScholarships, scholarshipsLoaded]);
 
   const shortcuts = [
     { title: 'AP College Predictor', detail: 'Explore rank matches with available historical data', icon: Landmark, workspace: 'ap-predictor' },
@@ -205,10 +215,10 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
       <section className="nc-hero" aria-labelledby="nc-hero-title">
         <div className="nc-page-width nc-hero-grid">
           <div className="nc-hero-copy">
-            <p className="nc-eyebrow"><span className="nc-eyebrow-dot" aria-hidden="true" /> Mana AP &amp; Telangana students kosam</p>
-            <h1 id="nc-hero-title">Your next chapter — <span>planned with clarity.</span></h1>
+            <p className="nc-eyebrow"><span className="nc-eyebrow-dot" aria-hidden="true" /> {homeContent.heroEyebrow || "Mana AP & Telangana students kosam"}</p>
+            <h1 id="nc-hero-title">{homeContent.heroTitle || "Your next chapter — planned with clarity."}</h1>
             <p className="nc-hero-description">
-              Explore AP &amp; Telangana admission data, compare college options, discover funding and find practical tools for your student journey.
+              {homeContent.heroDescription || "Explore AP & Telangana admission data, compare college options, discover funding and find practical tools for your student journey."}
             </p>
 
             <div className="nc-state-cards" aria-label="Choose your state">

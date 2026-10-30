@@ -45,6 +45,9 @@ jobs:
             node --check functions/index.js
           fi
 
+      - name: Admin authentication and CMS unit tests
+        run: node --test functions/adminAuthCore.test.js functions/adminCmsCore.test.js
+
       - name: TypeScript check
         run: npm run lint
 

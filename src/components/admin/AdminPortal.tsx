@@ -10,6 +10,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { adminAuth, adminFunctions } from "../../services/adminFirebase";
+import { AdminCmsDashboard } from "./AdminCmsDashboard";
 import {
   RESET_NEUTRAL_MESSAGE,
   loginErrorMessage,
@@ -273,6 +274,10 @@ export default function AdminPortal() {
   const expiryLabel = session
     ? new Date(session.expiresAtMs).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
     : "";
+
+  if (session) {
+    return <AdminCmsDashboard sessionToken={session.token} onLogout={() => void handleLogout()} />;
+  }
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#f4faf6] px-4 py-10 text-slate-900">

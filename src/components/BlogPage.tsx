@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, ArrowRight, BookOpen, CalendarDays, Clock3, Search } from 'lucide-react';
 import articlesData from '../data/blogArticles.json';
 import editorialArticlesData from '../data/editorialBlogArticles.generated.json';
+import { useCmsCollection } from '../context/CmsContentContext';
 
 type BlogArticle = {
   slug: string; title: string; category: string; tags: string[]; status: 'published' | 'draft';
@@ -9,11 +10,7 @@ type BlogArticle = {
   metaTitle?: string; metaDescription?: string; author?: string; readingTimeMinutes?: number | null;
   toolLinks: { label: string; href: string }[];
 };
-const allArticles = [...(articlesData as BlogArticle[]), ...(editorialArticlesData as BlogArticle[])]
-  .sort((a, b) => String(b.publishedAt || '').localeCompare(String(a.publishedAt || '')) ||
-    String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')) ||
-    a.title.localeCompare(b.title));
-const articles = allArticles.filter((article) => article.status === 'published');
+const baseArticles = [...(articlesData as BlogArticle[]), ...(editorialArticlesData as BlogArticle[])];
 const SITE = 'https://naacollege.in';
 const categorySlug = (value: string) => value.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const slugFromPath = (path: string) => path.replace(/\/+$/, '').split('/').filter(Boolean).pop() || '';
@@ -113,6 +110,12 @@ export function isBlogPath(pathname: string) {
 export const BlogPage: React.FC = () => {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('All');
+  const mergedArticles = useCmsCollection<BlogArticle>('blogs', baseArticles, 'slug');
+  const articles = useMemo(() => mergedArticles
+    .filter((article) => article.status === 'published')
+    .sort((a, b) => String(b.publishedAt || '').localeCompare(String(a.publishedAt || '')) ||
+      String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')) ||
+      a.title.localeCompare(b.title)), [mergedArticles]);
   const pathname = typeof window === 'undefined' ? '/blog/' : window.location.pathname;
   const isCategory = pathname.startsWith('/blog/category/');
   const categoryPathSlug = isCategory ? slugFromPath(pathname) : '';
