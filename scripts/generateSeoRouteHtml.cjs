@@ -301,9 +301,12 @@ const renderStaticArticle = (article) => {
     while (i < lines.length && lines[i].trim() && !/^(#{2,3}\s|>\s|[-*]\s+|\d+[.)]\s+)/.test(lines[i].trim()) && !isMarkdownTableRow(lines[i].trim())) paragraph.push(lines[i++].trim());
     blocks.push('<p class="my-4 text-base font-normal leading-8 text-slate-700">' + inlineStatic(paragraph.join(' ')) + '</p>');
   }
+  const coverImage = article.coverImage
+    ? '<img src="' + htmlEscape(article.coverImage) + '" alt="" class="mb-6 aspect-video w-full max-h-[440px] rounded-2xl object-cover" />'
+    : '';
   return '<article class="mx-auto max-w-4xl px-4 py-6 sm:px-8"><p class="mb-5 text-sm"><a href="/blog/" class="text-cyan-700 underline">Naa College Blog</a> / ' + htmlEscape(article.category) +
     '</p><h1 class="mb-4 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">' + htmlEscape(article.title) + '</h1><p class="mb-5 text-lg leading-8 text-slate-600">' + htmlEscape(article.summary) +
-    '</p><p class="mb-8 text-sm text-slate-500">Updated ' + htmlEscape(article.updatedAt) + ' · By ' + htmlEscape(article.author || 'Naa College Editorial Desk') + ' · ' +
+    '</p>' + coverImage + '<p class="mb-8 text-sm text-slate-500">Updated ' + htmlEscape(article.updatedAt) + ' · By ' + htmlEscape(article.author || 'Naa College Editorial Desk') + ' · ' +
     (article.readingTimeMinutes || Math.max(2, Math.ceil(String(article.content || '').trim().split(/\s+/).filter(Boolean).length / 220))) + ' min read</p><div class="blog-prose">' + blocks.join('\n') + '</div>' +
     (article.sources && article.sources.length ? '<h2 class="mt-10 text-xl font-semibold">Official and reference sources</h2><ul class="my-4 list-disc space-y-2 pl-6">' +
       article.sources.map((source) => '<li><a href="' + htmlEscape(source.url) + '" rel="noopener noreferrer" class="text-cyan-700 underline">' + htmlEscape(source.label) + '</a></li>').join('') + '</ul>' : '') +
@@ -353,6 +356,7 @@ publishedBlogArticles.forEach((article) => {
     schema: {
       '@context': 'https://schema.org', '@type': 'BlogPosting', headline: article.title,
       description: article.metaDescription || article.summary, datePublished: article.publishedAt, dateModified: article.updatedAt,
+      image: article.coverImage ? 'https://naacollege.in' + article.coverImage : undefined,
       mainEntityOfPage: canonical,
       author: { '@type': 'Organization', name: article.author || 'Naa College Editorial Desk', url: 'https://naacollege.in/' },
       publisher: { '@type': 'Organization', name: 'Naa College', url: 'https://naacollege.in/' }
@@ -402,6 +406,10 @@ function buildRouteHtml(route) {
   html = setMeta(html, 'property', 'og:description', route.description);
   html = setMeta(html, 'property', 'og:url', canonical);
   if (route.schema && route.schema['@type'] === 'BlogPosting') html = setMeta(html, 'property', 'og:type', 'article');
+  if (route.schema?.image) {
+    html = setMeta(html, 'property', 'og:image', route.schema.image);
+    html = setMeta(html, 'name', 'twitter:image', route.schema.image);
+  }
   html = setMeta(html, 'name', 'twitter:title', route.title);
   html = setMeta(html, 'name', 'twitter:description', route.description);
   html = setMeta(html, 'name', 'twitter:url', canonical);
