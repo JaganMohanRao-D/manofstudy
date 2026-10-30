@@ -223,12 +223,12 @@ function normalizeStructured(raw) {
 
 
 function pandocSimpleTablesToPipe(content) {
-  const lines = String(content || '').split(/\\r?\\n/);
+  const lines = String(content || '').split(/\r?\n/);
   const output = [];
   for (let i = 0; i < lines.length; i += 1) {
     const separator = lines[i];
     const groups = [...separator.matchAll(/-{3,}/g)];
-    if (groups.length < 2 || !/^\\s*-{3,}(?:\\s+-{3,})+\\s*$/.test(separator)) {
+    if (groups.length < 2 || !/^\s*-{3,}(?:\s+-{3,})+\s*$/.test(separator)) {
       output.push(lines[i]);
       continue;
     }
@@ -236,7 +236,7 @@ function pandocSimpleTablesToPipe(content) {
     const starts = groups.map((group) => group.index ?? 0);
     const headerLine = lines[i - 1] || '';
     if (output.length) output.pop();
-    if (output.length && /^\\s*-{3,}\\s*$/.test(output[output.length - 1])) output.pop();
+    if (output.length && /^\s*-{3,}\s*$/.test(output[output.length - 1])) output.pop();
 
     const cellsFor = (line) => starts.map((start, index) => {
       const nextStart = starts[index + 1];
@@ -247,9 +247,9 @@ function pandocSimpleTablesToPipe(content) {
     let cursor = i + 1;
     while (cursor < lines.length) {
       const line = lines[cursor];
-      if (/^\\s*-{3,}\\s*$/.test(line)) { cursor += 1; break; }
+      if (/^\s*-{3,}\s*$/.test(line)) { cursor += 1; break; }
       if (!line.trim()) { cursor += 1; continue; }
-      if (!/^\\s{2,}\\S/.test(line) || /^\\s*#{1,6}\\s/.test(line)) break;
+      if (!/^\s{2,}\S/.test(line) || /^\s*#{1,6}\s/.test(line)) break;
 
       const cells = cellsFor(line);
       if (!cells[0] && rows.length && cells.slice(1).some(Boolean)) {
@@ -263,7 +263,7 @@ function pandocSimpleTablesToPipe(content) {
     }
 
     if (headers.length > 1 && rows.length) {
-      const cleanCell = (value) => String(value || '').replace(/\\s+/g, ' ').replace(/\\|/g, '\\\\|').trim();
+      const cleanCell = (value) => String(value || '').replace(/\s+/g, ' ').trim();
       output.push('| ' + headers.map(cleanCell).join(' | ') + ' |');
       output.push('| ' + headers.map(() => '---').join(' | ') + ' |');
       for (const row of rows) {
@@ -274,26 +274,27 @@ function pandocSimpleTablesToPipe(content) {
     }
     i = cursor - 1;
   }
-  return output.join('\\n');
+  return output.join('\n');
 }
 
 function normalizeMarkdownArticle(spec) {
   const filePath = path.join(root, spec.path);
   if (!fs.existsSync(filePath)) throw new Error('[Blog integration] Missing Markdown source: ' + spec.path);
-  const source = fs.readFileSync(filePath, 'utf8').replace(/^\\uFEFF/, '');
-  const titleMatch = source.match(/^#\\s+(.+)$/m);
+  const source = fs.readFileSync(filePath, 'utf8').replace(/^\uFEFF/, '');
+  const titleMatch = source.match(/^#\s+(.+)$/m);
   if (!titleMatch) throw new Error('[Blog integration] Markdown source is missing its H1 title: ' + spec.path);
-  let content = source.replace(/^#\\s+.+\\r?\\n+/, '');
-  content = pandocSimpleTablesToPipe(content)
-    .replace(/\\\\\\[/g, '[')
-    .replace(/\\\\\\]/g, ']')
-    .replace(/(\\b\\d{1,2})\\s+--\\s+(\\d{1,2}\\b)/g, '$1 – $2')
-    .replace(/[ \\t]+\\n/g, '\\n')
-    .replace(/\\n{3,}/g, '\\n\\n')
+  let content = source.replace(/^#\s+.+\r?\n+/, '');
+  content = pandocSimpleTablesToPipe(content);
+  const slash = String.fromCharCode(92);
+  content = content.split(slash + '[').join('[').split(slash + ']').join(']');
+  content = content
+    .replace(/(\b\d{1,2})\s+--\s+(\d{1,2}\b)/g, '$1 – $2')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
     .trim();
-  const firstParagraph = content.split(/\\n\\s*\\n/).find((block) => block.trim() && !block.trim().startsWith('#')) || '';
-  const summary = firstParagraph.replace(/\\s+/g, ' ').trim().split(/(?<=[.!?])\\s+/)[0];
-  const wordCount = content.split(/\\s+/).filter(Boolean).length;
+  const firstParagraph = content.split(/\n\s*\n/).find((block) => block.trim() && !block.trim().startsWith('#')) || '';
+  const summary = firstParagraph.replace(/\s+/g, ' ').trim().split(/(?<=[.!?])\s+/)[0] || titleMatch[1].trim();
+  const wordCount = content.split(/\s+/).filter(Boolean).length;
   return {
     slug: spec.slug,
     title: titleMatch[1].trim(),
