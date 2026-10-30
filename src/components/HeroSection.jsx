@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -42,7 +42,7 @@ const publishedArticles = [...articlesData, ...editorialArticlesData]
     String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')) ||
     a.title.localeCompare(b.title)
   )
-  .slice(0, 3);
+  .slice(0, 5);
 
 const latestBlogArticle = publishedArticles[0] || null;
 
@@ -99,6 +99,28 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [featuredScholarships, setFeaturedScholarships] = useState([]);
   const [scholarshipsLoaded, setScholarshipsLoaded] = useState(false);
+  const [activeBlogIndex, setActiveBlogIndex] = useState(0);
+  const blogTouchStartX = useRef(null);
+  const activeBlogArticle = publishedArticles[activeBlogIndex] || null;
+  const changeFeaturedBlog = (direction) => {
+    setActiveBlogIndex((current) => (current + direction + publishedArticles.length) % publishedArticles.length);
+  };
+  const handleBlogKeyDown = (event) => {
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      changeFeaturedBlog(-1);
+    } else if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      changeFeaturedBlog(1);
+    }
+  };
+  const formatBlogPublishedDate = (value) => {
+    if (!value) return '';
+    const date = new Date(value + 'T00:00:00');
+    return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString('en-IN', {
+      day: '2-digit', month: 'short', year: 'numeric',
+    });
+  };
 
   useEffect(() => {
     let active = true;
@@ -473,77 +495,78 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         </div>
       </section>
 
-      <section id="naa-recent-blogs" className="nc-blogs-section nc-page-width" aria-labelledby="nc-blogs-title">
-        <div className="nc-section-heading-row">
-          <div>
-            <span className="nc-section-kicker">READ · LEARN · GET AHEAD</span>
-            <h2 id="nc-blogs-title">STUDENT FIELD NOTES <span>— GUIDES &amp; INSIGHTS</span></h2>
-            <p>Student guides and practical explainers, together in one place.</p>
+      <section id="naa-recent-blogs" className="nc-premium-blogs-section" aria-labelledby="nc-blogs-title">
+        <div className="nc-page-width nc-premium-blogs-inner">
+          <div className="nc-premium-blogs-heading">
+            <div className="nc-premium-blogs-heading-copy">
+              <span className="nc-premium-blogs-kicker"><span aria-hidden="true" /> LATEST FROM NAA COLLEGE</span>
+              <h2 id="nc-blogs-title">RECENT <span>BLOGS</span></h2>
+              <p>Latest admissions updates, education news, exam notifications and practical student guides.</p>
+            </div>
+            <a className="nc-premium-blogs-view-all" href="/blog/">VIEW ALL ARTICLES <ArrowRight size={17} aria-hidden="true" /></a>
           </div>
-          <a className="nc-all-blogs-link" href="/blog/">View all blogs <ArrowRight size={16} aria-hidden="true" /></a>
-        </div>
-        <div className="nc-laptop-device" aria-label="Recent Naa College blogs displayed on a laptop screen">
-          <div className="nc-laptop-lid">
-            <span className="nc-laptop-camera" aria-hidden="true" />
-            <div className="nc-laptop-screen">
-              <div className="nc-laptop-toolbar" aria-hidden="true">
-                <span className="nc-laptop-brand-icon"><BookOpen size={16} /></span>
-                <strong>NAA COLLEGE</strong>
-                <span className="nc-laptop-toolbar-divider" />
-                <span className="nc-laptop-toolbar-subtitle">STUDENT KNOWLEDGE DESK</span>
-                <span className="nc-laptop-toolbar-spacer" />
-                <span className="nc-laptop-toolbar-status"><i /> ONLINE</span>
+          {activeBlogArticle ? (
+            <div
+              className="nc-featured-blog-showcase"
+              aria-label="Featured Naa College articles. Use the arrow keys to browse."
+              onKeyDown={handleBlogKeyDown}
+              onTouchStart={(event) => { blogTouchStartX.current = event.changedTouches[0]?.clientX ?? null; }}
+              onTouchEnd={(event) => {
+                if (blogTouchStartX.current === null) return;
+                const distance = event.changedTouches[0].clientX - blogTouchStartX.current;
+                if (Math.abs(distance) > 45) changeFeaturedBlog(distance < 0 ? 1 : -1);
+                blogTouchStartX.current = null;
+              }}
+            >
+              <div className="nc-featured-blog-topline">
+                <div className="nc-featured-blog-topline-label"><span className="nc-featured-blog-live-dot" aria-hidden="true" />LATEST STORIES</div>
+                <span className="nc-featured-blog-counter">FEATURED {activeBlogIndex + 1} OF {publishedArticles.length}</span>
               </div>
-              <div className="nc-laptop-content">
-                <div className="nc-laptop-content-heading">
-                  <span className="nc-laptop-overline">THE LATEST FROM OUR BLOG</span>
-                  <strong>Ideas that move you forward.</strong>
-                  <span className="nc-laptop-count">03 GUIDES <Sparkles size={13} /></span>
-                </div>
-                <div className="nc-blogs-grid nc-laptop-blog-grid">
-          {publishedArticles.map((article, index) => (
-            <article className={'nc-blog-card nc-blog-card-' + (index + 1)} key={article.slug}>
-              <a href={'/blog/' + article.slug + '/'} className="nc-blog-art-link" aria-label={'Read ' + article.title}>
-                <div className={'nc-blog-art nc-blog-art-' + (index + 1)} aria-hidden="true">
-                  {article.coverImage ? (
-                    <img className="nc-blog-cover-image" src={article.coverImage} alt="" loading="lazy" />
-                  ) : index === 0 ? (
-                    <>
-                      <span className="nc-art-index">AP / 01</span>
-                      <Landmark className="nc-blog-main-icon" size={47} strokeWidth={1.4} />
-                      <div className="nc-rank-ticket"><span>RANK</span><i /><i /><i /></div>
-                    </>
-                  ) : index === 1 ? (
-                    <>
-                      <span className="nc-art-index">TG / 02</span>
-                      <div className="nc-map-lines"><i /><i /><i /><i /></div>
-                      <Building2 className="nc-blog-main-icon" size={44} strokeWidth={1.4} />
-                      <span className="nc-map-pin"><MapPin size={17} /></span>
-                    </>
+              <article className="nc-featured-blog-card" aria-live="polite">
+                <a className="nc-featured-blog-visual" href={'/blog/' + activeBlogArticle.slug + '/'} aria-label={'Read ' + activeBlogArticle.title}>
+                  {activeBlogArticle.coverImage ? (
+                    <img className="nc-featured-blog-cover" src={activeBlogArticle.coverImage} alt="" loading={activeBlogIndex === 0 ? 'eager' : 'lazy'} decoding="async" />
                   ) : (
-                    <>
-                      <span className="nc-art-index">GUIDE / 03</span>
-                      <div className="nc-result-sheet"><ClipboardCheck size={35} /><span /><span /><span /></div>
-                      <BookOpen className="nc-blog-main-icon" size={32} strokeWidth={1.5} />
-                    </>
+                    <div className="nc-featured-blog-fallback" aria-hidden="true">
+                      <span className="nc-featured-blog-fallback-index">NAA COLLEGE / STUDENT GUIDE</span>
+                      <BookOpen size={58} strokeWidth={1.35} />
+                      <span className="nc-featured-blog-fallback-caption">READ · LEARN · GET AHEAD</span>
+                    </div>
                   )}
+                  <span className="nc-featured-blog-image-frame" aria-hidden="true" />
+                </a>
+                <div className="nc-featured-blog-copy">
+                  <div className="nc-featured-blog-copy-top">
+                    <span className="nc-featured-blog-category">{activeBlogArticle.category || 'Student guide'}</span>
+                    <span className="nc-featured-blog-editorial-mark">NAA COLLEGE · EDITORIAL</span>
+                  </div>
+                  <h3><a href={'/blog/' + activeBlogArticle.slug + '/'}>{activeBlogArticle.title}</a></h3>
+                  <p className="nc-featured-blog-summary">{activeBlogArticle.summary}</p>
+                  <div className="nc-featured-blog-footer">
+                    <div className="nc-featured-blog-date"><CalendarDays size={15} aria-hidden="true" />
+                      <time dateTime={activeBlogArticle.publishedAt || undefined}>{formatBlogPublishedDate(activeBlogArticle.publishedAt) || 'Recently published'}</time>
+                    </div>
+                    <a className="nc-featured-blog-read" href={'/blog/' + activeBlogArticle.slug + '/'}>READ ARTICLE <ArrowRight size={17} aria-hidden="true" /></a>
+                  </div>
                 </div>
-              </a>
-              <div className="nc-blog-body">
-                <div className="nc-blog-meta"><span>{article.category || 'Student guide'}</span><span className="nc-blog-meta-dot" aria-hidden="true" /></div>
-                <h3><a href={'/blog/' + article.slug + '/'}>{article.title}</a></h3>
-                <p>{article.summary}</p>
-                <a href={'/blog/' + article.slug + '/'} className="nc-read-article">Read article <ArrowRight size={16} aria-hidden="true" /></a>
-              </div>
-            </article>
-          ))}
+              </article>
+              <div className="nc-featured-blog-controls" aria-label="Featured article navigation">
+                <div className="nc-featured-blog-dots" role="group" aria-label="Choose a featured article">
+                  {publishedArticles.map((article, index) => (
+                    <button key={article.slug} type="button" className={'nc-featured-blog-dot' + (index === activeBlogIndex ? ' is-active' : '')}
+                      onClick={() => setActiveBlogIndex(index)} aria-label={'Show article ' + (index + 1) + ': ' + article.title}
+                      aria-current={index === activeBlogIndex ? 'true' : undefined} />
+                  ))}
+                </div>
+                <div className="nc-featured-blog-arrows">
+                  <button type="button" onClick={() => changeFeaturedBlog(-1)} aria-label="Previous featured article"><ArrowLeft size={18} aria-hidden="true" /></button>
+                  <button type="button" onClick={() => changeFeaturedBlog(1)} aria-label="Next featured article"><ArrowRight size={18} aria-hidden="true" /></button>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="nc-laptop-base" aria-hidden="true">
-            <span className="nc-laptop-trackpad" />
-          </div>
+          ) : (
+            <div className="nc-featured-blog-empty">No published articles are available yet. <a href="/blog/">Visit all articles <ArrowRight size={15} /></a></div>
+          )}
         </div>
       </section>
 
@@ -581,56 +604,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
         <p className="nc-featured-scholarship-note"><VerifiedIcon size={15} aria-hidden="true" /> Dates and eligibility can change. Confirm details on the scholarship provider’s official portal before applying.</p>
       </section>
 
-      <section id="nc-latest-blog-after-scholarship" className="nc-latest-blog-section nc-page-width" aria-labelledby="nc-latest-blog-title">
-        <div className="nc-latest-blog-heading">
-          <div className="nc-latest-blog-heading-copy">
-            <span className="nc-section-kicker">LATEST FROM THE BLOG</span>
-            <h2 id="nc-latest-blog-title">Fresh guides for your <span>next step.</span></h2>
-            <p>Practical reads on AI tools, college admissions, programming and student life — written to help you make informed decisions.</p>
-          </div>
-          <a className="nc-latest-blog-view-all" href="/blog/" aria-label="View all Naa College blogs">
-            View all blogs <ArrowRight size={17} aria-hidden="true" />
-          </a>
-        </div>
-
-        {latestBlogArticle ? (
-          <article className="nc-latest-blog-card">
-            <a
-              className="nc-latest-blog-visual"
-              href={'/blog/' + latestBlogArticle.slug + '/'}
-              aria-label={'Read ' + latestBlogArticle.title}
-            >
-{latestBlogArticle.coverImage ? (
-                <img className="nc-latest-blog-cover" src={latestBlogArticle.coverImage} alt="" loading="lazy" />
-              ) : (
-                <>
-                  <span className="nc-latest-blog-visual-orbit nc-latest-blog-visual-orbit-one" aria-hidden="true" />
-                  <span className="nc-latest-blog-visual-orbit nc-latest-blog-visual-orbit-two" aria-hidden="true" />
-                  <span className="nc-latest-blog-book-icon" aria-hidden="true"><BookOpen size={42} strokeWidth={1.5} /></span>
-                  <span className="nc-latest-blog-visual-label"><Sparkles size={13} aria-hidden="true" /> STUDENT KNOWLEDGE HUB</span>
-                </>
-              )}
-            </a>
-            <div className="nc-latest-blog-content">
-              <div className="nc-latest-blog-meta">
-                <span>{latestBlogArticle.category || 'Student guide'}</span>
-                <span className="nc-latest-blog-meta-dot" aria-hidden="true" />
-                <span>{latestBlogArticle.readingTimeMinutes || Math.max(2, Math.ceil(String(latestBlogArticle.content || '').split(/\s+/).filter(Boolean).length / 220))} min read</span>
-              </div>
-              <h3><a href={'/blog/' + latestBlogArticle.slug + '/'}>{latestBlogArticle.title}</a></h3>
-              <p>{latestBlogArticle.summary}</p>
-              <a className="nc-latest-blog-read" href={'/blog/' + latestBlogArticle.slug + '/'}>
-                Read the latest article <ArrowRight size={17} aria-hidden="true" />
-              </a>
-            </div>
-          </article>
-        ) : (
-          <div className="nc-latest-blog-empty">
-            New student guides are being prepared. Visit the blog to explore published articles.
-            <a href="/blog/">View all blogs <ArrowRight size={16} aria-hidden="true" /></a>
-          </div>
-        )}
-      </section>
+      
 
       <section className="nc-naacox-section" aria-labelledby="nc-naacox-title">
         <div className="nc-page-width">
