@@ -24,6 +24,17 @@ const structuredSpecs = [
   { path: 'src/data/blog-4-github-basics.json', slug: 'github-basics-for-beginners-complete-guide' }
 ];
 
+const markdownSpecs = [
+  {
+    path: 'src/data/VITEEE_2027_Complete_Exam_Details.md',
+    slug: 'viteee-2027-complete-exam-details',
+    category: 'Engineering Entrance Exams',
+    tags: ['VITEEE 2027', 'VITEEE application', 'B.Tech admissions', 'engineering entrance exam', 'VIT campuses'],
+    coverImage: '/Scholorship_images/VITEEE%202027%20Exam%20Update.webp',
+    publishedAt: '2026-10-30'
+  }
+];
+
 function readJson(relativePath) {
   const filePath = path.join(root, relativePath);
   if (!fs.existsSync(filePath)) throw new Error('[Blog integration] Missing source file: ' + relativePath);
@@ -210,6 +221,100 @@ function normalizeStructured(raw) {
   };
 }
 
+
+function pandocSimpleTablesToPipe(content) {
+  const lines = String(content || '').split(/\\r?\\n/);
+  const output = [];
+  for (let i = 0; i < lines.length; i += 1) {
+    const separator = lines[i];
+    const groups = [...separator.matchAll(/-{3,}/g)];
+    if (groups.length < 2 || !/^\\s*-{3,}(?:\\s+-{3,})+\\s*$/.test(separator)) {
+      output.push(lines[i]);
+      continue;
+    }
+
+    const starts = groups.map((group) => group.index ?? 0);
+    const headerLine = lines[i - 1] || '';
+    if (output.length) output.pop();
+    if (output.length && /^\\s*-{3,}\\s*$/.test(output[output.length - 1])) output.pop();
+
+    const cellsFor = (line) => starts.map((start, index) => {
+      const nextStart = starts[index + 1];
+      return line.slice(index === 0 ? 0 : start, nextStart === undefined ? undefined : nextStart).trim();
+    });
+    const headers = cellsFor(headerLine);
+    const rows = [];
+    let cursor = i + 1;
+    while (cursor < lines.length) {
+      const line = lines[cursor];
+      if (/^\\s*-{3,}\\s*$/.test(line)) { cursor += 1; break; }
+      if (!line.trim()) { cursor += 1; continue; }
+      if (!/^\\s{2,}\\S/.test(line) || /^\\s*#{1,6}\\s/.test(line)) break;
+
+      const cells = cellsFor(line);
+      if (!cells[0] && rows.length && cells.slice(1).some(Boolean)) {
+        const continuation = cells.slice(1).filter(Boolean).join(' ');
+        const last = rows[rows.length - 1];
+        last[last.length - 1] = [last[last.length - 1], continuation].filter(Boolean).join(' ');
+      } else {
+        rows.push(cells);
+      }
+      cursor += 1;
+    }
+
+    if (headers.length > 1 && rows.length) {
+      const cleanCell = (value) => String(value || '').replace(/\\s+/g, ' ').replace(/\\|/g, '\\\\|').trim();
+      output.push('| ' + headers.map(cleanCell).join(' | ') + ' |');
+      output.push('| ' + headers.map(() => '---').join(' | ') + ' |');
+      for (const row of rows) {
+        output.push('| ' + headers.map((_, index) => cleanCell(row[index] || '')).join(' | ') + ' |');
+      }
+    } else {
+      output.push(headerLine, separator, ...lines.slice(i + 1, cursor));
+    }
+    i = cursor - 1;
+  }
+  return output.join('\\n');
+}
+
+function normalizeMarkdownArticle(spec) {
+  const filePath = path.join(root, spec.path);
+  if (!fs.existsSync(filePath)) throw new Error('[Blog integration] Missing Markdown source: ' + spec.path);
+  const source = fs.readFileSync(filePath, 'utf8').replace(/^\\uFEFF/, '');
+  const titleMatch = source.match(/^#\\s+(.+)$/m);
+  if (!titleMatch) throw new Error('[Blog integration] Markdown source is missing its H1 title: ' + spec.path);
+  let content = source.replace(/^#\\s+.+\\r?\\n+/, '');
+  content = pandocSimpleTablesToPipe(content)
+    .replace(/\\\\\\[/g, '[')
+    .replace(/\\\\\\]/g, ']')
+    .replace(/(\\b\\d{1,2})\\s+--\\s+(\\d{1,2}\\b)/g, '$1 – $2')
+    .replace(/[ \\t]+\\n/g, '\\n')
+    .replace(/\\n{3,}/g, '\\n\\n')
+    .trim();
+  const firstParagraph = content.split(/\\n\\s*\\n/).find((block) => block.trim() && !block.trim().startsWith('#')) || '';
+  const summary = firstParagraph.replace(/\\s+/g, ' ').trim().split(/(?<=[.!?])\\s+/)[0];
+  const wordCount = content.split(/\\s+/).filter(Boolean).length;
+  return {
+    slug: spec.slug,
+    title: titleMatch[1].trim(),
+    metaTitle: 'VITEEE 2027: Exam Details, Dates & Eligibility | Naa College',
+    metaDescription: summary,
+    category: spec.category,
+    tags: spec.tags,
+    status: 'published',
+    publishedAt: spec.publishedAt,
+    updatedAt: spec.publishedAt,
+    featured: false,
+    author: 'TEAM NAA COLLEGE',
+    readingTimeMinutes: Math.max(2, Math.ceil(wordCount / 220)),
+    summary,
+    coverImage: spec.coverImage,
+    content,
+    sources: [],
+    toolLinks: []
+  };
+}
+
 const existing = readJson('src/data/blogArticles.json');
 if (!Array.isArray(existing)) throw new Error('[Blog integration] Existing blog data must be an array.');
 const alternateCse = readJson(alternateCsePath);
@@ -250,7 +355,11 @@ const structuredArticles = structuredSpecs.map(spec => {
   }
   return registerArticle(normalizeStructured(raw), spec.path);
 });
-const articles = [...legacyArticles, ...structuredArticles];
+const markdownArticles = markdownSpecs.map(spec => {
+  const article = normalizeMarkdownArticle(spec);
+  return registerArticle(article, spec.path);
+});
+const articles = [...legacyArticles, ...structuredArticles, ...markdownArticles];
 fs.writeFileSync(outputPath, JSON.stringify(articles, null, 2) + '\n', 'utf8');
 console.log('[Blog integration] Generated ' + articles.length + ' articles from structured src/data JSON.');
 console.log('[Blog integration] Preserved the four new English-only articles and their SEO metadata without translating them.');
