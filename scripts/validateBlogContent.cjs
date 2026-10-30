@@ -28,7 +28,7 @@ const sourcePaths = [
 for (const sourcePath of sourcePaths) readJson(sourcePath);
 
 if (!Array.isArray(baseline) || baseline.length === 0) throw new Error('[Blog] Existing article data must be a non-empty array.');
-if (!Array.isArray(editorial) || editorial.length !== 11) {
+if (!Array.isArray(editorial) || editorial.length !== 12) {
   throw new Error('[Blog] Expected eleven normalized editorial articles; found ' + (editorial?.length ?? 'invalid data'));
 }
 
@@ -52,6 +52,15 @@ for (const expected of requiredEnglishBlogs) {
   }
   if ((article.sources || []).length !== 0) throw new Error('[Blog] Third-party source lists must not be rendered: ' + expected.slug);
 }
+const viteeeArticle = editorial.find((item) => item.slug === 'viteee-2027-complete-exam-details');
+if (!viteeeArticle || viteeeArticle.status !== 'published' ||
+    viteeeArticle.coverImage !== '/Scholorship_images/VITEEE%202027%20Exam%20Update.webp' ||
+    !viteeeArticle.metaTitle || !viteeeArticle.metaDescription) {
+  throw new Error('[Blog] VITEEE 2027 article or its cover-image metadata is missing.');
+}
+const viteeeImagePath = path.resolve(root, 'public', viteeeArticle.coverImage.replace(/^\\//, '').replace(/%20/g, ' '));
+if (!fs.existsSync(viteeeImagePath)) throw new Error('[Blog] VITEEE cover image is missing: ' + viteeeImagePath);
+
 const slugs = new Set();
 const errors = [];
 for (const article of articles) {
