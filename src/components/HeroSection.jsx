@@ -507,7 +507,8 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
                 <div className={'nc-blog-art nc-blog-art-' + (index + 1)} aria-hidden="true">
                   {article.coverImage ? (
                     <img className="nc-blog-cover-image" src={article.coverImage} alt="" loading="lazy" />
-                  ) : (<>
+                  ) : index === 0 ? (
+                    <>
                       <span className="nc-art-index">AP / 01</span>
                       <Landmark className="nc-blog-main-icon" size={47} strokeWidth={1.4} />
                       <div className="nc-rank-ticket"><span>RANK</span><i /><i /><i /></div>
@@ -524,7 +525,8 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
                       <span className="nc-art-index">GUIDE / 03</span>
                       <div className="nc-result-sheet"><ClipboardCheck size={35} /><span /><span /><span /></div>
                       <BookOpen className="nc-blog-main-icon" size={32} strokeWidth={1.5} />
-                    </>)}
+                    </>
+                  )}
                 </div>
               </a>
               <div className="nc-blog-body">
