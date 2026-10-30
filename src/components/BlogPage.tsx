@@ -6,7 +6,7 @@ import editorialArticlesData from '../data/editorialBlogArticles.generated.json'
 type BlogArticle = {
   slug: string; title: string; category: string; tags: string[]; status: 'published' | 'draft';
   publishedAt: string; updatedAt: string; featured: boolean; summary: string; content: string;
-  metaTitle?: string; metaDescription?: string; author?: string; readingTimeMinutes?: number | null;
+  metaTitle?: string; metaDescription?: string; author?: string; readingTimeMinutes?: number | null; coverImage?: string;
   toolLinks: { label: string; href: string }[];
 };
 const allArticles = [...(articlesData as BlogArticle[]), ...(editorialArticlesData as BlogArticle[])]
@@ -99,6 +99,7 @@ function ArticleBody({ content }: { content: string }) {
 }
 function ArticleCard({ article }: { article: BlogArticle }) {
   return <article className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-cyan-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/80 sm:p-6">
+    {article.coverImage && <img src={article.coverImage} alt="" loading="lazy" className="mb-4 aspect-[16/9] w-full rounded-xl object-cover" />}
     <div className="flex flex-wrap items-center gap-2 text-xs font-semibold"><span className="rounded-full bg-cyan-50 px-2.5 py-1 text-cyan-800 dark:bg-cyan-950/50 dark:text-cyan-200">{article.category}</span><span className="inline-flex items-center gap-1 text-slate-500"><Clock3 className="h-3.5 w-3.5" />{readTime(article)} min read</span></div>
     <h2 className="mt-4 text-lg font-semibold leading-snug tracking-tight text-slate-950 dark:text-white">{article.title}</h2>
     <p className="mt-3 flex-1 text-sm leading-6 text-slate-600 dark:text-slate-300">{article.summary}</p>
@@ -148,6 +149,13 @@ export const BlogPage: React.FC = () => {
     setMeta('meta[property="og:type"]', article ? 'article' : 'website');
     setMeta('meta[property="og:title"]', title); setMeta('meta[property="og:description"]', description); setMeta('meta[property="og:url"]', canonical);
     setMeta('meta[name="twitter:title"]', title); setMeta('meta[name="twitter:description"]', description); setMeta('meta[name="twitter:url"]', canonical);
+    if (article?.coverImage) {
+      setMeta('meta[property="og:image"]', SITE + article.coverImage);
+      setMeta('meta[name="twitter:image"]', SITE + article.coverImage);
+    } else {
+      document.head.querySelector('meta[property="og:image"]')?.remove();
+      document.head.querySelector('meta[name="twitter:image"]')?.remove();
+    }
     let canonicalElement = document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
     if (!canonicalElement) { canonicalElement = document.createElement('link'); canonicalElement.rel = 'canonical'; document.head.appendChild(canonicalElement); }
     canonicalElement.href = canonical;
@@ -156,6 +164,7 @@ export const BlogPage: React.FC = () => {
     schema.textContent = JSON.stringify(article ? {
       '@context': 'https://schema.org', '@type': 'BlogPosting', headline: article.title, description: article.metaDescription || article.summary,
       datePublished: article.publishedAt, dateModified: article.updatedAt, mainEntityOfPage: canonical,
+      image: article.coverImage ? SITE + article.coverImage : undefined,
       author: { '@type': 'Organization', name: article.author || 'Naa College Editorial Desk', url: SITE + '/' },
       publisher: { '@type': 'Organization', name: 'Naa College Editorial Desk', url: SITE + '/' }
     } : { '@context': 'https://schema.org', '@type': 'Blog', name: 'Naa College Blog', url: SITE + '/blog/' });
@@ -169,7 +178,7 @@ export const BlogPage: React.FC = () => {
 
   if (article) return <article className="mx-auto max-w-6xl">
     <a href="/blog/" className="inline-flex items-center gap-2 text-sm font-bold text-cyan-800 dark:text-cyan-300"><ArrowLeft className="h-4 w-4" />All articles</a>
-    <header className="mt-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-10"><p className="text-xs font-bold uppercase tracking-[0.16em] text-cyan-700 dark:text-cyan-300">{article.category}</p><h1 className="mt-3 max-w-4xl text-3xl font-semibold leading-tight tracking-tight text-slate-950 dark:text-white sm:text-4xl">{article.title}</h1><p className="mt-5 max-w-3xl text-base leading-7 text-slate-600 dark:text-slate-300">{article.summary}</p><div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs text-slate-500 dark:text-slate-400"><span className="inline-flex items-center gap-1.5"><CalendarDays className="h-4 w-4" />Updated {article.updatedAt}</span><span className="inline-flex items-center gap-1.5"><Clock3 className="h-4 w-4" />{readTime(article)} min read</span><span>By {article.author || 'Naa College Editorial Desk'}</span></div></header>
+    <header className="mt-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-10"><p className="text-xs font-bold uppercase tracking-[0.16em] text-cyan-700 dark:text-cyan-300">{article.category}</p><h1 className="mt-3 max-w-4xl text-3xl font-semibold leading-tight tracking-tight text-slate-950 dark:text-white sm:text-4xl">{article.title}</h1><p className="mt-5 max-w-3xl text-base leading-7 text-slate-600 dark:text-slate-300">{article.summary}</p>{article.coverImage && <img src={article.coverImage} alt={article.title + ' cover'} loading="eager" className="mt-6 aspect-[16/9] w-full max-h-[440px] rounded-2xl object-cover" />}<div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs text-slate-500 dark:text-slate-400"><span className="inline-flex items-center gap-1.5"><CalendarDays className="h-4 w-4" />Updated {article.updatedAt}</span><span className="inline-flex items-center gap-1.5"><Clock3 className="h-4 w-4" />{readTime(article)} min read</span><span>By {article.author || 'Naa College Editorial Desk'}</span></div></header>
     <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_250px]"><div className="min-w-0 rounded-3xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900 sm:p-9"><ArticleBody content={article.content} />
       {article.toolLinks.length > 0 && <section className="mt-8 rounded-2xl border border-cyan-200 bg-cyan-50/70 p-5 dark:border-cyan-900 dark:bg-cyan-950/30"><h2 className="font-extrabold text-slate-950 dark:text-white">Open a related Naa College tool</h2><div className="mt-3 flex flex-wrap gap-2">{article.toolLinks.map((link) => <a key={link.href} href={link.href} className="inline-flex items-center gap-2 rounded-xl bg-cyan-800 px-3 py-2 text-sm font-bold text-white">{link.label}<ArrowRight className="h-4 w-4" /></a>)}</div></section>}
       <p className="mt-8 border-t border-slate-200 pt-5 text-xs leading-6 text-slate-500 dark:border-slate-800 dark:text-slate-400">Educational information only. Time-sensitive details should be confirmed with the relevant official authority or product documentation.</p>
