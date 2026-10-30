@@ -505,8 +505,9 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
             <article className={'nc-blog-card nc-blog-card-' + (index + 1)} key={article.slug}>
               <a href={'/blog/' + article.slug + '/'} className="nc-blog-art-link" aria-label={'Read ' + article.title}>
                 <div className={'nc-blog-art nc-blog-art-' + (index + 1)} aria-hidden="true">
-                  {index === 0 ? (
-                    <>
+                  {article.coverImage ? (
+                    <img className="nc-blog-cover-image" src={article.coverImage} alt="" loading="lazy" />
+                  ) : (<>
                       <span className="nc-art-index">AP / 01</span>
                       <Landmark className="nc-blog-main-icon" size={47} strokeWidth={1.4} />
                       <div className="nc-rank-ticket"><span>RANK</span><i /><i /><i /></div>
@@ -523,8 +524,7 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
                       <span className="nc-art-index">GUIDE / 03</span>
                       <div className="nc-result-sheet"><ClipboardCheck size={35} /><span /><span /><span /></div>
                       <BookOpen className="nc-blog-main-icon" size={32} strokeWidth={1.5} />
-                    </>
-                  )}
+                    </>)}
                 </div>
               </a>
               <div className="nc-blog-body">
@@ -598,10 +598,16 @@ export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
               href={'/blog/' + latestBlogArticle.slug + '/'}
               aria-label={'Read ' + latestBlogArticle.title}
             >
-              <span className="nc-latest-blog-visual-orbit nc-latest-blog-visual-orbit-one" aria-hidden="true" />
-              <span className="nc-latest-blog-visual-orbit nc-latest-blog-visual-orbit-two" aria-hidden="true" />
-              <span className="nc-latest-blog-book-icon" aria-hidden="true"><BookOpen size={42} strokeWidth={1.5} /></span>
-              <span className="nc-latest-blog-visual-label"><Sparkles size={13} aria-hidden="true" /> STUDENT KNOWLEDGE HUB</span>
+{latestBlogArticle.coverImage ? (
+                <img className="nc-latest-blog-cover" src={latestBlogArticle.coverImage} alt="" loading="lazy" />
+              ) : (
+                <>
+                  <span className="nc-latest-blog-visual-orbit nc-latest-blog-visual-orbit-one" aria-hidden="true" />
+                  <span className="nc-latest-blog-visual-orbit nc-latest-blog-visual-orbit-two" aria-hidden="true" />
+                  <span className="nc-latest-blog-book-icon" aria-hidden="true"><BookOpen size={42} strokeWidth={1.5} /></span>
+                  <span className="nc-latest-blog-visual-label"><Sparkles size={13} aria-hidden="true" /> STUDENT KNOWLEDGE HUB</span>
+                </>
+              )}
             </a>
             <div className="nc-latest-blog-content">
               <div className="nc-latest-blog-meta">
