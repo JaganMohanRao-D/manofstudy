@@ -29,7 +29,7 @@ for (const sourcePath of sourcePaths) readJson(sourcePath);
 
 if (!Array.isArray(baseline) || baseline.length === 0) throw new Error('[Blog] Existing article data must be a non-empty array.');
 if (!Array.isArray(editorial) || editorial.length !== 12) {
-  throw new Error('[Blog] Expected eleven normalized editorial articles; found ' + (editorial?.length ?? 'invalid data'));
+  throw new Error('[Blog] Expected twelve normalized editorial articles; found ' + (editorial?.length ?? 'invalid data'));
 }
 
 const articles = [...baseline, ...editorial];
@@ -96,4 +96,4 @@ if (errors.length) {
 }
 console.log('[Blog] Content validation passed: ' + articles.length + ' records (' +
   articles.filter(article => article.status === 'published').length + ' published, ' +
-  editorial.length + ' normalized from structured src/data JSON).');
+  editorial.length + ' generated from structured JSON and Markdown src/data sources).');
