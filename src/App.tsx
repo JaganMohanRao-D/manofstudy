@@ -937,8 +937,8 @@ export default function App() {
       'pdf-tools': { workspace: 'utilities', subTab: 'pdf-tools' },
       'video-to-audio': { workspace: 'utilities', subTab: 'video-audio' },
       'mock-tests': { workspace: 'mock-tests' },
-      'mock-tests-ap': { workspace: 'eapcet-cbt' },
-      'mock-tests-tg': { workspace: 'eapcet-cbt' },
+      'mock-tests-ap': { workspace: 'eapcet-cbt', subTab: 'ap-full' },
+      'mock-tests-tg': { workspace: 'eapcet-cbt', subTab: 'tg-full' },
       scholarships: { workspace: 'scholarships' },
     };
     const mapped = routeMap[route];
