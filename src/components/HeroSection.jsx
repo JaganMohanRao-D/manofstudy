@@ -46,8 +46,7 @@ import {
 
 } from 'lucide-react';
 
-import { ScrollReveal, StaggerGrid, VerifiedCounter } from
-'./motion/ScrollReveal';
+import { ScrollReveal, StaggerGrid } from './motion/ScrollReveal';
 
 import blogArticlesData from '../data/blogArticles.json';
 import editorialArticlesData from '../data/editorialBlogArticles.generated.json';
@@ -280,7 +279,7 @@ export default function HeroSection({
 
  const [scholarships, setScholarships] = useState([]);
 
- // Load real verified scholarships from /indian_scholarships.json
+ // Load scholarship listings from the existing /indian_scholarships.json dataset
 
  useEffect(() => {
 
@@ -690,8 +689,7 @@ exams in one
 
           <p className="text-xs text-[#5E6D7D] mt-1">
 
-             195+ AP colleges, 2025 & 2026 allotment datasets, and web options
-generator.
+             Explore available 2025–2026 historical allotment records and the web options generator.
 
           </p>
 
@@ -936,7 +934,7 @@ Access</span>
 
             <span className="text-xs font-extrabold uppercase tracking-widest text-[#2E7658]">
 
-             VERIFIED ADMISSION DATASETS
+             HISTORICAL ADMISSION DATA
 
             </span>
 
@@ -1428,7 +1426,7 @@ degree.
 
            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#2E7658]/40 text-[#9AE6B4] border border-[#2E7658] shrink-0">
 
-            ✓ Verified
+            Listed information
 
            </span>
 
