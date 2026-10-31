@@ -1,13 +1,8 @@
 import React from 'react';
 import { ArrowUpRight, HeartHandshake, MapPin, ShieldCheck } from 'lucide-react';
 
-interface FooterProps {
-  onNavigate?: (route: string) => void;
-  onOpenSupport?: () => void;
-}
-
-export default function Footer({ onNavigate, onOpenSupport }: FooterProps) {
-  const handleNav = (route: string) => onNavigate?.(route);
+export default function Footer({ onNavigate, onOpenSupport }) {
+  const handleNav = (route) => onNavigate?.(route);
 
   return (
     <footer className="w-full overflow-hidden border-t border-white/10 bg-[#102B3F] text-white">
