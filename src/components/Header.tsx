@@ -722,7 +722,7 @@ const handleRouteSelect = (route: string) => {
 
       ref={headerRef}
 
-      className="sticky top-0 z-50 w-full bg-white shadow-sm border-b border- [#E2E8ED]"
+      className="sticky top-0 z-50 w-full bg-white shadow-sm border-b border-[#E2E8ED]"
 
   >
 
@@ -757,7 +757,7 @@ Index) */}
 
       <span className="flex items-center gap-2.5 truncate">
 
-         <Search className="w-4 h-4 text-[#5E6D7D] group-hover:text- [#C29316] transition-colors" />
+         <Search className="w-4 h-4 text-[#5E6D7D] group-hover:text-[#C29316] transition-colors" />
 <PARSED TEXT FOR PAGE: 31 / 97>
          <span className="truncate">
 
@@ -775,7 +775,7 @@ Index) */}
 
          </kbd>
 
-         <span className="w-8 h-8 rounded-full bg-[#102B3F] group-hover:bg- [#C29316] text-white flex items-center justify-center transition-colors">
+         <span className="w-8 h-8 rounded-full bg-[#102B3F] group-hover:bg-[#C29316] text-white flex items-center justify-center transition-colors">
 
           <Search className="w-3.5 h-3.5" />
 
@@ -817,7 +817,7 @@ Index) */}
 
       onClick={onOpenSupport}
 
-      className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-semibold text-[#172B3B] bg-[#F5F8F5] hover:bg- [#FDF8EB] hover:border-[#C29316] border border-[#E2E8ED] transition-all"
+      className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-semibold text-[#172B3B] bg-[#F5F8F5] hover:bg-[#FDF8EB] hover:border-[#C29316] border border-[#E2E8ED] transition-all"
 
      >
 
@@ -1003,11 +1003,11 @@ category.id))
 
                       onClick={() => handleRouteSelect(item.route)}
 
-                      className="w-full text-left p-2.5 rounded-xl hover:bg- [#F5F8F5] transition-colors flex items-start gap-3 group"
+                      className="w-full text-left p-2.5 rounded-xl hover:bg-[#F5F8F5] transition-colors flex items-start gap-3 group"
 
                      >
 
-                      <div className="w-9 h-9 rounded-lg bg-[#F5F8F5] group-hover:bg-[#FDF8EB] border border-[#E2E8ED] group-hover:border- [#EED690] flex items-center justify-center shrink-0 mt-0.5 transition-colors">
+                      <div className="w-9 h-9 rounded-lg bg-[#F5F8F5] group-hover:bg-[#FDF8EB] border border-[#E2E8ED] group-hover:border-[#EED690] flex items-center justify-center shrink-0 mt-0.5 transition-colors">
 
                          <ItemIcon className="w-4 h-4 text-[#102B3F] group- hover:text-[#C29316]" />
 
@@ -1166,7 +1166,7 @@ category.id))
 
            {isExpanded && (
 
-            <div className="px-4 pb-3.5 pt-1 bg-white border-t border- [#E2E8ED] space-y-3">
+            <div className="px-4 pb-3.5 pt-1 bg-white border-t border-[#E2E8ED] space-y-3">
 
                 {category.columns.map((col) => (
 
@@ -1188,7 +1188,7 @@ category.id))
 
                        onClick={() => handleRouteSelect(item.route)}
 
-                       className="w-full py-2 px-2.5 rounded-lg hover:bg- [#F5F8F5] text-left flex items-center justify-between gap-2"
+                       className="w-full py-2 px-2.5 rounded-lg hover:bg-[#F5F8F5] text-left flex items-center justify-between gap-2"
 
                       >
 
@@ -1252,7 +1252,7 @@ category.id))
 
             onClick={() => handleRouteSelect('ap-eapcet-predictor')}
 
-            className="w-full py-3 rounded-xl font-bold text-xs text-white bg- [#102B3F] flex items-center justify-center gap-1.5"
+            className="w-full py-3 rounded-xl font-bold text-xs text-white bg-[#102B3F] flex items-center justify-center gap-1.5"
 
            >
 
