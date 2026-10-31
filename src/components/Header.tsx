@@ -116,7 +116,7 @@ const NAV_CATEGORIES: NavCategory[] = [
 
                   label: 'AP EAPCET College Predictor',
 
-                  description: 'Predict colleges using official 2025 & 2026 phase allotment cutoffs',
+                  description: 'Explore historical 2025–2026 AP EAPCET allotment patterns and cutoff ranks',
 
                   route: 'ap-eapcet-predictor',
 
