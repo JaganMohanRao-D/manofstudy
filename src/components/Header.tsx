@@ -1111,7 +1111,7 @@ category.id))
 
       transition={{ duration: 0.24, ease: 'easeOut' }}
 
-      className="lg:hidden bg-white border-t border-[#E2E8ED] overflow-y- auto max-h-[calc(100vh-4rem)]"
+      className="lg:hidden bg-white border-t border-[#E2E8ED] overflow-y-auto max-h-[calc(100vh-4rem)]"
 
      >
 
