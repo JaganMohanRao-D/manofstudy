@@ -1,673 +1,1949 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+
+import { motion } from 'motion/react';
+
 import {
-  ArrowLeft,
-  ArrowRight,
-  ArrowUpRight,
-  Bell,
-  BookOpen,
-  Building2,
-  CheckCircle2,
-  ClipboardCheck,
-  GraduationCap,
-  Landmark,
-  MapPin,
-  Search,
-  Sparkles,
-  Wrench,
-  Users,
-  BookMarked,
-  LibraryBig,
-  FileText,
-  Image as ImageIcon,
-  Target,
-  Clock3,
-  ShieldCheck,
-  Zap,
-  CalendarDays,
-  Wallet,
-  CheckCircle2 as VerifiedIcon,
+
+ Search,
+
+ ArrowRight,
+
+ ArrowUpRight,
+
+ Compass,
+
+ Building2,
+
+ Award,
+
+ CheckSquare,
+
+ FileSpreadsheet,
+
+ ShieldCheck,
+
+ Calculator,
+
+ FileText,
+
+ Mic,
+
+ BookOpen,
+
+ Sparkles,
+
+ Clock,
+
+ BarChart3,
+
+ CheckCircle2,
+
+ Bot,
+
+ ChevronRight,
+
+ GraduationCap,
+
 } from 'lucide-react';
-import './kineticMOS.css';
-import './NaaHomepageRedesign.css';
-import './NaaDesignFoundation.css';
-import { NaaCollegeAssistant } from './NaaCollegeAssistant';
-import { WORKSPACES, FLAGSHIP_FEATURES } from './FeaturesHub';
-import articlesData from '../data/blogArticles.json';
+
+import { ScrollReveal, StaggerGrid, VerifiedCounter } from
+'./motion/ScrollReveal';
+
+import blogArticlesData from '../data/blogArticles.json';
 import editorialArticlesData from '../data/editorialBlogArticles.generated.json';
+import './NaaDesignFoundation.css';
 
-const publishedArticles = [...articlesData, ...editorialArticlesData]
-  .filter((article) => article.status === 'published')
-  .slice()
-  .sort((a, b) =>
-    String(b.publishedAt || '').localeCompare(String(a.publishedAt || '')) ||
-    String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')) ||
-    a.title.localeCompare(b.title)
-  )
-  .slice(0, 5);
+const QUICK_SHORTCUTS = [
 
-const latestBlogArticle = publishedArticles[0] || null;
+ {
 
-const scholarshipDeadlineDate = (value) => {
-  const text = String(value || '');
-  const iso = text.match(/\b(20\d{2})-(\d{1,2})-(\d{1,2})\b/);
-  if (iso) return new Date(Number(iso[1]), Number(iso[2]) - 1, Number(iso[3]));
-  const long = text.match(/\b(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(20\d{2})\b/i);
-  if (!long) return null;
-  const months = ['january','february','march','april','may','june','july','august','september','october','november','december'];
-  return new Date(Number(long[3]), months.indexOf(long[2].toLowerCase()), Number(long[1]));
-};
-const getFeaturedScholarships = (items) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const getPriority = (item) => {
-    const status = String(item.status || '').toLowerCase();
-    const deadline = item._deadlineDate;
-    const explicitlyClosed = /closed|expired|ended/.test(status);
-    const uncertain = /not confirmed|not verified|unknown/.test(status);
-    const currentlyOpen = deadline && deadline >= today &&
-      /open|live|registration|renewal/.test(status) &&
-      !explicitlyClosed && !uncertain;
-    if (currentlyOpen) return 0;
-    if (!explicitlyClosed && !uncertain && (!deadline || deadline >= today)) return 1;
-    if (uncertain) return 2;
-    return 3;
-  };
-  return items
-    .filter((item) => item && item.title)
-    .map((item) => ({ ...item, _deadlineDate: scholarshipDeadlineDate(item.deadline) }))
-    .sort((a, b) => {
-      const priorityDifference = getPriority(a) - getPriority(b);
-      if (priorityDifference) return priorityDifference;
-      const aDate = a._deadlineDate ? a._deadlineDate.getTime() : Number.POSITIVE_INFINITY;
-      const bDate = b._deadlineDate ? b._deadlineDate.getTime() : Number.POSITIVE_INFINITY;
-      if (aDate !== bDate) return aDate - bDate;
-      return String(a.title).localeCompare(String(b.title));
-    });
-};
+     id: 'ap-predictor',
 
-const TICKER_ITEMS = [
-  { label: 'AP EAPCET College-Wise Allotments', detail: 'Explore available historical allotment records', workspace: 'ap-allotments' },
-  { label: 'EAPCET Web Options Generator', detail: 'Organise your college and branch preferences', workspace: 'ap-web-options' },
-  { label: 'AP College Predictor', detail: 'Explore rank matches using historical data', workspace: 'ap-predictor' },
-  { label: 'TG EAPCET name-wise allotments', detail: 'Search Telangana allotment records', workspace: 'tg-allotments' },
-  { label: 'Scholarships hub', detail: 'Find student funding information', workspace: 'scholarships' },
-  { label: 'Autonomous colleges directory', detail: 'Browse autonomy information', href: '/autonomous-colleges/' },
-  { label: 'Mock test series', detail: 'Open the available practice tests', workspace: 'mock-tests' },
+     title: 'AP EAPCET Predictor',
+
+     subtitle: '2025 & 2026 Cutoffs',
+
+     badge: 'AP',
+
+     route: 'ap-eapcet-predictor',
+
+     icon: Compass,
+
+ },
+
+ {
+
+     id: 'tg-predictor',
+
+    title: 'TG EAPCET Predictor',
+
+    subtitle: 'Rank & Branch Insights',
+
+    badge: 'TG',
+
+    route: 'tg-eapcet-predictor',
+
+    icon: Building2,
+
+},
+
+{
+
+    id: 'web-options',
+
+    title: 'Web Options Generator',
+
+    subtitle: 'Smart Counseling Lists',
+
+    badge: 'Tool',
+
+    route: 'web-options-generator',
+
+    icon: FileSpreadsheet,
+
+},
+
+{
+
+    id: 'autonomous',
+
+    title: 'Autonomous Colleges',
+
+    subtitle: 'NAAC & NBA Accredited',
+
+    badge: 'Directory',
+
+    route: 'autonomous-colleges',
+
+    icon: GraduationCap,
+
+},
+
+{
+
+    id: 'scholarships',
+
+    title: 'Scholarship Listings',
+
+    subtitle: 'Govt & Corporate Aid',
+
+     badge: 'Aid',
+
+     route: 'scholarships',
+
+     icon: Award,
+
+ },
+
+ {
+
+     id: 'mock-tests',
+
+     title: 'CBT Mock Tests',
+
+     subtitle: 'AP & TG Practice Hub',
+
+     badge: 'Live',
+
+     route: 'mock-tests',
+
+     icon: CheckSquare,
+
+ },
+
 ];
 
-export const HeroSection = ({ activeWorkspace = 'hub', onSelectWorkspace }) => {
-  const [query, setQuery] = useState('');
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [featuredScholarships, setFeaturedScholarships] = useState([]);
-  const [scholarshipsLoaded, setScholarshipsLoaded] = useState(false);
-  const [activeBlogIndex, setActiveBlogIndex] = useState(0);
-  const blogTouchStartX = useRef(null);
-  const activeBlogArticle = publishedArticles[activeBlogIndex] || null;
-  const changeFeaturedBlog = (direction) => {
-    setActiveBlogIndex((current) => (current + direction + publishedArticles.length) % publishedArticles.length);
-  };
-  const handleBlogKeyDown = (event) => {
-    if (event.key === 'ArrowLeft') {
-      event.preventDefault();
-      changeFeaturedBlog(-1);
-    } else if (event.key === 'ArrowRight') {
-      event.preventDefault();
-      changeFeaturedBlog(1);
-    }
-  };
-  const formatBlogPublishedDate = (value) => {
-    if (!value) return '';
-    const date = new Date(value + 'T00:00:00');
-    return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString('en-IN', {
-      day: '2-digit', month: 'short', year: 'numeric',
-    });
+const TICKER_ITEMS = [
+
+ { label: 'AP EAPCET 2026 Phase 1 Cutoff Ranks & Allotment Explorer', route:
+'ap-eapcet-predictor' },
+
+ { label: 'TG EAPCET College Predictor & Branch Closing Ranks', route: 'tg-eapcet-predictor' },
+
+ { label: 'National & Corporate Scholarship Listings for B.Tech Students',
+route: 'scholarships' },
+
+ { label: 'Full-Length AP & TG EAPCET Computer-Based Mock Tests', route:
+'mock-tests' },
+
+ { label: '4-Year CSE, AI/ML, Cyber Security & Mechanical Roadmaps', route:
+'engineering-roadmaps' },
+
+ { label: 'Attendance Defender & SGPA/CGPA Calculator Utilities', route:
+'attendance-defender' },
+
+];
+
+const STUDENT_UTILITY_TOOLS = [
+
+ {
+
+     id: 'attendance-defender',
+
+     category: 'ACADEMIC TRACKER',
+
+     title: 'Attendance Defender',
+
+     description:
+
+      'Calculate exact classes you can safely skip or must attend to maintain your 75% mandatory attendance threshold.',
+
+     specs: ['Instant 75% Buffer Check', 'Day-by-Day Planner'],
+
+     cta: 'Launch Attendance Tool',
+
+     route: 'attendance-defender',
+
+     icon: ShieldCheck,
+
+ },
+
+ {
+
+     id: 'gpa-calculator',
+
+     category: 'GRADE ANALYTICS',
+
+     title: 'SGPA & CGPA Calculator',
+
+     description:
+
+      'Accurately calculate semester and cumulative grade point averages tailored for JNTUK, JNTUH, JNTUA & autonomous regulations.',
+
+     specs: ['Credit-Weighted', 'Percentage Conversion'],
+
+     cta: 'Calculate GPA',
+
+     route: 'gpa-calculator',
+
+     icon: Calculator,
+
+ },
+
+ {
+
+     id: 'pdf-tools',
+
+     category: 'COUNSELLING UTILITY',
+
+     title: 'PDF Compress & Document Suite',
+
+     description:
+
+      'Compress income certificates, rank cards, and study memos down to portal size limits with browser-based processing where supported.',
+
+     specs: ['100KB–500KB Target', 'Browser-based where supported'],
+
+     cta: 'Open PDF Suite',
+
+     route: 'pdf-tools',
+
+     icon: FileText,
+
+ },
+
+ {
+
+     id: 'video-to-audio',
+
+     category: 'STUDY PRODUCTIVITY',
+
+     title: 'Video-to-Audio Converter',
+
+     description:
+
+      'Convert recorded engineering lectures and revision sessions into lightweight offline audio files right in your browser.',
+
+     specs: ['Fast Local Extraction', 'Local processing where supported'],
+
+     cta: 'Convert Lectures',
+
+     route: 'video-to-audio',
+
+     icon: Mic,
+
+ },
+
+];
+
+export default function HeroSection({
+
+ onNavigate,
+
+ onSelectArticle,
+
+ children,
+
+}) {
+
+ const [searchQuery, setSearchQuery] = useState('');
+
+ const [scholarships, setScholarships] = useState([]);
+
+ // Load real verified scholarships from /indian_scholarships.json
+
+ useEffect(() => {
+
+  let mounted = true;
+
+  fetch('/indian_scholarships.json')
+
+       .then((res) => (res.ok ? res.json() : []))
+
+       .then((data) => {
+
+        if (mounted && Array.isArray(data)) {
+
+            setScholarships(data.slice(0, 4));
+
+        }
+
+       })
+
+       .catch(() => {});
+
+  return () => {
+
+       mounted = false;
+
   };
 
-  useEffect(() => {
-    let active = true;
-    fetch('/indian_scholarships.json')
-      .then((response) => {
-        if (!response.ok) throw new Error('Scholarship data unavailable');
-        return response.json();
-      })
-      .then((items) => {
-        if (active && Array.isArray(items)) setFeaturedScholarships(getFeaturedScholarships(items));
-      })
-      .catch(() => { if (active) setFeaturedScholarships([]); })
-      .finally(() => { if (active) setScholarshipsLoaded(true); });
-    return () => { active = false; };
-  }, []);
+ }, []);
 
-  const shortcuts = [
-    { title: 'AP College Predictor', detail: 'Explore rank matches with available historical data', icon: Landmark, workspace: 'ap-predictor' },
-    { title: 'Telangana College Predictor', detail: 'Explore TG college and branch options', icon: GraduationCap, workspace: 'tg-predictor' },
-    { title: 'EAPCET Web Options Generator', detail: 'Build a preference draft from historical ranks', icon: ClipboardCheck, workspace: 'ap-web-options' },
-    { title: 'AP B.Tech Colleges', detail: 'Compare available branch-rank patterns', icon: LibraryBig, workspace: 'ap-top-colleges' },
-    { title: 'Scholarships', detail: 'Browse student funding resources', icon: BookMarked, workspace: 'scholarships' },
-    { title: 'Student Tools', detail: 'Attendance, GPA, PDF and image tools', icon: Wrench, workspace: 'utilities' },
+ // Load real published blog articles
+
+ const publishedBlogs = useMemo(() => {
+  const combined = [
+    ...(Array.isArray(blogArticlesData) ? blogArticlesData : []),
+    ...(Array.isArray(editorialArticlesData) ? editorialArticlesData : []),
+  ];
+  return combined
+    .filter((article) => article && article.status === 'published')
+    .slice()
+    .sort((a, b) =>
+      String(b.publishedAt || '').localeCompare(String(a.publishedAt || '')) ||
+      String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')) ||
+      String(a.title || '').localeCompare(String(b.title || ''))
+    )
+    .slice(0, 6);
+}, []);
+
+ // Search results filtering
+
+ const filteredSearchItems = useMemo(() => {
+
+  const q = searchQuery.trim().toLowerCase();
+
+  if (!q) return [];
+
+  const pool = [
+
+    ...QUICK_SHORTCUTS.map((s) => ({ title: s.title, category: s.badge, route:
+s.route })),
+
+    ...STUDENT_UTILITY_TOOLS.map((t) => ({ title: t.title, category: t.category,
+route: t.route })),
+
+    ...publishedBlogs.map((b) => ({
+
+       title: b.title,
+
+       category: b.category || 'Blog Guide',
+
+       route: `blog:${b.slug || b.id}`,
+
+    })),
+
   ];
 
-  const searchIndex = useMemo(() => {
-    const items = [
-      ...WORKSPACES.map((item) => ({
-        title: item.title.replace(/^🎯\s*/, ''),
-        detail: item.description || item.category || 'Student resource',
-        workspace: item.workspace,
-        keywords: item.category || '',
-      })),
-      ...FLAGSHIP_FEATURES.map((item) => ({
-        title: item.title,
-        detail: item.description || item.badge || 'Featured resource',
-        workspace: item.workspace,
-        keywords: item.badge || '',
-      })),
-      { title: 'Andhra Pradesh student tools', detail: 'AP EAPCET allotments, predictors and rank insights', target: 'regional-section-ap', keywords: 'andhra ap eapcet counselling' },
-      { title: 'Telangana student tools', detail: 'TG EAPCET allotments, predictor and college insights', target: 'regional-section-tg', keywords: 'telangana tg eapcet counselling' },
-      { title: 'Autonomous Colleges Directory', detail: 'Find colleges and review autonomy information', href: '/autonomous-colleges/', keywords: 'autonomous college university affiliation' },
-      { title: 'Recent Blogs', detail: 'Read published student guides from Naa College', target: 'naa-recent-blogs', keywords: 'articles guides blog' },
-      { title: 'PDF & Document Utilities', detail: 'Use document tools in your browser', workspace: 'utilities', keywords: 'pdf document merge split compress' },
-      { title: 'Image Compressor', detail: 'Compress images for student documents', workspace: 'utilities', keywords: 'image photo compress' },
-      { title: 'Mock Test Series', detail: 'Open the existing practice-test workspace', workspace: 'mock-tests', keywords: 'mock exam test cbt preparation' },
-    ];
-    return items.filter((item, index, all) =>
-      all.findIndex((other) => other.title === item.title && other.workspace === item.workspace && other.target === item.target && other.href === item.href) === index
-    );
-  }, []);
+  return pool.filter(
 
-  const matches = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (q.length < 2) return [];
-    const terms = q.split(/\s+/).filter(Boolean);
-    return searchIndex
-      .map((item) => {
-        const title = item.title.toLowerCase();
-        const haystack = (item.title + ' ' + item.detail + ' ' + (item.keywords || '')).toLowerCase();
-        const score = terms.reduce((sum, term) => sum + (title.includes(term) ? 3 : haystack.includes(term) ? 1 : 0), 0);
-        return { ...item, score };
-      })
-      .filter((item) => item.score > 0)
-      .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title))
-      .slice(0, 7);
-  }, [query, searchIndex]);
+    (item) =>
 
-  const go = (workspace) => {
-    setSearchOpen(false);
-    onSelectWorkspace?.(workspace);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+       item.title.toLowerCase().includes(q) ||
+item.category.toLowerCase().includes(q)
 
-  const openSearchResult = (item) => {
-    setSearchOpen(false);
-    if (item.href) {
-      window.location.assign(item.href);
-      return;
-    }
-    if (item.target) {
-      document.getElementById(item.target)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      return;
-    }
-    go(item.workspace || 'hub');
-  };
-
-  const scrollToTools = () => (document.getElementById('nc-student-tools') || document.getElementById('features-hub'))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-  const renderTickerItems = (duplicate = false) => TICKER_ITEMS.map((item, index) => {
-    const common = {
-      key: item.label + (duplicate ? '-loop' : ''),
-      className: 'nc-ticker-item',
-      tabIndex: duplicate ? -1 : undefined,
-    };
-    const contents = <><span>{item.label}</span><ArrowUpRight size={14} aria-hidden="true" /></>;
-    return item.href
-      ? <a {...common} href={item.href} aria-label={duplicate ? undefined : item.detail}>{contents}</a>
-      : <button {...common} type="button" onClick={() => go(item.workspace)} aria-label={duplicate ? undefined : item.detail}>{contents}</button>;
-  });
-
-  return (
-    <main className="naa-wireframe-home">
-      <section className="nc-hero" aria-labelledby="nc-hero-title">
-        <div className="nc-page-width nc-hero-grid">
-          <div className="nc-hero-copy">
-            <p className="nc-eyebrow"><span className="nc-eyebrow-dot" aria-hidden="true" /> Mana AP &amp; Telangana students kosam</p>
-            <h1 id="nc-hero-title">Your next chapter — <span>planned with clarity.</span></h1>
-            <p className="nc-hero-description">
-              Explore AP &amp; Telangana admission data, compare college options, discover funding and find practical tools for your student journey.
-            </p>
-
-            <div className="nc-state-cards" aria-label="Choose your state">
-              <button
-                type="button"
-                className="nc-state-card nc-state-ap"
-                onClick={() => go('ap-allotments')}
-                aria-label="Explore Andhra Pradesh student resources"
-              >
-                <span className="nc-state-art nc-state-art-ap" aria-hidden="true">
-                  <img src="/andhra-outline.webp" alt="" width="58" height="58" loading="eager" />
-                </span>
-                <span className="nc-state-copy">
-                  <span className="nc-state-label">FOR AP STUDENTS</span>
-                  <strong>Andhra Pradesh</strong>
-                  <small>Allotments, predictors &amp; rank insights</small>
-                  <span className="nc-card-action">Explore AP <ArrowRight size={15} /></span>
-                </span>
-              </button>
-
-              <button
-                type="button"
-                className="nc-state-card nc-state-tg"
-                onClick={() => go('tg-allotments')}
-                aria-label="Explore Telangana student resources"
-              >
-                <span className="nc-state-art nc-state-art-tg" aria-hidden="true">
-                  <img src="/telangana-outline.webp" alt="" width="58" height="58" loading="eager" />
-                </span>
-                <span className="nc-state-copy">
-                  <span className="nc-state-label">FOR TG STUDENTS</span>
-                  <strong>Telangana</strong>
-                  <small>College discovery &amp; seat records</small>
-                  <span className="nc-card-action">Explore TG <ArrowRight size={15} /></span>
-                </span>
-              </button>
-            </div>
-            <p className="nc-hero-note"><CheckCircle2 size={15} aria-hidden="true" /> Student resources, clear context. Important counselling decisions ni official sources tho verify cheyyandi.</p>
-          </div>
-
-          <div className="nc-video-column">
-            <div
-              className="nc-video-frame"
-              onContextMenu={(event) => event.preventDefault()}
-              onDragStart={(event) => event.preventDefault()}
-              onCopy={(event) => event.preventDefault()}
-            >
-              <video
-                className="nc-campus-video"
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                disablePictureInPicture
-                disableRemotePlayback
-                controlsList="nodownload noplaybackrate noremoteplayback"
-                draggable={false}
-                onContextMenu={(event) => event.preventDefault()}
-                onDragStart={(event) => event.preventDefault()}
-                onCopy={(event) => event.preventDefault()}
-                poster="/Vibrant%20Campus%20Life%20Illustration.webp"
-                aria-label="Naa College introduction video"
-              >
-                <source src="/HERO_VEDIO.webm" type="video/webm" />
-                Your browser does not support the Naa College introduction video.
-              </video>
-            </div>
-            <div className="nc-video-footnote"><span>ADMISSIONS</span><i aria-hidden="true" /><span>ACADEMICS</span><i aria-hidden="true" /><span>STUDENT LIFE</span></div>
-          </div>
-        </div>
-      </section>
-
-      <section className="nc-ticker-strip" aria-label="Latest updates and student resources">
-        <div className="nc-page-width nc-ticker-inner">
-          <div className="nc-ticker-label"><Sparkles size={16} aria-hidden="true" /><span>STUDENT RESOURCE SHORTCUTS</span></div>
-          <div className="nc-ticker-viewport">
-            <div className="nc-ticker-track">
-              <div className="nc-ticker-group">{renderTickerItems(false)}</div>
-              <div className="nc-ticker-group" aria-hidden="true">{renderTickerItems(true)}</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="nc-quick-section nc-page-width" aria-labelledby="nc-quick-title">
-        <div className="nc-quick-heading">
-          <span className="nc-section-kicker">ONE PLACE TO GET STARTED</span>
-          <h2 id="nc-quick-title">Start with what <span>you need.</span></h2>
-          <p>Search student tools, college resources and guidance in one place.</p>
-        </div>
-        <div className="nc-quick-content">
-          <div className="nc-search-wrap">
-            <Search size={20} aria-hidden="true" />
-            <label className="nc-sr-only" htmlFor="nc-resource-search">Search colleges, scholarships and student tools</label>
-            <input
-              id="nc-resource-search"
-              value={query}
-              onFocus={() => setSearchOpen(true)}
-              onChange={(event) => { setQuery(event.target.value); setSearchOpen(true); }}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' && matches[0]) {
-                  event.preventDefault();
-                  openSearchResult(matches[0]);
-                }
-                if (event.key === 'Escape') setSearchOpen(false);
-              }}
-              placeholder="College, scholarship, tool search cheyyandi..."
-              aria-expanded={searchOpen && query.trim().length >= 2}
-              aria-controls="nc-search-results"
-              autoComplete="off"
-              type="search"
-            />
-            <button type="button" className="nc-search-submit" onClick={() => matches[0] ? openSearchResult(matches[0]) : (setSearchOpen(true), scrollToTools())}>
-              Search <ArrowRight size={17} aria-hidden="true" />
-            </button>
-          </div>
-          {searchOpen && query.trim().length >= 2 && (
-            <div className="nc-search-results" id="nc-search-results" role="status" aria-live="polite">
-              {matches.length ? matches.map((item) => (
-                <button type="button" key={item.title + (item.workspace || item.target || item.href || '')} onClick={() => openSearchResult(item)} className="nc-search-result">
-                  <span><strong>{item.title}</strong><small>{item.detail}</small></span>
-                  <ArrowUpRight size={17} aria-hidden="true" />
-                </button>
-              )) : <p className="nc-search-empty">No matching resources. Try “AP”, “TG”, “scholarship”, “PDF” or “attendance”.</p>}
-            </div>
-          )}
-
-          <div className="nc-shortcut-grid" aria-label="Popular quick links">
-            {shortcuts.map((item, index) => {
-              const Icon = item.icon;
-              return (
-                <button type="button" className={'nc-shortcut nc-shortcut-' + (index + 1)} key={item.title} onClick={() => go(item.workspace)}>
-                  <span className="nc-shortcut-icon"><Icon size={19} aria-hidden="true" /></span>
-                  <span className="nc-shortcut-text"><strong>{item.title}</strong><small>{item.detail}</small></span>
-                  <ArrowRight className="nc-shortcut-arrow" size={17} aria-hidden="true" />
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-
-      <section id="nc-student-tools" className="nc-home-tools" aria-labelledby="nc-home-tools-title">
-        <div className="nc-page-width">
-          <div className="nc-home-section-head">
-            <div>
-              <span className="nc-home-kicker"><Wrench size={14} aria-hidden="true" /> STUDENT UTILITY ENGINE</span>
-              <h2 id="nc-home-tools-title">Everyday student tasks, <span>made easier.</span></h2>
-              <p>Useful browser tools for admission forms, documents and the small academic jobs that take too much time.</p>
-            </div>
-            <div className="nc-home-head-aside" aria-label="Tool benefits">
-              <span><ShieldCheck size={14} /> Files stay in your browser where supported</span>
-              <span><Sparkles size={14} /> Free student resources</span>
-            </div>
-          </div>
-          <div className="nc-home-tools-grid">
-            <article className="nc-home-tool-card nc-home-tool-card-featured">
-              <div className="nc-home-tool-card-top"><span className="nc-home-tool-badge"><Zap size={13} /> MOST USED</span><span className="nc-home-tool-index">01</span></div>
-              <div className="nc-home-tool-visual nc-home-pdf-visual" aria-hidden="true">
-                <div className="nc-home-file-sheet"><FileText size={35} /><span /><span /><span /><b>PDF</b></div>
-                <span className="nc-home-visual-orbit nc-home-orbit-one" /><span className="nc-home-visual-orbit nc-home-orbit-two" />
-              </div>
-              <h3>PDF Compress &amp; Document Tools</h3>
-              <p>Reduce the size of certificates, rank cards and application documents, or open the wider PDF toolkit.</p>
-              <div className="nc-home-tool-tags"><span>Admission-ready files</span><span>Browser-based tools</span></div>
-              <button type="button" className="nc-home-card-action" onClick={() => go('utilities')}>Open PDF toolkit <ArrowRight size={16} /></button>
-            </article>
-            <article className="nc-home-tool-card">
-              <div className="nc-home-tool-card-top"><span className="nc-home-tool-badge nc-home-tool-badge-green"><ImageIcon size={13} /> IMAGE PREP</span><span className="nc-home-tool-index">02</span></div>
-              <div className="nc-home-tool-visual nc-home-image-visual" aria-hidden="true">
-                <div className="nc-home-photo-sheet"><ImageIcon size={34} /><span className="nc-home-photo-sun" /><span className="nc-home-photo-hill" /></div>
-                <span className="nc-home-resize-corner" /><span className="nc-home-resize-corner nc-home-resize-corner-br" />
-              </div>
-              <h3>Image &amp; Signature Prep</h3>
-              <p>Find image, scan and document utilities for common application-upload requirements.</p>
-              <div className="nc-home-tool-tags"><span>JPG · PNG · WebP</span><span>Student uploads</span></div>
-              <button type="button" className="nc-home-card-action" onClick={() => go('utilities')}>Explore image tools <ArrowRight size={16} /></button>
-            </article>
-            <article className="nc-home-tool-card">
-              <div className="nc-home-tool-card-top"><span className="nc-home-tool-badge nc-home-tool-badge-blue"><Clock3 size={13} /> ACADEMICS</span><span className="nc-home-tool-index">03</span></div>
-              <div className="nc-home-tool-visual nc-home-academic-visual" aria-hidden="true">
-                <div className="nc-home-calculator"><div className="nc-home-calculator-screen">A+</div><span /><span /><span /><span /><span /><span /></div>
-                <div className="nc-home-calculator-note"><CheckCircle2 size={18} /><b>Plan clearly</b></div>
-              </div>
-              <h3>Attendance Planner</h3>
-              <p>Estimate attendance scenarios and understand how many classes you may need to attend to reach your target.</p>
-              <div className="nc-home-tool-tags"><span>Attendance</span><span>Attendance target</span></div>
-              <button type="button" className="nc-home-card-action" onClick={() => go('attendance')}>Open attendance planner <ArrowRight size={16} /></button>
-            </article>
-          </div>
-          <div className="nc-home-tools-bottom"><span>Need something else?</span><button type="button" onClick={() => go('utilities')}>Browse the full student toolkit <ArrowUpRight size={15} /></button></div>
-        </div>
-      </section>
-
-      <section className="nc-discovery-section" aria-label="Explore more student resources">
-        <div className="nc-page-width nc-discovery-grid">
-          <article className="nc-discovery-card nc-autonomous-card">
-            <div className="nc-discovery-art nc-autonomous-art" aria-hidden="true">
-              <div className="nc-art-paper"><LibraryBig size={40} strokeWidth={1.45} /><span /><span /><span /></div>
-              <div className="nc-art-stamp">COLLEGE<br />GUIDE</div>
-            </div>
-            <div className="nc-discovery-copy">
-              <span className="nc-section-kicker">COLLEGE DISCOVERY</span>
-              <h2>Autonomous Colleges</h2>
-              <p>Autonomous colleges kosam vetukuthunnara? AP, Telangana colleges search cheyyandi; autonomy and affiliating university details choodandi.</p>
-              <a href="/autonomous-colleges/" className="nc-primary-link">Explore colleges <ArrowRight size={16} aria-hidden="true" /></a>
-            </div>
-          </article>
-
-          <article className="nc-discovery-card nc-mock-card">
-            <div className="nc-discovery-art nc-mock-art" aria-hidden="true">
-              <div className="nc-test-sheet"><span className="nc-test-sheet-top" /><span /><span /><span /><span /></div>
-              <div className="nc-test-score"><ClipboardCheck size={23} /><strong>TEST</strong><small>Practice mode</small></div>
-            </div>
-            <div className="nc-discovery-copy">
-              <span className="nc-section-kicker">PRACTISE &amp; PREPARE</span>
-              <h2>Mock Test Series</h2>
-              <p>Mee preparation ela undo test chesukondi. Available mock tests start chesi, mee score and progress ni review cheyyandi.</p>
-              <button type="button" className="nc-primary-link" onClick={() => go('mock-tests')}>Explore mock tests <ArrowRight size={16} aria-hidden="true" /></button>
-            </div>
-          </article>
-        </div>
-      </section>
-
-
-      <section id="nc-practice-zone" className="nc-home-practice" aria-labelledby="nc-practice-title">
-        <div className="nc-page-width">
-          <div className="nc-practice-hero">
-            <div className="nc-practice-copy">
-              <span className="nc-practice-kicker"><Target size={14} /> PRACTISE WITH PURPOSE</span>
-              <h2 id="nc-practice-title">Walk into the exam <span>better prepared.</span></h2>
-              <p>Get familiar with timed computer-based practice, question navigation and review before exam day. Choose the test that matches your preparation.</p>
-              <div className="nc-practice-benefits"><span><Clock3 size={16} /> Timed practice</span><span><CheckCircle2 size={16} /> Score review</span><span><ShieldCheck size={16} /> Learn at your pace</span></div>
-              <div className="nc-practice-actions">
-                <button type="button" className="nc-practice-primary" onClick={() => go('mock-tests')}>Browse mock tests <ArrowRight size={17} /></button>
-                <button type="button" className="nc-practice-secondary" onClick={() => go('eapcet-cbt')}>Open EAPCET simulator <ArrowUpRight size={16} /></button>
-              </div>
-            </div>
-            <div className="nc-practice-visual" aria-hidden="true">
-              <div className="nc-practice-glow" />
-              <div className="nc-practice-monitor">
-                <div className="nc-monitor-top"><span /><span /><span /><b>Practice workspace</b></div>
-                <div className="nc-monitor-body">
-                  <div className="nc-monitor-sidebar"><i /><i /><i /><i /></div>
-                  <div className="nc-monitor-content"><b className="nc-monitor-question">Question 01</b><span className="nc-monitor-line nc-monitor-line-long" /><span className="nc-monitor-line" />
-                    <div className="nc-monitor-option"><i /> Option A</div><div className="nc-monitor-option"><i /> Option B</div><div className="nc-monitor-option"><i /> Option C</div><div className="nc-monitor-option"><i /> Option D</div>
-                  </div>
-                  <div className="nc-monitor-timer"><Clock3 size={14} /><b>02:45</b><small>TIME LEFT</small></div>
-                </div>
-              </div>
-              <div className="nc-practice-float nc-practice-float-score"><CheckCircle2 size={18} /><span><b>Review your work</b><small>Learn from each attempt</small></span></div>
-              <div className="nc-practice-float nc-practice-float-questions"><Target size={18} /><span><b>Practice mode</b><small>One question at a time</small></span></div>
-            </div>
-          </div>
-          <div className="nc-practice-options" aria-label="Available practice options">
-            <button type="button" onClick={() => go('eapcet-cbt')} className="nc-practice-option nc-practice-option-ap"><span className="nc-practice-option-symbol">AP</span><span className="nc-practice-option-copy"><b>AP EAPCET Practice</b><small>Engineering pattern and rank-context tools</small></span><ArrowUpRight size={18} /></button>
-            <button type="button" onClick={() => go('eapcet-cbt')} className="nc-practice-option nc-practice-option-tg"><span className="nc-practice-option-symbol">TG</span><span className="nc-practice-option-copy"><b>Telangana EAPCET Practice</b><small>Build familiarity with CBT-style questions</small></span><ArrowUpRight size={18} /></button>
-            <button type="button" onClick={() => go('mock-tests')} className="nc-practice-option nc-practice-option-general"><span className="nc-practice-option-symbol"><BookOpen size={21} /></span><span className="nc-practice-option-copy"><b>More Mock Tests</b><small>Explore the available student test library</small></span><ArrowUpRight size={18} /></button>
-          </div>
-        </div>
-      </section>
-
-      <section id="naa-recent-blogs" className="nc-premium-blogs-section nc-phone-blogs-section" aria-labelledby="nc-blogs-title">
-        <div className="nc-page-width nc-premium-blogs-inner">
-          <div className="nc-premium-blogs-heading nc-phone-blogs-heading">
-            <span className="nc-premium-blogs-kicker"><span aria-hidden="true" /> LATEST STORIES</span>
-            <h2 id="nc-blogs-title">RECENT <span>BLOGS</span></h2>
-            <p>Latest admissions updates, education news, exam notifications and practical student guides.</p>
-            <span className="nc-phone-heading-rule" aria-hidden="true" />
-          </div>
-          {activeBlogArticle ? (
-            <div
-              className="nc-phone-blog-stage"
-              aria-label="Featured Naa College articles. Use the arrow keys to browse."
-              tabIndex={0}
-              onKeyDown={handleBlogKeyDown}
-              onTouchStart={(event) => { blogTouchStartX.current = event.changedTouches[0]?.clientX ?? null; }}
-              onTouchEnd={(event) => {
-                if (blogTouchStartX.current === null) return;
-                const distance = event.changedTouches[0].clientX - blogTouchStartX.current;
-                if (Math.abs(distance) > 45) changeFeaturedBlog(distance < 0 ? 1 : -1);
-                blogTouchStartX.current = null;
-              }}
-            >
-              <div className="nc-phone-blog-device">
-                <div className="nc-phone-blog-side-button nc-phone-blog-side-button-left" aria-hidden="true" />
-                <div className="nc-phone-blog-side-button nc-phone-blog-side-button-right" aria-hidden="true" />
-                <div className="nc-phone-blog-bezel">
-                  <div className="nc-phone-blog-notch" aria-hidden="true"><span /><i /></div>
-                  <div className="nc-phone-blog-screen">
-                    <div className="nc-phone-blog-statusbar" aria-hidden="true">
-                      <span>9:41</span>
-                      <span className="nc-phone-blog-status-icons"><i /><i /><b /></span>
-                    </div>
-                    <div className="nc-phone-blog-screen-header">
-                      <div className="nc-phone-blog-screen-heading">
-                        <span className="nc-phone-blog-screen-marker" aria-hidden="true" />
-                        <div><h3>Recent Blogs</h3><p>Latest official updates</p></div>
-                      </div>
-                      <a href="/blog/" className="nc-phone-blog-view-all">View all <ArrowRight size={15} aria-hidden="true" /></a>
-                    </div>
-                    <div className="nc-phone-blog-featured-line">
-                      <span><i aria-hidden="true" /> FEATURED ({activeBlogIndex + 1} OF {publishedArticles.length})</span>
-                      <div className="nc-phone-blog-mini-dots" aria-hidden="true">
-                        {publishedArticles.map((article, index) => <i key={article.slug} className={index === activeBlogIndex ? 'is-active' : ''} />)}
-                      </div>
-                    </div>
-                    <article className="nc-phone-blog-article" aria-live="polite">
-                      <a className="nc-phone-blog-cover-link" href={'/blog/' + activeBlogArticle.slug + '/'} aria-label={'Read ' + activeBlogArticle.title}>
-                        {activeBlogArticle.coverImage ? (
-                          <img
-                            className="nc-phone-blog-cover"
-                            src={activeBlogArticle.coverImage}
-                            alt=""
-                            loading={activeBlogIndex === 0 ? 'eager' : 'lazy'}
-                            decoding="async"
-                          />
-                        ) : (
-                          <div className="nc-phone-blog-cover-fallback" aria-hidden="true">
-                            <BookOpen size={48} strokeWidth={1.4} />
-                            <span>NAA COLLEGE</span>
-                          </div>
-                        )}
-                      </a>
-                      <div className="nc-phone-blog-article-copy">
-                        <span className="nc-phone-blog-category">{activeBlogArticle.category || 'STUDENT GUIDES'}</span>
-                        <h4><a href={'/blog/' + activeBlogArticle.slug + '/'}>{activeBlogArticle.title}</a></h4>
-                        <p>{activeBlogArticle.summary}</p>
-                        <div className="nc-phone-blog-article-footer">
-                          <div className="nc-phone-blog-date"><CalendarDays size={15} aria-hidden="true" /><time dateTime={activeBlogArticle.publishedAt || undefined}>{formatBlogPublishedDate(activeBlogArticle.publishedAt) || 'Recently published'}</time></div>
-                          <a href={'/blog/' + activeBlogArticle.slug + '/'} className="nc-phone-blog-read">READ ARTICLE <ArrowRight size={16} aria-hidden="true" /></a>
-                        </div>
-                      </div>
-                    </article>
-                    <div className="nc-phone-blog-bottom-controls">
-                      <div className="nc-phone-blog-dots" role="group" aria-label="Choose a featured article">
-                        {publishedArticles.map((article, index) => (
-                          <button
-                            key={article.slug}
-                            type="button"
-                            className={'nc-phone-blog-dot' + (index === activeBlogIndex ? ' is-active' : '')}
-                            onClick={() => setActiveBlogIndex(index)}
-                            aria-label={'Show article ' + (index + 1) + ': ' + article.title}
-                            aria-current={index === activeBlogIndex ? 'true' : undefined}
-                          />
-                        ))}
-                      </div>
-                      <div className="nc-phone-blog-arrows">
-                        <button type="button" onClick={() => changeFeaturedBlog(-1)} aria-label="Previous featured article"><ArrowLeft size={17} aria-hidden="true" /></button>
-                        <button type="button" onClick={() => changeFeaturedBlog(1)} aria-label="Next featured article"><ArrowRight size={17} aria-hidden="true" /></button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="nc-featured-blog-empty">No published articles are available yet. <a href="/blog/">Visit all articles <ArrowRight size={15} /></a></div>
-          )}
-          <a href="/blog/" className="nc-phone-blog-mobile-view-all">VIEW ALL ARTICLES <ArrowRight size={16} aria-hidden="true" /></a>
-        </div>
-      </section>
-
-
-      <section className="nc-featured-scholarships nc-page-width" aria-labelledby="nc-featured-scholarships-title">
-        <div className="nc-section-heading-row">
-          <div>
-            <span className="nc-section-kicker">FUND YOUR NEXT STEP</span>
-            <h2 id="nc-featured-scholarships-title">FUND YOUR <span>NEXT STEP</span></h2>
-            <p>Browse the cards horizontally to explore listed scholarships, compare eligibility details and confirm current application status before applying.</p>
-          </div>
-          <a className="nc-all-blogs-link" href="/scholarships/">Explore all scholarships <ArrowRight size={16} aria-hidden="true" /></a>
-        </div>
-        {featuredScholarships.length > 0 ? (
-          <div className="nc-featured-scholarship-grid">
-            {featuredScholarships.map((item) => (
-              <a className="nc-featured-scholarship-card" key={item.id} href={'/scholarships/' + String(item.title).toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') + '/'}>
-                <div className="nc-featured-scholarship-topline"><span><Sparkles size={14} /> SCHOLARSHIP LISTING</span><ArrowUpRight size={18} aria-hidden="true" /></div>
-                <h3 className="nc-featured-scholarship-title">{item.title}</h3>
-                <div className="nc-featured-scholarship-facts">
-                  <div><span><Wallet size={14} /> AMOUNT / AWARD</span><strong>{item.amount || 'Amount not confirmed'}</strong></div>
-                  <div><span><CalendarDays size={14} /> DEADLINE</span><strong>{item.deadline || 'Check official source'}</strong></div>
-                </div>
-                <div className="nc-featured-scholarship-copy"><strong>SCHOLARSHIP DETAILS</strong><p>{item.description || item.target || 'Read the official scheme details.'}</p></div>
-                <div className="nc-featured-scholarship-copy nc-featured-scholarship-eligibility"><strong>ELIGIBILITY</strong><p>{item.eligibility || item.target || 'Check the current provider guidelines.'}</p></div>
-                <span className="nc-featured-scholarship-cta">View full scholarship details <ArrowRight size={16} aria-hidden="true" /></span>
-              </a>
-            ))}
-          </div>
-        ) : (
-          <div className="nc-featured-scholarship-empty">
-            {scholarshipsLoaded ? 'No upcoming deadlines are currently confirmed in the scholarship dataset. Check the full hub for updates.' : 'Checking currently listed scholarship deadlines…'}
-          </div>
-        )}
-        <p className="nc-featured-scholarship-note"><VerifiedIcon size={15} aria-hidden="true" /> Dates and eligibility can change. Confirm details on the scholarship provider’s official portal before applying.</p>
-      </section>
-
-      
-
-      <section className="nc-naacox-section" aria-labelledby="nc-naacox-title">
-        <div className="nc-page-width">
-          <div className="nc-naacox-heading-wrap">
-            <span className="nc-naacox-eyebrow"><Sparkles size={14} aria-hidden="true" /> A STUDENT-FIRST AI ASSISTANT</span>
-            <h2 id="nc-naacox-title" className="nc-naacox-display-title">
-              <span className="nc-naacox-title-our">OUR</span>
-              <span className="nc-naacox-title-ai">AI</span>
-              <span className="nc-naacox-title-chip">CHATBOT</span>
-            </h2>
-            <p>Meet <strong>NaaCox AI</strong> — your guide to college choices, AP &amp; Telangana admissions, scholarships, study planning, programming and career questions.</p>
-          </div>
-
-          <div className="nc-naacox-chat-stage">
-            <div className="nc-naacox-chat-context">
-              <div className="nc-naacox-context-brand">
-                <span className="nc-naacox-context-icon"><GraduationCap size={22} aria-hidden="true" /></span>
-                <span><strong>Ask NaaCox AI</strong><small>English or Telugu-English · Type your question below</small></span>
-              </div>
-              <div className="nc-naacox-context-topics" aria-label="Example topics">
-                <span>AP / TG EAPCET</span>
-                <span>Scholarships</span>
-                <span>College choices</span>
-                <span>Study &amp; careers</span>
-              </div>
-            </div>
-            <NaaCollegeAssistant embedded />
-          </div>
-          <p className="nc-naacox-safety-note"><CheckCircle2 size={14} aria-hidden="true" /> Use NaaCox for guidance; confirm important admissions and scholarship decisions with official sources.</p>
-        </div>
-      </section>
-
-
-
-    </main>
   );
-};
 
-export default HeroSection;
+ }, [searchQuery, publishedBlogs]);
+
+ const triggerRoute = (route) => {
+
+  if (!route) return;
+
+  if (route.startsWith('blog:') && onSelectArticle) {
+
+      onSelectArticle(route.replace('blog:', ''));
+
+      return;
+
+  }
+
+  if (onNavigate) {
+
+      onNavigate(route);
+
+  }
+
+ };
+
+ return (
+
+  <div className="naa-platform-shell w-full bg-white text-[#172B3B]">
+
+      {/*
+===================================================================
+==
+
+         1. PREMIUM HERO SECTION (Preserves /HERO_VEDIO.webm on clean
+white)
+
+===================================================================
+== */}
+
+      <section className="relative bg-white pt-6 pb-12 lg:pt-12 lg:pb-16 border-b border-[#E2E8ED] overflow-hidden">
+
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+
+            {/* Left Column: Headline, Search & AP/TG Cards */}
+
+            <div className="lg:col-span-7 space-y-6">
+
+             <motion.div
+
+         initial={{ opacity: 0, y: 14 }}
+
+         animate={{ opacity: 1, y: 0 }}
+
+         transition={{ duration: 0.45 }}
+
+         className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FDF8EB] border border-[#EED690] text-[#172B3B] text-xs font-bold"
+
+       >
+
+         <span className="w-2 h-2 rounded-full bg-[#C29316]" />
+
+         <span>ANDHRA PRADESH & TELANGANA STUDENT
+PLATFORM</span>
+
+       </motion.div>
+
+       <motion.h1
+
+         initial={{ opacity: 0, y: 18 }}
+
+         animate={{ opacity: 1, y: 0 }}
+
+         transition={{ duration: 0.5, delay: 0.06 }}
+
+         className="naa-hero-title naa-mobile-condensed-heading text-4xl sm:text-5xl lg:text-[3.5rem]"
+
+       >
+
+         Right Guidance.{' '}
+
+         <span className="block text-[#C29316] mt-1">
+
+           Brighter Engineering Futures.
+
+         </span>
+
+       </motion.h1>
+
+       <motion.p
+
+         initial={{ opacity: 0, y: 18 }}
+
+         animate={{ opacity: 1, y: 0 }}
+
+           transition={{ duration: 0.5, delay: 0.12 }}
+
+           className="text-base sm:text-lg text-[#5E6D7D] max-w-2xl leading-relaxed"
+
+       >
+
+           Explore official AP & TG EAPCET college cutoffs, generate counseling
+web options,
+
+           discover verified scholarships, and practice full-length CBT mock
+exams in one
+
+           trusted workspace.
+
+       </motion.p>
+
+       {/* Inline Global Student Search Bar */}
+
+       <motion.div
+
+           initial={{ opacity: 0, y: 18 }}
+
+           animate={{ opacity: 1, y: 0 }}
+
+           transition={{ duration: 0.5, delay: 0.18 }}
+
+           className="relative max-w-2xl"
+
+       >
+
+           <div className="flex items-center bg-white border-2 border-[#E2E8ED] focus-within:border-[#C29316] rounded-2xl p-1.5 shadow-sm transition-colors">
+
+            <Search className="w-5 h-5 text-[#5E6D7D] ml-3 mr-2 shrink-0" />
+
+            <input
+
+             type="search"
+
+             value={searchQuery}
+
+             onChange={(e) => setSearchQuery(e.target.value)}
+
+             placeholder="Search colleges, EAPCET cutoffs, scholarships, tools..."
+
+           className="w-full py-2.5 px-2 text-sm text-[#172B3B] placeholder-[#7A8B99] bg-transparent focus:outline-none"
+
+           aria-label="Search Naa College resources"
+
+          />
+
+          <button
+
+           type="button"
+
+           onClick={() =>
+
+               filteredSearchItems[0]
+
+                ? triggerRoute(filteredSearchItems[0].route)
+
+                : triggerRoute('ap-eapcet-predictor')
+
+           }
+
+           className="px-5 py-2.5 rounded-xl bg-[#C29316] hover:bg-[#a97f11] text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 shrink-0 transition-colors"
+
+          >
+
+           <span>Search</span>
+
+           <ArrowRight className="w-4 h-4" />
+
+          </button>
+
+         </div>
+
+         {/* Live Search Dropdown */}
+
+         {searchQuery.trim().length > 0 && (
+
+          <div className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl border border-[#E2E8ED] shadow-xl z-30 overflow-hidden">
+
+           {filteredSearchItems.length > 0 ? (
+
+               <div className="divide-y divide-[#EDF2F6] max-h-64 overflow-y-auto">
+
+             {filteredSearchItems.map((item, idx) => (
+
+                 <button
+
+                  key={idx}
+
+                  type="button"
+
+                  onClick={() => {
+
+                     setSearchQuery('');
+
+                     triggerRoute(item.route);
+
+                  }}
+
+                  className="w-full px-4 py-3 text-left hover:bg-[#F5F8F5] flex items-center justify-between gap-3"
+
+                 >
+
+                  <div>
+
+                     <div className="text-xs font-bold text-[#172B3B]">{item.title}
+</div>
+
+                     <div className="text-[10px] font-semibold uppercase tracking-wider text-[#2E7658]">
+
+                       {item.category}
+
+                     </div>
+
+                  </div>
+
+                  <ArrowUpRight className="w-4 h-4 text-[#C29316]" />
+
+                 </button>
+
+             ))}
+
+            </div>
+
+           ):(
+
+            <div className="p-4 text-xs text-[#5E6D7D] text-center">
+
+             No direct match found. Try searching "AP EAPCET",
+"Scholarships", or "GPA".
+
+              </div>
+
+             )}
+
+         </div>
+
+        )}
+
+        {/* Popular Filter Pills */}
+
+        <div className="flex flex-wrap items-center gap-2 mt-3">
+
+         <span className="text-xs font-semibold text-[#5E6D7D]">Popular:</span>
+
+         {[
+
+             { label: 'AP EAPCET 2026', route: 'ap-eapcet-predictor' },
+
+             { label: 'TG EAPCET', route: 'tg-eapcet-predictor' },
+
+             { label: 'Web Options', route: 'web-options-generator' },
+
+             { label: 'Scholarships', route: 'scholarships' },
+
+             { label: 'CSE Roadmap', route: 'engineering-roadmaps' },
+
+         ].map((pill) => (
+
+             <button
+
+              key={pill.label}
+
+              type="button"
+
+              onClick={() => triggerRoute(pill.route)}
+
+              className="px-3 py-1 rounded-full text-xs font-semibold bg-[#F5F8F5] hover:bg-[#EAF4F0] text-[#172B3B] hover:text-[#2E7658] border border-[#E2E8ED] transition-colors"
+
+             >
+
+              {pill.label}
+
+             </button>
+
+         ))}
+
+         </div>
+
+        </motion.div>
+
+        {/* Dedicated AP & Telangana Resource Cards */}
+
+        <motion.div
+
+         initial={{ opacity: 0, y: 18 }}
+
+         animate={{ opacity: 1, y: 0 }}
+
+         transition={{ duration: 0.5, delay: 0.24 }}
+
+         className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2"
+
+        >
+
+         <div
+
+            onClick={() => triggerRoute('ap-eapcet-predictor')}
+
+            role="button"
+
+            tabIndex={0}
+
+            onKeyDown={(e) => e.key === 'Enter' && triggerRoute('ap-eapcet-predictor')}
+
+            className="naa-card p-4 cursor-pointer group border-l-4 border-l-[#C29316]"
+
+         >
+
+            <div className="flex items-center justify-between mb-1.5">
+
+             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-[#FDF8EB] text-[#C29316] border border-[#EED690]">
+
+               Andhra Pradesh Hub
+
+             </span>
+
+             <ArrowUpRight className="w-4 h-4 text-[#5E6D7D] group-hover:text-[#C29316] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+
+          </div>
+
+          <h2 className="text-base font-extrabold text-[#172B3B]">
+
+             AP EAPCET Predictor & Cutoffs
+
+          </h2>
+
+          <p className="text-xs text-[#5E6D7D] mt-1">
+
+             195+ AP colleges, 2025 & 2026 allotment datasets, and web options
+generator.
+
+          </p>
+
+         </div>
+
+         <div
+
+          onClick={() => triggerRoute('tg-eapcet-predictor')}
+
+          role="button"
+
+          tabIndex={0}
+
+          onKeyDown={(e) => e.key === 'Enter' && triggerRoute('tg-eapcet-predictor')}
+
+          className="naa-card p-4 cursor-pointer group border-l-4 border-l-[#2E7658]"
+
+         >
+
+          <div className="flex items-center justify-between mb-1.5">
+
+             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-[#EAF4F0] text-[#2E7658] border border-[#B6DbcB]">
+
+               Telangana Hub
+
+             </span>
+
+             <ArrowUpRight className="w-4 h-4 text-[#5E6D7D] group-hover:text-[#2E7658] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+
+          </div>
+
+           <h2 className="text-base font-extrabold text-[#172B3B]">
+
+            TG EAPCET Predictor & Cutoffs
+
+           </h2>
+
+           <p className="text-xs text-[#5E6D7D] mt-1">
+
+            Explore JNTUH & OU closing ranks, autonomous colleges, and TG
+mock tests.
+
+           </p>
+
+          </div>
+
+       </motion.div>
+
+      </div>
+
+      {/* Right Column: Preserved /HERO_VEDIO.webm on Pure White
+Background */}
+
+      <motion.div
+
+       initial={{ opacity: 0, y: 20 }}
+
+       animate={{ opacity: 1, y: 0 }}
+
+       transition={{ duration: 0.55, delay: 0.2 }}
+
+       className="lg:col-span-5"
+
+      >
+
+       <div className="bg-white rounded-3xl border border-[#E2E8ED] p-3 sm:p-4 shadow-lg">
+
+          <div className="bg-white rounded-2xl overflow-hidden flex items-center justify-center">
+
+           <video
+
+            src="/HERO_VEDIO.webm"
+
+            poster="/Vibrant%20Campus%20Life%20Illustration.webp"
+
+            autoPlay
+
+             muted
+
+             loop
+
+             playsInline
+
+             className="w-full h-auto object-contain bg-white pointer-events-none select-none"
+
+            />
+
+        </div>
+
+        <div className="mt-3 pt-3 border-t border-[#EDF2F6] flex items-center justify-between px-2 text-xs text-[#5E6D7D]">
+
+            <span className="font-bold text-[#172B3B] flex items-center gap-1.5">
+
+             <Sparkles className="w-3.5 h-3.5 text-[#C29316]" />
+
+             Naa College Interactive Campus
+
+            </span>
+
+            <span className="text-[#2E7658] font-semibold">100% Free Student
+Access</span>
+
+        </div>
+
+       </div>
+
+      </motion.div>
+
+     </div>
+
+     {/* 6-Card Feature Shortcut Dock Beneath Hero (Reference 00:01) */}
+
+     <StaggerGrid className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mt-10 pt-8 border-t border-[#EDF2F6]">
+
+      {QUICK_SHORTCUTS.map((item) => {
+
+       const Icon = item.icon;
+
+       return (
+
+        <button
+
+            key={item.id}
+
+            type="button"
+
+            onClick={() => triggerRoute(item.route)}
+
+            className="naa-card p-3.5 text-left flex items-start gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C29316]"
+
+        >
+
+            <div className="w-9 h-9 rounded-xl bg-[#F5F8F5] group-hover:bg-[#102B3F] text-[#102B3F] group-hover:text-[#C29316] flex items-center justify-center shrink-0 transition-colors">
+
+             <Icon className="w-4 h-4" />
+
+            </div>
+
+            <div className="min-w-0">
+
+             <div className="text-xs font-extrabold text-[#172B3B] truncate group-hover:text-[#102B3F]">
+
+              {item.title}
+
+             </div>
+
+             <div className="text-[11px] text-[#5E6D7D] truncate mt-0.5">
+
+              {item.subtitle}
+
+             </div>
+
+            </div>
+
+        </button>
+
+       );
+
+      })}
+
+     </StaggerGrid>
+
+    </div>
+
+   </section>
+
+     {/*
+===================================================================
+==
+
+         2. LATEST RESOURCE TICKER STRIP
+
+===================================================================
+== */}
+
+     <div className="bg-[#102B3F] text-white py-2.5 border-b border-[#163852] overflow-hidden">
+
+      <div className="max-w-7xl mx-auto px-4 flex items-center gap-4">
+
+         <span className="px-2.5 py-0.5 rounded bg-[#C29316] text-[#102B3F] text-[10px] font-extrabold uppercase tracking-wider shrink-0">
+
+           Live Updates
+
+         </span>
+
+         <div className="overflow-hidden flex-1">
+
+           <div className="naa-ticker-track items-center gap-8 text-xs font-medium">
+
+            {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, idx) => (
+
+             <button
+
+              key={idx}
+
+              type="button"
+
+              onClick={() => triggerRoute(item.route)}
+
+              className="inline-flex items-center gap-2 text-white/90 hover:text-[#C29316] whitespace-nowrap transition-colors"
+
+             >
+
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C29316]" />
+
+              <span>{item.label}</span>
+
+             </button>
+
+            ))}
+
+           </div>
+
+         </div>
+
+      </div>
+
+     </div>
+
+     {/*
+===================================================================
+==
+
+         3. AUTONOMOUS COLLEGES & ADMISSION PATHWAYS
+
+===================================================================
+== */}
+
+     <section
+
+      id="autonomous-colleges-section"
+
+      className="py-16 lg:py-20 bg-[#F5F8F5] border-b border-[#E2E8ED]"
+
+     >
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+         <ScrollReveal className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+
+           <div>
+
+            <span className="text-xs font-extrabold uppercase tracking-widest text-[#2E7658]">
+
+             VERIFIED ADMISSION DATASETS
+
+            </span>
+
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#172B3B] mt-1">
+
+          Your Future Starts with{' '}
+
+          <span className="text-[#C29316]">The Right College</span>
+
+       </h2>
+
+       <p className="text-sm sm:text-base text-[#5E6D7D] mt-2 max-w-2xl">
+
+          Compare UGC Autonomous institutions, inspect official phase-wise
+EAPCET cutoffs,
+
+          and build your counseling preference list with confidence.
+
+       </p>
+
+      </div>
+
+      <button
+
+       type="button"
+
+       onClick={() => triggerRoute('autonomous-colleges')}
+
+       className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#102B3F] hover:bg-[#173b56] text-white text-xs font-bold self-start md:self-auto transition-colors"
+
+      >
+
+       <span>Explore Autonomous Directory</span>
+
+       <ArrowUpRight className="w-4 h-4 text-[#C29316]" />
+
+      </button>
+
+     </ScrollReveal>
+
+     <StaggerGrid className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <div className="naa-card p-6 flex flex-col justify-between">
+
+       <div>
+
+          <div className="flex items-center justify-between mb-4">
+
+           <div className="w-11 h-11 rounded-2xl bg-[#FDF8EB] border border-[#EED690] flex items-center justify-center text-[#C29316]">
+
+             <GraduationCap className="w-5 h-5" />
+
+            </div>
+
+            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#EAF4F0] text-[#2E7658]">
+
+             NAAC & NBA
+
+            </span>
+
+        </div>
+
+        <h3 className="text-lg font-extrabold text-[#172B3B]">
+
+            Autonomous Engineering Colleges
+
+        </h3>
+
+        <p className="text-xs sm:text-sm text-[#5E6D7D] mt-2 leading-relaxed">
+
+            Filter top autonomous colleges in Andhra Pradesh & Telangana by
+accreditation,
+
+            fee structure, and branch-level intake.
+
+        </p>
+
+       </div>
+
+       <button
+
+        type="button"
+
+        onClick={() => triggerRoute('autonomous-colleges')}
+
+        className="mt-6 pt-4 border-t border-[#EDF2F6] flex items-center justify-between text-xs font-bold text-[#102B3F] hover:text-[#C29316]"
+
+       >
+
+        <span>Open Autonomous Explorer</span>
+
+        <ArrowRight className="w-4 h-4" />
+
+       </button>
+
+      </div>
+
+      <div className="naa-card p-6 flex flex-col justify-between">
+
+       <div>
+
+        <div className="flex items-center justify-between mb-4">
+
+            <div className="w-11 h-11 rounded-2xl bg-[#EAF4F0] border border-[#B6DbcB] flex items-center justify-center text-[#2E7658]">
+
+             <BarChart3 className="w-5 h-5" />
+
+            </div>
+
+            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#FDF8EB] text-[#C29316]">
+
+             Historical allotment records
+
+            </span>
+
+        </div>
+
+        <h3 className="text-lg font-extrabold text-[#172B3B]">
+
+            Historical EAPCET Allotment Analytics
+
+        </h3>
+
+        <p className="text-xs sm:text-sm text-[#5E6D7D] mt-2 leading-relaxed">
+
+            Inspect real student allotment records, category-wise closing ranks,
+and gender
+
+            reservation cutoffs across AP & TG.
+
+        </p>
+
+       </div>
+
+       <button
+
+        type="button"
+
+        onClick={() => triggerRoute('ap-allotment-explorer')}
+
+        className="mt-6 pt-4 border-t border-[#EDF2F6] flex items-center justify-between text-xs font-bold text-[#102B3F] hover:text-[#2E7658]"
+
+       >
+
+        <span>Inspect Cutoff Ranks</span>
+
+        <ArrowRight className="w-4 h-4" />
+
+       </button>
+
+      </div>
+
+      <div className="naa-card p-6 flex flex-col justify-between">
+
+       <div>
+
+        <div className="flex items-center justify-between mb-4">
+
+            <div className="w-11 h-11 rounded-2xl bg-[#F5F8F5] border border-[#E2E8ED] flex items-center justify-center text-[#102B3F]">
+
+             <FileSpreadsheet className="w-5 h-5" />
+
+            </div>
+
+            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#F5F8F5] text-[#172B3B]">
+
+             Web Options
+
+            </span>
+
+        </div>
+
+        <h3 className="text-lg font-extrabold text-[#172B3B]">
+
+            Counselling Web Options Generator
+
+        </h3>
+
+        <p className="text-xs sm:text-sm text-[#5E6D7D] mt-2 leading-relaxed">
+
+            Automatically generate a downloadable, prioritized college and
+branch sequence
+
+                tailored to your rank and preferred districts.
+
+             </p>
+
+            </div>
+
+            <button
+
+             type="button"
+
+             onClick={() => triggerRoute('web-options-generator')}
+
+             className="mt-6 pt-4 border-t border-[#EDF2F6] flex items-center justify-between text-xs font-bold text-[#102B3F] hover:text-[#C29316]"
+
+            >
+
+             <span>Generate Web Options</span>
+
+             <ArrowRight className="w-4 h-4" />
+
+            </button>
+
+           </div>
+
+         </StaggerGrid>
+
+      </div>
+
+     </section>
+
+     {/*
+===================================================================
+==
+
+         4. RECENT BLOGS (Editorial Portal Presentation -Reference 00:06-00:09)
+
+===================================================================
+== */}
+
+     <section id="recent-blogs-section" className="py-16 lg:py-20 bg-white border-b border-[#E2E8ED]">
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+         <ScrollReveal className="text-center max-w-3xl mx-auto mb-10">
+
+      <span className="text-xs font-extrabold uppercase tracking-widest text-[#2E7658]">
+
+         EDITORIAL GUIDES & ADMISSION UPDATES
+
+      </span>
+
+      <h2 className="text-3xl sm:text-5xl font-extrabold text-[#172B3B] mt-1">
+
+         Recent <span className="text-[#C29316]">Blogs</span>
+
+      </h2>
+
+      <p className="text-sm sm:text-base text-[#5E6D7D] mt-2">
+
+         Admissions information, cutoff analyses, scholarship walkthroughs,
+and 4-year
+
+         engineering career roadmaps.
+
+      </p>
+
+     </ScrollReveal>
+
+     {/* Browser-Framed Editorial Portal Container */}
+
+     <div className="rounded-3xl border-2 border-[#E2E8ED] bg-[#F5F8F5] shadow-md overflow-hidden">
+
+      {/* Browser Top Bar */}
+
+      <div className="bg-white px-4 py-3 border-b border-[#E2E8ED] flex items-center justify-between gap-4">
+
+         <div className="flex items-center gap-2">
+
+          <span className="w-3 h-3 rounded-full bg-[#E2E8ED]" />
+
+          <span className="w-3 h-3 rounded-full bg-[#C29316]" />
+
+          <span className="w-3 h-3 rounded-full bg-[#2E7658]" />
+
+         </div>
+
+         <div className="px-4 py-1 rounded-full bg-[#F5F8F5] border border-[#E2E8ED] text-[11px] font-medium text-[#5E6D7D] truncate">
+
+           naacollege.in/blogs
+
+          </div>
+
+          <button
+
+           type="button"
+
+           onClick={() => triggerRoute('blogs')}
+
+           className="text-xs font-bold text-[#2E7658] hover:text-[#102B3F] flex items-center gap-1"
+
+          >
+
+           <span>View all articles</span>
+
+           <ArrowUpRight className="w-3.5 h-3.5" />
+
+          </button>
+
+      </div>
+
+      {/* Blog Cards Grid */}
+
+      <div className="p-5 sm:p-8">
+
+          <StaggerGrid className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+           {publishedBlogs.map((article, index) => (
+
+              <article
+
+               key={article.id || article.slug || index}
+
+               onClick={() =>
+
+                   onSelectArticle
+
+                    ? onSelectArticle(article.slug || article.id)
+
+                    : triggerRoute('blogs')
+
+               }
+
+               className="naa-card overflow-hidden flex flex-col cursor-pointer group bg-white"
+
+             >
+
+             <div className="aspect-video w-full bg-[#102B3F] overflow-hidden relative">
+
+                 {article.coverImage || article.image ? (
+
+                  <img
+
+                      src={article.coverImage || article.image}
+
+                      alt={article.title}
+
+                      loading="lazy"
+
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+
+                  />
+
+                 ):(
+
+                  <div className="w-full h-full flex items-center justify-center text-white/80 font-bold text-sm px-6 text-center">
+
+                      {article.title}
+
+                  </div>
+
+                 )}
+
+                 <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-[#102B3F]/90 text-[#C29316] text-[10px] font-extrabold uppercase tracking-wider">
+
+                  {article.category || 'ADMISSIONS & GUIDANCE'}
+
+                 </span>
+
+             </div>
+
+             <div className="p-5 flex-1 flex flex-col justify-between">
+
+                 <div>
+
+                  <h3 className="text-base font-extrabold text-[#172B3B] group-hover:text-[#2E7658] line-clamp-2 leading-snug transition-colors">
+
+                {article.title}
+
+               </h3>
+
+               <p className="text-xs text-[#5E6D7D] line-clamp-2 mt-2 leading-relaxed">
+
+                {article.summary || article.excerpt || article.description}
+
+               </p>
+
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-[#EDF2F6] flex items-center justify-between text-xs">
+
+               <span className="text-[#7A8B99] font-medium">
+
+                {article.date || article.publishedAt || '2026 Guide'}
+
+               </span>
+
+               <span className="font-bold text-[#C29316] group-hover:translate-x-0.5 transition-transform inline-flex items-center gap-1">
+
+                Read article <ArrowRight className="w-3.5 h-3.5" />
+
+               </span>
+
+              </div>
+
+             </div>
+
+            </article>
+
+        ))}
+
+       </StaggerGrid>
+
+      </div>
+
+     </div>
+
+    </div>
+
+   </section>
+
+     {/*
+===================================================================
+==
+
+         5. FEATURED SCHOLARSHIPS (Deep Navy Contrast Section -Reference
+00:16)
+
+===================================================================
+== */}
+
+     <section
+
+      id="featured-scholarships-section"
+
+      className="py-16 lg:py-20 bg-[#102B3F] text-white relative overflow-hidden"
+
+     >
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+         <ScrollReveal className="text-center max-w-3xl mx-auto mb-10">
+
+           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+
+            Explore Scholarship Listings{' '}
+
+            <span className="text-[#C29316]">For Your College Journey</span>
+
+           </h2>
+
+           <p className="text-sm sm:text-base text-white/80 mt-2.5">
+
+            We track verified national, state, and corporate scholarship programs.
+Explore grant
+
+            amounts, eligibility criteria, and application timelines to fund your
+degree.
+
+           </p>
+
+           <div className="flex flex-wrap items-center justify-center gap-2.5 mt-5">
+
+            <span className="px-3.5 py-1 rounded-full text-xs font-semibold bg-white/10 border border-white/15 text-white">
+
+           ₹10,000 to ₹2,00,000+ Grants
+
+          </span>
+
+          <span className="px-3.5 py-1 rounded-full text-xs font-semibold bg-[#2E7658]/30 border border-[#B6DbcB]/30 text-[#B6DbcB]">
+
+           Free student information
+
+          </span>
+
+          <span className="px-3.5 py-1 rounded-full text-xs font-semibold bg-white/10 border border-white/15 text-white">
+
+           Engineering, Medical & Degree
+
+          </span>
+
+      </div>
+
+     </ScrollReveal>
+
+     <StaggerGrid className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+
+      {scholarships.map((item, idx) => (
+
+          <div
+
+           key={item.id || item.name || idx}
+
+           className="rounded-2xl bg-[#163852] border border-white/10 hover:border-[#C29316]/60 p-5 flex flex-col justify-between transition-all hover:-translate-y-1"
+
+          >
+
+           <div>
+
+              <div className="flex items-center justify-between gap-2 mb-3">
+
+               <span className="text-[10px] font-bold uppercase tracking-wider text-white/70 truncate">
+
+                 {item.provider || item.category || 'SCHOLARSHIP GRANT'}
+
+               </span>
+
+           <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#2E7658]/40 text-[#9AE6B4] border border-[#2E7658] shrink-0">
+
+            ✓ Verified
+
+           </span>
+
+         </div>
+
+         <h3 className="text-base font-extrabold text-white line-clamp-2">
+
+           {item.name || item.title}
+
+         </h3>
+
+         <div className="mt-3 pt-3 border-t border-white/10">
+
+           <div className="text-xl font-extrabold text-[#C29316]">
+
+            {item.amount || item.award || 'Merit Financial Aid'}
+
+           </div>
+
+           <p className="text-xs text-white/75 line-clamp-2 mt-1.5">
+
+            {item.eligibility || item.description}
+
+           </p>
+
+         </div>
+
+        </div>
+
+        <div className="mt-5 pt-3 border-t border-white/10 flex items-center justify-between text-xs">
+
+         <span className="text-white/60 truncate">
+
+           {item.deadline ? `Deadline: ${item.deadline}` : 'Annual Intake'}
+
+         </span>
+
+         <button
+
+              type="button"
+
+              onClick={() => triggerRoute('scholarships')}
+
+              className="font-bold text-[#C29316] hover:text-white inline-flex items-center gap-1 shrink-0"
+
+             >
+
+              <span>View Details</span>
+
+              <ArrowRight className="w-3.5 h-3.5" />
+
+             </button>
+
+           </div>
+
+        </div>
+
+       ))}
+
+      </StaggerGrid>
+
+      <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
+
+       <div className="flex items-center gap-2 text-xs sm:text-sm text-white/85">
+
+        <span className="w-2 h-2 rounded-full bg-[#2E7658]" />
+
+        <span>Verified government & corporate scholarship directory with
+eligibility filters</span>
+
+       </div>
+
+       <button
+
+        type="button"
+
+        onClick={() => triggerRoute('scholarships')}
+
+        className="px-5 py-2.5 rounded-xl bg-[#C29316] hover:bg-[#a97f11] text-[#102B3F] font-extrabold text-xs inline-flex items-center gap-1.5 shrink-0 transition-colors"
+
+       >
+
+            <span>Browse Full Scholarship Directory</span>
+
+            <ArrowUpRight className="w-4 h-4" />
+
+           </button>
+
+         </div>
+
+      </div>
+
+     </section>
+
+     {/*
+===================================================================
+==
+
+         6. EXAMINATION PREPARATION & CBT MOCK TESTS (Reference 00:18-00:20)
+
+===================================================================
+== */}
+
+     <section id="exam-practice-section" className="py-16 lg:py-20 bg-white border-b border-[#E2E8ED]">
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+         <div className="rounded-3xl border border-[#E2E8ED] bg-[#F5F8F5] p-6 sm:p-10">
+
+           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+
+            <ScrollReveal className="lg:col-span-7 space-y-5">
+
+             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#E2E8ED] text-xs font-bold text-[#2E7658]">
+
+              <span className="w-2 h-2 rounded-full bg-[#2E7658]" />
+
+              <span>FULL-LENGTH CBT PRACTICE ZONE</span>
+
+             </div>
+
+        <h2 className="text-3xl sm:text-4xl font-extrabold text-[#172B3B]">
+
+         Practice Zone @ <span className="text-[#C29316]">Mocktest</span>
+
+        </h2>
+
+        <p className="text-sm sm:text-base text-[#5E6D7D] leading-relaxed">
+
+         Master real exam pressure with Full-Length Computer-Based Tests
+(CBT). Simulate
+
+         the exact test interface for AP EAPCET (MPC & BiPC), TG EAPCET, and
+JEE Main with
+
+         live countdown timers and step-by-step explanations.
+
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+
+         <div className="bg-white p-3.5 rounded-xl border border-[#E2E8ED] flex items-center gap-3">
+
+          <Clock className="w-5 h-5 text-[#C29316] shrink-0" />
+
+          <div>
+
+            <div className="text-xs font-extrabold text-[#172B3B]">Real Exam
+Timer</div>
+
+            <div className="text-[11px] text-[#5E6D7D]">180 Min CBT
+Palette</div>
+
+          </div>
+
+         </div>
+
+         <div className="bg-white p-3.5 rounded-xl border border-[#E2E8ED] flex items-center gap-3">
+
+          <BarChart3 className="w-5 h-5 text-[#2E7658] shrink-0" />
+
+          <div>
+
+              <div className="text-xs font-extrabold text-[#172B3B]">Accuracy
+Analytics</div>
+
+              <div className="text-[11px] text-[#5E6D7D]">Subject-wise
+score</div>
+
+             </div>
+
+          </div>
+
+          <div className="bg-white p-3.5 rounded-xl border border-[#E2E8ED] flex items-center gap-3">
+
+             <CheckCircle2 className="w-5 h-5 text-[#102B3F] shrink-0" />
+
+             <div>
+
+              <div className="text-xs font-extrabold text-[#172B3B]">Verified
+Solutions</div>
+
+              <div className="text-[11px] text-[#5E6D7D]">Step-by-step
+keys</div>
+
+             </div>
+
+          </div>
+
+         </div>
+
+         <div className="flex flex-wrap items-center gap-3 pt-2">
+
+          <button
+
+             type="button"
+
+             onClick={() => triggerRoute('mock-tests')}
+
+             className="px-5 py-3 rounded-xl bg-[#102B3F] hover:bg-[#173b56] text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 transition-colors"
+
+          >
+
+             <span>Browse All Mock Tests</span>
+
+             <ArrowRight className="w-4 h-4 text-[#C29316]" />
+
+          </button>
+
+          <button
+
+           type="button"
+
+           onClick={() => triggerRoute('mock-tests-ap')}
+
+           className="px-5 py-3 rounded-xl bg-[#2E7658] hover:bg-[#235c44] text-white font-bold text-xs sm:text-sm transition-colors"
+
+          >
+
+           AP EAPCET Free Demo
+
+          </button>
+
+          <button
+
+           type="button"
+
+           onClick={() => triggerRoute('mock-tests-tg')}
+
+           className="px-5 py-3 rounded-xl bg-white hover:bg-[#FDF8EB] text-[#172B3B] border border-[#E2E8ED] font-bold text-xs sm:text-sm transition-colors"
+
+          >
+
+           TG EAPCET Practice
+
+          </button>
+
+         </div>
+
+       </ScrollReveal>
+
+       {/* Illustrated CBT Interface Preview */}
+
+       <ScrollReveal delay={0.12} className="lg:col-span-5">
+
+         <div className="bg-white rounded-2xl border border-[#E2E8ED] p-5 shadow-sm space-y-4">
+
+          <div className="flex items-center justify-between border-b border-[#EDF2F6] pb-3">
+
+          <span className="text-xs font-extrabold text-[#102B3F]">
+
+           STUDENT CBT PRACTICE
+
+          </span>
+
+          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EAF4F0] text-[#2E7658]">
+
+           Timed practice • Score review
+
+          </span>
+
+         </div>
+
+         <div className="space-y-2.5">
+
+          {[
+
+           {
+
+               title: 'AP EAPCET (MPC -Engineering) Full Mock Test',
+
+               meta: '80 Maths • 40 Physics • 40 Chemistry',
+
+               route: 'mock-tests-ap',
+
+           },
+
+           {
+
+               title: 'AP EAPCET (BiPC -Agriculture & Pharmacy) Mock',
+
+               meta: '80 Biology • 40 Physics • 40 Chemistry',
+
+               route: 'mock-tests-ap',
+
+           },
+
+           {
+
+               title: 'TG EAPCET (MPC & BiPC) Full-Length CBT Series',
+
+               meta: 'Telangana State Council Syllabus',
+
+               route: 'mock-tests-tg',
+
+           },
+
+          ].map((test) => (
+
+              <div
+
+                  key={test.title}
+
+                  onClick={() => triggerRoute(test.route)}
+
+                  role="button"
+
+                  tabIndex={0}
+
+                  onKeyDown={(e) => e.key === 'Enter' && triggerRoute(test.route)}
+
+                  className="p-3.5 rounded-xl bg-[#F5F8F5] hover:bg-[#FDF8EB] border border-[#E2E8ED] hover:border-[#EED690] flex items-center justify-between gap-3 cursor-pointer transition-colors"
+
+              >
+
+                  <div>
+
+                   <div className="text-xs font-bold text-[#172B3B]">{test.title}</div>
+
+                   <div className="text-[11px] text-[#5E6D7D] mt-0.5">{test.meta}
+</div>
+
+                  </div>
+
+                  <span className="text-xs font-extrabold text-[#C29316] shrink-0">
+
+                   Start →
+
+                  </span>
+
+              </div>
+
+             ))}
+
+            </div>
+
+           </div>
+
+          </ScrollReveal>
+
+         </div>
+
+     </div>
+
+      </div>
+
+     </section>
+
+     {/*
+===================================================================
+==
+
+         7. STUDENT UTILITY ENGINE ("TOOLS" Section -Reference 00:21-00:22)
+
+===================================================================
+== */}
+
+     <section id="student-tools-section" className="py-16 lg:py-20 bg-[#F5F8F5] border-b border-[#E2E8ED]">
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+         <ScrollReveal className="text-center max-w-2xl mx-auto mb-12">
+
+           <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white border border-[#E2E8ED] text-[11px] font-bold uppercase tracking-wider text-[#2E7658]">
+
+            <Wrench className="w-3.5 h-3.5" />
+
+            <span>STUDENT UTILITY ENGINE</span>
+
+           </span>
+
+           <h2 className="text-4xl sm:text-6xl font-black tracking-[0.28em] text-[#102B3F] mt-3 pl-[0.28em]">
+
+            TOOLS
+
+           </h2>
+
+           <p className="text-sm sm:text-base text-[#5E6D7D] mt-3">
+
+            Free, high-performance browser utilities crafted for engineering
+students — track
+
+            attendance, calculate CGPA, and prepare counseling documents with
+zero server upload.
+
+         </p>
+
+        </ScrollReveal>
+
+        <StaggerGrid className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+         {STUDENT_UTILITY_TOOLS.map((tool) => {
+
+          const Icon = tool.icon;
+
+          return (
+
+           <div
+
+            key={tool.id}
+
+            className="naa-card p-6 flex flex-col justify-between bg-white"
+
+           >
+
+            <div>
+
+                <div className="flex items-center justify-between gap-2 mb-4">
+
+                 <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-[#EAF4F0] text-[#2E7658]">
+
+                  {tool.category}
+
+                 </span>
+
+                 <div className="w-9 h-9 rounded-xl bg-[#F5F8F5] flex items-center justify-center text-[#102B3F]">
+
+                  <Icon className="w-4 h-4" />
+
+                 </div>
+
+                </div>
+
+                <h3 className="text-lg font-extrabold text-[#172B3B]">{tool.title}
+</h3>
+
+                <p className="text-xs text-[#5E6D7D] mt-2 leading-relaxed">
+
+            {tool.description}
+
+           </p>
+
+           <div className="flex flex-wrap gap-1.5 mt-4">
+
+            {tool.specs.map((spec) => (
+
+             <span
+
+              key={spec}
+
+              className="px-2.5 py-1 rounded-md text-[10px] font-semibold bg-[#F5F8F5] text-[#172B3B] border border-[#E2E8ED]"
+
+             >
+
+              {spec}
+
+             </span>
+
+            ))}
+
+           </div>
+
+          </div>
+
+          <div className="mt-6 pt-4 border-t border-[#EDF2F6] flex items-center justify-between">
+
+           <span className="text-[11px] font-semibold text-[#5E6D7D]">
+
+            Student utility
+
+           </span>
+
+           <button
+
+            type="button"
+
+            onClick={() => triggerRoute(tool.route)}
+
+            className="px-3.5 py-2 rounded-xl bg-[#102B3F] hover:bg-[#C29316] text-white font-bold text-xs inline-flex items-center gap-1 transition-colors"
+
+                   >
+
+                    <span>Launch</span>
+
+                    <ArrowRight className="w-3.5 h-3.5" />
+
+                   </button>
+
+                  </div>
+
+              </div>
+
+             );
+
+            })}
+
+           </StaggerGrid>
+
+       </div>
+
+      </section>
+
+      {/*
+===================================================================
+==
+
+           8. NAACOX AI ASSISTANT & LOWER EDUCATIONAL GUIDES (Preserved)
+
+===================================================================
+== */}
+
+      {children && (
+
+       <section id="naacox-ai-section" className="py-12 bg-white">
+
+           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">{children}</div>
+
+       </section>
+
+      )}
+
+  </div>
+
+ );
+
+}
+
+export { HeroSection };
