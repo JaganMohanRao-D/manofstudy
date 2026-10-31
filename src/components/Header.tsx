@@ -39,7 +39,7 @@ import {
  Calculator,
 
  FileText,
-<PARSED TEXT FOR PAGE: 15 / 97>
+
     ShieldCheck,
 
     Mic,
@@ -83,7 +83,7 @@ interface MegaMenuColumn {
 }
 
 interface NavCategory {
-<PARSED TEXT FOR PAGE: 16 / 97>
+
     id: string;
 
     label: string;
@@ -129,7 +129,7 @@ const NAV_CATEGORIES: NavCategory[] = [
               {
 
                   label: 'AP Allotment Explorer',
-<PARSED TEXT FOR PAGE: 17 / 97>
+
               description: 'Inspect college-wise & branch-wise seat allotments across AP',
 
               route: 'ap-allotment-explorer',
@@ -177,7 +177,7 @@ const NAV_CATEGORIES: NavCategory[] = [
           {
 
               label: 'AP EAPCET Full Mock Tests',
-<PARSED TEXT FOR PAGE: 18 / 97>
+
                description: 'Practice full-length MPC & BiPC CBT mock exams',
 
                route: 'mock-tests-ap',
@@ -227,7 +227,7 @@ const NAV_CATEGORIES: NavCategory[] = [
            },
 
            {
-<PARSED TEXT FOR PAGE: 19 / 97>
+
             label: 'TG Allotment & Cutoff Explorer',
 
             description: 'Search historical closing ranks across OU & JNTUH regions',
@@ -275,7 +275,7 @@ const NAV_CATEGORIES: NavCategory[] = [
         {
 
             label: 'TG EAPCET Mock Test Portal',
-<PARSED TEXT FOR PAGE: 20 / 97>
+
                description: 'Explore available Telangana CBT practice tests and review results',
 
                route: 'mock-tests-tg',
@@ -325,7 +325,7 @@ const NAV_CATEGORIES: NavCategory[] = [
            },
 
            {
-<PARSED TEXT FOR PAGE: 21 / 97>
+
               label: 'Government & Post-Matric Schemes',
 
               description: 'Central Sector, AICTE Pragati, Swanath & state fee reimbursement',
@@ -373,7 +373,7 @@ const NAV_CATEGORIES: NavCategory[] = [
          items: [
 
           {
-<PARSED TEXT FOR PAGE: 22 / 97>
+
                label: 'Full Mock Test Exam Portal',
 
                description: 'Real exam interface with timer, question palette & solutions',
@@ -421,7 +421,7 @@ const NAV_CATEGORIES: NavCategory[] = [
  {
 
      id: 'other-tools',
-<PARSED TEXT FOR PAGE: 23 / 97>
+
   label: 'Other Tools',
 
   icon: Wrench,
@@ -469,7 +469,7 @@ const NAV_CATEGORIES: NavCategory[] = [
        heading: 'Document & Media Utilities',
 
        items: [
-<PARSED TEXT FOR PAGE: 24 / 97>
+
            {
 
                label: 'PDF Compress & Counselling Tools',
@@ -519,7 +519,7 @@ const NAV_CATEGORIES: NavCategory[] = [
           items: [
 
            {
-<PARSED TEXT FOR PAGE: 25 / 97>
+
                label: 'CSE & AI/ML 4-Year Roadmap',
 
                description: 'Semester-by-semester skills, DSA, projects & internship blueprint',
@@ -569,7 +569,7 @@ const NAV_CATEGORIES: NavCategory[] = [
      id: 'career-resources',
 
      label: 'Career & Student Resources',
-<PARSED TEXT FOR PAGE: 26 / 97>
+
   icon: Briefcase,
 
   columns: [
@@ -617,7 +617,7 @@ const NAV_CATEGORIES: NavCategory[] = [
             icon: GraduationCap,
 
         },
-<PARSED TEXT FOR PAGE: 27 / 97>
+
           ],
 
       },
@@ -663,7 +663,7 @@ export const Header: React.FC<HeaderProps> = ({
       }
 
      };
-<PARSED TEXT FOR PAGE: 28 / 97>
+
  const handleClickOutside = (e: MouseEvent) => {
 
      if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
@@ -713,7 +713,7 @@ const handleRouteSelect = (route: string) => {
      onNavigate(route);
 
  }
-<PARSED TEXT FOR PAGE: 29 / 97>
+
  };
 
  return (
@@ -758,7 +758,7 @@ Index) */}
       <span className="flex items-center gap-2.5 truncate">
 
          <Search className="w-4 h-4 text-[#5E6D7D] group-hover:text-[#C29316] transition-colors" />
-<PARSED TEXT FOR PAGE: 31 / 97>
+
          <span className="truncate">
 
           Search colleges, EAPCET cutoffs, scholarships, mock tests...
@@ -804,7 +804,7 @@ Index) */}
       aria-label="Search colleges and tools"
 
      >
-<PARSED TEXT FOR PAGE: 32 / 97>
+
       <Search className="w-5 h-5" />
 
      </button>
@@ -844,7 +844,7 @@ Index) */}
       <ArrowUpRight className="w-3.5 h-3.5 text-[#C29316]" />
 
      </button>
-<PARSED TEXT FOR PAGE: 33 / 97>
+
        {/* Mobile Hamburger Button */}
 
        <button
@@ -889,7 +889,7 @@ className="w-5 h-5" />}
            type="button"
 
            onClick={() => handleRouteSelect('home')}
-<PARSED TEXT FOR PAGE: 34 / 97>
+
         className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items- center gap-1.5 transition-colors ${            activeWorkspace === 'hub'             ? 'bg-[#C29316] text-[#102B3F] font-bold'             : 'text-white/90 hover:text-white hover:bg-white/10'          }`}
 
       >
@@ -928,7 +928,7 @@ className="w-5 h-5" />}
 
                setOpenCategory((prev) => (prev === category.id ? null :
 category.id))
-<PARSED TEXT FOR PAGE: 35 / 97>
+
            }
 
            aria-expanded={isOpen}
@@ -962,7 +962,7 @@ category.id))
                 animate={{ opacity: 1, y: 0, scale: 1 }}
 
                 exit={{ opacity: 0, y: 6, scale: 0.98 }}
-<PARSED TEXT FOR PAGE: 36 / 97>
+
             transition={{ duration: 0.18, ease: 'easeOut' }}
 
             className={`absolute top-full pt-2 z-50 ${                 category.columns.length > 1                  ? 'left-0 w-[640px] max-w-[calc(100vw-2rem)]'                  : 'left-0 w-[340px] max-w-[calc(100vw-2rem)]'              }`}
@@ -998,7 +998,7 @@ category.id))
                         <button
 
                          key={item.label}
-<PARSED TEXT FOR PAGE: 37 / 97>
+
                       type="button"
 
                       onClick={() => handleRouteSelect(item.route)}
@@ -1038,7 +1038,7 @@ category.id))
                          <p className="text-[11px] text-[#5E6D7D] line-clamp-2 mt-0.5">
 
                            {item.description}
-<PARSED TEXT FOR PAGE: 38 / 97>
+
                                   </p>
 
                                  </div>
@@ -1086,7 +1086,7 @@ category.id))
      >
 
       <span>Editorial Blogs</span>
-<PARSED TEXT FOR PAGE: 39 / 97>
+
       <ArrowUpRight className="w-3.5 h-3.5" />
 
      </button>
@@ -1132,7 +1132,7 @@ category.id))
              className="rounded-xl border border-[#E2E8ED] overflow-hidden bg-[#F5F8F5]/50"
 
           >
-<PARSED TEXT FOR PAGE: 40 / 97>
+
            <button
 
             type="button"
@@ -1175,7 +1175,7 @@ category.id))
                   <div className="text-[10px] font-bold uppercase tracking- wider text-[#2E7658] pt-1">
 
                       {col.heading}
-<PARSED TEXT FOR PAGE: 41 / 97>
+
                   </div>
 
                   {col.items.map((item) => (
@@ -1223,7 +1223,7 @@ category.id))
            )}
 
           </div>
-<PARSED TEXT FOR PAGE: 42 / 97>
+
            );
 
           })}
@@ -1269,7 +1269,7 @@ category.id))
      </motion.div>
 
     )}
-<PARSED TEXT FOR PAGE: 43 / 97>
+
       </AnimatePresence>
 
      </header>
