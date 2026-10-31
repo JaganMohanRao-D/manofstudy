@@ -17,6 +17,23 @@ function patchFile(relativePath, transform, label) {
 
 patchFile('src/components/Header.tsx', (source) => {
   let next = source;
+  // The premium Naa College header already has a complete white accordion drawer.
+  // Do not inject the retired cyan mobile menu into this redesigned component.
+  const hasPremiumResponsiveHeader =
+    next.includes('MOBILE ACCORDION NAVIGATION DRAWER') &&
+    next.includes('aria-label="Primary platform navigation"') &&
+    next.includes('className="lg:hidden bg-white');
+  if (hasPremiumResponsiveHeader) {
+    if (!next.includes('id="mos-desktop-primary-nav"')) {
+      next = next.replace('aria-label="Primary platform navigation"', 'id="mos-desktop-primary-nav" aria-label="Primary platform navigation"');
+    }
+    if (!next.includes('id="mos-mobile-navigation-panel"')) {
+      next = next.replace('className="lg:hidden bg-white', 'id="mos-mobile-navigation-panel" className="lg:hidden bg-white');
+    }
+    next = next.replace('overflow-y- auto', 'overflow-y-auto');
+    console.log('[mobile-ap-ux] premium responsive mega-menu detected; retained its existing mobile accordion and skipped the legacy injector.');
+    return next;
+  }
 
   next = next.replace(
     '<nav className="hidden flex-1 items-center justify-center gap-1 lg:flex" aria-label="Primary navigation">',

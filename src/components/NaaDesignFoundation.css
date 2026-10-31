@@ -1,110 +1,119 @@
-/* Naa College homepage design foundation
-   Shared visual rules for the homepage only. Keep product logic and other routes untouched. */
-.naa-wireframe-home {
-  --nc-ink: #172b3b;
-  --nc-muted: #5e6d7d;
-  --nc-line: #e2e8ed;
-  --nc-blue: #245d7a;
-  --nc-gold: #c29316;
-  --nc-green: #2e7658;
-  --nc-radius-card: 18px;
-  --nc-radius-control: 12px;
-  --nc-shadow-card: 0 3px 14px rgba(23, 43, 59, 0.045);
-  --nc-shadow-hover: 0 12px 28px rgba(23, 43, 59, 0.09);
-  color: var(--nc-ink);
+/*
+  Naa College design foundation
+  Shared visual tokens and homepage-only legacy style isolation.
+*/
+:root {
+  --naa-bg-main: #FFFFFF;
+  --naa-bg-soft: #F5F8F5;
+  --naa-bg-mint: #EBF3EE;
+  --naa-bg-navy: #102B3F;
+  --naa-bg-navy-elevated: #163852;
+
+  --naa-text-primary: #172B3B;
+  --naa-text-secondary: #5E6D7D;
+  --naa-text-muted: #7A8B99;
+  --naa-text-inverse: #FFFFFF;
+
+  --naa-gold: #C29316;
+  --naa-gold-light: #FDF8EB;
+  --naa-gold-border: #EED690;
+  --naa-green: #2E7658;
+  --naa-green-light: #EAF4F0;
+  --naa-green-border: #B6DBCB;
+
+  --naa-border: #E2E8ED;
+  --naa-border-subtle: #EDF2F6;
+  --naa-shadow-sm: 0 2px 8px -2px rgba(16, 43, 63, 0.06);
+  --naa-shadow-md: 0 10px 25px -5px rgba(16, 43, 63, 0.08), 0 4px 10px -3px rgba(16, 43, 63, 0.04);
+  --naa-shadow-lg: 0 20px 40px -12px rgba(16, 43, 63, 0.14);
+  --naa-shadow-mega: 0 24px 48px -12px rgba(16, 43, 63, 0.22);
+
+  --naa-radius-sm: 0.5rem;
+  --naa-radius-md: 0.875rem;
+  --naa-radius-lg: 1.25rem;
+  --naa-radius-xl: 1.5rem;
+  --naa-radius-pill: 9999px;
+
+  --naa-font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --naa-font-display: 'Plus Jakarta Sans', sans-serif;
+  --naa-font-condensed: 'Bebas Neue', 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Scope the refreshed landing page away from the old Kinetic visual system. */
+.naa-platform-shell,
+.naa-platform-shell.mos-k-homepage-flow,
+.naa-platform-shell .mos-kinetic-home {
+  background-color: var(--naa-bg-main);
+  color: var(--naa-text-primary);
+  font-family: var(--naa-font-sans);
+  letter-spacing: normal;
+  overflow-x: clip;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 
-html.dark .naa-wireframe-home {
-  --nc-ink: #eaf2fa;
-  --nc-muted: #b1c0ce;
-  --nc-line: #2a3a49;
-  --nc-blue: #83b8d2;
-  --nc-gold: #e2c16a;
-  --nc-green: #8cc6a7;
-  --nc-shadow-card: 0 3px 14px rgba(0, 0, 0, 0.14);
-  --nc-shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.22);
+.naa-platform-shell .naa-card {
+  background: var(--naa-bg-main);
+  border: 1px solid var(--naa-border);
+  border-radius: var(--naa-radius-lg);
+  box-shadow: var(--naa-shadow-sm);
+  font-family: var(--naa-font-sans);
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.naa-wireframe-home .nc-page-width {
-  width: min(1220px, calc(100% - 48px));
+.naa-platform-shell .naa-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--naa-shadow-md);
+  border-color: #CBD5E1;
 }
 
-.naa-wireframe-home :is(.nc-quick-heading h2, .nc-section-heading-row h2, .nc-home-section-head h2) {
-  text-wrap: balance;
+.naa-hero-title {
+  font-family: var(--naa-font-display);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--naa-text-primary);
 }
 
-.naa-wireframe-home :is(.nc-quick-heading p, .nc-section-heading-row p, .nc-home-section-head p, .nc-hero-description) {
-  text-wrap: pretty;
-}
-
-.naa-wireframe-home :is(
-  .nc-state-card,
-  .nc-shortcut,
-  .nc-home-tool-card,
-  .nc-discovery-card,
-  .nc-practice-option,
-  .nc-blog-card,
-  .nc-featured-scholarship-card
-) {
-  scroll-margin-top: 96px;
-}
-
-.naa-wireframe-home :is(.nc-state-card, .nc-shortcut, .nc-practice-option, .nc-blog-card, .nc-featured-scholarship-card) {
-  transition-duration: 180ms;
-  transition-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-
-.naa-wireframe-home :is(.nc-state-card, .nc-shortcut, .nc-practice-option, .nc-blog-card, .nc-featured-scholarship-card):hover {
-  box-shadow: var(--nc-shadow-hover);
-}
-
-.naa-wireframe-home :is(.nc-state-card, .nc-shortcut, .nc-search-wrap, .nc-search-submit, .nc-home-tool-card, .nc-discovery-card, .nc-practice-option, .nc-blog-card, .nc-featured-scholarship-card, .nc-naacox-chat-stage) {
-  border-color: var(--nc-line);
-}
-
-.naa-wireframe-home :is(.nc-state-card, .nc-shortcut, .nc-home-tool-card, .nc-discovery-card, .nc-practice-option, .nc-blog-card, .nc-featured-scholarship-card) {
-  box-shadow: var(--nc-shadow-card);
-}
-
-.naa-wireframe-home :is(a, button, input, textarea, select):focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--nc-blue) 72%, white);
-  outline-offset: 3px;
-}
-
-.naa-wireframe-home :is(.nc-primary-link, .nc-all-blogs-link, .nc-card-action, .nc-home-card-action) {
-  text-underline-offset: 4px;
-}
-
-.naa-wireframe-home img,
-.naa-wireframe-home video {
-  max-width: 100%;
-}
-
-@media (max-width: 720px) {
-  .naa-wireframe-home .nc-page-width {
-    width: calc(100% - 32px);
-  }
-
-  .naa-wireframe-home :is(.nc-quick-section, .nc-home-tools, .nc-home-practice, .nc-home-pathways, .nc-blogs-section, .nc-featured-scholarships) {
-    scroll-margin-top: 76px;
-  }
-
-  .naa-wireframe-home :is(.nc-quick-heading h2, .nc-section-heading-row h2) {
-    letter-spacing: -0.035em;
+@media (max-width: 640px) {
+  .naa-mobile-condensed-heading {
+    font-family: var(--naa-font-condensed);
+    letter-spacing: 0.03em;
+    line-height: 1.04;
   }
 }
 
-@media (max-width: 380px) {
-  .naa-wireframe-home .nc-page-width {
-    width: calc(100% - 28px);
+@keyframes naa-ticker-scroll {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+.naa-ticker-track {
+  display: flex;
+  width: max-content;
+  animation: naa-ticker-scroll 38s linear infinite;
+}
+
+.naa-ticker-track:hover {
+  animation-play-state: paused;
+}
+
+@media (max-width: 768px) {
+  .naa-ticker-track {
+    animation-duration: 75s;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .naa-wireframe-home :is(.nc-state-card, .nc-shortcut, .nc-home-tool-card, .nc-practice-option, .nc-blog-card, .nc-featured-scholarship-card) {
-    transition: none !important;
-    transform: none !important;
+  .naa-platform-shell *,
+  .naa-platform-shell *::before,
+  .naa-platform-shell *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

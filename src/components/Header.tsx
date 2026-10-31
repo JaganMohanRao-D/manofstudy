@@ -1,145 +1,1281 @@
-import React, { useState } from 'react';
-import { Search, Menu, X, ChevronDown, Home, GraduationCap, Map, Trophy, Sparkles, BookOpen, ShieldCheck, FileText, Image as ImageIcon, Heart, Wrench, Route, Calculator, ClipboardCheck, Info, Mail } from 'lucide-react';
-import { ToolTab, WorkspaceView, LegalModalType } from '../types';
+import React, { useState, useEffect, useRef } from 'react';
+
+import { motion, AnimatePresence } from 'motion/react';
+
+import {
+
+ Search,
+
+ ChevronDown,
+
+ GraduationCap,
+
+ Compass,
+
+ Award,
+
+ CheckSquare,
+
+ Wrench,
+
+ BookOpen,
+
+ Briefcase,
+
+ HeartHandshake,
+
+ Menu,
+
+ X,
+
+ ArrowUpRight,
+
+ Sparkles,
+
+ Building2,
+
+ FileSpreadsheet,
+
+ Calculator,
+
+ FileText,
+
+    ShieldCheck,
+
+    Mic,
+
+    Bot,
+
+} from 'lucide-react';
 
 export interface HeaderProps {
-  activeWorkspace?: WorkspaceView;
-  onSelectWorkspace?: (ws: WorkspaceView) => void;
-  activeTab?: ToolTab;
-  setActiveTab?: (tab: ToolTab) => void;
-  onSelectEapcetPhase?: (phase: string) => void;
-  onOpenLegal?: (type: LegalModalType) => void;
-  onOpenCommandPalette?: () => void;
-  onOpenSupport?: () => void;
+
+    activeWorkspace?: string;
+
+    onNavigate?: (routeOrWorkspace: string) => void;
+
+    onOpenSearch?: () => void;
+
+    onOpenSupport?: () => void;
+
 }
 
-type NavItem = { label: string; workspace: WorkspaceView; tab?: ToolTab; icon: React.ComponentType<{ className?: string }> };
+interface MegaMenuItem {
 
-const AP_TOOLS: NavItem[] = [
-  { label: 'AP EAPCET College-Wise Allotments', workspace: 'ap-allotments', icon: ClipboardCheck },
-  { label: 'AP College Predictor', workspace: 'ap-predictor', icon: Map },
-  { label: 'EAPCET Web Options Generator', workspace: 'ap-web-options', icon: ClipboardCheck },
-  { label: 'AP Rank Predictor', workspace: 'ap-rank-predictor', icon: Calculator },
-  { label: 'AP B.Tech Colleges', workspace: 'ap-top-colleges', icon: Trophy },
+    label: string;
+
+    description: string;
+
+    route: string;
+
+    badge?: string;
+
+    icon: React.ComponentType<{ className?: string }>;
+
+}
+
+interface MegaMenuColumn {
+
+    heading: string;
+
+    items: MegaMenuItem[];
+
+}
+
+interface NavCategory {
+
+    id: string;
+
+    label: string;
+
+    icon: React.ComponentType<{ className?: string }>;
+
+    columns: MegaMenuColumn[];
+
+}
+
+const NAV_CATEGORIES: NavCategory[] = [
+
+    {
+
+        id: 'ap-hub',
+
+        label: 'For AP',
+
+        icon: Compass,
+
+        columns: [
+
+         {
+
+             heading: 'AP EAPCET Counselling & Cutoffs',
+
+             items: [
+
+              {
+
+                  label: 'AP EAPCET College Predictor',
+
+                  description: 'Explore historical 2025–2026 AP EAPCET allotment patterns and cutoff ranks',
+
+                  route: 'ap-eapcet-predictor',
+
+                  badge: '2026 Ready',
+
+                  icon: Compass,
+
+              },
+
+              {
+
+                  label: 'AP Allotment Explorer',
+
+              description: 'Inspect college-wise & branch-wise seat allotments across AP',
+
+              route: 'ap-allotment-explorer',
+
+              badge: 'Historical Data',
+
+              icon: Building2,
+
+          },
+
+          {
+
+              label: 'AP Web Options Generator',
+
+              description: 'Build prioritized, risk-balanced counseling web option lists',
+
+              route: 'web-options-generator',
+
+              icon: FileSpreadsheet,
+
+          },
+
+        ],
+
+    },
+
+    {
+
+        heading: 'AP Colleges & Exam Prep',
+
+        items: [
+
+          {
+
+              label: 'AP Autonomous Colleges Hub',
+
+              description: 'Explore UGC autonomous engineering institutions in Andhra Pradesh',
+
+              route: 'autonomous-colleges',
+
+              icon: GraduationCap,
+
+          },
+
+          {
+
+              label: 'AP EAPCET Full Mock Tests',
+
+               description: 'Practice full-length MPC & BiPC CBT mock exams',
+
+               route: 'mock-tests-ap',
+
+               badge: 'Free CBT',
+
+               icon: CheckSquare,
+
+           },
+
+          ],
+
+      },
+
+     ],
+
+ },
+
+ {
+
+     id: 'tg-hub',
+
+     label: 'For TG',
+
+     icon: Building2,
+
+     columns: [
+
+      {
+
+          heading: 'TG EAPCET Counselling & Cutoffs',
+
+          items: [
+
+           {
+
+               label: 'TG EAPCET College Predictor',
+
+               description: 'Rank-based college & branch prediction for Telangana admissions',
+
+               route: 'tg-eapcet-predictor',
+
+               badge: 'Updated',
+
+               icon: Compass,
+
+           },
+
+           {
+
+            label: 'TG Allotment & Cutoff Explorer',
+
+            description: 'Search historical closing ranks across OU & JNTUH regions',
+
+            route: 'tg-allotment-explorer',
+
+            icon: Building2,
+
+        },
+
+        {
+
+            label: 'TG Web Options Planner',
+
+            description: 'Generate structured counseling preference sheets for TG EAPCET',
+
+            route: 'web-options-generator',
+
+            icon: FileSpreadsheet,
+
+        },
+
+       ],
+
+   },
+
+   {
+
+       heading: 'TG Colleges & Practice',
+
+       items: [
+
+        {
+
+            label: 'TG Autonomous Colleges Directory',
+
+            description: 'Top accredited autonomous engineering colleges in Telangana',
+
+            route: 'autonomous-colleges',
+
+            icon: GraduationCap,
+
+        },
+
+        {
+
+            label: 'TG EAPCET Mock Test Portal',
+
+               description: 'Explore available Telangana CBT practice tests and review results',
+
+               route: 'mock-tests-tg',
+
+               badge: 'Live',
+
+               icon: CheckSquare,
+
+           },
+
+          ],
+
+      },
+
+     ],
+
+ },
+
+ {
+
+     id: 'scholarships',
+
+     label: 'Scholarships',
+
+     icon: Award,
+
+     columns: [
+
+      {
+
+          heading: 'Student Scholarship Listings',
+
+          items: [
+
+           {
+
+               label: 'Available Scholarship Listings',
+
+               description: 'Browse national, state & corporate scholarships for B.Tech students',
+
+               route: 'scholarships',
+
+               badge: 'Listed',
+
+               icon: Award,
+
+           },
+
+           {
+
+              label: 'Government & Post-Matric Schemes',
+
+              description: 'Central Sector, AICTE Pragati, Swanath & state fee reimbursement',
+
+              route: 'scholarships',
+
+              icon: ShieldCheck,
+
+          },
+
+          {
+
+              label: 'Corporate & Merit Grants',
+
+              description: 'Reliance Foundation, LIC Golden Jubilee, Tata Capital & ONGC',
+
+              route: 'scholarships',
+
+              icon: Sparkles,
+
+          },
+
+         ],
+
+     },
+
+    ],
+
+},
+
+{
+
+    id: 'mock-tests',
+
+    label: 'Mock Tests',
+
+    icon: CheckSquare,
+
+    columns: [
+
+     {
+
+         heading: 'Computer-Based Test (CBT) Portals',
+
+         items: [
+
+          {
+
+               label: 'Full Mock Test Exam Portal',
+
+               description: 'Real exam interface with timer, question palette & solutions',
+
+               route: 'mock-tests',
+
+               badge: 'Popular',
+
+               icon: CheckSquare,
+
+           },
+
+           {
+
+               label: 'AP EAPCET Practice Series',
+
+               description: 'MPC & BiPC chapter-wise and full syllabus practice exams',
+
+               route: 'mock-tests-ap',
+
+               icon: BookOpen,
+
+           },
+
+           {
+
+               label: 'TG EAPCET Practice Series',
+
+               description: 'Timed Telangana EAPCET mock exams with accuracy breakdown',
+
+               route: 'mock-tests-tg',
+
+               icon: BookOpen,
+
+           },
+
+          ],
+
+      },
+
+     ],
+
+ },
+
+ {
+
+     id: 'other-tools',
+
+  label: 'Other Tools',
+
+  icon: Wrench,
+
+  columns: [
+
+   {
+
+       heading: 'Academic & Attendance Calculators',
+
+       items: [
+
+        {
+
+            label: 'Attendance Defender',
+
+            description: 'Calculate exact classes needed to stay above 75% attendance',
+
+            route: 'attendance-defender',
+
+            badge: 'Student Favorite',
+
+            icon: ShieldCheck,
+
+        },
+
+        {
+
+            label: 'SGPA & CGPA Calculator',
+
+            description: 'Compute semester & cumulative grade points with credit weights',
+
+            route: 'gpa-calculator',
+
+            icon: Calculator,
+
+        },
+
+       ],
+
+   },
+
+   {
+
+       heading: 'Document & Media Utilities',
+
+       items: [
+
+           {
+
+               label: 'PDF Compress & Counselling Tools',
+
+               description: 'Compress rank cards & certificates for portal uploads in- browser',
+
+               route: 'pdf-tools',
+
+               icon: FileText,
+
+           },
+
+           {
+
+               label: 'Video-to-Audio Lecture Converter',
+
+               description: 'Extract clean audio notes from recorded study lectures',
+
+               route: 'video-to-audio',
+
+               icon: Mic,
+
+           },
+
+          ],
+
+      },
+
+     ],
+
+ },
+
+ {
+
+     id: 'academics',
+
+     label: 'Academics',
+
+     icon: BookOpen,
+
+     columns: [
+
+      {
+
+          heading: 'Engineering Roadmaps & Curriculum',
+
+          items: [
+
+           {
+
+               label: 'CSE & AI/ML 4-Year Roadmap',
+
+               description: 'Semester-by-semester skills, DSA, projects & internship blueprint',
+
+               route: 'engineering-roadmaps',
+
+               badge: 'PDF + Interactive',
+
+               icon: BookOpen,
+
+           },
+
+           {
+
+               label: 'CSE Cyber Security Roadmap',
+
+               description: 'Network security, ethical hacking & certification pathway',
+
+               route: 'engineering-roadmaps',
+
+               icon: ShieldCheck,
+
+           },
+
+           {
+
+               label: 'Mechanical & Core Engineering Roadmaps',
+
+               description: 'CAD, core manufacturing & interdisciplinary career tracks',
+
+               route: 'engineering-roadmaps',
+
+               icon: Wrench,
+
+           },
+
+          ],
+
+      },
+
+     ],
+
+ },
+
+ {
+
+     id: 'career-resources',
+
+     label: 'Career & Student Resources',
+
+  icon: Briefcase,
+
+  columns: [
+
+   {
+
+       heading: 'AI Guidance & Editorial Insights',
+
+       items: [
+
+        {
+
+            label: 'NaaCox AI Student Assistant',
+
+            description: 'Ask instant questions on cutoffs, branches, roadmaps & colleges',
+
+            route: '#naacox-ai-section',
+
+            badge: 'AI Powered',
+
+            icon: Bot,
+
+        },
+
+        {
+
+            label: 'Admissions & Career Blogs',
+
+            description: 'In-depth guides on EAPCET counseling, IIT/NIT admissions & skills',
+
+            route: 'blogs',
+
+            icon: FileText,
+
+        },
+
+        {
+
+            label: 'Autonomous Colleges Explorer',
+
+            description: 'Compare NAAC grades, NBA accreditation & placement metrics',
+
+            route: 'autonomous-colleges',
+
+            icon: GraduationCap,
+
+        },
+
+          ],
+
+      },
+
+     ],
+
+ },
+
 ];
-const TG_TOOLS: NavItem[] = [
-  { label: 'TG EAPCET College Predictor', workspace: 'tg-predictor', icon: Map },
-  { label: 'TG Top B.Tech Colleges', workspace: 'tg-top-colleges', icon: Trophy },
-  { label: 'TG EAPCET Allotments — Namewise', workspace: 'tg-allotments', icon: ClipboardCheck },
-];
-const OTHER_TOOLS: NavItem[] = [
-  { label: 'AI Student Gap Analyzer', workspace: 'gap-analyzer', icon: Sparkles },
-  { label: 'Attendance Defender', workspace: 'attendance', icon: ShieldCheck },
-  { label: 'Study Guides', workspace: 'guides', icon: BookOpen },
-  { label: 'PDF Tools', workspace: 'utilities', tab: 'pdf-tools', icon: FileText },
-  { label: 'Image Compressor', workspace: 'utilities', tab: 'resizer', icon: ImageIcon },
-  { label: 'Engineering Roadmaps', workspace: 'roadmaps', icon: Route },
-  { label: 'Internships Radar', workspace: 'internships', icon: GraduationCap },
-  { label: 'Major Projects Hub', workspace: 'projects', icon: Wrench },
-  { label: 'GPA Hub', workspace: 'gpa', icon: Calculator },
-  { label: 'Academics', workspace: 'academics', icon: BookOpen },
-];
 
-export const Header: React.FC<HeaderProps> = ({ activeWorkspace = 'hub', onSelectWorkspace, setActiveTab, onOpenCommandPalette, onOpenLegal, onOpenSupport }) => {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [openMenu, setOpenMenu] = useState<'ap' | 'tg' | 'other' | null>(null);
+export const Header: React.FC<HeaderProps> = ({
 
-  const navigate = (item: NavItem) => {
-    if (item.tab && setActiveTab) setActiveTab(item.tab);
-    onSelectWorkspace?.(item.workspace);
-    setMobileOpen(false);
-    setOpenMenu(null);
-  };
-  const goHome = () => {
-    onSelectWorkspace?.('hub');
-    setMobileOpen(false);
-    setOpenMenu(null);
-    window.history.pushState(null, '', '/');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+ activeWorkspace = 'hub',
 
-  const Dropdown = ({ label, menu, items }: { label: string; menu: 'ap' | 'tg' | 'other'; items: NavItem[] }) => (
-    <div className="relative">
-      <button type="button" onClick={() => setOpenMenu(openMenu === menu ? null : menu)} className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/8 transition-colors" aria-expanded={openMenu === menu}>
-        {label}<ChevronDown className={`w-3.5 h-3.5 transition-transform ${openMenu === menu ? 'rotate-180' : ''}`} />
-      </button>
-      {openMenu === menu && (
-        <div className="absolute left-0 top-full mt-2 w-80 rounded-2xl border border-cyan-400/15 bg-[#07101d]/98 p-2 shadow-2xl shadow-black/40 backdrop-blur-xl z-[80]">
-          {items.map((item) => { const Icon = item.icon; return (
-            <button key={`${menu}-${item.label}`} type="button" onClick={() => navigate(item)} className="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-left text-sm text-slate-300 hover:bg-cyan-400/10 hover:text-white transition-colors">
-              <span className="w-8 h-8 rounded-lg bg-cyan-400/10 border border-cyan-300/10 flex items-center justify-center shrink-0"><Icon className="w-4 h-4 text-cyan-300" /></span>
-              <span className="leading-tight">{item.label}</span>
-            </button>
-          ); })}
-        </div>
-      )}
+ onNavigate,
+
+ onOpenSearch,
+
+ onOpenSupport,
+
+}) => {
+
+ const [openCategory, setOpenCategory] = useState<string | null>(null);
+
+ const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+ const [mobileAccordion, setMobileAccordion] = useState<string | null>('ap- hub');
+
+ const headerRef = useRef<HTMLElement | null>(null);
+
+ // Close mega menu on Escape or outside click
+
+ useEffect(() => {
+
+     const handleKeyDown = (e: KeyboardEvent) => {
+
+      if (e.key === 'Escape') {
+
+          setOpenCategory(null);
+
+          setMobileMenuOpen(false);
+
+      }
+
+     };
+
+ const handleClickOutside = (e: MouseEvent) => {
+
+     if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
+
+         setOpenCategory(null);
+
+     }
+
+ };
+
+ window.addEventListener('keydown', handleKeyDown);
+
+ document.addEventListener('mousedown', handleClickOutside);
+
+ return () => {
+
+     window.removeEventListener('keydown', handleKeyDown);
+
+     document.removeEventListener('mousedown', handleClickOutside);
+
+ };
+
+}, []);
+
+const handleRouteSelect = (route: string) => {
+
+ setOpenCategory(null);
+
+ setMobileMenuOpen(false);
+
+ if (route.startsWith('#')) {
+
+     const target = document.querySelector(route);
+
+     if (target) {
+
+         target.scrollIntoView({ behavior: 'smooth' });
+
+         return;
+
+     }
+
+ }
+
+ if (onNavigate) {
+
+     onNavigate(route);
+
+ }
+
+ };
+
+ return (
+
+  <header
+
+      ref={headerRef}
+
+      className="sticky top-0 z-50 w-full bg-white shadow-sm border-b border-[#E2E8ED]"
+
+  >
+
+      {/* LEVEL 1: TOP UTILITY BAR */}
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
+
+               {/* Brand Logo */}
+        <button
+          type="button"
+          onClick={() => handleRouteSelect('home')}
+          className="flex min-w-0 shrink-0 items-center rounded-lg text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C29316]"
+          aria-label="Naa College Home"
+        >
+          <img src="/Naacollege_fulllogo.webp" alt="Naa College" width="320" height="180" className="block h-auto max-h-12 w-[min(44vw,220px)] object-contain sm:w-[220px]" loading="eager" decoding="async" />
+        </button>
+
+        {/* Global Search Bar Trigger (Connected to Command Palette / Search
+Index) */}
+
+    <div className="hidden md:flex flex-1 max-w-xl mx-4">
+
+     <button
+
+      type="button"
+
+      onClick={onOpenSearch}
+
+      className="w-full flex items-center justify-between pl-4 pr-2 py-2 rounded-full bg-[#F5F8F5] hover:bg-white border border-[#E2E8ED] hover:border-[#C29316] text-sm text-[#5E6D7D] shadow-inner transition-all group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C29316]"
+
+     >
+
+      <span className="flex items-center gap-2.5 truncate">
+
+         <Search className="w-4 h-4 text-[#5E6D7D] group-hover:text-[#C29316] transition-colors" />
+
+         <span className="truncate">
+
+          Search colleges, EAPCET cutoffs, scholarships, mock tests...
+
+         </span>
+
+      </span>
+
+      <span className="flex items-center gap-2">
+
+         <kbd className="hidden lg:inline-block px-2 py-0.5 text-[11px] font- semibold text-[#5E6D7D] bg-white border border-[#E2E8ED] rounded-full">
+
+          Ctrl K
+
+         </kbd>
+
+         <span className="w-8 h-8 rounded-full bg-[#102B3F] group-hover:bg-[#C29316] text-white flex items-center justify-center transition-colors">
+
+          <Search className="w-3.5 h-3.5" />
+
+         </span>
+
+      </span>
+
+     </button>
+
     </div>
-  );
 
-  return (
-    <header id="main-header" className="sticky top-0 z-50 w-full bg-white text-slate-900 border-b border-slate-200 shadow-sm shadow-slate-900/5">
-      <div className="mx-auto flex h-[68px] max-w-7xl items-center gap-3 px-3 sm:px-5 lg:px-7">
-        <a href="https://naacollege.in/" id="brand-logo" className="group flex min-w-0 shrink items-center text-left" aria-label="Naa College home">
-          <img src="/Naacollege_fulllogo.webp" alt="Naa College home" width="320" height="180" className="block h-auto max-h-12 w-[min(44vw,220px)] object-contain sm:w-[220px]" loading="eager" decoding="async" />
-        </a>
+    {/* Right Action Controls */}
 
-        <nav className="hidden flex-1 items-center justify-center gap-1 lg:flex" aria-label="Primary navigation">
-          <button type="button" onClick={goHome} className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${activeWorkspace === 'hub' ? 'bg-cyan-400/15 text-cyan-200' : 'text-slate-300 hover:bg-white/8 hover:text-white'}`}><Home className="w-4 h-4" /> Home</button>
-          <a href="/blog/" className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900">Blog</a>
-          <a href="/autonomous-colleges/" className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900">Autonomous Colleges</a>
-          <Dropdown label="For AP" menu="ap" items={AP_TOOLS} />
-          <Dropdown label="For TG" menu="tg" items={TG_TOOLS} />
-          <button type="button" onClick={() => navigate({ label: 'Scholarships', workspace: 'scholarships', icon: GraduationCap })} className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${activeWorkspace === 'scholarships' ? 'bg-cyan-400/15 text-cyan-200' : 'text-slate-300 hover:bg-white/8 hover:text-white'}`}>Scholarships</button>
-          <button type="button" onClick={() => navigate({ label: 'Mock Tests', workspace: 'mock-tests', icon: GraduationCap })} className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${['mock-tests','cbt-mock-test','eapcet-cbt'].includes(activeWorkspace) ? 'bg-cyan-400/15 text-cyan-200' : 'text-slate-300 hover:bg-white/8 hover:text-white'}`}>Mock Tests</button>
-          <Dropdown label="Other Tools" menu="other" items={OTHER_TOOLS} />
-        </nav>
+    <div className="flex items-center gap-2.5">
 
-        <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
-          <button type="button" id="header-command-palette-trigger" onClick={onOpenCommandPalette} className="hidden lg:inline-flex h-9 items-center gap-2 rounded-xl border border-cyan-300/10 bg-white/5 px-2.5 text-slate-300 hover:border-cyan-300/25 hover:bg-cyan-400/10 hover:text-white transition-colors sm:px-3" title="Search tools" aria-label="Search Naa College tools"><Search className="h-4 w-4 text-cyan-300" /><span className="hidden xl:inline text-xs font-medium">Search tools</span></button>
-          <button type="button" id="header-support-btn" onClick={onOpenSupport} className="inline-flex h-9 w-9 sm:w-auto items-center justify-center gap-1.5 rounded-xl border border-cyan-300/15 bg-cyan-400/8 px-0 sm:px-3 text-xs font-bold text-cyan-200 hover:bg-cyan-400/15 hover:text-white transition-colors" aria-label="Support Naa College" title="Support Naa College"><Heart className="h-3.5 w-3.5" /><span className="hidden sm:inline">Support</span></button>
-          <button type="button" onClick={() => setMobileOpen((v) => !v)} id="header-hamburger-drawer-btn" className="order-first inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-cyan-300/10 bg-white/5 text-slate-200 hover:bg-cyan-400/10 lg:hidden" aria-label={mobileOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={mobileOpen}>{mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</button>
-        </div>
-      </div>
+     {/* Mobile Search Icon */}
 
-      {mobileOpen && (
-        <div id="mos-mobile-navigation-panel" className="border-t border-cyan-300/10 bg-[#040b16] px-3 pb-4 pt-2 lg:hidden">
-          <div className="mx-auto max-w-7xl space-y-1">
-            <button type="button" onClick={goHome} className="w-full rounded-xl px-3 py-3 text-left text-sm font-semibold text-slate-200 hover:bg-cyan-400/10">Home</button>
-            <a href="/blog/" onClick={() => setMobileOpen(false)} className="block w-full rounded-xl px-3 py-3 text-left text-sm font-semibold text-slate-700 hover:bg-slate-100">Blog</a>
-            <a href="/autonomous-colleges/" onClick={() => setMobileOpen(false)} className="block w-full rounded-xl px-3 py-3 text-left text-sm font-semibold text-slate-700 hover:bg-slate-100">Autonomous Colleges</a>
-            <button type="button" onClick={() => { setMobileOpen(false); onOpenCommandPalette?.(); }} id="mobile-search-tools" className="group mb-2 flex min-h-12 w-full items-center gap-3 rounded-2xl border border-cyan-300/20 bg-gradient-to-r from-cyan-400/[0.10] to-cyan-300/[0.06] px-3.5 py-3 text-left shadow-lg shadow-cyan-950/10 transition hover:border-cyan-300/35 hover:bg-cyan-400/[0.14]" aria-label="Search Naa College tools">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-cyan-300/15 bg-[#07101d] text-cyan-300"><Search className="h-4 w-4" /></span>
-              <span className="min-w-0 flex-1"><span className="block text-sm font-semibold text-white">Search Naa College</span><span className="mt-0.5 block text-[11px] text-slate-400">Find tools by name or what you need</span></span>
-              <span className="text-lg text-slate-500 transition group-hover:translate-x-0.5 group-hover:text-cyan-300">⌕</span>
-            </button>
-            <MobileGroup title="For AP" items={AP_TOOLS} onSelect={navigate} />
-            <MobileGroup title="For TG" items={TG_TOOLS} onSelect={navigate} />
-            <button type="button" onClick={() => navigate({ label: 'Scholarships', workspace: 'scholarships', icon: GraduationCap })} className="w-full rounded-xl px-3 py-3 text-left text-sm font-semibold text-slate-200 hover:bg-cyan-400/10">Scholarships</button>
-            <button type="button" onClick={() => navigate({ label: 'Mock Tests', workspace: 'mock-tests', icon: GraduationCap })} className="w-full rounded-xl px-3 py-3 text-left text-sm font-semibold text-slate-200 hover:bg-cyan-400/10">Mock Tests</button>
-            <MobileGroup title="Other Tools" items={OTHER_TOOLS} onSelect={navigate} />
-            <div className="mt-3 border-t border-white/8 pt-3">
-              <p className="px-3 pb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">About & Information</p>
-              <div className="grid grid-cols-2 gap-2">
-                <a href="/about" onClick={() => setMobileOpen(false)} className="flex min-h-11 items-center gap-2 rounded-xl border border-white/8 bg-white/[0.03] px-3 py-2.5 text-left text-xs font-medium text-slate-300 hover:border-cyan-300/20 hover:bg-cyan-400/8 hover:text-white"><Info className="h-4 w-4 shrink-0 text-cyan-300" />About Us</a>
-                <a href="/privacy-policy" onClick={() => setMobileOpen(false)} className="flex min-h-11 items-center gap-2 rounded-xl border border-white/8 bg-white/[0.03] px-3 py-2.5 text-left text-xs font-medium text-slate-300 hover:border-cyan-300/20 hover:bg-cyan-400/8 hover:text-white"><ShieldCheck className="h-4 w-4 shrink-0 text-cyan-300" />Privacy Policy</a>
-                <a href="/terms-of-service" onClick={() => setMobileOpen(false)} className="flex min-h-11 items-center gap-2 rounded-xl border border-white/8 bg-white/[0.03] px-3 py-2.5 text-left text-xs font-medium text-slate-300 hover:border-cyan-300/20 hover:bg-cyan-400/8 hover:text-white"><FileText className="h-4 w-4 shrink-0 text-cyan-300" />Terms of Service</a>
-                <a href="/contact-us" onClick={() => setMobileOpen(false)} className="flex min-h-11 items-center gap-2 rounded-xl border border-white/8 bg-white/[0.03] px-3 py-2.5 text-left text-xs font-medium text-slate-300 hover:border-cyan-300/20 hover:bg-cyan-400/8 hover:text-white"><Mail className="h-4 w-4 shrink-0 text-cyan-300" />Contact Developer</a>
-              </div>
-            </div>
-            <button type="button" onClick={() => { setMobileOpen(false); onOpenSupport?.(); }} className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-cyan-300/15 bg-cyan-400/8 px-3 py-3 text-sm font-bold text-cyan-200"><Heart className="h-4 w-4" /> Support Naa College</button>
+     <button
+
+      type="button"
+
+      onClick={onOpenSearch}
+
+      className="md:hidden p-2.5 rounded-full bg-[#F5F8F5] text-[#172B3B] hover:bg-[#EAF4F0] border border-[#E2E8ED]"
+
+      aria-label="Search colleges and tools"
+
+     >
+
+      <Search className="w-5 h-5" />
+
+     </button>
+
+     {/* Support / Community Action */}
+
+     <button
+
+      type="button"
+
+      onClick={onOpenSupport}
+
+      className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-semibold text-[#172B3B] bg-[#F5F8F5] hover:bg-[#FDF8EB] hover:border-[#C29316] border border-[#E2E8ED] transition-all"
+
+     >
+
+      <HeartHandshake className="w-4 h-4 text-[#2E7658]" />
+
+      <span>Support Us</span>
+
+     </button>
+
+     {/* Quick Predictor CTA */}
+
+     <button
+
+      type="button"
+
+      onClick={() => handleRouteSelect('ap-eapcet-predictor')}
+
+      className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-bold text-white bg-[#102B3F] hover:bg-[#173b56] shadow-sm transition-all"
+
+     >
+
+      <span>Predict Colleges</span>
+
+      <ArrowUpRight className="w-3.5 h-3.5 text-[#C29316]" />
+
+     </button>
+
+       {/* Mobile Hamburger Button */}
+
+       <button
+
+        type="button"
+
+        onClick={() => setMobileMenuOpen((prev) => !prev)}
+
+        className="lg:hidden p-2.5 rounded-xl bg-[#102B3F] text-white hover:bg-[#173b56] transition-colors"
+
+        aria-expanded={mobileMenuOpen}
+
+        aria-label="Toggle navigation menu"
+
+       >
+
+        {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu
+className="w-5 h-5" />}
+
+       </button>
+
+    </div>
+
+   </div>
+
+   {/* LEVEL 2: SECONDARY DESKTOP NAVIGATION BAR */}
+
+   <nav
+
+    aria-label="Primary platform navigation"
+
+    className="hidden lg:block bg-[#102B3F] text-white relative"
+
+   >
+
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items- center justify-between h-12">
+
+       <div className="flex items-center gap-1">
+
+        <button
+
+           type="button"
+
+           onClick={() => handleRouteSelect('home')}
+
+        className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items- center gap-1.5 transition-colors ${            activeWorkspace === 'hub'             ? 'bg-[#C29316] text-[#102B3F] font-bold'             : 'text-white/90 hover:text-white hover:bg-white/10'          }`}
+
+      >
+
+        <GraduationCap className="w-3.5 h-3.5" />
+
+        <span>Home</span>
+
+      </button>
+
+      {NAV_CATEGORIES.map((category) => {
+
+        const Icon = category.icon;
+
+        const isOpen = openCategory === category.id;
+
+        return (
+
+          <div
+
+           key={category.id}
+
+           className="relative"
+
+           onMouseEnter={() => setOpenCategory(category.id)}
+
+           onMouseLeave={() => setOpenCategory(null)}
+
+          >
+
+           <button
+
+              type="button"
+
+              onClick={() =>
+
+               setOpenCategory((prev) => (prev === category.id ? null :
+category.id))
+
+           }
+
+           aria-expanded={isOpen}
+
+           className={`px-3.5 py-2 rounded-lg text-xs font-medium flex items- center gap-1.5 transition-colors focus:outline-none focus-visible:ring-2 focus- visible:ring-[#C29316] ${                 isOpen                  ? 'bg-white/15 text-[#C29316]'                  : 'text-white/90 hover:text-white hover:bg-white/10'             }`}
+
+          >
+
+           <Icon className="w-3.5 h-3.5 text-[#C29316]" />
+
+           <span>{category.label}</span>
+
+           <ChevronDown
+
+               className={`w-3.5 h-3.5 transition-transform duration-200 ${                  isOpen ? 'rotate-180 text-[#C29316]' : 'text-white/70'                 }`}
+
+           />
+
+          </button>
+
+          {/* Mega Menu Dropdown */}
+
+          <AnimatePresence>
+
+           {isOpen && (
+
+               <motion.div
+
+                initial={{ opacity: 0, y: 8, scale: 0.98 }}
+
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+
+                exit={{ opacity: 0, y: 6, scale: 0.98 }}
+
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+
+            className={`absolute top-full pt-2 z-50 ${                 category.columns.length > 1                  ? 'left-0 w-[640px] max-w-[calc(100vw-2rem)]'                  : 'left-0 w-[340px] max-w-[calc(100vw-2rem)]'              }`}
+
+           >
+
+            <div className="bg-white text-[#172B3B] rounded-2xl border border-[#E2E8ED] shadow-2xl overflow-hidden p-5">
+
+               <div
+
+                className={`grid gap-6 ${                     category.columns.length > 1 ? 'grid-cols-2' : 'grid-cols-1'                  }`}
+
+               >
+
+                {category.columns.map((col) => (
+
+                   <div key={col.heading} className="space-y-3">
+
+                    <div className="text-[11px] font-bold uppercase tracking- wider text-[#2E7658] border-b border-[#E2E8ED] pb-1.5">
+
+                      {col.heading}
+
+                    </div>
+
+                    <div className="space-y-1.5">
+
+                      {col.items.map((item) => {
+
+                       const ItemIcon = item.icon;
+
+                       return (
+
+                        <button
+
+                         key={item.label}
+
+                      type="button"
+
+                      onClick={() => handleRouteSelect(item.route)}
+
+                      className="w-full text-left p-2.5 rounded-xl hover:bg-[#F5F8F5] transition-colors flex items-start gap-3 group"
+
+                     >
+
+                      <div className="w-9 h-9 rounded-lg bg-[#F5F8F5] group-hover:bg-[#FDF8EB] border border-[#E2E8ED] group-hover:border-[#EED690] flex items-center justify-center shrink-0 mt-0.5 transition-colors">
+
+                         <ItemIcon className="w-4 h-4 text-[#102B3F] group- hover:text-[#C29316]" />
+
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+
+                         <div className="flex items-center gap-2">
+
+                           <span className="text-xs font-bold text-[#172B3B] group-hover:text-[#102B3F]">
+
+                            {item.label}
+
+                           </span>
+
+                           {item.badge && (
+
+                            <span className="px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded bg-[#FDF8EB] text-[#C29316] border border-[#EED690]">
+
+                                {item.badge}
+
+                            </span>
+
+                           )}
+
+                         </div>
+
+                         <p className="text-[11px] text-[#5E6D7D] line-clamp-2 mt-0.5">
+
+                           {item.description}
+
+                                  </p>
+
+                                 </div>
+
+                             </button>
+
+                            );
+
+                           })}
+
+                       </div>
+
+                      </div>
+
+                     ))}
+
+                    </div>
+
+                   </div>
+
+               </motion.div>
+
+              )}
+
+              </AnimatePresence>
+
           </div>
-        </div>
-      )}
-    </header>
-  );
-};
 
-const MobileGroup: React.FC<{ title: string; items: NavItem[]; onSelect: (item: NavItem) => void }> = ({ title, items, onSelect }) => {
-  const [expanded, setExpanded] = useState(false);
-  return <div className="rounded-xl border border-cyan-300/8 bg-white/[0.02]">
-    <button type="button" onClick={() => setExpanded((v) => !v)} className="flex w-full items-center justify-between px-3 py-3 text-left text-sm font-semibold text-slate-200">{title}<ChevronDown className={`h-4 w-4 text-cyan-300 transition-transform ${expanded ? 'rotate-180' : ''}`} /></button>
-    {expanded && <div className="border-t border-cyan-300/8 p-1">{items.map((item) => { const Icon = item.icon; return <button key={`${title}-${item.label}`} type="button" onClick={() => onSelect(item)} className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-xs text-slate-300 hover:bg-cyan-400/10 hover:text-white"><Icon className="h-4 w-4 shrink-0 text-cyan-300" />{item.label}</button>; })}</div>}
-  </div>;
+         );
+
+      })}
+
+     </div>
+
+     {/* Right Quick Link in Nav Bar */}
+
+     <button
+
+      type="button"
+
+      onClick={() => handleRouteSelect('blogs')}
+
+      className="text-xs font-semibold text-[#C29316] hover:text-white flex items-center gap-1 transition-colors"
+
+     >
+
+      <span>Editorial Blogs</span>
+
+      <ArrowUpRight className="w-3.5 h-3.5" />
+
+     </button>
+
+    </div>
+
+   </nav>
+
+   {/* MOBILE ACCORDION NAVIGATION DRAWER */}
+
+   <AnimatePresence>
+
+    {mobileMenuOpen && (
+
+     <motion.div
+
+      initial={{ opacity: 0, height: 0 }}
+
+      animate={{ opacity: 1, height: 'auto' }}
+
+      exit={{ opacity: 0, height: 0 }}
+
+      transition={{ duration: 0.24, ease: 'easeOut' }}
+
+      className="lg:hidden bg-white border-t border-[#E2E8ED] overflow-y-auto max-h-[calc(100vh-4rem)]"
+
+     >
+
+      <div className="px-4 py-4 space-y-2">
+
+         {NAV_CATEGORIES.map((category) => {
+
+         const Icon = category.icon;
+
+         const isExpanded = mobileAccordion === category.id;
+
+         return (
+
+          <div
+
+             key={category.id}
+
+             className="rounded-xl border border-[#E2E8ED] overflow-hidden bg-[#F5F8F5]/50"
+
+          >
+
+           <button
+
+            type="button"
+
+            onClick={() =>
+
+                setMobileAccordion((prev) => (prev === category.id ? null :
+category.id))
+
+            }
+
+            className="w-full px-4 py-3.5 flex items-center justify-between text-left font-bold text-sm text-[#172B3B]"
+
+           >
+
+            <span className="flex items-center gap-2.5">
+
+                <Icon className="w-4 h-4 text-[#2E7658]" />
+
+                <span>{category.label}</span>
+
+            </span>
+
+            <ChevronDown
+
+                className={`w-4 h-4 text-[#5E6D7D] transition-transform ${                   isExpanded ? 'rotate-180 text-[#C29316]' : ''                  }`}
+
+            />
+
+           </button>
+
+           {isExpanded && (
+
+            <div className="px-4 pb-3.5 pt-1 bg-white border-t border-[#E2E8ED] space-y-3">
+
+                {category.columns.map((col) => (
+
+                 <div key={col.heading} className="space-y-1.5">
+
+                  <div className="text-[10px] font-bold uppercase tracking- wider text-[#2E7658] pt-1">
+
+                      {col.heading}
+
+                  </div>
+
+                  {col.items.map((item) => (
+
+                      <button
+
+                       key={item.label}
+
+                       type="button"
+
+                       onClick={() => handleRouteSelect(item.route)}
+
+                       className="w-full py-2 px-2.5 rounded-lg hover:bg-[#F5F8F5] text-left flex items-center justify-between gap-2"
+
+                      >
+
+                       <div>
+
+                          <div className="text-xs font-semibold text-[#172B3B]">
+
+                           {item.label}
+
+                          </div>
+
+                          <div className="text-[11px] text-[#5E6D7D] line-clamp-1">
+
+                           {item.description}
+
+                          </div>
+
+                       </div>
+
+                       <ArrowUpRight className="w-3.5 h-3.5 text-[#C29316] shrink-0" />
+
+                      </button>
+
+                  ))}
+
+                 </div>
+
+                ))}
+
+               </div>
+
+           )}
+
+          </div>
+
+           );
+
+          })}
+
+          <div className="pt-2 grid grid-cols-2 gap-2.5">
+
+           <button
+
+            type="button"
+
+            onClick={onOpenSupport}
+
+            className="w-full py-3 rounded-xl font-bold text-xs text-[#172B3B] bg-[#F5F8F5] border border-[#E2E8ED] flex items-center justify-center gap-2"
+
+           >
+
+            <HeartHandshake className="w-4 h-4 text-[#2E7658]" />
+
+            <span>Support Naa College</span>
+
+           </button>
+
+           <button
+
+            type="button"
+
+            onClick={() => handleRouteSelect('ap-eapcet-predictor')}
+
+            className="w-full py-3 rounded-xl font-bold text-xs text-white bg-[#102B3F] flex items-center justify-center gap-1.5"
+
+           >
+
+            <span>College Predictor</span>
+
+            <ArrowUpRight className="w-4 h-4 text-[#C29316]" />
+
+           </button>
+
+          </div>
+
+         </div>
+
+     </motion.div>
+
+    )}
+
+      </AnimatePresence>
+
+     </header>
+
+ );
+
 };
 
 export default Header;
