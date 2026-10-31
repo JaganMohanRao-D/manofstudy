@@ -1,1 +1,119 @@
-/* ==========================================================================\n   src/components/NaaDesignFoundation.css\n   Unified Design Tokens, Typography & Cascade Isolation for Naa College\n   ========================================================================== */\n\n:root {\n  /* Core Surface Palette */\n  --naa-bg-main: #FFFFFF;\n  --naa-bg-soft: #F5F8F5;\n  --naa-bg-mint: #EBF3EE;\n  --naa-bg-navy: #102B3F;\n  --naa-bg-navy-elevated: #163852;\n\n  /* Typography Colors */\n  --naa-text-primary: #172B3B;\n  --naa-text-secondary: #5E6D7D;\n  --naa-text-muted: #7A8B99;\n  --naa-text-inverse: #FFFFFF;\n\n  /* Brand Accents */\n  --naa-gold: #C29316;\n  --naa-gold-light: #FDF8EB;\n  --naa-gold-border: #EED690;\n  --naa-green: #2E7658;\n  --naa-green-light: #EAF4F0;\n  --naa-green-border: #B6DbcB;\n\n  /* Borders & Elevation */\n  --naa-border: #E2E8ED;\n  --naa-border-subtle: #EDF2F6;\n  --naa-shadow-sm: 0 2px 8px -2px rgba(16, 43, 63, 0.06);\n  --naa-shadow-md: 0 10px 25px -5px rgba(16, 43, 63, 0.08), 0 4px 10px -3px rgba(16, 43, 63, 0.04);\n  --naa-shadow-lg: 0 20px 40px -12px rgba(16, 43, 63, 0.14);\n  --naa-shadow-mega: 0 24px 48px -12px rgba(16, 43, 63, 0.22);\n\n  /* Radii & Spacing */\n  --naa-radius-sm: 0.5rem;\n  --naa-radius-md: 0.875rem;\n  --naa-radius-lg: 1.25rem;\n  --naa-radius-xl: 1.5rem;\n  --naa-radius-pill: 9999px;\n\n  /* Typography Families */\n  --naa-font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;\n  --naa-font-display: 'Plus Jakarta Sans', sans-serif;\n  --naa-font-condensed: 'Bebas Neue', 'Plus Jakarta Sans', sans-serif;\n}\n\n/* Isolate Naa College Homepage from legacy kineticMOS.css dark/monospace rules */\n.naa-platform-shell,\n.naa-platform-shell.mos-k-homepage-flow,\n.naa-platform-shell .mos-kinetic-home {\n  background-color: var(--naa-bg-main);\n  color: var(--naa-text-primary);\n  font-family: var(--naa-font-sans);\n  letter-spacing: normal;\n  overflow-x: clip;\n}\n\n/* Reset legacy square monospace card overrides inside homepage scope */\n.naa-platform-shell .naa-card {\n  background: var(--naa-bg-main);\n  border: 1px solid var(--naa-border);\n  border-radius: var(--naa-radius-lg);\n  box-shadow: var(--naa-shadow-sm);\n  font-family: var(--naa-font-sans);\n  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),\n              box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),\n              border-color 0.28s cubic-bezier(0.22, 1, 0.36, 1);\n}\n\n.naa-platform-shell .naa-card:hover {\n  transform: translateY(-4px);\n  box-shadow: var(--naa-shadow-md);\n  border-color: #CBD5E1;\n}\n\n/* Responsive Display Typography */\n.naa-hero-title {\n  font-family: var(--naa-font-display);\n  font-weight: 800;\n  line-height: 1.08;\n  letter-spacing: -0.03em;\n  color: var(--naa-text-primary);\n}\n\n@media (max-width: 640px) {\n  .naa-mobile-condensed-heading {\n    font-family: var(--naa-font-condensed);\n    letter-spacing: 0.03em;\n    line-height: 1.04;\n  }\n}\n\n/* Resource Ticker Marquee - Smooth on Desktop & Mobile */\n@keyframes naa-ticker-scroll {\n  0% { transform: translate3d(0, 0, 0); }\n  100% { transform: translate3d(-50%, 0, 0); }\n}\n\n.naa-ticker-track {\n  display: flex;\n  width: max-content;\n  animation: naa-ticker-scroll 38s linear infinite;\n}\n\n.naa-ticker-track:hover {\n  animation-play-state: paused;\n}\n\n@media (max-width: 768px) {\n  .naa-ticker-track {\n    animation-duration: 32s;\n  }\n}\n\n/* Respect reduced-motion preferences without disabling ordinary mobile motion. */\n@media (prefers-reduced-motion: reduce) {\n  *,\n  *::before,\n  *::after {\n    animation-duration: 0.01ms !important;\n    animation-iteration-count: 1 !important;\n    transition-duration: 0.01ms !important;\n    scroll-behavior: auto !important;\n  }\n}
+/*
+  Naa College design foundation
+  Shared visual tokens and homepage-only legacy style isolation.
+*/
+:root {
+  --naa-bg-main: #FFFFFF;
+  --naa-bg-soft: #F5F8F5;
+  --naa-bg-mint: #EBF3EE;
+  --naa-bg-navy: #102B3F;
+  --naa-bg-navy-elevated: #163852;
+
+  --naa-text-primary: #172B3B;
+  --naa-text-secondary: #5E6D7D;
+  --naa-text-muted: #7A8B99;
+  --naa-text-inverse: #FFFFFF;
+
+  --naa-gold: #C29316;
+  --naa-gold-light: #FDF8EB;
+  --naa-gold-border: #EED690;
+  --naa-green: #2E7658;
+  --naa-green-light: #EAF4F0;
+  --naa-green-border: #B6DBCB;
+
+  --naa-border: #E2E8ED;
+  --naa-border-subtle: #EDF2F6;
+  --naa-shadow-sm: 0 2px 8px -2px rgba(16, 43, 63, 0.06);
+  --naa-shadow-md: 0 10px 25px -5px rgba(16, 43, 63, 0.08), 0 4px 10px -3px rgba(16, 43, 63, 0.04);
+  --naa-shadow-lg: 0 20px 40px -12px rgba(16, 43, 63, 0.14);
+  --naa-shadow-mega: 0 24px 48px -12px rgba(16, 43, 63, 0.22);
+
+  --naa-radius-sm: 0.5rem;
+  --naa-radius-md: 0.875rem;
+  --naa-radius-lg: 1.25rem;
+  --naa-radius-xl: 1.5rem;
+  --naa-radius-pill: 9999px;
+
+  --naa-font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --naa-font-display: 'Plus Jakarta Sans', sans-serif;
+  --naa-font-condensed: 'Bebas Neue', 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Scope the refreshed landing page away from the old Kinetic visual system. */
+.naa-platform-shell,
+.naa-platform-shell.mos-k-homepage-flow,
+.naa-platform-shell .mos-kinetic-home {
+  background-color: var(--naa-bg-main);
+  color: var(--naa-text-primary);
+  font-family: var(--naa-font-sans);
+  letter-spacing: normal;
+  overflow-x: clip;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.naa-platform-shell .naa-card {
+  background: var(--naa-bg-main);
+  border: 1px solid var(--naa-border);
+  border-radius: var(--naa-radius-lg);
+  box-shadow: var(--naa-shadow-sm);
+  font-family: var(--naa-font-sans);
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.naa-platform-shell .naa-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--naa-shadow-md);
+  border-color: #CBD5E1;
+}
+
+.naa-hero-title {
+  font-family: var(--naa-font-display);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--naa-text-primary);
+}
+
+@media (max-width: 640px) {
+  .naa-mobile-condensed-heading {
+    font-family: var(--naa-font-condensed);
+    letter-spacing: 0.03em;
+    line-height: 1.04;
+  }
+}
+
+@keyframes naa-ticker-scroll {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+.naa-ticker-track {
+  display: flex;
+  width: max-content;
+  animation: naa-ticker-scroll 38s linear infinite;
+}
+
+.naa-ticker-track:hover {
+  animation-play-state: paused;
+}
+
+@media (max-width: 768px) {
+  .naa-ticker-track {
+    animation-duration: 75s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .naa-platform-shell *,
+  .naa-platform-shell *::before,
+  .naa-platform-shell *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
