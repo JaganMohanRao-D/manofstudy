@@ -463,13 +463,7 @@ PLATFORM</span>
 
        >
 
-           Explore official AP & TG EAPCET college cutoffs, generate counseling
-web options,
-
-           discover verified scholarships, and practice full-length CBT mock
-exams in one
-
-           trusted workspace.
+           Explore historical AP & TG EAPCET allotment records, compare college options, organise counselling preferences, discover scholarship listings, and practise with student-focused tools in one workspace.
 
        </motion.p>
 
@@ -948,10 +942,7 @@ Access</span>
 
        <p className="text-sm sm:text-base text-[#5E6D7D] mt-2 max-w-2xl">
 
-          Compare UGC Autonomous institutions, inspect official phase-wise
-EAPCET cutoffs,
-
-          and build your counseling preference list with confidence.
+          Explore UGC autonomous institutions, review historical phase-wise EAPCET allotment records, and organise your counselling preferences with clearer context.
 
        </p>
 
@@ -1370,11 +1361,7 @@ and 4-year
 
            <p className="text-sm sm:text-base text-white/80 mt-2.5">
 
-            We track verified national, state, and corporate scholarship programs.
-Explore grant
-
-            amounts, eligibility criteria, and application timelines to fund your
-degree.
+            Browse national, state and corporate scholarship listings. Review the listed award details, eligibility information and application timelines before applying.
 
            </p>
 
@@ -1494,8 +1481,7 @@ degree.
 
         <span className="w-2 h-2 rounded-full bg-[#2E7658]" />
 
-        <span>Verified government & corporate scholarship directory with
-eligibility filters</span>
+        <span>Government & corporate scholarship listings with eligibility details</span>
 
        </div>
 
@@ -1606,11 +1592,9 @@ score</div>
 
              <div>
 
-              <div className="text-xs font-extrabold text-[#172B3B]">Verified
-Solutions</div>
+              <div className="text-xs font-extrabold text-[#172B3B]">Answer Review</div>
 
-              <div className="text-[11px] text-[#5E6D7D]">Step-by-step
-keys</div>
+              <div className="text-[11px] text-[#5E6D7D]">Solutions where available</div>
 
              </div>
 
