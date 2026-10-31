@@ -908,6 +908,50 @@ export default function App() {
     }
   };
 
+  // Bridge reference-inspired navigation labels to the real Naa College workspaces.
+  const handleNavigateRoute = (routeOrWorkspace: string) => {
+    const route = String(routeOrWorkspace || '').trim().toLowerCase();
+    if (!route) return;
+    if (route.startsWith('#')) {
+      const target = document.getElementById(route.slice(1));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+    if (route === 'home' || route === 'hub') { handleSelectWorkspace('hub'); return; }
+    if (route === 'autonomous-colleges') { window.location.assign('/autonomous-colleges/'); return; }
+    if (route === 'blogs') { window.location.assign('/blog/'); return; }
+    const standalonePaths: Record<string, string> = {
+      about: '/about', contact: '/contact-us', 'privacy-policy': '/privacy-policy',
+      terms: '/terms-of-service', disclaimer: '/legal-safe-harbor',
+    };
+    if (standalonePaths[route]) { window.location.assign(standalonePaths[route]); return; }
+    const routeMap: Record<string, { workspace: WorkspaceView; subTab?: ToolTab }> = {
+      'ap-eapcet-predictor': { workspace: 'ap-predictor' },
+      'ap-allotment-explorer': { workspace: 'ap-allotments' },
+      'tg-eapcet-predictor': { workspace: 'tg-predictor' },
+      'tg-allotment-explorer': { workspace: 'tg-allotments' },
+      'web-options-generator': { workspace: 'ap-web-options' },
+      'engineering-roadmaps': { workspace: 'roadmaps' },
+      'attendance-defender': { workspace: 'attendance' },
+      'gpa-calculator': { workspace: 'gpa' },
+      'pdf-tools': { workspace: 'utilities', subTab: 'pdf-tools' },
+      'video-to-audio': { workspace: 'utilities', subTab: 'video-audio' },
+      'mock-tests': { workspace: 'mock-tests' },
+      'mock-tests-ap': { workspace: 'eapcet-cbt' },
+      'mock-tests-tg': { workspace: 'eapcet-cbt' },
+      scholarships: { workspace: 'scholarships' },
+    };
+    const mapped = routeMap[route];
+    if (mapped) { handleSelectWorkspace(mapped.workspace, mapped.subTab); return; }
+    const workspaces: WorkspaceView[] = [
+      'hub', 'eapcet', 'ap-allotments', 'ap-predictor', 'ap-web-options', 'ap-rank-predictor',
+      'ap-top-colleges', 'tg-allotments', 'tg-top-colleges', 'tg-predictor', 'roadmaps',
+      'scholarships', 'utilities', 'vault', 'backlog', 'compiler', 'dsa', 'academics',
+      'attendance', 'gpa', 'essentials', 'store', 'guides', 'projects', 'internships',
+      'cbt-mock-test', 'eapcet-cbt', 'mock-tests', 'gap-analyzer',
+    ];
+    if (workspaces.includes(route as WorkspaceView)) handleSelectWorkspace(route as WorkspaceView);
+  };
   const handleSelectBranchRoadmapFromPalette = (branchId: string) => {
     setTargetRoadmapBranchId(branchId);
     handleSelectWorkspace('roadmaps');
@@ -1070,17 +1114,15 @@ export default function App() {
       {!isExamActive && (
         <Header
           activeWorkspace={activeWorkspace}
-          onSelectWorkspace={(ws) => handleSelectWorkspace(ws)}
-          onSelectEapcetPhase={handleSelectEapcetPhase}
-          onOpenLegal={(type) => setLegalModal(type)}
-          onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+          onNavigate={handleNavigateRoute}
+          onOpenSearch={() => setIsCommandPaletteOpen(true)}
           onOpenSupport={() => setIsSupportModalOpen(true)}
         />
       )}
 
       {/* 2. Main Content Container */}
       <main className={`flex-1 w-full max-w-full overflow-hidden ${
-        isExamActive
+        isExamActive || activeWorkspace === 'hub'
           ? 'p-0 max-w-full'
           : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-6'
       }`}>
@@ -1270,12 +1312,17 @@ export default function App() {
             ]}
           />
         ) : activeWorkspace === 'hub' ? (
-          <div className="mos-k-homepage-flow mos-kinetic-home space-y-8 animate-in fade-in duration-200">
-            {/* Dynamic Feature Selector Hero & Bento Cards Showcase */}
+          <div className="w-full animate-in fade-in duration-200">
+            {/* Premium homepage built from the supplied reference implementation. */}
             <HeroSection
-              activeWorkspace={activeWorkspace}
-              onSelectWorkspace={(ws) => handleSelectWorkspace(ws)}
-            />
+              onNavigate={handleNavigateRoute}
+              onSelectArticle={(slug: string) => window.location.assign('/blog/' + encodeURIComponent(slug) + '/')}
+            >
+              <>
+                <NaaCollegeAssistant embedded />
+                <EducationalGuideAndSeo />
+              </>
+            </HeroSection>
 
             <ChunkErrorBoundary fallbackTitle="Unable to load interactive sections">
               <Suspense fallback={<LoadingFallback />}>
@@ -1628,7 +1675,10 @@ export default function App() {
 
       {/* Minimalist High-Performance Footer (hidden during active CBT testing) */}
       {!isExamActive && (
-        <Footer onOpenSupportModal={() => setIsSupportModalOpen(true)} />
+        <Footer
+          onNavigate={handleNavigateRoute}
+          onOpenSupport={() => setIsSupportModalOpen(true)}
+        />
       )}
 
       {/* 6. Legal & Contact Modal */}
