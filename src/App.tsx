@@ -920,12 +920,12 @@ export default function App() {
     if (route === 'home' || route === 'hub') { handleSelectWorkspace('hub'); return; }
     if (route === 'autonomous-colleges') { window.location.assign('/autonomous-colleges/'); return; }
     if (route === 'blogs') { window.location.assign('/blog/'); return; }
-    const standalonePaths: Record<string, string> = {
-      about: '/about', contact: '/contact-us', 'privacy-policy': '/privacy-policy',
-      terms: '/terms-of-service', disclaimer: '/legal-safe-harbor',
+    const legalRouteMap: Record<string, LegalModalType> = {
+      about: 'about', contact: 'contact', 'privacy-policy': 'privacy',
+      terms: 'terms', disclaimer: 'disclaimer',
     };
-    if (standalonePaths[route]) { window.location.assign(standalonePaths[route]); return; }
-    const routeMap: Record<string, { workspace: WorkspaceView; subTab?: ToolTab }> = {
+    if (legalRouteMap[route]) { setLegalModal(legalRouteMap[route]); return; }
+    const routeMap: Record<string, { workspace: WorkspaceView; subTab?: string }> = {
       'ap-eapcet-predictor': { workspace: 'ap-predictor' },
       'ap-allotment-explorer': { workspace: 'ap-allotments' },
       'tg-eapcet-predictor': { workspace: 'tg-predictor' },
