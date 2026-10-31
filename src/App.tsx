@@ -1324,15 +1324,7 @@ export default function App() {
               </>
             </HeroSection>
 
-            <ChunkErrorBoundary fallbackTitle="Unable to load interactive sections">
-              <Suspense fallback={<LoadingFallback />}>
-                {/* Educational Guides & Transparent Methodology Documentation */}
-                <div className="content-visibility-auto">
-                  <EducationalGuideAndSeo />
-                </div>
 
-              </Suspense>
-            </ChunkErrorBoundary>
           </div>
         ) : (
           /* WHEN IN AN ACTIVE WORKSPACE: Focused, Single-Tool Workspace View */
