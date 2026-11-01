@@ -7,6 +7,8 @@ import {
 } from "lucide-react";
 import { adminFunctions } from "../../services/adminFirebase";
 import { useAdminAuth } from "../../context/AdminAuthContext";
+import blogArticlesData from "../../data/blogArticles.json";
+import editorialArticlesData from "../../data/editorialBlogArticles.generated.json";
 
 type Post = {
   id: string; title: string; slug: string; category: string; content: string; summary?: string;
@@ -26,6 +28,7 @@ type Tab = "overview" | "blogs" | "scholarships" | "tools" | "assets";
 const getDashboardCall = httpsCallable<{ sessionToken: string }, DashboardData>(adminFunctions, "getNaaAdminDashboard");
 const saveRecordCall = httpsCallable<{ sessionToken: string; type: string; id?: string; data: any }, { id: string }>(adminFunctions, "saveNaaAdminRecord");
 const deleteRecordCall = httpsCallable<{ sessionToken: string; type: string; id: string }, { id: string }>(adminFunctions, "deleteNaaAdminRecord");
+const importLegacyCall = httpsCallable<{ sessionToken: string; posts: any[]; scholarships: any[] }, { postsImported: number; scholarshipsImported: number }>(adminFunctions, "importNaaAdminLegacyContent");
 const SESSION_KEY = "naa_college_admin_session_v2";
 
 const DEFAULT_TOOLS: ToolItem[] = [
@@ -138,6 +141,66 @@ export default function AdminDashboard() {
     } finally { setSaving(false); }
   }
 
+  const migrationComplete = data.config?.contentMigration?.blogs === true && data.config?.contentMigration?.scholarships === true;
+
+  async function importExistingContent() {
+    if (migrationComplete) return;
+    setSaving(true);
+    try {
+      const blogMap = new Map<string, any>();
+      [...(blogArticlesData as any[]), ...(editorialArticlesData as any[])].forEach((article) => {
+        const slug = String(article?.slug || "").trim().toLowerCase();
+        const title = String(article?.title || "").trim();
+        const content = String(article?.content || "").trim();
+        if (!slug || !title || !content) return;
+        blogMap.set(slug, {
+          title,
+          slug,
+          category: String(article.category || "Student Guides"),
+          content,
+          summary: String(article.summary || ""),
+          coverImage: /^https?:\\/\\//i.test(String(article.coverImage || "")) ? String(article.coverImage) : "",
+          status: article.status === "published" ? "published" : "draft",
+          featured: article.featured === true,
+          tags: Array.isArray(article.tags) ? article.tags : [],
+        });
+      });
+
+      const scholarshipResponse = await fetch("/indian_scholarships.json", { cache: "no-store" });
+      if (!scholarshipResponse.ok) throw new Error("The existing scholarship directory could not be loaded.");
+      const rawScholarships = await scholarshipResponse.json();
+      if (!Array.isArray(rawScholarships)) throw new Error("The scholarship directory has an unexpected format.");
+      const scholarshipMap = new Map<string, any>();
+      rawScholarships.forEach((item: any) => {
+        const title = String(item?.title || "").trim();
+        const provider = String(item?.provider || "Provider not listed").trim();
+        const link = String(item?.apply_link || item?.official_source_url || item?.guideline_url || "").trim();
+        if (!title || !/^https?:\\/\\//i.test(link)) return;
+        scholarshipMap.set((title + "|" + provider).toLowerCase(), {
+          title,
+          provider,
+          amount: String(item.amount || ""),
+          eligibility: String(item.eligibility || "Check the official provider portal for current eligibility."),
+          deadline: String(item.deadline || ""),
+          link,
+          active: !/(closed|expired|ended)/i.test(String(item.status || "")),
+        });
+      });
+
+      const { data: result } = await importLegacyCall({
+        sessionToken,
+        posts: [...blogMap.values()],
+        scholarships: [...scholarshipMap.values()],
+      });
+      await loadDashboard();
+      showToast("Imported " + result.postsImported + " blogs and " + result.scholarshipsImported + " scholarships. The CMS is now the content source.");
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : "Existing content import failed.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
   function openNewPost() {
     setEditingId("");
     setPostForm({ ...EMPTY_POST });
@@ -226,6 +289,10 @@ export default function AdminDashboard() {
         {loadError && <div role="alert" className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800"><span>{loadError}</span><button onClick={() => void loadDashboard()} className="font-bold underline">Retry</button></div>}
         {loading ? <div className="flex min-h-[280px] items-center justify-center gap-3 text-sm font-semibold text-slate-500"><LoaderCircle className="h-5 w-5 animate-spin" />Loading dashboard data…</div> : <>
           {tab === "overview" && <section className="space-y-6">
+            <section className="mb-5 flex flex-col gap-3 rounded-2xl border border-[#eadfc7] bg-[#fbf8f0] p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+              <div className="min-w-0"><h2 className="text-sm font-black text-[#6f5425]">Existing website content library</h2><p className="mt-1 max-w-2xl text-xs leading-5 text-[#8b7957]">{migrationComplete ? "Your original blog and scholarship records have been migrated. The public directory now reads from the CMS." : "Import the existing static blog and scholarship data once. After migration, the CMS becomes the source of truth so you can edit or remove those records here."}</p></div>
+              <button onClick={() => void importExistingContent()} disabled={saving || migrationComplete} className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#14233d] px-4 text-xs font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{saving ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <CirclePlus className="h-4 w-4" />}{migrationComplete ? "Library imported" : "Import existing library"}</button>
+            </section>
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               <StatCard label="Total blogs" value={data.posts.length} detail={publishedCount + " published"} icon={FileText} />
               <StatCard label="Scholarships active" value={activeScholarships} detail={data.scholarships.length + " total records"} icon={BriefcaseBusiness} />
