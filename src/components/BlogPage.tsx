@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, ArrowRight, BookOpen, CalendarDays, Clock3, Search } from 'lucide-react';
 import articlesData from '../data/blogArticles.json';
 import editorialArticlesData from '../data/editorialBlogArticles.generated.json';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, query as firestoreQuery, where } from 'firebase/firestore';
 import { db } from '../services/firebase';
 
 type BlogArticle = {
@@ -121,7 +121,7 @@ export const BlogPage: React.FC = () => {
     let active = true;
     const loadAdminPosts = async () => {
       try {
-        const snapshot = await getDocs(query(collection(db, 'admin_posts'), where('status', '==', 'published')));
+        const snapshot = await getDocs(firestoreQuery(collection(db, 'admin_posts'), where('status', '==', 'published')));
         const managed = snapshot.docs.map((entry) => {
           const value = entry.data() as any;
           const updated = value.updatedAt?.toDate?.() || value.createdAt?.toDate?.() || new Date();
