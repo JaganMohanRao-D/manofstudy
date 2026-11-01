@@ -328,16 +328,11 @@ function createAdminAuth({ db, auth, FieldValue, now = () => Date.now(), logger 
     let stage = "owner-identity";
     try {
       const owner = await assertOwnerIdentity(request.auth);
-      const token = request.data && request.data.sessionToken;
-      if (isPlausibleSessionToken(token)) {
-        stage = "read-session-for-revocation";
-        const ref = db.collection(ADMIN_SESSION_COLLECTION).doc(hashSessionToken(token));
-        const snapshot = await ref.get();
-        if (snapshot.exists && snapshot.data() && snapshot.data().uid === owner.uid) {
-          stage = "revoke-session";
-          await ref.delete();
-        }
-      }
+      stage = "revoke-refresh-tokens";
+      // Revoke Firebase refresh tokens as well as signing out the current
+      // browser. assertOwnerIdentity checks tokensValidAfterTime on all
+      // privileged requests, so previously issued ID tokens are rejected.
+      await auth.revokeRefreshTokens(owner.uid);
       return { success: true };
     } catch (error) {
       return rethrowSafely(
