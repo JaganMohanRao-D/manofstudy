@@ -472,7 +472,7 @@ exports.saveNaaAdminRecord = onCall(
 exports.deleteNaaAdminRecord = onCall(
   { ...adminCallableOptions(), timeoutSeconds: 20 },
   async (request) => {
-    await adminAuth.requireAdminSession(request);
+    await adminAuth.assertOwnerIdentity(request.auth);
     try {
       return await adminContent.deleteRecord(request.data || {});
     } catch (error) {
@@ -489,7 +489,7 @@ exports.deleteNaaAdminRecord = onCall(
 exports.importNaaAdminLegacyContent = onCall(
   { ...adminCallableOptions(), timeoutSeconds: 60 },
   async (request) => {
-    await adminAuth.requireAdminSession(request);
+    await adminAuth.assertOwnerIdentity(request.auth);
     try {
       return await adminContent.importLegacyContent(request.data || {});
     } catch (error) {
