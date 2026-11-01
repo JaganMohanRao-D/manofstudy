@@ -219,7 +219,7 @@ service cloud.firestore {
     }
 
     match /admin_site_config/{configId} {
-      allow get, list: if configId in ['tools', 'hero', 'alerts', 'featuredTags'];
+      allow get, list: if configId in ['tools', 'hero', 'alerts', 'featuredTags', 'contentMigration'];
       allow create, update, delete: if false;
     }
 
