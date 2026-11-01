@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, ArrowRight, BookOpen, CalendarDays, Clock3, Search } from 'lucide-react';
 import articlesData from '../data/blogArticles.json';
 import editorialArticlesData from '../data/editorialBlogArticles.generated.json';
-import { collection, getDocs, query as firestoreQuery, where } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query as firestoreQuery, where } from 'firebase/firestore';
 import { db } from '../services/firebase';
 
 type BlogArticle = {
@@ -117,11 +117,16 @@ export const BlogPage: React.FC = () => {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('All');
   const [dynamicArticles, setDynamicArticles] = useState<BlogArticle[]>([]);
+  const [cmsOnly, setCmsOnly] = useState(false);
   useEffect(() => {
     let active = true;
     const loadAdminPosts = async () => {
       try {
-        const snapshot = await getDocs(firestoreQuery(collection(db, 'admin_posts'), where('status', '==', 'published')));
+        const [snapshot, migrationDoc] = await Promise.all([
+          getDocs(firestoreQuery(collection(db, 'admin_posts'), where('status', '==', 'published'))),
+          getDoc(doc(db, 'admin_site_config', 'contentMigration')),
+        ]);
+        if (active) setCmsOnly(migrationDoc.exists() && migrationDoc.data()?.value?.blogs === true);
         const managed = snapshot.docs.map((entry) => {
           const value = entry.data() as any;
           const updated = value.updatedAt?.toDate?.() || value.createdAt?.toDate?.() || new Date();
@@ -151,10 +156,10 @@ export const BlogPage: React.FC = () => {
   }, []);
   const articles = useMemo(() => {
     const bySlug = new Map<string, BlogArticle>();
-    staticArticles.forEach((article) => bySlug.set(article.slug, article));
+    if (!cmsOnly) staticArticles.forEach((article) => bySlug.set(article.slug, article));
     dynamicArticles.forEach((article) => bySlug.set(article.slug, article));
     return [...bySlug.values()].sort((a, b) => String(b.publishedAt || '').localeCompare(String(a.publishedAt || '')));
-  }, [dynamicArticles]);
+  }, [dynamicArticles, cmsOnly]);
   const pathname = typeof window === 'undefined' ? '/blog/' : window.location.pathname;
   const isCategory = pathname.startsWith('/blog/category/');
   const categoryPathSlug = isCategory ? slugFromPath(pathname) : '';
