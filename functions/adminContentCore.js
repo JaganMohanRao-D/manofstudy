@@ -146,22 +146,43 @@ function createAdminContent({ db, FieldValue, now = () => Date.now() }) {
     if (migrationState.blogs === true && migrationState.scholarships === true) {
       throw new AdminContentValidationError("The existing content library has already been imported.");
     }
+    const [existingPosts, existingScholarships] = await Promise.all([
+      db.collection(COLLECTIONS.posts).get(),
+      db.collection(COLLECTIONS.scholarships).get(),
+    ]);
+    const postBySlug = new Map(existingPosts.docs.map((doc) => [doc.data().slug, doc.id]));
+    const scholarshipByKey = new Map(existingScholarships.docs.map((doc) => {
+      const value = doc.data();
+      return [(String(value.title || "") + "|" + String(value.provider || "")).toLowerCase(), doc.id];
+    }));
     const writes = [];
     const timestamp = FieldValue.serverTimestamp();
     const slugify = (value) => String(value || "").toLowerCase().trim()
       .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 140);
+    let postsImported = 0;
+    let scholarshipsImported = 0;
 
     for (const raw of posts) {
       const record = validateRecord("posts", raw);
-      const ref = db.collection(COLLECTIONS.posts).doc("legacy-" + record.slug);
+      const id = "legacy-" + record.slug;
+      const existingId = postBySlug.get(record.slug);
+      // Never overwrite an article already created or edited directly in the CMS.
+      if (existingId && existingId !== id) continue;
+      const ref = db.collection(COLLECTIONS.posts).doc(id);
       writes.push({ ref, data: { ...record, source: "legacy-import", createdAt: timestamp, updatedAt: timestamp } });
+      postsImported += 1;
     }
     for (const raw of scholarships) {
       const record = validateRecord("scholarships", raw);
       const id = "legacy-" + slugify(record.title + "-" + record.provider);
       if (id === "legacy-") continue;
+      const key = (record.title + "|" + record.provider).toLowerCase();
+      const existingId = scholarshipByKey.get(key);
+      // Preserve any existing CMS-managed scholarship with the same identity.
+      if (existingId && existingId !== id) continue;
       const ref = db.collection(COLLECTIONS.scholarships).doc(id);
       writes.push({ ref, data: { ...record, source: "legacy-import", createdAt: timestamp, updatedAt: timestamp } });
+      scholarshipsImported += 1;
     }
 
     for (let index = 0; index < writes.length; index += 400) {
@@ -173,7 +194,7 @@ function createAdminContent({ db, FieldValue, now = () => Date.now() }) {
       value: { blogs: true, scholarships: true },
       updatedAt: timestamp,
     }, { merge: true });
-    return { postsImported: posts.length, scholarshipsImported: scholarships.length };
+    return { postsImported, scholarshipsImported };
   }
 
   return { getDashboard, saveRecord, deleteRecord, importLegacyContent };
