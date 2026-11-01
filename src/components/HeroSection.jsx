@@ -45,7 +45,8 @@ import {
  GraduationCap,
  Wrench,
 
-  ListChecks, Route, CalendarCheck, Map,\n} from 'lucide-react';
+  ListChecks, Route, CalendarCheck, Map,
+} from 'lucide-react';
 
 import { ScrollReveal, StaggerGrid } from './motion/ScrollReveal';
 
