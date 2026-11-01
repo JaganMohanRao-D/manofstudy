@@ -11,8 +11,8 @@ import firebaseAppletConfig from "../../firebase-applet-config.json";
  *    student auth state (and a signed-in student must not be signed out by
  *    visiting /theone).
  *  - Firebase Auth uses browser-local persistence so the owner session survives
- *    refreshes. A short-lived opaque server session is stored locally and checked
- *    against the backend before protected content is rendered.
+ *    refreshes. Protected routes and every content callable independently verify
+ *    the owner's live Firebase identity on the server.
  *
  * It uses the same Firebase project (manofstudy-live) as the rest of the site.
  */
