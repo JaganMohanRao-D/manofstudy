@@ -5,7 +5,7 @@ export function AdminRouteGuard({ children }: { children: React.ReactNode }) {
   const { isAdmin, loading } = useAdminAuth();
 
   useEffect(() => {
-    if (!loading && !isAdmin) window.location.replace("/theone");
+    if (!loading && !isAdmin) window.location.replace("/");
   }, [loading, isAdmin]);
 
   if (loading || !isAdmin) {
