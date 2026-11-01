@@ -206,6 +206,23 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // Public-facing records are read-only to browser clients. All writes are
+    // performed by owner-verified Cloud Functions using the Admin SDK.
+    match /admin_posts/{postId} {
+      allow get, list: if resource.data.status == 'published';
+      allow create, update, delete: if false;
+    }
+
+    match /admin_scholarships/{scholarshipId} {
+      allow get, list: if resource.data.active == true;
+      allow create, update, delete: if false;
+    }
+
+    match /admin_site_config/{configId} {
+      allow get, list: if configId in ['tools', 'hero', 'alerts', 'featuredTags'];
+      allow create, update, delete: if false;
+    }
+
     // Deny all other unmatched paths by default
     match /{document=**} {
       allow read, write: if false;
