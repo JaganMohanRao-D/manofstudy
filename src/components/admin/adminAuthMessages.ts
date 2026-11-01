@@ -87,7 +87,7 @@ export function loginErrorMessage(error: unknown): string {
   // Backend authorization step (Cloud Functions).
   if (code === "permission-denied") {
     if (errorReason(error) === "email-not-verified") {
-      return "Your email address has not been verified yet. Use “Forgot password?” to verify it and set your password, then sign in.";
+      return "A verification email has been sent. Open it, verify your email address, and then sign in again.";
     }
     return "This account is not authorized to access the admin area.";
   }
