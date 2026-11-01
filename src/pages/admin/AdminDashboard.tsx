@@ -25,12 +25,10 @@ type DashboardData = {
 };
 type Tab = "overview" | "blogs" | "scholarships" | "tools" | "assets";
 
-const getDashboardCall = httpsCallable<{ sessionToken: string }, DashboardData>(adminFunctions, "getNaaAdminDashboard");
-const saveRecordCall = httpsCallable<{ sessionToken: string; type: string; id?: string; data: any }, { id: string }>(adminFunctions, "saveNaaAdminRecord");
-const deleteRecordCall = httpsCallable<{ sessionToken: string; type: string; id: string }, { id: string }>(adminFunctions, "deleteNaaAdminRecord");
-const importLegacyCall = httpsCallable<{ sessionToken: string; posts: any[]; scholarships: any[] }, { postsImported: number; scholarshipsImported: number }>(adminFunctions, "importNaaAdminLegacyContent");
-const SESSION_KEY = "naa_college_admin_session_v2";
-
+const getDashboardCall = httpsCallable<Record<string, never>, DashboardData>(adminFunctions, "getNaaAdminDashboard");
+const saveRecordCall = httpsCallable<{ type: string; id?: string; data: any }, { id: string }>(adminFunctions, "saveNaaAdminRecord");
+const deleteRecordCall = httpsCallable<{ type: string; id: string }, { id: string }>(adminFunctions, "deleteNaaAdminRecord");
+const importLegacyCall = httpsCallable<{ posts: any[]; scholarships: any[] }, { postsImported: number; scholarshipsImported: number }>(adminFunctions, "importNaaAdminLegacyContent");
 const DEFAULT_TOOLS: ToolItem[] = [
   { id: "ap-predictor", name: "AP College Predictor", description: "Explore AP engineering colleges using historical EAPCET allotment data.", icon: "GraduationCap", visible: true },
   { id: "ap-allotments", name: "AP EAPCET College-wise Allotments", description: "Search historical AP EAPCET allotment records by college and branch.", icon: "Building2", visible: true },
@@ -44,13 +42,6 @@ const DEFAULT_TOOLS: ToolItem[] = [
 const EMPTY_POST = { title: "", slug: "", category: "Student Guides", summary: "", coverImage: "", content: "", status: "draft" as const, featured: false, tags: "" };
 const EMPTY_SCHOLARSHIP = { title: "", provider: "", amount: "", eligibility: "", deadline: "", link: "", active: true };
 
-function readSessionToken(): string {
-  try {
-    const raw = localStorage.getItem(SESSION_KEY);
-    const parsed = raw ? JSON.parse(raw) : null;
-    return typeof parsed?.token === "string" ? parsed.token : "";
-  } catch { return ""; }
-}
 
 function makeSlug(value: string) {
   return value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -80,7 +71,6 @@ export default function AdminDashboard() {
   const [alerts, setAlerts] = useState({ message: "", enabled: false });
   const [featuredTags, setFeaturedTags] = useState("AP EAPCET, Scholarships, Career Roadmaps");
 
-  const sessionToken = readSessionToken();
   const showToast = useCallback((message: string) => {
     setToast(message);
     window.setTimeout(() => setToast(""), 3200);
@@ -90,7 +80,7 @@ export default function AdminDashboard() {
     setLoading(true);
     setLoadError("");
     try {
-      const { data: result } = await getDashboardCall({ sessionToken: readSessionToken() });
+      const { data: result } = await getDashboardCall({});
       setData(result);
       const savedTools = result.config?.tools?.items;
       if (Array.isArray(savedTools) && savedTools.length) setTools(savedTools);
@@ -119,7 +109,7 @@ export default function AdminDashboard() {
   async function save(type: string, id: string | undefined, payload: any) {
     setSaving(true);
     try {
-      await saveRecordCall({ sessionToken, type, ...(id ? { id } : {}), data: payload });
+      await saveRecordCall({ type, ...(id ? { id } : {}), data: payload });
       await loadDashboard();
       showToast("Changes saved successfully.");
       return true;
@@ -133,7 +123,7 @@ export default function AdminDashboard() {
     if (!window.confirm("Delete this item permanently?")) return;
     setSaving(true);
     try {
-      await deleteRecordCall({ sessionToken, type, id });
+      await deleteRecordCall({ type, id });
       await loadDashboard();
       showToast("Item deleted.");
     } catch (error) {
@@ -188,7 +178,6 @@ export default function AdminDashboard() {
       });
 
       const { data: result } = await importLegacyCall({
-        sessionToken,
         posts: [...blogMap.values()],
         scholarships: [...scholarshipMap.values()],
       });
