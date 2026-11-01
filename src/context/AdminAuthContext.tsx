@@ -167,6 +167,8 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
     try {
       if (stored?.token) await logoutCall({ sessionToken: stored.token });
+    } catch (error) {
+      console.warn('[NaaAdmin] Server session revocation was not confirmed; the session will expire automatically.', error);
     } finally {
       await signOut(adminAuth).catch(() => undefined);
     }
