@@ -45,7 +45,7 @@ import {
  GraduationCap,
  Wrench,
 
-} from 'lucide-react';
+  ListChecks, Route, CalendarCheck, Map,\n} from 'lucide-react';
 
 import { ScrollReveal, StaggerGrid } from './motion/ScrollReveal';
 
@@ -55,7 +55,9 @@ import './NaaDesignFoundation.css';
 import { collection, doc, getDoc } from 'firebase/firestore';
 import { db } from '../services/firebase';
 
-const ADMIN_ICON_MAP = { Compass, Building2, Award, CheckSquare, FileSpreadsheet, ShieldCheck, Calculator, FileText, Mic, BookOpen, Sparkles, Clock, BarChart3, CheckCircle2, Bot, GraduationCap, Wrench };\n\nconst QUICK_SHORTCUTS = [
+const ADMIN_ICON_MAP = { Compass, Building2, Award, CheckSquare, FileSpreadsheet, ShieldCheck, Calculator, FileText, Mic, BookOpen, Sparkles, Clock, BarChart3, CheckCircle2, Bot, GraduationCap, Wrench, ListChecks, Route, CalendarCheck, Map };
+
+const QUICK_SHORTCUTS = [
 
  {
 
@@ -384,10 +386,10 @@ export default function HeroSection({
 
   const pool = [
 
-    ...QUICK_SHORTCUTS.map((s) => ({ title: s.title, category: s.badge, route:
+    ...configuredQuickShortcuts.map((s) => ({ title: s.title, category: s.badge, route:
 s.route })),
 
-    ...STUDENT_UTILITY_TOOLS.map((t) => ({ title: t.title, category: t.category,
+    ...configuredStudentTools.map((t) => ({ title: t.title, category: t.category,
 route: t.route })),
 
     ...publishedBlogs.map((b) => ({
