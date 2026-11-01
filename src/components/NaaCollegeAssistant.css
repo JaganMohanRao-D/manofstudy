@@ -1,7 +1,7 @@
 /* Naa College AI assistant — solid colours, keyboard-accessible floating chat. */
-.nca-assistant-root { position: relative; z-index: 9998; }
+.nca-assistant-root { position: relative; z-index: auto; }
 .nca-chat-launcher {
-  position: fixed; right: 22px; bottom: 22px; z-index: 9999;
+  position: fixed; right: 22px; bottom: 22px; z-index: 25;
   display: inline-flex; align-items: center; justify-content: center;
   width: 66px; height: 66px; min-height: 66px; padding: 6px;
   border: 1px solid #126b55; border-radius: 50%;

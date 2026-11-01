@@ -401,15 +401,15 @@ white)
 ===================================================================
 == */}
 
-      <section className="relative bg-white pt-6 pb-12 lg:pt-12 lg:pb-16 border-b border-[#E2E8ED] overflow-hidden">
+      <section className="relative bg-white pt-4 pb-8 sm:pt-6 sm:pb-12 lg:pt-12 lg:pb-16 border-b border-[#E2E8ED] overflow-hidden">
 
        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 items-center">
 
             {/* Left Column: Headline, Search & AP/TG Cards */}
 
-            <div className="lg:col-span-7 space-y-6">
+            <div className="lg:col-span-7 space-y-4 sm:space-y-6">
 
              <motion.div
 
@@ -438,7 +438,7 @@ PLATFORM</span>
 
          transition={{ duration: 0.5, delay: 0.06 }}
 
-         className="naa-hero-title naa-mobile-condensed-heading text-4xl sm:text-5xl lg:text-[3.5rem]"
+         className="naa-hero-title naa-mobile-condensed-heading text-[2rem] leading-none sm:text-5xl lg:text-[3.5rem]"
 
        >
 
@@ -460,7 +460,7 @@ PLATFORM</span>
 
            transition={{ duration: 0.5, delay: 0.12 }}
 
-           className="text-base sm:text-lg text-[#5E6D7D] max-w-2xl leading-relaxed"
+           className="text-sm sm:text-lg text-[#5E6D7D] max-w-2xl leading-snug sm:leading-relaxed"
 
        >
 
@@ -468,31 +468,15 @@ PLATFORM</span>
 
        </motion.p>
 
-       {/* Mobile campus video: placed between the hero copy and search. */}
-       <motion.div
-         initial={{ opacity: 0, y: 20 }}
-         animate={{ opacity: 1, y: 0 }}
-         transition={{ duration: 0.55, delay: 0.16 }}
-         className="lg:hidden"
-       >
-         <div className="bg-white rounded-3xl border border-[#E2E8ED] p-3 shadow-lg">
-           <div className="bg-white rounded-2xl overflow-hidden flex items-center justify-center">
-             <video
-               src="/HERO_VEDIO.webm"
-               poster="/Vibrant%20Campus%20Life%20Illustration.webp"
-               autoPlay
-               muted
-               loop
-               playsInline
-               className="w-full h-auto object-contain bg-white pointer-events-none select-none"
-             />
+       {/* Compact mobile campus video accent */}
+       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.12 }} className="lg:hidden -mt-1">
+         <div className="flex items-center gap-3 rounded-2xl border border-[#E2E8ED] bg-white p-2 shadow-sm">
+           <div className="h-[76px] w-[36%] min-w-0 shrink-0 overflow-hidden rounded-xl bg-[#F5F8F5]">
+             <video src="/HERO_VEDIO.webm" poster="/Vibrant%20Campus%20Life%20Illustration.webp" autoPlay muted loop playsInline className="h-full w-full object-cover pointer-events-none select-none" />
            </div>
-           <div className="mt-3 pt-3 border-t border-[#EDF2F6] flex flex-wrap items-center justify-between gap-2 px-2 text-xs text-[#5E6D7D]">
-             <span className="font-bold text-[#172B3B] flex items-center gap-1.5">
-               <Sparkles className="w-3.5 h-3.5 text-[#C29316]" />
-               Naa College Interactive Campus
-             </span>
-             <span className="text-[#2E7658] font-semibold">100% Free Student Access</span>
+           <div className="min-w-0 flex-1 py-1">
+             <span className="flex items-center gap-1.5 text-xs font-extrabold leading-snug text-[#172B3B]"><Sparkles className="h-3.5 w-3.5 shrink-0 text-[#C29316]" /> Naa College Interactive Campus</span>
+             <span className="mt-1 block text-[11px] font-semibold text-[#2E7658]">100% Free Student Access</span>
            </div>
          </div>
        </motion.div>
@@ -511,7 +495,7 @@ PLATFORM</span>
 
        >
 
-           <div className="flex items-center bg-white border-2 border-[#E2E8ED] focus-within:border-[#C29316] rounded-2xl p-1.5 shadow-sm transition-colors">
+           <div className="flex min-h-[56px] items-center bg-white border-2 border-[#E2E8ED] focus-within:border-[#C29316] rounded-2xl p-1.5 shadow-sm transition-colors">
 
             <Search className="w-5 h-5 text-[#5E6D7D] ml-3 mr-2 shrink-0" />
 
@@ -525,7 +509,7 @@ PLATFORM</span>
 
              placeholder="Search colleges, EAPCET cutoffs, scholarships, tools..."
 
-           className="w-full py-2.5 px-2 text-sm text-[#172B3B] placeholder-[#7A8B99] bg-transparent focus:outline-none"
+           className="w-full min-h-[44px] py-2.5 px-2 text-sm text-[#172B3B] placeholder-[#7A8B99] bg-transparent focus:outline-none"
 
            aria-label="Search Naa College resources"
 
@@ -545,7 +529,7 @@ PLATFORM</span>
 
            }
 
-           className="px-5 py-2.5 rounded-xl bg-[#C29316] hover:bg-[#a97f11] text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 shrink-0 transition-colors"
+           className="min-h-[44px] px-4 sm:px-5 py-2.5 rounded-xl bg-[#C29316] hover:bg-[#a97f11] text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 shrink-0 transition-colors"
 
           >
 
@@ -561,7 +545,7 @@ PLATFORM</span>
 
          {searchQuery.trim().length > 0 && (
 
-          <div className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl border border-[#E2E8ED] shadow-xl z-30 overflow-hidden">
+          <div className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl border border-[#E2E8ED] shadow-xl z-[10001] overflow-hidden">
 
            {filteredSearchItems.length > 0 ? (
 
@@ -651,7 +635,7 @@ PLATFORM</span>
 
               onClick={() => triggerRoute(pill.route)}
 
-              className="px-3 py-1 rounded-full text-xs font-semibold bg-[#F5F8F5] hover:bg-[#EAF4F0] text-[#172B3B] hover:text-[#2E7658] border border-[#E2E8ED] transition-colors"
+              className="min-h-[44px] px-3 py-2 rounded-full text-xs font-semibold bg-[#F5F8F5] hover:bg-[#EAF4F0] text-[#172B3B] hover:text-[#2E7658] border border-[#E2E8ED] transition-colors"
 
              >
 
@@ -662,6 +646,29 @@ PLATFORM</span>
          ))}
 
          </div>
+
+          {/* Mobile Quick Access: six core student tools. */}
+          <div className="relative z-[10000] mt-3 grid grid-cols-2 gap-2.5 sm:hidden" aria-label="Quick access student tools">
+            {[
+              { label: 'Rank / Cutoff Predictor', route: 'ap-eapcet-predictor', icon: BarChart3 },
+              { label: 'Branch & Career Roadmaps', route: 'engineering-roadmaps', icon: Compass },
+              { label: 'Scholarships & Aid', route: 'scholarships', icon: Award },
+              { label: 'College Compare & Details', route: 'autonomous-colleges', icon: Building2 },
+              { label: 'Mock Tests / Prep', route: 'mock-tests', icon: CheckSquare },
+              { label: 'Video to Audio', route: 'video-to-audio', icon: Mic },
+            ].map((tool) => {
+              const Icon = tool.icon;
+              return (
+                <button key={tool.label} type="button" onClick={() => triggerRoute(tool.route)}
+                  className="group flex min-h-[68px] min-w-0 items-center gap-2.5 rounded-xl border border-[#E2E8ED] bg-white px-3 py-2.5 text-left shadow-sm transition-all active:scale-[0.97] hover:border-[#C9D8D0] hover:bg-[#FBFDFC] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C29316]">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#F5F8F5] text-[#17364A] transition-colors group-hover:bg-[#EAF4F0]">
+                    <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
+                  </span>
+                  <span className="min-w-0 whitespace-normal break-words text-[11px] font-bold leading-snug text-[#172B3B]">{tool.label}</span>
+                </button>
+              );
+            })}
+          </div>
 
         </motion.div>
 
@@ -826,7 +833,7 @@ Access</span>
 
      {/* 6-Card Feature Shortcut Dock Beneath Hero (Reference 00:01) */}
 
-     <StaggerGrid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 mt-10 pt-8 border-t border-[#EDF2F6]">
+     <StaggerGrid className="hidden sm:grid grid-cols-2 lg:grid-cols-6 gap-3 mt-10 pt-8 border-t border-[#EDF2F6]">
 
       {QUICK_SHORTCUTS.map((item) => {
 
