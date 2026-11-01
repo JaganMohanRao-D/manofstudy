@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, ArrowRight, BookOpen, CalendarDays, Clock3, Search } from 'lucide-react';
 import articlesData from '../data/blogArticles.json';
 import editorialArticlesData from '../data/editorialBlogArticles.generated.json';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../services/firebase';
 
 type BlogArticle = {
   slug: string; title: string; category: string; tags: string[]; status: 'published' | 'draft';
@@ -13,7 +15,7 @@ const allArticles = [...(articlesData as BlogArticle[]), ...(editorialArticlesDa
   .sort((a, b) => String(b.publishedAt || '').localeCompare(String(a.publishedAt || '')) ||
     String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')) ||
     a.title.localeCompare(b.title));
-const articles = allArticles.filter((article) => article.status === 'published');
+const staticArticles = allArticles.filter((article) => article.status === 'published');
 const SITE = 'https://naacollege.in';
 const categorySlug = (value: string) => value.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const slugFromPath = (path: string) => path.replace(/\/+$/, '').split('/').filter(Boolean).pop() || '';
@@ -114,6 +116,45 @@ export function isBlogPath(pathname: string) {
 export const BlogPage: React.FC = () => {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('All');
+  const [dynamicArticles, setDynamicArticles] = useState<BlogArticle[]>([]);
+  useEffect(() => {
+    let active = true;
+    const loadAdminPosts = async () => {
+      try {
+        const snapshot = await getDocs(query(collection(db, 'admin_posts'), where('status', '==', 'published')));
+        const managed = snapshot.docs.map((entry) => {
+          const value = entry.data() as any;
+          const updated = value.updatedAt?.toDate?.() || value.createdAt?.toDate?.() || new Date();
+          return {
+            slug: String(value.slug || entry.id),
+            title: String(value.title || 'Untitled article'),
+            category: String(value.category || 'Student Guides'),
+            tags: Array.isArray(value.tags) ? value.tags : [],
+            status: 'published' as const,
+            publishedAt: updated.toISOString(),
+            updatedAt: updated.toISOString(),
+            featured: value.featured === true,
+            summary: String(value.summary || ''),
+            content: String(value.content || ''),
+            author: String(value.author || 'TEAM NAA COLLEGE'),
+            coverImage: String(value.coverImage || ''),
+            toolLinks: [],
+          } satisfies BlogArticle;
+        });
+        if (active) setDynamicArticles(managed);
+      } catch (error) {
+        console.warn('[BlogPage] Admin-managed articles could not be loaded.', error);
+      }
+    };
+    void loadAdminPosts();
+    return () => { active = false; };
+  }, []);
+  const articles = useMemo(() => {
+    const bySlug = new Map<string, BlogArticle>();
+    staticArticles.forEach((article) => bySlug.set(article.slug, article));
+    dynamicArticles.forEach((article) => bySlug.set(article.slug, article));
+    return [...bySlug.values()].sort((a, b) => String(b.publishedAt || '').localeCompare(String(a.publishedAt || '')));
+  }, [dynamicArticles]);
   const pathname = typeof window === 'undefined' ? '/blog/' : window.location.pathname;
   const isCategory = pathname.startsWith('/blog/category/');
   const categoryPathSlug = isCategory ? slugFromPath(pathname) : '';
@@ -121,13 +162,13 @@ export const BlogPage: React.FC = () => {
   const slug = isCategory || pathname.replace(/\/+$/, '') === '/blog' ? '' : slugFromPath(pathname);
   const article = articles.find((item) => item.slug === slug);
   const isListing = !slug || isCategory;
-  const categories = useMemo(() => ['All', ...Array.from(new Set(articles.map((item) => item.category)))], []);
+  const categories = useMemo(() => ['All', ...Array.from(new Set(articles.map((item) => item.category)))], [articles]);
   const filtered = useMemo(() => articles.filter((item) => {
     const text = [item.title, item.summary, ...item.tags, item.category].join(' ').toLowerCase();
     return (category === 'All' || item.category === category) && (!isCategory || !currentCategory || item.category === currentCategory) && text.includes(query.trim().toLowerCase());
-  }), [category, query, isCategory, currentCategory]);
+  }), [articles, category, query, isCategory, currentCategory]);
   const toc = useMemo(() => article ? article.content.split('\n').filter((line) => line.startsWith('## ')).map((line) => line.slice(3).trim()) : [], [article]);
-  const related = useMemo(() => article ? articles.filter((item) => item.slug !== article.slug && (item.category === article.category || item.tags.some((tag) => article.tags.includes(tag)))).slice(0, 3) : [], [article]);
+  const related = useMemo(() => article ? articles.filter((item) => item.slug !== article.slug && (item.category === article.category || item.tags.some((tag) => article.tags.includes(tag)) )).slice(0, 3) : [], [article, articles]);
 
   useEffect(() => {
     let title = 'Student Blog & Knowledge Hub | Naa College';
