@@ -215,6 +215,7 @@ function normalizeStructured(raw) {
     author: str(raw.author) || 'Naa College Editorial Desk',
     readingTimeMinutes: Number(raw.reading_time_minutes) || null,
     summary: str(raw.excerpt || raw.meta_description || raw.title),
+    ...(str(raw.cover_image) ? { coverImage: str(raw.cover_image) } : {}),
     content,
     sources: [],
     toolLinks: []
