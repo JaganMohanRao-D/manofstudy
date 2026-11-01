@@ -2,6 +2,7 @@
   "name": "functions",
   "description": "Firebase Cloud Functions for MOS CampusConnect Answer Email Notifications",
   "scripts": {
+    "test": "node --test",
     "lint": "eslint .",
     "serve": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
