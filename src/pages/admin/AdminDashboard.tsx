@@ -39,7 +39,7 @@ const DEFAULT_TOOLS: ToolItem[] = [
   { id: "pdf-tools", name: "Student PDF Tools", description: "Convert, merge and manage documents in the browser.", icon: "FileText", visible: true },
   { id: "tg-predictor", name: "TG EAPCET College Predictor", description: "Explore Telangana engineering options using historical allotment data.", icon: "Map", visible: true },
 ];
-const EMPTY_POST = { title: "", slug: "", category: "Student Guides", summary: "", coverImage: "", content: "", status: "draft" as const, featured: false, tags: "" };
+const EMPTY_POST = { title: "", slug: "", category: "Student Guides", summary: "", coverImage: "", content: "", status: "draft" as "draft" | "published", featured: false, tags: "" };
 const EMPTY_SCHOLARSHIP = { title: "", provider: "", category: "Government", target: "Students", status: "Cycle not confirmed", amount: "", eligibility: "", deadline: "", link: "", active: true };
 
 
