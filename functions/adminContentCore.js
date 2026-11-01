@@ -10,16 +10,29 @@ const CONFIG_KEYS = new Set(["tools", "hero", "alerts", "featuredTags", "content
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const HTTP_URL_RE = /^https?:\/\//i;
 
+class AdminContentValidationError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "AdminContentValidationError";
+  }
+}
+
 function cleanString(value, max, field, required = false) {
   const result = typeof value === "string" ? value.trim() : "";
-  if (required && !result) throw new Error(field + " is required.");
-  if (result.length > max) throw new Error(field + " is too long.");
+  if (required && !result) throw new AdminContentValidationError(field + " is required.");
+  if (result.length > max) throw new AdminContentValidationError(field + " is too long.");
   return result;
 }
 
 function safeUrl(value, field, required = false) {
   const result = cleanString(value, 2048, field, required);
-  if (result && !HTTP_URL_RE.test(result)) throw new Error(field + " must be an http(s) URL.");
+  if (result) {
+    let parsed;
+    try { parsed = new URL(result); } catch { throw new AdminContentValidationError(field + " must be a valid http(s) URL."); }
+    if (!HTTP_URL_RE.test(result) || !["http:", "https:"].includes(parsed.protocol) || !parsed.hostname) {
+      throw new AdminContentValidationError(field + " must be a valid http(s) URL.");
+    }
+  }
   return result;
 }
 
@@ -28,7 +41,7 @@ function validateRecord(type, input) {
   if (type === "posts") {
     const title = cleanString(data.title, 180, "Title", true);
     const slug = cleanString(data.slug, 180, "Slug", true).toLowerCase();
-    if (!SLUG_RE.test(slug)) throw new Error("Use a URL-safe slug with lowercase letters, numbers and hyphens.");
+    if (!SLUG_RE.test(slug)) throw new AdminContentValidationError("Use a URL-safe slug with lowercase letters, numbers and hyphens.");
     const status = data.status === "published" ? "published" : "draft";
     return {
       title,
@@ -56,13 +69,13 @@ function validateRecord(type, input) {
   }
   if (type === "config") {
     const key = cleanString(data.key, 40, "Configuration key", true);
-    if (!CONFIG_KEYS.has(key)) throw new Error("Unsupported configuration section.");
+    if (!CONFIG_KEYS.has(key)) throw new AdminContentValidationError("Unsupported configuration section.");
     const value = data.value && typeof data.value === "object" && !Array.isArray(data.value) ? data.value : {};
     const serialized = JSON.stringify(value);
-    if (serialized.length > 30000) throw new Error("Configuration is too large.");
+    if (serialized.length > 30000) throw new AdminContentValidationError("Configuration is too large.");
     return { key, value };
   }
-  throw new Error("Unsupported content type.");
+  throw new AdminContentValidationError("Unsupported content type.");
 }
 
 function createAdminContent({ db, FieldValue, now = () => Date.now() }) {
@@ -93,6 +106,12 @@ function createAdminContent({ db, FieldValue, now = () => Date.now() }) {
     }
     const collectionName = COLLECTIONS[type];
     const requestedId = cleanString(input.id, 160, "Record id");
+    if (type === "posts") {
+      const duplicates = await db.collection(collectionName).where("slug", "==", record.slug).limit(2).get();
+      if (duplicates.docs.some((doc) => doc.id !== requestedId)) {
+        throw new AdminContentValidationError("Another blog post already uses this slug.");
+      }
+    }
     const ref = requestedId ? db.collection(collectionName).doc(requestedId) : db.collection(collectionName).doc();
     const snapshot = await ref.get();
     const timestamp = FieldValue.serverTimestamp();
@@ -107,7 +126,7 @@ function createAdminContent({ db, FieldValue, now = () => Date.now() }) {
   async function deleteRecord(input) {
     const type = input && input.type;
     const id = cleanString(input && input.id, 160, "Record id", true);
-    if (type !== "posts" && type !== "scholarships") throw new Error("Unsupported delete operation.");
+    if (type !== "posts" && type !== "scholarships") throw new AdminContentValidationError("Unsupported delete operation.");
     await db.collection(COLLECTIONS[type]).doc(id).delete();
     return { id };
   }
@@ -116,7 +135,13 @@ function createAdminContent({ db, FieldValue, now = () => Date.now() }) {
     const posts = Array.isArray(input && input.posts) ? input.posts : [];
     const scholarships = Array.isArray(input && input.scholarships) ? input.scholarships : [];
     if (posts.length > 300 || scholarships.length > 500) {
-      throw new Error("The import contains too many records. Split the import and retry.");
+      throw new AdminContentValidationError("The import contains too many records. Split the import and retry.");
+    }
+    const migrationRef = db.collection(COLLECTIONS.config).doc("contentMigration");
+    const migrationSnapshot = await migrationRef.get();
+    const migrationState = migrationSnapshot.exists ? migrationSnapshot.data().value || {} : {};
+    if (migrationState.blogs === true && migrationState.scholarships === true) {
+      throw new AdminContentValidationError("The existing content library has already been imported.");
     }
     const writes = [];
     const timestamp = FieldValue.serverTimestamp();
@@ -141,7 +166,7 @@ function createAdminContent({ db, FieldValue, now = () => Date.now() }) {
       writes.slice(index, index + 400).forEach((write) => batch.set(write.ref, write.data, { merge: true }));
       await batch.commit();
     }
-    await db.collection(COLLECTIONS.config).doc("contentMigration").set({
+    await migrationRef.set({
       value: { blogs: true, scholarships: true },
       updatedAt: timestamp,
     }, { merge: true });
