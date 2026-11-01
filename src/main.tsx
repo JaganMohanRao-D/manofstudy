@@ -94,6 +94,7 @@ function AppBootstrap() {
   }, []);
 
   const pathname = window.location.pathname.replace(/\/+$/, '') || '/';
+  const isAdminPath = pathname === '/theone' || pathname.startsWith('/theone/');
 
   return (
     <Suspense fallback={<StartupFallback />}>
