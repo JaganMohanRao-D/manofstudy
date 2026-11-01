@@ -117,6 +117,10 @@ function setup({ record = ownerRecord(), records } = {}) {
       }
       return users[uid];
     },
+    async revokeRefreshTokens(uid) {
+      auth.revokedUid = uid;
+      if (users[uid]) users[uid] = { ...users[uid], tokensValidAfterTime: new Date(clock.now).toUTCString() };
+    },
   };
   const admin = core.createAdminAuth({
     db,
@@ -332,6 +336,13 @@ test("logout cannot revoke another user's session and requires owner identity", 
   await rejects(admin.logout(req(authContext({ email: "x@example.com" }), { sessionToken })), "permission-denied");
   await rejects(admin.logout(req(null, { sessionToken })), "unauthenticated");
   assert.equal(db.keys(SESSIONS).length, 1);
+});
+
+test("logout without a legacy session revokes Firebase refresh tokens", async () => {
+  const { admin, auth } = setup();
+  assert.deepEqual(await admin.logout(req(authContext())), { success: true });
+  assert.equal(auth.revokedUid, OWNER_UID);
+  await rejects(admin.assertOwnerIdentity(authContext()), "unauthenticated");
 });
 
 // ---------------------------------------------------------- rate limiting ---
