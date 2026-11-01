@@ -390,12 +390,10 @@ exports.websiteAssistantChat = require("./websiteAssistant").websiteAssistantCha
 
 
 // ---------------------------------------------------------------------------
-// Private Naa College owner portal authentication (email + password).
-// Only the verified email/password account jaganmakes@gmail.com may create an
-// admin session. Firebase Auth verifies the ID token; adminAuthCore.js then
-// enforces the owner allowlist, verified email, password provider, live
-// account state and rate limits server-side before issuing an opaque,
-// short-lived session token. Google sign-in can NOT create an admin session.
+// Private Naa College owner portal authentication.
+// Firebase Auth persists the browser session; these callables independently
+// verify the exact owner email, verified identity, password provider and live
+// account state before any privileged operation. Logout revokes refresh tokens.
 // ---------------------------------------------------------------------------
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
 const { createAdminAuth } = require("./adminAuthCore");
@@ -415,14 +413,12 @@ function adminCallableOptions() {
   };
 }
 
-exports.loginWithPasswordNaaAdmin = onCall(
-  { ...adminCallableOptions(), timeoutSeconds: 15 },
-  (request) => adminAuth.login(request)
-);
-
-exports.verifyNaaAdminSession = onCall(
+exports.verifyNaaAdminIdentity = onCall(
   adminCallableOptions(),
-  (request) => adminAuth.verify(request)
+  async (request) => {
+    await adminAuth.assertOwnerIdentity(request.auth);
+    return { valid: true };
+  }
 );
 
 exports.logoutNaaAdmin = onCall(
@@ -430,13 +426,13 @@ exports.logoutNaaAdmin = onCall(
   (request) => adminAuth.logout(request)
 );
 
-// Every future privileged admin endpoint must call
-// adminAuth.requireAdminSession(request) before doing any work.
+// Every privileged admin endpoint must call
+// adminAuth.assertOwnerIdentity(request.auth) before doing any work.
 
 
 // ---------------------------------------------------------------------------
 // Owner-only content management API. All reads/writes require the verified
-// owner identity AND the short-lived server-side admin session.
+// verified owner identity from the Firebase ID token.
 // The Admin SDK is the only writer; browser clients never receive privileged
 // Firestore credentials.
 // ---------------------------------------------------------------------------
@@ -446,7 +442,7 @@ const adminContent = createAdminContent({ db, FieldValue });
 exports.getNaaAdminDashboard = onCall(
   { ...adminCallableOptions(), timeoutSeconds: 20 },
   async (request) => {
-    await adminAuth.requireAdminSession(request);
+    await adminAuth.assertOwnerIdentity(request.auth);
     try {
       return await adminContent.getDashboard();
     } catch (error) {
