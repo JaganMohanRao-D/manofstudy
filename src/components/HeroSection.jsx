@@ -442,11 +442,11 @@ PLATFORM</span>
 
        >
 
-         Right Guidance.{' '}
+         Focus on Learning.{' '}
 
          <span className="block text-[#C29316] mt-1">
 
-           Brighter Engineering Futures.
+           We'll Handle the Rest
 
          </span>
 
