@@ -53,7 +53,7 @@ import { ScrollReveal, StaggerGrid } from './motion/ScrollReveal';
 import blogArticlesData from '../data/blogArticles.json';
 import editorialArticlesData from '../data/editorialBlogArticles.generated.json';
 import './NaaDesignFoundation.css';
-import { collection, doc, getDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query as firestoreQuery, where } from 'firebase/firestore';
 import { db } from '../services/firebase';
 
 const ADMIN_ICON_MAP = { Compass, Building2, Award, CheckSquare, FileSpreadsheet, ShieldCheck, Calculator, FileText, Mic, BookOpen, Sparkles, Clock, BarChart3, CheckCircle2, Bot, GraduationCap, Wrench, ListChecks, Route, CalendarCheck, Map };
@@ -285,6 +285,7 @@ export default function HeroSection({
 
  const [scholarships, setScholarships] = useState([]);
  const [siteConfig, setSiteConfig] = useState({});
+ const [dynamicBlogs, setDynamicBlogs] = useState([]);
 
  // Load scholarship listings from the existing /indian_scholarships.json dataset
 
@@ -359,23 +360,39 @@ export default function HeroSection({
   return 'ap-eapcet-predictor';
  };
 
- // Load real published blog articles
+ // Load published CMS articles for the homepage's editorial shortcuts.
+ useEffect(() => {
+  let mounted = true;
+  getDocs(firestoreQuery(collection(db, 'admin_posts'), where('status', '==', 'published')))
+   .then((snapshot) => {
+    const managed = snapshot.docs.map((entry) => {
+     const value = entry.data();
+     const updated = value.updatedAt?.toDate?.() || value.createdAt?.toDate?.() || new Date();
+     return { slug: value.slug || entry.id, id: entry.id, title: value.title || 'Student guide', category: value.category || 'Student Guides', status: 'published', publishedAt: updated.toISOString(), updatedAt: updated.toISOString() };
+    });
+    if (mounted) setDynamicBlogs(managed);
+   })
+   .catch((error) => console.warn('[Naa College] CMS articles could not be loaded for the homepage.', error));
+  return () => { mounted = false; };
+ }, []);
 
+ // Load real published blog articles
  const publishedBlogs = useMemo(() => {
-  const combined = [
+  const bySlug = new Map();
+  [
     ...(Array.isArray(blogArticlesData) ? blogArticlesData : []),
     ...(Array.isArray(editorialArticlesData) ? editorialArticlesData : []),
-  ];
-  return combined
-    .filter((article) => article && article.status === 'published')
-    .slice()
+    ...dynamicBlogs,
+  ].filter((article) => article && article.status === 'published')
+   .forEach((article) => bySlug.set(article.slug || article.id, article));
+  return [...bySlug.values()]
     .sort((a, b) =>
       String(b.publishedAt || '').localeCompare(String(a.publishedAt || '')) ||
       String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')) ||
       String(a.title || '').localeCompare(String(b.title || ''))
     )
     .slice(0, 6);
-}, []);
+}, [dynamicBlogs]);
 
  // Search results filtering
 
