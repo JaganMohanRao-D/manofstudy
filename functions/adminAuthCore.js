@@ -328,10 +328,18 @@ function createAdminAuth({ db, auth, FieldValue, now = () => Date.now(), logger 
     let stage = "owner-identity";
     try {
       const owner = await assertOwnerIdentity(request.auth);
+      const legacyToken = request.data && request.data.sessionToken;
+      if (legacyToken) {
+        // Retire an opaque session issued by the previous admin portal version.
+        stage = "revoke-legacy-session";
+        const session = await getValidSession(legacyToken, owner.uid);
+        if (session) await session.ref.delete();
+        return { success: true };
+      }
       stage = "revoke-refresh-tokens";
-      // Revoke Firebase refresh tokens as well as signing out the current
-      // browser. assertOwnerIdentity checks tokensValidAfterTime on all
-      // privileged requests, so previously issued ID tokens are rejected.
+      // Firebase Auth is now the persistent session authority. Revoke refresh
+      // tokens on logout; assertOwnerIdentity checks tokensValidAfterTime on
+      // every privileged call so already-issued ID tokens are rejected too.
       await auth.revokeRefreshTokens(owner.uid);
       return { success: true };
     } catch (error) {
