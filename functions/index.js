@@ -481,3 +481,16 @@ exports.deleteNaaAdminRecord = onCall(
     }
   }
 );
+
+exports.importNaaAdminLegacyContent = onCall(
+  { ...adminCallableOptions(), timeoutSeconds: 60 },
+  async (request) => {
+    await adminAuth.requireAdminSession(request);
+    try {
+      return await adminContent.importLegacyContent(request.data || {});
+    } catch (error) {
+      if (error instanceof HttpsError) throw error;
+      throw new HttpsError("invalid-argument", error && error.message ? error.message : "Legacy content import failed.");
+    }
+  }
+);
