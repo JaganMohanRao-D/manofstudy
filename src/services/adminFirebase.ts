@@ -10,9 +10,9 @@ import firebaseAppletConfig from "../../firebase-applet-config.json";
  *  - Signing the owner in with email/password must not change the public site's
  *    student auth state (and a signed-in student must not be signed out by
  *    visiting /theone).
- *  - Auth state is kept in memory only, so closing or refreshing the page never
- *    leaves a reusable owner credential in browser storage. The server-side admin
- *    session token is likewise held in memory only (see AdminPortal).
+ *  - Firebase Auth uses browser-local persistence so the owner session survives
+ *    refreshes. A short-lived opaque server session is stored locally and checked
+ *    against the backend before protected content is rendered.
  *
  * It uses the same Firebase project (manofstudy-live) as the rest of the site.
  */
