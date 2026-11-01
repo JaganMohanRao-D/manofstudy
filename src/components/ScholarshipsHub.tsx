@@ -6,7 +6,7 @@ import {
   MapPin, Wallet, Users, Filter, AlertCircle, FileText
 } from 'lucide-react';
 import { ScholarshipDetailPage, scholarshipSlug } from './ScholarshipDetailPage';
-import { collection, getDocs, query as firestoreQuery, where } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query as firestoreQuery, where } from 'firebase/firestore';
 import { db } from '../services/firebase';
 
 export interface IndianScholarship {
@@ -204,7 +204,11 @@ export const ScholarshipsHub: React.FC = () => {
       if (!Array.isArray(data) || data.some((item: any) => !item || !item.id || !item.title || !item.provider || !externalUrl(item.official_source_url || item.apply_link))) {
         throw new Error('Scholarship data has an invalid structure');
       }
-      const managedSnapshot = await getDocs(firestoreQuery(collection(db, 'admin_scholarships'), where('active', '==', true))).catch(() => null);
+      const [managedSnapshot, migrationDoc] = await Promise.all([
+        getDocs(firestoreQuery(collection(db, 'admin_scholarships'), where('active', '==', true))).catch(() => null),
+        getDoc(doc(db, 'admin_site_config', 'contentMigration')).catch(() => null),
+      ]);
+      const cmsOnly = migrationDoc?.exists() && migrationDoc.data()?.value?.scholarships === true;
       const managed: IndianScholarship[] = managedSnapshot ? managedSnapshot.docs.map((entry) => {
         const item = entry.data() as any;
         return {
@@ -226,7 +230,7 @@ export const ScholarshipsHub: React.FC = () => {
         };
       }) : [];
       const merged = new Map<string, IndianScholarship>();
-      [...(data as IndianScholarship[]), ...managed].forEach((item) => merged.set(item.title.trim().toLowerCase(), item));
+      [...(cmsOnly ? [] : (data as IndianScholarship[])), ...managed].forEach((item) => merged.set(item.title.trim().toLowerCase(), item));
       setScholarships([...merged.values()]);
     } catch {
       setLoadError('Scholarships could not be loaded. Please retry in a moment.');
