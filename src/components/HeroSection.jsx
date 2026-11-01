@@ -507,7 +507,7 @@ PLATFORM</span>
 
              onChange={(e) => setSearchQuery(e.target.value)}
 
-             placeholder="Search colleges, EAPCET cutoffs, scholarships, tools..."
+             placeholder="Search colleges or exams..."
 
            className="w-full min-h-[44px] py-2.5 px-2 text-sm text-[#172B3B] placeholder-[#7A8B99] bg-transparent focus:outline-none"
 
@@ -619,12 +619,6 @@ PLATFORM</span>
 
              { label: 'TG EAPCET', route: 'tg-eapcet-predictor' },
 
-             { label: 'Web Options', route: 'web-options-generator' },
-
-             { label: 'Scholarships', route: 'scholarships' },
-
-             { label: 'CSE Roadmap', route: 'engineering-roadmaps' },
-
          ].map((pill) => (
 
              <button
@@ -648,7 +642,7 @@ PLATFORM</span>
          </div>
 
           {/* Mobile Quick Access: six core student tools. */}
-          <div className="relative z-[10000] mt-3 grid grid-cols-2 gap-2.5 sm:hidden" aria-label="Quick access student tools">
+          <div className="relative z-[10000] mt-3 grid grid-cols-2 gap-2.5 pb-16 sm:hidden" aria-label="Quick access student tools">
             {[
               { label: 'Rank / Cutoff Predictor', route: 'ap-eapcet-predictor', icon: BarChart3 },
               { label: 'Branch & Career Roadmaps', route: 'engineering-roadmaps', icon: Compass },
