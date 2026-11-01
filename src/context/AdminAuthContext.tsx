@@ -4,7 +4,7 @@ import { httpsCallable } from "firebase/functions";
 import { adminAuth, adminFunctions } from "../services/adminFirebase";
 import { loginErrorMessage } from "../components/admin/adminAuthMessages";
 
-const ADMIN_EMAIL = "jaganmakes@gmail.com";
+const ADMIN_EMAIL = (import.meta.env.VITE_ADMIN_EMAIL || "jaganmakes@gmail.com").trim().toLowerCase();
 const SESSION_STORAGE_KEY = "naa_college_admin_session_v2";
 const verifySessionCall = httpsCallable<{ sessionToken: string }, { valid: boolean }>(adminFunctions, "verifyNaaAdminSession");
 const loginCall = httpsCallable<Record<string, never>, { sessionToken: string; expiresAt: string }>(adminFunctions, "loginWithPasswordNaaAdmin");
