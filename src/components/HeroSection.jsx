@@ -464,9 +464,38 @@ PLATFORM</span>
 
        >
 
-           Explore historical AP & TG EAPCET allotment records, compare college options, organise counselling preferences, discover scholarship listings, and practise with student-focused tools in one workspace.
+           Explore EAPCET allotments, compare colleges, find scholarships and access student tools—all in one place.
 
        </motion.p>
+
+       {/* Mobile campus video: placed between the hero copy and search. */}
+       <motion.div
+         initial={{ opacity: 0, y: 20 }}
+         animate={{ opacity: 1, y: 0 }}
+         transition={{ duration: 0.55, delay: 0.16 }}
+         className="lg:hidden"
+       >
+         <div className="bg-white rounded-3xl border border-[#E2E8ED] p-3 shadow-lg">
+           <div className="bg-white rounded-2xl overflow-hidden flex items-center justify-center">
+             <video
+               src="/HERO_VEDIO.webm"
+               poster="/Vibrant%20Campus%20Life%20Illustration.webp"
+               autoPlay
+               muted
+               loop
+               playsInline
+               className="w-full h-auto object-contain bg-white pointer-events-none select-none"
+             />
+           </div>
+           <div className="mt-3 pt-3 border-t border-[#EDF2F6] flex flex-wrap items-center justify-between gap-2 px-2 text-xs text-[#5E6D7D]">
+             <span className="font-bold text-[#172B3B] flex items-center gap-1.5">
+               <Sparkles className="w-3.5 h-3.5 text-[#C29316]" />
+               Naa College Interactive Campus
+             </span>
+             <span className="text-[#2E7658] font-semibold">100% Free Student Access</span>
+           </div>
+         </div>
+       </motion.div>
 
        {/* Inline Global Student Search Bar */}
 
@@ -746,7 +775,7 @@ Background */}
 
        transition={{ duration: 0.55, delay: 0.2 }}
 
-       className="lg:col-span-5"
+       className="hidden lg:block lg:col-span-5"
 
       >
 
@@ -797,7 +826,7 @@ Access</span>
 
      {/* 6-Card Feature Shortcut Dock Beneath Hero (Reference 00:01) */}
 
-     <StaggerGrid className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mt-10 pt-8 border-t border-[#EDF2F6]">
+     <StaggerGrid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 mt-10 pt-8 border-t border-[#EDF2F6]">
 
       {QUICK_SHORTCUTS.map((item) => {
 
@@ -825,13 +854,13 @@ Access</span>
 
             <div className="min-w-0">
 
-             <div className="text-xs font-extrabold text-[#172B3B] truncate group-hover:text-[#102B3F]">
+             <div className="text-xs font-extrabold text-[#172B3B] whitespace-normal break-words leading-snug group-hover:text-[#102B3F]">
 
               {item.title}
 
              </div>
 
-             <div className="text-[11px] text-[#5E6D7D] truncate mt-0.5">
+             <div className="text-[11px] text-[#5E6D7D] whitespace-normal break-words leading-snug mt-0.5">
 
               {item.subtitle}
 
