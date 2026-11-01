@@ -5,12 +5,9 @@ import { adminAuth, adminFunctions } from "../services/adminFirebase";
 import { loginErrorMessage } from "../components/admin/adminAuthMessages";
 
 const ADMIN_EMAIL = (import.meta.env.VITE_ADMIN_EMAIL || "jaganmakes@gmail.com").trim().toLowerCase();
-const SESSION_STORAGE_KEY = "naa_college_admin_session_v2";
-const verifySessionCall = httpsCallable<{ sessionToken: string }, { valid: boolean }>(adminFunctions, "verifyNaaAdminSession");
-const loginCall = httpsCallable<Record<string, never>, { sessionToken: string; expiresAt: string }>(adminFunctions, "loginWithPasswordNaaAdmin");
-const logoutCall = httpsCallable<{ sessionToken: string }, { success: boolean }>(adminFunctions, "logoutNaaAdmin");
+const verifyIdentityCall = httpsCallable<Record<string, never>, { valid: boolean }>(adminFunctions, "verifyNaaAdminIdentity");
+const logoutCall = httpsCallable<Record<string, never>, { success: boolean }>(adminFunctions, "logoutNaaAdmin");
 
-type StoredAdminSession = { token: string; expiresAt: number };
 type AdminAuthValue = {
   user: User | null;
   isAdmin: boolean;
@@ -21,32 +18,13 @@ type AdminAuthValue = {
 
 const AdminAuthContext = createContext<AdminAuthValue | null>(null);
 
-function readStoredSession(): StoredAdminSession | null {
-  try {
-    const raw = window.localStorage.getItem(SESSION_STORAGE_KEY);
-    if (!raw) return null;
-    const value = JSON.parse(raw) as Partial<StoredAdminSession>;
-    if (typeof value.token !== "string" || !value.token || !Number.isFinite(value.expiresAt)) return null;
-    return { token: value.token, expiresAt: Number(value.expiresAt) };
-  } catch {
-    return null;
-  }
-}
-
-function clearStoredSession() {
-  try { window.localStorage.removeItem(SESSION_STORAGE_KEY); } catch { /* Storage may be unavailable. */ }
-}
-
 export function AdminAuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [session, setSession] = useState<StoredAdminSession | null>(null);
-  const loginInProgress = useRef(false);
+  const authActionInProgress = useRef(false);
 
-  const endLocalSession = useCallback(async () => {
-    clearStoredSession();
-    setSession(null);
+  const clearLocalAuth = useCallback(async () => {
     setUser(null);
     setIsAdmin(false);
     await signOut(adminAuth).catch(() => undefined);
@@ -55,37 +33,29 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let active = true;
     const unsubscribe = onAuthStateChanged(adminAuth, async (nextUser) => {
-      if (!active || loginInProgress.current) return;
+      if (!active || authActionInProgress.current) return;
       if (!nextUser) {
         setUser(null);
         setIsAdmin(false);
-        setSession(null);
         setLoading(false);
         return;
       }
       if ((nextUser.email || "").trim().toLowerCase() !== ADMIN_EMAIL || !nextUser.emailVerified) {
-        await endLocalSession();
-        if (active) setLoading(false);
-        return;
-      }
-      const stored = readStoredSession();
-      if (!stored || stored.expiresAt <= Date.now()) {
-        await endLocalSession();
+        await clearLocalAuth();
         if (active) setLoading(false);
         return;
       }
       try {
-        const { data } = await verifySessionCall({ sessionToken: stored.token });
+        const { data } = await verifyIdentityCall({});
         if (!active) return;
         if (!data.valid) {
-          await endLocalSession();
+          await clearLocalAuth();
           return;
         }
         setUser(nextUser);
-        setSession(stored);
         setIsAdmin(true);
       } catch {
-        await endLocalSession();
+        await clearLocalAuth();
       } finally {
         if (active) setLoading(false);
       }
@@ -94,23 +64,24 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
       active = false;
       unsubscribe();
     };
-  }, [endLocalSession]);
+  }, [clearLocalAuth]);
 
+  // Re-check the verified owner identity periodically and when the admin tab
+  // becomes visible again. Every content callable also performs its own check.
   useEffect(() => {
-    if (!isAdmin || !session) return;
+    if (!isAdmin) return;
     const verify = async () => {
-      if (Date.now() >= session.expiresAt) {
-        await endLocalSession();
-        return;
-      }
       try {
-        const { data } = await verifySessionCall({ sessionToken: session.token });
-        if (!data.valid) await endLocalSession();
-      } catch {
-        await endLocalSession();
+        const { data } = await verifyIdentityCall({});
+        if (!data.valid) await clearLocalAuth();
+      } catch (error) {
+        const code = String((error as { code?: unknown })?.code || "");
+        if (code.includes("permission-denied") || code.includes("unauthenticated")) {
+          await clearLocalAuth();
+        }
       }
     };
-    const interval = window.setInterval(() => void verify(), 4 * 60 * 1000);
+    const interval = window.setInterval(() => void verify(), 5 * 60 * 1000);
     const onVisible = () => {
       if (document.visibilityState === "visible") void verify();
     };
@@ -119,58 +90,55 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
       window.clearInterval(interval);
       document.removeEventListener("visibilitychange", onVisible);
     };
-  }, [isAdmin, session, endLocalSession]);
+  }, [isAdmin, clearLocalAuth]);
 
   const login = useCallback(async (email: string, password: string) => {
-    loginInProgress.current = true;
+    authActionInProgress.current = true;
     setLoading(true);
     try {
       const normalizedEmail = email.trim().toLowerCase();
       if (normalizedEmail !== ADMIN_EMAIL) {
-        const denied = Object.assign(new Error("Unauthorized account"), { code: "permission-denied" });
-        throw denied;
+        throw Object.assign(new Error("Unauthorized account"), { code: "permission-denied" });
       }
-      if (!password) throw Object.assign(new Error("Password required"), { code: "auth/missing-password" });
+      if (!password) {
+        throw Object.assign(new Error("Password required"), { code: "auth/missing-password" });
+      }
+
       const credential = await signInWithEmailAndPassword(adminAuth, normalizedEmail, password);
       if ((credential.user.email || "").trim().toLowerCase() !== ADMIN_EMAIL || !credential.user.emailVerified) {
         await signOut(adminAuth).catch(() => undefined);
         throw Object.assign(new Error("Unauthorized account"), { code: "permission-denied" });
       }
-      const { data } = await loginCall({});
-      const expiresAt = Date.parse(data.expiresAt);
-      if (!data.sessionToken || !Number.isFinite(expiresAt) || expiresAt <= Date.now()) {
-        throw new Error("The admin session could not be created.");
-      }
-      const nextSession = { token: data.sessionToken, expiresAt };
-      window.localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(nextSession));
+
+      const { data } = await verifyIdentityCall({});
+      if (!data.valid) throw Object.assign(new Error("Unauthorized account"), { code: "permission-denied" });
+
       setUser(credential.user);
-      setSession(nextSession);
       setIsAdmin(true);
     } catch (error) {
-      clearStoredSession();
-      setSession(null);
+      setUser(null);
       setIsAdmin(false);
       await signOut(adminAuth).catch(() => undefined);
-      const mapped = loginErrorMessage(error);
-      throw new Error(mapped);
+      throw new Error(loginErrorMessage(error));
     } finally {
-      loginInProgress.current = false;
+      authActionInProgress.current = false;
       setLoading(false);
     }
   }, []);
 
   const logout = useCallback(async () => {
-    const stored = readStoredSession();
-    clearStoredSession();
-    setSession(null);
-    setIsAdmin(false);
-    setUser(null);
+    authActionInProgress.current = true;
     try {
-      if (stored?.token) await logoutCall({ sessionToken: stored.token });
+      // The backend revokes refresh tokens; local sign-out then clears this
+      // browser's persisted Firebase session.
+      await logoutCall({});
     } catch (error) {
-      console.warn('[NaaAdmin] Server session revocation was not confirmed; the session will expire automatically.', error);
+      console.warn("[NaaAdmin] Server token revocation was not confirmed.", error);
     } finally {
       await signOut(adminAuth).catch(() => undefined);
+      setUser(null);
+      setIsAdmin(false);
+      authActionInProgress.current = false;
     }
   }, []);
 
