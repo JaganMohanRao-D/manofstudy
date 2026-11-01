@@ -55,7 +55,7 @@ import './NaaDesignFoundation.css';
 import { collection, doc, getDoc } from 'firebase/firestore';
 import { db } from '../services/firebase';
 
-const QUICK_SHORTCUTS = [
+const ADMIN_ICON_MAP = { Compass, Building2, Award, CheckSquare, FileSpreadsheet, ShieldCheck, Calculator, FileText, Mic, BookOpen, Sparkles, Clock, BarChart3, CheckCircle2, Bot, GraduationCap, Wrench };\n\nconst QUICK_SHORTCUTS = [
 
  {
 
@@ -339,12 +339,12 @@ export default function HeroSection({
  const configuredQuickShortcuts = QUICK_SHORTCUTS.map((item) => {
   const configId = item.id === 'web-options' ? 'ap-web-options' : item.id;
   const config = resolveTool(configId);
-  return { ...item, title: config?.name || item.title, subtitle: config?.description || item.subtitle, hidden: config && config.visible === false };
+  return { ...item, title: config?.name || item.title, subtitle: config?.description || item.subtitle, icon: ADMIN_ICON_MAP[config?.icon] || item.icon, hidden: config && config.visible === false };
  }).filter((item) => !item.hidden);
  const configuredStudentTools = STUDENT_UTILITY_TOOLS.map((item) => {
   const configId = item.id === 'attendance-defender' ? 'attendance' : item.id;
   const config = resolveTool(configId);
-  return { ...item, title: config?.name || item.title, description: config?.description || item.description, hidden: config && config.visible === false };
+  return { ...item, title: config?.name || item.title, description: config?.description || item.description, icon: ADMIN_ICON_MAP[config?.icon] || item.icon, hidden: config && config.visible === false };
  }).filter((item) => !item.hidden);
  const featuredTagLabels = Array.isArray(siteConfig.featuredTags?.items) ? siteConfig.featuredTags.items : [];
  const featuredTagRoute = (label) => {
