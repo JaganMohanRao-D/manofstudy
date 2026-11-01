@@ -59,120 +59,70 @@ import { db } from '../services/firebase';
 const ADMIN_ICON_MAP = { Compass, Building2, Award, CheckSquare, FileSpreadsheet, ShieldCheck, Calculator, FileText, Mic, BookOpen, Sparkles, Clock, BarChart3, CheckCircle2, Bot, GraduationCap, Wrench, ListChecks, Route, CalendarCheck, Map };
 
 const QUICK_SHORTCUTS = [
-
- {
-
-     id: 'ap-predictor',
-
-     title: 'AP EAPCET Predictor',
-
-     subtitle: '2025 & 2026 Cutoffs',
-
-     badge: 'AP',
-
-     route: 'ap-eapcet-predictor',
-
-     icon: Compass,
-
- },
-
- {
-
-     id: 'tg-predictor',
-
+  {
+    id: 'ap-predictor',
+    title: 'AP EAPCET Predictor',
+    subtitle: '2025 & 2026 Cutoffs',
+    badge: 'AP',
+    route: 'ap-eapcet-predictor',
+    icon: Compass,
+  },
+  {
+    id: 'tg-predictor',
     title: 'TG EAPCET Predictor',
-
     subtitle: 'Rank & Branch Insights',
-
     badge: 'TG',
-
     route: 'tg-eapcet-predictor',
-
     icon: Building2,
-
-},
-
-{
-
+  },
+  {
     id: 'web-options',
-
     title: 'Web Options Generator',
-
     subtitle: 'Smart Counseling Lists',
-
     badge: 'Tool',
-
     route: 'web-options-generator',
-
     icon: FileSpreadsheet,
-
-},
-
-{
-
- {
+  },
+  {
     id: 'ap-allotments',
     title: 'AP College-wise Allotments',
     subtitle: 'Historical Seat Records',
     badge: 'AP',
     route: 'ap-allotment-explorer',
     icon: Building2,
- },
- {
+  },
+  {
     id: 'roadmaps',
     title: 'Career Roadmaps',
     subtitle: '4-Year Branch Guides',
     badge: 'Careers',
     route: 'engineering-roadmaps',
     icon: BookOpen,
- },
-
+  },
+  {
     id: 'autonomous',
-
     title: 'Autonomous Colleges',
-
     subtitle: 'NAAC & NBA Accredited',
-
     badge: 'Directory',
-
     route: 'autonomous-colleges',
-
     icon: GraduationCap,
-
-},
-
-{
-
+  },
+  {
     id: 'scholarships',
-
     title: 'Scholarship Listings',
-
     subtitle: 'Govt & Corporate Aid',
-
-     badge: 'Aid',
-
-     route: 'scholarships',
-
-     icon: Award,
-
- },
-
- {
-
-     id: 'mock-tests',
-
-     title: 'CBT Mock Tests',
-
-     subtitle: 'AP & TG Practice Hub',
-
-     badge: 'Live',
-
-     route: 'mock-tests',
-
-     icon: CheckSquare,
-
- },
-
+    badge: 'Aid',
+    route: 'scholarships',
+    icon: Award,
+  },
+  {
+    id: 'mock-tests',
+    title: 'CBT Mock Tests',
+    subtitle: 'AP & TG Practice Hub',
+    badge: 'Live',
+    route: 'mock-tests',
+    icon: CheckSquare,
+  },
 ];
 
 const TICKER_ITEMS = [
