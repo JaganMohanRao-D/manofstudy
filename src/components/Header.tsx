@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../services/firebase';
 
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -45,6 +47,10 @@ import {
     Mic,
 
     Bot,
+    Route,
+    CalendarCheck,
+    ListChecks,
+    Map,
 
 } from 'lucide-react';
 
@@ -628,6 +634,23 @@ const NAV_CATEGORIES: NavCategory[] = [
 
 ];
 
+const ADMIN_NAV_ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+    Compass, GraduationCap, Award, CheckSquare, Wrench, BookOpen, Briefcase, HeartHandshake,
+    Building2, FileSpreadsheet, Calculator, FileText, ShieldCheck, Mic, Bot,
+    Route, CalendarCheck, ListChecks, Map,
+};
+
+const ADMIN_TOOL_ID_BY_ROUTE: Record<string, string> = {
+    'ap-eapcet-predictor': 'ap-predictor',
+    'ap-allotment-explorer': 'ap-allotments',
+    'web-options-generator': 'ap-web-options',
+    'engineering-roadmaps': 'roadmaps',
+    scholarships: 'scholarships',
+    'attendance-defender': 'attendance',
+    'pdf-tools': 'pdf-tools',
+    'tg-eapcet-predictor': 'tg-predictor',
+};
+
 export const Header: React.FC<HeaderProps> = ({
 
  activeWorkspace = 'hub',
@@ -641,6 +664,43 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
 
  const [openCategory, setOpenCategory] = useState<string | null>(null);
+ const [managedTools, setManagedTools] = useState<Array<{ id: string; name: string; description: string; icon: string; visible: boolean }>>([]);
+
+ useEffect(() => {
+     let active = true;
+     getDoc(doc(db, 'admin_site_config', 'tools'))
+         .then((snapshot) => {
+             if (!active || !snapshot.exists()) return;
+             const items = snapshot.data()?.value?.items;
+             if (Array.isArray(items)) setManagedTools(items);
+         })
+         .catch((error) => console.warn('[Naa College] Tool navigation settings unavailable.', error));
+     return () => { active = false; };
+ }, []);
+
+ const configuredNavCategories: NavCategory[] = NAV_CATEGORIES
+     .map((category) => ({
+         ...category,
+         columns: category.columns
+             .map((column) => ({
+                 ...column,
+                 items: column.items
+                     .map((item) => {
+                         const toolId = ADMIN_TOOL_ID_BY_ROUTE[item.route];
+                         const config = toolId ? managedTools.find((tool) => tool.id === toolId) : undefined;
+                         if (config && config.visible === false) return null;
+                         return {
+                             ...item,
+                             label: config?.name || item.label,
+                             description: config?.description || item.description,
+                             icon: ADMIN_NAV_ICON_MAP[config?.icon] || item.icon,
+                         };
+                     })
+                     .filter((item): item is MegaMenuItem => item !== null),
+             }))
+             .filter((column) => column.items.length > 0),
+     }))
+     .filter((category) => category.columns.length > 0);
 
  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -900,7 +960,7 @@ className="w-5 h-5" />}
 
       </button>
 
-      {NAV_CATEGORIES.map((category) => {
+      {configuredNavCategories.map((category) => {
 
         const Icon = category.icon;
 
