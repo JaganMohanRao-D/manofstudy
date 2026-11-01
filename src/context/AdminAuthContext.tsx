@@ -110,7 +110,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
         throw Object.assign(new Error("Unauthorized account"), { code: "permission-denied" });
       }
       if (!credential.user.emailVerified) {
-        await sendEmailVerification(credential.user).catch(() => undefined);
+        await sendEmailVerification(credential.user);
         await signOut(adminAuth).catch(() => undefined);
         throw Object.assign(new Error("Email verification required"), {
           code: "permission-denied",
