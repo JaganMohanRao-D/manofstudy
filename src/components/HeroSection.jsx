@@ -326,13 +326,15 @@ export default function HeroSection({
    getDoc(doc(db, 'admin_site_config', 'alerts')),
    getDoc(doc(db, 'admin_site_config', 'featuredTags')),
    getDoc(doc(db, 'admin_site_config', 'tools')),
-  ]).then(([heroDoc, alertDoc, tagsDoc, toolsDoc]) => {
+   getDoc(doc(db, 'admin_site_config', 'contentMigration')),
+  ]).then(([heroDoc, alertDoc, tagsDoc, toolsDoc, migrationDoc]) => {
    if (!mounted) return;
    setSiteConfig({
     hero: heroDoc.exists() ? heroDoc.data().value || {} : {},
     alerts: alertDoc.exists() ? alertDoc.data().value || {} : {},
     featuredTags: tagsDoc.exists() ? tagsDoc.data().value || {} : {},
     tools: toolsDoc.exists() ? toolsDoc.data().value || {} : {},
+    contentMigration: migrationDoc.exists() ? migrationDoc.data().value || {} : {},
    });
   }).catch((error) => console.warn('[Naa College] Public site configuration unavailable.', error));
   return () => { mounted = false; };
@@ -380,8 +382,8 @@ export default function HeroSection({
  const publishedBlogs = useMemo(() => {
   const bySlug = new Map();
   [
-    ...(Array.isArray(blogArticlesData) ? blogArticlesData : []),
-    ...(Array.isArray(editorialArticlesData) ? editorialArticlesData : []),
+    ...(siteConfig.contentMigration?.blogs === true ? [] : (Array.isArray(blogArticlesData) ? blogArticlesData : [])),
+    ...(siteConfig.contentMigration?.blogs === true ? [] : (Array.isArray(editorialArticlesData) ? editorialArticlesData : [])),
     ...dynamicBlogs,
   ].filter((article) => article && article.status === 'published')
    .forEach((article) => bySlug.set(article.slug || article.id, article));
@@ -392,7 +394,7 @@ export default function HeroSection({
       String(a.title || '').localeCompare(String(b.title || ''))
     )
     .slice(0, 6);
-}, [dynamicBlogs]);
+}, [dynamicBlogs, siteConfig.contentMigration?.blogs]);
 
  // Search results filtering
 
