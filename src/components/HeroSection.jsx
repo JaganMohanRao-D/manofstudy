@@ -52,6 +52,8 @@ import { ScrollReveal, StaggerGrid } from './motion/ScrollReveal';
 import blogArticlesData from '../data/blogArticles.json';
 import editorialArticlesData from '../data/editorialBlogArticles.generated.json';
 import './NaaDesignFoundation.css';
+import { collection, doc, getDoc } from 'firebase/firestore';
+import { db } from '../services/firebase';
 
 const QUICK_SHORTCUTS = [
 
@@ -279,6 +281,7 @@ export default function HeroSection({
  const [searchQuery, setSearchQuery] = useState('');
 
  const [scholarships, setScholarships] = useState([]);
+ const [siteConfig, setSiteConfig] = useState({});
 
  // Load scholarship listings from the existing /indian_scholarships.json dataset
 
@@ -309,6 +312,49 @@ export default function HeroSection({
   };
 
  }, []);
+
+ // Public display configuration is read-only for visitors; only the owner
+ // dashboard can change these values through authenticated Cloud Functions.
+ useEffect(() => {
+  let mounted = true;
+  Promise.all([
+   getDoc(doc(db, 'admin_site_config', 'hero')),
+   getDoc(doc(db, 'admin_site_config', 'alerts')),
+   getDoc(doc(db, 'admin_site_config', 'featuredTags')),
+   getDoc(doc(db, 'admin_site_config', 'tools')),
+  ]).then(([heroDoc, alertDoc, tagsDoc, toolsDoc]) => {
+   if (!mounted) return;
+   setSiteConfig({
+    hero: heroDoc.exists() ? heroDoc.data().value || {} : {},
+    alerts: alertDoc.exists() ? alertDoc.data().value || {} : {},
+    featuredTags: tagsDoc.exists() ? tagsDoc.data().value || {} : {},
+    tools: toolsDoc.exists() ? toolsDoc.data().value || {} : {},
+   });
+  }).catch((error) => console.warn('[Naa College] Public site configuration unavailable.', error));
+  return () => { mounted = false; };
+ }, []);
+
+ const configuredTools = Array.isArray(siteConfig.tools?.items) ? siteConfig.tools.items : [];
+ const resolveTool = (id) => configuredTools.find((tool) => tool.id === id);
+ const configuredQuickShortcuts = QUICK_SHORTCUTS.map((item) => {
+  const configId = item.id === 'web-options' ? 'ap-web-options' : item.id;
+  const config = resolveTool(configId);
+  return { ...item, title: config?.name || item.title, subtitle: config?.description || item.subtitle, hidden: config && config.visible === false };
+ }).filter((item) => !item.hidden);
+ const configuredStudentTools = STUDENT_UTILITY_TOOLS.map((item) => {
+  const configId = item.id === 'attendance-defender' ? 'attendance' : item.id;
+  const config = resolveTool(configId);
+  return { ...item, title: config?.name || item.title, description: config?.description || item.description, hidden: config && config.visible === false };
+ }).filter((item) => !item.hidden);
+ const featuredTagLabels = Array.isArray(siteConfig.featuredTags?.items) ? siteConfig.featuredTags.items : [];
+ const featuredTagRoute = (label) => {
+  const value = String(label).toLowerCase();
+  if (value.includes('scholar')) return 'scholarships';
+  if (value.includes('roadmap') || value.includes('career')) return 'engineering-roadmaps';
+  if (value.includes('web option')) return 'web-options-generator';
+  if (value.includes('tg')) return 'tg-eapcet-predictor';
+  return 'ap-eapcet-predictor';
+ };
 
  // Load real published blog articles
 
@@ -365,7 +411,7 @@ item.category.toLowerCase().includes(q)
 
   );
 
- }, [searchQuery, publishedBlogs]);
+ }, [searchQuery, publishedBlogs, configuredQuickShortcuts, configuredStudentTools]);
 
  const triggerRoute = (route) => {
 
@@ -390,6 +436,7 @@ item.category.toLowerCase().includes(q)
  return (
 
   <div className="naa-platform-shell w-full bg-white text-[#172B3B]">
+      {siteConfig.alerts?.enabled && siteConfig.alerts?.message && <div role="status" className="border-b border-[#EED690] bg-[#FDF8EB] px-4 py-2.5 text-center text-xs font-bold leading-5 text-[#75551c] sm:text-sm">{siteConfig.alerts.message}</div>}
 
       {/*
 ===================================================================
@@ -464,7 +511,7 @@ PLATFORM</span>
 
        >
 
-           Explore EAPCET allotments, compare colleges, find scholarships and access student tools—all in one place.
+           {siteConfig.hero?.subtitle || 'Explore EAPCET allotments, compare colleges, find scholarships and access student tools—all in one place.'}
 
        </motion.p>
 
@@ -613,13 +660,10 @@ PLATFORM</span>
 
          <span className="text-xs font-semibold text-[#5E6D7D]">Popular:</span>
 
-         {[
-
+         {(featuredTagLabels.length ? featuredTagLabels.map((label) => ({ label, route: featuredTagRoute(label) })) : [
              { label: 'AP EAPCET 2026', route: 'ap-eapcet-predictor' },
-
              { label: 'TG EAPCET', route: 'tg-eapcet-predictor' },
-
-         ].map((pill) => (
+         ]).map((pill) => (
 
              <button
 
@@ -829,7 +873,7 @@ Access</span>
 
      <StaggerGrid className="hidden sm:grid grid-cols-2 lg:grid-cols-6 gap-3 mt-10 pt-8 border-t border-[#EDF2F6]">
 
-      {QUICK_SHORTCUTS.map((item) => {
+      {configuredQuickShortcuts.map((item) => {
 
        const Icon = item.icon;
 
@@ -1833,7 +1877,7 @@ zero server upload.
 
         <StaggerGrid className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-         {STUDENT_UTILITY_TOOLS.map((tool) => {
+         {configuredStudentTools.map((tool) => {
 
           const Icon = tool.icon;
 
