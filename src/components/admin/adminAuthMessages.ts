@@ -101,7 +101,7 @@ export function loginErrorMessage(error: unknown): string {
     return "The sign-in service is temporarily unavailable. Please try again later.";
   }
   if (code === "internal" || code === "unknown" || code === "failed-precondition") {
-    return "Sign-in could not be completed. Please try again later.";
+    return "The admin verification service is unavailable. Confirm the latest Firebase Functions are deployed, then try again.";
   }
 
   return "Sign-in failed. Please try again.";
