@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut, type User } from "firebase/auth";
+import { onAuthStateChanged, sendEmailVerification, signInWithEmailAndPassword, signOut, type User } from "firebase/auth";
 import { httpsCallable } from "firebase/functions";
 import { adminAuth, adminFunctions } from "../services/adminFirebase";
 import { loginErrorMessage } from "../components/admin/adminAuthMessages";
@@ -105,9 +105,17 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
       }
 
       const credential = await signInWithEmailAndPassword(adminAuth, normalizedEmail, password);
-      if ((credential.user.email || "").trim().toLowerCase() !== ADMIN_EMAIL || !credential.user.emailVerified) {
+      if ((credential.user.email || "").trim().toLowerCase() !== ADMIN_EMAIL) {
         await signOut(adminAuth).catch(() => undefined);
         throw Object.assign(new Error("Unauthorized account"), { code: "permission-denied" });
+      }
+      if (!credential.user.emailVerified) {
+        await sendEmailVerification(credential.user).catch(() => undefined);
+        await signOut(adminAuth).catch(() => undefined);
+        throw Object.assign(new Error("Email verification required"), {
+          code: "permission-denied",
+          details: { reason: "email-not-verified" },
+        });
       }
 
       const { data } = await verifyIdentityCall({});
