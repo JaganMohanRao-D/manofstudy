@@ -1177,7 +1177,7 @@ category.id))
 
       <div className="px-4 py-4 space-y-2">
 
-         {NAV_CATEGORIES.map((category) => {
+         {configuredNavCategories.map((category) => {
 
          const Icon = category.icon;
 
