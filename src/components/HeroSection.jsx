@@ -110,6 +110,23 @@ const QUICK_SHORTCUTS = [
 
 {
 
+ {
+    id: 'ap-allotments',
+    title: 'AP College-wise Allotments',
+    subtitle: 'Historical Seat Records',
+    badge: 'AP',
+    route: 'ap-allotment-explorer',
+    icon: Building2,
+ },
+ {
+    id: 'roadmaps',
+    title: 'Career Roadmaps',
+    subtitle: '4-Year Branch Guides',
+    badge: 'Careers',
+    route: 'engineering-roadmaps',
+    icon: BookOpen,
+ },
+
     id: 'autonomous',
 
     title: 'Autonomous Colleges',
