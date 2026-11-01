@@ -431,8 +431,8 @@ exports.logoutNaaAdmin = onCall(
 
 
 // ---------------------------------------------------------------------------
-// Owner-only content management API. All reads/writes require the verified
-// verified owner identity from the Firebase ID token.
+// Owner-only content management API. All reads/writes require a verified
+// owner identity from the Firebase ID token.
 // The Admin SDK is the only writer; browser clients never receive privileged
 // Firestore credentials.
 // ---------------------------------------------------------------------------
@@ -460,7 +460,11 @@ exports.saveNaaAdminRecord = onCall(
       return await adminContent.saveRecord(request.data || {});
     } catch (error) {
       if (error instanceof HttpsError) throw error;
-      throw new HttpsError("invalid-argument", error && error.message ? error.message : "Invalid content.");
+      if (error && error.name === "AdminContentValidationError") {
+        throw new HttpsError("invalid-argument", error.message);
+      }
+      console.error("[NaaAdminContent] Save failed", error);
+      throw new HttpsError("internal", "Content could not be saved. Please try again.");
     }
   }
 );
@@ -473,7 +477,11 @@ exports.deleteNaaAdminRecord = onCall(
       return await adminContent.deleteRecord(request.data || {});
     } catch (error) {
       if (error instanceof HttpsError) throw error;
-      throw new HttpsError("invalid-argument", error && error.message ? error.message : "Invalid delete request.");
+      if (error && error.name === "AdminContentValidationError") {
+        throw new HttpsError("invalid-argument", error.message);
+      }
+      console.error("[NaaAdminContent] Delete failed", error);
+      throw new HttpsError("internal", "Content could not be deleted. Please try again.");
     }
   }
 );
@@ -486,7 +494,11 @@ exports.importNaaAdminLegacyContent = onCall(
       return await adminContent.importLegacyContent(request.data || {});
     } catch (error) {
       if (error instanceof HttpsError) throw error;
-      throw new HttpsError("invalid-argument", error && error.message ? error.message : "Legacy content import failed.");
+      if (error && error.name === "AdminContentValidationError") {
+        throw new HttpsError("invalid-argument", error.message);
+      }
+      console.error("[NaaAdminContent] Legacy import failed", error);
+      throw new HttpsError("internal", "Existing content could not be imported. Please try again.");
     }
   }
 );
