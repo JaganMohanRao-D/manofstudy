@@ -491,13 +491,7 @@ PLATFORM</span>
 
        >
 
-         Right Guidance.{' '}
-
-         <span className="block text-[#C29316] mt-1">
-
-           Brighter Engineering Futures.
-
-         </span>
+         {siteConfig.hero?.title || <>Right Guidance.{' '}<span className="block text-[#C29316] mt-1">Brighter Engineering Futures.</span></>}
 
        </motion.h1>
 
