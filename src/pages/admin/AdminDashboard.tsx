@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import { httpsCallable } from "firebase/functions";
 import {
-  Activity, ArrowUpRight, BookOpen, BriefcaseBusiness, Check, ChevronRight, CirclePlus,
-  FileText, LayoutDashboard, LoaderCircle, LogOut, Menu, Pencil, Save, Settings2,
+  Activity, ArrowUpRight, BookOpen, BriefcaseBusiness, ChevronRight, CirclePlus,
+  FileText, LayoutDashboard, LoaderCircle, LogOut, Pencil, Save,
   ShieldCheck, Trash2, Wrench, X, Image as ImageIcon, Eye, EyeOff, CalendarDays,
 } from "lucide-react";
 import { adminFunctions } from "../../services/adminFirebase";
