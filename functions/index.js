@@ -397,7 +397,7 @@ exports.websiteAssistantChat = require("./websiteAssistant").websiteAssistantCha
 // account state and rate limits server-side before issuing an opaque,
 // short-lived session token. Google sign-in can NOT create an admin session.
 // ---------------------------------------------------------------------------
-const { onCall } = require("firebase-functions/v2/https");
+const { onCall, HttpsError } = require("firebase-functions/v2/https");
 const { createAdminAuth } = require("./adminAuthCore");
 
 const ADMIN_AUTH_REGION = "asia-southeast1";
@@ -432,3 +432,52 @@ exports.logoutNaaAdmin = onCall(
 
 // Every future privileged admin endpoint must call
 // adminAuth.requireAdminSession(request) before doing any work.
+
+
+// ---------------------------------------------------------------------------
+// Owner-only content management API. All reads/writes require the verified
+// owner identity AND the short-lived server-side admin session.
+// The Admin SDK is the only writer; browser clients never receive privileged
+// Firestore credentials.
+// ---------------------------------------------------------------------------
+const { createAdminContent } = require("./adminContentCore");
+const adminContent = createAdminContent({ db, FieldValue });
+
+exports.getNaaAdminDashboard = onCall(
+  { ...adminCallableOptions(), timeoutSeconds: 20 },
+  async (request) => {
+    await adminAuth.requireAdminSession(request);
+    try {
+      return await adminContent.getDashboard();
+    } catch (error) {
+      console.error("[NaaAdminContent] Dashboard read failed", error);
+      throw new HttpsError("internal", "Admin dashboard data could not be loaded.");
+    }
+  }
+);
+
+exports.saveNaaAdminRecord = onCall(
+  { ...adminCallableOptions(), timeoutSeconds: 20 },
+  async (request) => {
+    await adminAuth.requireAdminSession(request);
+    try {
+      return await adminContent.saveRecord(request.data || {});
+    } catch (error) {
+      if (error instanceof HttpsError) throw error;
+      throw new HttpsError("invalid-argument", error && error.message ? error.message : "Invalid content.");
+    }
+  }
+);
+
+exports.deleteNaaAdminRecord = onCall(
+  { ...adminCallableOptions(), timeoutSeconds: 20 },
+  async (request) => {
+    await adminAuth.requireAdminSession(request);
+    try {
+      return await adminContent.deleteRecord(request.data || {});
+    } catch (error) {
+      if (error instanceof HttpsError) throw error;
+      throw new HttpsError("invalid-argument", error && error.message ? error.message : "Invalid delete request.");
+    }
+  }
+);
