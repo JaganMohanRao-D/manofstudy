@@ -159,7 +159,7 @@ export default function AdminDashboard() {
           category: String(article.category || "Student Guides"),
           content,
           summary: String(article.summary || ""),
-          coverImage: /^https?:\\/\\//i.test(String(article.coverImage || "")) ? String(article.coverImage) : "",
+          coverImage: /^https?:\/\//i.test(String(article.coverImage || "")) ? String(article.coverImage) : "",
           status: article.status === "published" ? "published" : "draft",
           featured: article.featured === true,
           tags: Array.isArray(article.tags) ? article.tags : [],
@@ -175,7 +175,7 @@ export default function AdminDashboard() {
         const title = String(item?.title || "").trim();
         const provider = String(item?.provider || "Provider not listed").trim();
         const link = String(item?.apply_link || item?.official_source_url || item?.guideline_url || "").trim();
-        if (!title || !/^https?:\\/\\//i.test(link)) return;
+        if (!title || !/^https?:\/\//i.test(link)) return;
         scholarshipMap.set((title + "|" + provider).toLowerCase(), {
           title,
           provider,
