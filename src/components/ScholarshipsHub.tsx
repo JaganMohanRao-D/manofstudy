@@ -6,6 +6,8 @@ import {
   MapPin, Wallet, Users, Filter, AlertCircle, FileText
 } from 'lucide-react';
 import { ScholarshipDetailPage, scholarshipSlug } from './ScholarshipDetailPage';
+import { collection, getDocs, query as firestoreQuery, where } from 'firebase/firestore';
+import { db } from '../services/firebase';
 
 export interface IndianScholarship {
   id: string;
@@ -202,7 +204,30 @@ export const ScholarshipsHub: React.FC = () => {
       if (!Array.isArray(data) || data.some((item: any) => !item || !item.id || !item.title || !item.provider || !externalUrl(item.official_source_url || item.apply_link))) {
         throw new Error('Scholarship data has an invalid structure');
       }
-      setScholarships(data as IndianScholarship[]);
+      const managedSnapshot = await getDocs(firestoreQuery(collection(db, 'admin_scholarships'), where('active', '==', true))).catch(() => null);
+      const managed: IndianScholarship[] = managedSnapshot ? managedSnapshot.docs.map((entry) => {
+        const item = entry.data() as any;
+        return {
+          id: 'admin-' + entry.id,
+          title: String(item.title || 'Scholarship'),
+          provider: String(item.provider || 'Provider not listed'),
+          category: 'Admin managed',
+          target: 'Students',
+          eligibility: String(item.eligibility || 'Check the official provider portal for eligibility.'),
+          amount: String(item.amount || ''),
+          deadline: String(item.deadline || ''),
+          apply_link: String(item.link || ''),
+          official_source_url: String(item.link || ''),
+          status: 'Cycle not confirmed',
+          description: 'Managed by the Naa College editorial team. Verify the current application cycle and eligibility on the official provider portal.',
+          level: 'undergraduate',
+          state: 'national',
+          tags: ['Naa College managed'],
+        };
+      }) : [];
+      const merged = new Map<string, IndianScholarship>();
+      [...(data as IndianScholarship[]), ...managed].forEach((item) => merged.set(item.title.trim().toLowerCase(), item));
+      setScholarships([...merged.values()]);
     } catch {
       setLoadError('Scholarships could not be loaded. Please retry in a moment.');
     } finally {
@@ -370,7 +395,7 @@ export const ScholarshipsHub: React.FC = () => {
         {loading ? (
           <div className="mos-mini-scholarship-loading" aria-label="Loading scholarship details" />
         ) : miniScholarship ? (
-          <a className="mos-mini-scholarship-card" href={'/scholarships/' + scholarshipSlug(miniScholarship.title) + '/'}>
+          <a className="mos-mini-scholarship-card" href={miniScholarship.id.startsWith('admin-') ? miniScholarship.apply_link : '/scholarships/' + scholarshipSlug(miniScholarship.title) + '/'}>
             <div className="mos-mini-scholarship-main">
               <span className="mos-mini-scholarship-status"><Check className="h-3.5 w-3.5" /> Upcoming / listed open</span>
               <h3>{miniScholarship.title}</h3>
@@ -424,7 +449,7 @@ export const ScholarshipsHub: React.FC = () => {
                   <div className="min-w-0 flex-1"><p className="truncate text-xs font-semibold text-[var(--mos-text-muted)]" title={s.provider}>{s.provider}</p><div className="mt-1 flex flex-wrap gap-1.5">{tags.slice(0, 2).map(tag => <span key={tag} className="rounded-md border border-[var(--mos-border)] bg-[var(--mos-surface-muted)] px-2 py-0.5 text-[10px] font-medium text-[var(--mos-text-secondary)]">{tag}</span>)}{s.dateAdded && !Number.isNaN(new Date(s.dateAdded).getTime()) && (Date.now() - new Date(s.dateAdded).getTime() < 14 * 86400000) && <span className="inline-flex items-center gap-1 rounded-md bg-sky-500/10 px-2 py-0.5 text-[10px] font-bold text-sky-700 dark:text-sky-300"><Sparkles className="h-3 w-3" /> New</span>}</div></div>
                   <button type="button" onClick={() => toggleSaved(s.id)} aria-label={saved ? 'Remove ' + s.title + ' from saved scholarships' : 'Save ' + s.title} aria-pressed={saved} title={saved ? 'Saved' : 'Save scholarship'} className={'rounded-lg border p-2 transition focus-visible:outline-2 focus-visible:outline-emerald-500 ' + (saved ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600' : 'border-transparent text-[var(--mos-text-muted)] hover:border-[var(--mos-border)] hover:bg-[var(--mos-surface-muted)]')}><Bookmark className="h-4 w-4" fill={saved ? 'currentColor' : 'none'} /></button>
                 </div>
-                <a href={'/scholarships/' + scholarshipSlug(s.title) + '/'} className="mos-scholarship-title-link mt-4 block rounded-xl px-3 py-3 text-base font-black leading-6 sm:text-lg" aria-label={'View details for ' + s.title}>
+                <a href={s.id.startsWith('admin-') ? s.apply_link : '/scholarships/' + scholarshipSlug(s.title) + '/'} className="mos-scholarship-title-link mt-4 block rounded-xl px-3 py-3 text-base font-black leading-6 sm:text-lg" aria-label={'View details for ' + s.title}>
                   <span className="mos-scholarship-title-kicker">SCHOLARSHIP OPPORTUNITY</span>
                   <h3 className="mos-scholarship-shining-title">{s.title}</h3>
                 </a>
@@ -451,7 +476,7 @@ export const ScholarshipsHub: React.FC = () => {
                 <a href={'/scholarships/' + scholarshipSlug(s.title) + '/'} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border border-sky-500/25 bg-sky-500/[.07] px-3 py-2.5 text-xs font-bold text-[var(--mos-text-primary)] transition hover:border-sky-500/50 hover:bg-sky-500/10 focus-visible:outline-2 focus-visible:outline-sky-500">View Full Details <ArrowUpRight className="h-3.5 w-3.5" /></a>
                 {externalUrl(s.official_source_url || s.apply_link) ? <a href={s.official_source_url || s.apply_link} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-2.5 text-xs font-bold text-white transition hover:bg-emerald-500 active:scale-[.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500">{s.official_source_url ? 'Visit official source' : 'Open listing'} <ExternalLink className="h-3.5 w-3.5" /></a> : <button type="button" disabled className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-[var(--mos-surface-muted)] px-3 py-2.5 text-xs font-bold text-[var(--mos-text-muted)]" title="No valid application URL is available">Link unavailable</button>}
                 <button type="button" onClick={() => shareScholarship(s)} className="inline-flex items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-xs font-semibold text-[var(--mos-text-muted)] transition hover:bg-[var(--mos-surface-muted)] hover:text-[var(--mos-text-primary)] focus-visible:outline-2 focus-visible:outline-emerald-500"><Share2 className="h-3.5 w-3.5" /> Share</button>
-                <button type="button" onClick={() => copyText('https://naacollege.in/scholarships/' + scholarshipSlug(s.title) + '/', s)} className="inline-flex items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-xs font-semibold text-[var(--mos-text-muted)] transition hover:bg-[var(--mos-surface-muted)] hover:text-[var(--mos-text-primary)] focus-visible:outline-2 focus-visible:outline-emerald-500">{copiedId === s.id ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}{copiedId === s.id ? 'Copied link' : 'Copy link'}</button>
+                <button type="button" onClick={() => copyText(s.id.startsWith('admin-') ? s.apply_link : 'https://naacollege.in/scholarships/' + scholarshipSlug(s.title) + '/', s)} className="inline-flex items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-xs font-semibold text-[var(--mos-text-muted)] transition hover:bg-[var(--mos-surface-muted)] hover:text-[var(--mos-text-primary)] focus-visible:outline-2 focus-visible:outline-emerald-500">{copiedId === s.id ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}{copiedId === s.id ? 'Copied link' : 'Copy link'}</button>
               </div>
             </article>;
           })}
