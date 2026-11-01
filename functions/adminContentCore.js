@@ -6,7 +6,7 @@ const COLLECTIONS = Object.freeze({
   config: "admin_site_config",
 });
 
-const CONFIG_KEYS = new Set(["tools", "hero", "alerts", "featuredTags"]);
+const CONFIG_KEYS = new Set(["tools", "hero", "alerts", "featuredTags", "contentMigration"]);
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const HTTP_URL_RE = /^https?:\/\//i;
 
@@ -112,7 +112,43 @@ function createAdminContent({ db, FieldValue, now = () => Date.now() }) {
     return { id };
   }
 
-  return { getDashboard, saveRecord, deleteRecord };
+  async function importLegacyContent(input) {
+    const posts = Array.isArray(input && input.posts) ? input.posts : [];
+    const scholarships = Array.isArray(input && input.scholarships) ? input.scholarships : [];
+    if (posts.length > 300 || scholarships.length > 500) {
+      throw new Error("The import contains too many records. Split the import and retry.");
+    }
+    const writes = [];
+    const timestamp = FieldValue.serverTimestamp();
+    const slugify = (value) => String(value || "").toLowerCase().trim()
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 140);
+
+    for (const raw of posts) {
+      const record = validateRecord("posts", raw);
+      const ref = db.collection(COLLECTIONS.posts).doc("legacy-" + record.slug);
+      writes.push({ ref, data: { ...record, source: "legacy-import", createdAt: timestamp, updatedAt: timestamp } });
+    }
+    for (const raw of scholarships) {
+      const record = validateRecord("scholarships", raw);
+      const id = "legacy-" + slugify(record.title + "-" + record.provider);
+      if (id === "legacy-") continue;
+      const ref = db.collection(COLLECTIONS.scholarships).doc(id);
+      writes.push({ ref, data: { ...record, source: "legacy-import", createdAt: timestamp, updatedAt: timestamp } });
+    }
+
+    for (let index = 0; index < writes.length; index += 400) {
+      const batch = db.batch();
+      writes.slice(index, index + 400).forEach((write) => batch.set(write.ref, write.data, { merge: true }));
+      await batch.commit();
+    }
+    await db.collection(COLLECTIONS.config).doc("contentMigration").set({
+      value: { blogs: true, scholarships: true },
+      updatedAt: timestamp,
+    }, { merge: true });
+    return { postsImported: posts.length, scholarshipsImported: scholarships.length };
+  }
+
+  return { getDashboard, saveRecord, deleteRecord, importLegacyContent };
 }
 
 module.exports = { createAdminContent, validateRecord, COLLECTIONS };
