@@ -97,7 +97,7 @@ function AppBootstrap() {
 
   return (
     <Suspense fallback={<StartupFallback />}>
-      {pathname === '/theone' ? <AdminPortal /> : <PublicAppShell />}
+      {isAdminPath ? <AdminPortal /> : <PublicAppShell />}
     </Suspense>
   );
 }
