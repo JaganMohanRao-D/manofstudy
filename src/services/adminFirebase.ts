@@ -1,5 +1,5 @@
 import { getApps, initializeApp, type FirebaseApp } from "firebase/app";
-import { getAuth, inMemoryPersistence, initializeAuth, type Auth } from "firebase/auth";
+import { getAuth, browserLocalPersistence, initializeAuth, type Auth } from "firebase/auth";
 import { getFunctions, type Functions } from "firebase/functions";
 import firebaseAppletConfig from "../../firebase-applet-config.json";
 
@@ -37,7 +37,7 @@ function resolveAdminApp(): FirebaseApp {
 
 function resolveAdminAuth(app: FirebaseApp): Auth {
   try {
-    return initializeAuth(app, { persistence: inMemoryPersistence });
+    return initializeAuth(app, { persistence: browserLocalPersistence });
   } catch {
     // Already initialized (e.g. Vite hot reload).
     return getAuth(app);
