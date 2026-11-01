@@ -60,6 +60,9 @@ function validateRecord(type, input) {
     return {
       title: cleanString(data.title, 180, "Title", true),
       provider: cleanString(data.provider, 180, "Provider", true),
+      category: cleanString(data.category, 80, "Category"),
+      target: cleanString(data.target, 180, "Target"),
+      status: cleanString(data.status, 120, "Status") || (data.active === false ? "Closed" : "Cycle not confirmed"),
       amount: cleanString(data.amount, 120, "Amount"),
       eligibility: cleanString(data.eligibility, 2000, "Eligibility", true),
       deadline: cleanString(data.deadline, 120, "Deadline"),
