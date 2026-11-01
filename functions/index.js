@@ -455,7 +455,7 @@ exports.getNaaAdminDashboard = onCall(
 exports.saveNaaAdminRecord = onCall(
   { ...adminCallableOptions(), timeoutSeconds: 20 },
   async (request) => {
-    await adminAuth.requireAdminSession(request);
+    await adminAuth.assertOwnerIdentity(request.auth);
     try {
       return await adminContent.saveRecord(request.data || {});
     } catch (error) {
