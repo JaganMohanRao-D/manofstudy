@@ -217,7 +217,8 @@ function normalizeStructured(raw) {
     summary: str(raw.excerpt || raw.meta_description || raw.title),
     content,
     sources: [],
-    toolLinks: []
+    toolLinks: [],
+    coverImage: str(raw.cover_image)
   };
 }
 
